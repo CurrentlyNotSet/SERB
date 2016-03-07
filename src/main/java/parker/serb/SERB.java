@@ -25,21 +25,24 @@ public class SERB {
     public static void main(String[] args) {
         
         UIManager.put("InternalFrame.borderShadow", Color.gray);
-        
+        //
+        //System.out.println(System.getProperty("os.name"));
+        if(System.getProperty("os.name").equalsIgnoreCase("Mac OS X")) {
         //Used to watch for Apple-Q keys and handle the applicaiton being closed
-        try {
-            Application macOSXApplication=Application.getApplication();
+            try {
+                Application macOSXApplication=Application.getApplication();
 
-            macOSXApplication.setQuitHandler((AppEvent.QuitEvent qe, QuitResponse qr) -> {
-                if(Global.activeUser != null) {
-                    User.updateActiveLogIn();
-                    Audit.addAuditEntry("Logged Off");
-                }
-                System.exit(0);
-            });
-        }
-        catch (Throwable ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+                macOSXApplication.setQuitHandler((AppEvent.QuitEvent qe, QuitResponse qr) -> {
+                    if(Global.activeUser != null) {
+                        User.updateActiveLogIn();
+                        Audit.addAuditEntry("Logged Off");
+                    }
+                    System.exit(0);
+                });
+            }
+            catch (Throwable ex) {
+                SlackNotification.sendNotification(ex.getMessage());
+            }
         }
         
         //install weblaf look and feel
