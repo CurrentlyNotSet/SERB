@@ -31,6 +31,7 @@ public class FileService {
                     Global.scanPath = "/Users/parkerjohnston/Desktop/SERB/Scan/";
                     Global.emailPath = "/Users/parkerjohnston/Desktop/SERB/Email/";
                     Global.activityPath = "/Users/parkerjohnston/Desktop/SERB/Activity/";
+                    //Global.mediaPath = "/Users/parkerjohnston/Desktop/SERB/Media/";
                     break;
                 //TODO: Add in other machines with the correct paths
                 case "Alienware15":
@@ -38,6 +39,7 @@ public class FileService {
                     Global.scanPath = "C:\\SERB\\Scan\\";
                     Global.emailPath = "C:\\SERB\\Email\\";
                     Global.activityPath = "C:\\SERB\\Activity\\";
+                    //Global.mediaPath = "C:\\SERB\\Media\\";
                     break;
                 default:
                     //SERB LOCATIONS
@@ -114,4 +116,40 @@ public class FileService {
         docketFile.delete();
     }
     
+    //docketMedia
+    public static void docketMedia(String[] caseNumbers,
+            String fileName,
+            String section,
+            String typeAbbrv,
+            String typeFull,
+            String from, 
+            String to,
+            String comment) {
+        
+        File docketFile = new File(Global.scanPath + section + File.separatorChar + fileName);
+        
+        if(docketFile.exists()) {
+            for (String caseNumber : caseNumbers) {
+                String[] caseNumberParts = caseNumber.split("-");
+                File caseArchiveFile = new File(
+                        Global.activityPath 
+                        + section
+                        + File.separatorChar
+                        + caseNumberParts[0]
+                        + File.separatorChar
+                        + caseNumber);
+                
+                caseArchiveFile.mkdirs();
+                
+                String fileDate = String.valueOf(new Date().getTime());
+                
+                FileUtils.copyFile(docketFile, new File(caseArchiveFile + File.separator + fileDate + "_" + typeAbbrv + fileName.substring(fileName.lastIndexOf("."))));
+                Activity.addActivtyFromDocket("Filed " + typeFull + " from " + from,
+                        fileDate + "_" + typeAbbrv + fileName.substring(fileName.lastIndexOf(".")),
+                        caseNumberParts,from, to, typeFull, comment, false, false);
+            }
+        }
+        
+        docketFile.delete();
+    }
 }
