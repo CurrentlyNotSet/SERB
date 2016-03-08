@@ -31,7 +31,7 @@ public class FileService {
                     Global.scanPath = "/Users/parkerjohnston/Desktop/SERB/Scan/";
                     Global.emailPath = "/Users/parkerjohnston/Desktop/SERB/Email/";
                     Global.activityPath = "/Users/parkerjohnston/Desktop/SERB/Activity/";
-                    //Global.mediaPath = "/Users/parkerjohnston/Desktop/SERB/Media/";
+                    Global.mediaPath = "/Users/parkerjohnston/Desktop/SERB/Media/";
                     break;
                 //TODO: Add in other machines with the correct paths
                 case "Alienware15":
@@ -39,7 +39,7 @@ public class FileService {
                     Global.scanPath = "C:\\SERB\\Scan\\";
                     Global.emailPath = "C:\\SERB\\Email\\";
                     Global.activityPath = "C:\\SERB\\Activity\\";
-                    //Global.mediaPath = "C:\\SERB\\Media\\";
+                    Global.mediaPath = "C:\\SERB\\Media\\";
                     break;
                 default:
                     //SERB LOCATIONS
@@ -126,7 +126,7 @@ public class FileService {
             String to,
             String comment) {
         
-        File docketFile = new File(Global.scanPath + section + File.separatorChar + fileName);
+        File docketFile = new File(Global.mediaPath + section + File.separatorChar + fileName);
         
         if(docketFile.exists()) {
             for (String caseNumber : caseNumbers) {
