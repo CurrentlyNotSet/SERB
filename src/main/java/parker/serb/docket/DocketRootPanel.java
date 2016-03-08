@@ -33,6 +33,7 @@ import parker.serb.sql.Audit;
 import parker.serb.sql.Email;
 import parker.serb.sql.EmailAttachment;
 import parker.serb.sql.User;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -85,11 +86,11 @@ public class DocketRootPanel extends javax.swing.JPanel {
                             docket.type = "Scan";
                             docs.add(docket);
                         } catch (IOException ex) {
-                            Logger.getLogger(DocketRootPanel.class.getName()).log(Level.SEVERE, null, ex);
+                            SlackNotification.sendNotification(ex.getMessage());
                         }
                     }
                 } catch (IOException ex) {
-                    Logger.getLogger(DocketRootPanel.class.getName()).log(Level.SEVERE, null, ex);
+                    SlackNotification.sendNotification(ex.getMessage());
                 }
             });
         } catch (IOException ex) {
