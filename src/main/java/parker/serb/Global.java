@@ -70,5 +70,6 @@ public class Global {
     public static String scanPath;
     public static String emailPath;
     public static String activityPath;
+    public static String mediaPath;
     public static boolean errorNotifications;
 }
