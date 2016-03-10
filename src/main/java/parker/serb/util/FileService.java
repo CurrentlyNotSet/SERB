@@ -16,6 +16,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import parker.serb.Global;
 import parker.serb.sql.Activity;
+import parker.serb.sql.Email;
+import parker.serb.sql.EmailAttachment;
 
 /**
  *
@@ -74,6 +76,32 @@ public class FileService {
                     + section
                     + File.separatorChar
                     + fileName));
+        } catch (IOException | NullPointerException | IllegalArgumentException ex) {
+            SlackNotification.sendNotification(ex.getMessage());
+        }
+    }
+    
+    public static void openAttachmentFile(String id, String section) {
+        try {
+            Desktop desktop = Desktop.getDesktop();
+            desktop.open(new File(Global.emailPath
+                    + File.separatorChar
+                    + section
+                    + File.separatorChar
+                    + EmailAttachment.getEmailAttachmentFileByID(id)));
+        } catch (IOException | NullPointerException | IllegalArgumentException ex) {
+            SlackNotification.sendNotification(ex.getMessage());
+        }
+    }
+    
+    public static void openEmailBodyFile(String id, String section) {
+        try {
+            Desktop desktop = Desktop.getDesktop();
+            desktop.open(new File(Global.emailPath
+                    + File.separatorChar
+                    + section
+                    + File.separatorChar
+                    + Email.getEmailBodyFileByID(id)));
         } catch (IOException | NullPointerException | IllegalArgumentException ex) {
             SlackNotification.sendNotification(ex.getMessage());
         }
