@@ -121,14 +121,14 @@ public class FileService {
         
         if(docketFile.exists()) {
             for (String caseNumber : caseNumbers) {
-                String[] caseNumberParts = caseNumber.split("-");
+                String[] caseNumberParts = caseNumber.trim().split("-");
                 File caseArchiveFile = new File(
                         Global.activityPath 
                         + section
                         + File.separatorChar
                         + caseNumberParts[0]
                         + File.separatorChar
-                        + caseNumber);
+                        + caseNumber.trim());
                 
                 caseArchiveFile.mkdirs();
                 
@@ -158,14 +158,14 @@ public class FileService {
         
         if(docketFile.exists()) {
             for (String caseNumber : caseNumbers) {
-                String[] caseNumberParts = caseNumber.split("-");
+                String[] caseNumberParts = caseNumber.trim().split("-");
                 File caseArchiveFile = new File(
                         Global.activityPath 
                         + section
                         + File.separatorChar
                         + caseNumberParts[0]
                         + File.separatorChar
-                        + caseNumber);
+                        + caseNumber.trim());
                 
                 caseArchiveFile.mkdirs();
                 
