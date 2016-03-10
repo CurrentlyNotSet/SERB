@@ -46,7 +46,7 @@ public class RootPanel extends javax.swing.JFrame {
      */
     public RootPanel() {
         initComponents();
-        setIconImage( new ImageIcon(getClass().getResource("/Serb-Logo-TranspRing.png")).getImage() );
+        setIconImage( new ImageIcon(getClass().getResource("/SERBSeal.png")).getImage() );
         addListeners();
         Global.root = this;
         User.findAppliedRoles();
@@ -112,31 +112,31 @@ public class RootPanel extends javax.swing.JFrame {
         switch (Global.activeSection) {
             case "Docketing":
                 card.show(jPanel9, "card2");
-                jLabel1.setIcon(new ImageIcon(getClass().getResource("/Serb-Logo-TranspRing.png")));
+                jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
                 break;
             case "REP":
                 card.show(jPanel9, "card3");
-                jLabel1.setIcon(new ImageIcon(getClass().getResource("/Serb-Logo-TranspRing.png")));
+                jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
                 rEPHeaderPanel1.loadCases();
                 break;
             case "ULP":
                 card.show(jPanel9, "card4");
-                jLabel1.setIcon(new ImageIcon(getClass().getResource("/Serb-Logo-TranspRing.png")));
+                jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
                 uLPHeaderPanel1.loadCases();
                 break;
             case "ORG":
                 card.show(jPanel9, "card5");
-                jLabel1.setIcon(new ImageIcon(getClass().getResource("/Serb-Logo-TranspRing.png")));
+                jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
 //                rEPHeaderPanel1.loadCases();
                 break;
             case "MED":
                 card.show(jPanel9, "card6");
-                jLabel1.setIcon(new ImageIcon(getClass().getResource("/Serb-Logo-TranspRing.png")));
+                jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
 //                rEPHeaderPanel1.loadCases();
                 break;    
             case "Hearings":
                 card.show(jPanel9, "card7");
-                jLabel1.setIcon(new ImageIcon(getClass().getResource("/Serb-Logo-TranspRing.png")));
+                jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
 //                rEPHeaderPanel1.loadCases();
                 break; 
             case "Civil Service Commission":
@@ -151,7 +151,7 @@ public class RootPanel extends javax.swing.JFrame {
                 break;  
             case "Employer Search":
                 card.show(jPanel9, "card2");
-                jLabel1.setIcon(new ImageIcon(getClass().getResource("/Serb-Logo-TranspRing.png")));
+                jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
 //                rEPHeaderPanel1.loadCases();
                 break;  
         }
@@ -445,15 +445,14 @@ public class RootPanel extends javax.swing.JFrame {
         jPanel1.setPreferredSize(new java.awt.Dimension(1199, 179));
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Serb-Logo-TranspRing.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SERBSeal.png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel8Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 144, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel8Layout.setVerticalGroup(
