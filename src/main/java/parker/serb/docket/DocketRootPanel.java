@@ -94,7 +94,7 @@ public class DocketRootPanel extends javax.swing.JPanel {
                 }
             });
         } catch (IOException ex) {
-            Logger.getLogger(DocketRootPanel.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex.getMessage());
         }
     }
     
@@ -116,15 +116,15 @@ public class DocketRootPanel extends javax.swing.JPanel {
                             docket.type = "Media";
                             docs.add(docket);
                         } catch (IOException ex) {
-                            Logger.getLogger(DocketRootPanel.class.getName()).log(Level.SEVERE, null, ex);
+                            SlackNotification.sendNotification(ex.getMessage());
                         }
                     }
                 } catch (IOException ex) {
-                    Logger.getLogger(DocketRootPanel.class.getName()).log(Level.SEVERE, null, ex);
+                    SlackNotification.sendNotification(ex.getMessage());
                 }
             });
         } catch (IOException ex) {
-            Logger.getLogger(DocketRootPanel.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex.getMessage());
         }
     }
     
@@ -245,7 +245,10 @@ public class DocketRootPanel extends javax.swing.JPanel {
             Collections.sort(docs, new CustomComparator());
             loadTable();
         } else if(docketTable.getValueAt(docketTable.getSelectedRow(), 2).equals("Email")){
-            new FileEmailDialog((JFrame) Global.root.getRootPane().getParent(), true);
+            new fileEmailDialog((JFrame) Global.root.getRootPane().getParent(),
+                    true,
+                    docketTable.getValueAt(docketTable.getSelectedRow(), 0).toString(),
+                    SectionComboBox.getSelectedItem().toString());
         } else if(docketTable.getValueAt(docketTable.getSelectedRow(), 2).equals("Media")){
             new mediaFileDialog((JFrame) Global.root.getRootPane().getParent(),
                 true,
@@ -346,7 +349,7 @@ public class DocketRootPanel extends javax.swing.JPanel {
                 Email doc = (Email) docs.get(i);
                 if(doc.id == (int) docketTable.getValueAt(docketTable.getSelectedRow(), 0)) {
                     
-                    File bodyFile = new File(Global.scanPath + SectionComboBox.getSelectedItem().toString() + File.separatorChar + doc.emailBodyFileName);
+                    File bodyFile = new File(Global.emailPath + SectionComboBox.getSelectedItem().toString() + File.separatorChar + doc.emailBodyFileName);
                     
                     if(bodyFile.exists()) {
                         bodyFile.delete();
@@ -354,7 +357,7 @@ public class DocketRootPanel extends javax.swing.JPanel {
                     
                     Email.deleteEmailEntry(doc.id);
                     
-                    List emailAttachmentList = EmailAttachment.getAttachmentList(doc.id);
+                    List emailAttachmentList = EmailAttachment.getAttachmentList(Integer.toString(doc.id));
                     
                     for(int j = 0; j < emailAttachmentList.size(); j++) {
                         EmailAttachment attach = (EmailAttachment) emailAttachmentList.get(j);
