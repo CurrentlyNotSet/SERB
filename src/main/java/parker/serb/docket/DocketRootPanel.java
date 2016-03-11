@@ -99,32 +99,34 @@ public class DocketRootPanel extends javax.swing.JPanel {
     }
     
     private void loadMediaData(String section) {
-        
-        try {
-            Files.walk(Paths.get(Global.mediaPath + section)).forEach(filePath -> {
-                try {
-                    if (Files.isRegularFile(filePath) && !Files.isHidden(filePath)) {
-                        try {
-                            Path file = filePath;
-                            BasicFileAttributes attr = Files.readAttributes(file, BasicFileAttributes.class);
-                            Email docket = new Email();
-                            docket.id = 0;
-                            docket.attachmentCount = "";
-                            docket.receivedDate = new Date(attr.creationTime().toMillis());
-                            docket.emailFrom = "";
-                            docket.emailSubject = file.getFileName().toString();
-                            docket.type = "Media";
-                            docs.add(docket);
-                        } catch (IOException ex) {
-                            SlackNotification.sendNotification(ex.getMessage());
+        //allow for the media folder to not exisit and not throw errors
+        if(new File(Global.mediaPath).exists()) {
+            try {
+                Files.walk(Paths.get(Global.mediaPath + section)).forEach(filePath -> {
+                    try {
+                        if (Files.isRegularFile(filePath) && !Files.isHidden(filePath)) {
+                            try {
+                                Path file = filePath;
+                                BasicFileAttributes attr = Files.readAttributes(file, BasicFileAttributes.class);
+                                Email docket = new Email();
+                                docket.id = 0;
+                                docket.attachmentCount = "";
+                                docket.receivedDate = new Date(attr.creationTime().toMillis());
+                                docket.emailFrom = "";
+                                docket.emailSubject = file.getFileName().toString();
+                                docket.type = "Media";
+                                docs.add(docket);
+                            } catch (IOException ex) {
+                                SlackNotification.sendNotification(ex.getMessage());
+                            }
                         }
+                    } catch (IOException ex) {
+                        SlackNotification.sendNotification(ex.getMessage());
                     }
-                } catch (IOException ex) {
-                    SlackNotification.sendNotification(ex.getMessage());
-                }
-            });
-        } catch (IOException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+                });
+            } catch (IOException ex) {
+                SlackNotification.sendNotification(ex.getMessage());
+            }
         }
     }
     
