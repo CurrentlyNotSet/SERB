@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import parker.serb.Global;
 import parker.serb.sql.Activity;
+import parker.serb.sql.ActivityType;
 import parker.serb.sql.Email;
 import parker.serb.sql.EmailAttachment;
 
@@ -137,7 +138,7 @@ public class FileService {
                 FileUtils.copyFile(docketFile, new File(caseArchiveFile + File.separator + fileDate + "_" + typeAbbrv + (redacted ? "_REDACTED.pdf" : ".pdf")));
                 Activity.addActivtyFromDocket("Filed " + typeFull + " from " + from + (redacted ? " (REDACTED)" : ""),
                         fileDate + "_" + typeAbbrv + (redacted ? "_REDACTED.pdf" : ".pdf"),
-                        caseNumberParts,from, to, typeFull, comment, redacted, true);
+                        caseNumberParts,from, to, typeFull, comment, redacted, false);
             }
         }
         
@@ -178,6 +179,82 @@ public class FileService {
             }
         }
         
+        docketFile.delete();
+    }
+    
+    public static void docketEmailBody(String[] caseNumbers,
+            String emailID,
+            String section,
+            String from, 
+            String to,
+            String subject) {
+        
+        String fileName = Email.getEmailBodyFileByID(emailID);
+        
+        File docketFile = new File(Global.emailPath + section + File.separatorChar + fileName);
+        
+        if(docketFile.exists()) {
+            for (String caseNumber : caseNumbers) {
+                String[] caseNumberParts = caseNumber.trim().split("-");
+                File caseArchiveFile = new File(
+                        Global.activityPath 
+                        + section
+                        + File.separatorChar
+                        + caseNumberParts[0]
+                        + File.separatorChar
+                        + caseNumber.trim());
+                
+                caseArchiveFile.mkdirs();
+                
+                String fileDate = String.valueOf(new Date().getTime());
+                
+                FileUtils.copyFile(docketFile, new File(caseArchiveFile + File.separator + fileDate + "_BODY.pdf"));
+                Activity.addActivtyFromDocket("Filed Email Body from " + from,
+                        fileDate + "_BODY.pdf",
+                        caseNumberParts,from, to, "Body", "", false, true);
+            }
+        }
+        docketFile.delete();
+    }
+    
+    public static void docketEmailAttachment(String[] caseNumbers,
+            String atachmentID,
+            String emailID,
+            String section,
+            String from, 
+            String to,
+            String subject,
+            String fileName,
+            String type,
+            String comment) {
+        
+        File docketFile = new File(Global.emailPath + section + File.separatorChar + fileName);
+        
+        if(docketFile.exists()) {
+            for (String caseNumber : caseNumbers) {
+                String[] caseNumberParts = caseNumber.trim().split("-");
+                File caseArchiveFile = new File(
+                        Global.activityPath 
+                        + section
+                        + File.separatorChar
+                        + caseNumberParts[0]
+                        + File.separatorChar
+                        + caseNumber.trim());
+                
+                caseArchiveFile.mkdirs();
+                
+                String fileDate = String.valueOf(new Date().getTime());
+                
+                String fileExtenstion = fileName.substring(fileName.lastIndexOf(".")); //. included
+                
+                String fullType = ActivityType.getFullType(type);
+                
+                FileUtils.copyFile(docketFile, new File(caseArchiveFile + File.separator + fileDate + "_" + type + fileExtenstion));
+                Activity.addActivtyFromDocket("Filed " + fullType + " from " + from,
+                        fileDate + "_" + type + fileExtenstion,
+                        caseNumberParts, from, to, fullType, comment, false, fileExtenstion.endsWith("pdf"));
+            }
+        }
         docketFile.delete();
     }
 }
