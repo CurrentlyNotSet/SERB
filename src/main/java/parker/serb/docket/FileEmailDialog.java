@@ -5,30 +5,284 @@
  */
 package parker.serb.docket;
 
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.DefaultCellEditor;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JTable;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+import parker.serb.Global;
+import parker.serb.sql.Activity;
+import parker.serb.sql.ActivityType;
+import parker.serb.sql.CaseNumber;
+import parker.serb.sql.Email;
+import parker.serb.sql.EmailAttachment;
+import parker.serb.sql.User;
+import parker.serb.util.FileService;
+
 /**
  *
  * @author parker
  */
-public class FileEmailDialog extends javax.swing.JDialog {
-
+public class fileEmailDialog extends javax.swing.JDialog {
+    
+    JComboBox comboEditor = new JComboBox();
+    String emailID = "";
+    String emailSection = "";
     /**
      * Creates new form FileDocumentDialog
      */
-    public FileEmailDialog(java.awt.Frame parent, boolean modal) {
+    public fileEmailDialog(java.awt.Frame parent, boolean modal, String id, String section) {
         super(parent, modal);
-//        setUndecorated(true);
         initComponents();
+        emailID = id;
+        emailSection = section;
+        addListeners(section, id);
+        loadData(section, id);
         setColumnWidth();
         setLocationRelativeTo(parent);
         setVisible(true);
     }
     
     private void setColumnWidth() {
-        jTable1.getColumnModel().getColumn(1).setPreferredWidth(50);
-        jTable1.getColumnModel().getColumn(1).setMinWidth(50);
-        jTable1.getColumnModel().getColumn(1).setMaxWidth(50);
+        attachmentTable.getColumnModel().getColumn(0).setPreferredWidth(0);
+        attachmentTable.getColumnModel().getColumn(0).setMinWidth(0);
+        attachmentTable.getColumnModel().getColumn(0).setMaxWidth(0);
+        attachmentTable.getColumnModel().getColumn(2).setPreferredWidth(150);
+        attachmentTable.getColumnModel().getColumn(2).setMinWidth(150);
+        attachmentTable.getColumnModel().getColumn(2).setMaxWidth(150);
+        
     }
+    
+    private void addListeners(String section, String id) {
+        caseNumberTextBox.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {}
 
+            @Override
+            public void focusLost(FocusEvent e) {
+                validateCaseNumber();
+            }
+        });
+        
+        bodyTextArea.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(e.getClickCount() == 2) {
+                    FileService.openEmailBodyFile(id, section);
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        });
+        
+        attachmentTable.addMouseListener(new MouseListener() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(e.getClickCount() >= 2) {
+                    FileService.openAttachmentFile(attachmentTable.getValueAt(attachmentTable.getSelectedRow(), 0).toString(), section);
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        });
+        
+        comboEditor.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(attachmentTable != null) {
+                    enableButton();
+                } 
+            }
+        });
+        
+        toComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                enableButton();
+            }
+        });
+        
+        caseNumberTextBox.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                enableButton();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                enableButton();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                enableButton();
+            }
+        });
+        
+        
+    }
+    
+    private void enableButton() {
+        boolean enableButton = true;
+        
+        for (int i = 0; i < attachmentTable.getRowCount(); i++) {
+            String rowEntry = "";
+            if(attachmentTable.getValueAt(i, 2) != null) {
+                if(attachmentTable.getValueAt(i, 2).toString().equals("")
+                        || attachmentTable.getValueAt(i, 2).toString().equals("-----------")) {
+                    enableButton = false;
+                    break;
+                }
+            }
+        }
+        
+        if(toComboBox.getSelectedItem() != null) {
+            if(toComboBox.getSelectedItem().toString().equals("")) {
+                enableButton = false;
+            }
+        }
+        
+        
+        if(caseNumberTextBox.getText().equals("")) {
+            enableButton = false;
+        }
+        
+        fileButton.setEnabled(enableButton);
+    }
+    
+    private void validateCaseNumber() {
+        String[] caseNumbers = caseNumberTextBox.getText().split(",");
+        
+        String caseNumberFail = CaseNumber.validateULPCaseNumber(caseNumbers);
+        
+        if(!caseNumberFail.equals("")) {
+            new docketingCaseNotFound((JFrame) Global.root.getRootPane().getParent(), true, caseNumberFail);
+            caseNumberTextBox.requestFocus();
+        }
+    }
+     
+    private void loadData(String section, String id) {
+        loadToComboBox(section);
+        loadEmailInformation(id);
+        loadAttachmentTable(id, section);
+    }
+    
+    private void loadToComboBox(String section) {
+        List userList = null;
+                
+        switch (section) {
+            case "ULP":  userList = User.loadULPComboBox();
+        }
+        
+        toComboBox.setMaximumRowCount(6);
+        toComboBox.removeAllItems();
+        toComboBox.addItem("");
+        
+        for(int i = 0; i < userList.size(); i++) {
+            toComboBox.addItem(userList.get(i).toString());
+        }
+    }
+    
+    private void loadEmailInformation(String id) {
+        Email emailToLoad = Email.getEmailByID(id);
+        
+        dateTextBox.setText(Global.mmddyyyyhhmma.format(emailToLoad.receivedDate));
+        fromTextBox.setText(emailToLoad.emailFrom);
+        subjectTextBox.setText(emailToLoad.emailSubject);
+        bodyTextArea.setText(emailToLoad.emailBody);
+        
+    }
+    
+    private void loadAttachmentTable(String id, String section) {
+        
+        DefaultTableModel model = (DefaultTableModel) attachmentTable.getModel();
+        
+        TableColumn myColumn = attachmentTable.getColumnModel().getColumn(2);
+        
+        myColumn.setCellEditor(new DefaultCellEditor(loadTypeComboBox(section)));
+        
+        model.setRowCount(0);
+        
+        List<EmailAttachment> attachments = EmailAttachment.getAttachmentList(id);
+        
+        for (EmailAttachment attachment : attachments) {
+            model.addRow(new Object[] {attachment.id, attachment.fileName, ""});
+        }
+    }
+    
+    private JComboBox loadTypeComboBox(String section) {
+        List typeList = ActivityType.loadAllActivityTypeBySection(section);
+        
+        comboEditor.setMaximumRowCount(4);
+        comboEditor.removeAllItems();
+        comboEditor.addItem("DO NOT FILE");
+        comboEditor.addItem("-----------");
+        
+        for(Object type : typeList) {
+            ActivityType item = (ActivityType) type;
+            comboEditor.addItem(item.descriptionAbbrv);
+        }
+        
+        return comboEditor;
+    }
+    
+    private void fileEmailAttachments(String[] caseNumbers) {
+        //stop the possible edits on the table and file accordingly
+        if(attachmentTable.getCellEditor() != null)
+            attachmentTable.getCellEditor().stopCellEditing();
+
+        for (int i = 0; i < attachmentTable.getRowCount(); i++) {
+            if(!attachmentTable.getValueAt(i, 2).toString().equals("DO NOT FILE")) {
+                FileService.docketEmailAttachment(caseNumbers,
+                attachmentTable.getValueAt(i, 0).toString(),    //attachmentid
+                emailID,                                        
+                emailSection,                                   
+                fromTextBox.getText(),
+                toComboBox.getSelectedItem().toString(),
+                subjectTextBox.getText(),
+                attachmentTable.getValueAt(i, 1).toString(),    //fileName
+                attachmentTable.getValueAt(i, 2).toString(),    //fileType
+                attachmentTable.getValueAt(i, 3) != null
+                        ? attachmentTable.getValueAt(i, 3).toString() : ""); //comment
+            }
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -46,18 +300,19 @@ public class FileEmailDialog extends javax.swing.JDialog {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        bodyTextArea = new javax.swing.JTextArea();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        attachmentTable = new javax.swing.JTable();
+        caseNumberTextBox = new javax.swing.JTextField();
+        dateTextBox = new javax.swing.JTextField();
+        fromTextBox = new javax.swing.JTextField();
+        subjectTextBox = new javax.swing.JTextField();
+        fileButton = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        toComboBox = new javax.swing.JComboBox<>();
+        jLabel8 = new javax.swing.JLabel();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -86,41 +341,69 @@ public class FileEmailDialog extends javax.swing.JDialog {
 
         jLabel5.setText("To:");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        bodyTextArea.setEditable(false);
+        bodyTextArea.setColumns(20);
+        bodyTextArea.setLineWrap(true);
+        bodyTextArea.setRows(5);
+        bodyTextArea.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        bodyTextArea.setEnabled(false);
+        jScrollPane1.setViewportView(bodyTextArea);
 
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setText("Attachments");
 
         jLabel7.setText("Subject:");
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        attachmentTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "File Name", "Size"
+                "id", "File Name", "Type", "Comments"
             }
         ) {
-            boolean[] canEdit = new boolean [] {
-                false, true
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, true, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane3.setViewportView(jTable2);
-        if (jTable2.getColumnModel().getColumnCount() > 0) {
-            jTable2.getColumnModel().getColumn(0).setResizable(false);
-            jTable2.getColumnModel().getColumn(1).setResizable(false);
+        jScrollPane3.setViewportView(attachmentTable);
+        if (attachmentTable.getColumnModel().getColumnCount() > 0) {
+            attachmentTable.getColumnModel().getColumn(0).setResizable(false);
+            attachmentTable.getColumnModel().getColumn(1).setResizable(false);
+            attachmentTable.getColumnModel().getColumn(2).setResizable(false);
+            attachmentTable.getColumnModel().getColumn(3).setResizable(false);
         }
 
-        jButton1.setText("File Email");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        dateTextBox.setEditable(false);
+        dateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        dateTextBox.setEnabled(false);
+
+        fromTextBox.setEditable(false);
+        fromTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        fromTextBox.setEnabled(false);
+
+        subjectTextBox.setEditable(false);
+        subjectTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        subjectTextBox.setEnabled(false);
+
+        fileButton.setText("File");
+        fileButton.setEnabled(false);
+        fileButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                fileButtonActionPerformed(evt);
             }
         });
 
@@ -130,6 +413,11 @@ public class FileEmailDialog extends javax.swing.JDialog {
                 jButton2ActionPerformed(evt);
             }
         });
+
+        toComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel8.setText("Body");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -141,7 +429,7 @@ public class FileEmailDialog extends javax.swing.JDialog {
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane1)
                     .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel3)
@@ -151,15 +439,16 @@ public class FileEmailDialog extends javax.swing.JDialog {
                             .addComponent(jLabel7))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField1)
-                            .addComponent(jTextField2)
-                            .addComponent(jTextField3)
-                            .addComponent(jTextField4)
-                            .addComponent(jTextField5)))
+                            .addComponent(caseNumberTextBox)
+                            .addComponent(dateTextBox)
+                            .addComponent(fromTextBox)
+                            .addComponent(subjectTextBox)
+                            .addComponent(toComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(fileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -170,32 +459,34 @@ public class FileEmailDialog extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(caseNumberTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(dateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(fromTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(toComboBox)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(subjectTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(23, 23, 23)
+                .addComponent(jLabel8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
+                    .addComponent(fileButton)
                     .addComponent(jButton2))
                 .addContainerGap())
         );
@@ -203,16 +494,34 @@ public class FileEmailDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void fileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileButtonActionPerformed
+        //getcaseNumber
+        String[] caseNumbers = caseNumberTextBox.getText().trim().split(",");
+        //fileBody
+        FileService.docketEmailBody(caseNumbers,
+                emailID,
+                emailSection,
+                fromTextBox.getText(),
+                toComboBox.getSelectedItem().toString(),
+                subjectTextBox.getText());
+        
+        //fileAttachements
+        fileEmailAttachments(caseNumbers);
+        
+        dispose();
+    }//GEN-LAST:event_fileButtonActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JTable attachmentTable;
+    private javax.swing.JTextArea bodyTextArea;
+    private javax.swing.JTextField caseNumberTextBox;
+    private javax.swing.JTextField dateTextBox;
+    private javax.swing.JButton fileButton;
+    private javax.swing.JTextField fromTextBox;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -221,16 +530,44 @@ public class FileEmailDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
+    private javax.swing.JTextField subjectTextBox;
+    private javax.swing.JComboBox<String> toComboBox;
     // End of variables declaration//GEN-END:variables
+
+    class MyComboBoxRenderer extends JComboBox implements TableCellRenderer {
+        public MyComboBoxRenderer(String[] items) {
+          super(items);
+        }
+
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+            boolean hasFocus, int row, int column) {
+          if (isSelected) {
+            setForeground(table.getSelectionForeground());
+            super.setBackground(table.getSelectionBackground());
+          } else {
+            setForeground(table.getForeground());
+            setBackground(table.getBackground());
+          }
+          setSelectedItem(value);
+          return this;
+        }
+      }
+
+      class MyComboBoxEditor extends DefaultCellEditor {
+        public MyComboBoxEditor(String[] items) {
+          super(new JComboBox(items));
+        }
 }
+
+}
+
+
+
+
+
+
