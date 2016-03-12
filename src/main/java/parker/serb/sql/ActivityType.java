@@ -190,4 +190,31 @@ public class ActivityType {
         }
         return activityTypeList;
     }
+    
+    public static String getFullType(String typeAbbrv) {
+        String fullType = "";
+        
+        Statement stmt = null;
+            
+        try {
+
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "select * from ActivityType"
+                    + " where descriptionAbbrv = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, typeAbbrv);
+
+            ResultSet activityTypeListRS = preparedStatement.executeQuery();
+            
+            while(activityTypeListRS.next()) {
+                fullType = activityTypeListRS.getString("descriptionFull");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
+        return fullType;
+    }
 }
