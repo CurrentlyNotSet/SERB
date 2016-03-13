@@ -374,7 +374,7 @@ public class ULPCase {
         return recommendation;
     }
     
-     public static ULPCase loadStatus() {
+    public static ULPCase loadStatus() {
         ULPCase ulp = new ULPCase();
             
         try {
@@ -440,9 +440,6 @@ public class ULPCase {
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
-        
         return ulp;
     }
 
@@ -817,5 +814,13 @@ public class ULPCase {
         if(newCaseInformation.probableCause != oldCaseInformation.probableCause) {
             Activity.addActivty("Changed Priority from " + (oldCaseInformation.probableCause ? "Yes" : "No") + " to " + (newCaseInformation.probableCause ? "Yes" : "No"), "");
         }
+    }
+    
+    private static String ULPdocketTo(String caseNumber) {
+        String to = "";
+        
+        
+        
+        return to;
     }
 }
