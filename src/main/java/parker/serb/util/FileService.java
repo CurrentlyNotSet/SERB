@@ -12,11 +12,10 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import parker.serb.Global;
 import parker.serb.sql.Activity;
 import parker.serb.sql.ActivityType;
+import parker.serb.sql.Audit;
 import parker.serb.sql.Email;
 import parker.serb.sql.EmailAttachment;
 
@@ -139,6 +138,7 @@ public class FileService {
                 Activity.addActivtyFromDocket("Filed " + typeFull + " from " + from + (redacted ? " (REDACTED)" : ""),
                         fileDate + "_" + typeAbbrv + (redacted ? "_REDACTED.pdf" : ".pdf"),
                         caseNumberParts,from, to, typeFull, comment, redacted, false);
+                Audit.addAuditEntry("Filed " + typeFull + " from " + from + (redacted ? " (REDACTED)" : ""));
             }
         }
         
@@ -176,6 +176,7 @@ public class FileService {
                 Activity.addActivtyFromDocket("Filed " + typeFull + " from " + from,
                         fileDate + "_" + typeAbbrv + fileName.substring(fileName.lastIndexOf(".")),
                         caseNumberParts,from, to, typeFull, comment, false, false);
+                Audit.addAuditEntry("Filed " + typeFull + " from " + from);
             }
         }
         
@@ -212,6 +213,7 @@ public class FileService {
                 Activity.addActivtyFromDocket("Filed Email Body from " + from,
                         fileDate + "_BODY.pdf",
                         caseNumberParts,from, to, "Body", "", false, true);
+                Audit.addAuditEntry("Filed Email Body from " + from);
             }
         }
         docketFile.delete();
@@ -253,6 +255,7 @@ public class FileService {
                 Activity.addActivtyFromDocket("Filed " + fullType + " from " + from,
                         fileDate + "_" + type + fileExtenstion,
                         caseNumberParts, from, to, fullType, comment, false, fileExtenstion.endsWith("pdf"));
+                Audit.addAuditEntry("Filed " + fullType + " from " + from);
             }
         }
         docketFile.delete();
