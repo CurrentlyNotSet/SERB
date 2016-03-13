@@ -240,12 +240,7 @@ public class DocketRootPanel extends javax.swing.JPanel {
                 true,
                 docketTable.getValueAt(docketTable.getSelectedRow(), 4).toString(),
                 SectionComboBox.getSelectedItem().toString());
-            docs.clear();
-            loadScanData(SectionComboBox.getSelectedItem().toString());
-            loadEmailData(SectionComboBox.getSelectedItem().toString());
-            loadMediaData(SectionComboBox.getSelectedItem().toString());
-            Collections.sort(docs, new CustomComparator());
-            loadTable();
+            
         } else if(docketTable.getValueAt(docketTable.getSelectedRow(), 2).equals("Email")){
             new fileEmailDialog((JFrame) Global.root.getRootPane().getParent(),
                     true,
@@ -256,13 +251,17 @@ public class DocketRootPanel extends javax.swing.JPanel {
                 true,
                 docketTable.getValueAt(docketTable.getSelectedRow(), 4).toString(),
                 SectionComboBox.getSelectedItem().toString());
-            docs.clear();
-            loadScanData(SectionComboBox.getSelectedItem().toString());
-            loadEmailData(SectionComboBox.getSelectedItem().toString());
-            loadMediaData(SectionComboBox.getSelectedItem().toString());
-            Collections.sort(docs, new CustomComparator());
-            loadTable();
         }
+        reloadTableAfterFiling();
+    }
+    
+    private void reloadTableAfterFiling() {
+        docs.clear();
+        loadScanData(SectionComboBox.getSelectedItem().toString());
+        loadEmailData(SectionComboBox.getSelectedItem().toString());
+        loadMediaData(SectionComboBox.getSelectedItem().toString());
+        Collections.sort(docs, new CustomComparator());
+        loadTable();
     }
     
     private void searchDocketList() {
