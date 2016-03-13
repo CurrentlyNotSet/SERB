@@ -12,6 +12,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultCellEditor;
@@ -27,6 +28,7 @@ import javax.swing.table.TableColumn;
 import parker.serb.Global;
 import parker.serb.sql.Activity;
 import parker.serb.sql.ActivityType;
+import parker.serb.sql.Audit;
 import parker.serb.sql.CaseNumber;
 import parker.serb.sql.Email;
 import parker.serb.sql.EmailAttachment;
@@ -283,6 +285,33 @@ public class fileEmailDialog extends javax.swing.JDialog {
         }
     }
     
+    private void deleteEmail(String id) {
+                    
+        String emailBodyFileName = Email.getEmailBodyFileByID(id);
+
+        File bodyFile = new File(Global.emailPath + emailSection + File.separatorChar + emailBodyFileName);
+
+        if(bodyFile.exists()) {
+            bodyFile.delete();
+        }
+
+        Email.deleteEmailEntry(Integer.valueOf(id));
+
+        List emailAttachmentList = EmailAttachment.getAttachmentList(id);
+
+        for(int j = 0; j < emailAttachmentList.size(); j++) {
+            EmailAttachment attach = (EmailAttachment) emailAttachmentList.get(j);
+
+            File attachFile = new File(Global.emailPath + emailSection + File.separatorChar + attach.fileName);
+
+            if(attachFile.exists()) {
+                attachFile.delete();
+            }
+
+            EmailAttachment.deleteEmailAttachmentEntry(attach.id);
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -507,6 +536,8 @@ public class fileEmailDialog extends javax.swing.JDialog {
         
         //fileAttachements
         fileEmailAttachments(caseNumbers);
+        
+        deleteEmail(emailID);
         
         dispose();
     }//GEN-LAST:event_fileButtonActionPerformed
