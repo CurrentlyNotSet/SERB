@@ -32,6 +32,7 @@ import parker.serb.sql.Audit;
 import parker.serb.sql.CaseNumber;
 import parker.serb.sql.Email;
 import parker.serb.sql.EmailAttachment;
+import parker.serb.sql.ULPCase;
 import parker.serb.sql.User;
 import parker.serb.util.FileService;
 
@@ -195,6 +196,10 @@ public class fileEmailDialog extends javax.swing.JDialog {
         if(!caseNumberFail.equals("")) {
             new docketingCaseNotFound((JFrame) Global.root.getRootPane().getParent(), true, caseNumberFail);
             caseNumberTextBox.requestFocus();
+        }
+        
+        switch (emailSection) {
+            case "ULP":  toComboBox.setSelectedItem(ULPCase.ULPDocketTo(caseNumberTextBox.getText()));
         }
     }
      

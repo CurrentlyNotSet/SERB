@@ -18,6 +18,7 @@ import javax.swing.event.DocumentListener;
 import parker.serb.Global;
 import parker.serb.sql.ActivityType;
 import parker.serb.sql.CaseNumber;
+import parker.serb.sql.ULPCase;
 import parker.serb.sql.User;
 import parker.serb.util.FileService;
 
@@ -182,6 +183,10 @@ public class mediaFileDialog extends javax.swing.JDialog {
         if(!caseNumberFail.equals("")) {
             new docketingCaseNotFound((JFrame) Global.root.getRootPane().getParent(), true, caseNumberFail);
             caseNumberTextBox.requestFocus();
+        }
+        
+        switch (selectedSection) {
+            case "ULP":  toComboBox.setSelectedItem(ULPCase.ULPDocketTo(caseNumberTextBox.getText()));
         }
     }
 
