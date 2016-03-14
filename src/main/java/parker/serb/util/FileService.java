@@ -53,8 +53,7 @@ public class FileService {
     
     public static void openFile(String fileName) {
         try {
-            Desktop desktop = Desktop.getDesktop();
-            desktop.open(new File(Global.activityPath
+            Desktop.getDesktop().open(new File(Global.activityPath
                     + File.separatorChar
                     + Global.activeSection
                     + File.separatorChar
@@ -70,8 +69,7 @@ public class FileService {
     
     public static void openScanFile(String fileName, String section) {
         try {
-            Desktop desktop = Desktop.getDesktop();
-            desktop.open(new File(Global.scanPath
+            Desktop.getDesktop().open(new File(Global.scanPath
                     + File.separatorChar
                     + section
                     + File.separatorChar
@@ -83,8 +81,7 @@ public class FileService {
     
     public static void openAttachmentFile(String id, String section) {
         try {
-            Desktop desktop = Desktop.getDesktop();
-            desktop.open(new File(Global.emailPath
+            Desktop.getDesktop().open(new File(Global.emailPath
                     + File.separatorChar
                     + section
                     + File.separatorChar
@@ -96,8 +93,7 @@ public class FileService {
     
     public static void openEmailBodyFile(String id, String section) {
         try {
-            Desktop desktop = Desktop.getDesktop();
-            desktop.open(new File(Global.emailPath
+            Desktop.getDesktop().open(new File(Global.emailPath
                     + File.separatorChar
                     + section
                     + File.separatorChar
