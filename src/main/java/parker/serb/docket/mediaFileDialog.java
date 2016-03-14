@@ -185,9 +185,12 @@ public class mediaFileDialog extends javax.swing.JDialog {
             caseNumberTextBox.requestFocus();
         }
         
-        switch (selectedSection) {
-            case "ULP":  toComboBox.setSelectedItem(ULPCase.ULPDocketTo(caseNumberTextBox.getText()));
+        if(!caseNumberTextBox.getText().equals("")) {
+            switch (selectedSection) {
+                case "ULP":  toComboBox.setSelectedItem(ULPCase.ULPDocketTo(caseNumberTextBox.getText()));
+            }
         }
+        
     }
 
     /**

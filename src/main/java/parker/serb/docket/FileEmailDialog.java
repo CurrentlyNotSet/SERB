@@ -198,8 +198,10 @@ public class fileEmailDialog extends javax.swing.JDialog {
             caseNumberTextBox.requestFocus();
         }
         
-        switch (emailSection) {
-            case "ULP":  toComboBox.setSelectedItem(ULPCase.ULPDocketTo(caseNumberTextBox.getText()));
+        if(!caseNumberTextBox.getText().equals("")) {
+            switch (emailSection) {
+                case "ULP":  toComboBox.setSelectedItem(ULPCase.ULPDocketTo(caseNumberTextBox.getText()));
+            }
         }
     }
      
