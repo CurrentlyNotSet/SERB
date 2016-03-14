@@ -119,7 +119,7 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
                             break;
                     }
                 }
-                chargingPartTextBox.setText(chargingParty);
+                chargingPartyTextBox.setText(chargingParty);
                 chargingPartyREPTextBox.setText(chargingPartyREP);
                 chargedPartyTextBox.setText(chargedParty);
                 chargedPartyREPTextBox.setText(chargedPartyREP);
@@ -145,7 +145,7 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
      * 
      */
     void clearAll() {
-        chargingPartTextBox.setText("");
+        chargingPartyTextBox.setText("");
         chargingPartyREPTextBox.setText("");
         chargedPartyTextBox.setText("");
         chargedPartyREPTextBox.setText("");
@@ -177,7 +177,7 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
         caseNumberComboBox = new javax.swing.JComboBox();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        chargingPartTextBox = new javax.swing.JTextField();
+        chargingPartyTextBox = new javax.swing.JTextField();
         chargingPartyREPTextBox = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -211,13 +211,8 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
 
         jLabel2.setText("Charging Rep:");
 
-        chargingPartTextBox.setEditable(false);
-        chargingPartTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        chargingPartTextBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chargingPartTextBoxActionPerformed(evt);
-            }
-        });
+        chargingPartyTextBox.setEditable(false);
+        chargingPartyTextBox.setBackground(new java.awt.Color(238, 238, 238));
 
         chargingPartyREPTextBox.setEditable(false);
         chargingPartyREPTextBox.setBackground(new java.awt.Color(238, 238, 238));
@@ -247,7 +242,7 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(caseNumberComboBox, 0, 221, Short.MAX_VALUE)
-                    .addComponent(chargingPartTextBox)
+                    .addComponent(chargingPartyTextBox)
                     .addComponent(chargingPartyREPTextBox)
                     .addComponent(chargedPartyTextBox)
                     .addComponent(chargedPartyREPTextBox))
@@ -262,7 +257,7 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
                     .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(chargingPartTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(chargingPartyTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -345,10 +340,6 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
         add(jPanel2);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void chargingPartTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chargingPartTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_chargingPartTextBoxActionPerformed
-
     private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
         if(SwingUtilities.isRightMouseButton(evt)) {
             if(search == null) {
@@ -365,8 +356,8 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
     private javax.swing.JComboBox caseNumberComboBox;
     private javax.swing.JTextField chargedPartyREPTextBox;
     private javax.swing.JTextField chargedPartyTextBox;
-    private javax.swing.JTextField chargingPartTextBox;
     private javax.swing.JTextField chargingPartyREPTextBox;
+    private javax.swing.JTextField chargingPartyTextBox;
     private javax.swing.JTextField currentStatusTextBox;
     private javax.swing.JTextField filedDateTextBox;
     private javax.swing.JTextField investigatorTextBox;

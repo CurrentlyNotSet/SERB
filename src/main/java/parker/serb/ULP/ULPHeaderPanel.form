@@ -43,7 +43,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="caseNumberComboBox" pref="221" max="32767" attributes="0"/>
-                      <Component id="chargingPartTextBox" max="32767" attributes="0"/>
+                      <Component id="chargingPartyTextBox" max="32767" attributes="0"/>
                       <Component id="chargingPartyREPTextBox" alignment="0" max="32767" attributes="0"/>
                       <Component id="chargedPartyTextBox" alignment="0" max="32767" attributes="0"/>
                       <Component id="chargedPartyREPTextBox" alignment="0" max="32767" attributes="0"/>
@@ -62,7 +62,7 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="chargingPartTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="chargingPartyTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -117,16 +117,13 @@
             <Property name="text" type="java.lang.String" value="Charging Rep:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="chargingPartTextBox">
+        <Component class="javax.swing.JTextField" name="chargingPartyTextBox">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ee" green="ee" red="ee" type="rgb"/>
             </Property>
           </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chargingPartTextBoxActionPerformed"/>
-          </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="chargingPartyREPTextBox">
           <Properties>
