@@ -29,6 +29,7 @@ import parker.serb.user.Preferences;
 import parker.serb.util.CreateNewCaseDialog;
 import parker.serb.login.ExitVerification;
 import parker.serb.publicRecords.fileSelector;
+import parker.serb.sql.DocketLock;
 import parker.serb.util.FileService;
 import parker.serb.util.ReleaseNotesDialog;
 
@@ -982,8 +983,6 @@ public class RootPanel extends javax.swing.JFrame {
             default:
                 break;
         }
-        
-        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -998,6 +997,7 @@ public class RootPanel extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        DocketLock.removeUserLocks();
         User.updateActiveLogIn();
         Audit.addAuditEntry("Logged Off");
         System.exit(0);
