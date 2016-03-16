@@ -99,4 +99,23 @@ public class DocketLock {
             DbUtils.closeQuietly(stmt);
         }
     }
+    
+    public static void removeUserLocks() {
+        Statement stmt = null;
+            
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Delete from DocketLock where lockedBy = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, Global.activeUser.firstName + " " + Global.activeUser.lastName);
+            
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+    }
 }
