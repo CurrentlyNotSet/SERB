@@ -74,7 +74,7 @@ public class DocketRootPanel extends javax.swing.JPanel {
         try {
             Files.walk(Paths.get(Global.scanPath + section)).forEach(filePath -> {
                 try {
-                    if (Files.isRegularFile(filePath) && !Files.isHidden(filePath)) {
+                    if (Files.isRegularFile(filePath) && !Files.isHidden(filePath) && !filePath.startsWith(".DS_")) {
                         try {
                             Path file = filePath;
                             BasicFileAttributes attr = Files.readAttributes(file, BasicFileAttributes.class);
