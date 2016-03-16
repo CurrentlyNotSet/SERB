@@ -246,7 +246,8 @@ public class DocketRootPanel extends javax.swing.JPanel {
                         true,
                         docketTable.getValueAt(docketTable.getSelectedRow(), 4).toString(),section,
                         docketTable.getValueAt(docketTable.getSelectedRow(), 1).toString());
-                DocketLock.removeLock(section, docketTable.getValueAt(docketTable.getSelectedRow(), 4).toString());        
+                DocketLock.removeLock(section, docketTable.getValueAt(docketTable.getSelectedRow(), 4).toString());
+                reloadTableAfterFiling();
             } else {
                 new DocketLockDialog((JFrame) Global.root.getRootPane().getParent(), true, docketLock);
             }
@@ -258,6 +259,7 @@ public class DocketRootPanel extends javax.swing.JPanel {
                         true,
                         docketTable.getValueAt(docketTable.getSelectedRow(), 0).toString(),section);
                 DocketLock.removeLock(section, docketTable.getValueAt(docketTable.getSelectedRow(), 0).toString());
+                reloadTableAfterFiling();
             } else {
                 new DocketLockDialog((JFrame) Global.root.getRootPane().getParent(), true, docketLock);
             }
@@ -269,11 +271,12 @@ public class DocketRootPanel extends javax.swing.JPanel {
                     true,
                     docketTable.getValueAt(docketTable.getSelectedRow(), 4).toString(),section);
                 DocketLock.removeLock(section, docketTable.getValueAt(docketTable.getSelectedRow(), 4).toString());
+                reloadTableAfterFiling();
             } else {
                 new DocketLockDialog((JFrame) Global.root.getRootPane().getParent(), true, docketLock);
             }
         }
-        reloadTableAfterFiling();
+        
     }
     
     private void reloadTableAfterFiling() {
