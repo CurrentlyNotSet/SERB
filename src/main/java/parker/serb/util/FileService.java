@@ -111,7 +111,8 @@ public class FileService {
             String from, 
             String to,
             String comment,
-            boolean redacted) {
+            boolean redacted,
+            Date activityDate) {
         
         File docketFile = new File(Global.scanPath + section + File.separatorChar + fileName);
         
@@ -133,7 +134,7 @@ public class FileService {
                 FileUtils.copyFile(docketFile, new File(caseArchiveFile + File.separator + fileDate + "_" + typeAbbrv + (redacted ? "_REDACTED.pdf" : ".pdf")));
                 Activity.addActivtyFromDocket("Filed " + typeFull + " from " + from + (redacted ? " (REDACTED)" : ""),
                         fileDate + "_" + typeAbbrv + (redacted ? "_REDACTED.pdf" : ".pdf"),
-                        caseNumberParts,from, to, typeFull, comment, redacted, false);
+                        caseNumberParts,from, to, typeFull, comment, redacted, false, activityDate);
                 Audit.addAuditEntry("Filed " + typeFull + " from " + from + (redacted ? " (REDACTED)" : ""));
             }
         }
