@@ -43,6 +43,12 @@ public class FileService {
                     Global.activityPath = "C:\\SERB\\Activity\\";
                     Global.mediaPath = "C:\\SERB\\Media\\";
                     break;
+                case "NW103087":
+                    Global.scanPath = "C:\\Users\\johnp10\\Desktop\\SERB\\Scan\\";
+                    Global.emailPath = "C:\\Users\\johnp10\\Desktop\\SERB\\Email\\";
+                    Global.activityPath = "C:\\Users\\johnp10\\Desktop\\SERB\\Activity\\";
+                    Global.mediaPath = "C:\\Users\\johnp10\\Desktop\\SERB\\Media\\";
+                    break;    
                 default:
                     //SERB LOCATIONS
             }
