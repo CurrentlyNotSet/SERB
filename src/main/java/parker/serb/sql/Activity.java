@@ -117,6 +117,48 @@ public class Activity {
         }
     }
     
+    public static void addActivtyFromDocket(String action, String fileName,
+            String[] caseNumber,
+            String from, 
+            String to, 
+            String type, 
+            String comment,
+            boolean redacted,
+            boolean needsTimestamp,
+            Date activityDate) {
+        Statement stmt = null;
+            
+        try {
+
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, caseNumber[0].trim());
+            preparedStatement.setString(2, caseNumber[1].trim());
+            preparedStatement.setString(3, caseNumber[2].trim());
+            preparedStatement.setString(4, caseNumber[3].trim());
+            preparedStatement.setInt(5, Global.activeUser.id);
+            preparedStatement.setTimestamp(6, new Timestamp(activityDate.getTime()));
+            preparedStatement.setString(7, action);
+            preparedStatement.setString(8, fileName);
+            preparedStatement.setString(9, from);
+            preparedStatement.setString(10, to);
+            preparedStatement.setString(11, type);
+            preparedStatement.setString(12, comment);
+            preparedStatement.setBoolean(13, redacted);
+            preparedStatement.setBoolean(14, needsTimestamp);
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+    }
+    
     /**
      * Creates activity entry when new cases are created
      * @param caseNumber the new case number
