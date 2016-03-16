@@ -244,7 +244,8 @@ public class DocketRootPanel extends javax.swing.JPanel {
                 DocketLock.addLock(section, docketTable.getValueAt(docketTable.getSelectedRow(), 4).toString());
                 new scanFileDialog((JFrame) Global.root.getRootPane().getParent(),
                         true,
-                        docketTable.getValueAt(docketTable.getSelectedRow(), 4).toString(),section);
+                        docketTable.getValueAt(docketTable.getSelectedRow(), 4).toString(),section,
+                        docketTable.getValueAt(docketTable.getSelectedRow(), 1).toString());
                 DocketLock.removeLock(section, docketTable.getValueAt(docketTable.getSelectedRow(), 4).toString());        
             } else {
                 new DocketLockDialog((JFrame) Global.root.getRootPane().getParent(), true, docketLock);
