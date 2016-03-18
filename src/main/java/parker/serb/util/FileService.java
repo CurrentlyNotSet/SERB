@@ -215,7 +215,7 @@ public class FileService {
                 FileUtils.copyFile(docketFile, new File(caseArchiveFile + File.separator + fileDate + "_BODY.pdf"));
                 Activity.addActivtyFromDocket("Filed Email Body from " + from,
                         fileDate + "_BODY.pdf",
-                        caseNumberParts,from, to, "Body", "", false, true);
+                        caseNumberParts,from, to, "Email Body", "", false, true);
                 Audit.addAuditEntry("Filed Email Body from " + from);
             }
         }
