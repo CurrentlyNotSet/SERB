@@ -194,6 +194,7 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton6.setVisible(false);
                 jButton7.setVisible(false);
                 jButton8.setVisible(false);
+                jButton9.setVisible(true);
                 break;
             case "REP":
                 jButton1.setText("New Case");
