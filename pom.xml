@@ -18,7 +18,7 @@
             <dependency>
                 <groupId>de.sciss</groupId>
                 <artifactId>weblaf</artifactId>
-                <version>1.27</version>
+                <version>1.29</version>
             </dependency>
             <dependency>
                 <groupId>io.airbrake</groupId>
