@@ -5,8 +5,11 @@
  */
 package parker.serb.activity;
 
+import java.util.List;
 import parker.serb.Global;
 import parker.serb.sql.Activity;
+import parker.serb.sql.ActivityType;
+import parker.serb.sql.User;
 import parker.serb.util.FileService;
 
 /**
@@ -41,11 +44,36 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
     }
     
     private void loadToComboBox() {
+        List userList = null;
+                
+        switch (Global.activeSection) {
+            case "ULP":  userList = User.loadULPComboBox();
+        }
         
+        toComboBox.setMaximumRowCount(6);
+        
+        toComboBox.removeAllItems();
+        
+        toComboBox.addItem("");
+        
+        for(int i = 0; i < userList.size(); i++) {
+            toComboBox.addItem(userList.get(i).toString());
+        }
     }
     
     private void loadTypeComboBox() {
+        List typeList = ActivityType.loadAllActivityTypeBySection(Global.activeSection);
         
+        typeComboBox.setMaximumRowCount(10);
+        
+        typeComboBox.removeAllItems();
+        
+        typeComboBox.addItem("");
+        
+        for(int i = 0; i < typeList.size(); i++) {
+            ActivityType item = (ActivityType) typeList.get(i);
+            typeComboBox.addItem(item.descriptionFull);
+        }
     }
     
     private void loadInformation(String id) {
@@ -61,7 +89,6 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
         if(activity.fileName.equals("")) {
             viewFileButton.setVisible(false);
         }
-        
     }
 
     /**
@@ -175,10 +202,8 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
                                     .addComponent(fromTextBox)
                                     .addComponent(toComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 379, Short.MAX_VALUE)
-                                    .addComponent(typeComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(81, 81, 81)
-                        .addComponent(viewFileButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(typeComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(viewFileButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(updateButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -218,7 +243,7 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(viewFileButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
                 .addComponent(updateButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(closeButton)
