@@ -70,7 +70,6 @@ public class ActivityPanel extends javax.swing.JPanel {
                 if(e.getClickCount() == 2 && !filePath.equals("") && actvityTable.getSelectedColumn() == 3) {
                     FileService.openFile(filePath);
                 } else if(e.getClickCount() == 2 && actvityTable.getSelectedColumn() != 3) {
-                    System.out.println("DETAIL PANEL");
                     new DetailedActivityDialog((JFrame) Global.root.getRootPane().getParent(),
                             true,
                             actvityTable.getValueAt(actvityTable.getSelectedRow(), 4).toString());
