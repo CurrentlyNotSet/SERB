@@ -24,7 +24,6 @@ public class ResetPasswordDialog extends javax.swing.JDialog {
      */
     public ResetPasswordDialog(java.awt.Frame parent, boolean modal, boolean logIn) {
         super(parent, modal);
-        setUndecorated(true);
         initComponents();
         enteredFromLogIn = logIn;
         this.getRootPane().setDefaultButton(jButton1);

@@ -21,7 +21,6 @@ public class ExitVerification extends javax.swing.JDialog {
      */
     public ExitVerification(java.awt.Frame parent, boolean modal, String action) {
         super(parent, modal);
-        setUndecorated(true);
         initComponents();
         jLabel1.setText("Are you sure you want to " + action.toLowerCase() + "?");
         jButton3.setText(action);

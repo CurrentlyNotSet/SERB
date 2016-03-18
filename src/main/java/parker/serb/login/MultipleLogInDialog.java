@@ -19,7 +19,6 @@ public class MultipleLogInDialog extends javax.swing.JDialog {
      */
     public MultipleLogInDialog(java.awt.Frame parent) {
         super(parent, true);
-        setUndecorated(true);
         initComponents();
         jLabel2.setText(Global.activeUser.lastLogInPCName);
         setLocationRelativeTo(parent);
