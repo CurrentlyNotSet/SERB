@@ -25,7 +25,6 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
      */
     public CreateNewPartyDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        setUndecorated(true);
         initComponents();
         addListeners();
         loadStateComboBox();

@@ -27,7 +27,6 @@ public class PartyTypeSelectionPanel extends javax.swing.JDialog {
      */
     public PartyTypeSelectionPanel(java.awt.Frame parent, boolean modal, String passedName, String passedID) {
         super(parent, modal);
-        setUndecorated(true);
         initComponents();
         id = passedID;
         name = passedName;

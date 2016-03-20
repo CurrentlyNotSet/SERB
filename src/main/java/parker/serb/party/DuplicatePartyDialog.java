@@ -17,7 +17,6 @@ public class DuplicatePartyDialog extends javax.swing.JDialog {
      */
     public DuplicatePartyDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        setUndecorated(true);
         initComponents();
         setLocationRelativeTo(parent);
         setVisible(true);

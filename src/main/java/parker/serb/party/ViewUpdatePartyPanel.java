@@ -37,7 +37,6 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
      */
     public ViewUpdatePartyPanel(java.awt.Frame parent, boolean modal, String passedId) {
         super(parent, modal);
-        setUndecorated(true);
         initComponents();
         addListeners();
         loadStateComboBox();

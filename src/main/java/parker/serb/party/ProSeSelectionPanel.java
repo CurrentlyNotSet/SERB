@@ -27,7 +27,6 @@ public class ProSeSelectionPanel extends javax.swing.JDialog {
      */
     public ProSeSelectionPanel(java.awt.Frame parent, boolean modal, String passedPartyType, String passedID, String passedName) {
         super(parent, modal);
-        setUndecorated(true);
         initComponents();
         id = passedID;
         partyType = passedPartyType;
