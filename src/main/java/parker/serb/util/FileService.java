@@ -264,15 +264,23 @@ public class FileService {
         docketFile.delete();
     }
     
-    public static void renameActivtyFile(String fileName, Activity updatedActivity) {
+    public static void renameActivtyFile(String fileName, String updatedType) {
         
-        FileUtils.copyFile(new File(Global.activityPath + Global.caseYear
+        FileUtils.copyFile(new File(Global.activityPath + Global.activeSection 
+                + File.separator + Global.caseYear
                 + File.separator + Global.caseYear + "-" + Global.caseType
                 + "-" + Global.caseMonth + "-" + Global.caseNumber
-                + File.separator + fileName), new File(Global.activityPath + Global.caseYear
+                + File.separator + fileName), new File(Global.activityPath  + Global.activeSection
+                + File.separator + Global.caseYear
                 + File.separator + Global.caseYear + "-" + Global.caseType
                 + "-" + Global.caseMonth + "-" + Global.caseNumber
                 + File.separator + fileName.split("_")[0] + "_"
-                + ActivityType.getTypeAbbrv(updatedActivity.type) + "." + fileName.split("\\.")[1]));
+                + ActivityType.getTypeAbbrv(updatedType) + "." + fileName.split("\\.")[1]));
+        
+        new File(Global.activityPath + Global.activeSection 
+                + File.separator + Global.caseYear
+                + File.separator + Global.caseYear + "-" + Global.caseType
+                + "-" + Global.caseMonth + "-" + Global.caseNumber
+                + File.separator + fileName).delete();
     }
 }
