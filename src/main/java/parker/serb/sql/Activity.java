@@ -361,4 +361,34 @@ public class Activity {
         }
         return activity;
     }
+    
+    public static void updateActivtyEntry(Activity activty) {
+        try {
+
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "update Activity SET"
+                    + " [to] = ?,"
+                    + " [from] = ?,"
+                    + " type = ?,"
+                    + " comment = ?,"
+                    + " action = ?,"
+                    + " fileName = ?"
+                    + " Where id = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, activty.to);
+            preparedStatement.setString(2, activty.from);
+            preparedStatement.setString(3, activty.type);
+            preparedStatement.setString(4, activty.comment);
+            preparedStatement.setString(5, activty.action);
+            preparedStatement.setString(6, activty.fileName);
+            preparedStatement.setInt(7, activty.id);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
+    }
 }
