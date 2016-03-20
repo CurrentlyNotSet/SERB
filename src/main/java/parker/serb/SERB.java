@@ -24,11 +24,10 @@ public class SERB {
     
     public static void main(String[] args) {
         
-        UIManager.put("InternalFrame.borderShadow", Color.gray);
-        //
-        //System.out.println(System.getProperty("os.name"));
+        //UIManager.put("InternalFrame.borderShadow", Color.gray);
+        
         if(System.getProperty("os.name").equalsIgnoreCase("Mac OS X")) {
-        //Used to watch for Apple-Q keys and handle the applicaiton being closed
+            //Used to watch for Apple-Q keys and handle the applicaiton being closed
             try {
                 Application macOSXApplication=Application.getApplication();
 

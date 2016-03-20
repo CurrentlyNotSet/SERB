@@ -64,7 +64,7 @@ public class Email {
                 docket.emailBody = emailListRS.getString("emailBody");
                 docket.emailBodyFileName = emailListRS.getString("emailBodyFileName");
                 docket.type = "Email";
-                docket.attachmentCount = "0";
+                docket.attachmentCount = Integer.toString(EmailAttachment.getAttachmentList(Integer.toString(emailListRS.getInt("id"))).size());
                 emailList.add(docket);
             }
         } catch (SQLException ex) {
@@ -87,5 +87,54 @@ public class Email {
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public static Email getEmailByID(String id) {
+        Email email = null;
+        
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "select * from Email where id = ?";
+            
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, id);
+
+            ResultSet emailListRS = preparedStatement.executeQuery();
+            
+            while(emailListRS.next()) {
+                email = new Email();
+                email.id = emailListRS.getInt("id");
+                email.emailFrom = emailListRS.getString("emailFrom");
+                email.emailSubject = emailListRS.getString("emailSubject");
+                email.receivedDate = new Date(emailListRS.getTimestamp("receivedDate").getTime());
+                email.emailBody = emailListRS.getString("emailBody");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return email;
+    }
+    
+    public static String getEmailBodyFileByID(String id) {
+        String fileName = "";
+        
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "select * from Email where id = ?";
+            
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, id);
+
+            ResultSet emailListRS = preparedStatement.executeQuery();
+            
+            while(emailListRS.next()) {
+                fileName = emailListRS.getString("emailBodyFileName");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return fileName;
     }
 }

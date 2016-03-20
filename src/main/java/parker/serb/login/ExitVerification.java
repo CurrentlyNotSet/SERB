@@ -7,6 +7,7 @@ package parker.serb.login;
 
 import parker.serb.Global;
 import parker.serb.sql.Audit;
+import parker.serb.sql.DocketLock;
 import parker.serb.sql.User;
 
 /**
@@ -20,7 +21,6 @@ public class ExitVerification extends javax.swing.JDialog {
      */
     public ExitVerification(java.awt.Frame parent, boolean modal, String action) {
         super(parent, modal);
-        setUndecorated(true);
         initComponents();
         jLabel1.setText("Are you sure you want to " + action.toLowerCase() + "?");
         jButton3.setText(action);
@@ -100,13 +100,16 @@ public class ExitVerification extends javax.swing.JDialog {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         switch (jButton3.getText()) {
             case "Quit":
+                DocketLock.removeUserLocks();
                 User.updateActiveLogIn();
                 Audit.addAuditEntry("Logged Off");
                 System.exit(0);
             case "Log Off":
+                DocketLock.removeUserLocks();
                 User.updateActiveLogIn();
                 Audit.addAuditEntry("Logged Off");
                 Global.activeUser = null;
+                Global.activeUserRoles.clear();
                 Global.root.dispose();
                 dispose();
                 new LogInDialog(null);

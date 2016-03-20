@@ -156,7 +156,7 @@ public class LogInDialog extends javax.swing.JDialog {
         });
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Serb-Logo-TranspRing.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SERBSeal.png"))); // NOI18N
         jLabel1.setToolTipText("");
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);

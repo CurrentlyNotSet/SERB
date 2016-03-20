@@ -374,7 +374,7 @@ public class ULPCase {
         return recommendation;
     }
     
-     public static ULPCase loadStatus() {
+    public static ULPCase loadStatus() {
         ULPCase ulp = new ULPCase();
             
         try {
@@ -440,9 +440,6 @@ public class ULPCase {
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
-        
         return ulp;
     }
 
@@ -817,5 +814,43 @@ public class ULPCase {
         if(newCaseInformation.probableCause != oldCaseInformation.probableCause) {
             Activity.addActivty("Changed Priority from " + (oldCaseInformation.probableCause ? "Yes" : "No") + " to " + (newCaseInformation.probableCause ? "Yes" : "No"), "");
         }
+    }
+    
+    public static String ULPDocketTo(String caseNumber) {
+        String[] parsedCase = caseNumber.trim().split("-");
+        String to = "";
+        
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select"
+                    + " investigatorID,"
+                    + " aljID"
+                    + " from ULPCase"
+                    + " where caseYear = ? "
+                    + " and caseType = ? "
+                    + " and caseMonth = ? "
+                    + " and caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, parsedCase[0]);
+            preparedStatement.setString(2, parsedCase[1]);
+            preparedStatement.setString(3, parsedCase[2]);
+            preparedStatement.setString(4, parsedCase[3]);
+
+            ResultSet caseNumberRS = preparedStatement.executeQuery();
+           
+            caseNumberRS.next();
+            
+            if(caseNumberRS.getInt("aljID") != 0) {
+                to = User.getNameByID(caseNumberRS.getInt("aljID"));
+            } else if(caseNumberRS.getInt("investigatorID") != 0) {
+                to = User.getNameByID(caseNumberRS.getInt("investigatorID"));
+            }
+            stmt.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return to;
     }
 }

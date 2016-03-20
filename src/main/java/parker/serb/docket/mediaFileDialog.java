@@ -11,8 +11,6 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.event.DocumentEvent;
@@ -28,31 +26,26 @@ import parker.serb.util.FileService;
  *
  * @author parkerjohnston
  */
-public class scanFileDialog extends javax.swing.JDialog {
+public class mediaFileDialog extends javax.swing.JDialog {
 
     String selectedSection = "";
     /**
      * Creates new form scanFileDialog
      */
-    public scanFileDialog(java.awt.Frame parent, boolean modal, String file, String section, String time) {
+    public mediaFileDialog(java.awt.Frame parent, boolean modal, String file, String section) {
         super(parent, modal);
         initComponents();
         selectedSection = section;
-        loadData(section, file, time);
+        loadData(section, file);
         addListeners();
         setLocationRelativeTo(parent);
         setVisible(true); 
     }
     
-    private void loadData(String section, String file, String time) {
+    private void loadData(String section, String file) {
         fileNameTextBox.setText(file);
         loadToComboBox();
         loadTypeComboBox();
-        scanDateTextBox.setText(time.split(" ")[0]);
-        hourTextBox.setText(time.split(" ")[1].split(":")[0]);
-        minuteTextBox.setText(time.split(" ")[1].split(":")[1]);
-        amPMComboBox.setSelectedItem(time.split(" ")[2]);
-        
     }
     
     private void addListeners() {
@@ -197,21 +190,7 @@ public class scanFileDialog extends javax.swing.JDialog {
                 case "ULP":  toComboBox.setSelectedItem(ULPCase.ULPDocketTo(caseNumberTextBox.getText()));
             }
         }
-    }
-    
-    private Date generateDate() {
-        int hour = Integer.valueOf(hourTextBox.getText().trim());
         
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR, Integer.valueOf(scanDateTextBox.getText().split("/")[2]));
-        cal.set(Calendar.MONTH, Integer.valueOf(scanDateTextBox.getText().split("/")[0]) - 1);
-        cal.set(Calendar.DAY_OF_MONTH, Integer.valueOf(scanDateTextBox.getText().split("/")[1]));
-        cal.set(Calendar.HOUR_OF_DAY, amPMComboBox.getSelectedItem().toString().equalsIgnoreCase("AM") ? hour : hour + 12);
-        cal.set(Calendar.MINUTE, Integer.valueOf(minuteTextBox.getText().trim()));
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        
-        return cal.getTime();
     }
 
     /**
@@ -229,8 +208,6 @@ public class scanFileDialog extends javax.swing.JDialog {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        redactedCheckBox = new javax.swing.JCheckBox();
         fileNameTextBox = new javax.swing.JTextField();
         fromTextBox = new javax.swing.JTextField();
         toComboBox = new javax.swing.JComboBox<>();
@@ -241,18 +218,12 @@ public class scanFileDialog extends javax.swing.JDialog {
         caseNumberTextBox = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         commentTextBox = new javax.swing.JTextArea();
-        jLabel9 = new javax.swing.JLabel();
-        scanDateTextBox = new com.alee.extended.date.WebDateField();
-        hourTextBox = new javax.swing.JTextField();
-        jLabel10 = new javax.swing.JLabel();
-        minuteTextBox = new javax.swing.JTextField();
-        amPMComboBox = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Scan Filing");
+        jLabel1.setText("Media Filing");
 
         jLabel2.setText("File Name:");
 
@@ -263,8 +234,6 @@ public class scanFileDialog extends javax.swing.JDialog {
         jLabel5.setText("Type:");
 
         jLabel6.setText("Comment:");
-
-        jLabel7.setText("Redacted:");
 
         fileNameTextBox.setEditable(false);
         fileNameTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
@@ -296,34 +265,6 @@ public class scanFileDialog extends javax.swing.JDialog {
         commentTextBox.setRows(5);
         jScrollPane1.setViewportView(commentTextBox);
 
-        jLabel9.setText("Date:");
-
-        scanDateTextBox.setEditable(false);
-        scanDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
-        scanDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        scanDateTextBox.setDateFormat(Global.mmddyyyy);
-        scanDateTextBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                scanDateTextBoxActionPerformed(evt);
-            }
-        });
-
-        hourTextBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                hourTextBoxActionPerformed(evt);
-            }
-        });
-
-        jLabel10.setText(":");
-
-        minuteTextBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                minuteTextBoxActionPerformed(evt);
-            }
-        });
-
-        amPMComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "AM", "PM" }));
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -339,31 +280,16 @@ public class scanFileDialog extends javax.swing.JDialog {
                             .addComponent(jLabel3)
                             .addComponent(jLabel4)
                             .addComponent(jLabel5)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel9))
+                            .addComponent(jLabel6))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(caseNumberTextBox)
                             .addComponent(fileNameTextBox)
                             .addComponent(fromTextBox)
-                            .addComponent(toComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(toComboBox, 0, 279, Short.MAX_VALUE)
                             .addComponent(typeComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(redactedCheckBox)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(scanDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(hourTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, 0)
-                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, 0)
-                                .addComponent(minuteTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(amPMComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(jScrollPane1)))
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(fileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -384,37 +310,32 @@ public class scanFileDialog extends javax.swing.JDialog {
                     .addComponent(fileNameTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9)
-                    .addComponent(scanDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(hourTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel10)
-                    .addComponent(minuteTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(amPMComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel3)
+                    .addComponent(fromTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(fromTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(toComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(typeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(redactedCheckBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addComponent(jLabel6))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(fileButton)
-                    .addComponent(cancelButton))
-                .addContainerGap())
+                    .addComponent(cancelButton)
+                    .addComponent(fileButton))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -427,55 +348,33 @@ public class scanFileDialog extends javax.swing.JDialog {
     private void fileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileButtonActionPerformed
         // TODO add your handling code here:
         String[] caseNumbers = caseNumberTextBox.getText().trim().split(",");
-        FileService.docketScan(caseNumbers,
+        FileService.docketMedia(caseNumbers,
                 fileNameTextBox.getText(),
                 selectedSection,
                 typeComboBox.getSelectedItem().toString().split("-")[0].trim(),
                 typeComboBox.getSelectedItem().toString().split("-")[1].trim(),
                 fromTextBox.getText(),
                 toComboBox.getSelectedItem().toString(),
-                commentTextBox.getText(),
-                redactedCheckBox.isSelected(),
-                generateDate());
+                commentTextBox.getText());
         dispose();
     }//GEN-LAST:event_fileButtonActionPerformed
 
-    private void scanDateTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scanDateTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_scanDateTextBoxActionPerformed
-
-    private void hourTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hourTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_hourTextBoxActionPerformed
-
-    private void minuteTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minuteTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_minuteTextBoxActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> amPMComboBox;
     private javax.swing.JButton cancelButton;
     private javax.swing.JTextField caseNumberTextBox;
     private javax.swing.JTextArea commentTextBox;
     private javax.swing.JButton fileButton;
     private javax.swing.JTextField fileNameTextBox;
     private javax.swing.JTextField fromTextBox;
-    private javax.swing.JTextField hourTextBox;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField minuteTextBox;
-    private javax.swing.JCheckBox redactedCheckBox;
-    private com.alee.extended.date.WebDateField scanDateTextBox;
     private javax.swing.JComboBox<String> toComboBox;
     private javax.swing.JComboBox<String> typeComboBox;
     // End of variables declaration//GEN-END:variables

@@ -117,6 +117,48 @@ public class Activity {
         }
     }
     
+    public static void addActivtyFromDocket(String action, String fileName,
+            String[] caseNumber,
+            String from, 
+            String to, 
+            String type, 
+            String comment,
+            boolean redacted,
+            boolean needsTimestamp,
+            Date activityDate) {
+        Statement stmt = null;
+            
+        try {
+
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, caseNumber[0].trim());
+            preparedStatement.setString(2, caseNumber[1].trim());
+            preparedStatement.setString(3, caseNumber[2].trim());
+            preparedStatement.setString(4, caseNumber[3].trim());
+            preparedStatement.setInt(5, Global.activeUser.id);
+            preparedStatement.setTimestamp(6, new Timestamp(activityDate.getTime()));
+            preparedStatement.setString(7, action);
+            preparedStatement.setString(8, fileName);
+            preparedStatement.setString(9, from);
+            preparedStatement.setString(10, to);
+            preparedStatement.setString(11, type);
+            preparedStatement.setString(12, comment);
+            preparedStatement.setBoolean(13, redacted);
+            preparedStatement.setBoolean(14, needsTimestamp);
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+    }
+    
     /**
      * Creates activity entry when new cases are created
      * @param caseNumber the new case number
@@ -262,5 +304,91 @@ public class Activity {
 
         }
         return activityList;
+    }
+    
+    public static Activity loadActivityByID(String id) {
+        Activity activity = new Activity();
+        
+        Statement stmt = null;
+            
+        try {
+
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "select Activity.id,"
+                    + " caseYear,"
+                    + " caseType,"
+                    + " caseMonth,"
+                    + " caseNumber,"
+                    + " date,"
+                    + " [to],"
+                    + " [from],"
+                    + " type,"
+                    + " comment,"
+                    + " action,"
+                    + " firstName,"
+                    + " lastName,"
+                    + " fileName"
+                    + " from Activity"
+                    + " INNER JOIN Users"
+                    + " ON Activity.userID = Users.id"
+                    + " Where Activity.id = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setInt(1, Integer.parseInt(id));
+
+            ResultSet caseActivity = preparedStatement.executeQuery();
+            
+            while(caseActivity.next()) {
+                activity.id = caseActivity.getInt("id");
+                activity.user = caseActivity.getString("firstName") + " " + caseActivity.getString("lastName");
+                activity.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
+                activity.action = caseActivity.getString("action");
+                activity.caseYear = caseActivity.getString("caseYear");
+                activity.caseType = caseActivity.getString("caseType");
+                activity.caseMonth = caseActivity.getString("caseMonth");
+                activity.caseNumber = caseActivity.getString("caseNumber");
+                activity.fileName = caseActivity.getString("fileName");
+                activity.to = caseActivity.getString("to");
+                activity.type = caseActivity.getString("type");
+                activity.comment = caseActivity.getString("comment");
+                activity.from = caseActivity.getString("from");
+                
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
+        return activity;
+    }
+    
+    public static void updateActivtyEntry(Activity activty) {
+        try {
+
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "update Activity SET"
+                    + " [to] = ?,"
+                    + " [from] = ?,"
+                    + " type = ?,"
+                    + " comment = ?,"
+                    + " action = ?,"
+                    + " fileName = ?"
+                    + " Where id = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, activty.to);
+            preparedStatement.setString(2, activty.from);
+            preparedStatement.setString(3, activty.type);
+            preparedStatement.setString(4, activty.comment);
+            preparedStatement.setString(5, activty.action);
+            preparedStatement.setString(6, activty.fileName);
+            preparedStatement.setInt(7, activty.id);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
     }
 }

@@ -24,7 +24,7 @@ public class EmailAttachment {
     public int emailID;
     public String fileName;
     
-    public static List getAttachmentList(int id) {
+    public static List getAttachmentList(String id) {
         List emailAttachmentList = new ArrayList<>();
         
         try {
@@ -34,7 +34,7 @@ public class EmailAttachment {
             String sql = "select * from EmailAttachment where emailID = ?";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setInt(1, id);
+            preparedStatement.setString(1, id);
 
             ResultSet emailListRS = preparedStatement.executeQuery();
             
@@ -65,5 +65,28 @@ public class EmailAttachment {
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public static String getEmailAttachmentFileByID(String id) {
+        String emailAttachmentFileName = "";
+        
+        try {
+
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "select fileName from EmailAttachment where id = ?";
+            
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, id);
+
+            ResultSet emailListRS = preparedStatement.executeQuery();
+            
+            while(emailListRS.next()) {
+                emailAttachmentFileName = emailListRS.getString("fileName");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return emailAttachmentFileName;
     }
 }

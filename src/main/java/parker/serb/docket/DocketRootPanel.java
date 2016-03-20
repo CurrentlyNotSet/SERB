@@ -30,9 +30,11 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
 import parker.serb.sql.Audit;
+import parker.serb.sql.DocketLock;
 import parker.serb.sql.Email;
 import parker.serb.sql.EmailAttachment;
 import parker.serb.sql.User;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -72,7 +74,32 @@ public class DocketRootPanel extends javax.swing.JPanel {
         try {
             Files.walk(Paths.get(Global.scanPath + section)).forEach(filePath -> {
                 try {
-                    if (Files.isRegularFile(filePath) && !Files.isHidden(filePath)) {
+                    Path file = filePath;
+                    if(file.getFileName().toString().endsWith(".pdf")) {
+                        BasicFileAttributes attr = Files.readAttributes(file, BasicFileAttributes.class);
+                        Email docket = new Email();
+                        docket.id = 0;
+                        docket.attachmentCount = "";
+                        docket.receivedDate = new Date(attr.creationTime().toMillis());
+                        docket.emailFrom = "";
+                        docket.emailSubject = file.getFileName().toString();
+                        docket.type = "Scan";
+                        docs.add(docket);
+                    }
+                } catch (IOException ex) {
+                    SlackNotification.sendNotification(ex.getMessage());
+                }
+            });
+        } catch (IOException ex) {
+            SlackNotification.sendNotification(ex.getMessage());
+        }
+    }
+    
+    private void loadMediaData(String section) {
+        try {
+            Files.walk(Paths.get(Global.mediaPath + section)).forEach(filePath -> {
+                try {
+                    if (Files.isRegularFile(filePath) && !Files.isHidden(filePath) && !filePath.startsWith(".DS_")) {
                         try {
                             Path file = filePath;
                             BasicFileAttributes attr = Files.readAttributes(file, BasicFileAttributes.class);
@@ -82,18 +109,18 @@ public class DocketRootPanel extends javax.swing.JPanel {
                             docket.receivedDate = new Date(attr.creationTime().toMillis());
                             docket.emailFrom = "";
                             docket.emailSubject = file.getFileName().toString();
-                            docket.type = "Scan";
+                            docket.type = "Media";
                             docs.add(docket);
                         } catch (IOException ex) {
-                            Logger.getLogger(DocketRootPanel.class.getName()).log(Level.SEVERE, null, ex);
+                            SlackNotification.sendNotification(ex.getMessage());
                         }
                     }
                 } catch (IOException ex) {
-                    Logger.getLogger(DocketRootPanel.class.getName()).log(Level.SEVERE, null, ex);
+                    SlackNotification.sendNotification(ex.getMessage());
                 }
             });
         } catch (IOException ex) {
-            Logger.getLogger(DocketRootPanel.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex.getMessage());
         }
     }
     
@@ -146,6 +173,7 @@ public class DocketRootPanel extends javax.swing.JPanel {
                 docs.clear();
                 loadScanData(SectionComboBox.getSelectedItem().toString());
                 loadEmailData(SectionComboBox.getSelectedItem().toString());
+                loadMediaData(SectionComboBox.getSelectedItem().toString());
                 Collections.sort(docs, new CustomComparator());
                 loadTable();
             }
@@ -201,19 +229,56 @@ public class DocketRootPanel extends javax.swing.JPanel {
     }
     
     public void displayFileDialog() {
+        String section = SectionComboBox.getSelectedItem().toString();
+        
         if(docketTable.getValueAt(docketTable.getSelectedRow(), 2).equals("Scan")) {
-            new scanFileDialog((JFrame) Global.root.getRootPane().getParent(),
-                true,
-                docketTable.getValueAt(docketTable.getSelectedRow(), 4).toString(),
-                SectionComboBox.getSelectedItem().toString());
-            docs.clear();
-            loadScanData(SectionComboBox.getSelectedItem().toString());
-            loadEmailData(SectionComboBox.getSelectedItem().toString());
-            Collections.sort(docs, new CustomComparator());
-            loadTable();
-        } else {
-            new FileEmailDialog((JFrame) Global.root.getRootPane().getParent(), true);
+            DocketLock docketLock = DocketLock.checkLock(section, docketTable.getValueAt(docketTable.getSelectedRow(), 4).toString());
+            if(docketLock == null) {
+                DocketLock.addLock(section, docketTable.getValueAt(docketTable.getSelectedRow(), 4).toString());
+                new scanFileDialog((JFrame) Global.root.getRootPane().getParent(),
+                        true,
+                        docketTable.getValueAt(docketTable.getSelectedRow(), 4).toString(),section,
+                        docketTable.getValueAt(docketTable.getSelectedRow(), 1).toString());
+                DocketLock.removeLock(section, docketTable.getValueAt(docketTable.getSelectedRow(), 4).toString());
+                reloadTableAfterFiling();
+            } else {
+                new DocketLockDialog((JFrame) Global.root.getRootPane().getParent(), true, docketLock);
+            }
+        } else if(docketTable.getValueAt(docketTable.getSelectedRow(), 2).equals("Email")){
+            DocketLock docketLock = DocketLock.checkLock(section, docketTable.getValueAt(docketTable.getSelectedRow(), 0).toString());
+            if(docketLock == null) {
+                DocketLock.addLock(section, docketTable.getValueAt(docketTable.getSelectedRow(), 0).toString());
+                new fileEmailDialog((JFrame) Global.root.getRootPane().getParent(),
+                        true,
+                        docketTable.getValueAt(docketTable.getSelectedRow(), 0).toString(),section);
+                DocketLock.removeLock(section, docketTable.getValueAt(docketTable.getSelectedRow(), 0).toString());
+                reloadTableAfterFiling();
+            } else {
+                new DocketLockDialog((JFrame) Global.root.getRootPane().getParent(), true, docketLock);
+            }
+        } else if(docketTable.getValueAt(docketTable.getSelectedRow(), 2).equals("Media")){
+            DocketLock docketLock = DocketLock.checkLock(section, docketTable.getValueAt(docketTable.getSelectedRow(), 4).toString());
+            if(docketLock == null) {
+                DocketLock.addLock(section, docketTable.getValueAt(docketTable.getSelectedRow(), 4).toString());
+                new mediaFileDialog((JFrame) Global.root.getRootPane().getParent(),
+                    true,
+                    docketTable.getValueAt(docketTable.getSelectedRow(), 4).toString(),section);
+                DocketLock.removeLock(section, docketTable.getValueAt(docketTable.getSelectedRow(), 4).toString());
+                reloadTableAfterFiling();
+            } else {
+                new DocketLockDialog((JFrame) Global.root.getRootPane().getParent(), true, docketLock);
+            }
         }
+        
+    }
+    
+    private void reloadTableAfterFiling() {
+        docs.clear();
+        loadScanData(SectionComboBox.getSelectedItem().toString());
+        loadEmailData(SectionComboBox.getSelectedItem().toString());
+        loadMediaData(SectionComboBox.getSelectedItem().toString());
+        Collections.sort(docs, new CustomComparator());
+        loadTable();
     }
     
     private void searchDocketList() {
@@ -250,6 +315,8 @@ public class DocketRootPanel extends javax.swing.JPanel {
             deleteScan();
         } else if(docketTable.getValueAt(docketTable.getSelectedRow(), 2).equals("Email")) {
             deleteEmail();
+        } else if(docketTable.getValueAt(docketTable.getSelectedRow(), 2).equals("Media")) {
+            deleteMedia();
         }
     }
     
@@ -276,7 +343,7 @@ public class DocketRootPanel extends javax.swing.JPanel {
         ConfirmDocketDelete delete = new ConfirmDocketDelete((JFrame) Global.root, true);
         
         if(delete.isDelete()) {
-            File scanFile = new File(Global.scanPath + SectionComboBox.getSelectedItem().toString() + File.separatorChar + docketTable.getValueAt(docketTable.getSelectedRow(), 4));
+            File scanFile = new File(Global.mediaPath + SectionComboBox.getSelectedItem().toString() + File.separatorChar + docketTable.getValueAt(docketTable.getSelectedRow(), 4));
             scanFile.delete();
             for(int i = 0; i < docs.size(); i++) {
                 Email doc = (Email) docs.get(i);
@@ -300,7 +367,7 @@ public class DocketRootPanel extends javax.swing.JPanel {
                 Email doc = (Email) docs.get(i);
                 if(doc.id == (int) docketTable.getValueAt(docketTable.getSelectedRow(), 0)) {
                     
-                    File bodyFile = new File(Global.scanPath + SectionComboBox.getSelectedItem().toString() + File.separatorChar + doc.emailBodyFileName);
+                    File bodyFile = new File(Global.emailPath + SectionComboBox.getSelectedItem().toString() + File.separatorChar + doc.emailBodyFileName);
                     
                     if(bodyFile.exists()) {
                         bodyFile.delete();
@@ -308,7 +375,7 @@ public class DocketRootPanel extends javax.swing.JPanel {
                     
                     Email.deleteEmailEntry(doc.id);
                     
-                    List emailAttachmentList = EmailAttachment.getAttachmentList(doc.id);
+                    List emailAttachmentList = EmailAttachment.getAttachmentList(Integer.toString(doc.id));
                     
                     for(int j = 0; j < emailAttachmentList.size(); j++) {
                         EmailAttachment attach = (EmailAttachment) emailAttachmentList.get(j);
