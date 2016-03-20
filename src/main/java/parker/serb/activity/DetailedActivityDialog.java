@@ -18,7 +18,8 @@ import parker.serb.util.FileService;
  */
 public class DetailedActivityDialog extends javax.swing.JDialog {
 
-    Activity activity;
+    Activity orgActivity;
+    Activity updatedActivity = new Activity();;
     /**
      * Creates new form DetailedActivityDialog
      */
@@ -77,17 +78,53 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
     }
     
     private void loadInformation(String id) {
-        activity = Activity.loadActivityByID(id);
+        orgActivity = Activity.loadActivityByID(id);
         
-        dateTextBox.setText(activity.date);
-        actionTextBox.setText(activity.action);
-        fromTextBox.setText(activity.from);
-        toComboBox.setSelectedItem(activity.to);
-        typeComboBox.setSelectedItem(activity.type);
-        commentTextArea.setText(activity.comment);
+        dateTextBox.setText(orgActivity.date);
+        actionTextBox.setText(orgActivity.action);
+        fromTextBox.setText(orgActivity.from);
+        toComboBox.setSelectedItem(orgActivity.to);
+        typeComboBox.setSelectedItem(orgActivity.type);
+        commentTextArea.setText(orgActivity.comment);
         
-        if(activity.fileName.equals("")) {
+        if(orgActivity.fileName.equals("")) {
             viewFileButton.setVisible(false);
+        }
+    }
+    
+    private void enableInputs(boolean value) {
+        fromTextBox.setEditable(value);
+        toComboBox.setEnabled(value);
+        typeComboBox.setEnabled(value);
+        commentTextArea.setEditable(value);
+    }
+    
+    private void updateAction() {
+        updatedActivity.id = orgActivity.id;
+        updatedActivity.action = generateNewAction();
+        updatedActivity.comment = commentTextArea.getText();
+        updatedActivity.from = fromTextBox.getText();
+        updatedActivity.to = toComboBox.getSelectedItem().toString();
+        updatedActivity.type = typeComboBox.getSelectedItem().toString();
+        
+        Activity.updateActivtyEntry(updatedActivity);
+        
+    }
+    
+    private String generateNewAction() {
+        return "Filed " + typeComboBox.getSelectedItem().toString() + " from " +  fromTextBox.getText();
+    }
+    
+    private void updateFileName() {
+        if(!orgActivity.type.equals(typeComboBox.getSelectedItem().toString())) {
+//            FileService.moveFileToTempFolder(orgActivity.fileName);
+            FileService.renameActivtyFile(orgActivity.fileName, typeComboBox.getSelectedItem().toString());
+            
+            updatedActivity.fileName = orgActivity.fileName.split("_")[0] + "_"
+                    + ActivityType.getTypeAbbrv(typeComboBox.getSelectedItem().toString())
+                    + "." + orgActivity.fileName.split("\\.")[1];
+        } else {
+            updatedActivity.fileName = orgActivity.fileName;
         }
     }
 
@@ -254,15 +291,32 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
-        // TODO add your handling code here:
+        if(updateButton.getText().equals("Update")) {
+            enableInputs(true);
+            updateButton.setText("Save");
+            closeButton.setText("Cancel");
+        } else if(updateButton.getText().equals("Save")) {
+            updateFileName();
+            updateAction();
+            enableInputs(false);
+            updateButton.setText("Update");
+            closeButton.setText("Close");
+        }
     }//GEN-LAST:event_updateButtonActionPerformed
 
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
-        dispose();
+        if(closeButton.getText().equals("Close")) {
+            dispose();
+        } else if(closeButton.getText().equals("Cancel")) {
+            //cancel dialog 
+            //if cancel 
+                //reload
+                //disable text inputdisable text
+        }
     }//GEN-LAST:event_closeButtonActionPerformed
 
     private void viewFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewFileButtonActionPerformed
-        FileService.openFile(activity.fileName);
+        FileService.openFile(orgActivity.fileName);
     }//GEN-LAST:event_viewFileButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
