@@ -233,20 +233,22 @@ public class RootPanel extends javax.swing.JFrame {
                 break;
             case "ULP":
                 jButton1.setText("New Case");
-                jButton1.setEnabled(true);
-                jButton2.setVisible(true);
+                jButton1.setEnabled(false);
+                jButton2.setVisible(false);
                 jButton2.setText("Update");
                 jButton2.setEnabled(false);
-                jButton3.setVisible(true);
+                jButton3.setVisible(false);
                 jButton3.setText("Letters");
-                jButton4.setVisible(true);
+                jButton4.setVisible(false);
                 jButton4.setText("Reports");
-                jButton5.setVisible(true);
+                jButton5.setVisible(false);
                 jButton5.setText("Queue");
-                jButton6.setVisible(true);
+                jButton6.setVisible(false);
                 jButton6.setText("Public Records");
                 jButton7.setVisible(false);
                 jButton8.setVisible(false);
+                jButton9.setVisible(true);
+                jButton9.setEnabled(false);
                 break;
             case "ORG":
                 jButton1.setText("New Org");
