@@ -117,7 +117,6 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
     
     private void updateFileName() {
         if(!orgActivity.type.equals(typeComboBox.getSelectedItem().toString())) {
-//            FileService.moveFileToTempFolder(orgActivity.fileName);
             FileService.renameActivtyFile(orgActivity.fileName, typeComboBox.getSelectedItem().toString());
             
             updatedActivity.fileName = orgActivity.fileName.split("_")[0] + "_"

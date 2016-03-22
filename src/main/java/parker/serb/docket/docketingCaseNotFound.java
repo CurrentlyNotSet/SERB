@@ -5,8 +5,6 @@
  */
 package parker.serb.docket;
 
-import parker.serb.util.*;
-
 /**
  *
  * @author parkerjohnston

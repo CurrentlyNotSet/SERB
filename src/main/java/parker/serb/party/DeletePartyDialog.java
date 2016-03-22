@@ -23,7 +23,6 @@ public class DeletePartyDialog extends javax.swing.JDialog {
      */
     public DeletePartyDialog(java.awt.Frame parent, boolean modal, String passedId, String passedName, String passedPartyType) {
         super(parent, modal);
-        setUndecorated(true);
         initComponents();
         id = passedId;
         name = passedName;

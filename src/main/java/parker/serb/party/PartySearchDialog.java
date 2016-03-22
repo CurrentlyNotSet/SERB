@@ -30,7 +30,6 @@ public class PartySearchDialog extends javax.swing.JDialog {
      */
     public PartySearchDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        setUndecorated(true);
         initComponents();
         setTableColumnWidths();
         addListeners();
