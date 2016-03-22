@@ -56,6 +56,23 @@ public class scanFileDialog extends javax.swing.JDialog {
     }
     
     private void addListeners() {
+        hourTextBox.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                autoCompleteTimeOfDay();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                autoCompleteTimeOfDay();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                autoCompleteTimeOfDay();
+            }
+        });
+        
         caseNumberTextBox.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {}
@@ -134,6 +151,16 @@ public class scanFileDialog extends javax.swing.JDialog {
             @Override
             public void mouseExited(MouseEvent e) {}
         });
+    }
+    
+    private void autoCompleteTimeOfDay() {
+        if(hourTextBox.getText().equals("")) {
+            //place holder
+        } else if(Integer.parseInt(hourTextBox.getText()) >= 7 && Integer.parseInt(hourTextBox.getText()) <= 11) {
+            amPMComboBox.setSelectedItem("AM");
+        } else {
+            amPMComboBox.setSelectedItem("PM");
+        }
     }
     
     private void enableButton() {

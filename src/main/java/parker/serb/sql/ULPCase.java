@@ -840,12 +840,12 @@ public class ULPCase {
 
             ResultSet caseNumberRS = preparedStatement.executeQuery();
            
-            caseNumberRS.next();
-            
-            if(caseNumberRS.getInt("aljID") != 0) {
-                to = User.getNameByID(caseNumberRS.getInt("aljID"));
-            } else if(caseNumberRS.getInt("investigatorID") != 0) {
-                to = User.getNameByID(caseNumberRS.getInt("investigatorID"));
+            if(caseNumberRS.next()) {
+                if(caseNumberRS.getInt("aljID") != 0) {
+                    to = User.getNameByID(caseNumberRS.getInt("aljID"));
+                } else if(caseNumberRS.getInt("investigatorID") != 0) {
+                    to = User.getNameByID(caseNumberRS.getInt("investigatorID"));
+                }
             }
             stmt.close();
         } catch (SQLException ex) {
