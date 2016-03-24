@@ -30,7 +30,9 @@ import parker.serb.util.CreateNewCaseDialog;
 import parker.serb.login.ExitVerification;
 import parker.serb.publicRecords.fileSelector;
 import parker.serb.sql.DocketLock;
+import parker.serb.sql.NewCaseLock;
 import parker.serb.util.FileService;
+import parker.serb.util.NewCaseLockDialog;
 import parker.serb.util.ReleaseNotesDialog;
 
 //TODO: This panel may have a memory leak for long running use....
@@ -233,17 +235,17 @@ public class RootPanel extends javax.swing.JFrame {
                 break;
             case "ULP":
                 jButton1.setText("New Case");
-                jButton1.setEnabled(false);
-                jButton2.setVisible(false);
+                jButton1.setEnabled(true);
+                jButton2.setVisible(true);
                 jButton2.setText("Update");
                 jButton2.setEnabled(false);
-                jButton3.setVisible(false);
+                jButton3.setVisible(true);
                 jButton3.setText("Letters");
-                jButton4.setVisible(false);
+                jButton4.setVisible(true);
                 jButton4.setText("Reports");
-                jButton5.setVisible(false);
+                jButton5.setVisible(true);
                 jButton5.setText("Queue");
-                jButton6.setVisible(false);
+                jButton6.setVisible(true);
                 jButton6.setText("Public Records");
                 jButton7.setVisible(false);
                 jButton8.setVisible(false);
@@ -962,11 +964,19 @@ public class RootPanel extends javax.swing.JFrame {
                 docketRootPanel1.displayFileDialog();
                 break;
             case "REP":
-                new CreateNewCaseDialog((JFrame) this.getRootPane().getParent(), true);
-                break;
             case "ULP":
-                new CreateNewCaseDialog((JFrame) this.getRootPane().getParent(), true);
+                NewCaseLock caseLock = NewCaseLock.checkLock(Global.activeSection);
+                if(caseLock == null) {
+                    caseLock.addLock(Global.activeSection);
+                    new CreateNewCaseDialog((JFrame) this.getRootPane().getParent(), true);
+                    caseLock.removeLock(Global.activeSection);
+                } else {
+                    new NewCaseLockDialog((JFrame) this.getRootPane().getParent(), true, caseLock);
+                }
                 break;
+//            case "ULP":
+//                new CreateNewCaseDialog((JFrame) this.getRootPane().getParent(), true);
+//                break;
             default:
                 break;
         }
