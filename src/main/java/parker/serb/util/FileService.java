@@ -18,6 +18,7 @@ import parker.serb.sql.ActivityType;
 import parker.serb.sql.Audit;
 import parker.serb.sql.Email;
 import parker.serb.sql.EmailAttachment;
+import parker.serb.sql.ULPCase;
 
 /**
  *
@@ -142,6 +143,10 @@ public class FileService {
                         fileDate + "_" + typeAbbrv + (redacted ? "_REDACTED.pdf" : ".pdf"),
                         caseNumberParts,from, to, typeFull, comment, redacted, false, activityDate);
                 Audit.addAuditEntry("Filed " + typeFull + " from " + from + (redacted ? " (REDACTED)" : ""));
+                
+                switch(section) {
+                    case "ULP": ULPCase.ULPDocketNotification(caseNumber);
+                }
             }
         }
         
@@ -180,6 +185,10 @@ public class FileService {
                         fileDate + "_" + typeAbbrv + fileName.substring(fileName.lastIndexOf(".")),
                         caseNumberParts,from, to, typeFull, comment, false, false);
                 Audit.addAuditEntry("Filed " + typeFull + " from " + from);
+                
+                switch(section) {
+                    case "ULP": ULPCase.ULPDocketNotification(caseNumber);
+                }
             }
         }
         
@@ -191,7 +200,8 @@ public class FileService {
             String section,
             String from, 
             String to,
-            String subject) {
+            String subject,
+            Date activityDate) {
         
         String fileName = Email.getEmailBodyFileByID(emailID);
         
@@ -215,11 +225,17 @@ public class FileService {
                 FileUtils.copyFile(docketFile, new File(caseArchiveFile + File.separator + fileDate + "_BODY.pdf"));
                 Activity.addActivtyFromDocket("Filed Email Body from " + from,
                         fileDate + "_BODY.pdf",
-                        caseNumberParts,from, to, "Email Body", "", false, true);
+                        caseNumberParts,from, to, "Email Body", "", false, true, activityDate);
                 Audit.addAuditEntry("Filed Email Body from " + from);
+                
+                switch(section) {
+                    case "ULP": ULPCase.ULPDocketNotification(caseNumber);
+                }
             }
         }
         docketFile.delete();
+        
+       
     }
     
     public static void docketEmailAttachment(String[] caseNumbers,
@@ -231,7 +247,8 @@ public class FileService {
             String subject,
             String fileName,
             String type,
-            String comment) {
+            String comment,
+            Date activityDate) {
         
         File docketFile = new File(Global.emailPath + section + File.separatorChar + fileName);
         
@@ -257,7 +274,7 @@ public class FileService {
                 FileUtils.copyFile(docketFile, new File(caseArchiveFile + File.separator + fileDate + "_" + type + fileExtenstion));
                 Activity.addActivtyFromDocket("Filed " + fullType + " from " + from,
                         fileDate + "_" + type + fileExtenstion,
-                        caseNumberParts, from, to, fullType, comment, false, fileExtenstion.endsWith("pdf"));
+                        caseNumberParts, from, to, fullType, comment, false, fileExtenstion.endsWith("pdf"), activityDate);
                 Audit.addAuditEntry("Filed " + fullType + " from " + from);
             }
         }
