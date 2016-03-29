@@ -19,6 +19,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
 import parker.serb.sql.Activity;
+import parker.serb.sql.Audit;
 import parker.serb.util.FileService;
 
 //TODO: Investigate File Icon in Table
@@ -70,6 +71,7 @@ public class ActivityPanel extends javax.swing.JPanel {
                 if(e.getClickCount() == 2 && !filePath.equals("") && actvityTable.getSelectedColumn() == 3) {
                     FileService.openFile(filePath);
                 } else if(e.getClickCount() == 2 && actvityTable.getSelectedColumn() != 3) {
+                    Audit.addAuditEntry("Viewing Activty Detail for ID: " + actvityTable.getValueAt(actvityTable.getSelectedRow(), 4).toString());
                     new DetailedActivityDialog((JFrame) Global.root.getRootPane().getParent(),
                             true,
                             actvityTable.getValueAt(actvityTable.getSelectedRow(), 4).toString());
