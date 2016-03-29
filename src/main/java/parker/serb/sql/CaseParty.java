@@ -55,6 +55,33 @@ public class CaseParty {
         }
     }
     
+    public static void createPartyForCaseDuplication(int id, String type, String newCaseNumber) {
+        try {
+
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Insert INTO CaseParty VALUES ("
+                    + "?,"
+                    + "?,"
+                    + "?,"
+                    + "?,"
+                    + "?,"
+                    + "?)";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, newCaseNumber.split("-")[0]);
+            preparedStatement.setString(2, newCaseNumber.split("-")[1]);
+            preparedStatement.setString(3, newCaseNumber.split("-")[2]);
+            preparedStatement.setString(4, newCaseNumber.split("-")[3]);
+            preparedStatement.setInt(5, id);
+            preparedStatement.setString(6, type);
+            
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     /**
      * Returns a list of all parties that are associated with a case.  Joins the
      * Party and CaseParty Table to aquire all information
@@ -185,5 +212,29 @@ public class CaseParty {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
         }
         return validEntry;
+    }
+    
+    public static void duplicatePartyInformation(String newCase, String oldCase) {
+        
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+            
+            String sql = "Select partyID, caseRelation from CaseParty where CaseYear = ? and"
+                    + " CaseType = ? and CaseMonth = ? and CaseNumber = ?";
+            
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, oldCase.split("-")[0]);
+            preparedStatement.setString(2, oldCase.split("-")[1]);
+            preparedStatement.setString(3, oldCase.split("-")[2]);
+            preparedStatement.setString(4, oldCase.split("-")[3]);
+            
+            ResultSet results = preparedStatement.executeQuery();
+            
+            while(results.next()) {
+                createPartyForCaseDuplication(results.getInt("partyID"), results.getString("caseRelation"), newCase);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CaseParty.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
