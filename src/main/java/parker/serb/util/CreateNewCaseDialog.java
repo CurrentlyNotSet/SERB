@@ -10,7 +10,9 @@ import java.text.DateFormatSymbols;
 import java.util.Calendar;
 import java.util.List;
 import parker.serb.Global;
+import parker.serb.sql.Audit;
 import parker.serb.sql.CaseNumber;
+import parker.serb.sql.CaseParty;
 import parker.serb.sql.CaseType;
 import parker.serb.sql.REPCase;
 import parker.serb.sql.ULPCase;
@@ -30,8 +32,25 @@ public class CreateNewCaseDialog extends javax.swing.JDialog {
         loadInformation();
         addListeners();
         getNextCaseNumber(typeComboBox.getSelectedItem().toString(), yearComboBox.getSelectedItem().toString());
+        loadRelatedCases();
         setLocationRelativeTo(parent);
         setVisible(true);
+    }
+    
+    private void loadRelatedCases() {
+        List<String> relatedCases = null;
+        switch(Global.activeSection) {
+            case "ULP":
+                relatedCases = ULPCase.loadRelatedCases();
+                break;
+        }
+        
+        similarCaseComboBox.removeAllItems();
+        similarCaseComboBox.addItem("");
+        
+        for(int i = 0; i <  relatedCases.size(); i++) {
+            similarCaseComboBox.addItem(relatedCases.get(i));
+        }
     }
     
     private void getNextCaseNumber(String caseType, String year) {
@@ -131,19 +150,8 @@ public class CreateNewCaseDialog extends javax.swing.JDialog {
         dispose();
     }
     
-    private void createDuplicateCase() {
-        switch (Global.activeSection) {
-            case "REP":
-                REPCase.createDuplicateCase(buildCaseNumber(), similarCaseNumberTextBox.getText().trim());
-                break;
-            case "MED":
-                break;
-            case "ULP":
-                break;
-            case "ORG":
-                break;
-        }
-        dispose();
+    private void duplicateCaseInformation() {
+        CaseParty.duplicatePartyInformation(buildCaseNumber(), similarCaseComboBox.getSelectedItem().toString().trim());
     }
 
     /**
@@ -161,13 +169,13 @@ public class CreateNewCaseDialog extends javax.swing.JDialog {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        similarCaseNumberTextBox = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         yearComboBox = new javax.swing.JComboBox();
         typeComboBox = new javax.swing.JComboBox();
         monthComboBox = new javax.swing.JComboBox();
         caseNumberTextBox = new javax.swing.JTextField();
+        similarCaseComboBox = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -185,8 +193,6 @@ public class CreateNewCaseDialog extends javax.swing.JDialog {
 
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setText("Similar Case (Copy Case Information)");
-
-        similarCaseNumberTextBox.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
         jButton1.setText("Create");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -206,6 +212,10 @@ public class CreateNewCaseDialog extends javax.swing.JDialog {
 
         monthComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
+        caseNumberTextBox.setEditable(false);
+
+        similarCaseComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -213,7 +223,6 @@ public class CreateNewCaseDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(similarCaseNumberTextBox, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 301, Short.MAX_VALUE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
@@ -231,7 +240,8 @@ public class CreateNewCaseDialog extends javax.swing.JDialog {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1)))
+                        .addComponent(jButton1))
+                    .addComponent(similarCaseComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -263,8 +273,8 @@ public class CreateNewCaseDialog extends javax.swing.JDialog {
                     .addComponent(caseNumberTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(similarCaseNumberTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addComponent(similarCaseComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
@@ -276,11 +286,12 @@ public class CreateNewCaseDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if(similarCaseNumberTextBox.getText().trim().equals("")) {
-            createCase();
-        } else {
-            createDuplicateCase();
-        }
+        createCase();
+        if(!similarCaseComboBox.getSelectedItem().toString().trim().equals("")) {
+            duplicateCaseInformation();
+        } 
+        
+        dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -298,7 +309,7 @@ public class CreateNewCaseDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JComboBox monthComboBox;
-    private javax.swing.JTextField similarCaseNumberTextBox;
+    private javax.swing.JComboBox<String> similarCaseComboBox;
     private javax.swing.JComboBox typeComboBox;
     private javax.swing.JComboBox yearComboBox;
     // End of variables declaration//GEN-END:variables
