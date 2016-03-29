@@ -210,7 +210,7 @@ public class REPCase {
             if(success == 1) {
 //                SlackNotification.sendNotification("Case " + caseNumber + " Created");
 //                CaseNumber.updateNextCaseNumber(caseNumber);
-                Activity.addNewCaseActivty(caseNumber);
+//                Activity.addNewCaseActivty(caseNumber);
                 Global.root.getrEPHeaderPanel1().loadCases();
                 Global.root.getrEPHeaderPanel1().getjComboBox2().setSelectedItem(caseNumber); 
             }
@@ -342,7 +342,7 @@ public class REPCase {
             if(success == 1) {
 //                SlackNotification.sendNotification("Case " + caseNumber + " Created");
 //                CaseNumber.updateNextCaseNumber(caseNumber);
-                Activity.addNewCaseActivty(caseNumber);
+//                Activity.addNewCaseActivty(caseNumber);
                 Global.root.getrEPHeaderPanel1().loadCases();
                 Global.root.getrEPHeaderPanel1().getjComboBox2().setSelectedItem(caseNumber); 
             } else {
