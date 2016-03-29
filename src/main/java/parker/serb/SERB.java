@@ -13,6 +13,8 @@ import com.apple.eawt.QuitResponse;
 import java.awt.Color;
 import javax.swing.UIManager;
 import parker.serb.sql.Audit;
+import parker.serb.sql.DocketLock;
+import parker.serb.sql.NewCaseLock;
 import parker.serb.sql.User;
 import parker.serb.util.SlackNotification;
 
@@ -33,6 +35,8 @@ public class SERB {
 
                 macOSXApplication.setQuitHandler((AppEvent.QuitEvent qe, QuitResponse qr) -> {
                     if(Global.activeUser != null) {
+                        DocketLock.removeUserLocks();
+                        NewCaseLock.removeUserLocks();
                         User.updateActiveLogIn();
                         Audit.addAuditEntry("Logged Off");
                     }
