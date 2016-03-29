@@ -250,7 +250,8 @@ public class DocketRootPanel extends javax.swing.JPanel {
                 DocketLock.addLock(section, docketTable.getValueAt(docketTable.getSelectedRow(), 0).toString());
                 new fileEmailDialog((JFrame) Global.root.getRootPane().getParent(),
                         true,
-                        docketTable.getValueAt(docketTable.getSelectedRow(), 0).toString(),section);
+                        docketTable.getValueAt(docketTable.getSelectedRow(), 0).toString(),section,
+                        docketTable.getValueAt(docketTable.getSelectedRow(), 1).toString());
                 DocketLock.removeLock(section, docketTable.getValueAt(docketTable.getSelectedRow(), 0).toString());
                 reloadTableAfterFiling();
             } else {
