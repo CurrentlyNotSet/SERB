@@ -6,10 +6,13 @@
 package parker.serb.activity;
 
 import java.util.List;
+import javax.swing.JFrame;
 import parker.serb.Global;
 import parker.serb.sql.Activity;
 import parker.serb.sql.ActivityType;
+import parker.serb.sql.Audit;
 import parker.serb.sql.User;
+import parker.serb.util.CancelUpdate;
 import parker.serb.util.FileService;
 
 /**
@@ -19,13 +22,15 @@ import parker.serb.util.FileService;
 public class DetailedActivityDialog extends javax.swing.JDialog {
 
     Activity orgActivity;
-    Activity updatedActivity = new Activity();;
+    Activity updatedActivity = new Activity();
+    String passedID;
     /**
      * Creates new form DetailedActivityDialog
      */
     public DetailedActivityDialog(java.awt.Frame parent, boolean modal, String id) {
         super(parent, modal);
         initComponents();
+        passedID = id;
         displayUpdateButton();
         loadComboBoxes();
         loadInformation(id);
@@ -298,6 +303,7 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
             updateFileName();
             updateAction();
             enableInputs(false);
+            Audit.addAuditEntry("Updated Information for Activity: " + passedID);
             updateButton.setText("Update");
             closeButton.setText("Close");
         }
@@ -307,10 +313,14 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
         if(closeButton.getText().equals("Close")) {
             dispose();
         } else if(closeButton.getText().equals("Cancel")) {
-            //cancel dialog 
-            //if cancel 
-                //reload
-                //disable text inputdisable text
+            CancelUpdate cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+            if(!cancel.isReset()) {
+            } else {
+                loadInformation(passedID);
+                enableInputs(false);
+                updateButton.setText("Update");
+                closeButton.setText("Close");
+            }
         }
     }//GEN-LAST:event_closeButtonActionPerformed
 
