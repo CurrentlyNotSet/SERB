@@ -25,6 +25,7 @@ import parker.serb.sql.Party;
  */
 public class PartySearchDialog extends javax.swing.JDialog {
 
+    List parties;
     /**
      * Creates new form PartySearchDialog
      */
@@ -51,21 +52,21 @@ public class PartySearchDialog extends javax.swing.JDialog {
     }
     
     private void addListeners() {
-        jTextField1.getDocument().addDocumentListener(new DocumentListener() {
+        searchTextBox.getDocument().addDocumentListener(new DocumentListener() {
 
             @Override
             public void insertUpdate(DocumentEvent e) {
-                loadParties();
+                searchParties();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                loadParties();
+                searchParties();
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                loadParties();
+                searchParties();
             }
         });
         
@@ -114,10 +115,31 @@ public class PartySearchDialog extends javax.swing.JDialog {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
         
-        List parties = Party.loadAllParties();
+        parties = Party.loadAllParties();
         
         for(Object party: parties) {
             Party partyInformation = (Party) party;
+            model.addRow(new Object[] {partyInformation.id,
+                partyInformation.firstName + " " + partyInformation.lastName,
+                partyInformation.companyName,
+                partyInformation.emailAddress,
+                NumberFormatService.convertStringToPhoneNumber(partyInformation.workPhone)});
+        }
+    }
+    
+    private void searchParties() {
+    
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0);
+        
+        for(Object party: parties) {
+            Party partyInformation = (Party) party;
+            
+            if(partyInformation.firstName.toLowerCase().contains(searchTextBox.getText().toLowerCase())
+                    || partyInformation.lastName.toLowerCase().contains(searchTextBox.getText().toLowerCase())
+                    || partyInformation.companyName.toLowerCase().contains(searchTextBox.getText().toLowerCase())
+                    || partyInformation.emailAddress.toLowerCase().contains(searchTextBox.getText().toLowerCase())
+                    || NumberFormatService.convertStringToPhoneNumber(partyInformation.workPhone).contains(searchTextBox.getText().toLowerCase()))
             model.addRow(new Object[] {partyInformation.id,
                 partyInformation.firstName + " " + partyInformation.lastName,
                 partyInformation.companyName,
@@ -137,7 +159,7 @@ public class PartySearchDialog extends javax.swing.JDialog {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        searchTextBox = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -199,7 +221,7 @@ public class PartySearchDialog extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1)
+                        .addComponent(searchTextBox)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1))
                     .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -213,7 +235,7 @@ public class PartySearchDialog extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
@@ -241,6 +263,6 @@ public class PartySearchDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField searchTextBox;
     // End of variables declaration//GEN-END:variables
 }

@@ -43,10 +43,11 @@ public class Email {
 
             Statement stmt = Database.connectToDB().createStatement();
 
-            String sql = "select * from Email where Section = ?";
+            String sql = "select * from Email where Section = ? and readyToFile = ?";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, section);
+            preparedStatement.setBoolean(2, true);
 
             ResultSet emailListRS = preparedStatement.executeQuery();
             

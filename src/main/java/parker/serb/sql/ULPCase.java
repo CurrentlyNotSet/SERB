@@ -125,6 +125,31 @@ public class ULPCase {
         return caseNumberList;
     }
     
+    public static List<String> loadRelatedCases() {
+        
+        List<String> caseNumberList = new ArrayList<>();
+            
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+            
+            String sql = "Select caseYear, caseType, caseMonth, caseNumber from ULPCase  where fileDate between DateAdd(DD,-7,GETDATE()) and GETDATE() Order By caseYear DESC, caseNumber DESC";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            
+            ResultSet caseNumberRS = preparedStatement.executeQuery();
+            
+            while(caseNumberRS.next()) {
+                caseNumberList.add(caseNumberRS.getString("caseYear") + "-"
+                    + caseNumberRS.getString("caseType") + "-" 
+                    + caseNumberRS.getString("caseMonth") + "-"
+                    + caseNumberRS.getString("caseNumber"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return caseNumberList;
+    }
+    
     public static List loadULPCases(String caseYear,
             String caseType,
             String caseMonth,
@@ -547,7 +572,9 @@ public class ULPCase {
                         + caseNumber;
                         
                 CaseNumber.updateNextCaseNumber(caseYear, caseType, String.valueOf(Integer.valueOf(caseNumber) + 1));
-                Activity.addNewCaseActivty(fullCaseNumber);
+                Audit.addAuditEntry("Created Case: " + fullCaseNumber);
+                Activity.addNewCaseActivty(fullCaseNumber, "Case was Received and Started");
+                Activity.addNewCaseActivty(fullCaseNumber, "Case was Filed");
                 Global.root.getuLPHeaderPanel1().loadCases();
                 Global.root.getuLPHeaderPanel1().getjComboBox2().setSelectedItem(fullCaseNumber); 
             }
@@ -846,6 +873,41 @@ public class ULPCase {
                 } else if(caseNumberRS.getInt("investigatorID") != 0) {
                     to = User.getNameByID(caseNumberRS.getInt("investigatorID"));
                 }
+            }
+            stmt.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return to;
+    }
+    
+    public static String ULPDocketNotification(String caseNumber) {
+        String[] parsedCase = caseNumber.trim().split("-");
+        String to = "";
+        
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select"
+                    + " mediatorAssignedID"
+                    + " from ULPCase"
+                    + " where caseYear = ? "
+                    + " and caseType = ? "
+                    + " and caseMonth = ? "
+                    + " and caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, parsedCase[0]);
+            preparedStatement.setString(2, parsedCase[1]);
+            preparedStatement.setString(3, parsedCase[2]);
+            preparedStatement.setString(4, parsedCase[3]);
+
+            ResultSet caseNumberRS = preparedStatement.executeQuery();
+           
+            if(caseNumberRS.next()) {
+                if(caseNumberRS.getInt("mediatorAssignedID") != 0) {
+                    DocketNotifications.addNotification(caseNumber, "ULP", caseNumberRS.getInt("mediatorAssignedID"));
+                } 
             }
             stmt.close();
         } catch (SQLException ex) {

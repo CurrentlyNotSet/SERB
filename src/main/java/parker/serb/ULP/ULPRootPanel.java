@@ -29,11 +29,17 @@ public class ULPRootPanel extends javax.swing.JPanel {
     }
     
     private void enableDemoTabs() {
-        for(int i = jTabbedPane1.getTabCount()-1; i >= 0; i--) {
-            if(!jTabbedPane1.getTitleAt(i).equals("Activity")) {
-                jTabbedPane1.remove(i);
-            }
-        }
+//        for(int i = jTabbedPane1.getTabCount()-1; i >= 0; i--) {
+//            if(!jTabbedPane1.getTitleAt(i).equals("Activity")) {
+//                jTabbedPane1.remove(i);
+//            }
+//        }
+        jTabbedPane1.remove(6);
+        jTabbedPane1.remove(5);
+        jTabbedPane1.remove(4);
+        jTabbedPane1.remove(3);
+        jTabbedPane1.remove(2);
+
     }
     
     /**

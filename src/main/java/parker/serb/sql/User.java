@@ -563,6 +563,28 @@ public class User {
         return userID;    
     }
     
+    public static String getEmailByID(int id) {
+        String userEmail = "";
+        
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+            
+            String sql = "Select emailAddress from Users where id = ?";
+            
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+            
+            ResultSet success = preparedStatement.executeQuery();
+            
+            while (success.next()) {
+                userEmail = success.getString("emailAddress");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return userEmail;    
+    }
+    
     public static List getDocketSections() {
         List docketSections = new ArrayList<String>();
         

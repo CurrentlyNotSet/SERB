@@ -13,10 +13,10 @@ import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
-import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultCellEditor;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JTable;
@@ -26,9 +26,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import parker.serb.Global;
-import parker.serb.sql.Activity;
 import parker.serb.sql.ActivityType;
-import parker.serb.sql.Audit;
 import parker.serb.sql.CaseNumber;
 import parker.serb.sql.Email;
 import parker.serb.sql.EmailAttachment;
@@ -45,14 +43,16 @@ public class fileEmailDialog extends javax.swing.JDialog {
     JComboBox comboEditor = new JComboBox();
     String emailID = "";
     String emailSection = "";
+    String passedTime;
     /**
      * Creates new form FileDocumentDialog
      */
-    public fileEmailDialog(java.awt.Frame parent, boolean modal, String id, String section) {
+    public fileEmailDialog(java.awt.Frame parent, boolean modal, String id, String section, String time) {
         super(parent, modal);
         initComponents();
         emailID = id;
         emailSection = section;
+        passedTime = time;
         addListeners(section, id);
         loadData(section, id);
         setColumnWidth();
@@ -287,9 +287,27 @@ public class fileEmailDialog extends javax.swing.JDialog {
                 attachmentTable.getValueAt(i, 1).toString(),    //fileName
                 attachmentTable.getValueAt(i, 2).toString(),    //fileType
                 attachmentTable.getValueAt(i, 3) != null
-                        ? attachmentTable.getValueAt(i, 3).toString() : ""); //comment
+                        ? attachmentTable.getValueAt(i, 3).toString() : "",
+                generateDate()); //comment
             }
         }
+    }
+    
+    private Date generateDate() {
+        //int hour = Integer.valueOf(hourTextBox.getText().trim());
+        
+        //03/02/2017 06:53 PM
+        
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, Integer.valueOf(passedTime.split(" ")[0].split("/")[2]));
+        cal.set(Calendar.MONTH, Integer.valueOf(passedTime.split(" ")[0].split("/")[0]) - 1);
+        cal.set(Calendar.DAY_OF_MONTH, Integer.valueOf(passedTime.split(" ")[0].split("/")[1]));
+        cal.set(Calendar.HOUR_OF_DAY, passedTime.split(" ")[2].equals("AM") ? Integer.valueOf(passedTime.split(" ")[1].split(":")[0]) : Integer.valueOf(passedTime.split(" ")[1].split(":")[0]) + 12);
+        cal.set(Calendar.MINUTE, Integer.valueOf(passedTime.split(" ")[1].split(":")[1]));
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        
+        return cal.getTime();
     }
     
     private void deleteEmail(String id) {
@@ -539,7 +557,8 @@ public class fileEmailDialog extends javax.swing.JDialog {
                 emailSection,
                 fromTextBox.getText(),
                 toComboBox.getSelectedItem().toString(),
-                subjectTextBox.getText());
+                subjectTextBox.getText(),
+                generateDate());
         
         //fileAttachements
         fileEmailAttachments(caseNumbers);

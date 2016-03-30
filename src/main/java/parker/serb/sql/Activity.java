@@ -163,14 +163,14 @@ public class Activity {
      * Creates activity entry when new cases are created
      * @param caseNumber the new case number
      */
-    public static void addNewCaseActivty(String caseNumber) {
+    public static void addNewCaseActivty(String caseNumber, String message) {
         Statement stmt = null;
             
         try {
 
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?)";
+            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             String[] parsedCaseNumber = caseNumber.split("-");
@@ -180,9 +180,14 @@ public class Activity {
             preparedStatement.setString(4, parsedCaseNumber[3]);
             preparedStatement.setInt(5, Global.activeUser.id);
             preparedStatement.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
-            preparedStatement.setString(7, "Case Created");
+            preparedStatement.setString(7, message);
             preparedStatement.setString(8, "");
-            preparedStatement.setBoolean(9, false);
+            preparedStatement.setString(9, "");
+            preparedStatement.setString(10, "");
+            preparedStatement.setString(11, "");
+            preparedStatement.setString(12, "");
+            preparedStatement.setBoolean(13, false);
+            preparedStatement.setBoolean(14, false);
 
             preparedStatement.executeUpdate();
 
