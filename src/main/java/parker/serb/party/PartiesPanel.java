@@ -107,7 +107,7 @@ public class PartiesPanel extends javax.swing.JPanel {
         }
     }
     
-    void clearAll() {
+    public void clearAll() {
         jTextField1.setText("");
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
