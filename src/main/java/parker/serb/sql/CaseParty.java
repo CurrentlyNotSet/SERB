@@ -121,7 +121,7 @@ public class CaseParty {
                 party.type = casePartyRS.getString("caseRelation");
                 party.name = casePartyRS.getString("firstName") + " " + casePartyRS.getString("lastName");
                 party.email = casePartyRS.getString("emailAddress");
-                party.phoneNumber = NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("workPhone"));
+                party.phoneNumber = casePartyRS.getString("workPhone").equals("") ? "" : NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("workPhone"));
                 parties.add(party);
             }
         } catch (SQLException ex) {
