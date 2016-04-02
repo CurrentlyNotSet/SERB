@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
 import java.util.List;
+import javax.swing.JFrame;
 import parker.serb.Global;
 import parker.serb.sql.Audit;
 import parker.serb.sql.CaseNumber;
@@ -153,6 +154,20 @@ public class CreateNewCaseDialog extends javax.swing.JDialog {
     private void duplicateCaseInformation() {
         CaseParty.duplicatePartyInformation(buildCaseNumber(), similarCaseComboBox.getSelectedItem().toString().trim());
     }
+    
+    private boolean isFirstCase() {
+        
+        boolean firstCase = false;
+        
+        switch(Global.activeSection) {
+            case "ULP": firstCase =  ULPCase.checkIfFristCaseOfMonth(
+                    yearComboBox.getSelectedItem().toString(),
+                    typeComboBox.getSelectedItem().toString(),
+                    monthComboBox.getSelectedItem().toString().substring(0, 2));
+        }
+        
+        return firstCase;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -286,12 +301,31 @@ public class CreateNewCaseDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        createCase();
-        if(!similarCaseComboBox.getSelectedItem().toString().trim().equals("")) {
-            duplicateCaseInformation();
-        } 
+        boolean firstCase = isFirstCase();
         
-        dispose();
+        if(firstCase) {
+            firstCaseOfMonthDialog firstCaseDialog = new firstCaseOfMonthDialog(
+                    (JFrame) Global.root.getParent(), true, buildCaseNumber());
+            
+            if(firstCaseDialog.isConfirmed()) {
+                createCase();
+                if(!similarCaseComboBox.getSelectedItem().toString().trim().equals("")) {
+                    duplicateCaseInformation();
+                } 
+                firstCaseDialog.dispose();
+                dispose();
+            } else {
+                firstCaseDialog.dispose();
+            }
+            
+        } else {
+            createCase();
+            if(!similarCaseComboBox.getSelectedItem().toString().trim().equals("")) {
+                duplicateCaseInformation();
+            } 
+            dispose();
+        }
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
