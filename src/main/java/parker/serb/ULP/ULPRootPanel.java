@@ -34,7 +34,7 @@ public class ULPRootPanel extends javax.swing.JPanel {
 //                jTabbedPane1.remove(i);
 //            }
 //        }
-        jTabbedPane1.remove(6);
+//        jTabbedPane1.remove(6);
         jTabbedPane1.remove(5);
         jTabbedPane1.remove(4);
         jTabbedPane1.remove(3);
@@ -48,6 +48,7 @@ public class ULPRootPanel extends javax.swing.JPanel {
     void clearAll() {
         Global.root.getuLPHeaderPanel1().clearAll();
         activityPanel1.clearAll();
+        partiesPanel1.clearAll();
 //        rEPCaseInformationPanel2.clearAll();
         notesPanel2.clearAll();
     }
