@@ -915,4 +915,40 @@ public class ULPCase {
         }
         return to;
     }
+    
+    public static boolean checkIfFristCaseOfMonth(String year, String type, String month) {
+        boolean firstCase = false;
+        
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select"
+                    + " COUNT(*) AS CasesThisMonth"
+                    + " from ULPCase"
+                    + " where caseYear = ? "
+                    + " and caseType = ? "
+                    + " and caseMonth = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, year);
+            preparedStatement.setString(2, type);
+            preparedStatement.setString(3, month);
+
+            ResultSet caseNumberRS = preparedStatement.executeQuery();
+           
+            if(caseNumberRS.next()) {
+                 if(caseNumberRS.getInt("CasesThisMonth") > 0) {
+                     firstCase = false;
+                 } else {
+                     firstCase = true;
+                 }
+            }
+            stmt.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return firstCase;
+        
+    }
 }
