@@ -100,7 +100,6 @@ public class RootPanel extends javax.swing.JFrame {
         if(Global.activeUser.defaultSection != null)
             jTabbedPane1.setSelectedIndex(jTabbedPane1.indexOfTab(Global.activeUser.defaultSection));
         
-        
         if(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()).equals("Docketing")) {
             docketRootPanel1.loadDocketList();
         }
@@ -180,9 +179,9 @@ public class RootPanel extends javax.swing.JFrame {
      * section that is in active use
      */
     private void enableButtons() {
+        Dimension dim = new Dimension(108, 29);
         switch (Global.activeSection) {
             case "Docketing":
-                Dimension dim = new Dimension(108, 29);
                 jButton1.setSize(dim);
                 jButton1.setMinimumSize(dim);
                 jButton1.setMaximumSize(dim);
@@ -196,6 +195,9 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton6.setVisible(false);
                 jButton7.setVisible(false);
                 jButton8.setVisible(false);
+                jButton9.setSize(dim);
+                jButton9.setMinimumSize(dim);
+                jButton9.setMaximumSize(dim);
                 jButton9.setVisible(true);
                 break;
             case "REP":
@@ -234,8 +236,14 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton8.setVisible(false);
                 break;
             case "ULP":
+                jButton1.setSize(dim);
+                jButton1.setMinimumSize(dim);
+                jButton1.setMaximumSize(dim);
                 jButton1.setText("New Case");
                 jButton1.setEnabled(true);
+                jButton2.setSize(dim);
+                jButton2.setMinimumSize(dim);
+                jButton2.setMaximumSize(dim);
                 jButton2.setVisible(true);
                 jButton2.setText("Update");
                 jButton2.setEnabled(false);
@@ -249,6 +257,9 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton6.setText("Public Records");
                 jButton7.setVisible(false);
                 jButton8.setVisible(false);
+                jButton9.setSize(dim);
+                jButton9.setMinimumSize(dim);
+                jButton9.setMaximumSize(dim);
                 jButton9.setVisible(true);
                 jButton9.setEnabled(false);
                 break;
