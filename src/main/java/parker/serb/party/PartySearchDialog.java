@@ -144,7 +144,7 @@ public class PartySearchDialog extends javax.swing.JDialog {
                 partyInformation.firstName + " " + partyInformation.lastName,
                 partyInformation.companyName,
                 partyInformation.emailAddress,
-                NumberFormatService.convertStringToPhoneNumber(partyInformation.workPhone)});
+                partyInformation.workPhone });
         }
     }
 
