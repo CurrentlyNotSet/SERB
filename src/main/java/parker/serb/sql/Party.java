@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import parker.serb.util.NumberFormatService;
 
 /**
  *
@@ -64,7 +65,7 @@ public class Party {
                 party.city = partyRS.getString("city");
                 party.state = partyRS.getString("state");
                 party.zip = partyRS.getString("zipCode");
-                party.workPhone = partyRS.getString("workPhone");
+                party.workPhone = partyRS.getString("workPhone").equals("") ? "" : NumberFormatService.convertStringToPhoneNumber(partyRS.getString("workPhone"));
                 party.emailAddress = partyRS.getString("emailAddress");
             }
         } catch (SQLException ex) {
@@ -103,7 +104,7 @@ public class Party {
                 party.city = partyRS.getString("city");
                 party.state = partyRS.getString("state");
                 party.zip = partyRS.getString("zipCode");
-                party.workPhone = partyRS.getString("workPhone");
+                party.workPhone = partyRS.getString("workPhone").equals("") ? "" : NumberFormatService.convertStringToPhoneNumber(partyRS.getString("workPhone"));
                 party.emailAddress = partyRS.getString("emailAddress");
                 
                 parties.add(party);

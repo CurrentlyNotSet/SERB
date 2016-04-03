@@ -101,7 +101,7 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
         cityTextBox.setText(partyInformation.city);
         stateComboBox.setSelectedItem(partyInformation.state);
         zipCodeTextBox.setText(partyInformation.zip);
-        phoneNumberTextBox.setText(NumberFormatService.convertStringToPhoneNumber(partyInformation.workPhone));
+        phoneNumberTextBox.setText(partyInformation.workPhone);
         emailAddressTextBox.setText(partyInformation.emailAddress);
     }
     

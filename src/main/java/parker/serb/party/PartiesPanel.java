@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.JTable;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
@@ -135,6 +136,12 @@ public class PartiesPanel extends javax.swing.JPanel {
         
         loadAllParties();
     }
+
+    public JTable getjTable1() {
+        return jTable1;
+    }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
