@@ -76,8 +76,11 @@ public class PartySearchDialog extends javax.swing.JDialog {
             public void mouseClicked(MouseEvent e) {
                 if(e.getClickCount() == 2) {
                     if(duplicateParty()) {
-                        new PartyTypeSelectionPanel((JFrame) Global.root.getParent(), true, getPartyName(), getID());
-                        dispose();
+                        PartyTypeSelectionPanel partySelector = new PartyTypeSelectionPanel((JFrame) Global.root.getParent(), true, getPartyName(), getID());
+                        if(partySelector.selected) {
+                            dispose();
+                        }
+                        partySelector.dispose();
                     } else {
                         new DuplicatePartyDialog((JFrame) Global.root.getParent(), true);
                     }
