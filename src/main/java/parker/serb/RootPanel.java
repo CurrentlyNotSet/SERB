@@ -944,8 +944,10 @@ public class RootPanel extends javax.swing.JFrame {
         switch(Global.activeSection) {
             case "REP":
                 rEPRootPanel1.repDelete();
+                break;
             case "ULP":
                 uLPRootPanel1.ulpDelete();
+                break;
             case "Docketing":
                 docketRootPanel1.delete();
             default:
@@ -985,9 +987,6 @@ public class RootPanel extends javax.swing.JFrame {
                     new NewCaseLockDialog((JFrame) this.getRootPane().getParent(), true, caseLock);
                 }
                 break;
-//            case "ULP":
-//                new CreateNewCaseDialog((JFrame) this.getRootPane().getParent(), true);
-//                break;
             default:
                 break;
         }

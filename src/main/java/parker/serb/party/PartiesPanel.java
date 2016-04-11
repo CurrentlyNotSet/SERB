@@ -99,12 +99,16 @@ public class PartiesPanel extends javax.swing.JPanel {
         
         for(Object caseParty: caseParties) {
             CaseParty partyInformation = (CaseParty) caseParty;
-            if(partyInformation.name.toLowerCase().contains(searchTerm.toLowerCase())
-                    || partyInformation.type.toLowerCase().contains(searchTerm.toLowerCase())
-                    || partyInformation.phoneNumber.toLowerCase().contains(searchTerm.toLowerCase())
-                    || partyInformation.email.toLowerCase().contains(searchTerm.toLowerCase())) {
-                model.addRow(new Object[] {partyInformation.id, partyInformation.name, partyInformation.type, partyInformation.phoneNumber, partyInformation.email});
-            }
+            if(partyInformation.firstName.toLowerCase().contains(searchTerm.toLowerCase())
+                    || partyInformation.middleInitial.toLowerCase().contains(searchTerm.toLowerCase())
+                    || partyInformation.lastName.toLowerCase().contains(searchTerm.toLowerCase())
+                    || partyInformation.caseRelation.toLowerCase().contains(searchTerm.toLowerCase())
+                    || partyInformation.phone1.toLowerCase().contains(searchTerm.toLowerCase())
+                    || partyInformation.emailAddress.toLowerCase().contains(searchTerm.toLowerCase())
+                    ) {
+                model.addRow(new Object[] {partyInformation.id, partyInformation.firstName
+                    + (partyInformation.middleInitial.equals("") ? " " : (" " + partyInformation.middleInitial + ". ")) + partyInformation.lastName,
+                    partyInformation.caseRelation, partyInformation.phone1, partyInformation.emailAddress});            }
         }
     }
     
@@ -123,7 +127,9 @@ public class PartiesPanel extends javax.swing.JPanel {
         
         for(Object caseParty: caseParties) {
             CaseParty partyInformation = (CaseParty) caseParty;
-            model.addRow(new Object[] {partyInformation.id, partyInformation.name, partyInformation.type, partyInformation.phoneNumber, partyInformation.email});
+            model.addRow(new Object[] {partyInformation.id, partyInformation.firstName
+                + (partyInformation.middleInitial.equals("") ? " " : (" " + partyInformation.middleInitial + ". ")) + partyInformation.lastName,
+                partyInformation.caseRelation, partyInformation.phone1, partyInformation.emailAddress});
         }
     }
     

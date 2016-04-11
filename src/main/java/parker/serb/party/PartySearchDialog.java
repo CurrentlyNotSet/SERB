@@ -126,7 +126,7 @@ public class PartySearchDialog extends javax.swing.JDialog {
                 partyInformation.firstName + " " + partyInformation.lastName,
                 partyInformation.companyName,
                 partyInformation.emailAddress,
-                partyInformation.workPhone});
+                partyInformation.phone1});
         }
     }
     
@@ -142,12 +142,12 @@ public class PartySearchDialog extends javax.swing.JDialog {
                     || partyInformation.lastName.toLowerCase().contains(searchTextBox.getText().toLowerCase())
                     || partyInformation.companyName.toLowerCase().contains(searchTextBox.getText().toLowerCase())
                     || partyInformation.emailAddress.toLowerCase().contains(searchTextBox.getText().toLowerCase())
-                    || NumberFormatService.convertStringToPhoneNumber(partyInformation.workPhone).contains(searchTextBox.getText().toLowerCase()))
+                    || partyInformation.phone1.contains(searchTextBox.getText().toLowerCase()))
             model.addRow(new Object[] {partyInformation.id,
                 partyInformation.firstName + " " + partyInformation.lastName,
                 partyInformation.companyName,
                 partyInformation.emailAddress,
-                partyInformation.workPhone });
+                partyInformation.phone1 });
         }
     }
 

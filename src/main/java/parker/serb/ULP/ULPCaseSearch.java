@@ -208,22 +208,22 @@ public class ULPCaseSearch extends javax.swing.JDialog {
             for(Object caseParty: caseParties) {
                     CaseParty partyInformation = (CaseParty) caseParty;
 
-                switch (partyInformation.type) {
-                    case "Charging Party":
-                        if(chargingParty.equals("")) {
-                            chargingParty += partyInformation.name;
-                        } else {
-                            chargingParty += ", " + partyInformation.name;
-                        }
-                        break;
-                    case "Charged Party":
-                        if(chargedParty.equals("")) {
-                            chargedParty += partyInformation.name;
-                        } else {
-                            chargedParty += ", " + partyInformation.name;
-                        }
-                        break;
-                }
+//                switch (partyInformation.type) {
+//                    case "Charging Party":
+//                        if(chargingParty.equals("")) {
+//                            chargingParty += partyInformation.name;
+//                        } else {
+//                            chargingParty += ", " + partyInformation.name;
+//                        }
+//                        break;
+//                    case "Charged Party":
+//                        if(chargedParty.equals("")) {
+//                            chargedParty += partyInformation.name;
+//                        } else {
+//                            chargedParty += ", " + partyInformation.name;
+//                        }
+//                        break;
+//                }
             }
             model.addRow(new Object[] {(act.caseYear + "-" + act.caseType + "-" + act.caseMonth + "-" + act.caseNumber)
                     , chargingParty, chargedParty, act.employerIDNumber, act.barginingUnitNo}); 
