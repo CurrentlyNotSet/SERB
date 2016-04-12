@@ -7,12 +7,14 @@ package parker.serb.party;
 
 import java.awt.event.ActionEvent;
 import java.util.List;
+import javax.swing.JFrame;
 import parker.serb.util.NumberFormatService;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import parker.serb.Global;
 import parker.serb.sql.NamePrefix;
 import parker.serb.sql.Party;
+import parker.serb.util.CancelUpdate;
 
 /**
  *
@@ -441,7 +443,13 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        dispose();
+        CancelUpdate cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+            if(!cancel.isReset()) {
+            } else {
+                dispose();
+            }
+        
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
