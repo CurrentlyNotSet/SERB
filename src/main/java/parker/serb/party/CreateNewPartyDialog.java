@@ -6,10 +6,12 @@
 package parker.serb.party;
 
 import java.awt.event.ActionEvent;
+import java.util.List;
 import parker.serb.util.NumberFormatService;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import parker.serb.Global;
+import parker.serb.sql.NamePrefix;
 import parker.serb.sql.Party;
 
 /**
@@ -27,6 +29,7 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         addListeners();
+        loadPrefixComboBox();
         loadStateComboBox();
         setLocationRelativeTo(parent);
         setVisible(true);
@@ -176,6 +179,17 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
             jButton1.setEnabled(false);
         } else {
             jButton1.setEnabled(true);
+        }
+    }
+    
+    private void loadPrefixComboBox() {
+        List<String> prefixList = NamePrefix.loadActivePrefix();
+        
+        prefix.removeAllItems();
+        prefix.addItem("");
+        
+        for (String singlePrefix : prefixList) {
+            prefix.addItem(singlePrefix);
         }
     }
     

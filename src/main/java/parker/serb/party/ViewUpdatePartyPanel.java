@@ -13,12 +13,16 @@ import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import parker.serb.Global;
 import parker.serb.sql.CaseParty;
+import parker.serb.sql.NamePrefix;
 import parker.serb.sql.Party;
+import parker.serb.util.CancelUpdate;
 
 //TODO: Allow for a party to be updated from this panel
 //TODO: Reload Table after changes have been made to name, phone number, email
@@ -40,6 +44,7 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         addListeners();
+        loadPrefixComboBox();
         loadStateComboBox();
         id = passedId;
         loadInformation(id);
@@ -85,6 +90,17 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
         
         for (String state : Global.states) {
             stateComboBox.addItem(state);
+        }
+    }
+    
+    private void loadPrefixComboBox() {
+        List<String> prefixList = NamePrefix.loadActivePrefix();
+        
+        prefixComboBox.removeAllItems();
+        prefixComboBox.addItem("");
+        
+        for (String singlePrefix : prefixList) {
+            prefixComboBox.addItem(singlePrefix);
         }
     }
     
@@ -482,8 +498,12 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         if(jButton1.getText().equals("Cancel")) {
-            //confirm cancel
-            //use result to save/close
+            CancelUpdate cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+            if(!cancel.isReset()) {
+            } else {
+                loadInformation(id);
+                disableAll();
+            }
         } else {
             dispose();
         }
