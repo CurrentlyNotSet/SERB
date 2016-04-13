@@ -102,7 +102,7 @@ public class ULPCase {
         try {
             Statement stmt = Database.connectToDB().createStatement();
             
-            String sql = "Select TOP 50 * from ULPCase Order By caseYear DESC, caseNumber DESC";
+            String sql = "Select * from ULPCase Order By caseYear DESC, caseNumber DESC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             

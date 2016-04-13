@@ -87,34 +87,39 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
 
                 for(Object caseParty: caseParties) {
                     CaseParty partyInformation = (CaseParty) caseParty;
+                    
+                    String name = partyInformation.firstName
+                            + (partyInformation.middleInitial.equals("") ? " " : " " + partyInformation.middleInitial + ". ")
+                            + partyInformation.lastName;
+                            
 
-                    switch (partyInformation.type) {
+                    switch (partyInformation.caseRelation) {
                         case "Charging Party":
                             if(chargingParty.equals("")) {
-                                chargingParty += partyInformation.name;
+                                chargingParty += name;
                             } else {
-                                chargingParty += ", " + partyInformation.name;
+                                chargingParty += ", " + name;
                             }
                             break;
                         case "Charging Party REP":
                             if(chargingPartyREP.equals("")) {
-                                chargingPartyREP += partyInformation.name;
+                                chargingPartyREP += name;
                             } else {
-                                chargingPartyREP += ", " + partyInformation.name;
+                                chargingPartyREP += ", " + name;
                             }
                             break;
                         case "Charged Party":
                             if(chargedParty.equals("")) {
-                                chargedParty += partyInformation.name;
+                                chargedParty += name;
                             } else {
-                                chargedParty += ", " + partyInformation.name;
+                                chargedParty += ", " + name;
                             }
                             break;
                         case "Charged Party REP":
                             if(chargedPartyREP.equals("")) {
-                                chargedPartyREP += partyInformation.name;
+                                chargedPartyREP += name;
                             } else {
-                                chargedPartyREP += ", " + partyInformation.name;
+                                chargedPartyREP += ", " + name;
                             }
                             break;
                     }

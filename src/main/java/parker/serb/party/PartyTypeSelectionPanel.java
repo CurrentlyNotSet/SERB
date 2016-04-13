@@ -12,7 +12,6 @@ import parker.serb.sql.Activity;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.PartyType;
 
-//TODO: Add all other section party types to DB
 
 /**
  *
@@ -22,6 +21,7 @@ public class PartyTypeSelectionPanel extends javax.swing.JDialog {
 
     String id;
     String name;
+    boolean selected = false;
     /**
      * Creates new form PartyTypeSelectionPanel
      */
@@ -49,6 +49,12 @@ public class PartyTypeSelectionPanel extends javax.swing.JDialog {
             jComboBox1.addItem(type.toString());
         }
     }
+
+    public boolean isSelected() {
+        return selected;
+    }
+    
+    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -119,6 +125,7 @@ public class PartyTypeSelectionPanel extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        selected = true;
         CaseParty.createParty(id, jComboBox1.getSelectedItem().toString().trim());
         Activity.addActivty("Added " + name + " (" + jComboBox1.getSelectedItem().toString().trim() + ")", "");
         if(Global.activeSection.contains("ULP") 
@@ -126,11 +133,12 @@ public class PartyTypeSelectionPanel extends javax.swing.JDialog {
             setVisible(false);
             new ProSeSelectionPanel((JFrame) Global.root.getParent(), rootPaneCheckingEnabled, jComboBox1.getSelectedItem().toString().trim(), id, name);
         }
-        dispose();
+        setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        dispose();
+        selected = false;
+        setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -13,11 +13,16 @@ import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import parker.serb.Global;
+import parker.serb.sql.CaseParty;
+import parker.serb.sql.NamePrefix;
 import parker.serb.sql.Party;
+import parker.serb.util.CancelUpdate;
 
 //TODO: Allow for a party to be updated from this panel
 //TODO: Reload Table after changes have been made to name, phone number, email
@@ -39,6 +44,7 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         addListeners();
+        loadPrefixComboBox();
         loadStateComboBox();
         id = passedId;
         loadInformation(id);
@@ -87,32 +93,56 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
         }
     }
     
+    private void loadPrefixComboBox() {
+        List<String> prefixList = NamePrefix.loadActivePrefix();
+        
+        prefixComboBox.removeAllItems();
+        prefixComboBox.addItem("");
+        
+        for (String singlePrefix : prefixList) {
+            prefixComboBox.addItem(singlePrefix);
+        }
+    }
+    
     
     private void loadInformation(String id) {
-        Party partyInformation = Party.getPartyByID(id);
-
+        CaseParty partyInformation = CaseParty.getCasePartyByID(id);
+        
+        prefixComboBox.setSelectedItem(partyInformation.prefix);
         firstNameTextBox.setText(partyInformation.firstName);
         middleInitialTextBox.setText(partyInformation.middleInitial);
         lastNameTextBox.setText(partyInformation.lastName);
+        suffixTextBox.setText(partyInformation.suffix);
+        nameTitleTextBox.setText(partyInformation.nameTitle);
+        jobTitleTextBox.setText(partyInformation.jobTitle);
         companyTextBox.setText(partyInformation.companyName);
         address1TextBox.setText(partyInformation.address1);
         address2TextBox.setText(partyInformation.address2);
         address3TextBox.setText(partyInformation.address3);
         cityTextBox.setText(partyInformation.city);
-        stateComboBox.setSelectedItem(partyInformation.state);
-        zipCodeTextBox.setText(partyInformation.zip);
-        phoneNumberTextBox.setText(NumberFormatService.convertStringToPhoneNumber(partyInformation.workPhone));
+        stateComboBox.setSelectedItem(partyInformation.stateCode);
+        zipCodeTextBox.setText(partyInformation.zipcode);
+        phoneNumberTextBox.setText(partyInformation.phone1);
+        phone2NumberTextBox.setText(partyInformation.phone2);
         emailAddressTextBox.setText(partyInformation.emailAddress);
     }
     
     private void enableAll() {
         jButton2.setText("Save");
+        jButton1.setText("Cancel");
+        prefixComboBox.setEnabled(true);
         firstNameTextBox.setEnabled(true);
         firstNameTextBox.setBackground(Color.WHITE);
         middleInitialTextBox.setEnabled(true);
         middleInitialTextBox.setBackground(Color.WHITE);
         lastNameTextBox.setEnabled(true);
         lastNameTextBox.setBackground(Color.WHITE);
+        suffixTextBox.setEnabled(true);
+        suffixTextBox.setBackground(Color.WHITE);
+        nameTitleTextBox.setEnabled(true);
+        nameTitleTextBox.setBackground(Color.WHITE);
+        jobTitleTextBox.setEnabled(true);
+        jobTitleTextBox.setBackground(Color.WHITE);
         companyTextBox.setEnabled(true);
         companyTextBox.setBackground(Color.WHITE);
         address1TextBox.setEnabled(true);
@@ -123,6 +153,8 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
         address3TextBox.setBackground(Color.WHITE);
         phoneNumberTextBox.setEnabled(true);
         phoneNumberTextBox.setBackground(Color.WHITE);
+        phone2NumberTextBox.setEnabled(true);
+        phone2NumberTextBox.setBackground(Color.WHITE);
         emailAddressTextBox.setEnabled(true);
         emailAddressTextBox.setBackground(Color.WHITE);
         cityTextBox.setEnabled(true);
@@ -134,12 +166,20 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
     
     private void disableAll() {
         jButton2.setText("Update");
+        jButton1.setText("Close");
+        prefixComboBox.setEnabled(false);
         firstNameTextBox.setEnabled(false);
         firstNameTextBox.setBackground(new Color(238,238,238));
         middleInitialTextBox.setEnabled(false);
         middleInitialTextBox.setBackground(new Color(238,238,238));
         lastNameTextBox.setEnabled(false);
         lastNameTextBox.setBackground(new Color(238,238,238));
+        suffixTextBox.setEnabled(false);
+        suffixTextBox.setBackground(new Color(238,238,238));
+        nameTitleTextBox.setEnabled(false);
+        nameTitleTextBox.setBackground(new Color(238,238,238));
+        jobTitleTextBox.setEnabled(false);
+        jobTitleTextBox.setBackground(new Color(238,238,238));
         companyTextBox.setEnabled(false);
         companyTextBox.setBackground(new Color(238,238,238));
         address1TextBox.setEnabled(false);
@@ -150,6 +190,8 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
         address3TextBox.setBackground(new Color(238,238,238));
         phoneNumberTextBox.setEnabled(false);
         phoneNumberTextBox.setBackground(new Color(238,238,238));
+        phone2NumberTextBox.setEnabled(false);
+        phone2NumberTextBox.setBackground(new Color(238,238,238));
         emailAddressTextBox.setEnabled(false);
         emailAddressTextBox.setBackground(new Color(238,238,238));
         cityTextBox.setEnabled(false);
@@ -160,22 +202,29 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
     }
     
     private void updatePartyInformation() {
-        Party updateParty = new Party();
+        CaseParty updateParty = new CaseParty();
         
+        
+        updateParty.prefix = prefixComboBox.getSelectedItem() == null ? "" : prefixComboBox.getSelectedItem().toString().trim();
         updateParty.firstName = firstNameTextBox.getText().trim();
         updateParty.middleInitial = middleInitialTextBox.getText().trim();
         updateParty.lastName = lastNameTextBox.getText().trim();
+        updateParty.suffix = suffixTextBox.getText().trim();
+        updateParty.nameTitle = nameTitleTextBox.getText().trim();
+        updateParty.jobTitle = jobTitleTextBox.getText().trim();
         updateParty.companyName = companyTextBox.getText().trim();
         updateParty.address1 = address1TextBox.getText().trim();
         updateParty.address2 = address2TextBox.getText().trim();
         updateParty.address3 = address3TextBox.getText().trim();
         updateParty.city = cityTextBox.getText().trim();
-        updateParty.state = stateComboBox.getSelectedItem().toString().trim();
-        updateParty.zip = zipCodeTextBox.getText().trim();
-        updateParty.workPhone = NumberFormatService.convertPhoneNumberToString(phoneNumberTextBox.getText().trim());
+        updateParty.stateCode = stateComboBox.getSelectedItem().toString().trim();
+        updateParty.zipcode = zipCodeTextBox.getText().trim();
+        updateParty.phone1 = NumberFormatService.convertPhoneNumberToString(phoneNumberTextBox.getText().trim());
+        updateParty.phone2 = NumberFormatService.convertPhoneNumberToString(phone2NumberTextBox.getText().trim());;
+
         updateParty.emailAddress = emailAddressTextBox.getText().trim();
         
-        Party.updateParty(updateParty, id);
+        CaseParty.updateParty(updateParty, id);
     }
 
     /**
@@ -212,6 +261,14 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
         zipCodeTextBox = new javax.swing.JTextField();
         middleInitialTextBox = new javax.swing.JTextField();
         lastNameTextBox = new javax.swing.JTextField();
+        prefixComboBox = new javax.swing.JComboBox<>();
+        suffixTextBox = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        nameTitleTextBox = new javax.swing.JTextField();
+        jLabel13 = new javax.swing.JLabel();
+        jobTitleTextBox = new javax.swing.JTextField();
+        phone2NumberTextBox = new javax.swing.JTextField();
+        jLabel14 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -231,7 +288,7 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
 
         jLabel7.setText("City:");
 
-        jLabel8.setText("Phone:");
+        jLabel8.setText("Phone 1:");
 
         jLabel9.setText("Email:");
 
@@ -292,6 +349,28 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
         lastNameTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         lastNameTextBox.setEnabled(false);
 
+        prefixComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mrs.", "Ms.", "Mr.", "Dr. ", "Hon.", " " }));
+        prefixComboBox.setSelectedIndex(5);
+
+        suffixTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        suffixTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        suffixTextBox.setEnabled(false);
+
+        jLabel10.setText("Name Title:");
+
+        nameTitleTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        nameTitleTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+
+        jLabel13.setText("Job Title:");
+
+        jobTitleTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        jobTitleTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+
+        phone2NumberTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        phone2NumberTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+
+        jLabel14.setText("Phone 2:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -301,6 +380,10 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel4)
                             .addComponent(jLabel3)
@@ -308,36 +391,42 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
                             .addComponent(jLabel6)
                             .addComponent(jLabel7)
                             .addComponent(jLabel8)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel10)
+                            .addComponent(jLabel13)
                             .addComponent(jLabel9)
-                            .addComponent(jLabel2))
+                            .addComponent(jLabel14))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(phone2NumberTextBox)
                             .addComponent(companyTextBox)
-                            .addComponent(address1TextBox)
-                            .addComponent(address2TextBox)
-                            .addComponent(address3TextBox)
                             .addComponent(phoneNumberTextBox)
                             .addComponent(emailAddressTextBox)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(cityTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(prefixComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(firstNameTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(middleInitialTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lastNameTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(suffixTextBox))
+                            .addComponent(nameTitleTextBox)
+                            .addComponent(jobTitleTextBox)
+                            .addComponent(address1TextBox, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(address2TextBox, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(address3TextBox, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(cityTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE)
+                                .addGap(12, 12, 12)
                                 .addComponent(jLabel11)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(stateComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel12)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(zipCodeTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(firstNameTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(middleInitialTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lastNameTextBox))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(zipCodeTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -350,19 +439,29 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
                     .addComponent(firstNameTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(middleInitialTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lastNameTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
+                    .addComponent(jLabel2)
+                    .addComponent(prefixComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(suffixTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(companyTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel10)
+                    .addComponent(nameTitleTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(address1TextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel13)
+                    .addComponent(jobTitleTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(address2TextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(companyTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(address1TextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(address2TextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
@@ -370,20 +469,24 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(cityTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel11)
-                    .addComponent(stateComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(zipCodeTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel12)
-                    .addComponent(zipCodeTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(stateComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel11)
+                    .addComponent(cityTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(phoneNumberTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(phoneNumberTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(phone2NumberTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel14))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9)
-                    .addComponent(emailAddressTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                    .addComponent(emailAddressTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
@@ -394,7 +497,16 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        dispose();
+        if(jButton1.getText().equals("Cancel")) {
+            CancelUpdate cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+            if(!cancel.isReset()) {
+            } else {
+                loadInformation(id);
+                disableAll();
+            }
+        } else {
+            dispose();
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -404,6 +516,7 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
         } else {
             updatePartyInformation();
             disableAll();
+            dispose();
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -418,8 +531,11 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -428,10 +544,15 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JTextField jobTitleTextBox;
     private javax.swing.JTextField lastNameTextBox;
     private javax.swing.JTextField middleInitialTextBox;
+    private javax.swing.JTextField nameTitleTextBox;
+    private javax.swing.JTextField phone2NumberTextBox;
     private javax.swing.JTextField phoneNumberTextBox;
+    private javax.swing.JComboBox<String> prefixComboBox;
     private javax.swing.JComboBox stateComboBox;
+    private javax.swing.JTextField suffixTextBox;
     private javax.swing.JTextField zipCodeTextBox;
     // End of variables declaration//GEN-END:variables
 }

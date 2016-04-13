@@ -84,36 +84,36 @@ public class CMDSHeaderPanel extends javax.swing.JPanel {
                 for(Object caseParty: caseParties) {
                     CaseParty partyInformation = (CaseParty) caseParty;
 
-                    switch (partyInformation.type) {
-                        case "Employer":
-                            if(employer.equals("")) {
-                                employer += partyInformation.name;
-                            } else {
-                                employer += ", " + partyInformation.name;
-                            }
-                            break;
-                        case "Employee Organization":
-                            if(employeeOrg.equals("")) {
-                                employeeOrg += partyInformation.name;
-                            } else {
-                                employeeOrg += ", " + partyInformation.name;
-                            }
-                            break;
-                        case "Incumbent Employee Organization":
-                            if(incumbentEEO.equals("")) {
-                                incumbentEEO += partyInformation.name;
-                            } else {
-                                incumbentEEO += ", " + partyInformation.name;
-                            }
-                            break;
-                        case "Rival Employee Organization":
-                            if(rivalEEO.equals("")) {
-                                rivalEEO += partyInformation.name;
-                            } else {
-                                rivalEEO += ", " + partyInformation.name;
-                            }
-                            break;
-                    }
+//                    switch (partyInformation.type) {
+//                        case "Employer":
+//                            if(employer.equals("")) {
+//                                employer += partyInformation.name;
+//                            } else {
+//                                employer += ", " + partyInformation.name;
+//                            }
+//                            break;
+//                        case "Employee Organization":
+//                            if(employeeOrg.equals("")) {
+//                                employeeOrg += partyInformation.name;
+//                            } else {
+//                                employeeOrg += ", " + partyInformation.name;
+//                            }
+//                            break;
+//                        case "Incumbent Employee Organization":
+//                            if(incumbentEEO.equals("")) {
+//                                incumbentEEO += partyInformation.name;
+//                            } else {
+//                                incumbentEEO += ", " + partyInformation.name;
+//                            }
+//                            break;
+//                        case "Rival Employee Organization":
+//                            if(rivalEEO.equals("")) {
+//                                rivalEEO += partyInformation.name;
+//                            } else {
+//                                rivalEEO += ", " + partyInformation.name;
+//                            }
+//                            break;
+//                    }
                 }
                 employerTextBox.setText(employer);
                 employeeOrgTextBox.setText(employeeOrg);

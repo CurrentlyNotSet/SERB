@@ -83,7 +83,7 @@ public class RootPanel extends javax.swing.JFrame {
      * Rep - only REP
      * etc
      */
-    private void enableTabs() {
+    public void enableTabs() {
         if(!Global.activeUserRoles.contains("Admin")) {
             jMenuBar1.remove(jMenu2);
             for(int i = jTabbedPane1.getTabCount()-1; i >= 0; i--) {
@@ -283,7 +283,7 @@ public class RootPanel extends javax.swing.JFrame {
         }
     }
     
-    private void disableTabs(int activeTab) {
+    public void disableTabs(int activeTab) {
         for(int i = jTabbedPane1.getTabCount()-1; i >= 0; i--) {
             if(i != activeTab) {
                 jTabbedPane1.setEnabledAt(i, false);
@@ -944,8 +944,10 @@ public class RootPanel extends javax.swing.JFrame {
         switch(Global.activeSection) {
             case "REP":
                 rEPRootPanel1.repDelete();
+                break;
             case "ULP":
                 uLPRootPanel1.ulpDelete();
+                break;
             case "Docketing":
                 docketRootPanel1.delete();
             default:
@@ -985,9 +987,6 @@ public class RootPanel extends javax.swing.JFrame {
                     new NewCaseLockDialog((JFrame) this.getRootPane().getParent(), true, caseLock);
                 }
                 break;
-//            case "ULP":
-//                new CreateNewCaseDialog((JFrame) this.getRootPane().getParent(), true);
-//                break;
             default:
                 break;
         }

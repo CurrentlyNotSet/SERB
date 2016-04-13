@@ -153,6 +153,14 @@ public class CreateNewCaseDialog extends javax.swing.JDialog {
     
     private void duplicateCaseInformation() {
         CaseParty.duplicatePartyInformation(buildCaseNumber(), similarCaseComboBox.getSelectedItem().toString().trim());
+        
+        switch(Global.activeSection) {
+            case "ULP": 
+                Global.root.getuLPHeaderPanel1().loadHeaderInformation();
+                break;
+            default:
+                break;
+        }
     }
     
     private boolean isFirstCase() {

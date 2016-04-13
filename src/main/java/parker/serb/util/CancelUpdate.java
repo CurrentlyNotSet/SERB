@@ -18,7 +18,6 @@ public class CancelUpdate extends javax.swing.JDialog {
      */
     public CancelUpdate(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        setUndecorated(true);
         initComponents();
         setLocationRelativeTo(parent);
         setVisible(true);

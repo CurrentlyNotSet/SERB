@@ -78,6 +78,7 @@ public class NotesPanel extends javax.swing.JPanel {
 
         jTextArea2.setBackground(new java.awt.Color(238, 238, 238));
         jTextArea2.setColumns(20);
+        jTextArea2.setFont(new java.awt.Font("Lucida Grande", 0, 15)); // NOI18N
         jTextArea2.setLineWrap(true);
         jTextArea2.setRows(5);
         jTextArea2.setDisabledTextColor(new java.awt.Color(0, 0, 0));

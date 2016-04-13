@@ -5,31 +5,44 @@
  */
 package parker.serb.party;
 
-import parker.serb.sql.Activity;
-import parker.serb.sql.CaseParty;
-
-
 /**
  *
- * @author parker
+ * @author parkerjohnston
  */
-public class DeletePartyDialog extends javax.swing.JDialog {
+public class ULPMissingPartiesDialog extends javax.swing.JDialog {
 
-    String id;
-    String name;
-    String partyType;
     /**
-     * Creates new form DeletePartyDialog
+     * Creates new form ULPMissingPartiesDialog
      */
-    public DeletePartyDialog(java.awt.Frame parent, boolean modal, String passedId, String passedName, String passedPartyType) {
+    public ULPMissingPartiesDialog(java.awt.Frame parent, boolean modal,
+        boolean chargingParty,
+        boolean chargingRepParty,
+        boolean chargedParty,
+        boolean chargedRepParty) {
         super(parent, modal);
         initComponents();
-        id = passedId;
-        name = passedName;
-        partyType = passedPartyType;
-        jLabel2.setText("Remove " + name + " (" + partyType + ") from the case?");
+        jLabel3.setText(buildString(chargingParty, chargingRepParty, chargedParty, chargedRepParty));
         setLocationRelativeTo(parent);
         setVisible(true);
+    }
+    
+    private String buildString(boolean chargingParty, boolean chargingRepParty,
+            boolean chargedParty, boolean chargedRepParty) {
+        String htmlValue = "<html>";
+        
+        if(!chargingParty) 
+            htmlValue += "Charging Party<br>";
+        
+        if(!chargingRepParty) 
+            htmlValue += "Charging Party REP<br>";
+        
+        if(!chargedParty) 
+            htmlValue += "Charged Party<br>";
+        
+        if(!chargedRepParty) 
+            htmlValue += "Charged Party REP<br>";
+        
+        return htmlValue + "<html>";
     }
 
     /**
@@ -43,29 +56,31 @@ public class DeletePartyDialog extends javax.swing.JDialog {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Delete Confirmation");
+        jLabel1.setText("Missing Parties!");
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("jLabel2");
+        jLabel2.setText("The following parties are missing:");
 
-        jButton1.setText("Cancel");
+        jLabel3.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("jLabel3");
+        jLabel3.setMaximumSize(new java.awt.Dimension(49, 100));
+
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setText("Please fix before continuing!");
+
+        jButton1.setText("OK");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
-            }
-        });
-
-        jButton2.setText("Remove");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
             }
         });
 
@@ -77,11 +92,10 @@ public class DeletePartyDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 332, Short.MAX_VALUE)
-                        .addComponent(jButton2)))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -89,13 +103,15 @@ public class DeletePartyDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
-                .addGap(26, 26, 26)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton1)
+                .addContainerGap())
         );
 
         pack();
@@ -105,17 +121,12 @@ public class DeletePartyDialog extends javax.swing.JDialog {
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        CaseParty.removePartyFromCase(id);
-        Activity.addActivty("Removed " + name + " (" + partyType + ")", "");
-        dispose();
-    }//GEN-LAST:event_jButton2ActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     // End of variables declaration//GEN-END:variables
 }

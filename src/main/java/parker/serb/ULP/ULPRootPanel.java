@@ -10,7 +10,9 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import parker.serb.activity.ActivityPanel;
 import parker.serb.Global;
+import parker.serb.party.PartiesPanel;
 import parker.serb.party.PartySearchDialog;
+import parker.serb.party.ULPMissingPartiesDialog;
 import parker.serb.util.CancelUpdate;
 
 /**
@@ -19,6 +21,8 @@ import parker.serb.util.CancelUpdate;
  */
 public class ULPRootPanel extends javax.swing.JPanel {
 
+    String currentTab = "Activity";
+    boolean singleFire = true;
     /**
      * Creates new form REPRootPanel
      */
@@ -29,17 +33,10 @@ public class ULPRootPanel extends javax.swing.JPanel {
     }
     
     private void enableDemoTabs() {
-//        for(int i = jTabbedPane1.getTabCount()-1; i >= 0; i--) {
-//            if(!jTabbedPane1.getTitleAt(i).equals("Activity")) {
-//                jTabbedPane1.remove(i);
-//            }
-//        }
-//        jTabbedPane1.remove(6);
         jTabbedPane1.remove(5);
         jTabbedPane1.remove(4);
         jTabbedPane1.remove(3);
         jTabbedPane1.remove(2);
-
     }
     
     /**
@@ -49,18 +46,94 @@ public class ULPRootPanel extends javax.swing.JPanel {
         Global.root.getuLPHeaderPanel1().clearAll();
         activityPanel1.clearAll();
         partiesPanel1.clearAll();
-//        rEPCaseInformationPanel2.clearAll();
         notesPanel2.clearAll();
     }
     
     private void addListeners() {
-         jTabbedPane1.addChangeListener((ChangeEvent e) -> {
-            
-            if(Global.caseNumber != null) {
-                setButtons();
-                loadInformation();
+        
+        jTabbedPane1.addChangeListener((ChangeEvent e) -> {
+            if(singleFire) {
+                if(currentTab.equals("Parties") && Global.caseNumber != null) {
+                    validateParties();
+                    setButtons();
+                    loadInformation();
+                } else {
+                    if(Global.caseNumber != null) {
+                        setButtons();
+                        loadInformation();
+                        currentTab = jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex());
+                    }
+                }
             }
+            singleFire = true;
         });
+    }
+    
+    public void validateParties() {
+        boolean chargingParty = false;
+        boolean chargingRepParty = false;
+        boolean chargedParty = false;
+        boolean chargedRepParty = false;
+        
+        //need value from type (1)
+        for(int i = 0; i < getPartiesPanel1().getjTable1().getRowCount(); i++) {
+            if(getPartiesPanel1().getjTable1().getValueAt(i, 2).toString().equals("Charging Party")) {
+                chargingParty = true;
+            }
+            if(getPartiesPanel1().getjTable1().getValueAt(i, 2).toString().equals("Charging Party REP")) {
+                chargingRepParty = true;
+            }
+            if(getPartiesPanel1().getjTable1().getValueAt(i, 2).toString().equals("Charged Party")) {
+                chargedParty = true;
+            }
+            if(getPartiesPanel1().getjTable1().getValueAt(i, 2).toString().equals("Charged Party REP")) {
+                chargedRepParty = true;
+            }
+        }
+        
+        if(chargedParty && chargedRepParty && chargingParty && chargingRepParty) {
+            currentTab = jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex());
+            Global.root.enableTabsAfterSave();
+        } else {
+            singleFire = false;
+            jTabbedPane1.setSelectedIndex(1);
+            ULPMissingPartiesDialog missingParties = new ULPMissingPartiesDialog(null, true,
+                chargingParty,
+                chargingRepParty,
+                chargedParty,
+                chargedRepParty);
+        }
+    }
+    
+    public void validateCurrentParties() {
+        boolean chargingParty = false;
+        boolean chargingRepParty = false;
+        boolean chargedParty = false;
+        boolean chargedRepParty = false;
+        
+        //need value from type (2)
+        for(int i = 0; i < getPartiesPanel1().getjTable1().getRowCount(); i++) {
+            if(getPartiesPanel1().getjTable1().getValueAt(i, 2).toString().equals("Charging Party")) {
+                chargingParty = true;
+            }
+            if(getPartiesPanel1().getjTable1().getValueAt(i, 2).toString().equals("Charging Party REP")) {
+                chargingRepParty = true;
+            }
+            if(getPartiesPanel1().getjTable1().getValueAt(i, 2).toString().equals("Charged Party")) {
+                chargedParty = true;
+            }
+            if(getPartiesPanel1().getjTable1().getValueAt(i, 2).toString().equals("Charged Party REP")) {
+                chargedRepParty = true;
+            }
+        }
+        
+        if(chargedParty && chargedRepParty && chargingParty && chargingRepParty) {
+            Global.root.getuLPHeaderPanel1().getjComboBox2().setEnabled(true);
+            Global.root.enableTabsAfterSave();
+        } else {
+            Global.root.getuLPHeaderPanel1().getjComboBox2().setEnabled(false);
+            Global.root.disableTabs(Global.root.getjTabbedPane1().getSelectedIndex());
+        }
     }
     
     /**
@@ -75,6 +148,7 @@ public class ULPRootPanel extends javax.swing.JPanel {
                 break;
             case "Parties":
                 partiesPanel1.loadAllParties();
+                validateCurrentParties();
                 break;
             case "Status":
                 uLPStatusPanel1.loadInformation();
@@ -183,6 +257,7 @@ public class ULPRootPanel extends javax.swing.JPanel {
                 new PartySearchDialog((JFrame) this.getRootPane().getParent(), true);
                 partiesPanel1.loadAllParties();
                 Global.root.getuLPHeaderPanel1().loadHeaderInformation();
+                validateCurrentParties();
                 break;
             case "Status":
                 if(buttonText.equals("Update")) {
@@ -254,6 +329,7 @@ public class ULPRootPanel extends javax.swing.JPanel {
                 break;
             case "Parties":
                 partiesPanel1.removeParty();
+                validateCurrentParties();
                 Global.root.getuLPHeaderPanel1().loadHeaderInformation();
                 break;
             case "Status":
@@ -316,6 +392,12 @@ public class ULPRootPanel extends javax.swing.JPanel {
     public ActivityPanel getActivityPanel1() {
         return activityPanel1;
     }
+
+    public PartiesPanel getPartiesPanel1() {
+        return partiesPanel1;
+    }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.

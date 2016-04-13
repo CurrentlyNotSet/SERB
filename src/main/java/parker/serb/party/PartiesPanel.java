@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.JTable;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
@@ -74,6 +75,7 @@ public class PartiesPanel extends javax.swing.JPanel {
                 if(e.getClickCount() == 2) {
                     new ViewUpdatePartyPanel((JFrame) Global.root.getParent(), true, jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString());
                     loadAllParties();
+                    updateHeader();
                 }
             }
 
@@ -91,6 +93,14 @@ public class PartiesPanel extends javax.swing.JPanel {
         });
     }
     
+    private void updateHeader() {
+        switch(Global.activeSection) {
+            case "ULP":
+                Global.root.getuLPHeaderPanel1().loadHeaderInformation();
+                break;
+        }
+    }
+    
     private void loadPartySearch(String searchTerm) {
         
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
@@ -98,11 +108,21 @@ public class PartiesPanel extends javax.swing.JPanel {
         
         for(Object caseParty: caseParties) {
             CaseParty partyInformation = (CaseParty) caseParty;
-            if(partyInformation.name.toLowerCase().contains(searchTerm.toLowerCase())
-                    || partyInformation.type.toLowerCase().contains(searchTerm.toLowerCase())
-                    || partyInformation.phoneNumber.toLowerCase().contains(searchTerm.toLowerCase())
-                    || partyInformation.email.toLowerCase().contains(searchTerm.toLowerCase())) {
-                model.addRow(new Object[] {partyInformation.id, partyInformation.name, partyInformation.type, partyInformation.phoneNumber, partyInformation.email});
+            if(partyInformation.firstName.toLowerCase().contains(searchTerm.toLowerCase())
+                    || partyInformation.middleInitial.toLowerCase().contains(searchTerm.toLowerCase())
+                    || partyInformation.lastName.toLowerCase().contains(searchTerm.toLowerCase())
+                    || partyInformation.caseRelation.toLowerCase().contains(searchTerm.toLowerCase())
+                    || partyInformation.phone1.toLowerCase().contains(searchTerm.toLowerCase())
+                    || partyInformation.emailAddress.toLowerCase().contains(searchTerm.toLowerCase())
+                    ) {
+                model.addRow(new Object[] {partyInformation.id,
+                    (partyInformation.prefix.equals("") ? "" : (partyInformation.prefix + " "))
+                        + partyInformation.firstName
+                        + (partyInformation.middleInitial.equals("") ? "" : (" " + partyInformation.middleInitial + ". "))
+                        + partyInformation.lastName
+                        + (partyInformation.suffix.equals("") ? "" : (" " + partyInformation.suffix))
+                        + (partyInformation.nameTitle.equals("") ? "" : (", " + partyInformation.nameTitle)),
+                        partyInformation.caseRelation, partyInformation.phone1, partyInformation.emailAddress});           
             }
         }
     }
@@ -122,7 +142,14 @@ public class PartiesPanel extends javax.swing.JPanel {
         
         for(Object caseParty: caseParties) {
             CaseParty partyInformation = (CaseParty) caseParty;
-            model.addRow(new Object[] {partyInformation.id, partyInformation.name, partyInformation.type, partyInformation.phoneNumber, partyInformation.email});
+            model.addRow(new Object[] {partyInformation.id,
+                    (partyInformation.prefix.equals("") ? "" : (partyInformation.prefix + " "))
+                        + partyInformation.firstName
+                        + (partyInformation.middleInitial.equals("") ? "" : (" " + partyInformation.middleInitial + ". "))
+                        + partyInformation.lastName
+                        + (partyInformation.suffix.equals("") ? "" : (" " + partyInformation.suffix))
+                        + (partyInformation.nameTitle.equals("") ? "" : (", " + partyInformation.nameTitle)),
+                        partyInformation.caseRelation, partyInformation.phone1, partyInformation.emailAddress});
         }
     }
     
@@ -135,6 +162,12 @@ public class PartiesPanel extends javax.swing.JPanel {
         
         loadAllParties();
     }
+
+    public JTable getjTable1() {
+        return jTable1;
+    }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
