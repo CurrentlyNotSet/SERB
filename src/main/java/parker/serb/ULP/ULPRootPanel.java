@@ -55,6 +55,8 @@ public class ULPRootPanel extends javax.swing.JPanel {
             if(singleFire) {
                 if(currentTab.equals("Parties") && Global.caseNumber != null) {
                     validateParties();
+                    setButtons();
+                    loadInformation();
                 } else {
                     if(Global.caseNumber != null) {
                         setButtons();
@@ -63,6 +65,7 @@ public class ULPRootPanel extends javax.swing.JPanel {
                     }
                 }
             }
+            singleFire = true;
         });
     }
     
@@ -90,10 +93,10 @@ public class ULPRootPanel extends javax.swing.JPanel {
         
         if(chargedParty && chargedRepParty && chargingParty && chargingRepParty) {
             currentTab = jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex());
+            Global.root.enableTabsAfterSave();
         } else {
             singleFire = false;
             jTabbedPane1.setSelectedIndex(1);
-            singleFire = true;
             ULPMissingPartiesDialog missingParties = new ULPMissingPartiesDialog(null, true,
                 chargingParty,
                 chargingRepParty,
@@ -126,8 +129,10 @@ public class ULPRootPanel extends javax.swing.JPanel {
         
         if(chargedParty && chargedRepParty && chargingParty && chargingRepParty) {
             Global.root.getuLPHeaderPanel1().getjComboBox2().setEnabled(true);
+            Global.root.enableTabsAfterSave();
         } else {
             Global.root.getuLPHeaderPanel1().getjComboBox2().setEnabled(false);
+            Global.root.disableTabs(Global.root.getjTabbedPane1().getSelectedIndex());
         }
     }
     
@@ -324,6 +329,7 @@ public class ULPRootPanel extends javax.swing.JPanel {
                 break;
             case "Parties":
                 partiesPanel1.removeParty();
+                validateCurrentParties();
                 Global.root.getuLPHeaderPanel1().loadHeaderInformation();
                 break;
             case "Status":

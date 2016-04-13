@@ -43,9 +43,9 @@ public class PartySearchDialog extends javax.swing.JDialog {
         jTable1.getColumnModel().getColumn(0).setPreferredWidth(0);
         jTable1.getColumnModel().getColumn(0).setMinWidth(0);
         jTable1.getColumnModel().getColumn(0).setMaxWidth(0);
-        jTable1.getColumnModel().getColumn(1).setPreferredWidth(150);
-        jTable1.getColumnModel().getColumn(1).setMinWidth(150);
-        jTable1.getColumnModel().getColumn(1).setMaxWidth(150);
+        jTable1.getColumnModel().getColumn(1).setPreferredWidth(200);
+        jTable1.getColumnModel().getColumn(1).setMinWidth(200);
+        jTable1.getColumnModel().getColumn(1).setMaxWidth(200);
         jTable1.getColumnModel().getColumn(4).setPreferredWidth(110);
         jTable1.getColumnModel().getColumn(4).setMinWidth(110);
         jTable1.getColumnModel().getColumn(4).setMaxWidth(110);
@@ -123,7 +123,12 @@ public class PartySearchDialog extends javax.swing.JDialog {
         for(Object party: parties) {
             Party partyInformation = (Party) party;
             model.addRow(new Object[] {partyInformation.id,
-                partyInformation.firstName + " " + partyInformation.lastName,
+                (partyInformation.prefix.equals("") ? "" : (partyInformation.prefix + " "))
+                        + partyInformation.firstName
+                        + (partyInformation.middleInitial.equals("") ? "" : (" " + partyInformation.middleInitial + ". "))
+                        + partyInformation.lastName
+                        + (partyInformation.suffix.equals("") ? "" : (" " + partyInformation.suffix))
+                        + (partyInformation.nameTitle.equals("") ? "" : (", " + partyInformation.nameTitle)),
                 partyInformation.companyName,
                 partyInformation.emailAddress,
                 partyInformation.phone1});
@@ -144,10 +149,15 @@ public class PartySearchDialog extends javax.swing.JDialog {
                     || partyInformation.emailAddress.toLowerCase().contains(searchTextBox.getText().toLowerCase())
                     || partyInformation.phone1.contains(searchTextBox.getText().toLowerCase()))
             model.addRow(new Object[] {partyInformation.id,
-                partyInformation.firstName + " " + partyInformation.lastName,
+                (partyInformation.prefix.equals("") ? "" : (partyInformation.prefix + " "))
+                        + partyInformation.firstName
+                        + (partyInformation.middleInitial.equals("") ? "" : (" " + partyInformation.middleInitial + ". "))
+                        + partyInformation.lastName
+                        + (partyInformation.suffix.equals("") ? "" : (" " + partyInformation.suffix))
+                        + (partyInformation.nameTitle.equals("") ? "" : (", " + partyInformation.nameTitle)),
                 partyInformation.companyName,
                 partyInformation.emailAddress,
-                partyInformation.phone1 });
+                partyInformation.phone1});
         }
     }
 
@@ -219,7 +229,7 @@ public class PartySearchDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 687, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 785, Short.MAX_VALUE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)

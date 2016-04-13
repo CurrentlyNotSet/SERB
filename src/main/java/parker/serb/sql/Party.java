@@ -64,6 +64,7 @@ public class Party {
                 party.firstName = partyRS.getString("firstName");
                 party.middleInitial = partyRS.getString("middleInitial");
                 party.lastName = partyRS.getString("lastName");
+                party.suffix = partyRS.getString("suffix");
                 party.nameTitle = partyRS.getString("nameTitle");
                 party.jobTitle = partyRS.getString("jobTitle");
                 party.companyName = partyRS.getString("companyName");
@@ -107,6 +108,7 @@ public class Party {
                 party.firstName = partyRS.getString("firstName");
                 party.middleInitial = partyRS.getString("middleInitial");
                 party.lastName = partyRS.getString("lastName");
+                party.suffix = partyRS.getString("suffix");
                 party.nameTitle = partyRS.getString("nameTitle");
                 party.jobTitle = partyRS.getString("jobTitle");
                 party.companyName = partyRS.getString("companyName");

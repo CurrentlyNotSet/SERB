@@ -75,6 +75,7 @@ public class PartiesPanel extends javax.swing.JPanel {
                 if(e.getClickCount() == 2) {
                     new ViewUpdatePartyPanel((JFrame) Global.root.getParent(), true, jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString());
                     loadAllParties();
+                    updateHeader();
                 }
             }
 
@@ -92,6 +93,14 @@ public class PartiesPanel extends javax.swing.JPanel {
         });
     }
     
+    private void updateHeader() {
+        switch(Global.activeSection) {
+            case "ULP":
+                Global.root.getuLPHeaderPanel1().loadHeaderInformation();
+                break;
+        }
+    }
+    
     private void loadPartySearch(String searchTerm) {
         
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
@@ -106,9 +115,15 @@ public class PartiesPanel extends javax.swing.JPanel {
                     || partyInformation.phone1.toLowerCase().contains(searchTerm.toLowerCase())
                     || partyInformation.emailAddress.toLowerCase().contains(searchTerm.toLowerCase())
                     ) {
-                model.addRow(new Object[] {partyInformation.id, partyInformation.firstName
-                    + (partyInformation.middleInitial.equals("") ? " " : (" " + partyInformation.middleInitial + ". ")) + partyInformation.lastName,
-                    partyInformation.caseRelation, partyInformation.phone1, partyInformation.emailAddress});            }
+                model.addRow(new Object[] {partyInformation.id,
+                    (partyInformation.prefix.equals("") ? "" : (partyInformation.prefix + " "))
+                        + partyInformation.firstName
+                        + (partyInformation.middleInitial.equals("") ? "" : (" " + partyInformation.middleInitial + ". "))
+                        + partyInformation.lastName
+                        + (partyInformation.suffix.equals("") ? "" : (" " + partyInformation.suffix))
+                        + (partyInformation.nameTitle.equals("") ? "" : (", " + partyInformation.nameTitle)),
+                        partyInformation.caseRelation, partyInformation.phone1, partyInformation.emailAddress});           
+            }
         }
     }
     
@@ -127,9 +142,14 @@ public class PartiesPanel extends javax.swing.JPanel {
         
         for(Object caseParty: caseParties) {
             CaseParty partyInformation = (CaseParty) caseParty;
-            model.addRow(new Object[] {partyInformation.id, partyInformation.firstName
-                + (partyInformation.middleInitial.equals("") ? " " : (" " + partyInformation.middleInitial + ". ")) + partyInformation.lastName,
-                partyInformation.caseRelation, partyInformation.phone1, partyInformation.emailAddress});
+            model.addRow(new Object[] {partyInformation.id,
+                    (partyInformation.prefix.equals("") ? "" : (partyInformation.prefix + " "))
+                        + partyInformation.firstName
+                        + (partyInformation.middleInitial.equals("") ? "" : (" " + partyInformation.middleInitial + ". "))
+                        + partyInformation.lastName
+                        + (partyInformation.suffix.equals("") ? "" : (" " + partyInformation.suffix))
+                        + (partyInformation.nameTitle.equals("") ? "" : (", " + partyInformation.nameTitle)),
+                        partyInformation.caseRelation, partyInformation.phone1, partyInformation.emailAddress});
         }
     }
     

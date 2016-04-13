@@ -58,7 +58,7 @@
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="lastNameTextBox" min="-2" pref="170" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="suffixTextBox" pref="102" max="32767" attributes="0"/>
+                                      <Component id="suffixTextBox" max="32767" attributes="0"/>
                                   </Group>
                                   <Component id="nameTitleTextBox" max="32767" attributes="0"/>
                                   <Component id="jobTitleTextBox" alignment="0" max="32767" attributes="0"/>
@@ -82,16 +82,16 @@
                                   <Component id="companyTextBox" max="32767" attributes="0"/>
                                   <Component id="address2TextBox" alignment="0" max="32767" attributes="0"/>
                                   <Component id="address3TextBox" alignment="0" max="32767" attributes="0"/>
-                                  <Group type="102" alignment="0" attributes="0">
+                                  <Group type="102" alignment="1" attributes="0">
                                       <Component id="cityTextBox" min="-2" pref="266" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="stateComboBox" min="-2" max="-2" attributes="0"/>
+                                      <Component id="stateComboBox" min="-2" pref="108" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="jLabel12" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="zipCodeTextBox" max="32767" attributes="0"/>
+                                      <Component id="zipCodeTextBox" min="-2" pref="97" max="-2" attributes="0"/>
                                   </Group>
                                   <Component id="emailTextBox" max="32767" attributes="0"/>
                                   <Component id="phoneTextBox" alignment="0" max="32767" attributes="0"/>
