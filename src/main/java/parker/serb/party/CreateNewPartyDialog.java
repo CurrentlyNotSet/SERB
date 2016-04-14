@@ -175,9 +175,7 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
                 address1TextBox.getText().equals("") ||
                 cityTextBox.getText().equals("") ||
                 stateComboBox.getSelectedItem().toString().equals("") ||
-                zipCodeTextBox.getText().equals("") ||
-                emailTextBox.getText().equals("") ||
-                phoneTextBox.getText().equals("")) {
+                zipCodeTextBox.getText().equals("")) {
             jButton1.setEnabled(false);
         } else {
             jButton1.setEnabled(true);
