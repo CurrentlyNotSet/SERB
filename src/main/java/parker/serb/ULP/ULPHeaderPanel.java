@@ -347,11 +347,11 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
 
     private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
         if(SwingUtilities.isRightMouseButton(evt)) {
-            if(search == null) {
-                search = new ULPCaseSearch((JFrame) getRootPane().getParent(), true);
-            } else {
-                search.setVisible(true);
-            }
+//            if(search == null) {
+//                search = new ULPCaseSearch((JFrame) getRootPane().getParent(), true);
+//            } else {
+//                search.setVisible(true);
+//            }
         }
     }//GEN-LAST:event_jLabel11MouseClicked
 

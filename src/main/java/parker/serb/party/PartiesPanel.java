@@ -118,7 +118,7 @@ public class PartiesPanel extends javax.swing.JPanel {
                 model.addRow(new Object[] {partyInformation.id,
                     (partyInformation.prefix.equals("") ? "" : (partyInformation.prefix + " "))
                         + partyInformation.firstName
-                        + (partyInformation.middleInitial.equals("") ? "" : (" " + partyInformation.middleInitial + ". "))
+                        + (partyInformation.middleInitial.equals("") ? " " : (" " + partyInformation.middleInitial + ". "))
                         + partyInformation.lastName
                         + (partyInformation.suffix.equals("") ? "" : (" " + partyInformation.suffix))
                         + (partyInformation.nameTitle.equals("") ? "" : (", " + partyInformation.nameTitle)),
@@ -145,7 +145,7 @@ public class PartiesPanel extends javax.swing.JPanel {
             model.addRow(new Object[] {partyInformation.id,
                     (partyInformation.prefix.equals("") ? "" : (partyInformation.prefix + " "))
                         + partyInformation.firstName
-                        + (partyInformation.middleInitial.equals("") ? "" : (" " + partyInformation.middleInitial + ". "))
+                        + (partyInformation.middleInitial.equals("") ? " " : (" " + partyInformation.middleInitial + ". "))
                         + partyInformation.lastName
                         + (partyInformation.suffix.equals("") ? "" : (" " + partyInformation.suffix))
                         + (partyInformation.nameTitle.equals("") ? "" : (", " + partyInformation.nameTitle)),
