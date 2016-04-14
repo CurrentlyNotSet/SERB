@@ -46,9 +46,9 @@ public class PartySearchDialog extends javax.swing.JDialog {
         jTable1.getColumnModel().getColumn(1).setPreferredWidth(200);
         jTable1.getColumnModel().getColumn(1).setMinWidth(200);
         jTable1.getColumnModel().getColumn(1).setMaxWidth(200);
-        jTable1.getColumnModel().getColumn(4).setPreferredWidth(110);
-        jTable1.getColumnModel().getColumn(4).setMinWidth(110);
-        jTable1.getColumnModel().getColumn(4).setMaxWidth(110);
+        jTable1.getColumnModel().getColumn(4).setPreferredWidth(125);
+        jTable1.getColumnModel().getColumn(4).setMinWidth(125);
+        jTable1.getColumnModel().getColumn(4).setMaxWidth(125);
     }
     
     private void addListeners() {
@@ -125,7 +125,7 @@ public class PartySearchDialog extends javax.swing.JDialog {
             model.addRow(new Object[] {partyInformation.id,
                 (partyInformation.prefix.equals("") ? "" : (partyInformation.prefix + " "))
                         + partyInformation.firstName
-                        + (partyInformation.middleInitial.equals("") ? "" : (" " + partyInformation.middleInitial + ". "))
+                        + (partyInformation.middleInitial.equals("") ? " " : (" " + partyInformation.middleInitial + ". "))
                         + partyInformation.lastName
                         + (partyInformation.suffix.equals("") ? "" : (" " + partyInformation.suffix))
                         + (partyInformation.nameTitle.equals("") ? "" : (", " + partyInformation.nameTitle)),
@@ -151,7 +151,7 @@ public class PartySearchDialog extends javax.swing.JDialog {
             model.addRow(new Object[] {partyInformation.id,
                 (partyInformation.prefix.equals("") ? "" : (partyInformation.prefix + " "))
                         + partyInformation.firstName
-                        + (partyInformation.middleInitial.equals("") ? "" : (" " + partyInformation.middleInitial + ". "))
+                        + (partyInformation.middleInitial.equals("") ? " " : (" " + partyInformation.middleInitial + ". "))
                         + partyInformation.lastName
                         + (partyInformation.suffix.equals("") ? "" : (" " + partyInformation.suffix))
                         + (partyInformation.nameTitle.equals("") ? "" : (", " + partyInformation.nameTitle)),
