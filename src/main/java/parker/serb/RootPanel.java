@@ -97,8 +97,9 @@ public class RootPanel extends javax.swing.JFrame {
     private void setDefaultTab() {
         //TODO: Make sure default tab is still able to load else remove and load first tab
         
-        if(Global.activeUser.defaultSection != null)
+        if(Global.activeUser.defaultSection != null) {
             jTabbedPane1.setSelectedIndex(jTabbedPane1.indexOfTab(Global.activeUser.defaultSection));
+        }
         
         if(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()).equals("Docketing")) {
             docketRootPanel1.loadDocketList();
