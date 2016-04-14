@@ -94,9 +94,11 @@ public class ULPRootPanel extends javax.swing.JPanel {
         if(chargedParty && chargedRepParty && chargingParty && chargingRepParty) {
             currentTab = jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex());
             Global.root.enableTabsAfterSave();
+            Global.root.getjButton1().setEnabled(true);
         } else {
             singleFire = false;
             jTabbedPane1.setSelectedIndex(1);
+            Global.root.getjButton1().setEnabled(false);
             ULPMissingPartiesDialog missingParties = new ULPMissingPartiesDialog(null, true,
                 chargingParty,
                 chargingRepParty,
@@ -130,9 +132,11 @@ public class ULPRootPanel extends javax.swing.JPanel {
         if(chargedParty && chargedRepParty && chargingParty && chargingRepParty) {
             Global.root.getuLPHeaderPanel1().getjComboBox2().setEnabled(true);
             Global.root.enableTabsAfterSave();
+            Global.root.getjButton1().setEnabled(true);
         } else {
             Global.root.getuLPHeaderPanel1().getjComboBox2().setEnabled(false);
             Global.root.disableTabs(Global.root.getjTabbedPane1().getSelectedIndex());
+            Global.root.getjButton1().setEnabled(false);
         }
     }
     
