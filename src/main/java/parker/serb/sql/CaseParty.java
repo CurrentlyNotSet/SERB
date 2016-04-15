@@ -367,18 +367,11 @@ public class CaseParty {
 
             Statement stmt = Database.connectToDB().createStatement();
             
-            String sql = "Select CaseParty.partyID AS id,"
-                    + " caseRelation,"
-                    + " firstName,"
-                    + " middleInitial,"
-                    + " lastName,"
-                    + " workPhone,"
-                    + " emailAddress from CaseParty inner join Party "
-                    + " on Party.id = CaseParty.partyID "
-                    + " where caseParty.caseYear = ?"
-                    + " AND caseParty.caseType = ?"
-                    + " AND caseParty.caseMonth = ?"
-                    + " AND caseParty.caseNumber = ?"
+            String sql = "Select * from caseParty"
+                    + " where caseYear = ?"
+                    + " AND caseType = ?"
+                    + " AND caseMonth = ?"
+                    + " AND caseNumber = ?"
                     + " order by caseRelation";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
@@ -391,12 +384,12 @@ public class CaseParty {
             
             while(casePartyRS.next()) {
                 CaseParty party = new CaseParty();
-//                party.id = casePartyRS.getInt("id");
-//                party.type = casePartyRS.getString("caseRelation");
-//                party.name = casePartyRS.getString("firstName") + " " + casePartyRS.getString("lastName");
+                party.id = casePartyRS.getInt("id");
+                party.firstName = casePartyRS.getString("firstName");
+                party.caseRelation = casePartyRS.getString("caseRelation");
 //                party.email = casePartyRS.getString("emailAddress");
 //                party.phoneNumber = NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("workPhone"));
-//                parties.add(party);
+                parties.add(party);
             }
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
