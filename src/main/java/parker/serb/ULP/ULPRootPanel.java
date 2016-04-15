@@ -52,20 +52,20 @@ public class ULPRootPanel extends javax.swing.JPanel {
     private void addListeners() {
         
         jTabbedPane1.addChangeListener((ChangeEvent e) -> {
-            if(singleFire) {
-                if(currentTab.equals("Parties") && Global.caseNumber != null) {
-                    validateParties();
-                    setButtons();
-                    loadInformation();
-                } else {
+//            if(singleFire) {
+//                if(currentTab.equals("Parties") && Global.caseNumber != null) {
+//                    validateParties();
+//                    setButtons();
+//                    loadInformation();
+//                } else {
                     if(Global.caseNumber != null) {
                         setButtons();
                         loadInformation();
                         currentTab = jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex());
                     }
-                }
-            }
-            singleFire = true;
+//                }
+//            }
+//            singleFire = true;
         });
     }
     
@@ -92,18 +92,18 @@ public class ULPRootPanel extends javax.swing.JPanel {
         }
         
         if(chargedParty && chargedRepParty && chargingParty && chargingRepParty) {
-            currentTab = jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex());
-            Global.root.enableTabsAfterSave();
-            Global.root.getjButton1().setEnabled(true);
+//            currentTab = jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex());
+//            Global.root.enableTabsAfterSave();
+//            Global.root.getjButton1().setEnabled(true);
         } else {
-            singleFire = false;
-            jTabbedPane1.setSelectedIndex(1);
-            Global.root.getjButton1().setEnabled(false);
-            ULPMissingPartiesDialog missingParties = new ULPMissingPartiesDialog(null, true,
-                chargingParty,
-                chargingRepParty,
-                chargedParty,
-                chargedRepParty);
+//            singleFire = false;
+//            jTabbedPane1.setSelectedIndex(1);
+//            Global.root.getjButton1().setEnabled(false);
+//            ULPMissingPartiesDialog missingParties = new ULPMissingPartiesDialog(null, true,
+//                chargingParty,
+//                chargingRepParty,
+//                chargedParty,
+//                chargedRepParty);
         }
     }
     
@@ -130,13 +130,13 @@ public class ULPRootPanel extends javax.swing.JPanel {
         }
         
         if(chargedParty && chargedRepParty && chargingParty && chargingRepParty) {
-            Global.root.getuLPHeaderPanel1().getjComboBox2().setEnabled(true);
-            Global.root.enableTabsAfterSave();
-            Global.root.getjButton1().setEnabled(true);
+//            Global.root.getuLPHeaderPanel1().getjComboBox2().setEnabled(true);
+//            Global.root.enableTabsAfterSave();
+//            Global.root.getjButton1().setEnabled(true);
         } else {
-            Global.root.getuLPHeaderPanel1().getjComboBox2().setEnabled(false);
-            Global.root.disableTabs(Global.root.getjTabbedPane1().getSelectedIndex());
-            Global.root.getjButton1().setEnabled(false);
+//            Global.root.getuLPHeaderPanel1().getjComboBox2().setEnabled(false);
+//            Global.root.disableTabs(Global.root.getjTabbedPane1().getSelectedIndex());
+//            Global.root.getjButton1().setEnabled(false);
         }
     }
     
