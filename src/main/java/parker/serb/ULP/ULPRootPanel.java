@@ -52,92 +52,12 @@ public class ULPRootPanel extends javax.swing.JPanel {
     private void addListeners() {
         
         jTabbedPane1.addChangeListener((ChangeEvent e) -> {
-//            if(singleFire) {
-//                if(currentTab.equals("Parties") && Global.caseNumber != null) {
-//                    validateParties();
-//                    setButtons();
-//                    loadInformation();
-//                } else {
-                    if(Global.caseNumber != null) {
-                        setButtons();
-                        loadInformation();
-                        currentTab = jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex());
-                    }
-//                }
-//            }
-//            singleFire = true;
+            if(Global.caseNumber != null) {
+                setButtons();
+                loadInformation();
+                currentTab = jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex());
+            }
         });
-    }
-    
-    public void validateParties() {
-        boolean chargingParty = false;
-        boolean chargingRepParty = false;
-        boolean chargedParty = false;
-        boolean chargedRepParty = false;
-        
-        //need value from type (1)
-        for(int i = 0; i < getPartiesPanel1().getjTable1().getRowCount(); i++) {
-            if(getPartiesPanel1().getjTable1().getValueAt(i, 2).toString().equals("Charging Party")) {
-                chargingParty = true;
-            }
-            if(getPartiesPanel1().getjTable1().getValueAt(i, 2).toString().equals("Charging Party REP")) {
-                chargingRepParty = true;
-            }
-            if(getPartiesPanel1().getjTable1().getValueAt(i, 2).toString().equals("Charged Party")) {
-                chargedParty = true;
-            }
-            if(getPartiesPanel1().getjTable1().getValueAt(i, 2).toString().equals("Charged Party REP")) {
-                chargedRepParty = true;
-            }
-        }
-        
-        if(chargedParty && chargedRepParty && chargingParty && chargingRepParty) {
-//            currentTab = jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex());
-//            Global.root.enableTabsAfterSave();
-//            Global.root.getjButton1().setEnabled(true);
-        } else {
-//            singleFire = false;
-//            jTabbedPane1.setSelectedIndex(1);
-//            Global.root.getjButton1().setEnabled(false);
-//            ULPMissingPartiesDialog missingParties = new ULPMissingPartiesDialog(null, true,
-//                chargingParty,
-//                chargingRepParty,
-//                chargedParty,
-//                chargedRepParty);
-        }
-    }
-    
-    public void validateCurrentParties() {
-        boolean chargingParty = false;
-        boolean chargingRepParty = false;
-        boolean chargedParty = false;
-        boolean chargedRepParty = false;
-        
-        //need value from type (2)
-        for(int i = 0; i < getPartiesPanel1().getjTable1().getRowCount(); i++) {
-            if(getPartiesPanel1().getjTable1().getValueAt(i, 2).toString().equals("Charging Party")) {
-                chargingParty = true;
-            }
-            if(getPartiesPanel1().getjTable1().getValueAt(i, 2).toString().equals("Charging Party REP")) {
-                chargingRepParty = true;
-            }
-            if(getPartiesPanel1().getjTable1().getValueAt(i, 2).toString().equals("Charged Party")) {
-                chargedParty = true;
-            }
-            if(getPartiesPanel1().getjTable1().getValueAt(i, 2).toString().equals("Charged Party REP")) {
-                chargedRepParty = true;
-            }
-        }
-        
-        if(chargedParty && chargedRepParty && chargingParty && chargingRepParty) {
-//            Global.root.getuLPHeaderPanel1().getjComboBox2().setEnabled(true);
-//            Global.root.enableTabsAfterSave();
-//            Global.root.getjButton1().setEnabled(true);
-        } else {
-//            Global.root.getuLPHeaderPanel1().getjComboBox2().setEnabled(false);
-//            Global.root.disableTabs(Global.root.getjTabbedPane1().getSelectedIndex());
-//            Global.root.getjButton1().setEnabled(false);
-        }
     }
     
     /**
@@ -152,7 +72,6 @@ public class ULPRootPanel extends javax.swing.JPanel {
                 break;
             case "Parties":
                 partiesPanel1.loadAllParties();
-                validateCurrentParties();
                 break;
             case "Status":
                 uLPStatusPanel1.loadInformation();
@@ -261,7 +180,6 @@ public class ULPRootPanel extends javax.swing.JPanel {
                 new PartySearchDialog((JFrame) this.getRootPane().getParent(), true);
                 partiesPanel1.loadAllParties();
                 Global.root.getuLPHeaderPanel1().loadHeaderInformation();
-                validateCurrentParties();
                 break;
             case "Status":
                 if(buttonText.equals("Update")) {
@@ -333,7 +251,6 @@ public class ULPRootPanel extends javax.swing.JPanel {
                 break;
             case "Parties":
                 partiesPanel1.removeParty();
-                validateCurrentParties();
                 Global.root.getuLPHeaderPanel1().loadHeaderInformation();
                 break;
             case "Status":

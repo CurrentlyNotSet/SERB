@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -141,6 +142,7 @@ public class PartiesPanel extends javax.swing.JPanel {
     }
     
     public void clearAll() {
+        missingParties.setText("");
         jTextField1.setText("");
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
@@ -229,6 +231,8 @@ public class PartiesPanel extends javax.swing.JPanel {
     public JTable getjTable1() {
         return jTable1;
     }
+    
+    
     
     
 
