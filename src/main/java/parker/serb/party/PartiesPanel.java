@@ -112,6 +112,12 @@ public class PartiesPanel extends javax.swing.JPanel {
                     || partyInformation.middleInitial.toLowerCase().contains(searchTerm.toLowerCase())
                     || partyInformation.lastName.toLowerCase().contains(searchTerm.toLowerCase())
                     || partyInformation.caseRelation.toLowerCase().contains(searchTerm.toLowerCase())
+                    || partyInformation.address1.toLowerCase().contains(searchTerm.toLowerCase())
+                    || partyInformation.address2.toLowerCase().contains(searchTerm.toLowerCase())
+                    || partyInformation.address3.toLowerCase().contains(searchTerm.toLowerCase())
+                    || partyInformation.city.toLowerCase().contains(searchTerm.toLowerCase())
+                    || partyInformation.stateCode.toLowerCase().contains(searchTerm.toLowerCase())
+                    || partyInformation.zipcode.toLowerCase().contains(searchTerm.toLowerCase())
                     || partyInformation.phone1.toLowerCase().contains(searchTerm.toLowerCase())
                     || partyInformation.emailAddress.toLowerCase().contains(searchTerm.toLowerCase())
                     ) {
@@ -122,7 +128,14 @@ public class PartiesPanel extends javax.swing.JPanel {
                         + partyInformation.lastName
                         + (partyInformation.suffix.equals("") ? "" : (" " + partyInformation.suffix))
                         + (partyInformation.nameTitle.equals("") ? "" : (", " + partyInformation.nameTitle)),
-                        partyInformation.caseRelation, partyInformation.phone1, partyInformation.emailAddress});           
+                        partyInformation.caseRelation, 
+                        partyInformation.address1
+                        + (partyInformation.address2.equals("") ? "" : (", " + partyInformation.address2))
+                        + (partyInformation.address3.equals("") ? "" : (", " + partyInformation.address3))
+                        + (partyInformation.city.equals("") ? "" : (", " + partyInformation.city))
+                        + (partyInformation.stateCode.equals("") ? "" : (", " + partyInformation.stateCode))
+                        + (partyInformation.zipcode.equals("") ? "" : (", " + partyInformation.zipcode)),
+                        partyInformation.phone1, partyInformation.emailAddress});           
             }
         }
     }
@@ -149,7 +162,14 @@ public class PartiesPanel extends javax.swing.JPanel {
                         + partyInformation.lastName
                         + (partyInformation.suffix.equals("") ? "" : (" " + partyInformation.suffix))
                         + (partyInformation.nameTitle.equals("") ? "" : (", " + partyInformation.nameTitle)),
-                        partyInformation.caseRelation, partyInformation.phone1, partyInformation.emailAddress});
+                        partyInformation.caseRelation, 
+                        partyInformation.address1
+                        + (partyInformation.address2.equals("") ? "" : (", " + partyInformation.address2))
+                        + (partyInformation.address3.equals("") ? "" : (", " + partyInformation.address3))
+                        + (partyInformation.city.equals("") ? "" : (", " + partyInformation.city))
+                        + (partyInformation.stateCode.equals("") ? "" : (", " + partyInformation.stateCode))
+                        + (partyInformation.zipcode.equals("") ? "" : (", " + partyInformation.zipcode)),
+                        partyInformation.phone1, partyInformation.emailAddress});
         }
     }
     
