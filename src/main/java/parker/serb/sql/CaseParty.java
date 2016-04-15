@@ -184,10 +184,11 @@ public class CaseParty {
             Statement stmt = Database.connectToDB().createStatement();
             
             String sql = "Select * from CaseParty"
-                    + " where caseParty.caseYear = ?"
-                    + " and caseParty.caseType = ?"
-                    + " and caseParty.caseMonth = ?"
-                    + " and caseParty.caseNumber = ?";
+                    + " where caseYear = ?"
+                    + " and caseType = ?"
+                    + " and caseMonth = ?"
+                    + " and caseParty.caseNumber = ?"
+                    + " order by caseRelation";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, Global.caseYear);
@@ -375,7 +376,8 @@ public class CaseParty {
                     + " where caseParty.caseYear = ?"
                     + " AND caseParty.caseType = ?"
                     + " AND caseParty.caseMonth = ?"
-                    + " AND caseParty.caseNumber = ?";
+                    + " AND caseParty.caseNumber = ?"
+                    + " order by caseRelation";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, caseYear);
