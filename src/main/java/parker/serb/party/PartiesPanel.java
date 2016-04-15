@@ -191,11 +191,11 @@ public class PartiesPanel extends javax.swing.JPanel {
 
             },
             new String [] {
-                "ID", "Name", "Type", "Phone Number", "Email"
+                "ID", "Name", "Type", "Address", "Phone Number", "Email"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
