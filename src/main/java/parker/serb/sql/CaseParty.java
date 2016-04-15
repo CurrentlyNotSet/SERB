@@ -238,7 +238,8 @@ public class CaseParty {
             Statement stmt = Database.connectToDB().createStatement();
             
             String sql = "Update CaseParty"
-                    + " set prefix = ?,"
+                    + " set caseRelation = ?,"
+                    + " prefix = ?,"
                     + " firstName = ?,"
                     + " middleInitial = ?,"
                     + " lastName = ?,"
@@ -258,24 +259,25 @@ public class CaseParty {
                     + " where id = ?";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, party.prefix);
-            preparedStatement.setString(2, party.firstName);
-            preparedStatement.setString(3, party.middleInitial);
-            preparedStatement.setString(4, party.lastName);
-            preparedStatement.setString(5, party.suffix);
-            preparedStatement.setString(6, party.nameTitle);
-            preparedStatement.setString(7, party.jobTitle);
-            preparedStatement.setString(8, party.companyName);
-            preparedStatement.setString(9, party.address1);
-            preparedStatement.setString(10, party.address2);
-            preparedStatement.setString(11, party.address3);
-            preparedStatement.setString(12, party.city);
-            preparedStatement.setString(13, party.stateCode);
-            preparedStatement.setString(14, party.zipcode);
-            preparedStatement.setString(15, party.phone1.equals("") ? "" : NumberFormatService.convertPhoneNumberToString(party.phone1));
-            preparedStatement.setString(16, party.phone2.equals("") ? "" : NumberFormatService.convertPhoneNumberToString(party.phone2));
-            preparedStatement.setString(17, party.emailAddress);
-            preparedStatement.setString(18, id);
+            preparedStatement.setString(1, party.caseRelation);
+            preparedStatement.setString(2, party.prefix);
+            preparedStatement.setString(3, party.firstName);
+            preparedStatement.setString(4, party.middleInitial);
+            preparedStatement.setString(5, party.lastName);
+            preparedStatement.setString(6, party.suffix);
+            preparedStatement.setString(7, party.nameTitle);
+            preparedStatement.setString(8, party.jobTitle);
+            preparedStatement.setString(9, party.companyName);
+            preparedStatement.setString(10, party.address1);
+            preparedStatement.setString(11, party.address2);
+            preparedStatement.setString(12, party.address3);
+            preparedStatement.setString(13, party.city);
+            preparedStatement.setString(14, party.stateCode);
+            preparedStatement.setString(15, party.zipcode);
+            preparedStatement.setString(16, party.phone1.equals("") ? "" : NumberFormatService.convertPhoneNumberToString(party.phone1));
+            preparedStatement.setString(17, party.phone2.equals("") ? "" : NumberFormatService.convertPhoneNumberToString(party.phone2));
+            preparedStatement.setString(18, party.emailAddress);
+            preparedStatement.setString(19, id);
             
             if(preparedStatement.executeUpdate() == 1) {
                 Party.updateParty(party, CaseParty.getPartyID(id));
