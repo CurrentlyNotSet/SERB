@@ -94,7 +94,7 @@ public class ULPRecommendationPanel extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
-        recommendationComboBox = new javax.swing.JComboBox<String>();
+        recommendationComboBox = new javax.swing.JComboBox<>();
         addRecButton = new javax.swing.JButton();
 
         jLabel1.setText("Recommendation:");
@@ -103,11 +103,12 @@ public class ULPRecommendationPanel extends javax.swing.JPanel {
         jTextArea1.setColumns(20);
         jTextArea1.setLineWrap(true);
         jTextArea1.setRows(5);
+        jTextArea1.setWrapStyleWord(true);
         jTextArea1.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         jTextArea1.setEnabled(false);
         jScrollPane1.setViewportView(jTextArea1);
 
-        recommendationComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        recommendationComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         addRecButton.setText("Add");
         addRecButton.addActionListener(new java.awt.event.ActionListener() {
