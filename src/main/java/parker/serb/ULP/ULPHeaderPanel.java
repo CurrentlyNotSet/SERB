@@ -6,6 +6,7 @@
 package parker.serb.ULP;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JComboBox;
@@ -346,7 +347,7 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
-        if(SwingUtilities.isRightMouseButton(evt)) {
+        if(SwingUtilities.isRightMouseButton(evt) || evt.getButton() == MouseEvent.BUTTON3) {
             if(search == null) {
                 search = new ULPCaseSearch((JFrame) getRootPane().getParent(), true);
             } else {
