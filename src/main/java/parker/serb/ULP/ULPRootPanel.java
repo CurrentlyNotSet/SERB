@@ -33,9 +33,9 @@ public class ULPRootPanel extends javax.swing.JPanel {
     }
     
     private void enableDemoTabs() {
-        jTabbedPane1.remove(5);
-        jTabbedPane1.remove(4);
-        jTabbedPane1.remove(3);
+//        jTabbedPane1.remove(5);
+//        jTabbedPane1.remove(4);
+//        jTabbedPane1.remove(3);
         jTabbedPane1.remove(2);
     }
     

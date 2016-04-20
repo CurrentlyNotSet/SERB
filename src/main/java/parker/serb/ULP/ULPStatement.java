@@ -40,10 +40,13 @@ public class ULPStatement extends javax.swing.JPanel {
         jTextArea1.setBackground(new Color(238,238,238));
         jTextArea1.setEnabled(false);
         Global.root.getjButton9().setVisible(false);
-        loadInformation();
         
         if(save)
             saveInformation();
+        
+        loadInformation();
+        
+        
     }
     
     public void loadInformation() {
@@ -73,6 +76,7 @@ public class ULPStatement extends javax.swing.JPanel {
         jTextArea1.setColumns(20);
         jTextArea1.setLineWrap(true);
         jTextArea1.setRows(5);
+        jTextArea1.setWrapStyleWord(true);
         jTextArea1.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         jTextArea1.setEnabled(false);
         jScrollPane1.setViewportView(jTextArea1);
