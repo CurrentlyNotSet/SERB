@@ -136,7 +136,6 @@ public class ULPCaseSearch extends javax.swing.JDialog {
                     
 //                    Global.caseNumber = caseSearchTable.getValueAt(caseSearchTable.getSelectedRow(), 0).toString();
                     Global.root.getuLPHeaderPanel1().getjComboBox2().setSelectedItem(caseSearchTable.getValueAt(caseSearchTable.getSelectedRow(), 0).toString());
-                    System.out.println(Global.caseNumber);
                     setVisible(false);
                 }
             }
@@ -207,23 +206,30 @@ public class ULPCaseSearch extends javax.swing.JDialog {
             
             for(Object caseParty: caseParties) {
                     CaseParty partyInformation = (CaseParty) caseParty;
+                    
+                    String name = (partyInformation.prefix.equals("") ? "" : (partyInformation.prefix + " "))
+                        + partyInformation.firstName
+                        + (partyInformation.middleInitial.equals("") ? " " : (" " + partyInformation.middleInitial + ". "))
+                        + partyInformation.lastName
+                        + (partyInformation.suffix.equals("") ? "" : (" " + partyInformation.suffix))
+                        + (partyInformation.nameTitle.equals("") ? "" : (", " + partyInformation.nameTitle));
 
-//                switch (partyInformation.type) {
-//                    case "Charging Party":
-//                        if(chargingParty.equals("")) {
-//                            chargingParty += partyInformation.name;
-//                        } else {
-//                            chargingParty += ", " + partyInformation.name;
-//                        }
-//                        break;
-//                    case "Charged Party":
-//                        if(chargedParty.equals("")) {
-//                            chargedParty += partyInformation.name;
-//                        } else {
-//                            chargedParty += ", " + partyInformation.name;
-//                        }
-//                        break;
-//                }
+                switch (partyInformation.caseRelation) {
+                    case "Charging Party":
+                        if(chargingParty.equals("")) {
+                            chargingParty += name;
+                        } else {
+                            chargingParty += ", " + name;
+                        }
+                        break;
+                    case "Charged Party":
+                        if(chargedParty.equals("")) {
+                            chargedParty += name;
+                        } else {
+                            chargedParty += ", " + name;
+                        }
+                        break;
+                }
             }
             model.addRow(new Object[] {(act.caseYear + "-" + act.caseType + "-" + act.caseMonth + "-" + act.caseNumber)
                     , chargingParty, chargedParty, act.employerIDNumber, act.barginingUnitNo}); 
