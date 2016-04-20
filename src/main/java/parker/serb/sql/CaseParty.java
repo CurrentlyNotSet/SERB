@@ -384,11 +384,30 @@ public class CaseParty {
             
             while(casePartyRS.next()) {
                 CaseParty party = new CaseParty();
-                party.id = casePartyRS.getInt("id");
-                party.firstName = casePartyRS.getString("firstName");
+//                party.id = casePartyRS.getInt("id");
+//                party.caseYear = casePartyRS.getString("caseYear");
+//                party.caseType = casePartyRS.getString("caseType");
+//                party.caseMonth = casePartyRS.getString("caseMonth");
+//                party.caseNumber = casePartyRS.getString("caseNumber");
+                party.partyID = casePartyRS.getInt("partyID");
                 party.caseRelation = casePartyRS.getString("caseRelation");
-//                party.email = casePartyRS.getString("emailAddress");
-//                party.phoneNumber = NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("workPhone"));
+                party.prefix = casePartyRS.getString("prefix");
+                party.firstName = casePartyRS.getString("firstName");
+                party.middleInitial = casePartyRS.getString("middleInitial");
+                party.lastName = casePartyRS.getString("lastName");
+                party.suffix = casePartyRS.getString("suffix");
+                party.nameTitle = casePartyRS.getString("nameTitle");
+//                party.jobTitle = casePartyRS.getString("jobTitle");
+//                party.companyName = casePartyRS.getString("companyName");
+//                party.address1 = casePartyRS.getString("address1");
+//                party.address2 = casePartyRS.getString("address2");
+//                party.address3 = casePartyRS.getString("address3");
+//                party.city = casePartyRS.getString("city");
+//                party.stateCode = casePartyRS.getString("stateCode");
+//                party.zipcode = casePartyRS.getString("zipcode");
+//                party.phone1 = casePartyRS.getString("phone1").equals("") ? "" : NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("phone1"));
+//                party.phone2 = casePartyRS.getString("phone2").equals("") ? "" : NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("phone2"));
+//                party.emailAddress = casePartyRS.getString("email");
                 parties.add(party);
             }
         } catch (SQLException ex) {
