@@ -21,7 +21,6 @@ public class CaseNotFoundDialog extends javax.swing.JDialog {
      */
     public CaseNotFoundDialog(java.awt.Frame parent, boolean modal, String search) {
         super(parent, modal);
-        setUndecorated(true);
         initComponents();
         setLocationRelativeTo(parent);
         jLabel2.setText("Unable to load Case Number: " + search);
@@ -73,7 +72,7 @@ public class CaseNotFoundDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -97,6 +96,10 @@ public class CaseNotFoundDialog extends javax.swing.JDialog {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         NumberFormatService.clearCaseNumberInformation();
+        if(Global.activeSection.equals("REP")) {
+        } else if(Global.activeSection.equals("ULP")) {
+            Global.root.getuLPHeaderPanel1().getjComboBox2().setSelectedItem("");
+        }
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -104,6 +107,7 @@ public class CaseNotFoundDialog extends javax.swing.JDialog {
         if(Global.activeSection.equals("REP")) {
             new REPCaseSearch((JFrame) Global.root.getParent(), true);
         } else if(Global.activeSection.equals("ULP")) {
+            Global.root.getuLPHeaderPanel1().getjComboBox2().setSelectedItem("");
             new ULPCaseSearch((JFrame) Global.root.getParent(), true);
         }
         dispose();

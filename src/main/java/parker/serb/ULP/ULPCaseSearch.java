@@ -133,10 +133,11 @@ public class ULPCaseSearch extends javax.swing.JDialog {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if(e.getClickCount() == 2) {
-                    
+                    setVisible(false);
+//                    Global.selectedFullCaseNumber = caseSearchTable.getValueAt(caseSearchTable.getSelectedRow(), 0).toString();
 //                    Global.caseNumber = caseSearchTable.getValueAt(caseSearchTable.getSelectedRow(), 0).toString();
                     Global.root.getuLPHeaderPanel1().getjComboBox2().setSelectedItem(caseSearchTable.getValueAt(caseSearchTable.getSelectedRow(), 0).toString());
-                    setVisible(false);
+                    
                 }
             }
 
@@ -208,9 +209,9 @@ public class ULPCaseSearch extends javax.swing.JDialog {
                     CaseParty partyInformation = (CaseParty) caseParty;
                     
                     String name = (partyInformation.prefix.equals("") ? "" : (partyInformation.prefix + " "))
-                        + partyInformation.firstName
-                        + (partyInformation.middleInitial.equals("") ? " " : (" " + partyInformation.middleInitial + ". "))
-                        + partyInformation.lastName
+                        + (partyInformation.firstName.equals("") ? "" : (partyInformation.firstName + " "))
+                        + (partyInformation.middleInitial.equals("") ? "" : (partyInformation.middleInitial + ". "))
+                        + (partyInformation.lastName.equals("") ? "" : (partyInformation.lastName))
                         + (partyInformation.suffix.equals("") ? "" : (" " + partyInformation.suffix))
                         + (partyInformation.nameTitle.equals("") ? "" : (", " + partyInformation.nameTitle));
 

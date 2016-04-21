@@ -63,8 +63,11 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
     private void loadInformation() {
         if(caseNumberComboBox.getSelectedItem().toString().trim().length() == 16) {
             NumberFormatService.parseFullCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim());
-        } 
-        loadHeaderInformation();
+            loadHeaderInformation();
+        } else {
+            new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());  
+            
+        }
     }
     
     public void loadHeaderInformation() {
@@ -76,8 +79,7 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
         ULPCase ulp = ULPCase.loadHeaderInformation();
         
             if(ulp == null) {
-                new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());  
-                caseNumberComboBox.setSelectedItem("");
+                new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());          
             } else {
                 filedDateTextBox.setText(ulp.fileDate != null ? Global.mmddyyyy.format(new Date(ulp.fileDate.getTime())) : "");
                 currentStatusTextBox.setText(ulp.currentStatus != null ? ulp.currentStatus : "");
