@@ -124,9 +124,9 @@ public class PartiesPanel extends javax.swing.JPanel {
                     ) {
                 model.addRow(new Object[] {partyInformation.id,
                     (partyInformation.prefix.equals("") ? "" : (partyInformation.prefix + " "))
-                        + partyInformation.firstName
-                        + (partyInformation.middleInitial.equals("") ? " " : (" " + partyInformation.middleInitial + ". "))
-                        + partyInformation.lastName
+                        + (partyInformation.firstName.equals("") ? "" : (partyInformation.firstName + " "))
+                        + (partyInformation.middleInitial.equals("") ? "" : (partyInformation.middleInitial + ". "))
+                        + (partyInformation.lastName.equals("") ? "" : (partyInformation.lastName))
                         + (partyInformation.suffix.equals("") ? "" : (" " + partyInformation.suffix))
                         + (partyInformation.nameTitle.equals("") ? "" : (", " + partyInformation.nameTitle)),
                         partyInformation.caseRelation, 
@@ -159,9 +159,9 @@ public class PartiesPanel extends javax.swing.JPanel {
             CaseParty partyInformation = (CaseParty) caseParty;
             model.addRow(new Object[] {partyInformation.id,
                     (partyInformation.prefix.equals("") ? "" : (partyInformation.prefix + " "))
-                        + partyInformation.firstName
-                        + (partyInformation.middleInitial.equals("") ? " " : (" " + partyInformation.middleInitial + ". "))
-                        + partyInformation.lastName
+                        + (partyInformation.firstName.equals("") ? "" : (partyInformation.firstName + " "))
+                        + (partyInformation.middleInitial.equals("") ? "" : (partyInformation.middleInitial + ". "))
+                        + (partyInformation.lastName.equals("") ? "" : (partyInformation.lastName))
                         + (partyInformation.suffix.equals("") ? "" : (" " + partyInformation.suffix))
                         + (partyInformation.nameTitle.equals("") ? "" : (", " + partyInformation.nameTitle)),
                         partyInformation.caseRelation, 
@@ -208,7 +208,7 @@ public class PartiesPanel extends javax.swing.JPanel {
         if(chargedParty && chargedRepParty && chargingParty && chargingRepParty) {
             missingParties.setText("");
         } else {
-            String missingPartiesText = "Missing Require Parties:";
+            String missingPartiesText = "Missing Required Parties:";
             missingPartiesText += (chargingParty ? "" : " Charging Party ");
             missingPartiesText += (chargingRepParty ? "" : " Charging Party REP ");
             missingPartiesText += (chargedParty ? "" : " Charged Party ");

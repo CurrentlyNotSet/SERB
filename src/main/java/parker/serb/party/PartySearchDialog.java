@@ -124,9 +124,9 @@ public class PartySearchDialog extends javax.swing.JDialog {
             Party partyInformation = (Party) party;
             model.addRow(new Object[] {partyInformation.id,
                 (partyInformation.prefix.equals("") ? "" : (partyInformation.prefix + " "))
-                        + partyInformation.firstName
-                        + (partyInformation.middleInitial.equals("") ? " " : (" " + partyInformation.middleInitial + ". "))
-                        + partyInformation.lastName
+                        + (partyInformation.firstName.equals("") ? "" : (partyInformation.firstName + " "))
+                        + (partyInformation.middleInitial.equals("") ? "" : (partyInformation.middleInitial + ". "))
+                        + (partyInformation.lastName.equals("") ? "" : (partyInformation.lastName))
                         + (partyInformation.suffix.equals("") ? "" : (" " + partyInformation.suffix))
                         + (partyInformation.nameTitle.equals("") ? "" : (", " + partyInformation.nameTitle)),
                 partyInformation.companyName,
@@ -161,10 +161,10 @@ public class PartySearchDialog extends javax.swing.JDialog {
                     || partyInformation.emailAddress.toLowerCase().contains(searchTextBox.getText().toLowerCase())
                     || partyInformation.phone1.contains(searchTextBox.getText().toLowerCase()))
             model.addRow(new Object[] {partyInformation.id,
-                (partyInformation.prefix.equals("") ? "" : (partyInformation.prefix + " "))
-                        + partyInformation.firstName
-                        + (partyInformation.middleInitial.equals("") ? " " : (" " + partyInformation.middleInitial + ". "))
-                        + partyInformation.lastName
+               (partyInformation.prefix.equals("") ? "" : (partyInformation.prefix + " "))
+                        + (partyInformation.firstName.equals("") ? "" : (partyInformation.firstName + " "))
+                        + (partyInformation.middleInitial.equals("") ? "" : (partyInformation.middleInitial + ". "))
+                        + (partyInformation.lastName.equals("") ? "" : (partyInformation.lastName))
                         + (partyInformation.suffix.equals("") ? "" : (" " + partyInformation.suffix))
                         + (partyInformation.nameTitle.equals("") ? "" : (", " + partyInformation.nameTitle)),
                 partyInformation.companyName,
