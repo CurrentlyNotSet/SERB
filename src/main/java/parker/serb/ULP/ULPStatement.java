@@ -74,6 +74,7 @@ public class ULPStatement extends javax.swing.JPanel {
 
         jTextArea1.setBackground(new java.awt.Color(238, 238, 238));
         jTextArea1.setColumns(20);
+        jTextArea1.setFont(new java.awt.Font("Lucida Grande", 0, 15)); // NOI18N
         jTextArea1.setLineWrap(true);
         jTextArea1.setRows(5);
         jTextArea1.setWrapStyleWord(true);
