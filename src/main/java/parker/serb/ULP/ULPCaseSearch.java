@@ -249,13 +249,13 @@ public class ULPCaseSearch extends javax.swing.JDialog {
 //                if(j == 0) {
                     String[] parsedCaseNumber = String.valueOf(tableData[i][0]).split("-");
                     if(((parsedCaseNumber[0].contains(caseYearTextBox.getText()) && !caseYearTextBox.equals(""))
-                        && (parsedCaseNumber[1].contains(caseTypeTextBox.getText()) && !caseTypeTextBox.equals(""))
+                        && (parsedCaseNumber[1].toLowerCase().contains(caseTypeTextBox.getText().toLowerCase()) && !caseTypeTextBox.equals(""))
                         && (parsedCaseNumber[2].contains(caseMonthTextBox.getText()) && !caseMonthTextBox.equals(""))
                         && (parsedCaseNumber[3].contains(caseNumberTextBox.getText()) && !caseNumberTextBox.equals("")))
-                        && ((tableData[i][1].toString().contains(searchTextBox.getText()) && !searchTextBox.equals(""))
-                        || (tableData[i][2].toString().contains(searchTextBox.getText()) && !searchTextBox.equals(""))
-                        || (tableData[i][3].toString().contains(searchTextBox.getText()) && !searchTextBox.equals(""))
-                        || (tableData[i][4].toString().contains(searchTextBox.getText()) && !searchTextBox.equals("")))) {
+                        && ((tableData[i][1].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals(""))
+                        || (tableData[i][2].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals(""))
+                        || (tableData[i][3].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals(""))
+                        || (tableData[i][4].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals("")))) {
                         model.addRow(new Object[] {tableData[i][0]
                         , tableData[i][1], tableData[i][2], tableData[i][3], tableData[i][4]}); 
                         
