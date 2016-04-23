@@ -28,15 +28,15 @@ public class ULPRootPanel extends javax.swing.JPanel {
      */
     public ULPRootPanel() {
         initComponents();
-        enableDemoTabs();
+//        enableDemoTabs();
         addListeners();
     }
     
     private void enableDemoTabs() {
-//        jTabbedPane1.remove(5);
-//        jTabbedPane1.remove(4);
-//        jTabbedPane1.remove(3);
-        jTabbedPane1.remove(2);
+        jTabbedPane1.remove(5); //Investigation Reveals
+        jTabbedPane1.remove(4); //Rec
+        jTabbedPane1.remove(3); //Statement
+        jTabbedPane1.remove(2); //Status
     }
     
     /**
