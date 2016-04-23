@@ -212,7 +212,7 @@ public class ULPRootPanel extends javax.swing.JPanel {
                     enableTabs();
                     Global.root.enableTabsAfterSave();
                     Global.root.enableButtonsAfterCancel();
-                    uLPRecommendation1.disableUpdate();
+                    uLPRecommendation1.disableUpdate(true);
                 }
                 break;
             case "Investigation Reveals":
@@ -280,7 +280,7 @@ public class ULPRootPanel extends javax.swing.JPanel {
                     Global.root.enableButtonsAfterCancel();
                     Global.root.enableTabsAfterSave();
                     enableTabs();
-                    uLPRecommendation1.disableUpdate();
+                    uLPRecommendation1.disableUpdate(false);
                 }
                 break;
             case "Investigation Reveals":
