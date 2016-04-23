@@ -91,9 +91,12 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
                 for(Object caseParty: caseParties) {
                     CaseParty partyInformation = (CaseParty) caseParty;
                     
-                    String name = partyInformation.firstName
-                            + (partyInformation.middleInitial.equals("") ? " " : " " + partyInformation.middleInitial + ". ")
-                            + partyInformation.lastName;
+                    String name = (partyInformation.prefix.equals("") ? "" : (partyInformation.prefix + " "))
+                        + (partyInformation.firstName.equals("") ? "" : (partyInformation.firstName + " "))
+                        + (partyInformation.middleInitial.equals("") ? "" : (partyInformation.middleInitial + ". "))
+                        + (partyInformation.lastName.equals("") ? "" : (partyInformation.lastName))
+                        + (partyInformation.suffix.equals("") ? "" : (" " + partyInformation.suffix))
+                        + (partyInformation.nameTitle.equals("") ? "" : (", " + partyInformation.nameTitle));
                             
 
                     switch (partyInformation.caseRelation) {
