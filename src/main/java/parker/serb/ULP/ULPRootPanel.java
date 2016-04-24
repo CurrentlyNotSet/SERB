@@ -12,7 +12,6 @@ import parker.serb.activity.ActivityPanel;
 import parker.serb.Global;
 import parker.serb.party.PartiesPanel;
 import parker.serb.party.PartySearchDialog;
-import parker.serb.party.ULPMissingPartiesDialog;
 import parker.serb.util.CancelUpdate;
 
 /**
@@ -28,15 +27,7 @@ public class ULPRootPanel extends javax.swing.JPanel {
      */
     public ULPRootPanel() {
         initComponents();
-//        enableDemoTabs();
         addListeners();
-    }
-    
-    private void enableDemoTabs() {
-        jTabbedPane1.remove(5); //Investigation Reveals
-        jTabbedPane1.remove(4); //Rec
-        jTabbedPane1.remove(3); //Statement
-        jTabbedPane1.remove(2); //Status
     }
     
     /**
