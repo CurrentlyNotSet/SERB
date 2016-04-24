@@ -286,6 +286,7 @@
         </Component>
         <Component class="com.alee.extended.date.WebDateField" name="assignedDateTextBox">
           <Properties>
+            <Property name="editable" type="boolean" value="false"/>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ee" green="ee" red="ee" type="rgb"/>
             </Property>
@@ -303,6 +304,7 @@
         </Component>
         <Component class="com.alee.extended.date.WebDateField" name="reportDueDateTextBox">
           <Properties>
+            <Property name="editable" type="boolean" value="false"/>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ee" green="ee" red="ee" type="rgb"/>
             </Property>
@@ -320,6 +322,7 @@
         </Component>
         <Component class="com.alee.extended.date.WebDateField" name="dismissalDateTextBox">
           <Properties>
+            <Property name="editable" type="boolean" value="false"/>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ee" green="ee" red="ee" type="rgb"/>
             </Property>
@@ -334,6 +337,7 @@
         </Component>
         <Component class="com.alee.extended.date.WebDateField" name="deferredDateTextBox">
           <Properties>
+            <Property name="editable" type="boolean" value="false"/>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ee" green="ee" red="ee" type="rgb"/>
             </Property>
@@ -348,6 +352,7 @@
         </Component>
         <Component class="com.alee.extended.date.WebDateField" name="appealReceivedTextBox">
           <Properties>
+            <Property name="editable" type="boolean" value="false"/>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ee" green="ee" red="ee" type="rgb"/>
             </Property>
@@ -362,6 +367,7 @@
         </Component>
         <Component class="com.alee.extended.date.WebDateField" name="appealSentTextBox">
           <Properties>
+            <Property name="editable" type="boolean" value="false"/>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ee" green="ee" red="ee" type="rgb"/>
             </Property>
@@ -663,6 +669,7 @@
         </Component>
         <Component class="com.alee.extended.date.WebDateField" name="filedDateTextBox">
           <Properties>
+            <Property name="editable" type="boolean" value="false"/>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ee" green="ee" red="ee" type="rgb"/>
             </Property>

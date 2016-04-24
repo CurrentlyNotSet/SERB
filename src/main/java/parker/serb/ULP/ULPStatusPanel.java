@@ -388,33 +388,39 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         priorityComboBox.setSelectedIndex(1);
         priorityComboBox.setEnabled(false);
 
+        assignedDateTextBox.setEditable(false);
         assignedDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
         assignedDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
         assignedDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         assignedDateTextBox.setEnabled(false);
         assignedDateTextBox.setDateFormat(Global.mmddyyyy);
 
+        reportDueDateTextBox.setEditable(false);
         reportDueDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
         reportDueDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
         reportDueDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         reportDueDateTextBox.setEnabled(false);
         reportDueDateTextBox.setDateFormat(Global.mmddyyyy);
 
+        dismissalDateTextBox.setEditable(false);
         dismissalDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
         dismissalDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         dismissalDateTextBox.setEnabled(false);
         dismissalDateTextBox.setDateFormat(Global.mmddyyyy);
 
+        deferredDateTextBox.setEditable(false);
         deferredDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
         deferredDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         deferredDateTextBox.setEnabled(false);
         deferredDateTextBox.setDateFormat(Global.mmddyyyy);
 
+        appealReceivedTextBox.setEditable(false);
         appealReceivedTextBox.setBackground(new java.awt.Color(238, 238, 238));
         appealReceivedTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         appealReceivedTextBox.setEnabled(false);
         appealReceivedTextBox.setDateFormat(Global.mmddyyyy);
 
+        appealSentTextBox.setEditable(false);
         appealSentTextBox.setBackground(new java.awt.Color(238, 238, 238));
         appealSentTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         appealSentTextBox.setEnabled(false);
@@ -664,6 +670,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
 
         jLabel8.setText("Filed Date:");
 
+        filedDateTextBox.setEditable(false);
         filedDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
         filedDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         filedDateTextBox.setDrawShade(false);
