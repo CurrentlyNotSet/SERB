@@ -101,7 +101,7 @@ public class RelatedCase {
 
             Statement stmt = Database.connectToDB().createStatement();
 
-            String sql = "select COUNT(*) AS Count from RelatedCase where"
+            String sql = "select * from RelatedCase where"
                     + " caseYear = ? AND"
                     + " caseType = ? AND"
                     + " caseMonth = ? AND"
@@ -123,7 +123,7 @@ public class RelatedCase {
 
             ResultSet relatedCaseRS = preparedStatement.executeQuery();
             
-            if(relatedCaseRS.getInt("Count") > 0) {
+            while (relatedCaseRS.next()) {
                 newCase = false;
             }
             
