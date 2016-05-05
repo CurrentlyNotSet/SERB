@@ -17,6 +17,7 @@ import parker.serb.sql.CaseParty;
 import parker.serb.sql.CaseType;
 import parker.serb.sql.REPCase;
 import parker.serb.sql.ULPCase;
+import parker.serb.sql.ULPCaseSearchData;
 
 /**
  *
@@ -141,6 +142,10 @@ public class CreateNewCaseDialog extends javax.swing.JDialog {
                 break;
             case "ULP":
                 ULPCase.createCase(yearComboBox.getSelectedItem().toString(),
+                        typeComboBox.getSelectedItem().toString(),
+                        monthComboBox.getSelectedItem().toString().substring(0, 2),
+                        caseNumberTextBox.getText().trim());
+                ULPCaseSearchData.createNewCaseEntry(yearComboBox.getSelectedItem().toString(),
                         typeComboBox.getSelectedItem().toString(),
                         monthComboBox.getSelectedItem().toString().substring(0, 2),
                         caseNumberTextBox.getText().trim());

@@ -57,8 +57,8 @@ public class Activity {
             preparedStatement.setString(4, Global.caseNumber);
             preparedStatement.setInt(5, Global.activeUser.id);
             preparedStatement.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
-            preparedStatement.setString(7, action);
-            preparedStatement.setString(8, fileName);
+            preparedStatement.setString(7, action.equals("") ? null : action);
+            preparedStatement.setString(8, fileName == null ? null : fileName);
             preparedStatement.setString(9, "");
             preparedStatement.setString(10, "");
             preparedStatement.setString(11, "");
@@ -98,12 +98,12 @@ public class Activity {
             preparedStatement.setString(4, caseNumber[3].trim());
             preparedStatement.setInt(5, Global.activeUser.id);
             preparedStatement.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
-            preparedStatement.setString(7, action);
-            preparedStatement.setString(8, fileName);
-            preparedStatement.setString(9, from);
-            preparedStatement.setString(10, to);
-            preparedStatement.setString(11, type);
-            preparedStatement.setString(12, comment);
+            preparedStatement.setString(7, action.equals("") ? null : action);
+            preparedStatement.setString(8, fileName.equals("") ? null : fileName);
+            preparedStatement.setString(9, from.equals("") ? null : from);
+            preparedStatement.setString(10, to.equals("") ? null : to);
+            preparedStatement.setString(11, type.equals("") ? null : type);
+            preparedStatement.setString(12, comment.equals("") ? null : comment);
             preparedStatement.setBoolean(13, redacted);
             preparedStatement.setBoolean(14, needsTimestamp);
 
@@ -141,12 +141,12 @@ public class Activity {
             preparedStatement.setString(4, caseNumber[3].trim());
             preparedStatement.setInt(5, Global.activeUser.id);
             preparedStatement.setTimestamp(6, new Timestamp(activityDate.getTime()));
-            preparedStatement.setString(7, action);
-            preparedStatement.setString(8, fileName);
-            preparedStatement.setString(9, from);
-            preparedStatement.setString(10, to);
-            preparedStatement.setString(11, type);
-            preparedStatement.setString(12, comment);
+            preparedStatement.setString(7, action.equals("") ? null : action);
+            preparedStatement.setString(8, fileName.equals("") ? null : fileName);
+            preparedStatement.setString(9, from.equals("") ? null : from);
+            preparedStatement.setString(10, to.equals("") ? null : to);
+            preparedStatement.setString(11, type.equals("") ? null : type);
+            preparedStatement.setString(12, comment.equals("") ? null : comment);
             preparedStatement.setBoolean(13, redacted);
             preparedStatement.setBoolean(14, needsTimestamp);
 
@@ -180,12 +180,12 @@ public class Activity {
             preparedStatement.setString(4, parsedCaseNumber[3]);
             preparedStatement.setInt(5, Global.activeUser.id);
             preparedStatement.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
-            preparedStatement.setString(7, message);
-            preparedStatement.setString(8, "");
-            preparedStatement.setString(9, "");
-            preparedStatement.setString(10, "");
-            preparedStatement.setString(11, "");
-            preparedStatement.setString(12, "");
+            preparedStatement.setString(7, message.equals("") ? null : message);
+            preparedStatement.setString(8, null);
+            preparedStatement.setString(9, null);
+            preparedStatement.setString(10, null);
+            preparedStatement.setString(11, null);
+            preparedStatement.setString(12, null);
             preparedStatement.setBoolean(13, false);
             preparedStatement.setBoolean(14, false);
 
@@ -222,7 +222,7 @@ public class Activity {
                     + " lastName,"
                     + " fileName"
                     + " from Activity"
-                    + " INNER JOIN Users"
+                    + " LEFT JOIN Users"
                     + " ON Activity.userID = Users.id"
                     + " where caseYear = ? and"
                     + " caseType = ? and"
@@ -245,8 +245,14 @@ public class Activity {
             
             while(caseActivity.next()) {
                 Activity act = new Activity();
+                
+                if(caseActivity.getString("firstName") == null && caseActivity.getString("lastName") == null) {
+                    act.user = "SYSTEM";
+                } else {
+                    act.user = caseActivity.getString("firstName") + " " + caseActivity.getString("lastName");
+                }
+                
                 act.id = caseActivity.getInt("id");
-                act.user = caseActivity.getString("firstName") + " " + caseActivity.getString("lastName");
                 act.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
                 act.action = caseActivity.getString("action");
                 act.fileName = caseActivity.getString("fileName");

@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import parker.serb.Global;
 import parker.serb.sql.Audit;
@@ -90,6 +91,8 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
 
                 for(Object caseParty: caseParties) {
                     CaseParty partyInformation = (CaseParty) caseParty;
+
+                    
                     
                     String name = (partyInformation.prefix.equals("") ? "" : (partyInformation.prefix + " "))
                         + (partyInformation.firstName.equals("") ? "" : (partyInformation.firstName + " "))
@@ -169,6 +172,14 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
 
     public JComboBox getjComboBox2() {
         return caseNumberComboBox;
+    }
+
+    public JTextField getChargedPartyTextBox() {
+        return chargedPartyTextBox;
+    }
+
+    public JTextField getChargingPartyTextBox() {
+        return chargingPartyTextBox;
     }
     
     

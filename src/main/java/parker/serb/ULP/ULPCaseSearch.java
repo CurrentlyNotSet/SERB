@@ -12,8 +12,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
-import parker.serb.sql.CaseParty;
-import parker.serb.sql.ULPCase;
+import parker.serb.sql.ULPCaseSearchData;
 
 /**
  *
@@ -186,7 +185,6 @@ public class ULPCaseSearch extends javax.swing.JDialog {
                 return false;
             }   
         };
-
        
         model.addColumn("Case Number");
         model.addColumn("Charging Party");
@@ -194,46 +192,13 @@ public class ULPCaseSearch extends javax.swing.JDialog {
         model.addColumn("Employer Number");
         model.addColumn("Union Number");
         
-        caseList = ULPCase.loadULPCases();
+        caseList = ULPCaseSearchData.loadULPCaseList();
         
         for (Object caseItem : caseList) {
-            ULPCase act = (ULPCase) caseItem;
+            ULPCaseSearchData act = (ULPCaseSearchData) caseItem;
             
-            List caseParties = CaseParty.loadPartiesByCase(act.caseYear,
-                    act.caseType, act.caseMonth, act.caseNumber);
-            
-            String chargedParty = "";
-            String chargingParty = "";
-            
-            for(Object caseParty: caseParties) {
-                    CaseParty partyInformation = (CaseParty) caseParty;
-                    
-                    String name = (partyInformation.prefix.equals("") ? "" : (partyInformation.prefix + " "))
-                        + (partyInformation.firstName.equals("") ? "" : (partyInformation.firstName + " "))
-                        + (partyInformation.middleInitial.equals("") ? "" : (partyInformation.middleInitial + ". "))
-                        + (partyInformation.lastName.equals("") ? "" : (partyInformation.lastName))
-                        + (partyInformation.suffix.equals("") ? "" : (" " + partyInformation.suffix))
-                        + (partyInformation.nameTitle.equals("") ? "" : (", " + partyInformation.nameTitle));
-
-                switch (partyInformation.caseRelation) {
-                    case "Charging Party":
-                        if(chargingParty.equals("")) {
-                            chargingParty += name;
-                        } else {
-                            chargingParty += ", " + name;
-                        }
-                        break;
-                    case "Charged Party":
-                        if(chargedParty.equals("")) {
-                            chargedParty += name;
-                        } else {
-                            chargedParty += ", " + name;
-                        }
-                        break;
-                }
-            }
             model.addRow(new Object[] {(act.caseYear + "-" + act.caseType + "-" + act.caseMonth + "-" + act.caseNumber)
-                    , chargingParty, chargedParty, act.employerIDNumber, act.barginingUnitNo}); 
+                    , act.chargingParty, act.chargedParty, act.employerNumber, act.unionNumber}); 
         }
         getTableData();
         caseSearchTable.setModel(model);
@@ -244,24 +209,20 @@ public class ULPCaseSearch extends javax.swing.JDialog {
     private void limitCaseList() {
         model.setRowCount(0);
         
-        for (int i = 0; i<tableData.length; i++){
-//            for (int j x= 0; j<tableData[i].length; j++){
-//                if(j == 0) {
-                    String[] parsedCaseNumber = String.valueOf(tableData[i][0]).split("-");
-                    if(((parsedCaseNumber[0].contains(caseYearTextBox.getText()) && !caseYearTextBox.equals(""))
-                        && (parsedCaseNumber[1].toLowerCase().contains(caseTypeTextBox.getText().toLowerCase()) && !caseTypeTextBox.equals(""))
-                        && (parsedCaseNumber[2].contains(caseMonthTextBox.getText()) && !caseMonthTextBox.equals(""))
-                        && (parsedCaseNumber[3].contains(caseNumberTextBox.getText()) && !caseNumberTextBox.equals("")))
-                        && ((tableData[i][1].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals(""))
-                        || (tableData[i][2].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals(""))
-                        || (tableData[i][3].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals(""))
-                        || (tableData[i][4].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals("")))) {
-                        model.addRow(new Object[] {tableData[i][0]
-                        , tableData[i][1], tableData[i][2], tableData[i][3], tableData[i][4]}); 
-                        
-//                    }
-                }
-//            } 
+        for (int i = 0; i<tableData.length; i++)
+        {
+            String[] parsedCaseNumber = String.valueOf(tableData[i][0]).split("-");
+            if(((parsedCaseNumber[0].contains(caseYearTextBox.getText()) && !caseYearTextBox.equals(""))
+                && (parsedCaseNumber[1].toLowerCase().contains(caseTypeTextBox.getText().toLowerCase()) && !caseTypeTextBox.equals(""))
+                && (parsedCaseNumber[2].contains(caseMonthTextBox.getText()) && !caseMonthTextBox.equals(""))
+                && (parsedCaseNumber[3].contains(caseNumberTextBox.getText()) && !caseNumberTextBox.equals("")))
+                && ((tableData[i][1].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals(""))
+                || (tableData[i][2].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals(""))
+                || (tableData[i][3].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals(""))
+                || (tableData[i][4].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals("")))) {
+                model.addRow(new Object[] {tableData[i][0]
+                , tableData[i][1], tableData[i][2], tableData[i][3], tableData[i][4]}); 
+            }
         }
         caseSearchTable.setModel(model);
     }
@@ -302,6 +263,7 @@ public class ULPCaseSearch extends javax.swing.JDialog {
         caseMonthTextBox = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         caseNumberTextBox = new javax.swing.JTextField();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -353,7 +315,7 @@ public class ULPCaseSearch extends javax.swing.JDialog {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 391, Short.MAX_VALUE)
+            .addGap(0, 388, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -402,6 +364,13 @@ public class ULPCaseSearch extends javax.swing.JDialog {
             }
         });
 
+        jButton2.setText("Refresh");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -409,9 +378,9 @@ public class ULPCaseSearch extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLayeredPane1)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -431,7 +400,9 @@ public class ULPCaseSearch extends javax.swing.JDialog {
                         .addGap(18, 18, 18)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(searchTextBox)))
+                        .addComponent(searchTextBox)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton2)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -450,9 +421,10 @@ public class ULPCaseSearch extends javax.swing.JDialog {
                     .addComponent(jLabel6)
                     .addComponent(caseMonthTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7)
-                    .addComponent(caseNumberTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(caseNumberTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 391, Short.MAX_VALUE)
+                .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
                 .addGap(11, 11, 11)
                 .addComponent(jButton1)
                 .addContainerGap())
@@ -477,6 +449,14 @@ public class ULPCaseSearch extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_caseNumberTextBoxActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        jButton2.setEnabled(false);
+        model.setNumRows(0);
+        jLayeredPane1.moveToFront(jPanel1);
+        activity();
+        jButton2.setEnabled(true);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField caseMonthTextBox;
     private javax.swing.JTextField caseNumberTextBox;
@@ -484,6 +464,7 @@ public class ULPCaseSearch extends javax.swing.JDialog {
     private javax.swing.JTextField caseTypeTextBox;
     private javax.swing.JTextField caseYearTextBox;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

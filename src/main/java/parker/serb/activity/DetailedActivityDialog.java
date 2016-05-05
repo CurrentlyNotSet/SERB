@@ -92,7 +92,7 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
         typeComboBox.setSelectedItem(orgActivity.type);
         commentTextArea.setText(orgActivity.comment);
         
-        if(orgActivity.fileName.equals("")) {
+        if(orgActivity.fileName == null) {
             viewFileButton.setVisible(false);
         }
     }

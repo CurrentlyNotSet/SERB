@@ -71,12 +71,17 @@ public class ActivityPanel extends javax.swing.JPanel {
                 if(e.getClickCount() == 2 && !filePath.equals("") && actvityTable.getSelectedColumn() == 3) {
                     FileService.openFile(filePath);
                 } else if(e.getClickCount() == 2 && actvityTable.getSelectedColumn() != 3) {
-                    Audit.addAuditEntry("Viewing Activty Detail for ID: " + actvityTable.getValueAt(actvityTable.getSelectedRow(), 4).toString());
-                    new DetailedActivityDialog((JFrame) Global.root.getRootPane().getParent(),
-                            true,
-                            actvityTable.getValueAt(actvityTable.getSelectedRow(), 4).toString());
-                    searchTextBox.setText("");
-                    loadAllActivity();
+                    if(!actvityTable.getValueAt(actvityTable.getSelectedRow(), 1).toString().startsWith("Removed") &&
+                            !actvityTable.getValueAt(actvityTable.getSelectedRow(), 1).toString().startsWith("Set") &&
+                            !actvityTable.getValueAt(actvityTable.getSelectedRow(), 1).toString().startsWith("Changed"))
+                    {
+                        Audit.addAuditEntry("Viewing Activty Detail for ID: " + actvityTable.getValueAt(actvityTable.getSelectedRow(), 4).toString());
+                        new DetailedActivityDialog((JFrame) Global.root.getRootPane().getParent(),
+                                true,
+                                actvityTable.getValueAt(actvityTable.getSelectedRow(), 4).toString());
+                        searchTextBox.setText("");
+                        loadAllActivity();
+                    }
                 }
             }
 
@@ -126,7 +131,7 @@ public class ActivityPanel extends javax.swing.JPanel {
             Activity act = (Activity) activty1;
             if(act.action.toLowerCase().contains(searchTerm.toLowerCase())
                     || act.user.toLowerCase().contains(searchTerm.toLowerCase())) {
-                if(act.fileName.equals("")) {
+                if(act.fileName == null) {
                     model.addRow(new Object[] {act.date, act.action, act.user, "", act.id});
                 } else {
                     model.addRow(new Object[] {act.date, act.action, act.user, aboutIcon, act.id});
@@ -160,8 +165,8 @@ public class ActivityPanel extends javax.swing.JPanel {
         for (Object activty1 : activty) {
             Activity act = (Activity) activty1;
             
-            if(act.fileName.trim().equals("")) {
-                model.addRow(new Object[] {act.date, act.action, act.user, act.fileName.trim(), act.id});
+            if(act.fileName == null) {
+                model.addRow(new Object[] {act.date, act.action, act.user, "", act.id});
             } else {
                 actvityTable.getColumnModel().getColumn(3).setCellRenderer(new ImageRenderer());
                 model.addRow(new Object[] {act.date, act.action, act.user, act.fileName.trim(), act.id});

@@ -234,8 +234,8 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
         updateParty.city = cityTextBox.getText().trim();
         updateParty.stateCode = stateComboBox.getSelectedItem().toString().trim();
         updateParty.zipcode = zipCodeTextBox.getText().trim();
-        updateParty.phone1 = NumberFormatService.convertPhoneNumberToString(phoneNumberTextBox.getText().trim());
-        updateParty.phone2 = NumberFormatService.convertPhoneNumberToString(phone2NumberTextBox.getText().trim());;
+        updateParty.phone1 = NumberFormatService.convertPhoneNumberToString(phoneNumberTextBox.getText().trim()).length() >= 10 ? NumberFormatService.convertPhoneNumberToString(phoneNumberTextBox.getText().trim()) : null;
+        updateParty.phone2 = NumberFormatService.convertPhoneNumberToString(phone2NumberTextBox.getText().trim()).length() >= 10 ? NumberFormatService.convertPhoneNumberToString(phone2NumberTextBox.getText().trim()) : null;
 
         updateParty.emailAddress = emailAddressTextBox.getText().trim();
         
