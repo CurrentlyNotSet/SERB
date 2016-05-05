@@ -151,26 +151,25 @@ public class AddNewRelatedCase extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
-        //if the case does exisit process add related case
-         
-        if(caseNumberTextBox.getText().trim().equals(NumberFormatService.generateFullCaseNumber())) {
-            caseNotFoundLabel.setText("Current case cant be a related case!");
-        }
-        else if(!RelatedCase.checkCaseIsAlreadyRelated(caseNumberTextBox.getText().trim())) {
-            caseNotFoundLabel.setText("Case is already related!");
-        }
-        else if(CaseValidation.validateCaseNumber(caseNumberTextBox.getText().trim())) {
-            RelatedCase.addNewRelatedCase(caseNumberTextBox.getText().trim());
-            dispose();
-        }
-        else {
-            caseNotFoundLabel.setText("Case Number Not Found!");
+        if(caseNumberTextBox.getText().trim().length() == 16) {
+            if(caseNumberTextBox.getText().trim().toUpperCase().equals(NumberFormatService.generateFullCaseNumber())) {
+                caseNotFoundLabel.setText("Current case cant be a related case");
+            }
+            else if(!RelatedCase.checkCaseIsAlreadyRelated(caseNumberTextBox.getText().trim().toUpperCase())) {
+                caseNotFoundLabel.setText("Case is already a related case");
+            }
+            else if(CaseValidation.validateCaseNumber(caseNumberTextBox.getText().trim().toUpperCase())) {
+                RelatedCase.addNewRelatedCase(caseNumberTextBox.getText().trim().toUpperCase());
+                dispose();
+            }
+            else {
+                caseNotFoundLabel.setText("Case Number Not Found");
+            }
+        } else {
+            caseNotFoundLabel.setText("Invalid Case Number");
         }
         
-        //TODO: cant add current case number
-            //check if text is current case number
-        //TODO: check if case number is already there
-            //load the array list and store it, check if contained in list
+        
     }//GEN-LAST:event_addButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

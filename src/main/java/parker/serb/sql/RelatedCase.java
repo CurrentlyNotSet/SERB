@@ -101,7 +101,7 @@ public class RelatedCase {
 
             Statement stmt = Database.connectToDB().createStatement();
 
-            String sql = "select COUNT(*) AS Count from RelatedCase where"
+            String sql = "select * from RelatedCase where"
                     + " caseYear = ? AND"
                     + " caseType = ? AND"
                     + " caseMonth = ? AND"
@@ -123,7 +123,7 @@ public class RelatedCase {
 
             ResultSet relatedCaseRS = preparedStatement.executeQuery();
             
-            if(relatedCaseRS.getInt("Count") > 0) {
+            while (relatedCaseRS.next()) {
                 newCase = false;
             }
             
@@ -131,5 +131,38 @@ public class RelatedCase {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
         }
         return newCase;
+    }
+    
+    public static void removeRelatedCase(String caseNumber) {
+        String[] parsedCaseNumber = caseNumber.split("-");
+            
+        try {
+
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Delete from RelatedCase where"
+                    + " caseYear = ? AND"
+                    + " caseType = ? AND"
+                    + " caseMonth = ? AND"
+                    + " caseNumber = ? AND"
+                    + " relatedCaseYear = ? AND"
+                    + " relatedCaseType = ? AND"
+                    + " relatedCaseMonth = ? AND"
+                    + " relatedCaseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, Global.caseYear);
+            preparedStatement.setString(2, Global.caseType);
+            preparedStatement.setString(3, Global.caseMonth);
+            preparedStatement.setString(4, Global.caseNumber);
+            preparedStatement.setString(5, parsedCaseNumber[0]);
+            preparedStatement.setString(6, parsedCaseNumber[1]);
+            preparedStatement.setString(7, parsedCaseNumber[2]);
+            preparedStatement.setString(8, parsedCaseNumber[3]);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

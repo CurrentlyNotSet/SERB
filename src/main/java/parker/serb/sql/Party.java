@@ -60,23 +60,42 @@ public class Party {
             
             while(partyRS.next()) {
                 party.id = partyRS.getInt("id");
-                party.prefix = partyRS.getString("prefix");
-                party.firstName = partyRS.getString("firstName");
-                party.middleInitial = partyRS.getString("middleInitial");
-                party.lastName = partyRS.getString("lastName");
-                party.suffix = partyRS.getString("suffix");
-                party.nameTitle = partyRS.getString("nameTitle");
-                party.jobTitle = partyRS.getString("jobTitle");
-                party.companyName = partyRS.getString("companyName");
-                party.address1 = partyRS.getString("address1");
-                party.address2 = partyRS.getString("address2");
-                party.address3 = partyRS.getString("address3");
-                party.city = partyRS.getString("city");
-                party.stateCode = partyRS.getString("stateCode");
-                party.zipCode = partyRS.getString("zipCode");
-                party.phone1 = partyRS.getString("phone1").equals("") ? "" : NumberFormatService.convertStringToPhoneNumber(partyRS.getString("phone1"));
-                party.phone2 = partyRS.getString("phone2").equals("") ? "" : NumberFormatService.convertStringToPhoneNumber(partyRS.getString("phone2"));
-                party.emailAddress = partyRS.getString("emailAddress");
+                party.prefix = partyRS.getString("prefix") == null ? null : partyRS.getString("prefix");
+                party.firstName = partyRS.getString("firstName") == null ? null : partyRS.getString("firstName");
+                party.middleInitial = partyRS.getString("middleInitial") == null ? null : partyRS.getString("middleInitial");
+                party.lastName = partyRS.getString("lastName") == null ? null : partyRS.getString("lastName");
+                party.suffix = partyRS.getString("suffix") == null ? null : partyRS.getString("suffix");
+                party.nameTitle = partyRS.getString("nameTitle") == null ? null : partyRS.getString("nameTitle");
+                party.jobTitle = partyRS.getString("jobTitle") == null ? null : partyRS.getString("jobTitle");
+                party.companyName = partyRS.getString("companyName") == null ? null : partyRS.getString("companyName");
+                party.address1 = partyRS.getString("address1") == null ? null : partyRS.getString("address1");
+                party.address2 = partyRS.getString("address2") == null ? null : partyRS.getString("address2");
+                party.address3 = partyRS.getString("address3") == null ? null : partyRS.getString("address3");
+                party.city = partyRS.getString("city") == null ? "" : partyRS.getString("city");
+                party.stateCode = partyRS.getString("stateCode") == null ? null : partyRS.getString("stateCode");
+                party.zipCode = partyRS.getString("zipCode") == null ? null : partyRS.getString("zipCode");
+                party.phone1 = partyRS.getString("phone1") == null ? null : NumberFormatService.convertStringToPhoneNumber(partyRS.getString("phone1"));
+                party.phone2 = partyRS.getString("phone2") == null ? null : NumberFormatService.convertStringToPhoneNumber(partyRS.getString("phone2"));
+                party.emailAddress = partyRS.getString("emailAddress") == null ? "" : partyRS.getString("emailAddress");
+  
+//                party.id = partyRS.getInt("id");
+//                party.prefix = partyRS.getString("prefix");
+//                party.firstName = partyRS.getString("firstName");
+//                party.middleInitial = partyRS.getString("middleInitial");
+//                party.lastName = partyRS.getString("lastName");
+//                party.suffix = partyRS.getString("suffix");
+//                party.nameTitle = partyRS.getString("nameTitle");
+//                party.jobTitle = partyRS.getString("jobTitle");
+//                party.companyName = partyRS.getString("companyName");
+//                party.address1 = partyRS.getString("address1");
+//                party.address2 = partyRS.getString("address2");
+//                party.address3 = partyRS.getString("address3");
+//                party.city = partyRS.getString("city");
+//                party.stateCode = partyRS.getString("stateCode");
+//                party.zipCode = partyRS.getString("zipCode");
+//                party.phone1 = partyRS.getString("phone1").equals("") ? "" : NumberFormatService.convertStringToPhoneNumber(partyRS.getString("phone1"));
+//                party.phone2 = partyRS.getString("phone2").equals("") ? "" : NumberFormatService.convertStringToPhoneNumber(partyRS.getString("phone2"));
+//                party.emailAddress = partyRS.getString("emailAddress");
             }
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
@@ -104,23 +123,23 @@ public class Party {
             while(partyRS.next()) {
                 Party party = new Party();
                 party.id = partyRS.getInt("id");
-                party.prefix = partyRS.getString("prefix");
-                party.firstName = partyRS.getString("firstName");
-                party.middleInitial = partyRS.getString("middleInitial");
-                party.lastName = partyRS.getString("lastName");
-                party.suffix = partyRS.getString("suffix");
-                party.nameTitle = partyRS.getString("nameTitle");
-                party.jobTitle = partyRS.getString("jobTitle");
-                party.companyName = partyRS.getString("companyName");
-                party.address1 = partyRS.getString("address1");
-                party.address2 = partyRS.getString("address2");
-                party.address3 = partyRS.getString("address3");
-                party.city = partyRS.getString("city");
-                party.stateCode = partyRS.getString("stateCode");
-                party.zipCode = partyRS.getString("zipCode");
-                party.phone1 = partyRS.getString("phone1").equals("") ? "" : NumberFormatService.convertStringToPhoneNumber(partyRS.getString("phone1"));
-                party.phone2 = partyRS.getString("phone2").equals("") ? "" : NumberFormatService.convertStringToPhoneNumber(partyRS.getString("phone2"));
-                party.emailAddress = partyRS.getString("emailAddress");
+                party.prefix = partyRS.getString("prefix") == null ? "" : partyRS.getString("prefix");
+                party.firstName = partyRS.getString("firstName") == null ? "" : partyRS.getString("firstName");
+                party.middleInitial = partyRS.getString("middleInitial") == null ? "" : partyRS.getString("middleInitial");
+                party.lastName = partyRS.getString("lastName") == null ? "" : partyRS.getString("lastName");
+                party.suffix = partyRS.getString("suffix") == null ? "" : partyRS.getString("suffix");
+                party.nameTitle = partyRS.getString("nameTitle") == null ? "" : partyRS.getString("nameTitle");
+                party.jobTitle = partyRS.getString("jobTitle") == null ? "" : partyRS.getString("jobTitle");
+                party.companyName = partyRS.getString("companyName") == null ? "" : partyRS.getString("companyName");
+                party.address1 = partyRS.getString("address1") == null ? "" : partyRS.getString("address1");
+                party.address2 = partyRS.getString("address2") == null ? "" : partyRS.getString("address2");
+                party.address3 = partyRS.getString("address3") == null ? "" : partyRS.getString("address3");
+                party.city = partyRS.getString("city") == null ? "" : partyRS.getString("city");
+                party.stateCode = partyRS.getString("stateCode") == null ? "" : partyRS.getString("stateCode");
+                party.zipCode = partyRS.getString("zipCode") == null ? "" : partyRS.getString("zipCode");
+                party.phone1 = partyRS.getString("phone1") == null ? "" : NumberFormatService.convertStringToPhoneNumber(partyRS.getString("phone1"));
+                party.phone2 = partyRS.getString("phone2") == null ? "" : NumberFormatService.convertStringToPhoneNumber(partyRS.getString("phone2"));
+                party.emailAddress = partyRS.getString("emailAddress") == null ? "" : partyRS.getString("emailAddress");
                 
                 parties.add(party);
             }

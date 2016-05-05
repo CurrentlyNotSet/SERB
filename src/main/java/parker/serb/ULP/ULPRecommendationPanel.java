@@ -57,8 +57,11 @@ public class ULPRecommendationPanel extends javax.swing.JPanel {
         }
     }
     
-    public void disableUpdate() {
-        saveInformation();
+    public void disableUpdate(boolean save) {
+        
+        if(save) {
+            saveInformation();
+        }
         
         Global.root.getjButton2().setText("Update");
         Global.root.getjButton9().setVisible(false);
@@ -70,6 +73,8 @@ public class ULPRecommendationPanel extends javax.swing.JPanel {
         
         recommendationComboBox.setVisible(false);
         addRecButton.setVisible(false);
+        
+        loadInformation();
         
     }
     
@@ -101,6 +106,7 @@ public class ULPRecommendationPanel extends javax.swing.JPanel {
 
         jTextArea1.setBackground(new java.awt.Color(238, 238, 238));
         jTextArea1.setColumns(20);
+        jTextArea1.setFont(new java.awt.Font("Lucida Grande", 0, 15)); // NOI18N
         jTextArea1.setLineWrap(true);
         jTextArea1.setRows(5);
         jTextArea1.setWrapStyleWord(true);
@@ -150,8 +156,7 @@ public class ULPRecommendationPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void addRecButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRecButtonActionPerformed
-        System.out.println("add item");
-        jTextArea1.setText(recommendationComboBox.getSelectedItem().toString());
+        jTextArea1.setText(recommendationComboBox.getSelectedItem().toString().substring(recommendationComboBox.getSelectedItem().toString().indexOf("-")+1).trim());
     }//GEN-LAST:event_addRecButtonActionPerformed
 
 

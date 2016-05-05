@@ -5,31 +5,50 @@
  */
 package parker.serb.boardmeetings;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import javax.swing.JFrame;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import parker.serb.Global;
 import parker.serb.sql.BoardMeeting;
 import parker.serb.sql.ULPRecommendation;
+import parker.serb.util.CancelUpdate;
 
 /**
  *
  * @author parkerjohnston
  */
-public class AddULPBoardMeeting extends javax.swing.JDialog {
+public class UpdateULPBoardMeeting extends javax.swing.JDialog {
 
+    String id;
+    String agendaNumber;
+    String rec;
+    String date;
     /**
      * Creates new form AddULPBoardMeeting
      */
-    public AddULPBoardMeeting(java.awt.Frame parent, boolean modal) {
+    public UpdateULPBoardMeeting(java.awt.Frame parent, boolean modal,
+            String passedDate, String passedAgendaNumber, String passedRec, String passedID) {
         super(parent, modal);
         initComponents();
         addListeners();
+        id = passedID;
+        date = passedDate;
+        agendaNumber = passedAgendaNumber;
+        rec = passedRec;
         loadRecComboBox();
+        loadInformation(date, agendaNumber, rec);
         setLocationRelativeTo(parent);
         setVisible(true);
+    }
+    
+    private void loadInformation(String date, String agendaNumber, String rec) {
+        meetingDateTextBox.setText(date);
+        agendaItemTextBox.setText(agendaNumber);
+        recommendationComboBox.setSelectedItem(rec);
     }
     
     private void addListeners() {
@@ -92,10 +111,41 @@ public class AddULPBoardMeeting extends javax.swing.JDialog {
         if(meetingDateTextBox.getText().equals("") ||
                 agendaItemTextBox.getText().equals("") ||
                 recommendationComboBox.getSelectedItem().toString().equals("")) {
-            addBoardMeetingButton.setEnabled(false);
+            updateButton.setEnabled(false);
         } else {
-            addBoardMeetingButton.setEnabled(true);
+            updateButton.setEnabled(true);
         }
+    }
+    
+    private void enableAllInputs() {
+        meetingDateTextBox.setEnabled(true);
+        meetingDateTextBox.setBackground(Color.white);
+        agendaItemTextBox.setEnabled(true);
+        agendaItemTextBox.setBackground(Color.white);
+        recommendationComboBox.setEnabled(true);
+    }
+    
+    private void disableAllInputs(boolean save) {
+        if(save) {
+            saveInformation();
+        } else {
+            loadInformation(date, agendaNumber, rec);
+        }
+        
+        meetingDateTextBox.setEnabled(false);
+        meetingDateTextBox.setBackground(new Color(238, 238, 238));
+        agendaItemTextBox.setEnabled(false);
+        agendaItemTextBox.setBackground(new Color(238, 238, 238));
+        recommendationComboBox.setEnabled(false);
+    }
+    
+    private void saveInformation() {
+        BoardMeeting.updateBoardMeeting(
+            id,
+            meetingDateTextBox.getText(),
+            agendaItemTextBox.getText(),
+            recommendationComboBox.getSelectedItem().toString()
+        );
     }
 
     /**
@@ -111,8 +161,8 @@ public class AddULPBoardMeeting extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        addBoardMeetingButton = new javax.swing.JButton();
-        cancelBoardMeetingButton = new javax.swing.JButton();
+        updateButton = new javax.swing.JButton();
+        closeButton = new javax.swing.JButton();
         recommendationComboBox = new javax.swing.JComboBox<>();
         agendaItemTextBox = new javax.swing.JTextField();
         meetingDateTextBox = new com.alee.extended.date.WebDateField();
@@ -121,7 +171,7 @@ public class AddULPBoardMeeting extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("New Boarding Meeting");
+        jLabel1.setText("Update Boarding Meeting");
 
         jLabel2.setText("Meeting Date:");
 
@@ -129,26 +179,32 @@ public class AddULPBoardMeeting extends javax.swing.JDialog {
 
         jLabel4.setText("Recommendation:");
 
-        addBoardMeetingButton.setText("Add");
-        addBoardMeetingButton.setEnabled(false);
-        addBoardMeetingButton.addActionListener(new java.awt.event.ActionListener() {
+        updateButton.setText("Update");
+        updateButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addBoardMeetingButtonActionPerformed(evt);
+                updateButtonActionPerformed(evt);
             }
         });
 
-        cancelBoardMeetingButton.setText("Cancel");
-        cancelBoardMeetingButton.addActionListener(new java.awt.event.ActionListener() {
+        closeButton.setText("Close");
+        closeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cancelBoardMeetingButtonActionPerformed(evt);
+                closeButtonActionPerformed(evt);
             }
         });
 
         recommendationComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        recommendationComboBox.setEnabled(false);
+
+        agendaItemTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        agendaItemTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        agendaItemTextBox.setEnabled(false);
 
         meetingDateTextBox.setEditable(false);
+        meetingDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
         meetingDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
         meetingDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        meetingDateTextBox.setEnabled(false);
         meetingDateTextBox.setDateFormat(Global.mmddyyyy);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -170,9 +226,9 @@ public class AddULPBoardMeeting extends javax.swing.JDialog {
                             .addComponent(agendaItemTextBox)
                             .addComponent(meetingDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(cancelBoardMeetingButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(addBoardMeetingButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(updateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -194,32 +250,49 @@ public class AddULPBoardMeeting extends javax.swing.JDialog {
                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(addBoardMeetingButton)
-                    .addComponent(cancelBoardMeetingButton))
+                    .addComponent(updateButton)
+                    .addComponent(closeButton))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cancelBoardMeetingButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelBoardMeetingButtonActionPerformed
-        dispose();
-    }//GEN-LAST:event_cancelBoardMeetingButtonActionPerformed
+    private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
+        if(closeButton.getText().equals("Close")) {
+            dispose();
+        } else if(closeButton.getText().equals("Cancel")) {
+            CancelUpdate cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+            if(!cancel.isReset()) {
+            } else {
+                updateButton.setText("Update");
+                closeButton.setText("Close");
+                disableAllInputs(false);
+            }
+        }
+    }//GEN-LAST:event_closeButtonActionPerformed
 
-    private void addBoardMeetingButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBoardMeetingButtonActionPerformed
-        BoardMeeting.addULPBoardMeeting(meetingDateTextBox.getText(), agendaItemTextBox.getText(), recommendationComboBox.getSelectedItem().toString());
-        dispose();
-    }//GEN-LAST:event_addBoardMeetingButtonActionPerformed
+    private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
+        if(updateButton.getText().equals("Update")) {
+            updateButton.setText("Save");
+            closeButton.setText("Cancel");
+            enableAllInputs();
+        } else if(updateButton.getText().equals("Save")) {
+            updateButton.setText("Update");
+            closeButton.setText("Close");
+            disableAllInputs(true);
+        }
+    }//GEN-LAST:event_updateButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton addBoardMeetingButton;
     private javax.swing.JTextField agendaItemTextBox;
-    private javax.swing.JButton cancelBoardMeetingButton;
+    private javax.swing.JButton closeButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private com.alee.extended.date.WebDateField meetingDateTextBox;
     private javax.swing.JComboBox<String> recommendationComboBox;
+    private javax.swing.JButton updateButton;
     // End of variables declaration//GEN-END:variables
 }

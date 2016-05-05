@@ -82,23 +82,23 @@ public class CaseParty {
             preparedStatement.setString(4, Global.caseNumber);
             preparedStatement.setInt(5, party.id);
             preparedStatement.setString(6, type);
-            preparedStatement.setString(7, party.prefix);
-            preparedStatement.setString(8, party.firstName);
-            preparedStatement.setString(9, party.middleInitial);
-            preparedStatement.setString(10, party.lastName);
-            preparedStatement.setString(11, party.suffix);
-            preparedStatement.setString(12, party.nameTitle);
-            preparedStatement.setString(13, party.jobTitle);
-            preparedStatement.setString(14, party.companyName);
-            preparedStatement.setString(15, party.address1);
-            preparedStatement.setString(16, party.address2);
-            preparedStatement.setString(17, party.address3);
-            preparedStatement.setString(18, party.city);
-            preparedStatement.setString(19, party.stateCode);
-            preparedStatement.setString(20, party.zipCode);
-            preparedStatement.setString(21, party.phone1.equals("") ? "" : NumberFormatService.convertPhoneNumberToString(party.phone1));
-            preparedStatement.setString(22, party.emailAddress);
-            preparedStatement.setString(23, party.phone2.equals("") ? "" : NumberFormatService.convertPhoneNumberToString(party.phone2));
+            preparedStatement.setString(7, party.prefix == null ? null : party.prefix);
+            preparedStatement.setString(8, party.firstName == null ? null : party.firstName);
+            preparedStatement.setString(9, party.middleInitial == null ? null : party.middleInitial);
+            preparedStatement.setString(10, party.lastName == null ? null : party.lastName);
+            preparedStatement.setString(11, party.suffix == null ? null : party.suffix);
+            preparedStatement.setString(12, party.nameTitle == null ? null : party.nameTitle);
+            preparedStatement.setString(13, party.jobTitle == null ? null : party.jobTitle);
+            preparedStatement.setString(14, party.companyName == null ? null : party.companyName);
+            preparedStatement.setString(15, party.address1 == null ? null : party.address1);
+            preparedStatement.setString(16, party.address2 == null ? null : party.address2);
+            preparedStatement.setString(17, party.address3 == null ? null : party.address3);
+            preparedStatement.setString(18, party.city == null ? null : party.city);
+            preparedStatement.setString(19, party.stateCode == null ? null : party.stateCode);
+            preparedStatement.setString(20, party.zipCode == null ? null : party.zipCode);
+            preparedStatement.setString(21, party.phone1 == null ? null : NumberFormatService.convertPhoneNumberToString(party.phone1));
+            preparedStatement.setString(22, party.emailAddress == null ? null : party.emailAddress);
+            preparedStatement.setString(23, party.phone2 == null ? null : NumberFormatService.convertPhoneNumberToString(party.phone2));
             
             
             preparedStatement.executeUpdate();
@@ -207,23 +207,23 @@ public class CaseParty {
                 party.caseNumber = casePartyRS.getString("caseNumber");
                 party.partyID = casePartyRS.getInt("partyID");
                 party.caseRelation = casePartyRS.getString("caseRelation");
-                party.prefix = casePartyRS.getString("prefix");
-                party.firstName = casePartyRS.getString("firstName");
-                party.middleInitial = casePartyRS.getString("middleInitial");
-                party.lastName = casePartyRS.getString("lastName");
-                party.suffix = casePartyRS.getString("suffix");
-                party.nameTitle = casePartyRS.getString("nameTitle");
-                party.jobTitle = casePartyRS.getString("jobTitle");
-                party.companyName = casePartyRS.getString("companyName");
-                party.address1 = casePartyRS.getString("address1");
-                party.address2 = casePartyRS.getString("address2");
-                party.address3 = casePartyRS.getString("address3");
-                party.city = casePartyRS.getString("city");
-                party.stateCode = casePartyRS.getString("stateCode");
-                party.zipcode = casePartyRS.getString("zipcode");
-                party.phone1 = casePartyRS.getString("phone1").equals("") ? "" : NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("phone1"));
-                party.phone2 = casePartyRS.getString("phone2").equals("") ? "" : NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("phone2"));
-                party.emailAddress = casePartyRS.getString("email");
+                party.prefix = casePartyRS.getString("prefix") == null ? "" : casePartyRS.getString("prefix");
+                party.firstName = casePartyRS.getString("firstName") == null ? "" : casePartyRS.getString("firstName");
+                party.middleInitial = casePartyRS.getString("middleInitial") == null ? "" : casePartyRS.getString("middleInitial");
+                party.lastName = casePartyRS.getString("lastName") == null ? "" : casePartyRS.getString("lastName");
+                party.suffix = casePartyRS.getString("suffix") == null ? "" : casePartyRS.getString("suffix");
+                party.nameTitle = casePartyRS.getString("nameTitle") == null ? "" : casePartyRS.getString("nameTitle");
+                party.jobTitle = casePartyRS.getString("jobTitle") == null ? "" : casePartyRS.getString("jobTitle");
+                party.companyName = casePartyRS.getString("companyName") == null ? "" : casePartyRS.getString("companyName");
+                party.address1 = casePartyRS.getString("address1") == null ? "" : casePartyRS.getString("address1");
+                party.address2 = casePartyRS.getString("address2") == null ? "" : casePartyRS.getString("address2");
+                party.address3 = casePartyRS.getString("address3") == null ? "" : casePartyRS.getString("address3");
+                party.city = casePartyRS.getString("city") == null ? "" : casePartyRS.getString("city");
+                party.stateCode = casePartyRS.getString("stateCode") == null ? "" : casePartyRS.getString("stateCode");
+                party.zipcode = casePartyRS.getString("zipcode") == null ? "" : casePartyRS.getString("zipcode");
+                party.phone1 = casePartyRS.getString("phone1") == null ? "" : NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("phone1"));
+                party.phone2 = casePartyRS.getString("phone2") == null ? "" : NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("phone2"));
+                party.emailAddress = casePartyRS.getString("email") == null ? "" : casePartyRS.getString("email");
                 
                 parties.add(party);
             }
@@ -260,23 +260,23 @@ public class CaseParty {
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, party.caseRelation);
-            preparedStatement.setString(2, party.prefix);
-            preparedStatement.setString(3, party.firstName);
-            preparedStatement.setString(4, party.middleInitial);
-            preparedStatement.setString(5, party.lastName);
-            preparedStatement.setString(6, party.suffix);
-            preparedStatement.setString(7, party.nameTitle);
-            preparedStatement.setString(8, party.jobTitle);
-            preparedStatement.setString(9, party.companyName);
-            preparedStatement.setString(10, party.address1);
-            preparedStatement.setString(11, party.address2);
-            preparedStatement.setString(12, party.address3);
-            preparedStatement.setString(13, party.city);
-            preparedStatement.setString(14, party.stateCode);
-            preparedStatement.setString(15, party.zipcode);
-            preparedStatement.setString(16, party.phone1.equals("") ? "" : NumberFormatService.convertPhoneNumberToString(party.phone1));
-            preparedStatement.setString(17, party.phone2.equals("") ? "" : NumberFormatService.convertPhoneNumberToString(party.phone2));
-            preparedStatement.setString(18, party.emailAddress);
+            preparedStatement.setString(2, party.prefix == null ? null : party.prefix);
+            preparedStatement.setString(3, party.firstName == null ? null : party.firstName);
+            preparedStatement.setString(4, party.middleInitial == null ? null : party.middleInitial);
+            preparedStatement.setString(5, party.lastName == null ? null : party.lastName);
+            preparedStatement.setString(6, party.suffix == null ? null : party.suffix);
+            preparedStatement.setString(7, party.nameTitle == null ? null : party.nameTitle);
+            preparedStatement.setString(8, party.jobTitle == null ? null : party.jobTitle);
+            preparedStatement.setString(9, party.companyName == null ? null : party.companyName);
+            preparedStatement.setString(10, party.address1 == null ? null : party.address1);
+            preparedStatement.setString(11, party.address2 == null ? null : party.address2);
+            preparedStatement.setString(12, party.address3 == null ? null : party.address3);
+            preparedStatement.setString(13, party.city == null ? null : party.city);
+            preparedStatement.setString(14, party.stateCode == null ? null : party.stateCode);
+            preparedStatement.setString(15, party.zipcode == null ? null : party.zipcode);
+            preparedStatement.setString(16, party.phone1 == null ? null : NumberFormatService.convertPhoneNumberToString(party.phone1));
+            preparedStatement.setString(17, party.phone2 == null ? null : NumberFormatService.convertPhoneNumberToString(party.phone2));
+            preparedStatement.setString(18, party.emailAddress == null ? null : party.emailAddress);
             preparedStatement.setString(19, id);
             
             if(preparedStatement.executeUpdate() == 1) {
@@ -349,8 +349,8 @@ public class CaseParty {
                 party.city = casePartyRS.getString("city");
                 party.stateCode = casePartyRS.getString("stateCode");
                 party.zipcode = casePartyRS.getString("zipcode");
-                party.phone1 = casePartyRS.getString("phone1").equals("") ? "" : NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("phone1"));
-                party.phone2 = casePartyRS.getString("phone2").equals("") ? "" : NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("phone2"));
+                party.phone1 = casePartyRS.getString("phone1") == null ? "" : NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("phone1"));
+                party.phone2 = casePartyRS.getString("phone2") == null ? "" : NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("phone2"));
                 party.emailAddress = casePartyRS.getString("email");
             }
         } catch (SQLException ex) {
@@ -367,7 +367,9 @@ public class CaseParty {
 
             Statement stmt = Database.connectToDB().createStatement();
             
-            String sql = "Select * from caseParty"
+            String sql = "Select partyID, caseRelation, prefix, "
+                    + " firstName, middleInitial, lastName, suffix,"
+                    + " nameTitle from caseParty"
                     + " where caseYear = ?"
                     + " AND caseType = ?"
                     + " AND caseMonth = ?"
@@ -384,11 +386,6 @@ public class CaseParty {
             
             while(casePartyRS.next()) {
                 CaseParty party = new CaseParty();
-//                party.id = casePartyRS.getInt("id");
-//                party.caseYear = casePartyRS.getString("caseYear");
-//                party.caseType = casePartyRS.getString("caseType");
-//                party.caseMonth = casePartyRS.getString("caseMonth");
-//                party.caseNumber = casePartyRS.getString("caseNumber");
                 party.partyID = casePartyRS.getInt("partyID");
                 party.caseRelation = casePartyRS.getString("caseRelation");
                 party.prefix = casePartyRS.getString("prefix");
@@ -397,17 +394,6 @@ public class CaseParty {
                 party.lastName = casePartyRS.getString("lastName");
                 party.suffix = casePartyRS.getString("suffix");
                 party.nameTitle = casePartyRS.getString("nameTitle");
-//                party.jobTitle = casePartyRS.getString("jobTitle");
-//                party.companyName = casePartyRS.getString("companyName");
-//                party.address1 = casePartyRS.getString("address1");
-//                party.address2 = casePartyRS.getString("address2");
-//                party.address3 = casePartyRS.getString("address3");
-//                party.city = casePartyRS.getString("city");
-//                party.stateCode = casePartyRS.getString("stateCode");
-//                party.zipcode = casePartyRS.getString("zipcode");
-//                party.phone1 = casePartyRS.getString("phone1").equals("") ? "" : NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("phone1"));
-//                party.phone2 = casePartyRS.getString("phone2").equals("") ? "" : NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("phone2"));
-//                party.emailAddress = casePartyRS.getString("email");
                 parties.add(party);
             }
         } catch (SQLException ex) {

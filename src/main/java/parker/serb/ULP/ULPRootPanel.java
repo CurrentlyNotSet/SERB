@@ -12,7 +12,7 @@ import parker.serb.activity.ActivityPanel;
 import parker.serb.Global;
 import parker.serb.party.PartiesPanel;
 import parker.serb.party.PartySearchDialog;
-import parker.serb.party.ULPMissingPartiesDialog;
+import parker.serb.sql.ULPCaseSearchData;
 import parker.serb.util.CancelUpdate;
 
 /**
@@ -28,15 +28,7 @@ public class ULPRootPanel extends javax.swing.JPanel {
      */
     public ULPRootPanel() {
         initComponents();
-        enableDemoTabs();
         addListeners();
-    }
-    
-    private void enableDemoTabs() {
-//        jTabbedPane1.remove(5);
-//        jTabbedPane1.remove(4);
-//        jTabbedPane1.remove(3);
-        jTabbedPane1.remove(2);
     }
     
     /**
@@ -180,6 +172,9 @@ public class ULPRootPanel extends javax.swing.JPanel {
                 new PartySearchDialog((JFrame) this.getRootPane().getParent(), true);
                 partiesPanel1.loadAllParties();
                 Global.root.getuLPHeaderPanel1().loadHeaderInformation();
+                ULPCaseSearchData.updateCaseEntryFromParties(
+                        Global.root.getuLPHeaderPanel1().getChargedPartyTextBox().getText().trim(),
+                        Global.root.getuLPHeaderPanel1().getChargingPartyTextBox().getText().trim());
                 break;
             case "Status":
                 if(buttonText.equals("Update")) {
@@ -212,7 +207,7 @@ public class ULPRootPanel extends javax.swing.JPanel {
                     enableTabs();
                     Global.root.enableTabsAfterSave();
                     Global.root.enableButtonsAfterCancel();
-                    uLPRecommendation1.disableUpdate();
+                    uLPRecommendation1.disableUpdate(true);
                 }
                 break;
             case "Investigation Reveals":
@@ -252,6 +247,9 @@ public class ULPRootPanel extends javax.swing.JPanel {
             case "Parties":
                 partiesPanel1.removeParty();
                 Global.root.getuLPHeaderPanel1().loadHeaderInformation();
+                ULPCaseSearchData.updateCaseEntryFromParties(
+                        Global.root.getuLPHeaderPanel1().getChargedPartyTextBox().getText().trim(),
+                        Global.root.getuLPHeaderPanel1().getChargingPartyTextBox().getText().trim());
                 break;
             case "Status":
                 cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
@@ -280,7 +278,7 @@ public class ULPRootPanel extends javax.swing.JPanel {
                     Global.root.enableButtonsAfterCancel();
                     Global.root.enableTabsAfterSave();
                     enableTabs();
-                    uLPRecommendation1.disableUpdate();
+                    uLPRecommendation1.disableUpdate(false);
                 }
                 break;
             case "Investigation Reveals":
@@ -449,6 +447,8 @@ public class ULPRootPanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jTabbedPane1)
         );
+
+        jTabbedPane1.getAccessibleContext().setAccessibleName("Status");
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
