@@ -77,25 +77,6 @@ public class Party {
                 party.phone1 = partyRS.getString("phone1") == null ? null : NumberFormatService.convertStringToPhoneNumber(partyRS.getString("phone1"));
                 party.phone2 = partyRS.getString("phone2") == null ? null : NumberFormatService.convertStringToPhoneNumber(partyRS.getString("phone2"));
                 party.emailAddress = partyRS.getString("emailAddress") == null ? "" : partyRS.getString("emailAddress");
-  
-//                party.id = partyRS.getInt("id");
-//                party.prefix = partyRS.getString("prefix");
-//                party.firstName = partyRS.getString("firstName");
-//                party.middleInitial = partyRS.getString("middleInitial");
-//                party.lastName = partyRS.getString("lastName");
-//                party.suffix = partyRS.getString("suffix");
-//                party.nameTitle = partyRS.getString("nameTitle");
-//                party.jobTitle = partyRS.getString("jobTitle");
-//                party.companyName = partyRS.getString("companyName");
-//                party.address1 = partyRS.getString("address1");
-//                party.address2 = partyRS.getString("address2");
-//                party.address3 = partyRS.getString("address3");
-//                party.city = partyRS.getString("city");
-//                party.stateCode = partyRS.getString("stateCode");
-//                party.zipCode = partyRS.getString("zipCode");
-//                party.phone1 = partyRS.getString("phone1").equals("") ? "" : NumberFormatService.convertStringToPhoneNumber(partyRS.getString("phone1"));
-//                party.phone2 = partyRS.getString("phone2").equals("") ? "" : NumberFormatService.convertStringToPhoneNumber(partyRS.getString("phone2"));
-//                party.emailAddress = partyRS.getString("emailAddress");
             }
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
@@ -178,23 +159,23 @@ public class Party {
                     + "?)";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, party.prefix);
-            preparedStatement.setString(2, party.firstName);
-            preparedStatement.setString(3, party.middleInitial);
-            preparedStatement.setString(4, party.lastName);
-            preparedStatement.setString(5, party.suffix);
-            preparedStatement.setString(6, party.nameTitle);
-            preparedStatement.setString(7, party.jobTitle);
-            preparedStatement.setString(8, party.companyName);
-            preparedStatement.setString(9, party.address1);
-            preparedStatement.setString(10, party.address2);
-            preparedStatement.setString(11, party.address3);
-            preparedStatement.setString(12, party.city);
-            preparedStatement.setString(13, party.stateCode);
-            preparedStatement.setString(14, party.zipCode);
-            preparedStatement.setString(15, party.phone1);
-            preparedStatement.setString(16, party.emailAddress);
-            preparedStatement.setString(17, party.phone2);
+            preparedStatement.setString(1, party.prefix.equals("") ? null : party.prefix);
+            preparedStatement.setString(2, party.firstName.equals("") ? null : party.firstName);
+            preparedStatement.setString(3, party.middleInitial.equals("") ? null : party.middleInitial);
+            preparedStatement.setString(4, party.lastName.equals("") ? null : party.lastName);
+            preparedStatement.setString(5, party.suffix.equals("") ? null : party.suffix);
+            preparedStatement.setString(6, party.nameTitle.equals("") ? null : party.nameTitle);
+            preparedStatement.setString(7, party.jobTitle.equals("") ? null : party.jobTitle);
+            preparedStatement.setString(8, party.companyName.equals("") ? null : party.companyName);
+            preparedStatement.setString(9, party.address1.equals("") ? null : party.address1);
+            preparedStatement.setString(10, party.address2.equals("") ? null : party.address2);
+            preparedStatement.setString(11, party.address3.equals("") ? null : party.address3);
+            preparedStatement.setString(12, party.city.equals("") ? null : party.city);
+            preparedStatement.setString(13, party.stateCode.equals("") ? null : party.stateCode);
+            preparedStatement.setString(14, party.zipCode.equals("") ? null : party.zipCode);
+            preparedStatement.setString(15, party.phone1.equals("") ? null : party.phone1);
+            preparedStatement.setString(16, party.emailAddress.equals("") ? null : party.emailAddress);
+            preparedStatement.setString(17, party.phone2.equals("") ? null : party.phone2);
             
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
@@ -226,23 +207,23 @@ public class Party {
                     + "phone2 = ? where id = ?";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, party.prefix);
-            preparedStatement.setString(2, party.firstName);
-            preparedStatement.setString(3, party.middleInitial);
-            preparedStatement.setString(4, party.lastName);
-            preparedStatement.setString(5, party.suffix);
-            preparedStatement.setString(6, party.nameTitle);
-            preparedStatement.setString(7, party.jobTitle);
-            preparedStatement.setString(8, party.companyName);
-            preparedStatement.setString(9, party.address1);
-            preparedStatement.setString(10, party.address2);
-            preparedStatement.setString(11, party.address3);
-            preparedStatement.setString(12, party.city);
-            preparedStatement.setString(13, party.stateCode);
-            preparedStatement.setString(14, party.zipcode);
-            preparedStatement.setString(15, party.phone1);
-            preparedStatement.setString(16, party.emailAddress);
-            preparedStatement.setString(17, party.phone2);
+            preparedStatement.setString(1, party.prefix.equals("") ? null : party.prefix);
+            preparedStatement.setString(2, party.firstName.equals("") ? null : party.firstName);
+            preparedStatement.setString(3, party.middleInitial.equals("") ? null : party.middleInitial);
+            preparedStatement.setString(4, party.lastName.equals("") ? null : party.lastName);
+            preparedStatement.setString(5, party.suffix.equals("") ? null : party.suffix);
+            preparedStatement.setString(6, party.nameTitle.equals("") ? null : party.nameTitle);
+            preparedStatement.setString(7, party.jobTitle.equals("") ? null : party.jobTitle);
+            preparedStatement.setString(8, party.companyName.equals("") ? null : party.companyName);
+            preparedStatement.setString(9, party.address1.equals("") ? null : party.address1);
+            preparedStatement.setString(10, party.address2.equals("") ? null : party.address2);
+            preparedStatement.setString(11, party.address3.equals("") ? null : party.address3);
+            preparedStatement.setString(12, party.city.equals("") ? null : party.city);
+            preparedStatement.setString(13, party.stateCode.equals("") ? null : party.stateCode);
+            preparedStatement.setString(14, party.zipcode.equals("") ? null : party.zipcode);
+            preparedStatement.setString(15, party.phone1 == null ? null : NumberFormatService.convertPhoneNumberToString(party.phone1));
+            preparedStatement.setString(16, party.emailAddress.equals("") ? null : party.emailAddress);
+            preparedStatement.setString(17, party.phone2 == null ? null : NumberFormatService.convertPhoneNumberToString(party.phone2));
             preparedStatement.setInt(18, id);
             
             preparedStatement.executeUpdate();
