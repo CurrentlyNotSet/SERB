@@ -49,7 +49,7 @@ public class BoardMeeting {
 
             preparedStatement.executeUpdate();
             
-            Activity.addActivty("Added New Board Meeting Information", "");
+            Activity.addActivty("Added New Board Meeting Information", null);
 
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
@@ -112,6 +112,7 @@ public class BoardMeeting {
             preparedStatement.setString(4, id);
 
             preparedStatement.executeUpdate();
+            Activity.addActivty("Updated Board Meeting Information", null);
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -129,6 +130,7 @@ public class BoardMeeting {
             preparedStatement.setString(1, id);
 
             preparedStatement.executeUpdate();
+            Activity.addActivty("Removed Board Meeting Information", null);
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
         }

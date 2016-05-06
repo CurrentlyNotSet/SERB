@@ -184,7 +184,7 @@ public class REPCase {
                 preparedStatement.executeUpdate();
 
                 Audit.addAuditEntry("Updated Note for " + Global.caseNumber);
-                Activity.addActivty("Updated Note", "");
+                Activity.addActivty("Updated Note", null);
             }
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);

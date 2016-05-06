@@ -43,7 +43,7 @@ public class RelatedCase {
 
             preparedStatement.executeUpdate();
             
-            Activity.addActivty("Added " + caseNumber + " as Related Case", "");
+            Activity.addActivty("Added " + caseNumber + " as Related Case", null);
 
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
@@ -135,6 +135,7 @@ public class RelatedCase {
             preparedStatement.setString(5, caseNumber);
 
             preparedStatement.executeUpdate();
+            Activity.addActivty("Removed " + caseNumber + " from Related Case", null);
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
         }
