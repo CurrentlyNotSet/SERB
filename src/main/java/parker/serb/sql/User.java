@@ -111,7 +111,7 @@ public class User {
             
             Statement stmt = Database.connectToDB().createStatement();
             
-            String sql = "Select * from Users where username = ?";
+            String sql = "Select * from Users where username = ? and active = 1";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, username);
@@ -157,7 +157,7 @@ public class User {
             
             Statement stmt = Database.connectToDB().createStatement();
             
-            String sql = "Select * from Users where activeLogIn = ?";
+            String sql = "Select * from Users where activeLogIn = ? and active = 1";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setBoolean(1, true);
@@ -197,7 +197,7 @@ public class User {
             
             Statement stmt = Database.connectToDB().createStatement();
             
-            String sql = "Select * from Users where repcurrentowner = ?";
+            String sql = "Select * from Users where repcurrentowner = ? and active = 1";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setBoolean(1, true);
@@ -221,7 +221,7 @@ public class User {
             
             Statement stmt = Database.connectToDB().createStatement();
             
-            String sql = "Select * from Users where hearingPerson = ?";
+            String sql = "Select * from Users where hearingPerson = ? and active = 1";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setBoolean(1, true);
@@ -317,7 +317,7 @@ public class User {
             
             Statement stmt = Database.connectToDB().createStatement();
             
-            String sql = "Select * from Users where ULPCaseWorker = ?";
+            String sql = "Select * from Users where ULPCaseWorker = ? and active = 1";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setBoolean(1, true);
@@ -341,7 +341,7 @@ public class User {
         try {
             Statement stmt = Database.connectToDB().createStatement();
             
-            String sql = "Update Users SET lastLogInDateTime = ? where username = ?";
+            String sql = "Update Users SET lastLogInDateTime = ? where username = ? and active = 1";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setTimestamp(1, new java.sql.Timestamp(new Date().getTime()));
@@ -361,7 +361,7 @@ public class User {
         try {
             Statement stmt = Database.connectToDB().createStatement();
             
-            String sql = "Update Users SET lastLogInPCName = ? where username = ?";
+            String sql = "Update Users SET lastLogInPCName = ? where username = ? and active = 1";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, InetAddress.getLocalHost().getHostName());
@@ -380,7 +380,7 @@ public class User {
         try {
             Statement stmt = Database.connectToDB().createStatement();
             
-            String sql = "Update Users SET applicationVersion = ? where username = ?";
+            String sql = "Update Users SET applicationVersion = ? where username = ? and active = 1";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, Global.applicationVersion);
@@ -399,7 +399,7 @@ public class User {
         try {
             Statement stmt = Database.connectToDB().createStatement();
             
-            String sql = "Update Users SET activeLogIn = ? where username = ?";
+            String sql = "Update Users SET activeLogIn = ? where username = ? and active = 1";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setBoolean(1, !Global.activeUser.activeLogIn);
@@ -420,7 +420,7 @@ public class User {
         try {
             Statement stmt = Database.connectToDB().createStatement();
             
-            String sql = "Update Users SET passwordSalt = ?, password = ? where username = ?";
+            String sql = "Update Users SET passwordSalt = ?, password = ? where username = ? and active = 1";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setLong(1, salt);
@@ -440,7 +440,7 @@ public class User {
         try {
             Statement stmt = Database.connectToDB().createStatement();
             
-            String sql = "Update Users SET passwordReset = ? where username = ?";
+            String sql = "Update Users SET passwordReset = ? where username = ? and active = 1";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setBoolean(1, !Global.activeUser.passwordReset);
@@ -461,7 +461,7 @@ public class User {
             
             String sql = "Select Role AS Role from Role " +
             "INNER JOIN UserRole on UserRole.roleID = Role.id " +
-            "WHERE UserRole.userID = ?";
+            "WHERE UserRole.userID = ? and active = 1";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setInt(1, Global.activeUser.id);
@@ -494,7 +494,7 @@ public class User {
                     + " emailAddress = ?,"
                     + " workPhone = ?,"
                     + " defaultSection = ?"
-                    + " where id = ?";
+                    + " where id = ? and active = 1";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, user.firstName);
@@ -522,7 +522,7 @@ public class User {
         try {
             Statement stmt = Database.connectToDB().createStatement();
             
-            String sql = "Select *  from Users where ID = ?";
+            String sql = "Select *  from Users where ID = ? and active = 1";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setInt(1, userID);
@@ -546,7 +546,7 @@ public class User {
         try {
             Statement stmt = Database.connectToDB().createStatement();
             
-            String sql = "Select *  from Users where firstName = ? and lastName = ?";
+            String sql = "Select *  from Users where firstName = ? and lastName = ? and active = 1";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, parsedUserName[0]);
@@ -569,7 +569,7 @@ public class User {
         try {
             Statement stmt = Database.connectToDB().createStatement();
             
-            String sql = "Select emailAddress from Users where id = ?";
+            String sql = "Select emailAddress from Users where id = ? and active = 1";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setInt(1, id);
@@ -592,7 +592,7 @@ public class User {
             
             Statement stmt = Database.connectToDB().createStatement();
             
-            String sql = "Select * from Users where username = ?";
+            String sql = "Select * from Users where username = ? and active = 1";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, Global.activeUser.username);
