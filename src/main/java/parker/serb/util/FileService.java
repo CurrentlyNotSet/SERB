@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Date;
+import javax.swing.JFrame;
 import parker.serb.Global;
 import parker.serb.sql.Activity;
 import parker.serb.sql.ActivityType;
@@ -70,6 +71,7 @@ public class FileService {
                     + File.separatorChar
                     + fileName));
         } catch (IOException | NullPointerException | IllegalArgumentException ex) {
+            new FileNotFoundDialog((JFrame) Global.root.getRootPane().getParent(), true, fileName);
             SlackNotification.sendNotification(ex.getMessage());
         }
     }
