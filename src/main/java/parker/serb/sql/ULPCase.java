@@ -243,7 +243,7 @@ public class ULPCase {
             preparedStatement.executeUpdate();
             
             Audit.addAuditEntry("Updated Note for " + Global.caseNumber);
-            Activity.addActivty("Updated Note", "");
+            Activity.addActivty("Updated Note", null);
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -301,7 +301,7 @@ public class ULPCase {
             preparedStatement.executeUpdate();
             
             Audit.addAuditEntry("Updated Investigation Reveals for " + Global.caseNumber);
-            Activity.addActivty("Updated Investigation Reveals", "");
+            Activity.addActivty("Updated Investigation Reveals", null);
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -361,7 +361,7 @@ public class ULPCase {
                 preparedStatement.executeUpdate();
 
                 Audit.addAuditEntry("Updated Recommendation for " + Global.caseNumber);
-                Activity.addActivty("Updated Recommendation", "");
+                Activity.addActivty("Updated Recommendation", null);
             }
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
@@ -497,7 +497,7 @@ public class ULPCase {
             preparedStatement.executeUpdate();
             
             Audit.addAuditEntry("Updated Statement for " + Global.caseNumber);
-            Activity.addActivty("Updated Statement", "");
+            Activity.addActivty("Updated Statement", null);
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
         }

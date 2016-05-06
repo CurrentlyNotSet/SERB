@@ -46,7 +46,7 @@ public class SMDSLetter {
 
             preparedStatement.executeUpdate();
             
-            Activity.addActivty("Added " + caseNumber + " as Related Case", "");
+            Activity.addActivty("Added " + caseNumber + " as Related Case", null);
 
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);

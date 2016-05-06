@@ -127,7 +127,7 @@ public class PartyTypeSelectionPanel extends javax.swing.JDialog {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         selected = true;
         CaseParty.createParty(id, jComboBox1.getSelectedItem().toString().trim());
-        Activity.addActivty("Added " + name + " (" + jComboBox1.getSelectedItem().toString().trim() + ")", "");
+        Activity.addActivty("Added " + name + " (" + jComboBox1.getSelectedItem().toString().trim() + ")", null);
         if(Global.activeSection.contains("ULP") 
                 && !jComboBox1.getSelectedItem().toString().trim().contains("REP")) {
             setVisible(false);

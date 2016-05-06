@@ -107,7 +107,7 @@ public class DeletePartyDialog extends javax.swing.JDialog {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         CaseParty.removePartyFromCase(id);
-        Activity.addActivty("Removed " + name + " (" + partyType + ")", "");
+        Activity.addActivty("Removed " + name + " (" + partyType + ")", null);
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
