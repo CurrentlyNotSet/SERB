@@ -153,7 +153,7 @@ public class AddNewRelatedCase extends javax.swing.JDialog {
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         if(caseNumberTextBox.getText().trim().length() == 16) {
             if(caseNumberTextBox.getText().trim().toUpperCase().equals(NumberFormatService.generateFullCaseNumber())) {
-                caseNotFoundLabel.setText("Current case cant be a related case");
+                caseNotFoundLabel.setText("Current case can't be a related case");
             }
             else if(!RelatedCase.checkCaseIsAlreadyRelated(caseNumberTextBox.getText().trim().toUpperCase())) {
                 caseNotFoundLabel.setText("Case is already a related case");
