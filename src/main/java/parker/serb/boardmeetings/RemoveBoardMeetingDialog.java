@@ -43,10 +43,10 @@ public class RemoveBoardMeetingDialog extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Delete Case Hearing");
+        jLabel1.setText("Delete Board Meeting");
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Are you sure you want to remove the hearing?");
+        jLabel2.setText("Are you sure you want to remove the board meeting?");
 
         jButton1.setText("Delete");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
