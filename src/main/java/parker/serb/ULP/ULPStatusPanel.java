@@ -914,7 +914,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
 
         jLabel9.setText("Employer Number:");
 
-        jLabel21.setText("Union Number:");
+        jLabel21.setText("BUN Number:");
 
         employerNumberTextBox.setBackground(new java.awt.Color(238, 238, 238));
         employerNumberTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
