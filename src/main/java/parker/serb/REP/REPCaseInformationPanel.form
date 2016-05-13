@@ -21,11 +21,6 @@
   <SubComponents>
     <Container class="javax.swing.JPanel" name="jPanel1">
       <Properties>
-        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Information"/>
-          </Border>
-        </Property>
         <Property name="requestFocusEnabled" type="boolean" value="false"/>
       </Properties>
 
@@ -128,9 +123,9 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="0" pref="134" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="158" max="32767" attributes="0"/>
                       </Group>
-                      <Component id="addRelatedCaseButton" alignment="0" pref="150" max="32767" attributes="0"/>
+                      <Component id="addRelatedCaseButton" alignment="0" pref="174" max="32767" attributes="0"/>
                       <Component id="jScrollPane2" alignment="1" pref="0" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -361,13 +356,6 @@
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="jPanel2">
-      <Properties>
-        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Dates"/>
-          </Border>
-        </Property>
-      </Properties>
 
       <Layout>
         <DimensionLayout dim="0">
@@ -393,19 +381,19 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="fileDateTextBox" alignment="0" max="32767" attributes="0"/>
-                      <Component id="amendedFilingDateTextBox" alignment="1" pref="311" max="32767" attributes="0"/>
-                      <Component id="finalBoardDateTextBox" alignment="1" pref="311" max="32767" attributes="0"/>
-                      <Component id="registrationLetterSentTextBox" alignment="1" pref="311" max="32767" attributes="0"/>
-                      <Component id="dateOfAppealTextBox" alignment="0" pref="311" max="32767" attributes="0"/>
-                      <Component id="courtClosedDateTextBox" alignment="1" pref="311" max="32767" attributes="0"/>
-                      <Component id="returnSOIDueDateTextBox" alignment="1" pref="311" max="32767" attributes="0"/>
-                      <Component id="actualSOIReturnDateTextBox" alignment="1" pref="311" max="32767" attributes="0"/>
-                      <Component id="REPClosedCaseDueDateTextBox" alignment="1" pref="311" max="32767" attributes="0"/>
-                      <Component id="actualREPClosedDateTextBox" alignment="1" pref="311" max="32767" attributes="0"/>
+                      <Component id="amendedFilingDateTextBox" alignment="1" pref="323" max="32767" attributes="0"/>
+                      <Component id="finalBoardDateTextBox" alignment="1" pref="323" max="32767" attributes="0"/>
+                      <Component id="registrationLetterSentTextBox" alignment="1" pref="323" max="32767" attributes="0"/>
+                      <Component id="dateOfAppealTextBox" alignment="0" pref="323" max="32767" attributes="0"/>
+                      <Component id="courtClosedDateTextBox" alignment="1" pref="323" max="32767" attributes="0"/>
+                      <Component id="returnSOIDueDateTextBox" alignment="1" pref="323" max="32767" attributes="0"/>
+                      <Component id="actualSOIReturnDateTextBox" alignment="1" pref="323" max="32767" attributes="0"/>
+                      <Component id="REPClosedCaseDueDateTextBox" alignment="1" pref="323" max="32767" attributes="0"/>
+                      <Component id="actualREPClosedDateTextBox" alignment="1" pref="323" max="32767" attributes="0"/>
                       <Component id="clerksClosedDateInitialsTextBox" alignment="0" max="32767" attributes="0"/>
                       <Component id="SOIReturnInitialsTextBox" alignment="0" max="32767" attributes="0"/>
                       <Component id="repClosedInitials" alignment="0" max="32767" attributes="0"/>
-                      <Component id="actualClerksClosedDate" alignment="1" pref="311" max="32767" attributes="0"/>
+                      <Component id="actualClerksClosedDate" alignment="1" pref="323" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
