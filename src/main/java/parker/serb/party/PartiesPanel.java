@@ -18,6 +18,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
 import parker.serb.sql.CaseParty;
+import parker.serb.sql.REPCaseSearchData;
 import parker.serb.sql.ULPCaseSearchData;
 
 //TODO: Implement duplicate party catch
@@ -105,6 +106,13 @@ public class PartiesPanel extends javax.swing.JPanel {
                         Global.root.getuLPHeaderPanel1().getChargedPartyTextBox().getText().trim(),
                         Global.root.getuLPHeaderPanel1().getChargingPartyTextBox().getText().trim());
                 break;
+            case "REP":
+                Global.root.getrEPHeaderPanel1().loadHeaderInformation();
+                REPCaseSearchData.updateCaseEntryFromParties(
+                        Global.root.getrEPHeaderPanel1().getEmployerTextBox().getText().trim(),
+                        Global.root.getrEPHeaderPanel1().getEmployeeOrgTextBox().getText().trim(),
+                        Global.root.getrEPHeaderPanel1().getIncumbentEEOTextBox().getText().trim());
+                break;   
         }
     }
     
