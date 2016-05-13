@@ -226,6 +226,7 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton9.setSize(dim);
                 jButton9.setMinimumSize(dim);
                 jButton9.setMaximumSize(dim);
+                jButton9.setEnabled(false);
                 jButton9.setVisible(false);
                 break;
             case "MED":

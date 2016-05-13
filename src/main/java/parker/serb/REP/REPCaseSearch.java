@@ -5,21 +5,16 @@
  */
 package parker.serb.REP;
 
-import com.alee.laf.progressbar.WebProgressBar;
+import parker.serb.REP.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JLabel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
-import parker.serb.admin.SystemMontiorDialog;
-import parker.serb.sql.Activity;
-import parker.serb.sql.REPCase;
-import parker.serb.util.FileService;
+import parker.serb.sql.REPCaseSearchData;
+import parker.serb.sql.ULPCaseSearchData;
 
 /**
  *
@@ -28,14 +23,13 @@ import parker.serb.util.FileService;
 public class REPCaseSearch extends javax.swing.JDialog {
 
     DefaultTableModel model;
-    long lastKeyStroke = System.currentTimeMillis();
-    long debounceWait = 750;
+    List caseList;
+    Object[][] tableData;
     /**
      * Creates new form REPCaseSearch
      */
     public REPCaseSearch(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        setUndecorated(true);
         initComponents();
         jLayeredPane1.moveToFront(jPanel1);
         activity();
@@ -45,43 +39,103 @@ public class REPCaseSearch extends javax.swing.JDialog {
     }
     
     private void addListeners() {
-        jTextField1.getDocument().addDocumentListener(new DocumentListener() {
+        caseYearTextBox.getDocument().addDocumentListener(new DocumentListener() {
 
             @Override
             public void insertUpdate(DocumentEvent e) {
-                if(lastKeyStroke + debounceWait < System.currentTimeMillis() ) {
-                    System.out.println(lastKeyStroke);
-                    lastKeyStroke = System.currentTimeMillis();
-                    searchUpdate();
-                }
+                limitCaseList();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                if(lastKeyStroke + debounceWait < System.currentTimeMillis() ) {
-                    System.out.println(lastKeyStroke);
-                    lastKeyStroke = System.currentTimeMillis();
-                    searchUpdate();
-                }
+                limitCaseList();
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                if(lastKeyStroke + debounceWait < System.currentTimeMillis() ) {
-                    System.out.println(lastKeyStroke);
-                    lastKeyStroke = System.currentTimeMillis();
-                    searchUpdate();
-                }
+                limitCaseList();
             }
         });
         
-        jTable1.addMouseListener(new MouseListener() {
+        caseTypeTextBox.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                limitCaseList();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                limitCaseList();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                limitCaseList();
+            }
+        });
+        
+        caseMonthTextBox.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                limitCaseList();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                limitCaseList();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                limitCaseList();
+            }
+        });
+        
+        caseNumberTextBox.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                limitCaseList();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                limitCaseList();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                limitCaseList();
+            }
+        });
+        
+        searchTextBox.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                limitCaseList();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                limitCaseList();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                limitCaseList();
+            }
+        });
+        
+        caseSearchTable.addMouseListener(new MouseListener() {
 
             @Override
             public void mouseClicked(MouseEvent e) {
                 if(e.getClickCount() == 2) {
-                    Global.caseNumber = jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString();
-                    dispose();
+                    setVisible(false);
+                    Global.root.getrEPHeaderPanel1().getjComboBox2().setSelectedItem(caseSearchTable.getValueAt(caseSearchTable.getSelectedRow(), 0).toString());
                 }
             }
 
@@ -99,59 +153,99 @@ public class REPCaseSearch extends javax.swing.JDialog {
         });
     }
     
-    private void searchUpdate() {
-        clearJtable();
-        jLayeredPane1.moveToFront(jPanel1);
-        jLabel4.setVisible(true);
-        activity();
-    }
-    
-    private void clearJtable() {
-       DefaultTableModel temp = new DefaultTableModel();
-       jTable1.setModel(temp);
-    }
-    
     private void activity() {
-        new Thread(
+        Thread temp = new Thread(
             new Runnable() {
                 @Override
                 public void run() {
-                    loadActivity();
+                    loadAllCases();
+                    enableTextBoxes();
                 }
             }
-        ).start();
+        );
+        temp.start();
     }
     
-    private void loadActivity() {
-        
+    private void enableTextBoxes() {
+        caseYearTextBox.setEnabled(true);
+        caseTypeTextBox.setEnabled(true);
+        caseMonthTextBox.setEnabled(true);
+        caseNumberTextBox.setEnabled(true);
+        searchTextBox.setEnabled(true);
+    }
+    
+    private void loadAllCases() {
         model = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }   
         };
-        
-        
-        model.addColumn("Date");
+       
         model.addColumn("Case Number");
-        model.addColumn("User");
-        model.addColumn("Action");
+        model.addColumn("Employer Name");
+        model.addColumn("BU Number");
+        model.addColumn("Description");
+        model.addColumn("County");
+        model.addColumn("Board/Deemed");
+        model.addColumn("Employee Org");
+        model.addColumn("Incumbent");
         
+        caseList = REPCaseSearchData.loadREPCaseList();
         
-        List caseNumberList = REPCase.loadREPCases(50);
-        
-//        
-        for (Object caseNumberList1 : caseNumberList) {
-            REPCase act = (REPCase) caseNumberList1;
-            model.addRow(new Object[] {act.caseNumber, "", "", ""});
+        for (Object caseItem : caseList) {
+            REPCaseSearchData act = (REPCaseSearchData) caseItem;
+            
+            model.addRow(new Object[] {
+                (act.caseYear + "-" + act.caseType + "-" + act.caseMonth + "-" + act.caseNumber),
+                act.employerName,
+                act.bunNumber,
+                act.description,
+                act.county,
+                act.boardDeemed,
+                act.employeeOrg,
+                act.incumbent
+            }); 
         }
-        jTable1.setModel(model);
+        getTableData();
+        caseSearchTable.setModel(model);
         jLayeredPane1.moveToBack(jPanel1);
+        
     }
     
+    private void limitCaseList() {
+        model.setRowCount(0);
+        
+        for (int i = 0; i<tableData.length; i++)
+        {
+            String[] parsedCaseNumber = String.valueOf(tableData[i][0]).split("-");
+            if(((parsedCaseNumber[0].contains(caseYearTextBox.getText()) && !caseYearTextBox.equals(""))
+                && (parsedCaseNumber[1].toLowerCase().contains(caseTypeTextBox.getText().toLowerCase()) && !caseTypeTextBox.equals(""))
+                && (parsedCaseNumber[2].contains(caseMonthTextBox.getText()) && !caseMonthTextBox.equals(""))
+                && (parsedCaseNumber[3].contains(caseNumberTextBox.getText()) && !caseNumberTextBox.equals("")))
+                && ((tableData[i][1].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals(""))
+                || (tableData[i][2].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals(""))
+                || (tableData[i][3].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals(""))
+                || (tableData[i][4].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals(""))
+                || (tableData[i][5].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals(""))
+                || (tableData[i][6].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals(""))   
+                || (tableData[i][7].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals("")))) {
+                model.addRow(new Object[] {tableData[i][0]
+                , tableData[i][1], tableData[i][2], tableData[i][3], tableData[i][4], tableData[i][5], tableData[i][6], tableData[i][7]}); 
+            }
+        }
+        caseSearchTable.setModel(model);
+    }
     
-    
-    
+    public void getTableData() {
+        int nRow = model.getRowCount(), nCol = model.getColumnCount();
+        tableData = new Object[nRow][nCol];
+        for (int i = 0 ; i < nRow ; i++) {
+            for (int j = 0 ; j < nCol ; j++) {
+                tableData[i][j] = model.getValueAt(i,j);
+            }
+        }  
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -164,22 +258,25 @@ public class REPCaseSearch extends javax.swing.JDialog {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         jLayeredPane1 = new javax.swing.JLayeredPane();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        caseSearchTable = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jCheckBox2 = new javax.swing.JCheckBox();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jCheckBox3 = new javax.swing.JCheckBox();
-        jCheckBox4 = new javax.swing.JCheckBox();
-        jCheckBox5 = new javax.swing.JCheckBox();
-        jCheckBox6 = new javax.swing.JCheckBox();
+        searchTextBox = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        caseYearTextBox = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        caseTypeTextBox = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        caseMonthTextBox = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        caseNumberTextBox = new javax.swing.JTextField();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -189,19 +286,25 @@ public class REPCaseSearch extends javax.swing.JDialog {
         jLabel2.setText("Search:");
         jLabel2.setToolTipText("");
 
-        jLabel3.setText("Contained In:");
-
         jLayeredPane1.setLayout(new javax.swing.OverlayLayout(jLayeredPane1));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        caseSearchTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8"
+                "Case Number", "Employer Name", "BU Number", "Description", "County", "Board/Deemed", "Employee Org", "Incumbent"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(caseSearchTable);
 
         jLayeredPane1.add(jScrollPane1);
 
@@ -216,13 +319,13 @@ public class REPCaseSearch extends javax.swing.JDialog {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 981, Short.MAX_VALUE)
+            .addGap(0, 1104, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 981, Short.MAX_VALUE))
+                .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1104, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 328, Short.MAX_VALUE)
+            .addGap(0, 388, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -231,32 +334,50 @@ public class REPCaseSearch extends javax.swing.JDialog {
 
         jLayeredPane1.add(jPanel1);
 
-        jCheckBox2.setText("Employer Number");
-        jCheckBox2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox2ActionPerformed(evt);
-            }
-        });
-
-        jCheckBox1.setText("Bargininf Unit Number");
-
-        jCheckBox3.setText("Employer Name");
-
-        jCheckBox4.setText("Employee Org. Name");
-
-        jCheckBox5.setText("Rival Emp. Org. Name");
-
-        jCheckBox6.setText("Incumbent Emp. Org. Name");
-        jCheckBox6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox6ActionPerformed(evt);
-            }
-        });
+        searchTextBox.setEnabled(false);
 
         jButton1.setText("Close");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Case Search:");
+
+        caseYearTextBox.setEnabled(false);
+        caseYearTextBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                caseYearTextBoxActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setText("-");
+
+        caseTypeTextBox.setEnabled(false);
+
+        jLabel6.setText("-");
+
+        caseMonthTextBox.setEnabled(false);
+        caseMonthTextBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                caseMonthTextBoxActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setText("-");
+
+        caseNumberTextBox.setEnabled(false);
+        caseNumberTextBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                caseNumberTextBoxActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Refresh");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
             }
         });
 
@@ -267,29 +388,31 @@ public class REPCaseSearch extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLayeredPane1)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1104, Short.MAX_VALUE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField1)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jCheckBox1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jCheckBox2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jCheckBox4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jCheckBox3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jCheckBox5)
-                                    .addComponent(jCheckBox6))
-                                .addGap(0, 0, Short.MAX_VALUE)))))
+                        .addComponent(caseYearTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(jLabel5)
+                        .addGap(0, 0, 0)
+                        .addComponent(caseTypeTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(jLabel6)
+                        .addGap(0, 0, 0)
+                        .addComponent(caseMonthTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(jLabel7)
+                        .addGap(0, 0, 0)
+                        .addComponent(caseNumberTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(searchTextBox)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton2)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -300,20 +423,18 @@ public class REPCaseSearch extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(8, 8, 8)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(searchTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
-                    .addComponent(jCheckBox2)
-                    .addComponent(jCheckBox3)
-                    .addComponent(jCheckBox5))
+                    .addComponent(caseYearTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5)
+                    .addComponent(caseTypeTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6)
+                    .addComponent(caseMonthTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7)
+                    .addComponent(caseNumberTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBox1)
-                    .addComponent(jCheckBox4)
-                    .addComponent(jCheckBox6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
-                .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
                 .addGap(11, 11, 11)
                 .addComponent(jButton1)
                 .addContainerGap())
@@ -322,35 +443,49 @@ public class REPCaseSearch extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox2ActionPerformed
-
-    private void jCheckBox6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox6ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox6ActionPerformed
-
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Global.caseNumber = "";
-        dispose();
+        setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void caseYearTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_caseYearTextBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_caseYearTextBoxActionPerformed
+
+    private void caseMonthTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_caseMonthTextBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_caseMonthTextBoxActionPerformed
+
+    private void caseNumberTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_caseNumberTextBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_caseNumberTextBoxActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        jButton2.setEnabled(false);
+        model.setNumRows(0);
+        jLayeredPane1.moveToFront(jPanel1);
+        activity();
+        jButton2.setEnabled(true);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField caseMonthTextBox;
+    private javax.swing.JTextField caseNumberTextBox;
+    private javax.swing.JTable caseSearchTable;
+    private javax.swing.JTextField caseTypeTextBox;
+    private javax.swing.JTextField caseYearTextBox;
     private javax.swing.JButton jButton1;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JCheckBox jCheckBox3;
-    private javax.swing.JCheckBox jCheckBox4;
-    private javax.swing.JCheckBox jCheckBox5;
-    private javax.swing.JCheckBox jCheckBox6;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField searchTextBox;
     // End of variables declaration//GEN-END:variables
+
 }

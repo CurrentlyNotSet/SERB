@@ -7,15 +7,20 @@ package parker.serb.REP;
 
 import parker.serb.util.CaseNotFoundDialog;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import parker.serb.Global;
+import parker.serb.ULP.ULPCaseSearch;
 import parker.serb.sql.Audit;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.Party;
 import parker.serb.sql.REPCase;
+import parker.serb.util.NumberFormatService;
 
 //
 
@@ -25,6 +30,7 @@ import parker.serb.sql.REPCase;
  */
 public class REPHeaderPanel extends javax.swing.JPanel {
 
+    REPCaseSearch search = null;
     /**
      * Creates new form REPHeaderPanel
      */
@@ -55,8 +61,12 @@ public class REPHeaderPanel extends javax.swing.JPanel {
     }
     
     private void loadInformation() {
-        Global.caseNumber = caseNumberComboBox.getSelectedItem().toString().trim();
-        loadHeaderInformation();
+        if(caseNumberComboBox.getSelectedItem().toString().trim().length() == 16) {
+            NumberFormatService.parseFullCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim());
+            loadHeaderInformation();
+        } else {
+            new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());  
+        }
     }
     
     public void loadHeaderInformation() {
@@ -75,44 +85,51 @@ public class REPHeaderPanel extends javax.swing.JPanel {
                 filedDateTextBox.setText(rep.fileDate != null ? Global.mmddyyyy.format(new Date(rep.fileDate.getTime())) : "");
                 closedDateTextBox.setText(rep.courtClosedDate != null ? Global.mmddyyyy.format(new Date(rep.courtClosedDate.getTime())) : "");
                 currentStatusTextBox.setText(rep.status1 != null ? rep.status1 : "");
-                caseTypeTextBox.setText(rep.caseType != null ? rep.caseType : "");
+                caseTypeTextBox.setText(rep.type != null ? rep.type : "");
                 bargainingUnitTextBox.setText(rep.bargainingUnitNumber != null ? rep.bargainingUnitNumber : "");
 
                 List caseParties = CaseParty.loadPartiesByCase();
 
                 for(Object caseParty: caseParties) {
                     CaseParty partyInformation = (CaseParty) caseParty;
+                    
+                    String name = (partyInformation.prefix.equals("") ? "" : (partyInformation.prefix + " "))
+                        + (partyInformation.firstName.equals("") ? "" : (partyInformation.firstName + " "))
+                        + (partyInformation.middleInitial.equals("") ? "" : (partyInformation.middleInitial + ". "))
+                        + (partyInformation.lastName.equals("") ? "" : (partyInformation.lastName))
+                        + (partyInformation.suffix.equals("") ? "" : (" " + partyInformation.suffix))
+                        + (partyInformation.nameTitle.equals("") ? "" : (", " + partyInformation.nameTitle));
 
-//                    switch (partyInformation.type) {
-//                        case "Employer":
-//                            if(employer.equals("")) {
-//                                employer += partyInformation.name;
-//                            } else {
-//                                employer += ", " + partyInformation.name;
-//                            }
-//                            break;
-//                        case "Employee Organization":
-//                            if(employeeOrg.equals("")) {
-//                                employeeOrg += partyInformation.name;
-//                            } else {
-//                                employeeOrg += ", " + partyInformation.name;
-//                            }
-//                            break;
-//                        case "Incumbent Employee Organization":
-//                            if(incumbentEEO.equals("")) {
-//                                incumbentEEO += partyInformation.name;
-//                            } else {
-//                                incumbentEEO += ", " + partyInformation.name;
-//                            }
-//                            break;
-//                        case "Rival Employee Organization":
-//                            if(rivalEEO.equals("")) {
-//                                rivalEEO += partyInformation.name;
-//                            } else {
-//                                rivalEEO += ", " + partyInformation.name;
-//                            }
-//                            break;
-//                    }
+                    switch (partyInformation.caseRelation) {
+                        case "Employer":
+                            if(employer.equals("")) {
+                                employer += name;
+                            } else {
+                                employer += ", " + name;
+                            }
+                            break;
+                        case "Employee Organization":
+                            if(employeeOrg.equals("")) {
+                                employeeOrg += name;
+                            } else {
+                                employeeOrg += ", " + name;
+                            }
+                            break;
+                        case "Incumbent Employee Organization":
+                            if(incumbentEEO.equals("")) {
+                                incumbentEEO += name;
+                            } else {
+                                incumbentEEO += ", " + name;
+                            }
+                            break;
+                        case "Rival Employee Organization":
+                            if(rivalEEO.equals("")) {
+                                rivalEEO += name;
+                            } else {
+                                rivalEEO += ", " + name;
+                            }
+                            break;
+                    }
                 }
                 employerTextBox.setText(employer);
                 employeeOrgTextBox.setText(employeeOrg);
@@ -151,6 +168,22 @@ public class REPHeaderPanel extends javax.swing.JPanel {
     public JComboBox getjComboBox2() {
         return caseNumberComboBox;
     }
+
+    public JTextField getEmployerTextBox() {
+        return employerTextBox;
+    }
+
+    public JTextField getEmployeeOrgTextBox() {
+        return employeeOrgTextBox;
+    }
+
+    public JTextField getIncumbentEEOTextBox() {
+        return incumbentEEOTextBox;
+    }
+    
+    
+    
+    
     
     
     
@@ -192,6 +225,11 @@ public class REPHeaderPanel extends javax.swing.JPanel {
         setLayout(new java.awt.GridLayout(1, 0));
 
         jLabel11.setText("Case Number:");
+        jLabel11.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel11MouseClicked(evt);
+            }
+        });
 
         caseNumberComboBox.setEditable(true);
         caseNumberComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -354,6 +392,16 @@ public class REPHeaderPanel extends javax.swing.JPanel {
     private void employerTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employerTextBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_employerTextBoxActionPerformed
+
+    private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
+        if(SwingUtilities.isRightMouseButton(evt) || evt.getButton() == MouseEvent.BUTTON3) {
+            if(search == null) {
+                search = new REPCaseSearch((JFrame) getRootPane().getParent(), true);
+            } else {
+                search.setVisible(true);
+            }
+        }
+    }//GEN-LAST:event_jLabel11MouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

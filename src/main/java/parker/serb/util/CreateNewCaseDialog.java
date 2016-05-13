@@ -16,6 +16,7 @@ import parker.serb.sql.CaseNumber;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.CaseType;
 import parker.serb.sql.REPCase;
+import parker.serb.sql.REPCaseSearchData;
 import parker.serb.sql.ULPCase;
 import parker.serb.sql.ULPCaseSearchData;
 
@@ -45,6 +46,9 @@ public class CreateNewCaseDialog extends javax.swing.JDialog {
             case "ULP":
                 relatedCases = ULPCase.loadRelatedCases();
                 break;
+            case "REP":
+                relatedCases = REPCase.loadRelatedCases();
+                break;    
         }
         
         similarCaseComboBox.removeAllItems();
@@ -121,7 +125,7 @@ public class CreateNewCaseDialog extends javax.swing.JDialog {
     public static void refreshHeader() {
         switch (Global.activeSection) {
             case "REP":
-                Global.root.getrEPHeaderPanel1().loadCases();
+//                Global.root.getrEPHeaderPanel1().loadCases();
 //                Global.root.getrEPHeaderPanel1().getjComboBox2().setSelectedItem(buildCaseNumber());
                 break;
             case "MED":
@@ -136,7 +140,14 @@ public class CreateNewCaseDialog extends javax.swing.JDialog {
     private void createCase() {
         switch (Global.activeSection) {
             case "REP":
-                REPCase.createCase(buildCaseNumber());
+                REPCase.createCase(yearComboBox.getSelectedItem().toString(),
+                        typeComboBox.getSelectedItem().toString(),
+                        monthComboBox.getSelectedItem().toString().substring(0, 2),
+                        caseNumberTextBox.getText().trim());
+                REPCaseSearchData.createNewCaseEntry(yearComboBox.getSelectedItem().toString(),
+                        typeComboBox.getSelectedItem().toString(),
+                        monthComboBox.getSelectedItem().toString().substring(0, 2),
+                        caseNumberTextBox.getText().trim());
                 break;
             case "MED":
                 break;
@@ -177,6 +188,11 @@ public class CreateNewCaseDialog extends javax.swing.JDialog {
                     yearComboBox.getSelectedItem().toString(),
                     typeComboBox.getSelectedItem().toString(),
                     monthComboBox.getSelectedItem().toString().substring(0, 2));
+            case "REP": firstCase =  REPCase.checkIfFristCaseOfMonth(
+                    yearComboBox.getSelectedItem().toString(),
+                    typeComboBox.getSelectedItem().toString(),
+                    monthComboBox.getSelectedItem().toString().substring(0, 2));
+            
         }
         
         return firstCase;

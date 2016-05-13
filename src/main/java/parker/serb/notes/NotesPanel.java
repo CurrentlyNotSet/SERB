@@ -57,7 +57,7 @@ public class NotesPanel extends javax.swing.JPanel {
     
     public void saveInformation() {
         if(Global.activeSection.equals("REP")) {
-            REPCase.updateNote(jTextArea2.getText(), orginalNote);
+            REPCase.updateNote(jTextArea2.getText());
         } else if(Global.activeSection.equals("ULP")) {
             ULPCase.updateNote(jTextArea2.getText());
         }

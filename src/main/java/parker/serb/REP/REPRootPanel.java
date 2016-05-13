@@ -11,6 +11,7 @@ import javax.swing.event.ChangeEvent;
 import parker.serb.activity.ActivityPanel;
 import parker.serb.Global;
 import parker.serb.party.PartySearchDialog;
+import parker.serb.sql.REPCaseSearchData;
 import parker.serb.util.CancelUpdate;
 
 /**
@@ -24,13 +25,14 @@ public class REPRootPanel extends javax.swing.JPanel {
      */
     public REPRootPanel() {
         initComponents();
-        jTabbedPane1.remove(7);
+//        jTabbedPane1.remove(7); //NOTES
         jTabbedPane1.remove(6);
         jTabbedPane1.remove(5);
         jTabbedPane1.remove(4);
         jTabbedPane1.remove(3);
-        jTabbedPane1.remove(2);
-        jTabbedPane1.remove(1);
+//        jTabbedPane1.remove(2); //PARTIES
+        jTabbedPane1.remove(1); //INFORMATION
+//        jTabbedPane1.remove(0); //Activity
         addListeners();
     }
     
@@ -42,6 +44,7 @@ public class REPRootPanel extends javax.swing.JPanel {
         activityPanel1.clearAll();
         rEPCaseInformationPanel2.clearAll();
         notesPanel2.clearAll();
+        partiesPanel1.clearAll();
     }
     
     private void addListeners() {
@@ -49,6 +52,8 @@ public class REPRootPanel extends javax.swing.JPanel {
             rEPCaseInformationPanel2.loadCaseTypes();
             rEPCaseInformationPanel2.loadStatus();
             rEPCaseInformationPanel2.loadCurrentOwner();
+            rEPCaseInformationPanel2.loadCountyComboBox();
+//            rEPCaseInformationPanel2.loadDepartmentInState();
             rEPBoardStatusPanel1.loadBoardActionType();
             rEPBoardStatusPanel1.loadHearingPerson();
             
@@ -191,6 +196,10 @@ public class REPRootPanel extends javax.swing.JPanel {
                 new PartySearchDialog((JFrame) this.getRootPane().getParent(), true);
                 partiesPanel1.loadAllParties();
                 Global.root.getrEPHeaderPanel1().loadHeaderInformation();
+                REPCaseSearchData.updateCaseEntryFromParties(
+                        Global.root.getrEPHeaderPanel1().getEmployerTextBox().getText().trim(),
+                        Global.root.getrEPHeaderPanel1().getEmployeeOrgTextBox().getText().trim(),
+                        Global.root.getrEPHeaderPanel1().getIncumbentEEOTextBox().getText().trim());
                 break;
             case "Details":
                 
@@ -249,6 +258,10 @@ public class REPRootPanel extends javax.swing.JPanel {
             case "Parties":
                 partiesPanel1.removeParty();
                 Global.root.getrEPHeaderPanel1().loadHeaderInformation();
+                REPCaseSearchData.updateCaseEntryFromParties(
+                        Global.root.getrEPHeaderPanel1().getEmployerTextBox().getText().trim(),
+                        Global.root.getrEPHeaderPanel1().getEmployeeOrgTextBox().getText().trim(),
+                        Global.root.getrEPHeaderPanel1().getIncumbentEEOTextBox().getText().trim());
                 break;
             case "Details":
                 break;

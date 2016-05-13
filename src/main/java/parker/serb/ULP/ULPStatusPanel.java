@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package parker.serb.ULP;
+import com.alee.extended.date.WebDateField;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -11,8 +12,6 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JFrame;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
 import parker.serb.boardmeetings.AddULPBoardMeeting;
@@ -29,6 +28,7 @@ import parker.serb.sql.ULPCase;
 import parker.serb.sql.ULPCaseSearchData;
 import parker.serb.sql.ULPRecommendation;
 import parker.serb.sql.User;
+import parker.serb.util.ClearDateDialog;
 import parker.serb.util.NumberFormatService;
 
 /**
@@ -167,34 +167,6 @@ public class ULPStatusPanel extends javax.swing.JPanel {
             @Override
             public void mouseExited(MouseEvent e) {}
         });
-        
-//        relatedCaseTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-//            @Override
-//            public void valueChanged(ListSelectionEvent e) {
-//                if(relatedCaseTable.getSelectedRow() > -1) {
-//                    Global.root.getjButton9().setVisible(true);
-//                    Global.root.getjButton9().setEnabled(true);
-//                    boardMeetingTable.clearSelection();
-//                } else {
-//                    Global.root.getjButton9().setVisible(false);
-//                    Global.root.getjButton9().setEnabled(false);
-//                }
-//            }
-//        });
-        
-//        boardMeetingTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-//            @Override
-//            public void valueChanged(ListSelectionEvent e) {
-//                if(boardMeetingTable.getSelectedRow() > -1) {
-//                    Global.root.getjButton9().setVisible(true);
-//                    Global.root.getjButton9().setEnabled(true);
-//                    relatedCaseTable.clearSelection();
-//                } else {
-//                    Global.root.getjButton9().setVisible(false);
-//                    Global.root.getjButton9().setEnabled(false);
-//                }
-//            }
-//        });
     }
    
     private void setHearingsTableColumns() {
@@ -252,7 +224,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         filedDateTextBox.setEnabled(true);
         filedDateTextBox.setBackground(Color.white);
         probableCauseCheckBox.setEnabled(true);
-        deptInStateComboBox.setEnabled(true);
+//        deptInStateComboBox.setEnabled(true);
         addCaseHearingButton.setVisible(true);
         addRelatedCaseButton.setVisible(true);
     }
@@ -264,7 +236,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         Global.root.getjButton9().setVisible(false);
         
         //Set text boxes and combo boxes
-        deptInStateComboBox.setEnabled(false);
+//        deptInStateComboBox.setEnabled(false);
         allegationTextBox.setEnabled(false);
         allegationTextBox.setBackground(new Color(238,238,238));
         statusComboBox.setEnabled(false);
@@ -304,13 +276,16 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         addCaseHearingButton.setVisible(false);
         addRelatedCaseButton.setVisible(false);
         
-        if(runSave)
+        if(runSave) {
             saveInformation();
+        } else {
+            loadPanelInformation();
+        }
     }
     
     public void loadInformation() {
         
-        loadDeptInStateComboBox();
+//        loadDeptInStateComboBox();
         loadStatusComboBox();
         loadInvestigatorComobBox();
         loadALJComboBox();
@@ -320,20 +295,20 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         loadPanelInformation();
     }
     
-    public void loadDeptInStateComboBox() {
-        deptInStateComboBox.removeAllItems();
-        
-        deptInStateComboBox.addItem("");
-        
-        List deptInStateList = DepartmentInState.loadAllDepartments();
-        
-        for (Object department : deptInStateList) {
-            DepartmentInState dept = (DepartmentInState) department;
-            deptInStateComboBox.addItem(dept.code);
-        }
-        
-        deptInStateComboBox.setSelectedItem("");
-    }
+//    public void loadDeptInStateComboBox() {
+//        deptInStateComboBox.removeAllItems();
+//        
+//        deptInStateComboBox.addItem("");
+//        
+//        List deptInStateList = DepartmentInState.loadAllDepartments();
+//        
+//        for (Object department : deptInStateList) {
+//            DepartmentInState dept = (DepartmentInState) department;
+//            deptInStateComboBox.addItem(dept.code);
+//        }
+//        
+//        deptInStateComboBox.setSelectedItem("");
+//    }
     
     public void loadStatusComboBox() {
         statusComboBox.removeAllItems();
@@ -428,7 +403,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         currentStatusInformation = ULPCase.loadStatus();
         
         employerNumberTextBox.setText(currentStatusInformation.employerIDNumber);
-        deptInStateComboBox.setSelectedItem(currentStatusInformation.deptInState);
+//        deptInStateComboBox.setSelectedItem(currentStatusInformation.deptInState);
         barginingUnitNoTextBox.setText(currentStatusInformation.barginingUnitNo);
         eoNumberTextBox.setText(currentStatusInformation.EONumber);
         allegationTextBox.setText(currentStatusInformation.allegation);
@@ -456,7 +431,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         ULPCase newStatusInformation = new ULPCase();
         
         newStatusInformation.employerIDNumber = employerNumberTextBox.getText().trim().equals("") ? null : employerNumberTextBox.getText().trim();
-        newStatusInformation.deptInState = (deptInStateComboBox.getSelectedItem() == null || deptInStateComboBox.getSelectedItem().equals("")) ? null : deptInStateComboBox.getSelectedItem().toString().trim();
+//        newStatusInformation.deptInState = (deptInStateComboBox.getSelectedItem() == null || deptInStateComboBox.getSelectedItem().equals("")) ? null : deptInStateComboBox.getSelectedItem().toString().trim();
         newStatusInformation.barginingUnitNo = barginingUnitNoTextBox.getText().trim().equals("") ? null : barginingUnitNoTextBox.getText().trim();
         newStatusInformation.EONumber = eoNumberTextBox.getText().trim().equals("") ? null : eoNumberTextBox.getText().trim();
         newStatusInformation.allegation = allegationTextBox.getText().trim().equals("") ? null : allegationTextBox.getText().trim();
@@ -472,15 +447,25 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         newStatusInformation.courtCaseNumber = courtCaseNumberTextBox.getText().trim().equals("") ? null : courtCaseNumberTextBox.getText().trim();
         newStatusInformation.SERBCaseNumber = serbCaseNumberTextBox.getText().trim().equals("") ? null : serbCaseNumberTextBox.getText().trim();
         newStatusInformation.finalDispositionStatus = (finalDispositionComboBox.getSelectedItem() == null || finalDispositionComboBox.getSelectedItem().equals("")) ? null : finalDispositionComboBox.getSelectedItem().toString();
-        newStatusInformation.investigatorID = (investigatorComboBox.getSelectedItem() == null || investigatorComboBox.getSelectedItem().equals("")) ? 0 : (investigatorComboBox.getSelectedItem().toString().equals("") ? 0 : User.getCurrentOwnerID(investigatorComboBox.getSelectedItem().toString().trim()));
-        newStatusInformation.mediatorAssignedID = (mediatorAssignedComboBox.getSelectedItem() == null || mediatorAssignedComboBox.getSelectedItem().equals("")) ? 0 : (mediatorAssignedComboBox.getSelectedItem().toString().equals("") ? 0 : User.getCurrentOwnerID(mediatorAssignedComboBox.getSelectedItem().toString().trim()));
-        newStatusInformation.aljID = (aljComboBox.getSelectedItem() == null || aljComboBox.getSelectedItem().equals("")) ? 0 : (aljComboBox.getSelectedItem().toString().equals("") ? 0 : User.getCurrentOwnerID(aljComboBox.getSelectedItem().toString().trim()));
+        newStatusInformation.investigatorID = (investigatorComboBox.getSelectedItem() == null || investigatorComboBox.getSelectedItem().equals("")) ? 0 : (investigatorComboBox.getSelectedItem().toString().equals("") ? 0 : User.getUserID(investigatorComboBox.getSelectedItem().toString().trim()));
+        newStatusInformation.mediatorAssignedID = (mediatorAssignedComboBox.getSelectedItem() == null || mediatorAssignedComboBox.getSelectedItem().equals("")) ? 0 : (mediatorAssignedComboBox.getSelectedItem().toString().equals("") ? 0 : User.getUserID(mediatorAssignedComboBox.getSelectedItem().toString().trim()));
+        newStatusInformation.aljID = (aljComboBox.getSelectedItem() == null || aljComboBox.getSelectedItem().equals("")) ? 0 : (aljComboBox.getSelectedItem().toString().equals("") ? 0 : User.getUserID(aljComboBox.getSelectedItem().toString().trim()));
         newStatusInformation.fileDate = filedDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(filedDateTextBox.getText()));
         newStatusInformation.probableCause = probableCauseCheckBox.isSelected();
         
         ULPCase.updateCaseStatusInformation(newStatusInformation, currentStatusInformation);
         ULPCaseSearchData.updateCaseEntryFromStatus(newStatusInformation.employerIDNumber, newStatusInformation.barginingUnitNo);
         currentStatusInformation = ULPCase.loadStatus();
+    }
+    
+    private void clearDate(WebDateField dateField, MouseEvent evt) {
+        if(evt.getButton() == MouseEvent.BUTTON3 && dateField.isEnabled()) {
+            ClearDateDialog dialog = new ClearDateDialog((JFrame) Global.root, true);
+            if(dialog.isReset()) {
+                dateField.setText("");
+            }
+            dialog.dispose();
+        }
     }
     
 
@@ -547,12 +532,10 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         barginingUnitNoTextBox = new javax.swing.JTextField();
         jLabel22 = new javax.swing.JLabel();
         eoNumberTextBox = new javax.swing.JTextField();
-        jLabel23 = new javax.swing.JLabel();
-        deptInStateComboBox = new javax.swing.JComboBox<>();
 
         jLabel3.setText("Allegation:");
 
-        jLabel4.setText("Status");
+        jLabel4.setText("Status:");
 
         jLabel5.setText("Priority:");
 
@@ -598,6 +581,11 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         assignedDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         assignedDateTextBox.setEnabled(false);
         assignedDateTextBox.setDateFormat(Global.mmddyyyy);
+        assignedDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                assignedDateTextBoxMouseClicked(evt);
+            }
+        });
 
         reportDueDateTextBox.setEditable(false);
         reportDueDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
@@ -605,30 +593,55 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         reportDueDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         reportDueDateTextBox.setEnabled(false);
         reportDueDateTextBox.setDateFormat(Global.mmddyyyy);
+        reportDueDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                reportDueDateTextBoxMouseClicked(evt);
+            }
+        });
 
         dismissalDateTextBox.setEditable(false);
         dismissalDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
         dismissalDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         dismissalDateTextBox.setEnabled(false);
         dismissalDateTextBox.setDateFormat(Global.mmddyyyy);
+        dismissalDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                dismissalDateTextBoxMouseClicked(evt);
+            }
+        });
 
         deferredDateTextBox.setEditable(false);
         deferredDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
         deferredDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         deferredDateTextBox.setEnabled(false);
         deferredDateTextBox.setDateFormat(Global.mmddyyyy);
+        deferredDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                deferredDateTextBoxMouseClicked(evt);
+            }
+        });
 
         appealReceivedTextBox.setEditable(false);
         appealReceivedTextBox.setBackground(new java.awt.Color(238, 238, 238));
         appealReceivedTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         appealReceivedTextBox.setEnabled(false);
         appealReceivedTextBox.setDateFormat(Global.mmddyyyy);
+        appealReceivedTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                appealReceivedTextBoxMouseClicked(evt);
+            }
+        });
 
         appealSentTextBox.setEditable(false);
         appealSentTextBox.setBackground(new java.awt.Color(238, 238, 238));
         appealSentTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         appealSentTextBox.setEnabled(false);
         appealSentTextBox.setDateFormat(Global.mmddyyyy);
+        appealSentTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                appealSentTextBoxMouseClicked(evt);
+            }
+        });
 
         courtTextBox.setBackground(new java.awt.Color(238, 238, 238));
         courtTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
@@ -818,7 +831,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(addRelatedCaseButton, javax.swing.GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE)
+                    .addComponent(addRelatedCaseButton, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addGap(0, 0, 0))
         );
@@ -896,10 +909,11 @@ public class ULPStatusPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)
+                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel8.setText("Filed Date:");
 
         filedDateTextBox.setEditable(false);
@@ -908,6 +922,11 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         filedDateTextBox.setDrawShade(false);
         filedDateTextBox.setEnabled(false);
         filedDateTextBox.setDateFormat(Global.mmddyyyy);
+        filedDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                filedDateTextBoxMouseClicked(evt);
+            }
+        });
 
         probableCauseCheckBox.setText("Probable Cause");
         probableCauseCheckBox.setEnabled(false);
@@ -930,11 +949,6 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         eoNumberTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         eoNumberTextBox.setEnabled(false);
 
-        jLabel23.setText("Dept In State:");
-
-        deptInStateComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        deptInStateComboBox.setEnabled(false);
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -942,19 +956,18 @@ public class ULPStatusPanel extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel9)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel21)
-                            .addComponent(jLabel22)
-                            .addComponent(jLabel23))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel9)
+                                .addComponent(jLabel21)
+                                .addComponent(jLabel22))
+                            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(filedDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE)
                             .addComponent(employerNumberTextBox)
                             .addComponent(barginingUnitNoTextBox)
-                            .addComponent(eoNumberTextBox)
-                            .addComponent(deptInStateComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(eoNumberTextBox))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(probableCauseCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -983,10 +996,6 @@ public class ULPStatusPanel extends javax.swing.JPanel {
                     .addComponent(jLabel22)
                     .addComponent(eoNumberTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(deptInStateComboBox)
-                    .addComponent(jLabel23, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -1019,6 +1028,34 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         loadRelatedCasesTable();
     }//GEN-LAST:event_addRelatedCaseButtonActionPerformed
 
+    private void assignedDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_assignedDateTextBoxMouseClicked
+        clearDate(assignedDateTextBox, evt);
+    }//GEN-LAST:event_assignedDateTextBoxMouseClicked
+
+    private void reportDueDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reportDueDateTextBoxMouseClicked
+        clearDate(reportDueDateTextBox, evt);
+    }//GEN-LAST:event_reportDueDateTextBoxMouseClicked
+
+    private void dismissalDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dismissalDateTextBoxMouseClicked
+        clearDate(dismissalDateTextBox, evt);
+    }//GEN-LAST:event_dismissalDateTextBoxMouseClicked
+
+    private void deferredDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deferredDateTextBoxMouseClicked
+        clearDate(deferredDateTextBox, evt);
+    }//GEN-LAST:event_deferredDateTextBoxMouseClicked
+
+    private void appealReceivedTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_appealReceivedTextBoxMouseClicked
+        clearDate(appealReceivedTextBox, evt);
+    }//GEN-LAST:event_appealReceivedTextBoxMouseClicked
+
+    private void appealSentTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_appealSentTextBoxMouseClicked
+        clearDate(appealSentTextBox, evt);
+    }//GEN-LAST:event_appealSentTextBoxMouseClicked
+
+    private void filedDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_filedDateTextBoxMouseClicked
+        clearDate(filedDateTextBox, evt);
+    }//GEN-LAST:event_filedDateTextBoxMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addCaseHearingButton;
@@ -1033,7 +1070,6 @@ public class ULPStatusPanel extends javax.swing.JPanel {
     private javax.swing.JTextField courtCaseNumberTextBox;
     private javax.swing.JTextField courtTextBox;
     private com.alee.extended.date.WebDateField deferredDateTextBox;
-    private javax.swing.JComboBox<String> deptInStateComboBox;
     private com.alee.extended.date.WebDateField dismissalDateTextBox;
     private javax.swing.JTextField employerNumberTextBox;
     private javax.swing.JTextField eoNumberTextBox;
@@ -1055,7 +1091,6 @@ public class ULPStatusPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

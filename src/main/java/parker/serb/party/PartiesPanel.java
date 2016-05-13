@@ -5,6 +5,7 @@
  */
 package parker.serb.party;
 
+import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
@@ -28,6 +29,7 @@ import parker.serb.sql.ULPCaseSearchData;
 public class PartiesPanel extends javax.swing.JPanel {
 
     List caseParties;
+    
     /**
      * Creates new form PartiesPanel
      */
@@ -184,6 +186,8 @@ public class PartiesPanel extends javax.swing.JPanel {
         switch(Global.activeSection) {
             case "ULP":
                 validateULPParties();
+            case "REP":
+                validateREPParties();
         }
     }
     
@@ -221,6 +225,157 @@ public class PartiesPanel extends javax.swing.JPanel {
             missingParties.setText(missingPartiesText.replace("  ", ", ").trim());
         }
     }
+    
+    private  void validateREPParties() {
+        boolean employer = false;
+        boolean emmployerREP = false;
+        boolean employeeOrg = false;
+        boolean employeeOrgREP = false;
+        boolean rivalEmployeeOrg = false;
+        boolean rivalEmployeeOrgREP = false;
+        boolean incumbentEmployeeOrg = false;
+        boolean incumbentEmployeeOrgREP = false;
+        boolean intervener = false;
+        boolean intervenerREP = false;
+        boolean petitioner = false;
+        boolean petitionerREP = false;
+        boolean conversionSchool = false;
+        boolean conversionSchoolREP = false;
+        
+        //need value from type (1)
+        for(int i = 0; i < jTable1.getRowCount(); i++) {
+            if(jTable1.getValueAt(i, 2).toString().equals("Employer")) {
+                employer = true;
+            }
+            if(jTable1.getValueAt(i, 2).toString().equals("Employer REP")) {
+                emmployerREP = true;
+            }
+            if(jTable1.getValueAt(i, 2).toString().equals("Employee Organization")) {
+                employeeOrg = true;
+            } 
+            if(jTable1.getValueAt(i, 2).toString().equals("Employee Organization REP")) {
+                employeeOrgREP = true;
+            }
+            if(jTable1.getValueAt(i, 2).toString().equals("Rival Employee Organization")) {
+                rivalEmployeeOrg = true;
+            }
+            if(jTable1.getValueAt(i, 2).toString().equals("Rival Employee Organization REP")) {
+                rivalEmployeeOrgREP = true;
+            }
+            if(jTable1.getValueAt(i, 2).toString().equals("Incumbent Employee Organization")) {
+                incumbentEmployeeOrg = true;
+            }
+            if(jTable1.getValueAt(i, 2).toString().equals("Incumbent Employee Organization REP")) {
+                incumbentEmployeeOrgREP = true;
+            }
+            if(jTable1.getValueAt(i, 2).toString().equals("Intervener")) {
+                intervener = true;
+            }
+            if(jTable1.getValueAt(i, 2).toString().equals("Intervener REP")) {
+                intervenerREP = true;
+            }
+            if(jTable1.getValueAt(i, 2).toString().equals("Petitioner")) {
+                petitioner = true;
+            }
+            if(jTable1.getValueAt(i, 2).toString().equals("Petitioner REP")) {
+                petitionerREP = true;
+            }
+            if(jTable1.getValueAt(i, 2).toString().equals("Conversion School")) {
+                conversionSchool = true;
+            }
+            if(jTable1.getValueAt(i, 2).toString().equals("Conversion School REP")) {
+                conversionSchoolREP = true;
+            }
+            
+        }
+        
+        if(employer && emmployerREP
+                && ((employeeOrg && employeeOrgREP)
+                || (rivalEmployeeOrg && rivalEmployeeOrgREP)
+                || (incumbentEmployeeOrg && incumbentEmployeeOrgREP)
+                || (intervener && intervenerREP)
+                || (petitioner && petitionerREP)
+                || (conversionSchool && conversionSchoolREP))) {
+            missingParties.setText("");
+        } else {
+            String missingPartiesText = "Missing Required Parties:";
+            missingPartiesText += (employer ? "" : " Employer ");
+            missingPartiesText += (emmployerREP ? "" : " Employer REP ");
+            
+            if(!((employeeOrg && employeeOrgREP)
+                || (rivalEmployeeOrg && rivalEmployeeOrgREP)
+                || (incumbentEmployeeOrg && incumbentEmployeeOrgREP)
+                || (intervener && intervenerREP)
+                || (petitioner && petitionerREP)
+                || (conversionSchool && conversionSchoolREP)))
+            {
+                //Employee Org and Employee Org REP
+                if(!employeeOrg && !employeeOrgREP) {
+                    missingPartiesText += " Employee Org/REP ";
+                } else if(employeeOrg && !employeeOrgREP) {
+                    missingPartiesText += " Employee Org REP ";
+                } else if(!employeeOrg && employeeOrgREP) {
+                    missingPartiesText += " Employee Org ";
+                }
+
+                //Rival Employee Org and Rival Employee Org REP
+                if(!rivalEmployeeOrg && !rivalEmployeeOrgREP) {
+                    missingPartiesText += " Rival Employee Org/REP ";
+                } else if(rivalEmployeeOrg && !rivalEmployeeOrgREP) {
+                    missingPartiesText += " Rival Employee Org REP ";
+                } else if(!rivalEmployeeOrg && rivalEmployeeOrgREP) {
+                    missingPartiesText += " Rival Employee Org ";
+                }
+
+                //Incumbent Employee Org and Incumbent Employee Org REP
+                if(!incumbentEmployeeOrg && !incumbentEmployeeOrgREP) {
+                    missingPartiesText += " Incumbent Employee Org/REP ";
+                } else if(incumbentEmployeeOrg && !incumbentEmployeeOrgREP) {
+                    missingPartiesText += " Incumbent Employee Org REP ";
+                } else if(!incumbentEmployeeOrg && incumbentEmployeeOrgREP) {
+                    missingPartiesText += " Incumbent Employee Org ";
+                }
+
+                //Intervener and Intervener REP
+                if(!intervener && !intervenerREP) {
+                    missingPartiesText += " Intervener/REP ";
+                } else if(intervener && !intervenerREP) {
+                    missingPartiesText += " Intervener REP ";
+                } else if(!intervener && intervenerREP) {
+                    missingPartiesText += " Intervener ";
+                }
+
+                //Petitioner and Petitioner REP
+                if(!petitioner && !petitionerREP) {
+                    missingPartiesText += " Petitioner/REP ";
+                } else if(petitioner && !petitionerREP) {
+                    missingPartiesText += " Petitioner REP ";
+                } else if(!petitioner && petitionerREP) {
+                    missingPartiesText += " Petitioner ";
+                }
+
+                //Conversion School and Conversion School REP
+                if(!conversionSchool && !conversionSchoolREP) {
+                    missingPartiesText += " Conversion School/REP ";
+                } else if(conversionSchool && !conversionSchoolREP) {
+                    missingPartiesText += " Conversion School REP ";
+                } else if(!conversionSchool && conversionSchoolREP) {
+                    missingPartiesText += " Conversion School ";
+                }
+            }
+           
+            if(missingPartiesText.length() < 125) {
+                missingParties.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
+            } else if(missingPartiesText.length() < 150) {
+                missingParties.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+            } else {
+                missingParties.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
+            }
+            
+            missingParties.setText(missingPartiesText.replace("  ", ", ").trim());
+        }
+    }
+    
     
     public void removeParty() {
         new DeletePartyDialog((JFrame) Global.root.getParent(),

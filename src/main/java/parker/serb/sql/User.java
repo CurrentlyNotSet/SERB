@@ -216,24 +216,24 @@ public class User {
     public static List loadAllHearingPeople() {
         
         List activeUsers = new ArrayList<>();
-        
-        try {
-            
-            Statement stmt = Database.connectToDB().createStatement();
-            
-            String sql = "Select * from Users where hearingPerson = ? and active = 1";
-            
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setBoolean(1, true);
-            
-            ResultSet users = preparedStatement.executeQuery();
-            
-            while(users.next()) {
-                activeUsers.add(users.getString("firstName") + " " + users.getString("lastName"));
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        
+//        try {
+//            
+//            Statement stmt = Database.connectToDB().createStatement();
+//            
+//            String sql = "Select * from Users where hearingPerson = ? and active = 1";
+//            
+//            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+//            preparedStatement.setBoolean(1, true);
+//            
+//            ResultSet users = preparedStatement.executeQuery();
+//            
+//            while(users.next()) {
+//                activeUsers.add(users.getString("firstName") + " " + users.getString("lastName"));
+//            }
+//        } catch (SQLException ex) {
+//            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         return activeUsers;
     }
     
@@ -538,7 +538,7 @@ public class User {
         return userName;    
     }
     
-    public static int getCurrentOwnerID(String userName) {
+    public static int getUserID(String userName) {
         int userID = 0;
         
         String[] parsedUserName = userName.split(" ");
@@ -612,6 +612,30 @@ public class User {
             Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
         }
         return docketSections;
+    }
+    
+    public static List loadREPComboBox() {
+        
+        List activeUsers = new ArrayList<>();
+        
+        try {
+            
+            Statement stmt = Database.connectToDB().createStatement();
+            
+            String sql = "Select * from Users where REPCaseWorker = ? and active = 1";
+            
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setBoolean(1, true);
+            
+            ResultSet users = preparedStatement.executeQuery();
+            
+            while(users.next()) {
+                activeUsers.add(users.getString("firstName") + " " + users.getString("lastName"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return activeUsers;
     }
         
 }
