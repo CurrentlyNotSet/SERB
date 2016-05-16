@@ -282,10 +282,16 @@ public class REPCase {
                     + " status1,"
                     + " [type],"
                     + " bargainingUnitNumber"
-                    + " from REPCase where caseNumber = ?";
+                    + " from REPCase where caseYear = ? AND"
+                    + " caseType = ? AND"
+                    + " caseMonth = ? AND"
+                    + " caseNumber = ?";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, Global.caseNumber);
+            preparedStatement.setString(1, Global.caseYear);
+            preparedStatement.setString(2, Global.caseType);
+            preparedStatement.setString(3, Global.caseMonth);
+            preparedStatement.setString(4, Global.caseNumber);
 
             ResultSet caseHeader = preparedStatement.executeQuery();
             
@@ -442,6 +448,8 @@ public class REPCase {
                     + " SOIReturnInitials = ?,"
                     + " REPClosedCaseDueDate = ?,"
                     + " ActualREPClosedDate = ?,"
+                    + " REPClosedInitials = ?,"
+                    + " ActualClerksClosedDate = ?,"
                     + " ClerksClosedDateInitials = ?"
                     + " where caseYear = ?"
                     + " AND caseType = ?"
@@ -471,11 +479,13 @@ public class REPCase {
             preparedStatement.setString(20, newCaseInformation.SOIReturnInitials);
             preparedStatement.setTimestamp(21, newCaseInformation.REPClosedCaseDueDate);
             preparedStatement.setTimestamp(22, newCaseInformation.actualREPClosedDate);
-            preparedStatement.setString(23, newCaseInformation.clerksClosedDateInitials);
-            preparedStatement.setString(24, Global.caseYear);
-            preparedStatement.setString(25, Global.caseType);
-            preparedStatement.setString(26, Global.caseMonth);
-            preparedStatement.setString(27, Global.caseNumber);
+            preparedStatement.setString(23, newCaseInformation.REPClosedInitials);
+            preparedStatement.setTimestamp(24, newCaseInformation.actualClerksClosedDate);
+            preparedStatement.setString(25, newCaseInformation.clerksClosedDateInitials);
+            preparedStatement.setString(26, Global.caseYear);
+            preparedStatement.setString(27, Global.caseType);
+            preparedStatement.setString(28, Global.caseMonth);
+            preparedStatement.setString(29, Global.caseNumber);
 
             int success = preparedStatement.executeUpdate();
             
@@ -564,16 +574,6 @@ public class REPCase {
                 Activity.addActivty("Changed Employer ID Number from " + oldCaseInformation.employerIDNumber + " to " + newCaseInformation.employerIDNumber, null);
         }
         
-        //DeptInState
-        if(newCaseInformation.deptInState == null && oldCaseInformation.deptInState != null) {
-            Activity.addActivty("Removed " + oldCaseInformation.deptInState + " from Department in State", null);
-        } else if(newCaseInformation.deptInState != null && oldCaseInformation.deptInState == null) {
-            Activity.addActivty("Set Department in State to " + newCaseInformation.deptInState, null);
-        } else if(newCaseInformation.deptInState != null && oldCaseInformation.deptInState != null) {
-            if(!newCaseInformation.deptInState.equals(oldCaseInformation.deptInState)) 
-                Activity.addActivty("Changed Department in State from " + oldCaseInformation.deptInState + " to " + newCaseInformation.deptInState, null);
-        }
-        
         //bargUnitNumber
         if(newCaseInformation.bargainingUnitNumber == null && oldCaseInformation.bargainingUnitNumber != null) {
             Activity.addActivty("Removed " + oldCaseInformation.bargainingUnitNumber + " from Bargaining Unit", null);
@@ -604,16 +604,6 @@ public class REPCase {
         } else if(newCaseInformation.certificationRevoked == false && oldCaseInformation.certificationRevoked == true) {
             Activity.addActivty("Unset Certification Revoke", null);
         }
-        
-//        //Related Cases
-//        if(newCaseInformation.relatedCases == null && oldCaseInformation.relatedCases != null) {
-//            Activity.addActivty("Removed " + oldCaseInformation.relatedCases + " from Related Cases", null);
-//        } else if(newCaseInformation.relatedCases != null && oldCaseInformation.relatedCases == null) {
-//            Activity.addActivty("Set Related Cases to " + newCaseInformation.relatedCases, null);
-//        } else if(newCaseInformation.relatedCases != null && oldCaseInformation.relatedCases != null) {
-//            if(!newCaseInformation.relatedCases.equals(oldCaseInformation.relatedCases)) 
-//                Activity.addActivty("Changed Related Cases from " + oldCaseInformation.relatedCases + " to " + newCaseInformation.relatedCases, null);
-//        }
         
         //file date
         if(newCaseInformation.fileDate == null && oldCaseInformation.fileDate != null) {
@@ -715,6 +705,8 @@ public class REPCase {
                 Activity.addActivty("Changed REP Closed Case Due Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.REPClosedCaseDueDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.REPClosedCaseDueDate.getTime())), null);
         }
         
+        
+        
         //Actual REP Closed Date
         if(newCaseInformation.actualREPClosedDate == null && oldCaseInformation.actualREPClosedDate != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.actualREPClosedDate.getTime())) + " from Actual REP Closed Date", null);
@@ -723,6 +715,26 @@ public class REPCase {
         } else if(newCaseInformation.actualREPClosedDate != null && oldCaseInformation.actualREPClosedDate != null) {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.actualREPClosedDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.actualREPClosedDate.getTime()))))
                 Activity.addActivty("Changed Actual REP Closed Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.actualREPClosedDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.actualREPClosedDate.getTime())), null);
+        }
+        
+        //REP Closed Initials
+        if(newCaseInformation.REPClosedInitials == null && oldCaseInformation.REPClosedInitials != null) {
+            Activity.addActivty("Removed " + oldCaseInformation.REPClosedInitials + " from REP Closed Initials", null);
+        } else if(newCaseInformation.REPClosedInitials != null && oldCaseInformation.REPClosedInitials == null) {
+            Activity.addActivty("Set REP Closed Initials to " + newCaseInformation.REPClosedInitials, null);
+        } else if(newCaseInformation.REPClosedInitials != null && oldCaseInformation.REPClosedInitials != null) {
+            if(!newCaseInformation.REPClosedInitials.equals(oldCaseInformation.REPClosedInitials)) 
+                Activity.addActivty("Changed REP Closed Initials from " + oldCaseInformation.REPClosedInitials + " to " + newCaseInformation.REPClosedInitials, null);
+        }
+        
+        //Actual Clerks Closed Date
+        if(newCaseInformation.actualClerksClosedDate == null && oldCaseInformation.actualClerksClosedDate != null) {
+            Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.actualClerksClosedDate.getTime())) + " from Actual Clerks Closed Date", null);
+        } else if(newCaseInformation.actualClerksClosedDate != null && oldCaseInformation.actualClerksClosedDate == null) {
+            Activity.addActivty("Set Actual Clerks Closed Date to " + Global.mmddyyyy.format(new Date(newCaseInformation.actualClerksClosedDate.getTime())), null);
+        } else if(newCaseInformation.actualClerksClosedDate != null && oldCaseInformation.actualClerksClosedDate != null) {
+            if(!Global.mmddyyyy.format(new Date(oldCaseInformation.actualClerksClosedDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.actualClerksClosedDate.getTime()))))
+                Activity.addActivty("Changed Actual Clerks Closed Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.actualClerksClosedDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.actualClerksClosedDate.getTime())), null);
         }
         
         //Clerks Closed Date Initials

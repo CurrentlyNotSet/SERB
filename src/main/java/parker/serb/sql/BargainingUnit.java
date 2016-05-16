@@ -58,18 +58,18 @@ public class BargainingUnit {
             
             while(employerListRS.next()) {
                 BargainingUnit emp = new BargainingUnit();
-                emp.employerNumber = employerListRS.getString("employerNumber");
-                emp.unitNumber = employerListRS.getString("unitNumber");
-                emp.buEmployerName = employerListRS.getString("buEmployerName");
-                emp.lUnion = employerListRS.getString("lUnion");
-                emp.county = employerListRS.getString("County");
-                emp.unitDescription = employerListRS.getString("unitDescription");
-                emp.caseRefYear = employerListRS.getString("caseRefYear");
-                emp.caseRefSection = employerListRS.getString("caseRefSection");
-                emp.caseRefMonth = employerListRS.getString("caseRefMonth");
-                emp.caseRefSequence = employerListRS.getString("caseRefSequence");
-                emp.local = employerListRS.getString("local");
-                emp.cert = employerListRS.getString("cert");
+                emp.employerNumber = employerListRS.getString("employerNumber") == null ? "" : employerListRS.getString("employerNumber");
+                emp.unitNumber = employerListRS.getString("unitNumber") == null ? "" : employerListRS.getString("unitNumber");
+                emp.buEmployerName = employerListRS.getString("buEmployerName") == null ? "" : employerListRS.getString("buEmployerName");
+                emp.lUnion = employerListRS.getString("lUnion") == null ? "" : employerListRS.getString("lUnion");
+                emp.county = employerListRS.getString("County") == null ? "" : employerListRS.getString("County");
+                emp.unitDescription = employerListRS.getString("unitDescription") == null ? "" : employerListRS.getString("unitDescription");
+                emp.caseRefYear = employerListRS.getString("caseRefYear") == null ? "" : employerListRS.getString("caseRefYear");
+                emp.caseRefSection = employerListRS.getString("caseRefSection") == null ? "" : employerListRS.getString("caseRefSection");
+                emp.caseRefMonth = employerListRS.getString("caseRefMonth") == null ? "" : employerListRS.getString("caseRefMonth");
+                emp.caseRefSequence = employerListRS.getString("caseRefSequence") == null ? "" : employerListRS.getString("caseRefSequence");
+                emp.local = employerListRS.getString("local") == null ? "" : employerListRS.getString("local");
+                emp.cert = employerListRS.getString("cert") == null ? "" : employerListRS.getString("cert");
                 employerList.add(emp);
             }
         } catch (SQLException ex) {

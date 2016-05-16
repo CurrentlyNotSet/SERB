@@ -138,7 +138,7 @@ public class REPCaseSearchData {
             preparedStatement.setString(1, bunnumber);
             preparedStatement.setString(2, county);
             preparedStatement.setString(3, boarddeemed);
-            preparedStatement.setString(4, BargainingUnit.getUnitDescription(bunnumber));
+            preparedStatement.setString(4, bunnumber == null ? "" : BargainingUnit.getUnitDescription(bunnumber));
             preparedStatement.setString(5, Global.caseYear);
             preparedStatement.setString(6, Global.caseType);
             preparedStatement.setString(7, Global.caseMonth);

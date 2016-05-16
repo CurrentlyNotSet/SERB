@@ -31,7 +31,7 @@ public class REPRootPanel extends javax.swing.JPanel {
         jTabbedPane1.remove(4);
         jTabbedPane1.remove(3);
 //        jTabbedPane1.remove(2); //PARTIES
-        jTabbedPane1.remove(1); //INFORMATION
+//        jTabbedPane1.remove(1); //INFORMATION
 //        jTabbedPane1.remove(0); //Activity
         addListeners();
     }
@@ -49,13 +49,13 @@ public class REPRootPanel extends javax.swing.JPanel {
     
     private void addListeners() {
          jTabbedPane1.addChangeListener((ChangeEvent e) -> {
-            rEPCaseInformationPanel2.loadCaseTypes();
-            rEPCaseInformationPanel2.loadStatus();
-            rEPCaseInformationPanel2.loadCurrentOwner();
-            rEPCaseInformationPanel2.loadCountyComboBox();
+//            rEPCaseInformationPanel2.loadCaseTypes();
+//            rEPCaseInformationPanel2.loadStatus();
+//            rEPCaseInformationPanel2.loadCurrentOwner();
+//            rEPCaseInformationPanel2.loadCountyComboBox();
 //            rEPCaseInformationPanel2.loadDepartmentInState();
-            rEPBoardStatusPanel1.loadBoardActionType();
-            rEPBoardStatusPanel1.loadHearingPerson();
+//            rEPBoardStatusPanel1.loadBoardActionType();
+//            rEPBoardStatusPanel1.loadHearingPerson();
             
             if(Global.caseNumber != null) {
                 setButtons();
@@ -252,7 +252,7 @@ public class REPRootPanel extends javax.swing.JPanel {
                     Global.root.enableTabsAfterSave();
                     enableTabs();
                     rEPCaseInformationPanel2.disableUpdate(false);
-                    rEPCaseInformationPanel2.loadInformation();
+                    rEPCaseInformationPanel2.loadCaseInformation();
                 }
                 break;
             case "Parties":
