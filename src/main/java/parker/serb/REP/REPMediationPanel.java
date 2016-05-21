@@ -14,13 +14,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
-import parker.serb.sql.Activity;
 import parker.serb.sql.REPMediation;
-import parker.serb.util.FileService;
-
-//TODO: Investigate File Icon in Table
-//TODO: Add notification for no file with 
-//TODO: Remove the loadAllActivity method to be used with loadActivity(String)
 
 /**
  *
@@ -30,12 +24,8 @@ public class REPMediationPanel extends javax.swing.JPanel {
 
     List mediation;
     
-    /**
-     * Creates new form ActivityPanel
-     */
     public REPMediationPanel() {
         initComponents();
-//        setTableColumnWidths();
         addListeners();
     }
     
@@ -44,17 +34,17 @@ public class REPMediationPanel extends javax.swing.JPanel {
 
             @Override
             public void insertUpdate(DocumentEvent e) {
-//                loadActivity(searchTextBox.getText().trim());
+                mediationSearch(searchTextBox.getText().trim());
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-//                loadActivity(searchTextBox.getText().trim());
+                mediationSearch(searchTextBox.getText().trim());
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-//                loadActivity(searchTextBox.getText().trim());
+                mediationSearch(searchTextBox.getText().trim());
             }
         });
         
@@ -92,32 +82,6 @@ public class REPMediationPanel extends javax.swing.JPanel {
         });
     }
     
-//    private void setTableColumnWidths() {
-//        actvityTable.getColumnModel().getColumn(0).setPreferredWidth(175);
-//        actvityTable.getColumnModel().getColumn(0).setMinWidth(175);
-//        actvityTable.getColumnModel().getColumn(0).setMaxWidth(175);
-//        actvityTable.getColumnModel().getColumn(1).setPreferredWidth(200);
-//        actvityTable.getColumnModel().getColumn(1).setMinWidth(200);
-//        actvityTable.getColumnModel().getColumn(1).setMaxWidth(200);
-//        actvityTable.getColumnModel().getColumn(3).setPreferredWidth(0);
-//        actvityTable.getColumnModel().getColumn(3).setMinWidth(0);
-//        actvityTable.getColumnModel().getColumn(3).setMaxWidth(0);
-//    }
-    
-    private void loadActivity() {
-        
-//        DefaultTableModel model = (DefaultTableModel) mediationTable.getModel();
-//        model.setRowCount(0);
-//        
-//        for (Object activty1 : activty) {
-//            Activity act = (Activity) activty1;
-//            if(act.action.toLowerCase().contains(searchTerm.toLowerCase())
-//                    || act.user.toLowerCase().contains(searchTerm.toLowerCase())) {
-//                model.addRow(new Object[] {act.date, act.action, act.user, ""});
-//            }
-//        }
-    }
-    
     public void removeMediation() {
         new RemoveMediationDialog((JFrame) Global.root.getRootPane().getParent(),
                 true,
@@ -142,6 +106,22 @@ public class REPMediationPanel extends javax.swing.JPanel {
         for (Object mediation1 : mediation) {
             REPMediation act = (REPMediation) mediation1;
             model.addRow(new Object[] {act.id, act.mediationDate, act.mediationType, act.mediator, act.mediationOutcome});
+        }
+    }
+    
+    public void mediationSearch(String search) {
+        
+        DefaultTableModel model = (DefaultTableModel) mediationTable.getModel();
+        model.setRowCount(0);
+        
+        for (Object mediation1 : mediation) {
+            REPMediation act = (REPMediation) mediation1;
+            if(act.mediationType.toLowerCase().contains(search.toLowerCase()) ||
+                act.mediator.toLowerCase().contains(search.toLowerCase()) ||
+                act.mediationOutcome.toLowerCase().contains(search.toLowerCase())) 
+            {
+                model.addRow(new Object[] {act.id, act.mediationDate, act.mediationType, act.mediator, act.mediationOutcome});
+            }
         }
     }
     
