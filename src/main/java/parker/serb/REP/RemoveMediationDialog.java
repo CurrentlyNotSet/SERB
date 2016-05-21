@@ -3,21 +3,23 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package parker.serb.boardmeetings;
+package parker.serb.REP;
 
+import parker.serb.boardmeetings.*;
 import parker.serb.sql.BoardMeeting;
+import parker.serb.sql.REPMediation;
 
 /**
  *
  * @author parkerjohnston
  */
-public class RemoveBoardMeetingDialog extends javax.swing.JDialog {
+public class RemoveMediationDialog extends javax.swing.JDialog {
 
-    String id;
+    int id;
     /**
      * Creates new form RemoveBoardMeetingDialog
      */
-    public RemoveBoardMeetingDialog(java.awt.Frame parent, boolean modal, String passedID) {
+    public RemoveMediationDialog(java.awt.Frame parent, boolean modal, int passedID) {
         super(parent, modal);
         initComponents();
         id = passedID;
@@ -43,10 +45,10 @@ public class RemoveBoardMeetingDialog extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Delete Board Meeting");
+        jLabel1.setText("Delete Mediation");
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Are you sure you want to remove the board meeting?");
+        jLabel2.setText("Are you sure you want to remove the mediation?");
 
         jButton1.setText("Delete");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -95,7 +97,7 @@ public class RemoveBoardMeetingDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        BoardMeeting.removeBoardMeeting(id);
+        REPMediation.deleteMediationByID(id);
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 

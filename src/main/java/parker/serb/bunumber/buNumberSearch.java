@@ -115,15 +115,15 @@ public class buNumberSearch extends javax.swing.JDialog {
         for (Object singleBU : bu) {
             BargainingUnit buInfo = (BargainingUnit) singleBU;
             if((buInfo.employerNumber + "-" + buInfo.unitNumber).contains(searchTextBox.getText().trim()) ||
-//                    buInfo.unitNumber.contains(searchTextBox.getText().trim().toLowerCase()) ||
-                    buInfo.buEmployerName.toLowerCase().contains(searchTextBox.getText().trim().toLowerCase()) ||
-                    buInfo.lUnion.toLowerCase().contains(searchTextBox.getText().trim().toLowerCase()) ||
-                    buInfo.county.toLowerCase().contains(searchTextBox.getText().trim().toLowerCase()) ||
-                    buInfo.unitDescription.toLowerCase().contains(searchTextBox.getText().trim().toLowerCase()) ||
-                    (buInfo.caseRefYear + "-" + buInfo.caseRefSection + "-" + buInfo.caseRefMonth + "-" +
-                    buInfo.caseRefSequence).toLowerCase().contains(searchTextBox.getText().trim().toLowerCase()) ||
-                    buInfo.local.toLowerCase().contains(searchTextBox.getText().trim().toLowerCase()) ||
-                    buInfo.cert.toLowerCase().contains(searchTextBox.getText().trim().toLowerCase())) {
+                buInfo.buEmployerName.toLowerCase().contains(searchTextBox.getText().trim().toLowerCase())
+//                    buInfo.lUnion.toLowerCase().contains(searchTextBox.getText().trim().toLowerCase()) ||
+//                    buInfo.county.toLowerCase().contains(searchTextBox.getText().trim().toLowerCase()) ||
+//                    buInfo.unitDescription.toLowerCase().contains(searchTextBox.getText().trim().toLowerCase()) ||
+//                    (buInfo.caseRefYear + "-" + buInfo.caseRefSection + "-" + buInfo.caseRefMonth + "-" +
+//                    buInfo.caseRefSequence).toLowerCase().contains(searchTextBox.getText().trim().toLowerCase()) ||
+//                    buInfo.local.toLowerCase().contains(searchTextBox.getText().trim().toLowerCase()) ||
+//                    buInfo.cert.toLowerCase().contains(searchTextBox.getText().trim().toLowerCase())
+                ) {
             model.addRow(new Object[] {buInfo.employerNumber + "-" + buInfo.unitNumber,
                 buInfo.buEmployerName,
                 buInfo.lUnion,

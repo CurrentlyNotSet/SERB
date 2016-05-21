@@ -132,9 +132,13 @@ public class REPHeaderPanel extends javax.swing.JPanel {
                     }
                 }
                 employerTextBox.setText(employer);
+                employerTextBox.setCaretPosition(0);
                 employeeOrgTextBox.setText(employeeOrg);
+                employeeOrgTextBox.setCaretPosition(0);
                 incumbentEEOTextBox.setText(incumbentEEO);
+                incumbentEEOTextBox.setCaretPosition(0);
                 rivalEEOTextBox.setText(rivalEEO);
+                rivalEEOTextBox.setCaretPosition(0);
             }
         }
     }

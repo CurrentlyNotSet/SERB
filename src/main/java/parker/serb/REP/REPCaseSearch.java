@@ -244,7 +244,7 @@ public class REPCaseSearch extends javax.swing.JDialog {
             for (int j = 0 ; j < nCol ; j++) {
                 tableData[i][j] = model.getValueAt(i,j);
             }
-        }  
+        }
     }
 
     /**

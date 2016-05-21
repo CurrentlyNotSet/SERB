@@ -72,7 +72,7 @@ public class Employer {
                 Employer emp = new Employer();
                 emp.county = employerListRS.getString("County");
                 emp.employerName = employerListRS.getString("employerName");
-                emp.employerIDNumber = employerListRS.getString("EmployerIDNumber");
+                emp.employerIDNumber = employerListRS.getString("EmployerIDNumber") == null ? "" : employerListRS.getString("EmployerIDNumber");
                 employerList.add(emp);
             }
         } catch (SQLException ex) {

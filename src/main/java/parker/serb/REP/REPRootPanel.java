@@ -26,7 +26,7 @@ public class REPRootPanel extends javax.swing.JPanel {
     public REPRootPanel() {
         initComponents();
 //        jTabbedPane1.remove(7); //NOTES
-        jTabbedPane1.remove(6);
+//        jTabbedPane1.remove(6); //Mediation
         jTabbedPane1.remove(5);
         jTabbedPane1.remove(4);
         jTabbedPane1.remove(3);
@@ -88,6 +88,7 @@ public class REPRootPanel extends javax.swing.JPanel {
             case "Elections":
                 break;
             case "Mediation":
+                rEPMediationPanel1.loadAllMediations();
                 break;
             case "Notes":
                 notesPanel2.loadInformation();
@@ -139,9 +140,9 @@ public class REPRootPanel extends javax.swing.JPanel {
                 break;
             case "Mediation":
                 System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
-                Global.root.getjButton2().setText("Add Med.");
+                Global.root.getjButton2().setText("Add Mediation");
                 Global.root.getjButton2().setEnabled(true);
-                Global.root.getjButton9().setVisible(false);
+                Global.root.getjButton9().setVisible(true);
                 break;
             case "Notes":
                 System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
@@ -219,7 +220,8 @@ public class REPRootPanel extends javax.swing.JPanel {
             case "Elections":
                 break;
             case "Mediation":
-                
+                new REPAddMediationDialog((JFrame) Global.root.getParent(), true);
+                rEPMediationPanel1.loadAllMediations();
                 break;
             case "Notes":
                 if(buttonText.equals("Update")) {
@@ -279,6 +281,7 @@ public class REPRootPanel extends javax.swing.JPanel {
             case "Elections":
                 break;
             case "Mediation":
+                rEPMediationPanel1.removeMediation();
                 break;
             case "Notes":
                 cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);

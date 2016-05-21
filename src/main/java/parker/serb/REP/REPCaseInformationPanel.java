@@ -119,8 +119,6 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         actualClerksClosedDate.setBackground(Color.WHITE);
         clerksClosedDateInitialsTextBox.setEnabled(true);
         clerksClosedDateInitialsTextBox.setBackground(Color.WHITE);
-        
-//        loadInformation();
     }
     
     void disableUpdate(boolean runSave) {
@@ -136,17 +134,12 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         status2ComboBox.setBackground(new Color(238,238,238));
         currentOwnerComboBox.setEnabled(false);
         currentOwnerComboBox.setBackground(new Color(238,238,238));
-//        departmentInStateComboBox.setEnabled(false);
-//        departmentInStateComboBox.setBackground(new Color(238,238,238));
         
         countyComboBox.setEnabled(false);
         employerIDNumberTextBox.setEnabled(false);
         employerIDNumberTextBox.setBackground(new Color(238,238,238));
         bargainingUnitNumberTextBox.setEnabled(false);
         bargainingUnitNumberTextBox.setBackground(new Color(238,238,238));
-//        bargainingUnitNameTextBox.setEnabled(false);
-//        bargainingUnitNameTextBox.setBackground(new Color(238,238,238));
-        
         
         boardCertifiedCheckBox.setEnabled(false);
         deemedCertifiedCheckBox.setEnabled(false);
@@ -476,16 +469,12 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         jLabel9.setText("Related Cases:");
 
         caseTypeComboBox.setBackground(new java.awt.Color(255, 255, 255));
-        caseTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         caseTypeComboBox.setEnabled(false);
 
-        status1ComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         status1ComboBox.setEnabled(false);
 
-        status2ComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         status2ComboBox.setEnabled(false);
 
-        currentOwnerComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         currentOwnerComboBox.setEnabled(false);
 
         employerIDNumberTextBox.setBackground(new java.awt.Color(238, 238, 238));
@@ -545,7 +534,6 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
             }
         });
 
-        countyComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         countyComboBox.setEnabled(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -924,7 +912,9 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
                 employerIDNumberTextBox.setText(search.getEmployerNumber());
                 search.dispose();
             } else {
-                new employerDetail((JFrame) Global.root.getRootPane().getParent(), true, employerIDNumberTextBox.getText().trim());
+                if(employerIDNumberTextBox.getText().equals("")) {
+                    new employerDetail((JFrame) Global.root.getRootPane().getParent(), true, employerIDNumberTextBox.getText().trim());
+                }
             }
         }
     }//GEN-LAST:event_employerIDNumberTextBoxMouseClicked
@@ -992,6 +982,10 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
                 buNumberSearch search = new buNumberSearch((JFrame) Global.root.getRootPane().getParent(), true, employerIDNumberTextBox.getText().trim(), bargainingUnitNumberTextBox.getText().trim());
                 bargainingUnitNumberTextBox.setText(search.getBuNumber());
                 bargainingUnitNameTextBox.setText(search.getUnitDesc());
+                bargainingUnitNameTextBox.setCaretPosition(0);
+                if(employerIDNumberTextBox.getText().equals("")) {
+                    employerIDNumberTextBox.setText(search.getBuNumber().split("-")[0]);
+                }
                 search.dispose();
             } else {
 //                new employerDetail((JFrame) Global.root.getRootPane().getParent(), true, employerIDNumberTextBox.getText().trim());
