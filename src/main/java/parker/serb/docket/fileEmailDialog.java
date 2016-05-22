@@ -216,6 +216,7 @@ public class fileEmailDialog extends javax.swing.JDialog {
                 
         switch (section) {
             case "ULP":  userList = User.loadULPComboBox();
+            case "REP":  userList = User.loadREPComboBox();
         }
         
         toComboBox.setMaximumRowCount(6);

@@ -1014,6 +1014,5 @@ public class ULPCase {
         }
         
         return firstCase;
-        
     }
 }

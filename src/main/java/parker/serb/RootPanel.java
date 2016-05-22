@@ -202,21 +202,31 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton9.setVisible(true);
                 break;
             case "REP":
+                jButton1.setSize(dim);
+                jButton1.setMinimumSize(dim);
+                jButton1.setMaximumSize(dim);
                 jButton1.setText("New Case");
                 jButton1.setEnabled(true);
+                jButton2.setSize(dim);
+                jButton2.setMinimumSize(dim);
+                jButton2.setMaximumSize(dim);
                 jButton2.setVisible(true);
                 jButton2.setText("Update");
                 jButton2.setEnabled(false);
-                jButton3.setVisible(true);
+                jButton3.setVisible(false);
                 jButton3.setText("Letters");
-                jButton4.setVisible(true);
+                jButton4.setVisible(false);
                 jButton4.setText("Reports");
-                jButton5.setVisible(true);
+                jButton5.setVisible(false);
                 jButton5.setText("Queue");
-                jButton6.setVisible(true);
+                jButton6.setVisible(false);
                 jButton6.setText("Public Records");
                 jButton7.setVisible(false);
                 jButton8.setVisible(false);
+                jButton9.setSize(dim);
+                jButton9.setMinimumSize(dim);
+                jButton9.setMaximumSize(dim);
+                jButton9.setEnabled(false);
                 jButton9.setVisible(false);
                 break;
             case "MED":
@@ -225,13 +235,13 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton2.setVisible(true);
                 jButton2.setText("Update");
                 jButton2.setEnabled(false);
-                jButton3.setVisible(true);
+                jButton3.setVisible(false);
                 jButton3.setText("Letters");
-                jButton4.setVisible(true);
+                jButton4.setVisible(false);
                 jButton4.setText("Reports");
-                jButton5.setVisible(true);
+                jButton5.setVisible(false);
                 jButton5.setText("Queue");
-                jButton6.setVisible(true);
+                jButton6.setVisible(false);
                 jButton6.setText("Public Records");
                 jButton7.setVisible(false);
                 jButton8.setVisible(false);
@@ -261,7 +271,7 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton9.setSize(dim);
                 jButton9.setMinimumSize(dim);
                 jButton9.setMaximumSize(dim);
-                jButton9.setVisible(true);
+                jButton9.setVisible(false);
                 jButton9.setEnabled(false);
                 break;
             case "ORG":

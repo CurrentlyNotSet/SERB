@@ -19,8 +19,13 @@ import parker.serb.util.SlackNotification;
  */
 public class REPCase {
     
+    public int id;
+    public boolean active;
+    public String caseYear;
+    public String caseType; 
+    public String caseMonth;
     public String caseNumber;
-    public Timestamp fileDate;
+    public String type;
     public String status1;
     public String status2;
     public int currentOwnerID;
@@ -31,8 +36,7 @@ public class REPCase {
     public boolean boardCertified;
     public boolean deemedCertified;
     public boolean certificationRevoked;
-    public String relatedCases;
-    public String caseType;
+    public Timestamp fileDate;
     public Timestamp amendedFiliingDate;
     public Timestamp finalBoardDate;
     public Timestamp registrationLetterSent;
@@ -43,27 +47,29 @@ public class REPCase {
     public String SOIReturnInitials;
     public Timestamp REPClosedCaseDueDate;
     public Timestamp actualREPClosedDate;
+    public String REPClosedInitials;
+    public Timestamp actualClerksClosedDate;
     public String clerksClosedDateInitials;
     
-    /**
-     * Created an empty REPCase Table
-     */
-    public static void createTable() {
-        try {
-            Statement stmt = Database.connectToDB().createStatement();
-            
-            String sql = "CREATE TABLE REPCase" +
-                    "(id int IDENTITY (1,1) NOT NULL, " +
-                    " active varchar(1) NOT NULL, " + 
-                    " caseNumber varchar(16) NOT NULL, " +
-                    " note text NOT NULL, " +
-                    " PRIMARY KEY (id))"; 
-            
-            stmt.executeUpdate(sql);
-        } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-        } 
-    }
+//    /**
+//     * Created an empty REPCase Table
+//     */
+//    public static void createTable() {
+//        try {
+//            Statement stmt = Database.connectToDB().createStatement();
+//            
+//            String sql = "CREATE TABLE REPCase" +
+//                    "(id int IDENTITY (1,1) NOT NULL, " +
+//                    " active varchar(1) NOT NULL, " + 
+//                    " caseNumber varchar(16) NOT NULL, " +
+//                    " note text NOT NULL, " +
+//                    " PRIMARY KEY (id))"; 
+//            
+//            stmt.executeUpdate(sql);
+//        } catch (SQLException ex) {
+//            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+//        } 
+//    }
     
     
 //    private static REPCase getCaseInformation(String caseNumber) {
@@ -95,19 +101,37 @@ public class REPCase {
      * @return list of rep case numbers
      */
     public static List loadREPCaseNumbers() {
+        
+        //TODO: Limit the load to the last 6 months of filed dates
+        
         List caseNumberList = new ArrayList<>();
             
         try {
             Statement stmt = Database.connectToDB().createStatement();
 
-            String sql = "Select TOP 250 CaseNumber from REPCase Order By CaseNumber DESC";
+            String sql = "Select TOP 250"
+                    + " caseYear,"
+                    + " caseType,"
+                    + " caseMonth,"
+                    + " caseNumber"
+                    + " from REPCase"
+                    + " Order By CaseYear DESC,"
+                    + " CaseNumber DESC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
             ResultSet caseNumberRS = preparedStatement.executeQuery();
             
             while(caseNumberRS.next()) {
-                caseNumberList.add(caseNumberRS.getString("caseNumber"));
+                String createdCaseNumber = caseNumberRS.getString("caseYear")
+                        + "-" +
+                        caseNumberRS.getString("caseType")
+                        + "-" +
+                        caseNumberRS.getString("caseMonth")
+                        + "-" +
+                        caseNumberRS.getString("caseNumber");
+                        
+                caseNumberList.add(createdCaseNumber);
             }
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
@@ -115,28 +139,28 @@ public class REPCase {
         return caseNumberList;
     }
     
-    public static List loadREPCases(int limit) {
-        List caseNumberList = new ArrayList<>();
-            
-        try {
-            Statement stmt = Database.connectToDB().createStatement();
-
-            String sql = "Select TOP " + limit + " * from REPCase Order By CaseNumber DESC";
-
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-
-            ResultSet caseNumberRS = preparedStatement.executeQuery();
-            
-            while(caseNumberRS.next()) {
-                REPCase repCase = new REPCase();
-                repCase.caseNumber = caseNumberRS.getString("caseNumber");
-                caseNumberList.add(repCase);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return caseNumberList;
-    }
+//    public static List loadREPCases(int limit) {
+//        List caseNumberList = new ArrayList<>();
+//            
+//        try {
+//            Statement stmt = Database.connectToDB().createStatement();
+//
+//            String sql = "Select TOP " + limit + " * from REPCase Order By CaseNumber DESC";
+//
+//            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+//
+//            ResultSet caseNumberRS = preparedStatement.executeQuery();
+//            
+//            while(caseNumberRS.next()) {
+//                REPCase repCase = new REPCase();
+//                repCase.caseNumber = caseNumberRS.getString("caseNumber");
+//                caseNumberList.add(repCase);
+//            }
+//        } catch (SQLException ex) {
+//            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return caseNumberList;
+//    }
     
     /**
      * Loads the notes that are related to the case
@@ -148,10 +172,18 @@ public class REPCase {
         try {
             Statement stmt = Database.connectToDB().createStatement();
 
-            String sql = "Select Note from REPCase where CaseNumber = ?";
+            String sql = "Select Note"
+                    + " from REPCase"
+                    + " where caseYear = ?"
+                    + " and caseType = ?"
+                    + " and caseMonth = ?"
+                    + " and caseNumber = ?";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, Global.caseNumber);
+            preparedStatement.setString(1, Global.caseYear);
+            preparedStatement.setString(2, Global.caseType);
+            preparedStatement.setString(3, Global.caseMonth);
+            preparedStatement.setString(4, Global.caseNumber);
 
             ResultSet caseNumberRS = preparedStatement.executeQuery();
             
@@ -169,23 +201,28 @@ public class REPCase {
      * Updates the note that is related to the case number
      * @param note the new note value to be stored
      */
-    public static void updateNote(String newNote, String oldNote) {
+    public static void updateNote(String note) {
         try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Update REPCase"
+                    + " set note = ?"
+                    + " where caseYear = ?"
+                    + " and caseType = ?"
+                    + " and caseMonth = ?"
+                    + " and caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, note);
+            preparedStatement.setString(2, Global.caseYear);
+            preparedStatement.setString(3, Global.caseType);
+            preparedStatement.setString(4, Global.caseMonth);
+            preparedStatement.setString(5, Global.caseNumber);
+
+            preparedStatement.executeUpdate();
             
-            if(!newNote.equals(oldNote)) {
-                Statement stmt = Database.connectToDB().createStatement();
-
-                String sql = "Update REPCase set note = ? where CaseNumber = ?";
-
-                PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-                preparedStatement.setString(1, newNote);
-                preparedStatement.setString(2, Global.caseNumber);
-
-                preparedStatement.executeUpdate();
-
-                Audit.addAuditEntry("Updated Note for " + Global.caseNumber);
-                Activity.addActivty("Updated Note", null);
-            }
+            Audit.addAuditEntry("Updated Note for " + Global.caseNumber);
+            Activity.addActivty("Updated Note", null);
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -195,24 +232,35 @@ public class REPCase {
      * Creates a new REPCase entry
      * @param caseNumber the case number to be created 
      */
-    public static void createCase(String caseNumber) {
+    public static void createCase(String caseYear, String caseType, String caseMonth, String caseNumber) {
         try {
             Statement stmt = Database.connectToDB().createStatement();
 
-            String sql = "Insert into REPCase (CaseNumber, FileDate) Values (?,?)";
+            String sql = "Insert into REPCase (CaseYear, CaseType, CaseMonth, CaseNumber, FileDate) Values (?,?,?,?,?)";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, caseNumber);
-            preparedStatement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
+            preparedStatement.setString(1, caseYear);
+            preparedStatement.setString(2, caseType);
+            preparedStatement.setString(3, caseMonth);
+            preparedStatement.setString(4, caseNumber);
+            preparedStatement.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
 
             int success = preparedStatement.executeUpdate();
             
             if(success == 1) {
-//                SlackNotification.sendNotification("Case " + caseNumber + " Created");
-//                CaseNumber.updateNextCaseNumber(caseNumber);
-//                Activity.addNewCaseActivty(caseNumber);
+                String fullCaseNumber = caseYear
+                        + "-"
+                        + caseType
+                        + "-"
+                        + caseMonth
+                        + "-"
+                        + caseNumber;
+                        
+                CaseNumber.updateNextCaseNumber(caseYear, caseType, String.valueOf(Integer.valueOf(caseNumber) + 1));
+                Audit.addAuditEntry("Created Case: " + fullCaseNumber);
+                Activity.addNewCaseActivty(fullCaseNumber, "Case was Filed and Started");
                 Global.root.getrEPHeaderPanel1().loadCases();
-                Global.root.getrEPHeaderPanel1().getjComboBox2().setSelectedItem(caseNumber); 
+                Global.root.getrEPHeaderPanel1().getjComboBox2().setSelectedItem(fullCaseNumber); 
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex.getMessage());
@@ -229,10 +277,21 @@ public class REPCase {
         try {
             Statement stmt = Database.connectToDB().createStatement();
 
-            String sql = "Select fileDate, status1, courtClosedDate, caseType, bargainingUnitNumber from REPCase where caseNumber = ?";
+            String sql = "Select fileDate,"
+                    + " courtClosedDate,"
+                    + " status1,"
+                    + " [type],"
+                    + " bargainingUnitNumber"
+                    + " from REPCase where caseYear = ? AND"
+                    + " caseType = ? AND"
+                    + " caseMonth = ? AND"
+                    + " caseNumber = ?";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, Global.caseNumber);
+            preparedStatement.setString(1, Global.caseYear);
+            preparedStatement.setString(2, Global.caseType);
+            preparedStatement.setString(3, Global.caseMonth);
+            preparedStatement.setString(4, Global.caseNumber);
 
             ResultSet caseHeader = preparedStatement.executeQuery();
             
@@ -241,7 +300,7 @@ public class REPCase {
                 rep.fileDate = caseHeader.getTimestamp("fileDate");
                 rep.courtClosedDate = caseHeader.getTimestamp("courtClosedDate");
                 rep.status1 = caseHeader.getString("status1");
-                rep.caseType = caseHeader.getString("caseType");
+                rep.type = caseHeader.getString("type");
                 rep.bargainingUnitNumber = caseHeader.getString("bargainingUnitNumber");
             }
                 
@@ -258,7 +317,7 @@ public class REPCase {
             Statement stmt = Database.connectToDB().createStatement();
 
             String sql = "Select"
-                    + " caseType,"
+                    + " [type],"
                     + " status1,"
                     + " status2,"
                     + " currentOwnerID,"
@@ -269,7 +328,6 @@ public class REPCase {
                     + " boardCertified,"
                     + " deemedCertified,"
                     + " certificationRevoked,"
-                    + " relatedCases,"
                     + " fileDate,"
                     + " amendedFilingDate,"
                     + " finalBoardDate,"
@@ -280,18 +338,26 @@ public class REPCase {
                     + " actualSOIReturnDate,"
                     + " SOIReturnInitials,"
                     + " REPClosedCaseDueDate,"
-                    + " ActualREPClosedDate,"
-                    + " ClerksClosedDateInitials"
-                    + " from REPCase where caseNumber = ?";
+                    + " actualREPClosedDate,"
+                    + " REPClosedInitials,"
+                    + " actualClerksClosedDate,"
+                    + " clerksClosedDateInitials"
+                    + " from REPCase where caseYear = ? "
+                    + " AND caseType = ? "
+                    + " AND caseMonth = ? "
+                    + " AND caseNumber = ?";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, Global.caseNumber);
+            preparedStatement.setString(1, Global.caseYear);
+            preparedStatement.setString(2, Global.caseType);
+            preparedStatement.setString(3, Global.caseMonth);
+            preparedStatement.setString(4, Global.caseNumber);
 
             ResultSet caseInformation = preparedStatement.executeQuery();
             
             if(caseInformation.next()) {
                 rep = new REPCase();
-                rep.caseType = caseInformation.getString("caseType");
+                rep.type = caseInformation.getString("type");
                 rep.status1 = caseInformation.getString("status1");
                 rep.status2 = caseInformation.getString("status2");
                 rep.currentOwnerID = caseInformation.getInt("currentOwnerID");
@@ -302,7 +368,7 @@ public class REPCase {
                 rep.boardCertified = caseInformation.getBoolean("boardCertified");
                 rep.deemedCertified = caseInformation.getBoolean("deemedCertified");
                 rep.certificationRevoked = caseInformation.getBoolean("certificationRevoked");
-                rep.relatedCases = caseInformation.getString("relatedCases");
+                
                 rep.fileDate = caseInformation.getTimestamp("fileDate");
                 rep.amendedFiliingDate = caseInformation.getTimestamp("amendedFilingDate");
                 rep.finalBoardDate = caseInformation.getTimestamp("finalBoardDate");
@@ -314,10 +380,12 @@ public class REPCase {
                 rep.SOIReturnInitials = caseInformation.getString("SOIReturnInitials");
                 rep.REPClosedCaseDueDate = caseInformation.getTimestamp("REPClosedCaseDueDate");
                 rep.actualREPClosedDate = caseInformation.getTimestamp("actualREPClosedDate");
+                rep.REPClosedInitials = caseInformation.getString("REPClosedInitials");
+                rep.actualClerksClosedDate= caseInformation.getTimestamp("actualClerksClosedDate");
                 rep.clerksClosedDateInitials = caseInformation.getString("ClerksClosedDateInitials");
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+//            SlackNotification.sendNotification(ex.getMessage());
         }
         return rep;
     }
@@ -328,37 +396,37 @@ public class REPCase {
      * @param caseNumber
      * @param duplicateCase 
      */
-    public static void createDuplicateCase(String caseNumber, String duplicateCase) {
-        try {
-            Statement stmt = Database.connectToDB().createStatement();
-
-            String sql = "Select * from REPCase where caseNumber = ?";
-
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, duplicateCase);
-
-            int success = preparedStatement.executeUpdate();
-            
-            if(success == 1) {
-//                SlackNotification.sendNotification("Case " + caseNumber + " Created");
-//                CaseNumber.updateNextCaseNumber(caseNumber);
-//                Activity.addNewCaseActivty(caseNumber);
-                Global.root.getrEPHeaderPanel1().loadCases();
-                Global.root.getrEPHeaderPanel1().getjComboBox2().setSelectedItem(caseNumber); 
-            } else {
-                SlackNotification.sendNotification("Case " + caseNumber + " Does not exist");
-            }
-        } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
-        }
-    }
+//    public static void createDuplicateCase(String caseNumber, String duplicateCase) {
+//        try {
+//            Statement stmt = Database.connectToDB().createStatement();
+//
+//            String sql = "Select * from REPCase where caseNumber = ?";
+//
+//            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+//            preparedStatement.setString(1, duplicateCase);
+//
+//            int success = preparedStatement.executeUpdate();
+//            
+//            if(success == 1) {
+////                SlackNotification.sendNotification("Case " + caseNumber + " Created");
+////                CaseNumber.updateNextCaseNumber(caseNumber);
+////                Activity.addNewCaseActivty(caseNumber);
+//                Global.root.getrEPHeaderPanel1().loadCases();
+//                Global.root.getrEPHeaderPanel1().getjComboBox2().setSelectedItem(caseNumber); 
+//            } else {
+//                SlackNotification.sendNotification("Case " + caseNumber + " Does not exist");
+//            }
+//        } catch (SQLException ex) {
+//            SlackNotification.sendNotification(ex.getMessage());
+//        }
+//    }
     
     public static void updateCaseInformation(REPCase newCaseInformation, REPCase caseInformation) {
         try {
             Statement stmt = Database.connectToDB().createStatement();
 
              String sql = "Update REPCase set"
-                    + " caseType = ?,"
+                    + " type = ?,"
                     + " status1 = ?,"
                     + " status2 = ?,"
                     + " currentOwnerID = ?,"
@@ -369,7 +437,6 @@ public class REPCase {
                     + " boardCertified = ?,"
                     + " deemedCertified = ?,"
                     + " certificationRevoked = ?,"
-                    + " relatedCases = ?,"
                     + " fileDate = ?,"
                     + " amendedFilingDate = ?,"
                     + " finalBoardDate = ?,"
@@ -381,11 +448,16 @@ public class REPCase {
                     + " SOIReturnInitials = ?,"
                     + " REPClosedCaseDueDate = ?,"
                     + " ActualREPClosedDate = ?,"
+                    + " REPClosedInitials = ?,"
+                    + " ActualClerksClosedDate = ?,"
                     + " ClerksClosedDateInitials = ?"
-                    + " where caseNumber = ?";
+                    + " where caseYear = ?"
+                    + " AND caseType = ?"
+                    + " AND caseMonth = ? "
+                    + " AND caseNumber = ?";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, newCaseInformation.caseType);
+            preparedStatement.setString(1, newCaseInformation.type);
             preparedStatement.setString(2, newCaseInformation.status1);
             preparedStatement.setString(3, newCaseInformation.status2);
             preparedStatement.setInt(4, newCaseInformation.currentOwnerID);
@@ -396,46 +468,60 @@ public class REPCase {
             preparedStatement.setBoolean(9, newCaseInformation.boardCertified);
             preparedStatement.setBoolean(10, newCaseInformation.deemedCertified);
             preparedStatement.setBoolean(11, newCaseInformation.certificationRevoked);
-            preparedStatement.setString(12, newCaseInformation.relatedCases);
-            preparedStatement.setTimestamp(13, newCaseInformation.fileDate);
-            preparedStatement.setTimestamp(14, newCaseInformation.amendedFiliingDate);
-            preparedStatement.setTimestamp(15, newCaseInformation.finalBoardDate);
-            preparedStatement.setTimestamp(16, newCaseInformation.registrationLetterSent);
-            preparedStatement.setTimestamp(17, newCaseInformation.dateOfAppeal);
-            preparedStatement.setTimestamp(18, newCaseInformation.courtClosedDate);
-            preparedStatement.setTimestamp(19, newCaseInformation.returnSOIDueDate);
-            preparedStatement.setTimestamp(20, newCaseInformation.actualSOIReturnDate);
-            preparedStatement.setString(21, newCaseInformation.SOIReturnInitials);
-            preparedStatement.setTimestamp(22, newCaseInformation.REPClosedCaseDueDate);
-            preparedStatement.setTimestamp(23, newCaseInformation.actualREPClosedDate);
-            preparedStatement.setString(24, newCaseInformation.clerksClosedDateInitials);
-            preparedStatement.setString(25, Global.caseNumber);
+            preparedStatement.setTimestamp(12, newCaseInformation.fileDate);
+            preparedStatement.setTimestamp(13, newCaseInformation.amendedFiliingDate);
+            preparedStatement.setTimestamp(14, newCaseInformation.finalBoardDate);
+            preparedStatement.setTimestamp(15, newCaseInformation.registrationLetterSent);
+            preparedStatement.setTimestamp(16, newCaseInformation.dateOfAppeal);
+            preparedStatement.setTimestamp(17, newCaseInformation.courtClosedDate);
+            preparedStatement.setTimestamp(18, newCaseInformation.returnSOIDueDate);
+            preparedStatement.setTimestamp(19, newCaseInformation.actualSOIReturnDate);
+            preparedStatement.setString(20, newCaseInformation.SOIReturnInitials);
+            preparedStatement.setTimestamp(21, newCaseInformation.REPClosedCaseDueDate);
+            preparedStatement.setTimestamp(22, newCaseInformation.actualREPClosedDate);
+            preparedStatement.setString(23, newCaseInformation.REPClosedInitials);
+            preparedStatement.setTimestamp(24, newCaseInformation.actualClerksClosedDate);
+            preparedStatement.setString(25, newCaseInformation.clerksClosedDateInitials);
+            preparedStatement.setString(26, Global.caseYear);
+            preparedStatement.setString(27, Global.caseType);
+            preparedStatement.setString(28, Global.caseMonth);
+            preparedStatement.setString(29, Global.caseNumber);
 
             int success = preparedStatement.executeUpdate();
             
             if(success == 1) {
-                
                 detailedCaseInformationSaveInformation(newCaseInformation, caseInformation);
-                
-                
-//                if(!Global.mmddyyyy.format(new Date(caseInformation.fileDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.fileDate.getTime())))) {
-//                    Activity.addActivty("Changed File Date from " + Global.mmddyyyy.format(new Date(caseInformation.fileDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.fileDate.getTime())), null);
-//                }
+                REPCaseSearchData.updateCaseEntryFromCaseInformation(
+                        newCaseInformation.bargainingUnitNumber,
+                        newCaseInformation.county,
+                        getCertificationText(newCaseInformation));
             } 
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+//            SlackNotification.sendNotification(ex.getMessage());
+        }
+    }
+    
+    private static String getCertificationText(REPCase newCase) {
+        if(newCase.boardCertified) {
+            return "Board";
+        } else if(newCase.deemedCertified) {
+            return "Deemed";
+        } else if(newCase.certificationRevoked) {
+            return "Cert Revoked";
+        } else {
+            return "";
         }
     }
     
     private static void detailedCaseInformationSaveInformation(REPCase newCaseInformation, REPCase oldCaseInformation) {
         //caseType
-        if(newCaseInformation.caseType == null && oldCaseInformation.caseType != null) {
-            Activity.addActivty("Removed " + oldCaseInformation.caseType + " from Case Type", null);
-        } else if(newCaseInformation.caseType != null && oldCaseInformation.caseType == null) {
-            Activity.addActivty("Set Case Type to " + newCaseInformation.caseType, null);
-        } else if(newCaseInformation.caseType != null && oldCaseInformation.caseType != null) {
-            if(!newCaseInformation.caseType.equals(oldCaseInformation.caseType)) 
-                Activity.addActivty("Changed Case Type from " + oldCaseInformation.caseType + " to " + newCaseInformation.caseType, null);
+        if(newCaseInformation.type == null && oldCaseInformation.type != null) {
+            Activity.addActivty("Removed " + oldCaseInformation.type + " from Case Type", null);
+        } else if(newCaseInformation.type != null && oldCaseInformation.type == null) {
+            Activity.addActivty("Set Case Type to " + newCaseInformation.type, null);
+        } else if(newCaseInformation.type != null && oldCaseInformation.type != null) {
+            if(!newCaseInformation.type.equals(oldCaseInformation.type)) 
+                Activity.addActivty("Changed Case Type from " + oldCaseInformation.type + " to " + newCaseInformation.type, null);
         }
         
         //status1
@@ -488,16 +574,6 @@ public class REPCase {
                 Activity.addActivty("Changed Employer ID Number from " + oldCaseInformation.employerIDNumber + " to " + newCaseInformation.employerIDNumber, null);
         }
         
-        //DeptInState
-        if(newCaseInformation.deptInState == null && oldCaseInformation.deptInState != null) {
-            Activity.addActivty("Removed " + oldCaseInformation.deptInState + " from Department in State", null);
-        } else if(newCaseInformation.deptInState != null && oldCaseInformation.deptInState == null) {
-            Activity.addActivty("Set Department in State to " + newCaseInformation.deptInState, null);
-        } else if(newCaseInformation.deptInState != null && oldCaseInformation.deptInState != null) {
-            if(!newCaseInformation.deptInState.equals(oldCaseInformation.deptInState)) 
-                Activity.addActivty("Changed Department in State from " + oldCaseInformation.deptInState + " to " + newCaseInformation.deptInState, null);
-        }
-        
         //bargUnitNumber
         if(newCaseInformation.bargainingUnitNumber == null && oldCaseInformation.bargainingUnitNumber != null) {
             Activity.addActivty("Removed " + oldCaseInformation.bargainingUnitNumber + " from Bargaining Unit", null);
@@ -527,16 +603,6 @@ public class REPCase {
             Activity.addActivty("Set Certification Revoked", null);
         } else if(newCaseInformation.certificationRevoked == false && oldCaseInformation.certificationRevoked == true) {
             Activity.addActivty("Unset Certification Revoke", null);
-        }
-        
-        //Related Cases
-        if(newCaseInformation.relatedCases == null && oldCaseInformation.relatedCases != null) {
-            Activity.addActivty("Removed " + oldCaseInformation.relatedCases + " from Related Cases", null);
-        } else if(newCaseInformation.relatedCases != null && oldCaseInformation.relatedCases == null) {
-            Activity.addActivty("Set Related Cases to " + newCaseInformation.relatedCases, null);
-        } else if(newCaseInformation.relatedCases != null && oldCaseInformation.relatedCases != null) {
-            if(!newCaseInformation.relatedCases.equals(oldCaseInformation.relatedCases)) 
-                Activity.addActivty("Changed Related Cases from " + oldCaseInformation.relatedCases + " to " + newCaseInformation.relatedCases, null);
         }
         
         //file date
@@ -639,6 +705,8 @@ public class REPCase {
                 Activity.addActivty("Changed REP Closed Case Due Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.REPClosedCaseDueDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.REPClosedCaseDueDate.getTime())), null);
         }
         
+        
+        
         //Actual REP Closed Date
         if(newCaseInformation.actualREPClosedDate == null && oldCaseInformation.actualREPClosedDate != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.actualREPClosedDate.getTime())) + " from Actual REP Closed Date", null);
@@ -647,6 +715,26 @@ public class REPCase {
         } else if(newCaseInformation.actualREPClosedDate != null && oldCaseInformation.actualREPClosedDate != null) {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.actualREPClosedDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.actualREPClosedDate.getTime()))))
                 Activity.addActivty("Changed Actual REP Closed Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.actualREPClosedDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.actualREPClosedDate.getTime())), null);
+        }
+        
+        //REP Closed Initials
+        if(newCaseInformation.REPClosedInitials == null && oldCaseInformation.REPClosedInitials != null) {
+            Activity.addActivty("Removed " + oldCaseInformation.REPClosedInitials + " from REP Closed Initials", null);
+        } else if(newCaseInformation.REPClosedInitials != null && oldCaseInformation.REPClosedInitials == null) {
+            Activity.addActivty("Set REP Closed Initials to " + newCaseInformation.REPClosedInitials, null);
+        } else if(newCaseInformation.REPClosedInitials != null && oldCaseInformation.REPClosedInitials != null) {
+            if(!newCaseInformation.REPClosedInitials.equals(oldCaseInformation.REPClosedInitials)) 
+                Activity.addActivty("Changed REP Closed Initials from " + oldCaseInformation.REPClosedInitials + " to " + newCaseInformation.REPClosedInitials, null);
+        }
+        
+        //Actual Clerks Closed Date
+        if(newCaseInformation.actualClerksClosedDate == null && oldCaseInformation.actualClerksClosedDate != null) {
+            Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.actualClerksClosedDate.getTime())) + " from Actual Clerks Closed Date", null);
+        } else if(newCaseInformation.actualClerksClosedDate != null && oldCaseInformation.actualClerksClosedDate == null) {
+            Activity.addActivty("Set Actual Clerks Closed Date to " + Global.mmddyyyy.format(new Date(newCaseInformation.actualClerksClosedDate.getTime())), null);
+        } else if(newCaseInformation.actualClerksClosedDate != null && oldCaseInformation.actualClerksClosedDate != null) {
+            if(!Global.mmddyyyy.format(new Date(oldCaseInformation.actualClerksClosedDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.actualClerksClosedDate.getTime()))))
+                Activity.addActivty("Changed Actual Clerks Closed Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.actualClerksClosedDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.actualClerksClosedDate.getTime())), null);
         }
         
         //Clerks Closed Date Initials
@@ -658,5 +746,64 @@ public class REPCase {
             if(!newCaseInformation.clerksClosedDateInitials.equals(oldCaseInformation.clerksClosedDateInitials)) 
                 Activity.addActivty("Changed Clerks Closed Date Initials from " + oldCaseInformation.clerksClosedDateInitials + " to " + newCaseInformation.clerksClosedDateInitials, null);
         }
+    }
+    
+    public static List<String> loadRelatedCases() {
+        
+        List<String> caseNumberList = new ArrayList<>();
+            
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+            
+            String sql = "Select caseYear, caseType, caseMonth, caseNumber from REPCase  where fileDate between DateAdd(DD,-7,GETDATE()) and GETDATE() Order By caseYear DESC, caseNumber DESC";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            
+            ResultSet caseNumberRS = preparedStatement.executeQuery();
+            
+            while(caseNumberRS.next()) {
+                caseNumberList.add(caseNumberRS.getString("caseYear") + "-"
+                    + caseNumberRS.getString("caseType") + "-" 
+                    + caseNumberRS.getString("caseMonth") + "-"
+                    + caseNumberRS.getString("caseNumber"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return caseNumberList;
+    }
+    
+    public static boolean checkIfFristCaseOfMonth(String year, String type, String month) {
+        boolean firstCase = false;
+        
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select"
+                    + " COUNT(*) AS CasesThisMonth"
+                    + " from REPCase"
+                    + " where caseYear = ? "
+                    + " and caseType = ? "
+                    + " and caseMonth = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, year);
+            preparedStatement.setString(2, type);
+            preparedStatement.setString(3, month);
+
+            ResultSet caseNumberRS = preparedStatement.executeQuery();
+           
+            if(caseNumberRS.next()) {
+                 if(caseNumberRS.getInt("CasesThisMonth") > 0) {
+                     firstCase = false;
+                 } else {
+                     firstCase = true;
+                 }
+            }
+            stmt.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return firstCase;
     }
 }

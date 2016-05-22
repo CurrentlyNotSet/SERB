@@ -45,7 +45,7 @@ public class County {
 
             String sql = "select * "
                     + " FROM County"
-                    + " WHERE active = 1"
+                    + " WHERE active = 1 and stateCode = 'OH'"
                     + " ORDER BY countyName ASC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);

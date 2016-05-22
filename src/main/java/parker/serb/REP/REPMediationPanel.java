@@ -5,19 +5,16 @@
  */
 package parker.serb.REP;
 
-import parker.serb.activity.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
+import javax.swing.JFrame;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
-import parker.serb.sql.Activity;
-import parker.serb.util.FileService;
-
-//TODO: Investigate File Icon in Table
-//TODO: Add notification for no file with 
-//TODO: Remove the loadAllActivity method to be used with loadActivity(String)
+import parker.serb.Global;
+import parker.serb.sql.REPMediation;
 
 /**
  *
@@ -25,14 +22,10 @@ import parker.serb.util.FileService;
  */
 public class REPMediationPanel extends javax.swing.JPanel {
 
-    List activty;
+    List mediation;
     
-    /**
-     * Creates new form ActivityPanel
-     */
     public REPMediationPanel() {
         initComponents();
-        setTableColumnWidths();
         addListeners();
     }
     
@@ -41,27 +34,29 @@ public class REPMediationPanel extends javax.swing.JPanel {
 
             @Override
             public void insertUpdate(DocumentEvent e) {
-                loadActivity(searchTextBox.getText().trim());
+                mediationSearch(searchTextBox.getText().trim());
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                loadActivity(searchTextBox.getText().trim());
+                mediationSearch(searchTextBox.getText().trim());
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                loadActivity(searchTextBox.getText().trim());
+                mediationSearch(searchTextBox.getText().trim());
             }
         });
         
-        actvityTable.addMouseListener(new MouseListener() {
+        mediationTable.addMouseListener(new MouseListener() {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                String filePath = actvityTable.getValueAt(actvityTable.getSelectedRow(), 3).toString();
-                if(e.getClickCount() == 2 && !filePath.equals("")) {
-                    FileService.openFile(filePath);
+                if(e.getClickCount() == 2) {
+                    new REPUpdateMediationDialog((JFrame) Global.root.getRootPane().getParent(),
+                            true,
+                            mediationTable.getValueAt(mediationTable.getSelectedRow(),0).toString());
+                    loadAllMediations();
                 }
             }
 
@@ -77,66 +72,56 @@ public class REPMediationPanel extends javax.swing.JPanel {
             @Override
             public void mouseExited(MouseEvent e) {}
         });
+        
+        mediationTable.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
+            if(mediationTable.getSelectionModel().isSelectionEmpty()) {
+                Global.root.getjButton9().setEnabled(false);
+            } else {
+                Global.root.getjButton9().setEnabled(true);
+            }
+        });
     }
     
-    /**
-     * Set the width of all the columns in the table.
-     */
-    private void setTableColumnWidths() {
-        actvityTable.getColumnModel().getColumn(0).setPreferredWidth(175);
-        actvityTable.getColumnModel().getColumn(0).setMinWidth(175);
-        actvityTable.getColumnModel().getColumn(0).setMaxWidth(175);
-        actvityTable.getColumnModel().getColumn(1).setPreferredWidth(200);
-        actvityTable.getColumnModel().getColumn(1).setMinWidth(200);
-        actvityTable.getColumnModel().getColumn(1).setMaxWidth(200);
-//        actvityTable.getColumnModel().getColumn(3).setPreferredWidth(0);
-//        actvityTable.getColumnModel().getColumn(3).setMinWidth(0);
-//        actvityTable.getColumnModel().getColumn(3).setMaxWidth(0);
+    public void removeMediation() {
+        new RemoveMediationDialog((JFrame) Global.root.getRootPane().getParent(),
+                true,
+                (int)mediationTable.getValueAt(mediationTable.getSelectedRow(), 0));
+        loadAllMediations();
     }
-
-    /**
-     * Load all activity for the currently selected case.  Takes a term as a 
-     * parameter, but is not required.
-     * @param searchTerm a string of a value, if blank pass ""
-     */
-    private void loadActivity(String searchTerm) {
+    
+    public void clearAll() {
+        searchTextBox.setText("");
+        DefaultTableModel model = (DefaultTableModel) mediationTable.getModel();
+        model.setRowCount(0);
+    }
+    
+    public void loadAllMediations() {
         
-        DefaultTableModel model = (DefaultTableModel) actvityTable.getModel();
+        searchTextBox.setText("");
+        DefaultTableModel model = (DefaultTableModel) mediationTable.getModel();
         model.setRowCount(0);
         
-        for (Object activty1 : activty) {
-            Activity act = (Activity) activty1;
-            if(act.action.toLowerCase().contains(searchTerm.toLowerCase())
-                    || act.user.toLowerCase().contains(searchTerm.toLowerCase())) {
-                model.addRow(new Object[] {act.date, act.action, act.user, ""});
-            }
+        mediation = REPMediation.loadMediationsByCaseNumber();
+        
+        for (Object mediation1 : mediation) {
+            REPMediation act = (REPMediation) mediation1;
+            model.addRow(new Object[] {act.id, act.mediationDate, act.mediationType, act.mediator, act.mediationOutcome});
         }
     }
     
-    /**
-     * clears the search box and removes all results displayed from the table
-     */
-    public void clearAll() {
-        searchTextBox.setText("");
-        DefaultTableModel model = (DefaultTableModel) actvityTable.getModel();
-        model.setRowCount(0);
-    }
-    
-    /**
-     * loads all activity non limited for the currently selected case
-     * Will be removed in future releases
-     */
-    public void loadAllActivity() {
+    public void mediationSearch(String search) {
         
-        searchTextBox.setText("");
-        DefaultTableModel model = (DefaultTableModel) actvityTable.getModel();
+        DefaultTableModel model = (DefaultTableModel) mediationTable.getModel();
         model.setRowCount(0);
         
-        activty = Activity.loadCaseNumberActivity("%");
-        
-        for (Object activty1 : activty) {
-            Activity act = (Activity) activty1;
-            model.addRow(new Object[] {act.date, act.action, act.user, ""});
+        for (Object mediation1 : mediation) {
+            REPMediation act = (REPMediation) mediation1;
+            if(act.mediationType.toLowerCase().contains(search.toLowerCase()) ||
+                act.mediator.toLowerCase().contains(search.toLowerCase()) ||
+                act.mediationOutcome.toLowerCase().contains(search.toLowerCase())) 
+            {
+                model.addRow(new Object[] {act.id, act.mediationDate, act.mediationType, act.mediator, act.mediationOutcome});
+            }
         }
     }
     
@@ -152,30 +137,33 @@ public class REPMediationPanel extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         searchTextBox = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        actvityTable = new javax.swing.JTable();
+        mediationTable = new javax.swing.JTable();
         clearSearchButton = new javax.swing.JButton();
 
         jLabel1.setText("Search:");
 
-        actvityTable.setModel(new javax.swing.table.DefaultTableModel(
+        mediationTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Date / TIme", "Type", "Mediatior", "Outcome"
+                "id", "Date", "Type", "Mediatior", "Outcome"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(actvityTable);
-        if (actvityTable.getColumnModel().getColumnCount() > 0) {
-            actvityTable.getColumnModel().getColumn(1).setResizable(false);
+        jScrollPane1.setViewportView(mediationTable);
+        if (mediationTable.getColumnModel().getColumnCount() > 0) {
+            mediationTable.getColumnModel().getColumn(0).setMinWidth(0);
+            mediationTable.getColumnModel().getColumn(0).setPreferredWidth(0);
+            mediationTable.getColumnModel().getColumn(0).setMaxWidth(0);
+            mediationTable.getColumnModel().getColumn(2).setResizable(false);
         }
 
         clearSearchButton.setText("Clear");
@@ -217,10 +205,10 @@ public class REPMediationPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_clearSearchButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable actvityTable;
     private javax.swing.JButton clearSearchButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable mediationTable;
     private javax.swing.JTextField searchTextBox;
     // End of variables declaration//GEN-END:variables
 }

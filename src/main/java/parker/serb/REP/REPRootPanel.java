@@ -11,6 +11,7 @@ import javax.swing.event.ChangeEvent;
 import parker.serb.activity.ActivityPanel;
 import parker.serb.Global;
 import parker.serb.party.PartySearchDialog;
+import parker.serb.sql.REPCaseSearchData;
 import parker.serb.util.CancelUpdate;
 
 /**
@@ -24,6 +25,14 @@ public class REPRootPanel extends javax.swing.JPanel {
      */
     public REPRootPanel() {
         initComponents();
+//        jTabbedPane1.remove(7); //NOTES
+//        jTabbedPane1.remove(6); //Mediation
+        jTabbedPane1.remove(5);
+        jTabbedPane1.remove(4);
+        jTabbedPane1.remove(3);
+//        jTabbedPane1.remove(2); //PARTIES
+//        jTabbedPane1.remove(1); //INFORMATION
+//        jTabbedPane1.remove(0); //Activity
         addListeners();
     }
     
@@ -35,15 +44,18 @@ public class REPRootPanel extends javax.swing.JPanel {
         activityPanel1.clearAll();
         rEPCaseInformationPanel2.clearAll();
         notesPanel2.clearAll();
+        partiesPanel1.clearAll();
     }
     
     private void addListeners() {
          jTabbedPane1.addChangeListener((ChangeEvent e) -> {
-            rEPCaseInformationPanel2.loadCaseTypes();
-            rEPCaseInformationPanel2.loadStatus();
-            rEPCaseInformationPanel2.loadCurrentOwner();
-            rEPBoardStatusPanel1.loadBoardActionType();
-            rEPBoardStatusPanel1.loadHearingPerson();
+//            rEPCaseInformationPanel2.loadCaseTypes();
+//            rEPCaseInformationPanel2.loadStatus();
+//            rEPCaseInformationPanel2.loadCurrentOwner();
+//            rEPCaseInformationPanel2.loadCountyComboBox();
+//            rEPCaseInformationPanel2.loadDepartmentInState();
+//            rEPBoardStatusPanel1.loadBoardActionType();
+//            rEPBoardStatusPanel1.loadHearingPerson();
             
             if(Global.caseNumber != null) {
                 setButtons();
@@ -76,6 +88,7 @@ public class REPRootPanel extends javax.swing.JPanel {
             case "Elections":
                 break;
             case "Mediation":
+                rEPMediationPanel1.loadAllMediations();
                 break;
             case "Notes":
                 notesPanel2.loadInformation();
@@ -127,9 +140,9 @@ public class REPRootPanel extends javax.swing.JPanel {
                 break;
             case "Mediation":
                 System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
-                Global.root.getjButton2().setText("Add Med.");
+                Global.root.getjButton2().setText("Add Mediation");
                 Global.root.getjButton2().setEnabled(true);
-                Global.root.getjButton9().setVisible(false);
+                Global.root.getjButton9().setVisible(true);
                 break;
             case "Notes":
                 System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
@@ -184,6 +197,10 @@ public class REPRootPanel extends javax.swing.JPanel {
                 new PartySearchDialog((JFrame) this.getRootPane().getParent(), true);
                 partiesPanel1.loadAllParties();
                 Global.root.getrEPHeaderPanel1().loadHeaderInformation();
+                REPCaseSearchData.updateCaseEntryFromParties(
+                        Global.root.getrEPHeaderPanel1().getEmployerTextBox().getText().trim(),
+                        Global.root.getrEPHeaderPanel1().getEmployeeOrgTextBox().getText().trim(),
+                        Global.root.getrEPHeaderPanel1().getIncumbentEEOTextBox().getText().trim());
                 break;
             case "Details":
                 
@@ -203,7 +220,8 @@ public class REPRootPanel extends javax.swing.JPanel {
             case "Elections":
                 break;
             case "Mediation":
-                
+                new REPAddMediationDialog((JFrame) Global.root.getParent(), true);
+                rEPMediationPanel1.loadAllMediations();
                 break;
             case "Notes":
                 if(buttonText.equals("Update")) {
@@ -236,12 +254,16 @@ public class REPRootPanel extends javax.swing.JPanel {
                     Global.root.enableTabsAfterSave();
                     enableTabs();
                     rEPCaseInformationPanel2.disableUpdate(false);
-                    rEPCaseInformationPanel2.loadInformation();
+                    rEPCaseInformationPanel2.loadCaseInformation();
                 }
                 break;
             case "Parties":
                 partiesPanel1.removeParty();
                 Global.root.getrEPHeaderPanel1().loadHeaderInformation();
+                REPCaseSearchData.updateCaseEntryFromParties(
+                        Global.root.getrEPHeaderPanel1().getEmployerTextBox().getText().trim(),
+                        Global.root.getrEPHeaderPanel1().getEmployeeOrgTextBox().getText().trim(),
+                        Global.root.getrEPHeaderPanel1().getIncumbentEEOTextBox().getText().trim());
                 break;
             case "Details":
                 break;
@@ -259,6 +281,7 @@ public class REPRootPanel extends javax.swing.JPanel {
             case "Elections":
                 break;
             case "Mediation":
+                rEPMediationPanel1.removeMediation();
                 break;
             case "Notes":
                 cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);

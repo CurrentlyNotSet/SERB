@@ -54,6 +54,13 @@ public class CaseValidation {
                     + " AND caseType = ?"
                     + " AND caseMonth = ?"
                     + " AND caseNumber = ?";
+        }else if(caseNumber.contains("REP")
+                || caseNumber.contains("RBT")) {
+            sql = "Select Count(*) AS totalrows from REPCase where"
+                    + " caseYear = ?"
+                    + " AND caseType = ?"
+                    + " AND caseMonth = ?"
+                    + " AND caseNumber = ?";
         } else {
             return false;
         }
