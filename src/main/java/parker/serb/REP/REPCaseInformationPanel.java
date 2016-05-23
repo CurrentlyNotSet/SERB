@@ -764,9 +764,11 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
 
         clerksClosedDateInitialsTextBox.setBackground(new java.awt.Color(238, 238, 238));
         clerksClosedDateInitialsTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        clerksClosedDateInitialsTextBox.setEnabled(false);
 
         SOIReturnInitialsTextBox.setBackground(new java.awt.Color(238, 238, 238));
         SOIReturnInitialsTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        SOIReturnInitialsTextBox.setEnabled(false);
 
         jLabel22.setText("REP Closed Initials:");
 
