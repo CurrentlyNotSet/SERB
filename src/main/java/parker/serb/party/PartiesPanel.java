@@ -194,8 +194,10 @@ public class PartiesPanel extends javax.swing.JPanel {
         switch(Global.activeSection) {
             case "ULP":
                 validateULPParties();
+                break;
             case "REP":
                 validateREPParties();
+                break;
         }
     }
     
