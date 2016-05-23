@@ -7,6 +7,8 @@ package parker.serb.REP;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -70,6 +72,51 @@ public class REPAddMediationDialog extends javax.swing.JDialog {
                     amPMComboBox.setSelectedItem(Integer.parseInt(hourTextBox.getText()) >= 7 && Integer.parseInt(hourTextBox.getText()) <= 11 ? "AM" : "PM");
                 }
             }
+        });
+        
+        hourTextBox.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                
+                if (hourTextBox.getText().length() == 2) {
+                    e.consume();
+                } else {
+                    char c = e.getKeyChar();
+                    if (!((c >= '0') && (c <= '9') ||
+                       (c == KeyEvent.VK_BACK_SPACE) ||
+                       (c == KeyEvent.VK_DELETE))) {
+                      e.consume();
+                    }
+                }
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {}
+
+            @Override
+            public void keyReleased(KeyEvent e) {}
+        });
+        
+        minuteTextBox.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if (minuteTextBox.getText().length() == 2) {
+                    e.consume();
+                } else {
+                    char c = e.getKeyChar();
+                    if (!((c >= '0') && (c <= '9') ||
+                       (c == KeyEvent.VK_BACK_SPACE) ||
+                       (c == KeyEvent.VK_DELETE))) {
+                      e.consume();
+                    }
+                }
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {}
+
+            @Override
+            public void keyReleased(KeyEvent e) {}
         });
         
         dateTextBox.getDocument().addDocumentListener(new DocumentListener() {
@@ -137,15 +184,22 @@ public class REPAddMediationDialog extends javax.swing.JDialog {
     
     private void enableSaveButton() {
         if(dateTextBox.getText().equals("") ||
-//            !(Integer.valueOf(hourTextBox.getText().trim()) < 12 && Integer.valueOf(hourTextBox.getText().trim()) > 0) ||
-//            !(Integer.valueOf(minuteTextBox.getText().trim()) < 60 && Integer.valueOf(minuteTextBox.getText().trim()) > -1) ||
+            hourTextBox.getText().trim().equals("") ||
+            minuteTextBox.getText().trim().equals("") ||
             amPMComboBox.getSelectedItem().equals("") ||
             typeComboBox.getSelectedItem().equals("") ||
             mediatorComboBox.getSelectedItem().equals("")) 
         {
             saveButton.setEnabled(false);
         } else {
-            saveButton.setEnabled(true);
+            if(!(Integer.valueOf(hourTextBox.getText().trim()) <= 12 && Integer.valueOf(hourTextBox.getText().trim()) > 0) ||
+            !(Integer.valueOf(minuteTextBox.getText().trim()) < 60 && Integer.valueOf(minuteTextBox.getText().trim()) > -1) ||
+            minuteTextBox.getText().trim().length() != 2)
+            {
+                saveButton.setEnabled(false);
+            } else {
+                saveButton.setEnabled(true);
+            }
         }
     }
     
