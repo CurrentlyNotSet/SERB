@@ -31,15 +31,6 @@ import parker.serb.sql.User;
 import parker.serb.util.ClearDateDialog;
 import parker.serb.util.NumberFormatService;
 
-//TODO: Determine how to replicate the boarders on all textboxes to match WLF
-//TODO: Merge enable/disable update with a true false flag
-
-//TODO: Save updated information
-//TODO: Create History entry for updated information (Updated Case Information)
-//TODO: Load Case Types
-//TODO: Load Current Owner Box
-//TODO: Load Dept In State Text Box
-
 /**
  *
  * @author parker
@@ -366,6 +357,36 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
             dialog.dispose();
         }
     }
+    
+    private void setBUNumberCheckBoxes(String certStatus) {
+        switch(certStatus) {
+            case "B":
+                boardCertifiedCheckBox.setSelected(true);
+                deemedCertifiedCheckBox.setSelected(false);
+                certificationRevokedCheckBox.setSelected(false);
+                break;
+            case "D":
+                boardCertifiedCheckBox.setSelected(false);
+                deemedCertifiedCheckBox.setSelected(true);
+                certificationRevokedCheckBox.setSelected(false);
+                break;
+            case "U":
+                boardCertifiedCheckBox.setSelected(false);
+                deemedCertifiedCheckBox.setSelected(false);
+                certificationRevokedCheckBox.setSelected(false);
+                break;
+            case "N":
+                boardCertifiedCheckBox.setSelected(false);
+                deemedCertifiedCheckBox.setSelected(false);
+                certificationRevokedCheckBox.setSelected(true);
+                break;
+            default:
+                boardCertifiedCheckBox.setSelected(false);
+                deemedCertifiedCheckBox.setSelected(false);
+                certificationRevokedCheckBox.setSelected(false);
+                break;
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -428,6 +449,8 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         repClosedInitials = new javax.swing.JTextField();
         jLabel23 = new javax.swing.JLabel();
         actualClerksClosedDate = new com.alee.extended.date.WebDateField();
+        jLabel1 = new javax.swing.JLabel();
+        alphaListRecepitDateTextBox = new com.alee.extended.date.WebDateField();
 
         setLayout(new java.awt.GridLayout(1, 0));
 
@@ -492,6 +515,11 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         bargainingUnitNumberTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 bargainingUnitNumberTextBoxMouseClicked(evt);
+            }
+        });
+        bargainingUnitNumberTextBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bargainingUnitNumberTextBoxActionPerformed(evt);
             }
         });
 
@@ -620,8 +648,8 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel9)
-                        .addGap(0, 158, Short.MAX_VALUE))
-                    .addComponent(addRelatedCaseButton, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
+                        .addGap(0, 177, Short.MAX_VALUE))
+                    .addComponent(addRelatedCaseButton, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -790,6 +818,19 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
             }
         });
 
+        jLabel1.setText("Alpha List Receipt Date:");
+
+        alphaListRecepitDateTextBox.setEditable(false);
+        alphaListRecepitDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        alphaListRecepitDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        alphaListRecepitDateTextBox.setEnabled(false);
+        finalBoardDateTextBox.setDateFormat(Global.mmddyyyy);
+        alphaListRecepitDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                alphaListRecepitDateTextBoxMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -797,6 +838,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(10, 10, 10)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel1)
                     .addComponent(jLabel23)
                     .addComponent(jLabel22)
                     .addComponent(jLabel21)
@@ -826,7 +868,8 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
                     .addComponent(clerksClosedDateInitialsTextBox)
                     .addComponent(SOIReturnInitialsTextBox)
                     .addComponent(repClosedInitials)
-                    .addComponent(actualClerksClosedDate, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE))
+                    .addComponent(actualClerksClosedDate, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE)
+                    .addComponent(alphaListRecepitDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -840,6 +883,10 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11)
                     .addComponent(amendedFilingDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(alphaListRecepitDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel12)
@@ -888,7 +935,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(clerksClosedDateInitialsTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel21))
-                .addContainerGap())
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         add(jPanel2);
@@ -985,6 +1032,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
                 bargainingUnitNumberTextBox.setText(search.getBuNumber());
                 bargainingUnitNameTextBox.setText(search.getUnitDesc());
                 bargainingUnitNameTextBox.setCaretPosition(0);
+                setBUNumberCheckBoxes(search.getCertStatus());
                 if(employerIDNumberTextBox.getText().equals("")) {
                     employerIDNumberTextBox.setText(search.getBuNumber().split("-")[0]);
                 }
@@ -995,6 +1043,14 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_bargainingUnitNumberTextBoxMouseClicked
 
+    private void bargainingUnitNumberTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bargainingUnitNumberTextBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_bargainingUnitNumberTextBoxActionPerformed
+
+    private void alphaListRecepitDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_alphaListRecepitDateTextBoxMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_alphaListRecepitDateTextBoxMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.alee.extended.date.WebDateField REPClosedCaseDueDateTextBox;
@@ -1003,6 +1059,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
     private com.alee.extended.date.WebDateField actualREPClosedDateTextBox;
     private com.alee.extended.date.WebDateField actualSOIReturnDateTextBox;
     private javax.swing.JButton addRelatedCaseButton;
+    private com.alee.extended.date.WebDateField alphaListRecepitDateTextBox;
     private com.alee.extended.date.WebDateField amendedFilingDateTextBox;
     private javax.swing.JTextField bargainingUnitNameTextBox;
     private javax.swing.JTextField bargainingUnitNumberTextBox;
@@ -1018,6 +1075,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
     private javax.swing.JTextField employerIDNumberTextBox;
     private com.alee.extended.date.WebDateField fileDateTextBox;
     private com.alee.extended.date.WebDateField finalBoardDateTextBox;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;

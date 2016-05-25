@@ -584,26 +584,26 @@ public class REPCase {
                 Activity.addActivty("Changed Bargaining Unit from " + oldCaseInformation.bargainingUnitNumber + " to " + newCaseInformation.bargainingUnitNumber, null);
         }
         
-        //BoardCertified
-        if(newCaseInformation.boardCertified == true && oldCaseInformation.boardCertified == false) {
-            Activity.addActivty("Set Board Certified", null);
-        } else if(newCaseInformation.boardCertified == false && oldCaseInformation.boardCertified == true) {
-            Activity.addActivty("Unset Board Certified", null);
-        } 
-        
-        //Deemed Certified
-        if(newCaseInformation.deemedCertified == true && oldCaseInformation.deemedCertified == false) {
-            Activity.addActivty("Set Deemed Certified", null);
-        } else if(newCaseInformation.deemedCertified == false && oldCaseInformation.deemedCertified == true) {
-            Activity.addActivty("Unset Deemed Certified", null);
-        }
-        
-        //Certification Revoked
-        if(newCaseInformation.certificationRevoked == true && oldCaseInformation.certificationRevoked == false) {
-            Activity.addActivty("Set Certification Revoked", null);
-        } else if(newCaseInformation.certificationRevoked == false && oldCaseInformation.certificationRevoked == true) {
-            Activity.addActivty("Unset Certification Revoke", null);
-        }
+//        //BoardCertified
+//        if(newCaseInformation.boardCertified == true && oldCaseInformation.boardCertified == false) {
+//            Activity.addActivty("Set Board Certified", null);
+//        } else if(newCaseInformation.boardCertified == false && oldCaseInformation.boardCertified == true) {
+//            Activity.addActivty("Unset Board Certified", null);
+//        } 
+//        
+//        //Deemed Certified
+//        if(newCaseInformation.deemedCertified == true && oldCaseInformation.deemedCertified == false) {
+//            Activity.addActivty("Set Deemed Certified", null);
+//        } else if(newCaseInformation.deemedCertified == false && oldCaseInformation.deemedCertified == true) {
+//            Activity.addActivty("Unset Deemed Certified", null);
+//        }
+//        
+//        //Certification Revoked
+//        if(newCaseInformation.certificationRevoked == true && oldCaseInformation.certificationRevoked == false) {
+//            Activity.addActivty("Set Certification Revoked", null);
+//        } else if(newCaseInformation.certificationRevoked == false && oldCaseInformation.certificationRevoked == true) {
+//            Activity.addActivty("Unset Certification Revoke", null);
+//        }
         
         //file date
         if(newCaseInformation.fileDate == null && oldCaseInformation.fileDate != null) {
