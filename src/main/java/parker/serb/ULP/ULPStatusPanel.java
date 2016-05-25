@@ -17,6 +17,7 @@ import parker.serb.Global;
 import parker.serb.boardmeetings.AddULPBoardMeeting;
 import parker.serb.boardmeetings.RemoveBoardMeetingDialog;
 import parker.serb.boardmeetings.UpdateULPBoardMeeting;
+import parker.serb.bunumber.buNumberSearch;
 import parker.serb.employer.employerDetail;
 import parker.serb.employer.employerSearch;
 import parker.serb.relatedcase.AddNewRelatedCase;
@@ -939,6 +940,11 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         barginingUnitNoTextBox.setBackground(new java.awt.Color(238, 238, 238));
         barginingUnitNoTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         barginingUnitNoTextBox.setEnabled(false);
+        barginingUnitNoTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                barginingUnitNoTextBoxMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -1040,6 +1046,23 @@ public class ULPStatusPanel extends javax.swing.JPanel {
     private void filedDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_filedDateTextBoxMouseClicked
         clearDate(filedDateTextBox, evt);
     }//GEN-LAST:event_filedDateTextBoxMouseClicked
+
+    private void barginingUnitNoTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_barginingUnitNoTextBoxMouseClicked
+        if(evt.getClickCount() == 2) {
+            if(barginingUnitNoTextBox.isEnabled()) {
+                buNumberSearch search = new buNumberSearch((JFrame) Global.root.getRootPane().getParent(), true, employerNumberTextBox.getText().trim(), barginingUnitNoTextBox.getText().trim());
+                barginingUnitNoTextBox.setText(search.getBuNumber());
+                barginingUnitNoTextBox.setText(search.getUnitDesc());
+                barginingUnitNoTextBox.setCaretPosition(0);
+                if(employerNumberTextBox.getText().equals("")) {
+                    employerNumberTextBox.setText(search.getBuNumber().split("-")[0]);
+                }
+                search.dispose();
+            } else {
+//                new employerDetail((JFrame) Global.root.getRootPane().getParent(), true, employerIDNumberTextBox.getText().trim());
+            }
+        }
+    }//GEN-LAST:event_barginingUnitNoTextBoxMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
