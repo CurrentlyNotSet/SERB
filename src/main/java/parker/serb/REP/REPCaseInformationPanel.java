@@ -86,6 +86,8 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         fileDateTextBox.setBackground(Color.WHITE);
         amendedFilingDateTextBox.setEnabled(true);
         amendedFilingDateTextBox.setBackground(Color.WHITE);
+        alphaListRecepitDateTextBox.setEnabled(true);
+        alphaListRecepitDateTextBox.setBackground(Color.WHITE);
         finalBoardDateTextBox.setEnabled(true);
         finalBoardDateTextBox.setBackground(Color.WHITE);
         registrationLetterSentTextBox.setEnabled(true);
@@ -143,6 +145,8 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         fileDateTextBox.setBackground(new Color(238,238,238));
         amendedFilingDateTextBox.setEnabled(false);
         amendedFilingDateTextBox.setBackground(new Color(238,238,238));
+        alphaListRecepitDateTextBox.setEnabled(false);
+        alphaListRecepitDateTextBox.setBackground(new Color(238,238,238));
         finalBoardDateTextBox.setEnabled(false);
         finalBoardDateTextBox.setBackground(new Color(238,238,238));
         registrationLetterSentTextBox.setEnabled(false);
@@ -186,6 +190,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         certificationRevokedCheckBox.setSelected(false);
         fileDateTextBox.setText("");
         amendedFilingDateTextBox.setText("");
+        alphaListRecepitDateTextBox.setText("");
         finalBoardDateTextBox.setText("");
         registrationLetterSentTextBox.setText("");
         dateOfAppealTextBox.setText("");
@@ -286,6 +291,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         
         fileDateTextBox.setText(caseInformation.fileDate != null ? Global.mmddyyyy.format(new Date(caseInformation.fileDate.getTime())) : ""); 
         amendedFilingDateTextBox.setText(caseInformation.amendedFiliingDate != null ? Global.mmddyyyy.format(new Date(caseInformation.amendedFiliingDate.getTime())) : "");
+        alphaListRecepitDateTextBox.setText(caseInformation.alphaListDate != null ? Global.mmddyyyy.format(new Date(caseInformation.alphaListDate.getTime())) : "");
         finalBoardDateTextBox.setText(caseInformation.finalBoardDate != null ? Global.mmddyyyy.format(new Date(caseInformation.finalBoardDate.getTime())) : "");        
         registrationLetterSentTextBox.setText(caseInformation.registrationLetterSent != null ? Global.mmddyyyy.format(new Date(caseInformation.registrationLetterSent.getTime())) : "");  
         dateOfAppealTextBox.setText(caseInformation.dateOfAppeal != null ? Global.mmddyyyy.format(new Date(caseInformation.dateOfAppeal.getTime())) : "");  
@@ -316,6 +322,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         
         newCaseInformation.fileDate = fileDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(fileDateTextBox.getText()));
         newCaseInformation.amendedFiliingDate = amendedFilingDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(amendedFilingDateTextBox.getText()));
+        newCaseInformation.alphaListDate = alphaListRecepitDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(alphaListRecepitDateTextBox.getText()));
         newCaseInformation.finalBoardDate = finalBoardDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(finalBoardDateTextBox.getText()));
         newCaseInformation.registrationLetterSent = registrationLetterSentTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(registrationLetterSentTextBox.getText()));
         newCaseInformation.dateOfAppeal = dateOfAppealTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(dateOfAppealTextBox.getText()));
@@ -824,7 +831,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         alphaListRecepitDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
         alphaListRecepitDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         alphaListRecepitDateTextBox.setEnabled(false);
-        finalBoardDateTextBox.setDateFormat(Global.mmddyyyy);
+        alphaListRecepitDateTextBox.setDateFormat(Global.mmddyyyy);
         alphaListRecepitDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 alphaListRecepitDateTextBoxMouseClicked(evt);
@@ -1048,7 +1055,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_bargainingUnitNumberTextBoxActionPerformed
 
     private void alphaListRecepitDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_alphaListRecepitDateTextBoxMouseClicked
-        // TODO add your handling code here:
+        clearDate(alphaListRecepitDateTextBox, evt);
     }//GEN-LAST:event_alphaListRecepitDateTextBoxMouseClicked
 
 

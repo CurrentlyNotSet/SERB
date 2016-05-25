@@ -38,6 +38,7 @@ public class REPCase {
     public boolean certificationRevoked;
     public Timestamp fileDate;
     public Timestamp amendedFiliingDate;
+    public Timestamp alphaListDate;
     public Timestamp finalBoardDate;
     public Timestamp registrationLetterSent;
     public Timestamp dateOfAppeal;
@@ -50,51 +51,6 @@ public class REPCase {
     public String REPClosedInitials;
     public Timestamp actualClerksClosedDate;
     public String clerksClosedDateInitials;
-    
-//    /**
-//     * Created an empty REPCase Table
-//     */
-//    public static void createTable() {
-//        try {
-//            Statement stmt = Database.connectToDB().createStatement();
-//            
-//            String sql = "CREATE TABLE REPCase" +
-//                    "(id int IDENTITY (1,1) NOT NULL, " +
-//                    " active varchar(1) NOT NULL, " + 
-//                    " caseNumber varchar(16) NOT NULL, " +
-//                    " note text NOT NULL, " +
-//                    " PRIMARY KEY (id))"; 
-//            
-//            stmt.executeUpdate(sql);
-//        } catch (SQLException ex) {
-//            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-//        } 
-//    }
-    
-    
-//    private static REPCase getCaseInformation(String caseNumber) {
-//        REPCase caseInformation = new REPCase();
-//        
-//        try {
-//            Statement stmt = Database.connectToDB().createStatement();
-//            
-//            String sql = "Select * from REPCase Where caseNumber = ?";
-//            
-//            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-//            preparedStatement.setString(1, caseNumber);
-//            
-//            ResultSet caseNumberRS = preparedStatement.executeQuery();
-//            
-//            caseNumberRS.next();
-//            
-//            caseInformation.caseNumber = caseNumberRS.getString("caseNumber");
-//            caseInformation.fileDate = caseNumberRS.getTimestamp("fileDate");
-//            
-//        } catch (SQLException ex) {
-//            Logger.getLogger(REPCase.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        return caseInformation;
-//    }
     
     /**
      * Load a list of the most recent 250 REP case numbers
@@ -138,29 +94,6 @@ public class REPCase {
         }
         return caseNumberList;
     }
-    
-//    public static List loadREPCases(int limit) {
-//        List caseNumberList = new ArrayList<>();
-//            
-//        try {
-//            Statement stmt = Database.connectToDB().createStatement();
-//
-//            String sql = "Select TOP " + limit + " * from REPCase Order By CaseNumber DESC";
-//
-//            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-//
-//            ResultSet caseNumberRS = preparedStatement.executeQuery();
-//            
-//            while(caseNumberRS.next()) {
-//                REPCase repCase = new REPCase();
-//                repCase.caseNumber = caseNumberRS.getString("caseNumber");
-//                caseNumberList.add(repCase);
-//            }
-//        } catch (SQLException ex) {
-//            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        return caseNumberList;
-//    }
     
     /**
      * Loads the notes that are related to the case
@@ -341,7 +274,8 @@ public class REPCase {
                     + " actualREPClosedDate,"
                     + " REPClosedInitials,"
                     + " actualClerksClosedDate,"
-                    + " clerksClosedDateInitials"
+                    + " clerksClosedDateInitials,"
+                    + " alphaListDate"
                     + " from REPCase where caseYear = ? "
                     + " AND caseType = ? "
                     + " AND caseMonth = ? "
@@ -371,6 +305,7 @@ public class REPCase {
                 
                 rep.fileDate = caseInformation.getTimestamp("fileDate");
                 rep.amendedFiliingDate = caseInformation.getTimestamp("amendedFilingDate");
+                rep.alphaListDate = caseInformation.getTimestamp("alphaListDate");
                 rep.finalBoardDate = caseInformation.getTimestamp("finalBoardDate");
                 rep.registrationLetterSent = caseInformation.getTimestamp("registrationLetterSent");
                 rep.dateOfAppeal = caseInformation.getTimestamp("dateOfAppeal");
@@ -450,7 +385,8 @@ public class REPCase {
                     + " ActualREPClosedDate = ?,"
                     + " REPClosedInitials = ?,"
                     + " ActualClerksClosedDate = ?,"
-                    + " ClerksClosedDateInitials = ?"
+                    + " ClerksClosedDateInitials = ?,"
+                    + " alphaListDate = ?"
                     + " where caseYear = ?"
                     + " AND caseType = ?"
                     + " AND caseMonth = ? "
@@ -482,10 +418,11 @@ public class REPCase {
             preparedStatement.setString(23, newCaseInformation.REPClosedInitials);
             preparedStatement.setTimestamp(24, newCaseInformation.actualClerksClosedDate);
             preparedStatement.setString(25, newCaseInformation.clerksClosedDateInitials);
-            preparedStatement.setString(26, Global.caseYear);
-            preparedStatement.setString(27, Global.caseType);
-            preparedStatement.setString(28, Global.caseMonth);
-            preparedStatement.setString(29, Global.caseNumber);
+            preparedStatement.setTimestamp(26, newCaseInformation.alphaListDate);
+            preparedStatement.setString(27, Global.caseYear);
+            preparedStatement.setString(28, Global.caseType);
+            preparedStatement.setString(29, Global.caseMonth);
+            preparedStatement.setString(30, Global.caseNumber);
 
             int success = preparedStatement.executeUpdate();
             
@@ -583,27 +520,6 @@ public class REPCase {
             if(!newCaseInformation.bargainingUnitNumber.equals(oldCaseInformation.bargainingUnitNumber)) 
                 Activity.addActivty("Changed Bargaining Unit from " + oldCaseInformation.bargainingUnitNumber + " to " + newCaseInformation.bargainingUnitNumber, null);
         }
-        
-//        //BoardCertified
-//        if(newCaseInformation.boardCertified == true && oldCaseInformation.boardCertified == false) {
-//            Activity.addActivty("Set Board Certified", null);
-//        } else if(newCaseInformation.boardCertified == false && oldCaseInformation.boardCertified == true) {
-//            Activity.addActivty("Unset Board Certified", null);
-//        } 
-//        
-//        //Deemed Certified
-//        if(newCaseInformation.deemedCertified == true && oldCaseInformation.deemedCertified == false) {
-//            Activity.addActivty("Set Deemed Certified", null);
-//        } else if(newCaseInformation.deemedCertified == false && oldCaseInformation.deemedCertified == true) {
-//            Activity.addActivty("Unset Deemed Certified", null);
-//        }
-//        
-//        //Certification Revoked
-//        if(newCaseInformation.certificationRevoked == true && oldCaseInformation.certificationRevoked == false) {
-//            Activity.addActivty("Set Certification Revoked", null);
-//        } else if(newCaseInformation.certificationRevoked == false && oldCaseInformation.certificationRevoked == true) {
-//            Activity.addActivty("Unset Certification Revoke", null);
-//        }
         
         //file date
         if(newCaseInformation.fileDate == null && oldCaseInformation.fileDate != null) {
@@ -745,6 +661,16 @@ public class REPCase {
         } else if(newCaseInformation.clerksClosedDateInitials != null && oldCaseInformation.clerksClosedDateInitials != null) {
             if(!newCaseInformation.clerksClosedDateInitials.equals(oldCaseInformation.clerksClosedDateInitials)) 
                 Activity.addActivty("Changed Clerks Closed Date Initials from " + oldCaseInformation.clerksClosedDateInitials + " to " + newCaseInformation.clerksClosedDateInitials, null);
+        }
+        
+        //Alpha List Date
+        if(newCaseInformation.alphaListDate == null && oldCaseInformation.alphaListDate != null) {
+            Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.alphaListDate.getTime())) + " from Alpha List Receipt Date", null);
+        } else if(newCaseInformation.alphaListDate != null && oldCaseInformation.alphaListDate == null) {
+            Activity.addActivty("Set Alpha List Receipt Date to " + Global.mmddyyyy.format(new Date(newCaseInformation.alphaListDate.getTime())), null);
+        } else if(newCaseInformation.alphaListDate != null && oldCaseInformation.alphaListDate != null) {
+            if(!Global.mmddyyyy.format(new Date(oldCaseInformation.alphaListDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.alphaListDate.getTime()))))
+                Activity.addActivty("Changed Alpha List Receipt Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.alphaListDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.alphaListDate.getTime())), null);
         }
     }
     
