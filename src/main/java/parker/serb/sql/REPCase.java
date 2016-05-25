@@ -45,12 +45,12 @@ public class REPCase {
     public Timestamp courtClosedDate;
     public Timestamp returnSOIDueDate;
     public Timestamp actualSOIReturnDate;
-    public String SOIReturnInitials;
+    public String comments;
     public Timestamp REPClosedCaseDueDate;
     public Timestamp actualREPClosedDate;
-    public String REPClosedInitials;
+    public int REPClosedUser;
     public Timestamp actualClerksClosedDate;
-    public String clerksClosedDateInitials;
+    public int clerksClosedUser;
     
     /**
      * Load a list of the most recent 250 REP case numbers
@@ -269,12 +269,12 @@ public class REPCase {
                     + " courtClosedDate,"
                     + " returnSOIDueDate,"
                     + " actualSOIReturnDate,"
-                    + " SOIReturnInitials,"
+                    + " comments,"
                     + " REPClosedCaseDueDate,"
                     + " actualREPClosedDate,"
-                    + " REPClosedInitials,"
+                    + " REPClosedUser,"
                     + " actualClerksClosedDate,"
-                    + " clerksClosedDateInitials,"
+                    + " clerksClosedUser,"
                     + " alphaListDate"
                     + " from REPCase where caseYear = ? "
                     + " AND caseType = ? "
@@ -312,12 +312,12 @@ public class REPCase {
                 rep.courtClosedDate = caseInformation.getTimestamp("courtClosedDate");
                 rep.returnSOIDueDate = caseInformation.getTimestamp("returnSOIDueDate");
                 rep.actualSOIReturnDate = caseInformation.getTimestamp("actualSOIReturnDate");
-                rep.SOIReturnInitials = caseInformation.getString("SOIReturnInitials");
+                rep.comments = caseInformation.getString("comments");
                 rep.REPClosedCaseDueDate = caseInformation.getTimestamp("REPClosedCaseDueDate");
                 rep.actualREPClosedDate = caseInformation.getTimestamp("actualREPClosedDate");
-                rep.REPClosedInitials = caseInformation.getString("REPClosedInitials");
+                rep.REPClosedUser = caseInformation.getInt("REPClosedUser");
                 rep.actualClerksClosedDate= caseInformation.getTimestamp("actualClerksClosedDate");
-                rep.clerksClosedDateInitials = caseInformation.getString("ClerksClosedDateInitials");
+                rep.clerksClosedUser = caseInformation.getInt("clerksClosedUser");
             }
         } catch (SQLException ex) {
 //            SlackNotification.sendNotification(ex.getMessage());
@@ -380,12 +380,12 @@ public class REPCase {
                     + " courtClosedDate = ?,"
                     + " returnSOIDueDate = ?,"
                     + " actualSOIReturnDate = ?,"
-                    + " SOIReturnInitials = ?,"
+                    + " comments = ?,"
                     + " REPClosedCaseDueDate = ?,"
                     + " ActualREPClosedDate = ?,"
-                    + " REPClosedInitials = ?,"
+                    + " REPClosedUser = ?,"
                     + " ActualClerksClosedDate = ?,"
-                    + " ClerksClosedDateInitials = ?,"
+                    + " ClerksClosedUser = ?,"
                     + " alphaListDate = ?"
                     + " where caseYear = ?"
                     + " AND caseType = ?"
@@ -412,12 +412,12 @@ public class REPCase {
             preparedStatement.setTimestamp(17, newCaseInformation.courtClosedDate);
             preparedStatement.setTimestamp(18, newCaseInformation.returnSOIDueDate);
             preparedStatement.setTimestamp(19, newCaseInformation.actualSOIReturnDate);
-            preparedStatement.setString(20, newCaseInformation.SOIReturnInitials);
+            preparedStatement.setString(20, newCaseInformation.comments);
             preparedStatement.setTimestamp(21, newCaseInformation.REPClosedCaseDueDate);
             preparedStatement.setTimestamp(22, newCaseInformation.actualREPClosedDate);
-            preparedStatement.setString(23, newCaseInformation.REPClosedInitials);
+            preparedStatement.setInt(23, newCaseInformation.REPClosedUser);
             preparedStatement.setTimestamp(24, newCaseInformation.actualClerksClosedDate);
-            preparedStatement.setString(25, newCaseInformation.clerksClosedDateInitials);
+            preparedStatement.setInt(25, newCaseInformation.clerksClosedUser);
             preparedStatement.setTimestamp(26, newCaseInformation.alphaListDate);
             preparedStatement.setString(27, Global.caseYear);
             preparedStatement.setString(28, Global.caseType);
@@ -602,13 +602,13 @@ public class REPCase {
         }
         
         //SOI Return Initials
-        if(newCaseInformation.SOIReturnInitials == null && oldCaseInformation.SOIReturnInitials != null) {
-            Activity.addActivty("Removed " + oldCaseInformation.SOIReturnInitials + " from SOI Return Initials", null);
-        } else if(newCaseInformation.SOIReturnInitials != null && oldCaseInformation.SOIReturnInitials == null) {
-            Activity.addActivty("Set SOI Return Initials to " + newCaseInformation.SOIReturnInitials, null);
-        } else if(newCaseInformation.SOIReturnInitials != null && oldCaseInformation.SOIReturnInitials != null) {
-            if(!newCaseInformation.SOIReturnInitials.equals(oldCaseInformation.SOIReturnInitials)) 
-                Activity.addActivty("Changed SOI Return Initials from " + oldCaseInformation.SOIReturnInitials + " to " + newCaseInformation.SOIReturnInitials, null);
+        if(newCaseInformation.comments == null && oldCaseInformation.comments != null) {
+            Activity.addActivty("Removed " + oldCaseInformation.comments + " from Comments", null);
+        } else if(newCaseInformation.comments != null && oldCaseInformation.comments == null) {
+            Activity.addActivty("Set Comments to " + newCaseInformation.comments, null);
+        } else if(newCaseInformation.comments != null && oldCaseInformation.comments != null) {
+            if(!newCaseInformation.comments.equals(oldCaseInformation.comments)) 
+                Activity.addActivty("Changed Comments from " + oldCaseInformation.comments + " to " + newCaseInformation.comments, null);
         }
         
         //REPClsed Case Due Date
@@ -633,14 +633,22 @@ public class REPCase {
                 Activity.addActivty("Changed Actual REP Closed Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.actualREPClosedDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.actualREPClosedDate.getTime())), null);
         }
         
-        //REP Closed Initials
-        if(newCaseInformation.REPClosedInitials == null && oldCaseInformation.REPClosedInitials != null) {
-            Activity.addActivty("Removed " + oldCaseInformation.REPClosedInitials + " from REP Closed Initials", null);
-        } else if(newCaseInformation.REPClosedInitials != null && oldCaseInformation.REPClosedInitials == null) {
-            Activity.addActivty("Set REP Closed Initials to " + newCaseInformation.REPClosedInitials, null);
-        } else if(newCaseInformation.REPClosedInitials != null && oldCaseInformation.REPClosedInitials != null) {
-            if(!newCaseInformation.REPClosedInitials.equals(oldCaseInformation.REPClosedInitials)) 
-                Activity.addActivty("Changed REP Closed Initials from " + oldCaseInformation.REPClosedInitials + " to " + newCaseInformation.REPClosedInitials, null);
+        //REP Closed User
+//        if(newCaseInformation.REPClosedInitials == null && oldCaseInformation.REPClosedInitials != null) {
+//            Activity.addActivty("Removed " + oldCaseInformation.REPClosedInitials + " from REP Closed Initials", null);
+//        } else if(newCaseInformation.REPClosedInitials != null && oldCaseInformation.REPClosedInitials == null) {
+//            Activity.addActivty("Set REP Closed Initials to " + newCaseInformation.REPClosedInitials, null);
+//        } else if(newCaseInformation.REPClosedInitials != null && oldCaseInformation.REPClosedInitials != null) {
+//            if(!newCaseInformation.REPClosedInitials.equals(oldCaseInformation.REPClosedInitials)) 
+//                Activity.addActivty("Changed REP Closed Initials from " + oldCaseInformation.REPClosedInitials + " to " + newCaseInformation.REPClosedInitials, null);
+//        }
+        if(newCaseInformation.REPClosedUser == 0 && oldCaseInformation.REPClosedUser != 0) {
+            Activity.addActivty("Removed " + User.getNameByID(oldCaseInformation.REPClosedUser) + " from Clerks Closed By", null);
+        } else if(newCaseInformation.REPClosedUser != 0 && oldCaseInformation.REPClosedUser == 0) {
+            Activity.addActivty("Set Clerks Closed By to " + User.getNameByID(newCaseInformation.REPClosedUser), null);
+        } else if(newCaseInformation.REPClosedUser != 0 && oldCaseInformation.REPClosedUser != 0) {
+            if(newCaseInformation.REPClosedUser != oldCaseInformation.REPClosedUser) 
+                Activity.addActivty("Changed Clerks Closed By from " + User.getNameByID(oldCaseInformation.REPClosedUser) + " to " + User.getNameByID(newCaseInformation.REPClosedUser), null);
         }
         
         //Actual Clerks Closed Date
@@ -653,14 +661,14 @@ public class REPCase {
                 Activity.addActivty("Changed Actual Clerks Closed Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.actualClerksClosedDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.actualClerksClosedDate.getTime())), null);
         }
         
-        //Clerks Closed Date Initials
-        if(newCaseInformation.clerksClosedDateInitials == null && oldCaseInformation.clerksClosedDateInitials != null) {
-            Activity.addActivty("Removed " + oldCaseInformation.clerksClosedDateInitials + " from Clerks Closed Date Initials", null);
-        } else if(newCaseInformation.clerksClosedDateInitials != null && oldCaseInformation.clerksClosedDateInitials == null) {
-            Activity.addActivty("Set Clerks Closed Date Initials to " + newCaseInformation.clerksClosedDateInitials, null);
-        } else if(newCaseInformation.clerksClosedDateInitials != null && oldCaseInformation.clerksClosedDateInitials != null) {
-            if(!newCaseInformation.clerksClosedDateInitials.equals(oldCaseInformation.clerksClosedDateInitials)) 
-                Activity.addActivty("Changed Clerks Closed Date Initials from " + oldCaseInformation.clerksClosedDateInitials + " to " + newCaseInformation.clerksClosedDateInitials, null);
+        //Clerks Closed User
+        if(newCaseInformation.clerksClosedUser == 0 && oldCaseInformation.clerksClosedUser != 0) {
+            Activity.addActivty("Removed " + User.getNameByID(oldCaseInformation.clerksClosedUser) + " from Clerks Closed By", null);
+        } else if(newCaseInformation.clerksClosedUser != 0 && oldCaseInformation.clerksClosedUser == 0) {
+            Activity.addActivty("Set Clerks Closed By to " + User.getNameByID(newCaseInformation.clerksClosedUser), null);
+        } else if(newCaseInformation.clerksClosedUser != 0 && oldCaseInformation.clerksClosedUser != 0) {
+            if(newCaseInformation.clerksClosedUser != oldCaseInformation.currentOwnerID) 
+                Activity.addActivty("Changed Clerks Closed By from " + User.getNameByID(oldCaseInformation.clerksClosedUser) + " to " + User.getNameByID(newCaseInformation.clerksClosedUser), null);
         }
         
         //Alpha List Date

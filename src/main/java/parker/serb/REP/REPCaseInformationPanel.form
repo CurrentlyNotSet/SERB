@@ -358,20 +358,20 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="fileDateTextBox" alignment="0" max="32767" attributes="0"/>
-                      <Component id="amendedFilingDateTextBox" alignment="1" pref="323" max="32767" attributes="0"/>
-                      <Component id="finalBoardDateTextBox" alignment="1" pref="323" max="32767" attributes="0"/>
-                      <Component id="registrationLetterSentTextBox" alignment="1" pref="323" max="32767" attributes="0"/>
-                      <Component id="dateOfAppealTextBox" alignment="0" pref="323" max="32767" attributes="0"/>
-                      <Component id="courtClosedDateTextBox" alignment="1" pref="323" max="32767" attributes="0"/>
-                      <Component id="returnSOIDueDateTextBox" alignment="1" pref="323" max="32767" attributes="0"/>
-                      <Component id="actualSOIReturnDateTextBox" alignment="1" pref="323" max="32767" attributes="0"/>
-                      <Component id="REPClosedCaseDueDateTextBox" alignment="1" pref="323" max="32767" attributes="0"/>
-                      <Component id="actualREPClosedDateTextBox" alignment="1" pref="323" max="32767" attributes="0"/>
-                      <Component id="clerksClosedDateInitialsTextBox" alignment="0" max="32767" attributes="0"/>
-                      <Component id="SOIReturnInitialsTextBox" alignment="0" max="32767" attributes="0"/>
-                      <Component id="repClosedInitials" alignment="0" max="32767" attributes="0"/>
-                      <Component id="actualClerksClosedDate" alignment="1" pref="323" max="32767" attributes="0"/>
-                      <Component id="alphaListRecepitDateTextBox" alignment="0" pref="323" max="32767" attributes="0"/>
+                      <Component id="amendedFilingDateTextBox" alignment="1" pref="325" max="32767" attributes="0"/>
+                      <Component id="finalBoardDateTextBox" alignment="1" pref="325" max="32767" attributes="0"/>
+                      <Component id="registrationLetterSentTextBox" alignment="1" pref="325" max="32767" attributes="0"/>
+                      <Component id="dateOfAppealTextBox" alignment="0" pref="325" max="32767" attributes="0"/>
+                      <Component id="courtClosedDateTextBox" alignment="1" pref="325" max="32767" attributes="0"/>
+                      <Component id="returnSOIDueDateTextBox" alignment="1" pref="325" max="32767" attributes="0"/>
+                      <Component id="actualSOIReturnDateTextBox" alignment="1" pref="325" max="32767" attributes="0"/>
+                      <Component id="REPClosedCaseDueDateTextBox" alignment="1" pref="325" max="32767" attributes="0"/>
+                      <Component id="actualREPClosedDateTextBox" alignment="1" pref="325" max="32767" attributes="0"/>
+                      <Component id="commentsTextBox" alignment="0" max="32767" attributes="0"/>
+                      <Component id="actualClerksClosedDate" alignment="1" pref="325" max="32767" attributes="0"/>
+                      <Component id="alphaListRecepitDateTextBox" alignment="0" pref="325" max="32767" attributes="0"/>
+                      <Component id="repClosedUser" alignment="0" max="32767" attributes="0"/>
+                      <Component id="clerksClosedUser" alignment="0" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -428,7 +428,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel18" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="SOIReturnInitialsTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="commentsTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -441,21 +441,21 @@
                       <Component id="actualREPClosedDateTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel22" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="repClosedInitials" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="repClosedUser" max="32767" attributes="0"/>
+                      <Component id="jLabel22" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel23" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="actualClerksClosedDate" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel23" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="clerksClosedDateInitialsTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel21" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="clerksClosedUser" max="32767" attributes="0"/>
+                      <Component id="jLabel21" max="32767" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="23" max="32767" attributes="0"/>
+                  <EmptySpace pref="21" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -503,7 +503,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel18">
           <Properties>
-            <Property name="text" type="java.lang.String" value="SOI Return Initials:"/>
+            <Property name="text" type="java.lang.String" value="Comments:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel19">
@@ -518,7 +518,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel21">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Clerks Closed Date Initials:"/>
+            <Property name="text" type="java.lang.String" value="Clerks Closed By:"/>
           </Properties>
         </Component>
         <Component class="com.alee.extended.date.WebDateField" name="fileDateTextBox">
@@ -701,18 +701,7 @@
             <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="actualREPClosedDateTextBox.setDateFormat(Global.mmddyyyy);"/>
           </AuxValues>
         </Component>
-        <Component class="javax.swing.JTextField" name="clerksClosedDateInitialsTextBox">
-          <Properties>
-            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="ee" green="ee" red="ee" type="rgb"/>
-            </Property>
-            <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="0" green="0" red="0" type="rgb"/>
-            </Property>
-            <Property name="enabled" type="boolean" value="false"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JTextField" name="SOIReturnInitialsTextBox">
+        <Component class="javax.swing.JTextField" name="commentsTextBox">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ee" green="ee" red="ee" type="rgb"/>
@@ -725,18 +714,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel22">
           <Properties>
-            <Property name="text" type="java.lang.String" value="REP Closed Initials:"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JTextField" name="repClosedInitials">
-          <Properties>
-            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="ee" green="ee" red="ee" type="rgb"/>
-            </Property>
-            <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="0" green="0" red="0" type="rgb"/>
-            </Property>
-            <Property name="enabled" type="boolean" value="false"/>
+            <Property name="text" type="java.lang.String" value="REP Closed By:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel23">
@@ -786,6 +764,28 @@
           </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="alphaListRecepitDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JComboBox" name="repClosedUser">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="0"/>
+            </Property>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JComboBox" name="clerksClosedUser">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="0"/>
+            </Property>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
         </Component>
       </SubComponents>
