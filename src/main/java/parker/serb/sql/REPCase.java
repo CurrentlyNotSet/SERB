@@ -634,21 +634,13 @@ public class REPCase {
         }
         
         //REP Closed User
-//        if(newCaseInformation.REPClosedInitials == null && oldCaseInformation.REPClosedInitials != null) {
-//            Activity.addActivty("Removed " + oldCaseInformation.REPClosedInitials + " from REP Closed Initials", null);
-//        } else if(newCaseInformation.REPClosedInitials != null && oldCaseInformation.REPClosedInitials == null) {
-//            Activity.addActivty("Set REP Closed Initials to " + newCaseInformation.REPClosedInitials, null);
-//        } else if(newCaseInformation.REPClosedInitials != null && oldCaseInformation.REPClosedInitials != null) {
-//            if(!newCaseInformation.REPClosedInitials.equals(oldCaseInformation.REPClosedInitials)) 
-//                Activity.addActivty("Changed REP Closed Initials from " + oldCaseInformation.REPClosedInitials + " to " + newCaseInformation.REPClosedInitials, null);
-//        }
         if(newCaseInformation.REPClosedUser == 0 && oldCaseInformation.REPClosedUser != 0) {
-            Activity.addActivty("Removed " + User.getNameByID(oldCaseInformation.REPClosedUser) + " from Clerks Closed By", null);
+            Activity.addActivty("Removed " + User.getNameByID(oldCaseInformation.REPClosedUser) + " from REP Closed By", null);
         } else if(newCaseInformation.REPClosedUser != 0 && oldCaseInformation.REPClosedUser == 0) {
-            Activity.addActivty("Set Clerks Closed By to " + User.getNameByID(newCaseInformation.REPClosedUser), null);
+            Activity.addActivty("Set REP Closed By to " + User.getNameByID(newCaseInformation.REPClosedUser), null);
         } else if(newCaseInformation.REPClosedUser != 0 && oldCaseInformation.REPClosedUser != 0) {
             if(newCaseInformation.REPClosedUser != oldCaseInformation.REPClosedUser) 
-                Activity.addActivty("Changed Clerks Closed By from " + User.getNameByID(oldCaseInformation.REPClosedUser) + " to " + User.getNameByID(newCaseInformation.REPClosedUser), null);
+                Activity.addActivty("Changed REP Closed By from " + User.getNameByID(oldCaseInformation.REPClosedUser) + " to " + User.getNameByID(newCaseInformation.REPClosedUser), null);
         }
         
         //Actual Clerks Closed Date
