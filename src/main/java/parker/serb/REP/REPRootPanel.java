@@ -29,7 +29,7 @@ public class REPRootPanel extends javax.swing.JPanel {
 //        jTabbedPane1.remove(6); //Mediation
         jTabbedPane1.remove(5);
         jTabbedPane1.remove(4);
-        jTabbedPane1.remove(3);
+//        jTabbedPane1.remove(3); //Details
 //        jTabbedPane1.remove(2); //PARTIES
 //        jTabbedPane1.remove(1); //INFORMATION
 //        jTabbedPane1.remove(0); //Activity
