@@ -45,6 +45,7 @@ public class REPRootPanel extends javax.swing.JPanel {
         rEPCaseInformationPanel2.clearAll();
         notesPanel2.clearAll();
         partiesPanel1.clearAll();
+        rEPCaseDetailsPanel1.clearAll();
     }
     
     private void addListeners() {
@@ -81,6 +82,7 @@ public class REPRootPanel extends javax.swing.JPanel {
                 partiesPanel1.loadAllParties();
                 break;
             case "Details":
+                rEPCaseDetailsPanel1.loadInformation();
                 break;
             case "Board Status":
                 rEPBoardStatusPanel1.loadInformation();
@@ -203,7 +205,15 @@ public class REPRootPanel extends javax.swing.JPanel {
                         Global.root.getrEPHeaderPanel1().getIncumbentEEOTextBox().getText().trim());
                 break;
             case "Details":
-                
+                if(buttonText.equals("Update")) {
+                    disableTabs(jTabbedPane1.getSelectedIndex());
+                    rEPCaseDetailsPanel1.enableUpdate();
+                } else {
+                    enableTabs();
+                    Global.root.enableTabsAfterSave();
+                    Global.root.enableButtonsAfterCancel();
+                    rEPCaseDetailsPanel1.disableUpdate(true);
+                }
                 break;
             case "Board Status":
                 if(buttonText.equals("Update")) {
@@ -214,7 +224,7 @@ public class REPRootPanel extends javax.swing.JPanel {
                     Global.root.enableTabsAfterSave();
                     Global.root.enableButtonsAfterCancel();
                     rEPBoardStatusPanel1.disableUpdate(true);
-//                    Global.root.getrEPHeaderPanel1().loadHeaderInformation();
+                    rEPCaseDetailsPanel1.loadInformation();
                 }
                 break;
             case "Elections":
@@ -266,6 +276,15 @@ public class REPRootPanel extends javax.swing.JPanel {
                         Global.root.getrEPHeaderPanel1().getIncumbentEEOTextBox().getText().trim());
                 break;
             case "Details":
+                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+                if(!cancel.isReset()) {
+                } else {
+                    Global.root.enableButtonsAfterCancel();
+                    Global.root.enableTabsAfterSave();
+                    enableTabs();
+                    rEPCaseDetailsPanel1.disableUpdate(false);
+                    rEPCaseDetailsPanel1.loadInformation();
+                }
                 break;
             case "Board Status":
                 cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
@@ -378,9 +397,7 @@ public class REPRootPanel extends javax.swing.JPanel {
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(rEPCaseDetailsPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(rEPCaseDetailsPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Details", jPanel4);
