@@ -6,10 +6,14 @@
 package parker.serb.REP;
 
 import java.awt.Color;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import parker.serb.Global;
 import parker.serb.sql.REPBoardActionType;
+import parker.serb.sql.REPCase;
 import parker.serb.sql.User;
+import parker.serb.util.NumberFormatService;
 
 /**
  *
@@ -17,6 +21,7 @@ import parker.serb.sql.User;
  */
 public class REPBoardStatusPanel extends javax.swing.JPanel {
 
+    REPCase caseInformation;
     /**
      * Creates new form REPBoardStatusPanel
      */
@@ -30,9 +35,9 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
         
         hearingPersonComboBox.addItem("");
         
-        List gearingPeopleList = User.loadAllHearingPeople();
+        List hearingPeopleList = User.loadULPComboBox();
         
-        for (Object hearingPerson : gearingPeopleList) {
+        for (Object hearingPerson : hearingPeopleList) {
             hearingPersonComboBox.addItem(hearingPerson.toString());
         }
     }
@@ -52,6 +57,17 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
     public void loadInformation() {
         loadHearingPerson();
         loadBoardActionType();
+        //loadMeetings
+        loadStatusInformation();
+    }
+    
+    private void loadStatusInformation() {
+        caseInformation = REPCase.loadBoardStatus();
+        
+        boardActionTypeComboBox.setSelectedItem(caseInformation.boardActionType);
+        boardActionDateTextBox.setText(caseInformation.boardActionDate != null ? Global.mmddyyyy.format(new Date(caseInformation.boardActionDate.getTime())) : ""); 
+        hearingPersonComboBox.setSelectedItem(caseInformation.hearingPersonID == 0 ? "" : User.getNameByID(caseInformation.hearingPersonID));
+        BoardActionNote.setText(caseInformation.boardStatusNote);
     }
     
     void enableUpdate() {
@@ -61,14 +77,12 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
         
         boardActionTypeComboBox.setEnabled(true);
         boardActionDateTextBox.setEnabled(true);
+        boardActionDateTextBox.setBackground(Color.WHITE);
         hearingPersonComboBox.setEnabled(true);
         BoardActionNote.setEnabled(true);
         BoardMeetingBlurb.setEnabled(true);
         
         addBoardMeetingButton.setVisible(true);
-        //Dates
-//        fileDateTextBox.setEnabled(true);
-//        fileDateTextBox.setBackground(Color.WHITE);
     }
     
     void disableUpdate(boolean runSave) {
@@ -78,32 +92,33 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
         
         boardActionTypeComboBox.setEnabled(false);
         boardActionDateTextBox.setEnabled(false);
+        boardActionDateTextBox.setBackground(new Color(238,238,238));
         hearingPersonComboBox.setEnabled(false);
         BoardActionNote.setEnabled(false);
         BoardMeetingBlurb.setEnabled(false);
         
         addBoardMeetingButton.setVisible(false);
         
-
-//        caseTypeComboBox.setEnabled(false);
-//        caseTypeComboBox.setBackground(new Color(238,238,238));
-        
-        
-//        if(runSave)
-//            saveInformation();
+        if(runSave) {
+            saveInformation();
+        } else {
+            loadStatusInformation();
+        }
+            
     }
-//    
-//    public void disableAll() {
-//        boardActionTypeComboBox.setEnabled(false);
-//        boardActionDateTextBox.setEnabled(false);
-//        hearingPersonComboBox.setEnabled(false);
-//    }
-//    
-//    public void enableAll() {
-//        boardActionTypeComboBox.setEnabled(true);
-//        boardActionDateTextBox.setEnabled(true);
-//        hearingPersonComboBox.setEnabled(true);
-//    }
+    
+    private void saveInformation() {
+        REPCase newCaseInformation = new REPCase();
+        
+        newCaseInformation.boardActionType = boardActionTypeComboBox.getSelectedItem().toString().equals("") ? null : boardActionTypeComboBox.getSelectedItem().toString();
+        newCaseInformation.boardActionDate = boardActionDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(boardActionDateTextBox.getText()));
+        newCaseInformation.hearingPersonID = hearingPersonComboBox.getSelectedItem().toString().equals("") ? null : User.getUserID(hearingPersonComboBox.getSelectedItem().toString());
+        newCaseInformation.boardStatusNote = BoardActionNote.getText().equals("") ? null : BoardActionNote.getText();
+        newCaseInformation.boardStatusBlurb = BoardMeetingBlurb.getText().equals("") ? null : BoardMeetingBlurb.getText();
+        
+        REPCase.updateBoardStatus(newCaseInformation, caseInformation);
+        caseInformation = REPCase.loadBoardStatus();
+    }
     
 
     /**
@@ -125,20 +140,20 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         BoardActionNote = new javax.swing.JTextArea();
         hearingPersonComboBox = new javax.swing.JComboBox();
+        jLabel6 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         BoardMeetingBlurb = new javax.swing.JTextArea();
-        addBoardMeetingButton = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        addBoardMeetingButton = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Board Action"));
-
         jLabel1.setText("Type:");
 
-        boardActionTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         boardActionTypeComboBox.setEnabled(false);
 
         jLabel2.setText("Board Action Date:");
@@ -155,11 +170,13 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
         BoardActionNote.setColumns(20);
         BoardActionNote.setLineWrap(true);
         BoardActionNote.setRows(5);
+        BoardActionNote.setWrapStyleWord(true);
         BoardActionNote.setEnabled(false);
         jScrollPane1.setViewportView(BoardActionNote);
 
-        hearingPersonComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         hearingPersonComboBox.setEnabled(false);
+
+        jLabel6.setText("Board Action:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -170,9 +187,7 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(boardActionTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -182,13 +197,20 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(hearingPersonComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(hearingPersonComboBox, 0, 108, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel6))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(jLabel6)
+                .addGap(10, 10, 10)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(boardActionTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -199,24 +221,24 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1)
-                .addContainerGap())
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE))
         );
-
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Board Meeting"));
 
         jLabel5.setText("Blurb:");
 
         BoardMeetingBlurb.setColumns(20);
         BoardMeetingBlurb.setLineWrap(true);
         BoardMeetingBlurb.setRows(5);
+        BoardMeetingBlurb.setWrapStyleWord(true);
         BoardMeetingBlurb.setEnabled(false);
         jScrollPane3.setViewportView(BoardMeetingBlurb);
 
-        addBoardMeetingButton.setText("+");
-
         jPanel3.setMaximumSize(new java.awt.Dimension(300, 155));
         jPanel3.setMinimumSize(new java.awt.Dimension(300, 155));
+
+        jLabel7.setText("Board Meeting Information:");
+
+        addBoardMeetingButton.setText("+");
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -235,8 +257,9 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
             }
         });
         jTable1.setMaximumSize(new java.awt.Dimension(2147483647, 155));
-        jTable1.setMinimumSize(new java.awt.Dimension(60, 155));
+        jTable1.setMinimumSize(new java.awt.Dimension(300, 155));
         jTable1.setPreferredSize(new java.awt.Dimension(300, 155));
+        jTable1.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(jTable1);
         if (jTable1.getColumnModel().getColumnCount() > 0) {
             jTable1.getColumnModel().getColumn(0).setResizable(false);
@@ -245,15 +268,45 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
             jTable1.getColumnModel().getColumn(3).setResizable(false);
         }
 
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addComponent(jScrollPane2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(addBoardMeetingButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(addBoardMeetingButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, 0))
+        );
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, 0))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -263,27 +316,21 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(addBoardMeetingButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jLabel5)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(addBoardMeetingButton, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -293,8 +340,8 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -318,9 +365,12 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;

@@ -68,6 +68,11 @@ public class REPCase {
     public String EEONameChangeTo;
     public String ERNameChangeFrom;
     public String ERNameChangeTo;
+    public String boardActionType;
+    public Timestamp boardActionDate;
+    public int hearingPersonID;
+    public String boardStatusNote;
+    public String boardStatusBlurb;
     
     /**
      * Load a list of the most recent 250 REP case numbers
@@ -381,8 +386,8 @@ public class REPCase {
             
             if(caseInformation.next()) {
                 rep = new REPCase();
-                rep.type = caseInformation.getString("type") == null ? "" : caseInformation.getString("type");
-                rep.fileBy = caseInformation.getString("fileBy") == null ? "" : caseInformation.getString("fileBy") ;
+                rep.type = caseInformation.getString("type");
+                rep.fileBy = caseInformation.getString("fileBy");
                 rep.bargainingUnitIncluded = caseInformation.getString("bargainingUnitIncluded");
                 rep.bargainingUnitExcluded = caseInformation.getString("bargainingUnitExcluded");
                 rep.optInIncluded = caseInformation.getString("optInIncluded");
@@ -404,6 +409,81 @@ public class REPCase {
             SlackNotification.sendNotification(ex.getMessage());
         }
         return rep;
+    }
+    
+    public static REPCase loadBoardStatus() {
+        REPCase rep = null;
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select"
+                    + " boardActionType,"
+                    + " boardActionDate,"
+                    + " hearingPersonID,"
+                    + " boardStatusNote,"
+                    + " boardStatusBlurb"
+                    + " from REPCase where caseYear = ? "
+                    + " AND caseType = ? "
+                    + " AND caseMonth = ? "
+                    + " AND caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, Global.caseYear);
+            preparedStatement.setString(2, Global.caseType);
+            preparedStatement.setString(3, Global.caseMonth);
+            preparedStatement.setString(4, Global.caseNumber);
+
+            ResultSet caseInformation = preparedStatement.executeQuery();
+            
+            if(caseInformation.next()) {
+                rep = new REPCase();
+                rep.type = caseInformation.getString("boardActionType");
+//                rep.fileBy = caseInformation.getString("fileBy") == null ? "" : caseInformation.getString("fileBy") ;
+//                rep.bargainingUnitIncluded = caseInformation.getString("bargainingUnitIncluded");
+//                rep.bargainingUnitExcluded = caseInformation.getString("bargainingUnitExcluded");
+//                rep.optInIncluded = caseInformation.getString("optInIncluded");
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex.getMessage());
+        }
+        return rep;
+    }
+    
+    public static void updateBoardStatus(REPCase newCaseInformation, REPCase caseInformation) {
+        REPCase rep = null;
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Update REPCase set"
+                    + " boardActionType = ?,"
+                    + " boardActionDate = ?,"
+                    + " hearingPersonID = ?,"
+                    + " boardStatusNote = ?,"
+                    + " boardStatusBlurb = ?"
+                    + " from REPCase where caseYear = ? "
+                    + " AND caseType = ? "
+                    + " AND caseMonth = ? "
+                    + " AND caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, newCaseInformation.boardActionType);
+            preparedStatement.setTimestamp(2, newCaseInformation.boardActionDate);
+            preparedStatement.setInt(3, newCaseInformation.hearingPersonID);
+            preparedStatement.setString(4, newCaseInformation.boardStatusNote);
+            preparedStatement.setString(5, newCaseInformation.boardStatusBlurb);
+            preparedStatement.setString(6, Global.caseYear);
+            preparedStatement.setString(7, Global.caseType);
+            preparedStatement.setString(8, Global.caseMonth);
+            preparedStatement.setString(9, Global.caseNumber);
+
+            int success = preparedStatement.executeUpdate();
+            
+            if(success == 1) {
+//                detailedCaseDetailsSaveInformation(newCaseInformation, caseInformation);
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex.getMessage());
+        }
     }
     
     public static void updateCaseDetails(REPCase newCaseInformation, REPCase caseInformation) {
