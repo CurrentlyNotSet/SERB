@@ -437,11 +437,11 @@ public class REPCase {
             
             if(caseInformation.next()) {
                 rep = new REPCase();
-                rep.type = caseInformation.getString("boardActionType");
-//                rep.fileBy = caseInformation.getString("fileBy") == null ? "" : caseInformation.getString("fileBy") ;
-//                rep.bargainingUnitIncluded = caseInformation.getString("bargainingUnitIncluded");
-//                rep.bargainingUnitExcluded = caseInformation.getString("bargainingUnitExcluded");
-//                rep.optInIncluded = caseInformation.getString("optInIncluded");
+                rep.boardActionType = caseInformation.getString("boardActionType");
+                rep.boardActionDate = caseInformation.getTimestamp("boardActionDate");
+                rep.hearingPersonID = caseInformation.getInt("hearingPersonID");
+                rep.boardStatusNote = caseInformation.getString("boardStatusNote");
+                rep.boardStatusBlurb = caseInformation.getString("boardStatusBlurb");
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex.getMessage());

@@ -6,10 +6,19 @@
 package parker.serb.REP;
 
 import java.awt.Color;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+import javax.swing.JFrame;
+import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
+import parker.serb.boardmeetings.AddREPBoardMeeting;
+import parker.serb.boardmeetings.RemoveBoardMeetingDialog;
+import parker.serb.boardmeetings.UpdateREPBoardMeeting;
+import parker.serb.boardmeetings.UpdateULPBoardMeeting;
+import parker.serb.sql.BoardMeeting;
 import parker.serb.sql.REPBoardActionType;
 import parker.serb.sql.REPCase;
 import parker.serb.sql.User;
@@ -27,7 +36,65 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
      */
     public REPBoardStatusPanel() {
         initComponents();
+        boardMeetingTable.getColumnModel().getColumn(0).setPreferredWidth(125);
+        boardMeetingTable.getColumnModel().getColumn(0).setMinWidth(125);
+        boardMeetingTable.getColumnModel().getColumn(0).setMaxWidth(125);
+        
+        boardMeetingTable.getColumnModel().getColumn(1).setPreferredWidth(75);
+        boardMeetingTable.getColumnModel().getColumn(1).setMinWidth(75);
+        boardMeetingTable.getColumnModel().getColumn(1).setMaxWidth(75);
+        
+        boardMeetingTable.getColumnModel().getColumn(3).setPreferredWidth(125);
+        boardMeetingTable.getColumnModel().getColumn(3).setMinWidth(125);
+        boardMeetingTable.getColumnModel().getColumn(3).setMaxWidth(125);
+        
+        boardMeetingTable.getColumnModel().getColumn(4).setPreferredWidth(0);
+        boardMeetingTable.getColumnModel().getColumn(4).setMinWidth(0);
+        boardMeetingTable.getColumnModel().getColumn(4).setMaxWidth(0);
+        
+        addListeners();
+        
         addBoardMeetingButton.setVisible(false);
+    }
+    
+    private void addListeners() {
+        boardMeetingTable.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(boardMeetingTable.getSelectedRow() > -1) {
+                    if(e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1) {
+                        new UpdateREPBoardMeeting(
+                                (JFrame) Global.root.getRootPane().getParent(),
+                                true,
+                                boardMeetingTable.getValueAt(boardMeetingTable.getSelectedRow(), 0).toString().trim(),
+                                boardMeetingTable.getValueAt(boardMeetingTable.getSelectedRow(), 1).toString().trim(),
+                                boardMeetingTable.getValueAt(boardMeetingTable.getSelectedRow(), 2).toString().trim(),
+                                boardMeetingTable.getValueAt(boardMeetingTable.getSelectedRow(), 4).toString().trim(),
+                                boardMeetingTable.getValueAt(boardMeetingTable.getSelectedRow(), 3).toString().trim()
+                            );
+                        loadBoardMeetings();
+                    } else if(e.getButton() == MouseEvent.BUTTON3) {
+                        new RemoveBoardMeetingDialog(
+                                (JFrame) Global.root.getRootPane().getParent(),
+                                true,
+                                boardMeetingTable.getValueAt(boardMeetingTable.getSelectedRow(), 4).toString().trim());
+                        loadBoardMeetings();
+                    }
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        });
     }
     
     public void loadHearingPerson() {
@@ -57,17 +124,18 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
     public void loadInformation() {
         loadHearingPerson();
         loadBoardActionType();
-        //loadMeetings
+        loadBoardMeetings();
         loadStatusInformation();
     }
     
     private void loadStatusInformation() {
         caseInformation = REPCase.loadBoardStatus();
         
-        boardActionTypeComboBox.setSelectedItem(caseInformation.boardActionType);
+        boardActionTypeComboBox.setSelectedItem(caseInformation.boardActionType == null ? "" : caseInformation.boardActionType);
         boardActionDateTextBox.setText(caseInformation.boardActionDate != null ? Global.mmddyyyy.format(new Date(caseInformation.boardActionDate.getTime())) : ""); 
         hearingPersonComboBox.setSelectedItem(caseInformation.hearingPersonID == 0 ? "" : User.getNameByID(caseInformation.hearingPersonID));
         BoardActionNote.setText(caseInformation.boardStatusNote);
+        BoardMeetingBlurb.setText(caseInformation.boardStatusBlurb);
     }
     
     void enableUpdate() {
@@ -80,7 +148,9 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
         boardActionDateTextBox.setBackground(Color.WHITE);
         hearingPersonComboBox.setEnabled(true);
         BoardActionNote.setEnabled(true);
+        BoardActionNote.setBackground(Color.WHITE);
         BoardMeetingBlurb.setEnabled(true);
+        BoardMeetingBlurb.setBackground(Color.WHITE);
         
         addBoardMeetingButton.setVisible(true);
     }
@@ -95,8 +165,9 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
         boardActionDateTextBox.setBackground(new Color(238,238,238));
         hearingPersonComboBox.setEnabled(false);
         BoardActionNote.setEnabled(false);
+        BoardActionNote.setBackground(new Color(238,238,238));
         BoardMeetingBlurb.setEnabled(false);
-        
+        BoardMeetingBlurb.setBackground(new Color(238,238,238));
         addBoardMeetingButton.setVisible(false);
         
         if(runSave) {
@@ -107,12 +178,26 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
             
     }
     
+    private void loadBoardMeetings() {
+        DefaultTableModel model = (DefaultTableModel) boardMeetingTable.getModel();
+        
+        model.setRowCount(0);
+        
+        List boardMeeting = BoardMeeting.loadREPBoardMeetings();
+        
+        for (Object meeting : boardMeeting) {
+            BoardMeeting singleMeeting = (BoardMeeting) meeting;
+            model.addRow(new Object[] {singleMeeting.boardMeetingDate, singleMeeting.agendaItemNumber, singleMeeting.recommendation, singleMeeting.memoDate, singleMeeting.id});
+        }
+        boardMeetingTable.clearSelection();
+    }
+    
     private void saveInformation() {
         REPCase newCaseInformation = new REPCase();
         
         newCaseInformation.boardActionType = boardActionTypeComboBox.getSelectedItem().toString().equals("") ? null : boardActionTypeComboBox.getSelectedItem().toString();
         newCaseInformation.boardActionDate = boardActionDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(boardActionDateTextBox.getText()));
-        newCaseInformation.hearingPersonID = hearingPersonComboBox.getSelectedItem().toString().equals("") ? null : User.getUserID(hearingPersonComboBox.getSelectedItem().toString());
+        newCaseInformation.hearingPersonID = hearingPersonComboBox.getSelectedItem().toString().equals("") ? 0 : User.getUserID(hearingPersonComboBox.getSelectedItem().toString());
         newCaseInformation.boardStatusNote = BoardActionNote.getText().equals("") ? null : BoardActionNote.getText();
         newCaseInformation.boardStatusBlurb = BoardMeetingBlurb.getText().equals("") ? null : BoardMeetingBlurb.getText();
         
@@ -150,7 +235,7 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
         jPanel4 = new javax.swing.JPanel();
         addBoardMeetingButton = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        boardMeetingTable = new javax.swing.JTable();
 
         jLabel1.setText("Type:");
 
@@ -167,10 +252,12 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
 
         jLabel4.setText("Note:");
 
+        BoardActionNote.setBackground(new java.awt.Color(238, 238, 238));
         BoardActionNote.setColumns(20);
         BoardActionNote.setLineWrap(true);
         BoardActionNote.setRows(5);
         BoardActionNote.setWrapStyleWord(true);
+        BoardActionNote.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         BoardActionNote.setEnabled(false);
         jScrollPane1.setViewportView(BoardActionNote);
 
@@ -226,10 +313,12 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
 
         jLabel5.setText("Blurb:");
 
+        BoardMeetingBlurb.setBackground(new java.awt.Color(238, 238, 238));
         BoardMeetingBlurb.setColumns(20);
         BoardMeetingBlurb.setLineWrap(true);
         BoardMeetingBlurb.setRows(5);
         BoardMeetingBlurb.setWrapStyleWord(true);
+        BoardMeetingBlurb.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         BoardMeetingBlurb.setEnabled(false);
         jScrollPane3.setViewportView(BoardMeetingBlurb);
 
@@ -239,33 +328,38 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
         jLabel7.setText("Board Meeting Information:");
 
         addBoardMeetingButton.setText("+");
+        addBoardMeetingButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addBoardMeetingButtonActionPerformed(evt);
+            }
+        });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jScrollPane2.setToolTipText("");
+
+        boardMeetingTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Meeting Date", "Agenda Item", "Status/Recommendation", "Memo Date"
+                "Meeting Date", "Item", "Status/Recommendation", "Memo Date", "id"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        jTable1.setMaximumSize(new java.awt.Dimension(2147483647, 155));
-        jTable1.setMinimumSize(new java.awt.Dimension(300, 155));
-        jTable1.setPreferredSize(new java.awt.Dimension(300, 155));
-        jTable1.getTableHeader().setReorderingAllowed(false);
-        jScrollPane2.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setResizable(false);
-            jTable1.getColumnModel().getColumn(1).setResizable(false);
-            jTable1.getColumnModel().getColumn(2).setResizable(false);
-            jTable1.getColumnModel().getColumn(3).setResizable(false);
+        boardMeetingTable.setMaximumSize(new java.awt.Dimension(2147483647, 155));
+        boardMeetingTable.setMinimumSize(new java.awt.Dimension(0, 0));
+        boardMeetingTable.setPreferredSize(new java.awt.Dimension(300, 155));
+        boardMeetingTable.setShowGrid(true);
+        boardMeetingTable.getTableHeader().setReorderingAllowed(false);
+        jScrollPane2.setViewportView(boardMeetingTable);
+        if (boardMeetingTable.getColumnModel().getColumnCount() > 0) {
+            boardMeetingTable.getColumnModel().getColumn(4).setResizable(false);
         }
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -352,6 +446,11 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void addBoardMeetingButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBoardMeetingButtonActionPerformed
+        new AddREPBoardMeeting((JFrame) Global.root, true);
+        loadBoardMeetings();
+    }//GEN-LAST:event_addBoardMeetingButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea BoardActionNote;
@@ -359,6 +458,7 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
     private javax.swing.JButton addBoardMeetingButton;
     private com.alee.extended.date.WebDateField boardActionDateTextBox;
     private javax.swing.JComboBox boardActionTypeComboBox;
+    private javax.swing.JTable boardMeetingTable;
     private javax.swing.JComboBox hearingPersonComboBox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -374,6 +474,5 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }

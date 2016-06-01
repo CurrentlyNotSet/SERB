@@ -225,14 +225,14 @@ public class REPCaseDetailsPanel extends javax.swing.JPanel {
        }
        
        if(typeFiledByComboBox.isVisible()) {
-           newRepCase.typeFiledBy = typeFiledByComboBox.getSelectedItem().toString().equals("") ? null : typeFiledByComboBox.getSelectedItem().toString();
+           newRepCase.typeFiledBy = typeFiledByComboBox.getSelectedItem() == null ? null : typeFiledByComboBox.getSelectedItem().toString();
        } else {
            typeFiledByComboBox.setSelectedItem("");
            newRepCase.typeFiledBy = null;
        }
        
        if(typeFiledViaComboBox.isVisible()) {
-           newRepCase.typeFiledVia = typeFiledViaComboBox.getSelectedItem().toString().equals("") ? null : typeFiledViaComboBox.getSelectedItem().toString().trim();
+           newRepCase.typeFiledVia = typeFiledViaComboBox.getSelectedItem() == null ? null : typeFiledViaComboBox.getSelectedItem().toString().trim();
        } else {
            typeFiledViaComboBox.setSelectedItem("");
            newRepCase.typeFiledVia = null;
@@ -243,6 +243,34 @@ public class REPCaseDetailsPanel extends javax.swing.JPanel {
        } else {
            PositionStatementFiledByTextBox.setText("");
            newRepCase.positionStatementFiledBy = null;
+       }
+       
+       if(EEONameChangeFromTextBox.isVisible()) {
+           newRepCase.EEONameChangeFrom = EEONameChangeFromTextBox.getText().trim().equals("") ? null : EEONameChangeFromTextBox.getText().trim();
+       } else {
+           EEONameChangeFromTextBox.setText("");
+           newRepCase.EEONameChangeFrom = null;
+       }
+       
+       if(EEONameChangeToTextBox.isVisible()) {
+           newRepCase.EEONameChangeTo = EEONameChangeToTextBox.getText().trim().equals("") ? null : EEONameChangeToTextBox.getText().trim();
+       } else {
+           EEONameChangeFromTextBox.setText("");
+           newRepCase.EEONameChangeTo = null;
+       }
+       
+       if(ERNameChangeFromTextBox.isVisible()) {
+           newRepCase.ERNameChangeFrom = ERNameChangeFromTextBox.getText().trim().equals("") ? null : ERNameChangeFromTextBox.getText().trim();
+       } else {
+           ERNameChangeFromTextBox.setText("");
+           newRepCase.ERNameChangeFrom = null;
+       }
+       
+       if(ERNameChangeToTextBox.isVisible()) {
+           newRepCase.ERNameChangeTo = ERNameChangeToTextBox.getText().trim().equals("") ? null : ERNameChangeToTextBox.getText().trim();
+       } else {
+           ERNameChangeToTextBox.setText("");
+           newRepCase.ERNameChangeTo = null;
        }
        
        REPCase.updateCaseDetails(newRepCase, repCase);

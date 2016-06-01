@@ -86,12 +86,6 @@ public class UpdateULPBoardMeeting extends javax.swing.JDialog {
             }
         });
         
-        recommendationComboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                enableAddButton();
-            }
-        });
     }
     
     private void loadRecComboBox() {
@@ -109,8 +103,7 @@ public class UpdateULPBoardMeeting extends javax.swing.JDialog {
     
     private void enableAddButton() {
         if(meetingDateTextBox.getText().equals("") ||
-                agendaItemTextBox.getText().equals("") ||
-                recommendationComboBox.getSelectedItem().toString().equals("")) {
+                agendaItemTextBox.getText().equals("")) {
             updateButton.setEnabled(false);
         } else {
             updateButton.setEnabled(true);
@@ -140,7 +133,7 @@ public class UpdateULPBoardMeeting extends javax.swing.JDialog {
     }
     
     private void saveInformation() {
-        BoardMeeting.updateBoardMeeting(
+        BoardMeeting.updateULPBoardMeeting(
             id,
             meetingDateTextBox.getText(),
             agendaItemTextBox.getText(),

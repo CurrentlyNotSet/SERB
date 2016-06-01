@@ -63,7 +63,7 @@ public class ULPRootPanel extends javax.swing.JPanel {
                 activityPanel1.loadAllActivity();
                 break;
             case "Parties":
-                partiesPanel1.loadAllParties();
+                partiesPanel1.loadULPParties();
                 break;
             case "Status":
                 uLPStatusPanel1.loadInformation();
