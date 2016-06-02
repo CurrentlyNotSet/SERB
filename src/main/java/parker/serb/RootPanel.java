@@ -29,6 +29,7 @@ import parker.serb.user.Preferences;
 import parker.serb.util.CreateNewCaseDialog;
 import parker.serb.login.ExitVerification;
 import parker.serb.publicRecords.fileSelector;
+import parker.serb.sql.CaseNumber;
 import parker.serb.sql.DocketLock;
 import parker.serb.sql.NewCaseLock;
 import parker.serb.util.FileService;
@@ -164,6 +165,8 @@ public class RootPanel extends javax.swing.JFrame {
         jTabbedPane1.addChangeListener((ChangeEvent e) -> {
             if(Global.activeSection != null) {    
                 Global.activeSection = jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex());
+                
+                System.out.println(Global.activeSection);
                 
                 setHeaderCard();
                 enableButtons();
@@ -1012,8 +1015,10 @@ public class RootPanel extends javax.swing.JFrame {
         switch(Global.activeSection) {
             case "REP":
                 rEPRootPanel1.repUpdate(jButton2.getText());
+                break;
             case "ULP":
                 uLPRootPanel1.ulpUpdate(jButton2.getText());
+                break;
             default:
                 break;
         }
@@ -1023,8 +1028,10 @@ public class RootPanel extends javax.swing.JFrame {
         switch(Global.activeSection) {
             case "REP":
                 new REPReportDialog((JFrame) this.getRootPane().getParent(), true);
+                break;
             case "ULP":
                 new ULPReportDialog((JFrame) this.getRootPane().getParent(), true);
+                break;
             default:
                 break;
         }
