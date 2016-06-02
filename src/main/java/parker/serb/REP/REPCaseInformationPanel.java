@@ -310,6 +310,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         employerIDNumberTextBox.setText(caseInformation.employerIDNumber == null ? "" : caseInformation.employerIDNumber);
         bargainingUnitNumberTextBox.setText(caseInformation.bargainingUnitNumber == null ? "" : caseInformation.bargainingUnitNumber);
         bargainingUnitNameTextBox.setText(caseInformation.bargainingUnitNumber == null ? "" : BargainingUnit.getUnitDescription(caseInformation.bargainingUnitNumber));
+        bargainingUnitNameTextBox.setCaretPosition(0);
         boardCertifiedCheckBox.setSelected(caseInformation.boardCertified == true);
         deemedCertifiedCheckBox.setSelected(caseInformation.deemedCertified == true);
         certificationRevokedCheckBox.setSelected(caseInformation.certificationRevoked == true);
