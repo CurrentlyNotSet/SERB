@@ -20,7 +20,7 @@ public class Global {
     
     public static final boolean verboseLogging = true;
     
-    public static final String applicationVersion = "0.3";
+    public static final String applicationVersion = "3.0";
 
     //Gets a temp directory for storing files.  This should only be used for MongoDB
     //public static String tempDir = System.getProperty("java.io.tmpdir");
