@@ -358,22 +358,6 @@ public class REPCaseDetailsPanel extends javax.swing.JPanel {
         filedByComboBox = new javax.swing.JComboBox<>();
         professionalNonProfessionalCheckBox = new javax.swing.JCheckBox();
         optInIncludedLabel = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jScrollPane10 = new javax.swing.JScrollPane();
-        bargainingUnitIncludedTextArea = new javax.swing.JTextArea();
-        jPanel2 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        jScrollPane6 = new javax.swing.JScrollPane();
-        bargainingUnitExcludedTextArea = new javax.swing.JTextArea();
-        professionalExcludedPanel = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
-        jScrollPane12 = new javax.swing.JScrollPane();
-        professionalExcludedTextArea = new javax.swing.JTextArea();
-        professionalIncludedPanel = new javax.swing.JPanel();
-        professionalIncludedLabel = new javax.swing.JLabel();
-        jScrollPane11 = new javax.swing.JScrollPane();
-        professionalIncludedTextArea = new javax.swing.JTextArea();
         certificationUnitChangesLabel = new javax.swing.JLabel();
         toReflectLabel = new javax.swing.JLabel();
         typeFiledByLabel = new javax.swing.JLabel();
@@ -393,6 +377,24 @@ public class REPCaseDetailsPanel extends javax.swing.JPanel {
         ERNameChangeToTextBox = new javax.swing.JTextField();
         optInIncludedScrollPane = new javax.swing.JScrollPane();
         optInIncludedTextArea = new javax.swing.JTextArea();
+        jPanel3 = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jScrollPane10 = new javax.swing.JScrollPane();
+        bargainingUnitIncludedTextArea = new javax.swing.JTextArea();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        bargainingUnitExcludedTextArea = new javax.swing.JTextArea();
+        jPanel4 = new javax.swing.JPanel();
+        professionalIncludedPanel = new javax.swing.JPanel();
+        professionalIncludedLabel = new javax.swing.JLabel();
+        jScrollPane11 = new javax.swing.JScrollPane();
+        professionalIncludedTextArea = new javax.swing.JTextArea();
+        professionalExcludedPanel = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        jScrollPane12 = new javax.swing.JScrollPane();
+        professionalExcludedTextArea = new javax.swing.JTextArea();
         nonProfessionalExcludedPanel = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jScrollPane13 = new javax.swing.JScrollPane();
@@ -423,121 +425,6 @@ public class REPCaseDetailsPanel extends javax.swing.JPanel {
 
         optInIncludedLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         optInIncludedLabel.setText("Opt-In INCLUDED:");
-
-        jLabel2.setText("Bargaining Unit INCLUDED:");
-
-        bargainingUnitIncludedTextArea.setBackground(new java.awt.Color(238, 238, 238));
-        bargainingUnitIncludedTextArea.setColumns(20);
-        bargainingUnitIncludedTextArea.setLineWrap(true);
-        bargainingUnitIncludedTextArea.setRows(3);
-        bargainingUnitIncludedTextArea.setWrapStyleWord(true);
-        bargainingUnitIncludedTextArea.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        bargainingUnitIncludedTextArea.setEnabled(false);
-        jScrollPane10.setViewportView(bargainingUnitIncludedTextArea);
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addComponent(jScrollPane10)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane10))
-        );
-
-        jLabel3.setText("Bargaining Unit EXCLUDED:");
-
-        bargainingUnitExcludedTextArea.setBackground(new java.awt.Color(238, 238, 238));
-        bargainingUnitExcludedTextArea.setColumns(20);
-        bargainingUnitExcludedTextArea.setLineWrap(true);
-        bargainingUnitExcludedTextArea.setRows(3);
-        bargainingUnitExcludedTextArea.setWrapStyleWord(true);
-        bargainingUnitExcludedTextArea.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        bargainingUnitExcludedTextArea.setEnabled(false);
-        jScrollPane6.setViewportView(bargainingUnitExcludedTextArea);
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addComponent(jScrollPane6)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE))
-        );
-
-        jLabel6.setText("Professional EXCLUDED:");
-
-        professionalExcludedTextArea.setBackground(new java.awt.Color(238, 238, 238));
-        professionalExcludedTextArea.setColumns(20);
-        professionalExcludedTextArea.setLineWrap(true);
-        professionalExcludedTextArea.setRows(2);
-        professionalExcludedTextArea.setWrapStyleWord(true);
-        professionalExcludedTextArea.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        professionalExcludedTextArea.setEnabled(false);
-        jScrollPane12.setViewportView(professionalExcludedTextArea);
-
-        javax.swing.GroupLayout professionalExcludedPanelLayout = new javax.swing.GroupLayout(professionalExcludedPanel);
-        professionalExcludedPanel.setLayout(professionalExcludedPanelLayout);
-        professionalExcludedPanelLayout.setHorizontalGroup(
-            professionalExcludedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(professionalExcludedPanelLayout.createSequentialGroup()
-                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addComponent(jScrollPane12)
-        );
-        professionalExcludedPanelLayout.setVerticalGroup(
-            professionalExcludedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(professionalExcludedPanelLayout.createSequentialGroup()
-                .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane12, javax.swing.GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE))
-        );
-
-        professionalIncludedLabel.setText("Professional INCLUDED:");
-
-        professionalIncludedTextArea.setBackground(new java.awt.Color(238, 238, 238));
-        professionalIncludedTextArea.setColumns(20);
-        professionalIncludedTextArea.setLineWrap(true);
-        professionalIncludedTextArea.setRows(2);
-        professionalIncludedTextArea.setWrapStyleWord(true);
-        professionalIncludedTextArea.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        professionalIncludedTextArea.setEnabled(false);
-        jScrollPane11.setViewportView(professionalIncludedTextArea);
-
-        javax.swing.GroupLayout professionalIncludedPanelLayout = new javax.swing.GroupLayout(professionalIncludedPanel);
-        professionalIncludedPanel.setLayout(professionalIncludedPanelLayout);
-        professionalIncludedPanelLayout.setHorizontalGroup(
-            professionalIncludedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane11)
-            .addGroup(professionalIncludedPanelLayout.createSequentialGroup()
-                .addComponent(professionalIncludedLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        professionalIncludedPanelLayout.setVerticalGroup(
-            professionalIncludedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(professionalIncludedPanelLayout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addComponent(professionalIncludedLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane11))
-        );
 
         certificationUnitChangesLabel.setText("Certifications/Unit Changes:");
 
@@ -608,6 +495,136 @@ public class REPCaseDetailsPanel extends javax.swing.JPanel {
         optInIncludedTextArea.setEnabled(false);
         optInIncludedScrollPane.setViewportView(optInIncludedTextArea);
 
+        jLabel2.setText("Bargaining Unit INCLUDED:");
+
+        bargainingUnitIncludedTextArea.setBackground(new java.awt.Color(238, 238, 238));
+        bargainingUnitIncludedTextArea.setColumns(20);
+        bargainingUnitIncludedTextArea.setLineWrap(true);
+        bargainingUnitIncludedTextArea.setRows(3);
+        bargainingUnitIncludedTextArea.setWrapStyleWord(true);
+        bargainingUnitIncludedTextArea.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        bargainingUnitIncludedTextArea.setEnabled(false);
+        jScrollPane10.setViewportView(bargainingUnitIncludedTextArea);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jScrollPane10)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane10, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE))
+        );
+
+        jLabel3.setText("Bargaining Unit EXCLUDED:");
+
+        bargainingUnitExcludedTextArea.setBackground(new java.awt.Color(238, 238, 238));
+        bargainingUnitExcludedTextArea.setColumns(20);
+        bargainingUnitExcludedTextArea.setLineWrap(true);
+        bargainingUnitExcludedTextArea.setRows(3);
+        bargainingUnitExcludedTextArea.setWrapStyleWord(true);
+        bargainingUnitExcludedTextArea.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        bargainingUnitExcludedTextArea.setEnabled(false);
+        jScrollPane6.setViewportView(bargainingUnitExcludedTextArea);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jScrollPane6)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane6))
+        );
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        professionalIncludedLabel.setText("Professional INCLUDED:");
+
+        professionalIncludedTextArea.setBackground(new java.awt.Color(238, 238, 238));
+        professionalIncludedTextArea.setColumns(20);
+        professionalIncludedTextArea.setLineWrap(true);
+        professionalIncludedTextArea.setRows(2);
+        professionalIncludedTextArea.setWrapStyleWord(true);
+        professionalIncludedTextArea.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        professionalIncludedTextArea.setEnabled(false);
+        jScrollPane11.setViewportView(professionalIncludedTextArea);
+
+        javax.swing.GroupLayout professionalIncludedPanelLayout = new javax.swing.GroupLayout(professionalIncludedPanel);
+        professionalIncludedPanel.setLayout(professionalIncludedPanelLayout);
+        professionalIncludedPanelLayout.setHorizontalGroup(
+            professionalIncludedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane11)
+            .addGroup(professionalIncludedPanelLayout.createSequentialGroup()
+                .addComponent(professionalIncludedLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        professionalIncludedPanelLayout.setVerticalGroup(
+            professionalIncludedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(professionalIncludedPanelLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(professionalIncludedLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane11, javax.swing.GroupLayout.DEFAULT_SIZE, 62, Short.MAX_VALUE))
+        );
+
+        jLabel6.setText("Professional EXCLUDED:");
+
+        professionalExcludedTextArea.setBackground(new java.awt.Color(238, 238, 238));
+        professionalExcludedTextArea.setColumns(20);
+        professionalExcludedTextArea.setLineWrap(true);
+        professionalExcludedTextArea.setRows(2);
+        professionalExcludedTextArea.setWrapStyleWord(true);
+        professionalExcludedTextArea.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        professionalExcludedTextArea.setEnabled(false);
+        jScrollPane12.setViewportView(professionalExcludedTextArea);
+
+        javax.swing.GroupLayout professionalExcludedPanelLayout = new javax.swing.GroupLayout(professionalExcludedPanel);
+        professionalExcludedPanel.setLayout(professionalExcludedPanelLayout);
+        professionalExcludedPanelLayout.setHorizontalGroup(
+            professionalExcludedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(professionalExcludedPanelLayout.createSequentialGroup()
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jScrollPane12)
+        );
+        professionalExcludedPanelLayout.setVerticalGroup(
+            professionalExcludedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(professionalExcludedPanelLayout.createSequentialGroup()
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane12, javax.swing.GroupLayout.DEFAULT_SIZE, 62, Short.MAX_VALUE))
+        );
+
         jLabel7.setText("Non-Professional EXCLUDED:");
 
         nonProfessionalExcludedTextArea.setBackground(new java.awt.Color(238, 238, 238));
@@ -633,7 +650,7 @@ public class REPCaseDetailsPanel extends javax.swing.JPanel {
             .addGroup(nonProfessionalExcludedPanelLayout.createSequentialGroup()
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane13, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE))
+                .addComponent(jScrollPane13, javax.swing.GroupLayout.DEFAULT_SIZE, 62, Short.MAX_VALUE))
         );
 
         professionalIncludedLabel1.setText("Non-Professional INCLUDED:");
@@ -662,8 +679,37 @@ public class REPCaseDetailsPanel extends javax.swing.JPanel {
                 .addGap(0, 0, 0)
                 .addComponent(professionalIncludedLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane14))
+                .addComponent(jScrollPane14, javax.swing.GroupLayout.DEFAULT_SIZE, 62, Short.MAX_VALUE))
         );
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(professionalIncludedPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(nonProfessionalIncludedPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(nonProfessionalExcludedPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(professionalExcludedPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(professionalExcludedPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(professionalIncludedPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(6, 6, 6)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(nonProfessionalExcludedPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(nonProfessionalIncludedPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        jPanel4Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {nonProfessionalExcludedPanel, nonProfessionalIncludedPanel, professionalExcludedPanel, professionalIncludedPanel});
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -672,65 +718,52 @@ public class REPCaseDetailsPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(optInIncludedScrollPane)
+                    .addComponent(optInIncludedLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(typeFiledByLabel)
+                            .addComponent(toReflectLabel)
+                            .addComponent(positionStatementFiledByLabel)
+                            .addComponent(EEONameChangeFromLabel)
+                            .addComponent(ERNameChangeFromLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(professionalNonProfessionalCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(certificationUnitChangesLabel))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(PositionStatementFiledByTextBox)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(EEONameChangeFromTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+                                            .addComponent(ERNameChangeFromTextBox))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(EEONameChangeToLabel)
+                                            .addComponent(ERNameChangeToLabel))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(ERNameChangeToTextBox)
+                                            .addComponent(EEONameChangeToTextBox)))
+                                    .addComponent(toReflectTextBox))
+                                .addGap(1, 1, 1))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(typeFiledByComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(typeFiledViaLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(typeFiledViaComboBox, 0, 200, Short.MAX_VALUE))))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(filedByComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(optInIncludedScrollPane)
-                            .addComponent(optInIncludedLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(typeFiledByLabel)
-                                    .addComponent(toReflectLabel)
-                                    .addComponent(positionStatementFiledByLabel)
-                                    .addComponent(EEONameChangeFromLabel)
-                                    .addComponent(ERNameChangeFromLabel))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(PositionStatementFiledByTextBox)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                    .addComponent(EEONameChangeFromTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
-                                                    .addComponent(ERNameChangeFromTextBox))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(EEONameChangeToLabel)
-                                                    .addComponent(ERNameChangeToLabel))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(ERNameChangeToTextBox)
-                                                    .addComponent(EEONameChangeToTextBox)))
-                                            .addComponent(toReflectTextBox))
-                                        .addGap(1, 1, 1))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(typeFiledByComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(typeFiledViaLabel)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(typeFiledViaComboBox, 0, 189, Short.MAX_VALUE))))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(professionalIncludedPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(professionalExcludedPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(nonProfessionalIncludedPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(nonProfessionalExcludedPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGap(10, 10, 10))))
+                                .addComponent(filedByComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(professionalNonProfessionalCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(certificationUnitChangesLabel))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(10, 10, 10))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -741,24 +774,16 @@ public class REPCaseDetailsPanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(5, 5, 5)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(1, 1, 1)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(6, 6, 6)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(optInIncludedLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2)
                 .addComponent(optInIncludedScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(8, 8, 8)
                 .addComponent(professionalNonProfessionalCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(professionalExcludedPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(professionalIncludedPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(6, 6, 6)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(nonProfessionalExcludedPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(nonProfessionalIncludedPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
                 .addComponent(certificationUnitChangesLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -830,6 +855,8 @@ public class REPCaseDetailsPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane10;
     private javax.swing.JScrollPane jScrollPane11;
     private javax.swing.JScrollPane jScrollPane12;
