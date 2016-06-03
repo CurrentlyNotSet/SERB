@@ -5,15 +5,19 @@
  */
 package parker.serb.boardmeetings;
 
+import com.alee.extended.date.WebDateField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.util.List;
+import javax.swing.JFrame;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import parker.serb.Global;
 import parker.serb.sql.BoardMeeting;
 import parker.serb.sql.REPRecommendation;
 import parker.serb.sql.ULPRecommendation;
+import parker.serb.util.ClearDateDialog;
 
 /**
  *
@@ -97,6 +101,16 @@ public class AddREPBoardMeeting extends javax.swing.JDialog {
             addBoardMeetingButton.setEnabled(true);
         }
     }
+    
+    private void clearDate(WebDateField dateField, MouseEvent evt) {
+        if(evt.getButton() == MouseEvent.BUTTON3 && dateField.isEnabled()) {
+            ClearDateDialog dialog = new ClearDateDialog((JFrame) Global.root, true);
+            if(dialog.isReset()) {
+                dateField.setText("");
+            }
+            dialog.dispose();
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -157,6 +171,11 @@ public class AddREPBoardMeeting extends javax.swing.JDialog {
         meetingDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
         meetingDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         meetingDateTextBox.setDateFormat(Global.mmddyyyy);
+        meetingDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                meetingDateTextBoxMouseClicked(evt);
+            }
+        });
 
         jLabel5.setText("Memo Date:");
 
@@ -164,6 +183,11 @@ public class AddREPBoardMeeting extends javax.swing.JDialog {
         memoDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
         memoDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         memoDateTextBox.setDateFormat(Global.mmddyyyy);
+        memoDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                memoDateTextBoxMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -234,6 +258,14 @@ public class AddREPBoardMeeting extends javax.swing.JDialog {
     private void recommendationComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recommendationComboBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_recommendationComboBoxActionPerformed
+
+    private void meetingDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_meetingDateTextBoxMouseClicked
+        clearDate(meetingDateTextBox, evt);
+    }//GEN-LAST:event_meetingDateTextBoxMouseClicked
+
+    private void memoDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_memoDateTextBoxMouseClicked
+        clearDate(memoDateTextBox, evt);
+    }//GEN-LAST:event_memoDateTextBoxMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addBoardMeetingButton;

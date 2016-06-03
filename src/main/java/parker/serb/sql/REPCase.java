@@ -479,7 +479,7 @@ public class REPCase {
             int success = preparedStatement.executeUpdate();
             
             if(success == 1) {
-//                detailedCaseDetailsSaveInformation(newCaseInformation, caseInformation);
+                detailedBoardStatusDetailsSaveInformation(newCaseInformation, caseInformation);
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex.getMessage());
@@ -927,14 +927,14 @@ public class REPCase {
                 Activity.addActivty("Changed Bargaining Unit Excluded", null);
         }
         
-//        if(newCaseInformation.bargainingUnitExcluded == null && oldCaseInformation.bargainingUnitExcluded != null) {
-//            Activity.addActivty("Removed Bargaining Unit Excluded", null);
-//        } else if(newCaseInformation.bargainingUnitExcluded != null && oldCaseInformation.bargainingUnitExcluded == null) {
-//            Activity.addActivty("Set Bargaining Unit Excluded", null);
-//        } else if(newCaseInformation.bargainingUnitExcluded != null && oldCaseInformation.bargainingUnitExcluded != null) {
-//            if(!newCaseInformation.bargainingUnitExcluded.equals(oldCaseInformation.bargainingUnitExcluded)) 
-//                Activity.addActivty("Changed Bargaining Unit Excluded", null);
-//        }
+        if(newCaseInformation.bargainingUnitExcluded == null && oldCaseInformation.bargainingUnitExcluded != null) {
+            Activity.addActivty("Removed Bargaining Unit Excluded", null);
+        } else if(newCaseInformation.bargainingUnitExcluded != null && oldCaseInformation.bargainingUnitExcluded == null) {
+            Activity.addActivty("Set Bargaining Unit Excluded", null);
+        } else if(newCaseInformation.bargainingUnitExcluded != null && oldCaseInformation.bargainingUnitExcluded != null) {
+            if(!newCaseInformation.bargainingUnitExcluded.equals(oldCaseInformation.bargainingUnitExcluded)) 
+                Activity.addActivty("Changed Bargaining Unit Excluded", null);
+        }
         
 //        //currentOwner
 //        if(newCaseInformation.currentOwnerID == 0 && oldCaseInformation.currentOwnerID != 0) {
@@ -1129,7 +1129,58 @@ public class REPCase {
 //        }
     }
 
-    
+    private static void detailedBoardStatusDetailsSaveInformation(REPCase newCaseInformation, REPCase oldCaseInformation) {
+
+        //type
+        if(newCaseInformation.boardActionType == null && oldCaseInformation.boardActionType != null) {
+            Activity.addActivty("Removed " + oldCaseInformation.boardActionType + " from Board Action Type", null);
+        } else if(newCaseInformation.boardActionType != null && oldCaseInformation.boardActionType == null) {
+            Activity.addActivty("Set Board Action Type to " + newCaseInformation.boardActionType, null);
+        } else if(newCaseInformation.boardActionType != null && oldCaseInformation.boardActionType != null) {
+            if(!newCaseInformation.boardActionType.equals(oldCaseInformation.boardActionType)) 
+                Activity.addActivty("Changed Board Action Type from " + oldCaseInformation.boardActionType + " to " + newCaseInformation.boardActionType, null);
+        }
+        
+        //boardactionDate
+        if(newCaseInformation.boardActionDate == null && oldCaseInformation.boardActionDate != null) {
+            Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.boardActionDate.getTime())) + " from Board Action Date", null);
+        } else if(newCaseInformation.boardActionDate != null && oldCaseInformation.boardActionDate == null) {
+            Activity.addActivty("Set Board Action Date to " + Global.mmddyyyy.format(new Date(newCaseInformation.boardActionDate.getTime())), null);
+        } else if(newCaseInformation.boardActionDate != null && oldCaseInformation.boardActionDate != null) {
+            if(!Global.mmddyyyy.format(new Date(oldCaseInformation.boardActionDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.boardActionDate.getTime()))))
+                Activity.addActivty("Changed Board Action Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.boardActionDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.boardActionDate.getTime())), null);
+        }
+        
+        //hearingPerson
+        if(newCaseInformation.hearingPersonID == 0 && oldCaseInformation.hearingPersonID != 0) {
+            Activity.addActivty("Removed " + User.getNameByID(oldCaseInformation.hearingPersonID) + " from Hearing Person", null);
+        } else if(newCaseInformation.hearingPersonID != 0 && oldCaseInformation.hearingPersonID == 0) {
+            Activity.addActivty("Set Hearing Person to " + User.getNameByID(newCaseInformation.hearingPersonID), null);
+        } else if(newCaseInformation.hearingPersonID != 0 && oldCaseInformation.hearingPersonID != 0) {
+            if(newCaseInformation.hearingPersonID != oldCaseInformation.hearingPersonID) 
+                Activity.addActivty("Changed Hearing Person from " + User.getNameByID(oldCaseInformation.hearingPersonID) + " to " + User.getNameByID(newCaseInformation.hearingPersonID), null);
+        }
+        
+        //note
+        if(newCaseInformation.boardStatusNote == null && oldCaseInformation.boardStatusNote != null) {
+            Activity.addActivty("Removed Board Status Note", null);
+        } else if(newCaseInformation.boardStatusNote != null && oldCaseInformation.boardStatusNote == null) {
+            Activity.addActivty("Set Board Status Note", null);
+        } else if(newCaseInformation.boardStatusNote != null && oldCaseInformation.boardStatusNote != null) {
+            if(!newCaseInformation.boardStatusNote.equals(oldCaseInformation.boardStatusNote)) 
+                Activity.addActivty("Changed Board Status Note", null);
+        }
+        
+        //blurb
+        if(newCaseInformation.boardStatusBlurb == null && oldCaseInformation.boardStatusBlurb != null) {
+            Activity.addActivty("Removed Board Status Blurb", null);
+        } else if(newCaseInformation.boardStatusBlurb != null && oldCaseInformation.boardStatusBlurb == null) {
+            Activity.addActivty("Set Board Status Blurb", null);
+        } else if(newCaseInformation.boardStatusBlurb != null && oldCaseInformation.boardStatusBlurb != null) {
+            if(!newCaseInformation.boardStatusBlurb.equals(oldCaseInformation.boardStatusBlurb)) 
+                Activity.addActivty("Changed Board Status Blurb", null);
+        }
+    }
     
     public static List<String> loadRelatedCases() {
         

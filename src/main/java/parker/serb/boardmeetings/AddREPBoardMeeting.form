@@ -159,6 +159,9 @@
           <Color blue="0" green="0" red="0" type="rgb"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="meetingDateTextBoxMouseClicked"/>
+      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="meetingDateTextBox.setDateFormat(Global.mmddyyyy);"/>
       </AuxValues>
@@ -178,6 +181,9 @@
           <Color blue="0" green="0" red="0" type="rgb"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="memoDateTextBoxMouseClicked"/>
+      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="memoDateTextBox.setDateFormat(Global.mmddyyyy);"/>
       </AuxValues>

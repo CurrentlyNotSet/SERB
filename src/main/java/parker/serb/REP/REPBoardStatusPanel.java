@@ -5,6 +5,7 @@
  */
 package parker.serb.REP;
 
+import com.alee.extended.date.WebDateField;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -22,6 +23,7 @@ import parker.serb.sql.BoardMeeting;
 import parker.serb.sql.REPBoardActionType;
 import parker.serb.sql.REPCase;
 import parker.serb.sql.User;
+import parker.serb.util.ClearDateDialog;
 import parker.serb.util.NumberFormatService;
 
 /**
@@ -205,6 +207,16 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
         caseInformation = REPCase.loadBoardStatus();
     }
     
+    private void clearDate(WebDateField dateField, MouseEvent evt) {
+        if(evt.getButton() == MouseEvent.BUTTON3 && dateField.isEnabled()) {
+            ClearDateDialog dialog = new ClearDateDialog((JFrame) Global.root, true);
+            if(dialog.isReset()) {
+                dateField.setText("");
+            }
+            dialog.dispose();
+        }
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -243,10 +255,16 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
 
         jLabel2.setText("Board Action Date:");
 
+        boardActionDateTextBox.setEditable(false);
         boardActionDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
         boardActionDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         boardActionDateTextBox.setEnabled(false);
         boardActionDateTextBox.setDateFormat(Global.mmddyyyy);
+        boardActionDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                boardActionDateTextBoxMouseClicked(evt);
+            }
+        });
 
         jLabel3.setText("Hearing Person:");
 
@@ -450,6 +468,10 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
         new AddREPBoardMeeting((JFrame) Global.root, true);
         loadBoardMeetings();
     }//GEN-LAST:event_addBoardMeetingButtonActionPerformed
+
+    private void boardActionDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_boardActionDateTextBoxMouseClicked
+        clearDate(boardActionDateTextBox, evt);
+    }//GEN-LAST:event_boardActionDateTextBoxMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
