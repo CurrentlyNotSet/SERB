@@ -72,7 +72,7 @@ public class REPRootPanel extends javax.swing.JPanel {
                 rEPCaseInformationPanel2.loadInformation();
                 break;
             case "Parties":
-                partiesPanel1.loadAllParties();
+                partiesPanel1.loadULPParties();
                 break;
             case "Details":
                 rEPCaseDetailsPanel1.loadInformation();
@@ -190,7 +190,7 @@ public class REPRootPanel extends javax.swing.JPanel {
                 break;
             case "Parties":
                 new PartySearchDialog((JFrame) this.getRootPane().getParent(), true);
-                partiesPanel1.loadAllParties();
+                partiesPanel1.loadULPParties();
                 Global.root.getrEPHeaderPanel1().loadHeaderInformation();
                 REPCaseSearchData.updateCaseEntryFromParties(
                         Global.root.getrEPHeaderPanel1().getEmployerTextBox().getText().trim(),
