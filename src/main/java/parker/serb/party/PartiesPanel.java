@@ -601,15 +601,15 @@ public class PartiesPanel extends javax.swing.JPanel {
                 employerParties.add(partyInformation);
             } 
 
-            if(partyInformation.caseRelation.contains("Employee Organization")) {
+            if(partyInformation.caseRelation.startsWith("Employee Organization")) {
                 employeeOrgParties.add(partyInformation);
             } 
 
-            if(partyInformation.caseRelation.contains("Rival Employee Organization")) {
+            if(partyInformation.caseRelation.startsWith("Rival Employee Organization")) {
                 rivalEmployeeOrgParties.add(partyInformation);
             } 
 
-            if(partyInformation.caseRelation.contains("Incumbent Employee Organization")) {
+            if(partyInformation.caseRelation.startsWith("Incumbent Employee Organization")) {
                 incumbentEmployeeParties.add(partyInformation);
             } 
 
