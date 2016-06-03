@@ -5,33 +5,38 @@
  */
 package parker.serb.boardmeetings;
 
+import com.alee.extended.date.WebDateField;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import parker.serb.Global;
 import parker.serb.sql.BoardMeeting;
+import parker.serb.sql.REPRecommendation;
 import parker.serb.sql.ULPRecommendation;
 import parker.serb.util.CancelUpdate;
+import parker.serb.util.ClearDateDialog;
 
 /**
  *
  * @author parkerjohnston
  */
-public class UpdateULPBoardMeeting extends javax.swing.JDialog {
+public class UpdateREPBoardMeeting extends javax.swing.JDialog {
 
     String id;
     String agendaNumber;
     String rec;
     String date;
+    String memoDate;
     /**
      * Creates new form AddULPBoardMeeting
      */
-    public UpdateULPBoardMeeting(java.awt.Frame parent, boolean modal,
-            String passedDate, String passedAgendaNumber, String passedRec, String passedID) {
+    public UpdateREPBoardMeeting(java.awt.Frame parent, boolean modal,
+            String passedDate, String passedAgendaNumber, String passedRec, String passedID, String passedMemoDate) {
         super(parent, modal);
         initComponents();
         addListeners();
@@ -39,16 +44,18 @@ public class UpdateULPBoardMeeting extends javax.swing.JDialog {
         date = passedDate;
         agendaNumber = passedAgendaNumber;
         rec = passedRec;
+        memoDate = passedMemoDate;
         loadRecComboBox();
-        loadInformation(date, agendaNumber, rec);
+        loadInformation(date, agendaNumber, rec, memoDate);
         setLocationRelativeTo(parent);
         setVisible(true);
     }
     
-    private void loadInformation(String date, String agendaNumber, String rec) {
+    private void loadInformation(String date, String agendaNumber, String rec, String memoDate) {
         meetingDateTextBox.setText(date);
         agendaItemTextBox.setText(agendaNumber);
         recommendationComboBox.setSelectedItem(rec);
+        memoDateTextBox.setText(memoDate);
     }
     
     private void addListeners() {
@@ -85,7 +92,6 @@ public class UpdateULPBoardMeeting extends javax.swing.JDialog {
                 enableAddButton();
             }
         });
-        
     }
     
     private void loadRecComboBox() {
@@ -93,11 +99,11 @@ public class UpdateULPBoardMeeting extends javax.swing.JDialog {
         
         recommendationComboBox.addItem("");
         
-        List recommendationList = ULPRecommendation.loadAllULPRecommendations();
+        List recommendationList = REPRecommendation.loadAllREPRecommendations();
         
         for (Object recommendation : recommendationList) {
-            ULPRecommendation rec = (ULPRecommendation) recommendation;
-            recommendationComboBox.addItem(rec.code);
+            REPRecommendation rec = (REPRecommendation) recommendation;
+            recommendationComboBox.addItem(rec.recommendation);
         }
     }
     
@@ -116,13 +122,15 @@ public class UpdateULPBoardMeeting extends javax.swing.JDialog {
         agendaItemTextBox.setEnabled(true);
         agendaItemTextBox.setBackground(Color.white);
         recommendationComboBox.setEnabled(true);
+        memoDateTextBox.setEnabled(true);
+        memoDateTextBox.setBackground(Color.WHITE);
     }
     
     private void disableAllInputs(boolean save) {
         if(save) {
             saveInformation();
         } else {
-            loadInformation(date, agendaNumber, rec);
+            loadInformation(date, agendaNumber, rec, memoDate);
         }
         
         meetingDateTextBox.setEnabled(false);
@@ -130,15 +138,28 @@ public class UpdateULPBoardMeeting extends javax.swing.JDialog {
         agendaItemTextBox.setEnabled(false);
         agendaItemTextBox.setBackground(new Color(238, 238, 238));
         recommendationComboBox.setEnabled(false);
+        memoDateTextBox.setEnabled(false);
+        memoDateTextBox.setBackground(new Color(238, 238, 238));
     }
     
     private void saveInformation() {
-        BoardMeeting.updateULPBoardMeeting(
+        BoardMeeting.updateREPBoardMeeting(
             id,
             meetingDateTextBox.getText(),
             agendaItemTextBox.getText(),
-            recommendationComboBox.getSelectedItem().toString()
+            recommendationComboBox.getSelectedItem().toString(),
+            memoDateTextBox.getText()
         );
+    }
+    
+    private void clearDate(WebDateField dateField, MouseEvent evt) {
+        if(evt.getButton() == MouseEvent.BUTTON3 && dateField.isEnabled()) {
+            ClearDateDialog dialog = new ClearDateDialog((JFrame) Global.root, true);
+            if(dialog.isReset()) {
+                dateField.setText("");
+            }
+            dialog.dispose();
+        }
     }
 
     /**
@@ -159,6 +180,8 @@ public class UpdateULPBoardMeeting extends javax.swing.JDialog {
         recommendationComboBox = new javax.swing.JComboBox<>();
         agendaItemTextBox = new javax.swing.JTextField();
         meetingDateTextBox = new com.alee.extended.date.WebDateField();
+        jLabel5 = new javax.swing.JLabel();
+        memoDateTextBox = new com.alee.extended.date.WebDateField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -199,6 +222,25 @@ public class UpdateULPBoardMeeting extends javax.swing.JDialog {
         meetingDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         meetingDateTextBox.setEnabled(false);
         meetingDateTextBox.setDateFormat(Global.mmddyyyy);
+        meetingDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                meetingDateTextBoxMouseClicked(evt);
+            }
+        });
+
+        jLabel5.setText("Memo Date:");
+
+        memoDateTextBox.setEditable(false);
+        memoDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        memoDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+        memoDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        memoDateTextBox.setEnabled(false);
+        memoDateTextBox.setDateFormat(Global.mmddyyyy);
+        memoDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                memoDateTextBoxMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -212,12 +254,14 @@ public class UpdateULPBoardMeeting extends javax.swing.JDialog {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel3)
                             .addComponent(jLabel2)
-                            .addComponent(jLabel4))
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(recommendationComboBox, 0, 241, Short.MAX_VALUE)
+                            .addComponent(recommendationComboBox, 0, 544, Short.MAX_VALUE)
                             .addComponent(agendaItemTextBox)
-                            .addComponent(meetingDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(meetingDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(memoDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -241,11 +285,15 @@ public class UpdateULPBoardMeeting extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(recommendationComboBox)
                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(memoDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(updateButton)
                     .addComponent(closeButton))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -277,6 +325,14 @@ public class UpdateULPBoardMeeting extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_updateButtonActionPerformed
 
+    private void meetingDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_meetingDateTextBoxMouseClicked
+        clearDate(meetingDateTextBox, evt);
+    }//GEN-LAST:event_meetingDateTextBoxMouseClicked
+
+    private void memoDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_memoDateTextBoxMouseClicked
+        clearDate(memoDateTextBox, evt);
+    }//GEN-LAST:event_memoDateTextBoxMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField agendaItemTextBox;
     private javax.swing.JButton closeButton;
@@ -284,7 +340,9 @@ public class UpdateULPBoardMeeting extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private com.alee.extended.date.WebDateField meetingDateTextBox;
+    private com.alee.extended.date.WebDateField memoDateTextBox;
     private javax.swing.JComboBox<String> recommendationComboBox;
     private javax.swing.JButton updateButton;
     // End of variables declaration//GEN-END:variables

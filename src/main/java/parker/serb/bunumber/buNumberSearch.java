@@ -29,6 +29,7 @@ public class buNumberSearch extends javax.swing.JDialog {
 
     String buNumber;
     String unitDesc;
+    String certStatus;
     List bu;
     /**
      * Creates new form employerSearch
@@ -73,6 +74,7 @@ public class buNumberSearch extends javax.swing.JDialog {
                 if(e.getClickCount() == 2) {
                    buNumber = buTable.getValueAt(buTable.getSelectedRow(), 0).toString().trim();
                    unitDesc = buTable.getValueAt(buTable.getSelectedRow(), 4).toString().trim();
+                   certStatus = buTable.getValueAt(buTable.getSelectedRow(), 8).toString().trim();
                    setVisible(false);
                 } 
             }
@@ -115,24 +117,17 @@ public class buNumberSearch extends javax.swing.JDialog {
         for (Object singleBU : bu) {
             BargainingUnit buInfo = (BargainingUnit) singleBU;
             if((buInfo.employerNumber + "-" + buInfo.unitNumber).contains(searchTextBox.getText().trim()) ||
-                buInfo.buEmployerName.toLowerCase().contains(searchTextBox.getText().trim().toLowerCase())
-//                    buInfo.lUnion.toLowerCase().contains(searchTextBox.getText().trim().toLowerCase()) ||
-//                    buInfo.county.toLowerCase().contains(searchTextBox.getText().trim().toLowerCase()) ||
-//                    buInfo.unitDescription.toLowerCase().contains(searchTextBox.getText().trim().toLowerCase()) ||
-//                    (buInfo.caseRefYear + "-" + buInfo.caseRefSection + "-" + buInfo.caseRefMonth + "-" +
-//                    buInfo.caseRefSequence).toLowerCase().contains(searchTextBox.getText().trim().toLowerCase()) ||
-//                    buInfo.local.toLowerCase().contains(searchTextBox.getText().trim().toLowerCase()) ||
-//                    buInfo.cert.toLowerCase().contains(searchTextBox.getText().trim().toLowerCase())
-                ) {
-            model.addRow(new Object[] {buInfo.employerNumber + "-" + buInfo.unitNumber,
-                buInfo.buEmployerName,
-                buInfo.lUnion,
-                buInfo.county,
-                buInfo.unitDescription,
-                buInfo.caseRefYear.equals("") ? "" : (buInfo.caseRefYear + "-" + buInfo.caseRefSection + "-" + buInfo.caseRefMonth + "-" + buInfo.caseRefSequence),
-                "",
-                buInfo.local,
-                buInfo.cert});
+                buInfo.buEmployerName.toLowerCase().contains(searchTextBox.getText().trim().toLowerCase()))
+            {
+                model.addRow(new Object[] {buInfo.employerNumber + "-" + buInfo.unitNumber,
+                    buInfo.buEmployerName,
+                    buInfo.lUnion,
+                    buInfo.county,
+                    buInfo.unitDescription,
+                    buInfo.caseRefYear.equals("") ? "" : (buInfo.caseRefYear + "-" + buInfo.caseRefSection + "-" + buInfo.caseRefMonth + "-" + buInfo.caseRefSequence),
+                    "",
+                    buInfo.local,
+                    buInfo.cert});
             }
         }
     }
@@ -144,10 +139,10 @@ public class buNumberSearch extends javax.swing.JDialog {
     public String getUnitDesc() {
         return unitDesc;
     }
-    
-    
-    
 
+    public String getCertStatus() {
+        return certStatus;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -188,13 +183,14 @@ public class buNumberSearch extends javax.swing.JDialog {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, true, false
+                false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
+        buTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(buTable);
 
         jButton1.setText("Close");

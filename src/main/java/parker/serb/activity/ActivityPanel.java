@@ -191,6 +191,7 @@ public class ActivityPanel extends javax.swing.JPanel {
 
         jLabel1.setText("Search:");
 
+        actvityTable.setAutoCreateRowSorter(true);
         actvityTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 

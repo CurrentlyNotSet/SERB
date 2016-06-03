@@ -17,6 +17,7 @@ import parker.serb.Global;
 import parker.serb.boardmeetings.AddULPBoardMeeting;
 import parker.serb.boardmeetings.RemoveBoardMeetingDialog;
 import parker.serb.boardmeetings.UpdateULPBoardMeeting;
+import parker.serb.bunumber.buNumberSearch;
 import parker.serb.employer.employerDetail;
 import parker.serb.employer.employerSearch;
 import parker.serb.relatedcase.AddNewRelatedCase;
@@ -213,8 +214,8 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         serbCaseNumberTextBox.setBackground(Color.white);
         employerNumberTextBox.setEnabled(true);
         employerNumberTextBox.setBackground(Color.white);
-        eoNumberTextBox.setEnabled(true);
-        eoNumberTextBox.setBackground(Color.white);
+//        eoNumberTextBox.setEnabled(true);
+//        eoNumberTextBox.setBackground(Color.white);
         barginingUnitNoTextBox.setEnabled(true);
         barginingUnitNoTextBox.setBackground(Color.white);
         finalDispositionComboBox.setEnabled(true);
@@ -267,8 +268,8 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         filedDateTextBox.setBackground(new Color(238,238,238));
         employerNumberTextBox.setEnabled(false);
         employerNumberTextBox.setBackground(new Color(238,238,238));
-        eoNumberTextBox.setEnabled(false);
-        eoNumberTextBox.setBackground(new Color(238,238,238));
+//        eoNumberTextBox.setEnabled(false);
+//        eoNumberTextBox.setBackground(new Color(238,238,238));
         barginingUnitNoTextBox.setEnabled(false);
         barginingUnitNoTextBox.setBackground(new Color(238,238,238));
         probableCauseCheckBox.setEnabled(false);
@@ -405,7 +406,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         employerNumberTextBox.setText(currentStatusInformation.employerIDNumber);
 //        deptInStateComboBox.setSelectedItem(currentStatusInformation.deptInState);
         barginingUnitNoTextBox.setText(currentStatusInformation.barginingUnitNo);
-        eoNumberTextBox.setText(currentStatusInformation.EONumber);
+//        eoNumberTextBox.setText(currentStatusInformation.EONumber);
         allegationTextBox.setText(currentStatusInformation.allegation);
         statusComboBox.setSelectedItem(currentStatusInformation.currentStatus);
         priorityComboBox.setSelectedItem(currentStatusInformation.priority == true ? "Yes" : "No");
@@ -433,7 +434,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         newStatusInformation.employerIDNumber = employerNumberTextBox.getText().trim().equals("") ? null : employerNumberTextBox.getText().trim();
 //        newStatusInformation.deptInState = (deptInStateComboBox.getSelectedItem() == null || deptInStateComboBox.getSelectedItem().equals("")) ? null : deptInStateComboBox.getSelectedItem().toString().trim();
         newStatusInformation.barginingUnitNo = barginingUnitNoTextBox.getText().trim().equals("") ? null : barginingUnitNoTextBox.getText().trim();
-        newStatusInformation.EONumber = eoNumberTextBox.getText().trim().equals("") ? null : eoNumberTextBox.getText().trim();
+//        newStatusInformation.EONumber = eoNumberTextBox.getText().trim().equals("") ? null : eoNumberTextBox.getText().trim();
         newStatusInformation.allegation = allegationTextBox.getText().trim().equals("") ? null : allegationTextBox.getText().trim();
         newStatusInformation.currentStatus = (statusComboBox.getSelectedItem() == null || statusComboBox.getSelectedItem().equals("")) ? null : statusComboBox.getSelectedItem().toString().trim();
         newStatusInformation.priority = priorityComboBox.getSelectedItem().toString().equals("Yes");
@@ -530,8 +531,6 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         jLabel21 = new javax.swing.JLabel();
         employerNumberTextBox = new javax.swing.JTextField();
         barginingUnitNoTextBox = new javax.swing.JTextField();
-        jLabel22 = new javax.swing.JLabel();
-        eoNumberTextBox = new javax.swing.JTextField();
 
         jLabel3.setText("Allegation:");
 
@@ -831,7 +830,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(addRelatedCaseButton, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
+                    .addComponent(addRelatedCaseButton, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addGap(0, 0, 0))
         );
@@ -893,7 +892,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(addCaseHearingButton, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 6, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -906,10 +905,9 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE)
+                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -942,12 +940,11 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         barginingUnitNoTextBox.setBackground(new java.awt.Color(238, 238, 238));
         barginingUnitNoTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         barginingUnitNoTextBox.setEnabled(false);
-
-        jLabel22.setText("EO Number:");
-
-        eoNumberTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        eoNumberTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        eoNumberTextBox.setEnabled(false);
+        barginingUnitNoTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                barginingUnitNoTextBoxMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -959,15 +956,13 @@ public class ULPStatusPanel extends javax.swing.JPanel {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addComponent(jLabel9)
-                                .addComponent(jLabel21)
-                                .addComponent(jLabel22))
+                                .addComponent(jLabel21))
                             .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(filedDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE)
                             .addComponent(employerNumberTextBox)
-                            .addComponent(barginingUnitNoTextBox)
-                            .addComponent(eoNumberTextBox))
+                            .addComponent(barginingUnitNoTextBox))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(probableCauseCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -991,11 +986,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel21)
                     .addComponent(barginingUnitNoTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel22)
-                    .addComponent(eoNumberTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -1056,6 +1047,23 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         clearDate(filedDateTextBox, evt);
     }//GEN-LAST:event_filedDateTextBoxMouseClicked
 
+    private void barginingUnitNoTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_barginingUnitNoTextBoxMouseClicked
+        if(evt.getClickCount() == 2) {
+            if(barginingUnitNoTextBox.isEnabled()) {
+                buNumberSearch search = new buNumberSearch((JFrame) Global.root.getRootPane().getParent(), true, employerNumberTextBox.getText().trim(), barginingUnitNoTextBox.getText().trim());
+                barginingUnitNoTextBox.setText(search.getBuNumber());
+                barginingUnitNoTextBox.setText(search.getUnitDesc());
+                barginingUnitNoTextBox.setCaretPosition(0);
+                if(employerNumberTextBox.getText().equals("")) {
+                    employerNumberTextBox.setText(search.getBuNumber().split("-")[0]);
+                }
+                search.dispose();
+            } else {
+//                new employerDetail((JFrame) Global.root.getRootPane().getParent(), true, employerIDNumberTextBox.getText().trim());
+            }
+        }
+    }//GEN-LAST:event_barginingUnitNoTextBoxMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addCaseHearingButton;
@@ -1072,7 +1080,6 @@ public class ULPStatusPanel extends javax.swing.JPanel {
     private com.alee.extended.date.WebDateField deferredDateTextBox;
     private com.alee.extended.date.WebDateField dismissalDateTextBox;
     private javax.swing.JTextField employerNumberTextBox;
-    private javax.swing.JTextField eoNumberTextBox;
     private com.alee.extended.date.WebDateField filedDateTextBox;
     private javax.swing.JComboBox<String> finalDispositionComboBox;
     private javax.swing.JComboBox<String> investigatorComboBox;
@@ -1090,7 +1097,6 @@ public class ULPStatusPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

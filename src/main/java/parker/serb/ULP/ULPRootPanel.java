@@ -63,7 +63,7 @@ public class ULPRootPanel extends javax.swing.JPanel {
                 activityPanel1.loadAllActivity();
                 break;
             case "Parties":
-                partiesPanel1.loadAllParties();
+                partiesPanel1.loadULPParties();
                 break;
             case "Status":
                 uLPStatusPanel1.loadInformation();
@@ -170,7 +170,7 @@ public class ULPRootPanel extends javax.swing.JPanel {
                 break;
             case "Parties":
                 new PartySearchDialog((JFrame) this.getRootPane().getParent(), true);
-                partiesPanel1.loadAllParties();
+                partiesPanel1.loadULPParties();
                 Global.root.getuLPHeaderPanel1().loadHeaderInformation();
                 ULPCaseSearchData.updateCaseEntryFromParties(
                         Global.root.getuLPHeaderPanel1().getChargedPartyTextBox().getText().trim(),
