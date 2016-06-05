@@ -179,7 +179,8 @@ public class RootPanel extends javax.swing.JFrame {
                 
                 if(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()).equals("Employer Search"))
                     if(companySearchPanel1.getModel() == null) {
-                        companySearchPanel1.loadAllCases();
+                        
+                        companySearchPanel1.activity();
                     }
 //                    companySearchPanel1.lo/adPastData();
             }

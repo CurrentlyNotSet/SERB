@@ -55,20 +55,34 @@ public class companySearchPanel extends javax.swing.JPanel {
         }
     }
     
-    public void loadAllCases() {
+    public void activity() {
+        jLayeredPane1.moveToFront(jPanel1);
+        Thread temp = new Thread(
+            new Runnable() {
+                @Override
+                public void run() {
+                    loadAllCases();
+//                    enableTextBoxes();
+                }
+            }
+        );
+        temp.start();
+    }
+    
+    private void loadAllCases() {
+        
         model = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }   
         };
-//       
-//        model.addColumn("Case Number");
-//        model.addColumn("Employer Name");
-//        model.addColumn("Union Name");
-//        model.addColumn("County");
-//        model.addColumn("Employer ID");
-//        model.addColumn("BUN Number");
+        
+        model.addColumn("Case Number");
+        model.addColumn("Status");
+        model.addColumn("Filed Date");
+        model.addColumn("Employer");
+        model.addColumn("Parties");
         
         caseList = EmployerCaseSearchData.loadEmployerCaseList();
         
@@ -85,7 +99,7 @@ public class companySearchPanel extends javax.swing.JPanel {
         }
 //        getTableData();
         employerTable.setModel(model);
-//        jLayeredPane1.moveToBack(jPanel1);
+        jLayeredPane1.moveToBack(jPanel1);
         
     }
 
@@ -106,22 +120,48 @@ public class companySearchPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        employerTable = new javax.swing.JTable();
         employerSearchTerm = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        refreshButton = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         statusComboBox = new javax.swing.JComboBox<>();
-        jButton2 = new javax.swing.JButton();
+        clearButton = new javax.swing.JButton();
+        jLayeredPane1 = new javax.swing.JLayeredPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        employerTable = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
 
         jLabel1.setText("Search:");
 
+        employerSearchTerm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                employerSearchTermActionPerformed(evt);
+            }
+        });
+
+        refreshButton.setText("Refresh");
+        refreshButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refreshButtonActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Status:");
+
+        statusComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All", "Open", "Closed" }));
+
+        clearButton.setText("Clear");
+        clearButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearButtonActionPerformed(evt);
+            }
+        });
+
+        jLayeredPane1.setLayout(new javax.swing.OverlayLayout(jLayeredPane1));
+
         employerTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
                 "Case Number", "Status", "File Date", "Employer", "Parties"
@@ -149,29 +189,31 @@ public class companySearchPanel extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(employerTable);
 
-        employerSearchTerm.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                employerSearchTermActionPerformed(evt);
-            }
-        });
+        jLayeredPane1.add(jScrollPane1);
 
-        jButton1.setText("Refresh");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setOpaque(false);
 
-        jLabel2.setText("Status:");
+        jLabel4.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/loading_spinner.gif"))); // NOI18N
 
-        statusComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All", "Open", "Closed" }));
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1104, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1104, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 388, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE))
+        );
 
-        jButton2.setText("Clear");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
+        jLayeredPane1.add(jPanel1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -187,11 +229,11 @@ public class companySearchPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(employerSearchTerm)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
+                .addComponent(clearButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
+                .addComponent(refreshButton)
                 .addContainerGap())
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 568, Short.MAX_VALUE)
+            .addComponent(jLayeredPane1, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -200,27 +242,32 @@ public class companySearchPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(employerSearchTerm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1)
+                    .addComponent(refreshButton)
                     .addComponent(jLabel2)
                     .addComponent(statusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2))
+                    .addComponent(clearButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE))
+                .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        statusComboBox.setSelectedItem("All");
-        employerSearchTerm.setText("");
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshButtonActionPerformed
+//        jButton2.setEnabled(false);
+        model.setNumRows(0);
+        jLayeredPane1.moveToFront(jPanel1);
+        activity();
+//        jButton2.setEnabled(true);
+        
+    }//GEN-LAST:event_refreshButtonActionPerformed
 
     private void employerSearchTermActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employerSearchTermActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_employerSearchTermActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
+        statusComboBox.setSelectedItem("All");
+        employerSearchTerm.setText("");
+    }//GEN-LAST:event_clearButtonActionPerformed
 
     private void employerTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_employerTableMouseClicked
         if(evt.getClickCount() == 2) {
@@ -238,13 +285,16 @@ public class companySearchPanel extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton clearButton;
     private javax.swing.JTextField employerSearchTerm;
     private javax.swing.JTable employerTable;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLayeredPane jLayeredPane1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton refreshButton;
     private javax.swing.JComboBox<String> statusComboBox;
     // End of variables declaration//GEN-END:variables
 }
