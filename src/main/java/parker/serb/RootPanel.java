@@ -19,6 +19,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
+import parker.serb.MED.MEDHeaderPanel;
+import parker.serb.MED.MEDRootPanel;
 import parker.serb.ULP.ULPHeaderPanel;
 import parker.serb.ULP.ULPLetterDialog;
 import parker.serb.ULP.ULPReportDialog;
@@ -136,7 +138,7 @@ public class RootPanel extends javax.swing.JFrame {
             case "MED":
                 card.show(jPanel9, "card6");
                 jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
-//                rEPHeaderPanel1.loadCases();
+                mEDHeaderPanel1.loadCases();
                 break;    
             case "Hearings":
                 card.show(jPanel9, "card7");
@@ -156,7 +158,7 @@ public class RootPanel extends javax.swing.JFrame {
             case "Employer Search":
                 card.show(jPanel9, "card2");
                 jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
-//                rEPHeaderPanel1.loadCases();
+                docketingSectionLabel.setText("");
                 break;  
         }
     }
@@ -174,6 +176,12 @@ public class RootPanel extends javax.swing.JFrame {
                 if(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()).equals("Docketing"))
 //                    Global.root.getDocketing().loadDocketList();
                     docketRootPanel1.loadDocketList();
+                
+                if(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()).equals("Employer Search"))
+                    if(companySearchPanel1.getModel() == null) {
+                        companySearchPanel1.loadAllCases();
+                    }
+//                    companySearchPanel1.lo/adPastData();
             }
         });
     }
@@ -233,8 +241,14 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton9.setVisible(false);
                 break;
             case "MED":
+                jButton1.setSize(dim);
+                jButton1.setMinimumSize(dim);
+                jButton1.setMaximumSize(dim);
                 jButton1.setText("New Case");
                 jButton1.setEnabled(true);
+                jButton2.setSize(dim);
+                jButton2.setMinimumSize(dim);
+                jButton2.setMaximumSize(dim);
                 jButton2.setVisible(true);
                 jButton2.setText("Update");
                 jButton2.setEnabled(false);
@@ -374,6 +388,14 @@ public class RootPanel extends javax.swing.JFrame {
         return uLPRootPanel1;
     }
 
+    public MEDHeaderPanel getmEDHeaderPanel1() {
+        return mEDHeaderPanel1;
+    }
+
+    public MEDRootPanel getmEDRootPanel1() {
+        return mEDRootPanel1;
+    }
+
     public JLabel getDocketingSectionLabel() {
         return docketingSectionLabel;
     }
@@ -434,6 +456,7 @@ public class RootPanel extends javax.swing.JFrame {
         jPanel5 = new javax.swing.JPanel();
         uLPRootPanel1 = new parker.serb.ULP.ULPRootPanel();
         jPanel6 = new javax.swing.JPanel();
+        mEDRootPanel1 = new parker.serb.MED.MEDRootPanel();
         jPanel10 = new javax.swing.JPanel();
         jPanel11 = new javax.swing.JPanel();
         jPanel12 = new javax.swing.JPanel();
@@ -509,7 +532,7 @@ public class RootPanel extends javax.swing.JFrame {
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel13Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(docketingSectionLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 1025, Short.MAX_VALUE)
+                .addComponent(docketingSectionLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 1027, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel13Layout.setVerticalGroup(
@@ -524,7 +547,7 @@ public class RootPanel extends javax.swing.JFrame {
         Docketing.setLayout(DocketingLayout);
         DocketingLayout.setHorizontalGroup(
             DocketingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1037, Short.MAX_VALUE)
+            .addGap(0, 1040, Short.MAX_VALUE)
             .addGroup(DocketingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(DocketingLayout.createSequentialGroup()
                     .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -543,7 +566,7 @@ public class RootPanel extends javax.swing.JFrame {
         REP.setLayout(REPLayout);
         REPLayout.setHorizontalGroup(
             REPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(rEPHeaderPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1037, Short.MAX_VALUE)
+            .addComponent(rEPHeaderPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1040, Short.MAX_VALUE)
         );
         REPLayout.setVerticalGroup(
             REPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -556,7 +579,7 @@ public class RootPanel extends javax.swing.JFrame {
         ULP.setLayout(ULPLayout);
         ULPLayout.setHorizontalGroup(
             ULPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(uLPHeaderPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1037, Short.MAX_VALUE)
+            .addComponent(uLPHeaderPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1040, Short.MAX_VALUE)
         );
         ULPLayout.setVerticalGroup(
             ULPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -571,7 +594,7 @@ public class RootPanel extends javax.swing.JFrame {
         ORG.setLayout(ORGLayout);
         ORGLayout.setHorizontalGroup(
             ORGLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(oRGHeaderPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 1037, Short.MAX_VALUE)
+            .addComponent(oRGHeaderPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 1040, Short.MAX_VALUE)
         );
         ORGLayout.setVerticalGroup(
             ORGLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -586,7 +609,7 @@ public class RootPanel extends javax.swing.JFrame {
         MED.setLayout(MEDLayout);
         MEDLayout.setHorizontalGroup(
             MEDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mEDHeaderPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1037, Short.MAX_VALUE)
+            .addComponent(mEDHeaderPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1040, Short.MAX_VALUE)
         );
         MEDLayout.setVerticalGroup(
             MEDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -601,7 +624,7 @@ public class RootPanel extends javax.swing.JFrame {
         Hearing.setLayout(HearingLayout);
         HearingLayout.setHorizontalGroup(
             HearingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(hearingHeaderPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1037, Short.MAX_VALUE)
+            .addComponent(hearingHeaderPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1040, Short.MAX_VALUE)
         );
         HearingLayout.setVerticalGroup(
             HearingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -616,7 +639,7 @@ public class RootPanel extends javax.swing.JFrame {
         CSC.setLayout(CSCLayout);
         CSCLayout.setHorizontalGroup(
             CSCLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(cSCHeaderPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1037, Short.MAX_VALUE)
+            .addComponent(cSCHeaderPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1040, Short.MAX_VALUE)
         );
         CSCLayout.setVerticalGroup(
             CSCLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -631,7 +654,7 @@ public class RootPanel extends javax.swing.JFrame {
         CMDS.setLayout(CMDSLayout);
         CMDSLayout.setHorizontalGroup(
             CMDSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(cMDSHeaderPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1037, Short.MAX_VALUE)
+            .addComponent(cMDSHeaderPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1040, Short.MAX_VALUE)
         );
         CMDSLayout.setVerticalGroup(
             CMDSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -669,11 +692,11 @@ public class RootPanel extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(docketRootPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1058, Short.MAX_VALUE)
+            .addComponent(docketRootPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1061, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(docketRootPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 625, Short.MAX_VALUE)
+            .addComponent(docketRootPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 677, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Docketing", jPanel2);
@@ -682,11 +705,11 @@ public class RootPanel extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(rEPRootPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1058, Short.MAX_VALUE)
+            .addComponent(rEPRootPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1061, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(rEPRootPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 625, Short.MAX_VALUE)
+            .addComponent(rEPRootPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 677, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("REP", jPanel3);
@@ -695,11 +718,11 @@ public class RootPanel extends javax.swing.JFrame {
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1058, Short.MAX_VALUE)
+            .addGap(0, 1061, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 625, Short.MAX_VALUE)
+            .addGap(0, 677, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("ORG", jPanel4);
@@ -708,7 +731,7 @@ public class RootPanel extends javax.swing.JFrame {
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(uLPRootPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1058, Short.MAX_VALUE)
+            .addComponent(uLPRootPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1061, Short.MAX_VALUE)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -721,11 +744,11 @@ public class RootPanel extends javax.swing.JFrame {
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1058, Short.MAX_VALUE)
+            .addComponent(mEDRootPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1061, Short.MAX_VALUE)
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 625, Short.MAX_VALUE)
+            .addComponent(mEDRootPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 677, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("MED", jPanel6);
@@ -734,11 +757,11 @@ public class RootPanel extends javax.swing.JFrame {
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1058, Short.MAX_VALUE)
+            .addGap(0, 1061, Short.MAX_VALUE)
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 625, Short.MAX_VALUE)
+            .addGap(0, 677, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Civil Service Commission", jPanel10);
@@ -747,11 +770,11 @@ public class RootPanel extends javax.swing.JFrame {
         jPanel11.setLayout(jPanel11Layout);
         jPanel11Layout.setHorizontalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1058, Short.MAX_VALUE)
+            .addGap(0, 1061, Short.MAX_VALUE)
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 625, Short.MAX_VALUE)
+            .addGap(0, 677, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("CMDS", jPanel11);
@@ -760,11 +783,11 @@ public class RootPanel extends javax.swing.JFrame {
         jPanel12.setLayout(jPanel12Layout);
         jPanel12Layout.setHorizontalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1058, Short.MAX_VALUE)
+            .addGap(0, 1061, Short.MAX_VALUE)
         );
         jPanel12Layout.setVerticalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 625, Short.MAX_VALUE)
+            .addGap(0, 677, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Hearings", jPanel12);
@@ -773,11 +796,11 @@ public class RootPanel extends javax.swing.JFrame {
         jPanel14.setLayout(jPanel14Layout);
         jPanel14Layout.setHorizontalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(companySearchPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1058, Short.MAX_VALUE)
+            .addComponent(companySearchPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1061, Short.MAX_VALUE)
         );
         jPanel14Layout.setVerticalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(companySearchPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 625, Short.MAX_VALUE)
+            .addComponent(companySearchPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 677, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Employer Search", jPanel14);
@@ -932,7 +955,7 @@ public class RootPanel extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1202, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -961,6 +984,9 @@ public class RootPanel extends javax.swing.JFrame {
                 break;
             case "ULP":
                 uLPRootPanel1.ulpDelete();
+                break;
+            case "MED":
+                mEDRootPanel1.medDelete();
                 break;
             case "Docketing":
                 docketRootPanel1.delete();
@@ -992,6 +1018,7 @@ public class RootPanel extends javax.swing.JFrame {
                 break;
             case "REP":
             case "ULP":
+            case "MED":
                 NewCaseLock caseLock = NewCaseLock.checkLock(Global.activeSection);
                 if(caseLock == null) {
                     caseLock.addLock(Global.activeSection);
@@ -1018,6 +1045,9 @@ public class RootPanel extends javax.swing.JFrame {
                 break;
             case "ULP":
                 uLPRootPanel1.ulpUpdate(jButton2.getText());
+                break;
+            case "MED":
+                mEDRootPanel1.medUpdate(jButton2.getText());
                 break;
             default:
                 break;
@@ -1118,6 +1148,7 @@ public class RootPanel extends javax.swing.JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private parker.serb.MED.MEDHeaderPanel mEDHeaderPanel1;
+    private parker.serb.MED.MEDRootPanel mEDRootPanel1;
     private parker.serb.ORG.ORGHeaderPanel oRGHeaderPanel1;
     private parker.serb.ORG.ORGHeaderPanel oRGHeaderPanel2;
     private parker.serb.REP.REPHeaderPanel rEPHeaderPanel1;

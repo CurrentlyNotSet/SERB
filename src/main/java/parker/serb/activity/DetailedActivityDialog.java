@@ -55,6 +55,8 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
         switch (Global.activeSection) {
             case "ULP":  userList = User.loadULPComboBox(); break;
             case "REP":  userList = User.loadREPComboBox(); break;
+            case "MED":  userList = User.loadREPComboBox(); break;
+            default: break;
         }
         
         toComboBox.setMaximumRowCount(6);

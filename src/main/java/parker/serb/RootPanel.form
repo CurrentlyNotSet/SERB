@@ -115,7 +115,7 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="1" attributes="0">
-          <Component id="jPanel1" max="32767" attributes="0"/>
+          <Component id="jPanel1" pref="1202" max="32767" attributes="0"/>
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel7" min="-2" max="-2" attributes="0"/>
@@ -228,7 +228,7 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="1037" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="1040" max="32767" attributes="0"/>
                       <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jPanel13" max="32767" attributes="0"/>
@@ -254,7 +254,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="docketingSectionLabel" pref="1025" max="32767" attributes="0"/>
+                              <Component id="docketingSectionLabel" pref="1027" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -293,7 +293,7 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="rEPHeaderPanel1" alignment="0" pref="1037" max="32767" attributes="0"/>
+                      <Component id="rEPHeaderPanel1" alignment="0" pref="1040" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
@@ -317,7 +317,7 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="uLPHeaderPanel1" alignment="0" pref="1037" max="32767" attributes="0"/>
+                      <Component id="uLPHeaderPanel1" alignment="0" pref="1040" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
@@ -344,7 +344,7 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="oRGHeaderPanel2" alignment="0" pref="1037" max="32767" attributes="0"/>
+                      <Component id="oRGHeaderPanel2" alignment="0" pref="1040" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
@@ -371,7 +371,7 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="mEDHeaderPanel1" alignment="0" pref="1037" max="32767" attributes="0"/>
+                      <Component id="mEDHeaderPanel1" alignment="0" pref="1040" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
@@ -398,7 +398,7 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="hearingHeaderPanel1" alignment="0" pref="1037" max="32767" attributes="0"/>
+                      <Component id="hearingHeaderPanel1" alignment="0" pref="1040" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
@@ -425,7 +425,7 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="cSCHeaderPanel1" alignment="0" pref="1037" max="32767" attributes="0"/>
+                      <Component id="cSCHeaderPanel1" alignment="0" pref="1040" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
@@ -452,7 +452,7 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="cMDSHeaderPanel1" alignment="0" pref="1037" max="32767" attributes="0"/>
+                      <Component id="cMDSHeaderPanel1" alignment="0" pref="1040" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
@@ -495,12 +495,12 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="docketRootPanel1" alignment="0" pref="1058" max="32767" attributes="0"/>
+                  <Component id="docketRootPanel1" alignment="0" pref="1061" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="docketRootPanel1" alignment="0" pref="625" max="32767" attributes="0"/>
+                  <Component id="docketRootPanel1" alignment="0" pref="677" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -521,12 +521,12 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="rEPRootPanel1" alignment="0" pref="1058" max="32767" attributes="0"/>
+                  <Component id="rEPRootPanel1" alignment="0" pref="1061" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="rEPRootPanel1" alignment="0" pref="625" max="32767" attributes="0"/>
+                  <Component id="rEPRootPanel1" alignment="0" pref="677" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -547,12 +547,12 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="1058" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="1061" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="625" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="677" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -569,7 +569,7 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="uLPRootPanel1" alignment="0" pref="1058" max="32767" attributes="0"/>
+                  <Component id="uLPRootPanel1" alignment="0" pref="1061" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -595,15 +595,19 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="1058" max="32767" attributes="0"/>
+                  <Component id="mEDRootPanel1" alignment="1" pref="1061" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="625" max="32767" attributes="0"/>
+                  <Component id="mEDRootPanel1" alignment="1" pref="677" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
+          <SubComponents>
+            <Component class="parker.serb.MED.MEDRootPanel" name="mEDRootPanel1">
+            </Component>
+          </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="jPanel10">
           <Constraints>
@@ -617,12 +621,12 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="1058" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="1061" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="625" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="677" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -639,12 +643,12 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="1058" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="1061" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="625" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="677" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -661,12 +665,12 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="1058" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="1061" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="625" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="677" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -683,12 +687,12 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="companySearchPanel1" alignment="0" pref="1058" max="32767" attributes="0"/>
+                  <Component id="companySearchPanel1" alignment="0" pref="1061" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="companySearchPanel1" alignment="0" pref="625" max="32767" attributes="0"/>
+                  <Component id="companySearchPanel1" alignment="0" pref="677" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>

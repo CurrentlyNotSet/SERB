@@ -5,6 +5,7 @@
  */
 package parker.serb;
 
+import java.awt.Color;
 import parker.serb.sql.User;
 import java.sql.Connection;
 import java.text.SimpleDateFormat;
@@ -36,7 +37,9 @@ public class Global {
     public static String caseMonth = null;
     public static String caseNumber = null;
     
-    public static String employerSearchTerm = "";
+    public static Color alternateRowColor = new Color(255, 255, 235); //very light 
+    
+    public static String employerSearchTerm = null;
 //    public st
     
     

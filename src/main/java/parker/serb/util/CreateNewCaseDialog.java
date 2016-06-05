@@ -15,6 +15,9 @@ import parker.serb.sql.Audit;
 import parker.serb.sql.CaseNumber;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.CaseType;
+import parker.serb.sql.EmployerCaseSearchData;
+import parker.serb.sql.MEDCase;
+import parker.serb.sql.MEDCaseSearchData;
 import parker.serb.sql.REPCase;
 import parker.serb.sql.REPCaseSearchData;
 import parker.serb.sql.ULPCase;
@@ -48,14 +51,21 @@ public class CreateNewCaseDialog extends javax.swing.JDialog {
                 break;
             case "REP":
                 relatedCases = REPCase.loadRelatedCases();
-                break;    
+                break;  
+            case "MED":
+                relatedCases = MEDCase.loadRelatedCases();
+                break; 
+            default:
+                break;
         }
         
         similarCaseComboBox.removeAllItems();
         similarCaseComboBox.addItem("");
         
-        for(int i = 0; i <  relatedCases.size(); i++) {
-            similarCaseComboBox.addItem(relatedCases.get(i));
+        if(relatedCases != null) {
+            for(int i = 0; i <  relatedCases.size(); i++) {
+                similarCaseComboBox.addItem(relatedCases.get(i));
+            }
         }
     }
     
@@ -122,20 +132,20 @@ public class CreateNewCaseDialog extends javax.swing.JDialog {
         return caseNumber;
     }
     
-    public static void refreshHeader() {
-        switch (Global.activeSection) {
-            case "REP":
-//                Global.root.getrEPHeaderPanel1().loadCases();
-//                Global.root.getrEPHeaderPanel1().getjComboBox2().setSelectedItem(buildCaseNumber());
-                break;
-            case "MED":
-                break;
-            case "ULP":
-                break;
-            case "ORG":
-                break;
-        }
-    }
+//    public static void refreshHeader() {
+//        switch (Global.activeSection) {
+//            case "REP":
+////                Global.root.getrEPHeaderPanel1().loadCases();
+////                Global.root.getrEPHeaderPanel1().getjComboBox2().setSelectedItem(buildCaseNumber());
+//                break;
+//            case "MED":
+//                break;
+//            case "ULP":
+//                break;
+//            case "ORG":
+//                break;
+//        }
+//    }
     
     private void createCase() {
         switch (Global.activeSection) {
@@ -150,6 +160,15 @@ public class CreateNewCaseDialog extends javax.swing.JDialog {
                         caseNumberTextBox.getText().trim());
                 break;
             case "MED":
+                MEDCase.createCase(yearComboBox.getSelectedItem().toString(),
+                        typeComboBox.getSelectedItem().toString(),
+                        monthComboBox.getSelectedItem().toString().substring(0, 2),
+                        caseNumberTextBox.getText().trim());
+                MEDCaseSearchData.createNewCaseEntry(yearComboBox.getSelectedItem().toString(),
+                        typeComboBox.getSelectedItem().toString(),
+                        monthComboBox.getSelectedItem().toString().substring(0, 2),
+                        caseNumberTextBox.getText().trim());
+                
                 break;
             case "ULP":
                 ULPCase.createCase(yearComboBox.getSelectedItem().toString(),
@@ -164,6 +183,12 @@ public class CreateNewCaseDialog extends javax.swing.JDialog {
             case "ORG":
                 break;
         }
+        
+        EmployerCaseSearchData.createNewCaseEntry(yearComboBox.getSelectedItem().toString(),
+                        typeComboBox.getSelectedItem().toString(),
+                        monthComboBox.getSelectedItem().toString().substring(0, 2),
+                        caseNumberTextBox.getText().trim());
+        
         dispose();
     }
     
@@ -189,6 +214,10 @@ public class CreateNewCaseDialog extends javax.swing.JDialog {
                     typeComboBox.getSelectedItem().toString(),
                     monthComboBox.getSelectedItem().toString().substring(0, 2));
             case "REP": firstCase =  REPCase.checkIfFristCaseOfMonth(
+                    yearComboBox.getSelectedItem().toString(),
+                    typeComboBox.getSelectedItem().toString(),
+                    monthComboBox.getSelectedItem().toString().substring(0, 2));
+            case "MED": firstCase =  MEDCase.checkIfFristCaseOfMonth(
                     yearComboBox.getSelectedItem().toString(),
                     typeComboBox.getSelectedItem().toString(),
                     monthComboBox.getSelectedItem().toString().substring(0, 2));

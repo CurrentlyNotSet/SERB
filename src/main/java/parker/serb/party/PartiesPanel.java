@@ -144,48 +144,15 @@ public class PartiesPanel extends javax.swing.JPanel {
                         Global.root.getrEPHeaderPanel1().getEmployeeOrgTextBox().getText().trim(),
                         Global.root.getrEPHeaderPanel1().getIncumbentEEOTextBox().getText().trim());
                 break;   
+            case "MED":
+                Global.root.getmEDHeaderPanel1().loadHeaderInformation();
+//                REPCaseSearchData.updateCaseEntryFromParties(
+//                        Global.root.getrEPHeaderPanel1().getEmployerTextBox().getText().trim(),
+//                        Global.root.getrEPHeaderPanel1().getEmployeeOrgTextBox().getText().trim(),
+//                        Global.root.getrEPHeaderPanel1().getIncumbentEEOTextBox().getText().trim());
+                break; 
         }
     }
-    
-//        private void loadPartySearch(String searchTerm) {
-//        
-//        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-//        model.setRowCount(0);
-//        
-//        for(Object caseParty: caseParties) {
-//            CaseParty partyInformation = (CaseParty) caseParty;
-//            if(partyInformation.firstName.toLowerCase().contains(searchTerm.toLowerCase())
-//                    || partyInformation.middleInitial.toLowerCase().contains(searchTerm.toLowerCase())
-//                    || partyInformation.lastName.toLowerCase().contains(searchTerm.toLowerCase())
-//                    || partyInformation.caseRelation.toLowerCase().contains(searchTerm.toLowerCase())
-//                    || partyInformation.address1.toLowerCase().contains(searchTerm.toLowerCase())
-//                    || partyInformation.address2.toLowerCase().contains(searchTerm.toLowerCase())
-//                    || partyInformation.address3.toLowerCase().contains(searchTerm.toLowerCase())
-//                    || partyInformation.city.toLowerCase().contains(searchTerm.toLowerCase())
-//                    || partyInformation.stateCode.toLowerCase().contains(searchTerm.toLowerCase())
-//                    || partyInformation.zipcode.toLowerCase().contains(searchTerm.toLowerCase())
-//                    || partyInformation.phone1.toLowerCase().contains(searchTerm.toLowerCase())
-//                    || partyInformation.emailAddress.toLowerCase().contains(searchTerm.toLowerCase())
-//                    ) 
-//            {
-//                model.addRow(new Object[] {partyInformation.id,
-//                    (partyInformation.prefix.equals("") ? "" : (partyInformation.prefix + " "))
-//                        + (partyInformation.firstName.equals("") ? "" : (partyInformation.firstName + " "))
-//                        + (partyInformation.middleInitial.equals("") ? "" : (partyInformation.middleInitial + ". "))
-//                        + (partyInformation.lastName.equals("") ? "" : (partyInformation.lastName))
-//                        + (partyInformation.suffix.equals("") ? "" : (" " + partyInformation.suffix))
-//                        + (partyInformation.nameTitle.equals("") ? "" : (", " + partyInformation.nameTitle)),
-//                        partyInformation.caseRelation, 
-//                        partyInformation.address1
-//                        + (partyInformation.address2.equals("") ? "" : (", " + partyInformation.address2))
-//                        + (partyInformation.address3.equals("") ? "" : (", " + partyInformation.address3))
-//                        + (partyInformation.city.equals("") ? "" : (", " + partyInformation.city))
-//                        + (partyInformation.stateCode.equals("") ? "" : (", " + partyInformation.stateCode))
-//                        + (partyInformation.zipcode.equals("") ? "" : (", " + partyInformation.zipcode)),
-//                        partyInformation.phone1, partyInformation.emailAddress});           
-//            }
-//        }
-//    }
     
     private void loadULPPartySearch(String searchTerm) {
         List<CaseParty> chargingParties = new ArrayList<CaseParty>();
@@ -229,23 +196,23 @@ public class PartiesPanel extends javax.swing.JPanel {
                     chargedParties.add(partyInformation);
                 }  
                 
-                if(partyInformation.caseRelation.contains("Employer")) {
+                if(partyInformation.caseRelation.startsWith("Employer")) {
                     employerParties.add(partyInformation);
                 } 
                 
-                if(partyInformation.caseRelation.contains("Employee Organization")) {
+                if(partyInformation.caseRelation.startsWith("Employee Organization")) {
                     employeeOrgParties.add(partyInformation);
                 } 
                 
-                if(partyInformation.caseRelation.contains("Rival Employee Organization")) {
+                if(partyInformation.caseRelation.startsWith("Rival Employee Organization")) {
                     rivalEmployeeOrgParties.add(partyInformation);
                 } 
                 
-                if(partyInformation.caseRelation.contains("Incumbent Employee Organization")) {
+                if(partyInformation.caseRelation.startsWith("Incumbent Employee Organization")) {
                     incumbentEmployeeParties.add(partyInformation);
                 } 
                 
-                if(partyInformation.caseRelation.contains("Intervener")) {
+                if(partyInformation.caseRelation.startsWith("Intervener")) {
                     intervenerParties.add(partyInformation);
                 } 
                 
@@ -597,7 +564,7 @@ public class PartiesPanel extends javax.swing.JPanel {
                 chargedParties.add(partyInformation);
             }
             
-            if(partyInformation.caseRelation.contains("Employer")) {
+            if(partyInformation.caseRelation.startsWith("Employer")) {
                 employerParties.add(partyInformation);
             } 
 
@@ -904,6 +871,9 @@ public class PartiesPanel extends javax.swing.JPanel {
             case "REP":
                 validateREPParties();
                 break;
+            case "MED":
+                validateMEDParties();
+                break;
         }
     }
     
@@ -937,6 +907,41 @@ public class PartiesPanel extends javax.swing.JPanel {
             missingPartiesText += (chargingRepParty ? "" : " Charging Party REP ");
             missingPartiesText += (chargedParty ? "" : " Charged Party ");
             missingPartiesText += (chargedRepParty ? "" : " Charged Party REP ");
+                    
+            missingParties.setText(missingPartiesText.replace("  ", ", ").trim());
+        }
+    }
+    
+    private  void validateMEDParties() {
+        boolean employerParty = false;
+        boolean employerRepParty = false;
+        boolean employeeOrgParty = false;
+        boolean employeeOrgRepParty = false;
+        
+        //need value from type (1)
+        for(int i = 0; i < jTable1.getRowCount(); i++) {
+            if(jTable1.getValueAt(i, 2).toString().equals("Employer")) {
+                employerParty = true;
+            }
+            if(jTable1.getValueAt(i, 2).toString().equals("Employer REP")) {
+                employerRepParty = true;
+            }
+            if(jTable1.getValueAt(i, 2).toString().equals("Employee Organization")) {
+                employeeOrgParty = true;
+            }
+            if(jTable1.getValueAt(i, 2).toString().equals("Employee Organization REP")) {
+                employeeOrgRepParty = true;
+            }
+        }
+        
+        if(employerParty && employerRepParty && employeeOrgParty && employeeOrgRepParty) {
+            missingParties.setText("");
+        } else {
+            String missingPartiesText = "Missing Required Parties:";
+            missingPartiesText += (employerParty ? "" : " Employer ");
+            missingPartiesText += (employerRepParty ? "" : " Employer REP ");
+            missingPartiesText += (employeeOrgParty ? "" : " Employee Organization ");
+            missingPartiesText += (employeeOrgRepParty ? "" : " Employee Organization REP ");
                     
             missingParties.setText(missingPartiesText.replace("  ", ", ").trim());
         }

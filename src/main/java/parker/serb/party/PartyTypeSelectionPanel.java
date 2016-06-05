@@ -128,7 +128,7 @@ public class PartyTypeSelectionPanel extends javax.swing.JDialog {
         selected = true;
         CaseParty.createParty(id, jComboBox1.getSelectedItem().toString().trim());
         Activity.addActivty("Added " + name + " (" + jComboBox1.getSelectedItem().toString().trim() + ")", null);
-        if(Global.activeSection.contains("ULP") 
+        if((Global.activeSection.contains("ULP") || Global.activeSection.contains("MED"))
                 && !jComboBox1.getSelectedItem().toString().trim().contains("REP")) {
             setVisible(false);
             new ProSeSelectionPanel((JFrame) Global.root.getParent(), rootPaneCheckingEnabled, jComboBox1.getSelectedItem().toString().trim(), id, name);
