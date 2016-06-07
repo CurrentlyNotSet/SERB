@@ -654,6 +654,14 @@ public class REPCase {
                         newCaseInformation.bargainingUnitNumber,
                         newCaseInformation.county,
                         getCertificationText(newCaseInformation));
+//                EmployerCaseSearchData.updateCaseFileDate(
+//                        newCaseInformation.bargainingUnitNumber,
+//                        newCaseInformation.county,
+//                        getCertificationText(newCaseInformation));
+                EmployerCaseSearchData.updateCaseStatus(
+                        newCaseInformation.status1);
+                EmployerCaseSearchData.updateEmployer(
+                        newCaseInformation.employerIDNumber);
             } 
         } catch (SQLException ex) {
 //            SlackNotification.sendNotification(ex.getMessage());

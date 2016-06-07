@@ -11,7 +11,6 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
 import parker.serb.sql.EmployerCaseSearchData;
-import parker.serb.sql.MEDCaseSearchData;
 
 /**
  *
@@ -21,6 +20,8 @@ public class companySearchPanel extends javax.swing.JPanel {
 
     DefaultTableModel model;
     List caseList;
+    Object[][] tableData;
+        
     /**
      * Creates new form companySearchPanel
      */
@@ -33,19 +34,21 @@ public class companySearchPanel extends javax.swing.JPanel {
         employerSearchTerm.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-//                Global.employerSearchTerm = employerSearchTerm.getText().trim();
+                limitCaseList();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-//                Global.employerSearchTerm = employerSearchTerm.getText().trim();
+                limitCaseList();
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-//                Global.employerSearchTerm = employerSearchTerm.getText().trim();
+                limitCaseList();
             }
         });
+        
+        
         
     }
     
@@ -62,7 +65,9 @@ public class companySearchPanel extends javax.swing.JPanel {
                 @Override
                 public void run() {
                     loadAllCases();
-//                    enableTextBoxes();
+                    if(!employerSearchTerm.getText().equals("")) {
+                        limitCaseList();
+                    }
                 }
             }
         );
@@ -82,7 +87,6 @@ public class companySearchPanel extends javax.swing.JPanel {
         model.addColumn("Status");
         model.addColumn("Filed Date");
         model.addColumn("Employer");
-        model.addColumn("Parties");
         
         caseList = EmployerCaseSearchData.loadEmployerCaseList();
         
@@ -91,16 +95,39 @@ public class companySearchPanel extends javax.swing.JPanel {
             
             model.addRow(new Object[] {
                 (act.caseYear + "-" + act.caseType + "-" + act.caseMonth + "-" + act.caseNumber),
-                "", //employer name
-                "", //union name
-                "", //county
-                "" //BUN Number
+                act.status == null ? "" : act.status, //employer name
+                act.fileDate, //file date
+                act.employer == null ? "" : act.employer //employer
             }); 
         }
-//        getTableData();
+        getTableData();
         employerTable.setModel(model);
         jLayeredPane1.moveToBack(jPanel1);
         
+    }
+    
+    public void getTableData() {
+        int nRow = model.getRowCount(), nCol = model.getColumnCount();
+        tableData = new Object[nRow][nCol];
+        for (int i = 0 ; i < nRow ; i++) {
+            for (int j = 0 ; j < nCol ; j++) {
+                tableData[i][j] = model.getValueAt(i,j);
+            }
+        }
+    }
+    
+    private void limitCaseList() {
+        model.setRowCount(0);
+        
+        for (int i = 0; i<tableData.length; i++)
+        {
+            if(tableData[i][3].toString().toLowerCase().contains(employerSearchTerm.getText().toLowerCase()) && !employerSearchTerm.equals(""))
+            {
+                model.addRow(new Object[] {tableData[i][0]
+                , tableData[i][1], tableData[i][2], tableData[i][3]}); 
+            }
+        }
+        employerTable.setModel(model);
     }
 
     public DefaultTableModel getModel() {
@@ -149,6 +176,11 @@ public class companySearchPanel extends javax.swing.JPanel {
         jLabel2.setText("Status:");
 
         statusComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All", "Open", "Closed" }));
+        statusComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                statusComboBoxActionPerformed(evt);
+            }
+        });
 
         clearButton.setText("Clear");
         clearButton.addActionListener(new java.awt.event.ActionListener() {
@@ -164,14 +196,14 @@ public class companySearchPanel extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Case Number", "Status", "File Date", "Employer", "Parties"
+                "Case Number", "Status", "File Date", "Employer"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, true, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -252,11 +284,9 @@ public class companySearchPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshButtonActionPerformed
-//        jButton2.setEnabled(false);
         model.setNumRows(0);
         jLayeredPane1.moveToFront(jPanel1);
         activity();
-//        jButton2.setEnabled(true);
         
     }//GEN-LAST:event_refreshButtonActionPerformed
 
@@ -275,13 +305,30 @@ public class companySearchPanel extends javax.swing.JPanel {
             
             switch(caseNumber.split("-")[1]) {
                 case "MED":
+                case "STK":
+                case "NCN":
+                case "CON":
                     Global.root.getjTabbedPane1().setSelectedIndex(Global.root.getjTabbedPane1().indexOfTab("MED"));
                     Global.root.getmEDHeaderPanel1().getjComboBox2().setSelectedItem(caseNumber);
-//                    Global.root.getjTabbedPane1().setSelectedIndex(WIDTH);
+                    break;
+                case "REP":
+                case "RBT":
+                    Global.root.getjTabbedPane1().setSelectedIndex(Global.root.getjTabbedPane1().indexOfTab("REP"));
+                    Global.root.getrEPHeaderPanel1().getjComboBox2().setSelectedItem(caseNumber);
+                    break;
+                case "ULP":
+                case "ERC":
+                case "JWD":
+                    Global.root.getjTabbedPane1().setSelectedIndex(Global.root.getjTabbedPane1().indexOfTab("ULP"));
+                    Global.root.getuLPHeaderPanel1().getjComboBox2().setSelectedItem(caseNumber);
+                    break;
             }
         }
-        
     }//GEN-LAST:event_employerTableMouseClicked
+
+    private void statusComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statusComboBoxActionPerformed
+        
+    }//GEN-LAST:event_statusComboBoxActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

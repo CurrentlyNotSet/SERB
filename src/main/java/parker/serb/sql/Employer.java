@@ -95,6 +95,10 @@ public class Employer {
 
             ResultSet caseActivity = preparedStatement.executeQuery();
             
+            if(caseActivity == null) {
+                employer.employerName = "";
+            }
+            
             while(caseActivity.next()) {
                 employer.id = caseActivity.getInt("id");
                 employer.active = caseActivity.getBoolean("active");
@@ -124,9 +128,6 @@ public class Employer {
                 employer.assistantMiddleInitial = caseActivity.getString("assistantMiddleInitial");
                 employer.assistantLastName = caseActivity.getString("assistantLastName");
                 employer.county = caseActivity.getString("county");
-                
-                
-                
             }
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
