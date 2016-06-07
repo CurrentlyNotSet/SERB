@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -94,6 +95,33 @@ public class EmployerCaseSearchData {
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, caseStatus);
+            preparedStatement.setString(2, Global.caseYear);
+            preparedStatement.setString(3, Global.caseType);
+            preparedStatement.setString(4, Global.caseMonth);
+            preparedStatement.setString(5, Global.caseNumber);
+
+            preparedStatement.executeUpdate();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public static void updateFileDate(Timestamp fileDate) {
+            
+        try {
+
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "UPDATE EmployerCaseSearchData SET"
+                    + " fileDate = ?"
+                    + " WHERE caseYear = ? AND"
+                    + " caseType = ? AND"
+                    + " caseMonth = ? AND"
+                    + " caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setTimestamp(1, fileDate);
             preparedStatement.setString(2, Global.caseYear);
             preparedStatement.setString(3, Global.caseType);
             preparedStatement.setString(4, Global.caseMonth);

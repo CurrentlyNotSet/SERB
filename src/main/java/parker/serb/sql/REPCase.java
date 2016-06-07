@@ -36,6 +36,7 @@ public class REPCase {
     public boolean boardCertified;
     public boolean deemedCertified;
     public boolean certificationRevoked;
+    public String note;
     public Timestamp fileDate;
     public Timestamp amendedFiliingDate;
     public Timestamp alphaListDate;
@@ -297,7 +298,8 @@ public class REPCase {
                     + " REPClosedUser,"
                     + " actualClerksClosedDate,"
                     + " clerksClosedUser,"
-                    + " alphaListDate"
+                    + " alphaListDate,"
+                    + " note"
                     + " from REPCase where caseYear = ? "
                     + " AND caseType = ? "
                     + " AND caseMonth = ? "
@@ -324,6 +326,8 @@ public class REPCase {
                 rep.boardCertified = caseInformation.getBoolean("boardCertified");
                 rep.deemedCertified = caseInformation.getBoolean("deemedCertified");
                 rep.certificationRevoked = caseInformation.getBoolean("certificationRevoked");
+                
+                rep.note = caseInformation.getString("note");
                 
                 rep.fileDate = caseInformation.getTimestamp("fileDate");
                 rep.amendedFiliingDate = caseInformation.getTimestamp("amendedFilingDate");
@@ -608,7 +612,8 @@ public class REPCase {
                     + " REPClosedUser = ?,"
                     + " ActualClerksClosedDate = ?,"
                     + " ClerksClosedUser = ?,"
-                    + " alphaListDate = ?"
+                    + " alphaListDate = ?,"
+                    + " note = ?"
                     + " where caseYear = ?"
                     + " AND caseType = ?"
                     + " AND caseMonth = ? "
@@ -641,10 +646,11 @@ public class REPCase {
             preparedStatement.setTimestamp(24, newCaseInformation.actualClerksClosedDate);
             preparedStatement.setInt(25, newCaseInformation.clerksClosedUser);
             preparedStatement.setTimestamp(26, newCaseInformation.alphaListDate);
-            preparedStatement.setString(27, Global.caseYear);
-            preparedStatement.setString(28, Global.caseType);
-            preparedStatement.setString(29, Global.caseMonth);
-            preparedStatement.setString(30, Global.caseNumber);
+            preparedStatement.setString(27, newCaseInformation.note);
+            preparedStatement.setString(28, Global.caseYear);
+            preparedStatement.setString(29, Global.caseType);
+            preparedStatement.setString(30, Global.caseMonth);
+            preparedStatement.setString(31, Global.caseNumber);
 
             int success = preparedStatement.executeUpdate();
             
@@ -654,17 +660,15 @@ public class REPCase {
                         newCaseInformation.bargainingUnitNumber,
                         newCaseInformation.county,
                         getCertificationText(newCaseInformation));
-//                EmployerCaseSearchData.updateCaseFileDate(
-//                        newCaseInformation.bargainingUnitNumber,
-//                        newCaseInformation.county,
-//                        getCertificationText(newCaseInformation));
+                EmployerCaseSearchData.updateFileDate(
+                        newCaseInformation.fileDate);
                 EmployerCaseSearchData.updateCaseStatus(
                         newCaseInformation.status1);
                 EmployerCaseSearchData.updateEmployer(
                         newCaseInformation.employerIDNumber);
             } 
         } catch (SQLException ex) {
-//            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex.getMessage());
         }
     }
     
@@ -749,6 +753,16 @@ public class REPCase {
         } else if(newCaseInformation.bargainingUnitNumber != null && oldCaseInformation.bargainingUnitNumber != null) {
             if(!newCaseInformation.bargainingUnitNumber.equals(oldCaseInformation.bargainingUnitNumber)) 
                 Activity.addActivty("Changed Bargaining Unit from " + oldCaseInformation.bargainingUnitNumber + " to " + newCaseInformation.bargainingUnitNumber, null);
+        }
+        
+        //note
+        if(newCaseInformation.note == null && oldCaseInformation.note != null) {
+            Activity.addActivty("Updated Note", null);
+        } else if(newCaseInformation.note != null && oldCaseInformation.note == null) {
+            Activity.addActivty("Updated Note", null);
+        } else if(newCaseInformation.note != null && oldCaseInformation.note != null) {
+            if(!newCaseInformation.note.equals(oldCaseInformation.note)) 
+                Activity.addActivty("Updated Note", null);
         }
         
         //file date
