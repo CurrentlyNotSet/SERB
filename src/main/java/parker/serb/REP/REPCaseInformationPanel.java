@@ -278,13 +278,16 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
     
     public void loadREPClosedByComboBox() {
         repClosedUser.removeAllItems();
+        SOIReturnInitials.removeAllItems();
         
         repClosedUser.addItem("");
+        SOIReturnInitials.addItem("");
         
         List currentOwnerList = User.loadREPComboBox();
         
         for (Object currentOwners : currentOwnerList) {
             repClosedUser.addItem(currentOwners.toString());
+            SOIReturnInitials.addItem(currentOwners.toString());
         }
     }
     
@@ -330,7 +333,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         courtClosedDateTextBox.setText(caseInformation.courtClosedDate != null ? Global.mmddyyyy.format(new Date(caseInformation.courtClosedDate.getTime())) : "");  
         returnSOIDueDateTextBox.setText(caseInformation.returnSOIDueDate != null ? Global.mmddyyyy.format(new Date(caseInformation.returnSOIDueDate.getTime())) : "");  
         actualSOIReturnDateTextBox.setText(caseInformation.actualSOIReturnDate != null ? Global.mmddyyyy.format(new Date(caseInformation.actualSOIReturnDate.getTime())) : "");  
-//        commentsTextBox.setText(caseInformation.comments == null ? "" : caseInformation.comments);  
+        SOIReturnInitials.setSelectedItem(caseInformation.SOIReturnInitials == 0 ? "" : User.getNameByID(caseInformation.SOIReturnInitials));  
         REPClosedCaseDueDateTextBox.setText(caseInformation.REPClosedCaseDueDate != null ? Global.mmddyyyy.format(new Date(caseInformation.REPClosedCaseDueDate.getTime())) : "");  
         actualREPClosedDateTextBox.setText(caseInformation.actualREPClosedDate != null ? Global.mmddyyyy.format(new Date(caseInformation.actualREPClosedDate.getTime())) : "");  
         repClosedUser.setSelectedItem(caseInformation.REPClosedUser == 0 ? "" : User.getNameByID(caseInformation.REPClosedUser));
@@ -364,7 +367,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         newCaseInformation.courtClosedDate = courtClosedDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(courtClosedDateTextBox.getText()));
         newCaseInformation.returnSOIDueDate = returnSOIDueDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(returnSOIDueDateTextBox.getText()));
         newCaseInformation.actualSOIReturnDate = actualSOIReturnDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(actualSOIReturnDateTextBox.getText()));
-//        newCaseInformation.comments = commentsTextBox.getText().equals("") ? null : commentsTextBox.getText().trim();
+        newCaseInformation.SOIReturnInitials = SOIReturnInitials.getSelectedItem().toString().equals("") ? 0 : User.getUserID(SOIReturnInitials.getSelectedItem().toString());
         newCaseInformation.REPClosedCaseDueDate = REPClosedCaseDueDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(REPClosedCaseDueDateTextBox.getText()));
         newCaseInformation.actualREPClosedDate = actualREPClosedDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(actualREPClosedDateTextBox.getText()));
         newCaseInformation.REPClosedUser = repClosedUser.getSelectedItem().equals("") ? 0 : User.getUserID(repClosedUser.getSelectedItem().toString());
@@ -667,7 +670,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(addRelatedCaseButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(addRelatedCaseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane1))))
                 .addGap(10, 10, 10))
         );

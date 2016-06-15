@@ -155,17 +155,17 @@ public class PartiesPanel extends javax.swing.JPanel {
     }
     
     private void loadULPPartySearch(String searchTerm) {
-        List<CaseParty> chargingParties = new ArrayList<CaseParty>();
-        List<CaseParty> chargedParties = new ArrayList<CaseParty>();
-        List<CaseParty> employerParties = new ArrayList<CaseParty>();
-        List<CaseParty> employeeOrgParties = new ArrayList<CaseParty>();
-        List<CaseParty> rivalEmployeeOrgParties = new ArrayList<CaseParty>();
-        List<CaseParty> rivalEmployeeOrg2Parties = new ArrayList<CaseParty>();
-        List<CaseParty> rivalEmployeeOrg3Parties = new ArrayList<CaseParty>();
-        List<CaseParty> incumbentEmployeeParties = new ArrayList<CaseParty>();
-        List<CaseParty> intervenerParties = new ArrayList<CaseParty>();
-        List<CaseParty> petitionerParties = new ArrayList<CaseParty>();
-        List<CaseParty> conversionParties = new ArrayList<CaseParty>();
+        List<CaseParty> chargingParties = new ArrayList<>();
+        List<CaseParty> chargedParties = new ArrayList<>();
+        List<CaseParty> employerParties = new ArrayList<>();
+        List<CaseParty> employeeOrgParties = new ArrayList<>();
+        List<CaseParty> rivalEmployeeOrgParties = new ArrayList<>();
+        List<CaseParty> rivalEmployeeOrg2Parties = new ArrayList<>();
+        List<CaseParty> rivalEmployeeOrg3Parties = new ArrayList<>();
+        List<CaseParty> incumbentEmployeeParties = new ArrayList<>();
+        List<CaseParty> intervenerParties = new ArrayList<>();
+        List<CaseParty> petitionerParties = new ArrayList<>();
+        List<CaseParty> conversionParties = new ArrayList<>();
         
         
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();

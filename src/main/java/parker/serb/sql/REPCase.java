@@ -46,7 +46,7 @@ public class REPCase {
     public Timestamp courtClosedDate;
     public Timestamp returnSOIDueDate;
     public Timestamp actualSOIReturnDate;
-    public String comments;
+    public int SOIReturnInitials;
     public Timestamp REPClosedCaseDueDate;
     public Timestamp actualREPClosedDate;
     public int REPClosedUser;
@@ -74,6 +74,26 @@ public class REPCase {
     public int hearingPersonID;
     public String boardStatusNote;
     public String boardStatusBlurb;
+    
+    //electionData
+    public boolean multicaseElection;
+    public String electionType1;
+    public String electionType2;
+    public String electionType3;
+    public Timestamp eligibilityDate;
+    public String ballotOne;
+    public String ballotTwo;
+    public String ballotThree;
+    public String ballotFour;
+    public Timestamp mailKitDate;
+    public Timestamp pollingStartDate;
+    public Timestamp pollingEndDate;
+    public String ballotsCountDay;
+    public Timestamp ballotsCountDate;
+    public Timestamp ballotsCountTime;
+    public Timestamp eligibilityListDate;
+    public Timestamp preElectionConfDate;
+    public String selfReleasing;
     
     /**
      * Load a list of the most recent 250 REP case numbers
@@ -292,7 +312,7 @@ public class REPCase {
                     + " courtClosedDate,"
                     + " returnSOIDueDate,"
                     + " actualSOIReturnDate,"
-                    + " comments,"
+                    + " SOIReturnIntials,"
                     + " REPClosedCaseDueDate,"
                     + " actualREPClosedDate,"
                     + " REPClosedUser,"
@@ -338,7 +358,7 @@ public class REPCase {
                 rep.courtClosedDate = caseInformation.getTimestamp("courtClosedDate");
                 rep.returnSOIDueDate = caseInformation.getTimestamp("returnSOIDueDate");
                 rep.actualSOIReturnDate = caseInformation.getTimestamp("actualSOIReturnDate");
-                rep.comments = caseInformation.getString("comments");
+                rep.SOIReturnInitials = caseInformation.getInt("SOIReturnIntials");
                 rep.REPClosedCaseDueDate = caseInformation.getTimestamp("REPClosedCaseDueDate");
                 rep.actualREPClosedDate = caseInformation.getTimestamp("actualREPClosedDate");
                 rep.REPClosedUser = caseInformation.getInt("REPClosedUser");
@@ -453,6 +473,70 @@ public class REPCase {
         return rep;
     }
     
+    public static REPCase loadElectionInformation() {
+        REPCase rep = null;
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select"
+                    + " multicaseElection,"
+                    + " electionType1,"
+                    + " electionType2,"
+                    + " electionType3,"
+                    + " eligibilityDate,"
+                    + " ballotOne,"
+                    + " ballotTwo,"
+                    + " ballotThree,"
+                    + " ballotFour,"
+                    + " mailKitDate,"
+                    + " pollingStartDate,"
+                    + " pollingEndDate,"
+                    + " ballotsCountDay,"
+                    + " ballotsCountDate,"
+                    + " ballotsCountTime,"
+                    + " eligibilityListDate,"
+                    + " preElectionCOnfDate,"
+                    + " selfReleasing"
+                    + " from REPCase where caseYear = ? "
+                    + " AND caseType = ? "
+                    + " AND caseMonth = ? "
+                    + " AND caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, Global.caseYear);
+            preparedStatement.setString(2, Global.caseType);
+            preparedStatement.setString(3, Global.caseMonth);
+            preparedStatement.setString(4, Global.caseNumber);
+
+            ResultSet caseInformation = preparedStatement.executeQuery();
+            
+            if(caseInformation.next()) {
+                rep = new REPCase();
+                rep.multicaseElection = caseInformation.getBoolean("multicaseElection");
+                rep.electionType1 = caseInformation.getString("electionType1");
+                rep.electionType2 = caseInformation.getString("electionType2");
+                rep.electionType3 = caseInformation.getString("electionType3");
+                rep.eligibilityDate = caseInformation.getTimestamp("eligibilityDate");
+                rep.ballotOne = caseInformation.getString("ballotOne");
+                rep.ballotTwo = caseInformation.getString("ballotTwo");
+                rep.ballotThree = caseInformation.getString("ballotThree");
+                rep.ballotFour = caseInformation.getString("ballotFour");
+                rep.mailKitDate = caseInformation.getTimestamp("mailKitDate");
+                rep.pollingStartDate = caseInformation.getTimestamp("pollingStartDate");
+                rep.pollingEndDate = caseInformation.getTimestamp("pollingEndDate");
+                rep.ballotsCountDay = caseInformation.getString("ballotsCountDay");
+                rep.ballotsCountDate = caseInformation.getTimestamp("ballotsCountDate");
+                rep.ballotsCountTime = caseInformation.getTimestamp("ballotsCountTime");
+                rep.eligibilityListDate = caseInformation.getTimestamp("eligibilityListDate");
+                rep.preElectionConfDate = caseInformation.getTimestamp("preElectionConfDate");
+                rep.selfReleasing = caseInformation.getString("selfReleasing");
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex.getMessage());
+        }
+        return rep;
+    }
+    
     public static void updateBoardStatus(REPCase newCaseInformation, REPCase caseInformation) {
         REPCase rep = null;
         try {
@@ -485,6 +569,69 @@ public class REPCase {
             if(success == 1) {
                 detailedBoardStatusDetailsSaveInformation(newCaseInformation, caseInformation);
             }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex.getMessage());
+        }
+    }
+    
+    public static void updateElectionInformation(REPCase newCaseInformation, REPCase caseInformation) {
+        REPCase rep = null;
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Update REPCase set"
+                    + " multicaseElection = ?,"
+                    + " electionType1 = ?,"
+                    + " electionType2 = ?,"
+                    + " electionType3 = ?,"
+                    + " eligibilityDate = ?,"
+                    + " ballotOne = ?,"
+                    + " ballotTwo = ?,"
+                    + " ballotThree = ?,"
+                    + " ballotFour = ?,"
+                    + " mailKitDate = ?,"
+                    + " pollingStartDate = ?,"
+                    + " pollingEndDate = ?,"
+                    + " ballotsCountDay = ?,"
+                    + " ballotsCountDate = ?,"
+                    + " ballotsCountTime = ?,"
+                    + " eligibilityListDate = ?,"
+                    + " preElectionConfDate = ?,"
+                    + " selfReleasing = ?"
+                    + " where caseYear = ?"
+                    + " AND caseType = ?"
+                    + " AND caseMonth = ?"
+                    + " AND caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setBoolean(1, newCaseInformation.multicaseElection);
+            preparedStatement.setString(2, newCaseInformation.electionType1);
+            preparedStatement.setString(3, newCaseInformation.electionType2);
+            preparedStatement.setString(4, newCaseInformation.electionType3);   
+            preparedStatement.setTimestamp(5, newCaseInformation.eligibilityDate);  
+            preparedStatement.setString(6, newCaseInformation.ballotOne);  
+            preparedStatement.setString(7, newCaseInformation.ballotTwo);  
+            preparedStatement.setString(8, newCaseInformation.ballotThree);  
+            preparedStatement.setString(9, newCaseInformation.ballotFour);  
+            preparedStatement.setTimestamp(10, newCaseInformation.mailKitDate);  
+            preparedStatement.setTimestamp(11, newCaseInformation.pollingStartDate);  
+            preparedStatement.setTimestamp(12, newCaseInformation.pollingEndDate);  
+            preparedStatement.setString(13, newCaseInformation.ballotsCountDay);  
+            preparedStatement.setTimestamp(14, newCaseInformation.ballotsCountDate);  
+            preparedStatement.setTimestamp(15, newCaseInformation.ballotsCountTime);  
+            preparedStatement.setTimestamp(16, newCaseInformation.eligibilityListDate);  
+            preparedStatement.setTimestamp(17, newCaseInformation.preElectionConfDate);
+            preparedStatement.setString(18, newCaseInformation.selfReleasing);  
+            preparedStatement.setString(19, Global.caseYear);
+            preparedStatement.setString(20, Global.caseType);
+            preparedStatement.setString(21, Global.caseMonth);
+            preparedStatement.setString(22, Global.caseNumber);
+
+            int success = preparedStatement.executeUpdate();
+            
+//            if(success == 1) {
+//                detailedBoardStatusDetailsSaveInformation(newCaseInformation, caseInformation);
+//            }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex.getMessage());
         }
@@ -606,7 +753,7 @@ public class REPCase {
                     + " courtClosedDate = ?,"
                     + " returnSOIDueDate = ?,"
                     + " actualSOIReturnDate = ?,"
-                    + " comments = ?,"
+                    + " SOIReturnIntials = ?,"
                     + " REPClosedCaseDueDate = ?,"
                     + " ActualREPClosedDate = ?,"
                     + " REPClosedUser = ?,"
@@ -639,7 +786,7 @@ public class REPCase {
             preparedStatement.setTimestamp(17, newCaseInformation.courtClosedDate);
             preparedStatement.setTimestamp(18, newCaseInformation.returnSOIDueDate);
             preparedStatement.setTimestamp(19, newCaseInformation.actualSOIReturnDate);
-            preparedStatement.setString(20, newCaseInformation.comments);
+            preparedStatement.setInt(20, newCaseInformation.SOIReturnInitials);
             preparedStatement.setTimestamp(21, newCaseInformation.REPClosedCaseDueDate);
             preparedStatement.setTimestamp(22, newCaseInformation.actualREPClosedDate);
             preparedStatement.setInt(23, newCaseInformation.REPClosedUser);
@@ -846,13 +993,13 @@ public class REPCase {
         }
         
         //SOI Return Initials
-        if(newCaseInformation.comments == null && oldCaseInformation.comments != null) {
-            Activity.addActivty("Removed " + oldCaseInformation.comments + " from Comments", null);
-        } else if(newCaseInformation.comments != null && oldCaseInformation.comments == null) {
-            Activity.addActivty("Set Comments to " + newCaseInformation.comments, null);
-        } else if(newCaseInformation.comments != null && oldCaseInformation.comments != null) {
-            if(!newCaseInformation.comments.equals(oldCaseInformation.comments)) 
-                Activity.addActivty("Changed Comments from " + oldCaseInformation.comments + " to " + newCaseInformation.comments, null);
+        if(newCaseInformation.SOIReturnInitials == 0 && oldCaseInformation.SOIReturnInitials != 0) {
+            Activity.addActivty("Removed " + User.getNameByID(oldCaseInformation.SOIReturnInitials) + " from SOI Return Initials", null);
+        } else if(newCaseInformation.SOIReturnInitials != 0 && oldCaseInformation.SOIReturnInitials == 0) {
+            Activity.addActivty("Set SOI Return Initials to " + User.getNameByID(newCaseInformation.SOIReturnInitials), null);
+        } else if(newCaseInformation.SOIReturnInitials != 0 && oldCaseInformation.SOIReturnInitials != 0) {
+            if(newCaseInformation.SOIReturnInitials != oldCaseInformation.SOIReturnInitials) 
+                Activity.addActivty("Changed SOI Return Initials from " + User.getNameByID(oldCaseInformation.SOIReturnInitials) + " to " + User.getNameByID(newCaseInformation.REPClosedUser), null);
         }
         
         //REPClsed Case Due Date
