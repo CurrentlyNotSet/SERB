@@ -95,6 +95,72 @@ public class REPCase {
     public Timestamp preElectionConfDate;
     public String selfReleasing;
     
+    //results
+    public String resultApproxNumberEligibleVotes;
+    public String resultVoidBallots;
+    public String resultVotesCastForEEO;
+    public String resultVotesCastForIncumbentEEO;
+    public String resultVotesCastForRivalEEO1;
+    public String resultVotesCastForRivalEEO2;
+    public String resultVotesCastForRivalEEO3;
+    public String resultVotesCastForNoRepresentative;
+    public String resultValidVotesCounted;
+    public String resultChallengedBallots;
+    public String resultTotalBallotsCast;
+    public String resultWHoPrevailed;
+    
+    //professional
+    public String professionalApproxNumberEligible;
+    public String professionalYES;
+    public String professionalNO;
+    public String professionalChallenged;
+    public String professionalTotalVotes;
+    public String professionalOutcome;
+    public String professionalWhoPrevailed;
+    public String professionalVoidBallots;
+    public String professionalValidVotes;
+    public String professionalVotesCastForNoRepresentative;
+    public String professionalVotesCastForEEO;
+    public String professionalVotesCastForIncumbentEEO;
+    public String professionalVotesCastForRivalEEO1;
+    public String professionalVotesCastForRivalEEO2;
+    public String professionalVotesCastForRivalEEO3;
+    
+    //nonprofessional
+    public String nonprofessionalApproxNumberEligible;
+    public String nonprofessionalYES;
+    public String nonprofessionalNO;
+    public String nonprofessionalChallenged;
+    public String nonprofessionalTotalVotes;
+    public String nonprofessionalOutcome;
+    public String nonprofessionalWhoPrevailed;
+    public String nonprofessionalVoidBallots;
+    public String nonprofessionalValidVotes;
+    public String nonprofessionalVotesCastForNoRepresentative;
+    public String nonprofessionalVotesCastForEEO;
+    public String nonprofessionalVotesCastForIncumbentEEO;
+    public String nonprofessionalVotesCastForRivalEEO1;
+    public String nonprofessionalVotesCastForRivalEEO2;
+    public String nonprofessionalVotesCastForRivalEEO3;
+    
+    //combined
+    public String combinedApproxNumberEligible;
+    public String combinedYES;
+    public String combinedlNO;
+    public String combinedChallenged;
+    public String combinedTotalVotes;
+    public String combinedOutcome;
+    public String combinedWhoPrevailed;
+    public String combinedVoidBallots;
+    public String combinedValidVotes;
+    public String combinedVotesCastForNoRepresentative;
+    public String combinedVotesCastForEEO;
+    public String combinedVotesCastForIncumbentEEO;
+    public String combinedVotesCastForRivalEEO1;
+    public String combinedVotesCastForRivalEEO2;
+    public String combinedVotesCastForRivalEEO3;
+    
+    
     /**
      * Load a list of the most recent 250 REP case numbers
      * @return list of rep case numbers
@@ -496,7 +562,67 @@ public class REPCase {
                     + " ballotsCountTime,"
                     + " eligibilityListDate,"
                     + " preElectionCOnfDate,"
-                    + " selfReleasing"
+                    + " selfReleasing,"
+                    + " resultApproxNumberEligibleVoters,"
+                    + " resultVoidBallots,"
+                    + " resultVotesCastForEEO,"
+                    + " resultVotesCastForIncumbentEEO,"
+                    + " resultVotesCastForRivalEEO1,"
+                    + " resultVotesCastforRivalEEO2,"
+                    + " resultVotesCastForRivalEEO3,"
+                    + " resultVotesCastForNoRepresentative,"
+                    + " resultValidVotesCounted,"
+                    + " resultChallengedBallots,"
+                    + " resultTotalBallotsCast,"
+                    + " resultWhoPrevailed,"
+                    + " professionalApproxNumberEligible,"
+                    + " professionalYES,"
+                    + " professionalNO,"
+                    + " professionalChallenged,"
+                    + " professionalTotalVotes,"
+                    + " professionalOutcome,"
+                    + " professionalWhoPrevailed,"
+                    + " professionalVoidBallots,"
+                    + " professionalValidVotes,"
+                    + " professionalVotesCastforNoRepresentative,"
+                    + " professionalVotesCastForEEO,"
+                    + " professionalVotesCastForIncumbentEEO,"
+                    + " professionalVotesCastForRivalEEO1,"
+                    + " professionalVotesCastForRivalEEO2,"
+                    + " professionalVotesCastForRivalEEO3,"
+                    
+                    + " nonprofessionalApproxNumberEligible,"
+                    + " nonprofessionalYES,"
+                    + " nonprofessionalNO,"
+                    + " nonprofessionalChallenged,"
+                    + " nonprofessionalTotalVotes,"
+                    + " nonprofessionalOutcome,"
+                    + " nonprofessionalWhoPrevailed,"
+                    + " nonprofessionalVoidBallots,"
+                    + " nonprofessionalValidVotes,"
+                    + " nonprofessionalVotesCastforNoRepresentative,"
+                    + " nonprofessionalVotesCastForEEO,"
+                    + " nonprofessionalVotesCastForIncumbentEEO,"
+                    + " nonprofessionalVotesCastForRivalEEO1,"
+                    + " nonprofessionalVotesCastForRivalEEO2,"
+                    + " nonprofessionalVotesCastForRivalEEO3,"
+                    
+                    + " combinedApproxNumberEligible,"
+                    + " combinedYES,"
+                    + " combinedNO,"
+                    + " combinedChallenged,"
+                    + " combinedTotalVotes,"
+                    + " combinedOutcome,"
+                    + " combinedWhoPrevailed,"
+                    + " combinedVoidBallots,"
+                    + " combinedValidVotes,"
+                    + " combinedVotesCastforNoRepresentative,"
+                    + " combinedVotesCastForEEO,"
+                    + " combinedVotesCastForIncumbentEEO,"
+                    + " combinedVotesCastForRivalEEO1,"
+                    + " combinedVotesCastForRivalEEO2,"
+                    + " combinedVotesCastForRivalEEO3"
+                    
                     + " from REPCase where caseYear = ? "
                     + " AND caseType = ? "
                     + " AND caseMonth = ? "
@@ -530,6 +656,68 @@ public class REPCase {
                 rep.eligibilityListDate = caseInformation.getTimestamp("eligibilityListDate");
                 rep.preElectionConfDate = caseInformation.getTimestamp("preElectionConfDate");
                 rep.selfReleasing = caseInformation.getString("selfReleasing");
+                
+                rep.resultApproxNumberEligibleVotes = caseInformation.getString("resultApproxNumberEligibleVoters");
+                rep.resultVoidBallots = caseInformation.getString("resultVoidBallots");
+                rep.resultVotesCastForEEO = caseInformation.getString("resultVotesCastForEEO");
+                rep.resultVotesCastForIncumbentEEO = caseInformation.getString("resultVotesCastForIncumbentEEO");
+                rep.resultVotesCastForRivalEEO1 = caseInformation.getString("resultVotesCastForRivalEEO1");
+                rep.resultVotesCastForRivalEEO2 = caseInformation.getString("resultVotesCastForRivalEEO2");
+                rep.resultVotesCastForRivalEEO3 = caseInformation.getString("resultVotesCastForRivalEEO3");
+                rep.resultVotesCastForNoRepresentative = caseInformation.getString("resultVotesCastForNoRepresentative");
+                rep.resultValidVotesCounted = caseInformation.getString("resultValidVotesCounted");
+                rep.resultChallengedBallots = caseInformation.getString("resultChallengedBallots");
+                rep.resultTotalBallotsCast = caseInformation.getString("resultTotalBallotsCast");
+                rep.resultWHoPrevailed = caseInformation.getObject("resultWHoPrevailed") == null ? "" : CaseParty.getCasePartyByIDForElection(caseInformation.getInt("resultWHoPrevailed"));
+                
+                rep.professionalApproxNumberEligible = caseInformation.getString("professionalApproxNumberEligible");
+                rep.professionalYES = caseInformation.getString("professionalYES");
+                rep.professionalNO = caseInformation.getString("professionalNO");
+                rep.professionalChallenged = caseInformation.getString("professionalChallenged");
+                rep.professionalTotalVotes = caseInformation.getString("professionalTotalVotes");
+                rep.professionalOutcome = caseInformation.getString("professionalOutcome");
+                rep.professionalWhoPrevailed = caseInformation.getObject("professionalWHoPrevailed") == null ? "" : CaseParty.getCasePartyByIDForElection(caseInformation.getInt("professionalWhoPrevailed"));
+                rep.professionalVoidBallots = caseInformation.getString("professionalVoidBallots");
+                rep.professionalValidVotes = caseInformation.getString("professionalValidVotes");
+                rep.professionalVotesCastForNoRepresentative = caseInformation.getString("professionalVotesCastForNoRepresentative");
+                rep.professionalVotesCastForEEO = caseInformation.getString("professionalVotesCastForEEO");
+                rep.professionalVotesCastForIncumbentEEO = caseInformation.getString("professionalVotesCastForIncumbentEEO");
+                rep.professionalVotesCastForRivalEEO1 = caseInformation.getString("professionalVotesCastForRivalEEO1");
+                rep.professionalVotesCastForRivalEEO2 = caseInformation.getString("professionalVotesCastForRivalEEO2");
+                rep.professionalVotesCastForRivalEEO3 = caseInformation.getString("professionalVotesCastForRivalEEO3");
+            
+                rep.nonprofessionalApproxNumberEligible = caseInformation.getString("nonprofessionalApproxNumberEligible");
+                rep.nonprofessionalYES = caseInformation.getString("nonprofessionalYES");
+                rep.nonprofessionalNO = caseInformation.getString("nonprofessionalNO");
+                rep.nonprofessionalChallenged = caseInformation.getString("nonprofessionalChallenged");
+                rep.nonprofessionalTotalVotes = caseInformation.getString("nonprofessionalTotalVotes");
+                rep.nonprofessionalOutcome = caseInformation.getString("nonprofessionalOutcome");
+                rep.nonprofessionalWhoPrevailed = caseInformation.getObject("nonprofessionalWhoPrevailed") == null ? "" : CaseParty.getCasePartyByIDForElection(caseInformation.getInt("nonprofessionalWHoPrevailed"));
+                rep.nonprofessionalVoidBallots = caseInformation.getString("nonprofessionalVoidBallots");
+                rep.nonprofessionalValidVotes = caseInformation.getString("nonprofessionalValidVotes");
+                rep.nonprofessionalVotesCastForNoRepresentative = caseInformation.getString("nonprofessionalVotesCastForNoRepresentative");
+                rep.nonprofessionalVotesCastForEEO = caseInformation.getString("nonprofessionalVotesCastForEEO");
+                rep.nonprofessionalVotesCastForIncumbentEEO = caseInformation.getString("nonprofessionalVotesCastForIncumbentEEO");
+                rep.nonprofessionalVotesCastForRivalEEO1 = caseInformation.getString("nonprofessionalVotesCastForRivalEEO1");
+                rep.nonprofessionalVotesCastForRivalEEO2 = caseInformation.getString("nonprofessionalVotesCastForRivalEEO2");
+                rep.nonprofessionalVotesCastForRivalEEO3 = caseInformation.getString("nonprofessionalVotesCastForRivalEEO3");
+
+                rep.combinedApproxNumberEligible = caseInformation.getString("combinedApproxNumberEligible");
+                rep.combinedYES = caseInformation.getString("combinedYES");
+                rep.combinedlNO = caseInformation.getString("combinedNO");
+                rep.combinedChallenged = caseInformation.getString("combinedChallenged");
+                rep.combinedTotalVotes = caseInformation.getString("combinedTotalVotes");
+                rep.combinedOutcome = caseInformation.getString("combinedOutcome");
+                rep.combinedWhoPrevailed = caseInformation.getObject("combinedWhoPrevailed") == null ? "" : CaseParty.getCasePartyByIDForElection(caseInformation.getInt("combinedWHoPrevailed"));
+                rep.combinedVoidBallots = caseInformation.getString("combinedVoidBallots");
+                rep.combinedValidVotes = caseInformation.getString("combinedValidVotes");
+                rep.combinedVotesCastForNoRepresentative = caseInformation.getString("combinedVotesCastForNoRepresentative");
+                rep.combinedVotesCastForEEO = caseInformation.getString("combinedVotesCastForEEO");
+                rep.combinedVotesCastForIncumbentEEO = caseInformation.getString("combinedVotesCastForIncumbentEEO");
+                rep.combinedVotesCastForRivalEEO1 = caseInformation.getString("combinedVotesCastForRivalEEO1");
+                rep.combinedVotesCastForRivalEEO2 = caseInformation.getString("combinedVotesCastForRivalEEO2");
+                rep.combinedVotesCastForRivalEEO3 = caseInformation.getString("combinedVotesCastForRivalEEO3");
+
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex.getMessage());
@@ -574,7 +762,7 @@ public class REPCase {
         }
     }
     
-    public static void updateElectionInformation(REPCase newCaseInformation, REPCase caseInformation) {
+    public static void updateElectionInformation(REPCase newCaseInformation, REPCase caseInformation, String[] professional, String[] nonprofessional, String[] combined) {
         REPCase rep = null;
         try {
             Statement stmt = Database.connectToDB().createStatement();
@@ -597,7 +785,67 @@ public class REPCase {
                     + " ballotsCountTime = ?,"
                     + " eligibilityListDate = ?,"
                     + " preElectionConfDate = ?,"
-                    + " selfReleasing = ?"
+                    + " selfReleasing = ?,"
+                    + " resultApproxNumberEligibleVoters = ?,"
+                    + " resultVoidBallots = ?,"
+                    + " resultVotesCastForEEO = ?,"
+                    + " resultVotesCastForIncumbentEEO = ?,"
+                    + " resultVotesCastForRivalEEO1 = ?,"
+                    + " resultVotesCastforRivalEEO2 = ?,"
+                    + " resultVotesCastForRivalEEO3 = ?,"
+                    + " resultVotesCastForNoRepresentative = ?,"
+                    + " resultValidVotesCounted = ?,"
+                    + " resultChallengedBallots = ?,"
+                    + " resultTotalBallotsCast = ?,"
+                    + " resultWhoPrevailed = ?,"
+                    
+                    + " professionalApproxNumberEligible = ?,"
+                    + " professionalYES = ?,"
+                    + " professionalNO = ?,"
+                    + " professionalChallenged = ?,"
+                    + " professionalTotalVotes = ?,"
+                    + " professionalOutcome = ?,"
+                    + " professionalWhoPrevailed = ?,"
+                    + " professionalVoidBallots = ?,"
+                    + " professionalValidVotes = ?,"
+                    + " professionalVotesCastforNoRepresentative = ?,"
+                    + " professionalVotesCastForEEO = ?,"
+                    + " professionalVotesCastForIncumbentEEO = ?,"
+                    + " professionalVotesCastForRivalEEO1 = ?,"
+                    + " professionalVotesCastForRivalEEO2 = ?,"
+                    + " professionalVotesCastForRivalEEO3 = ?,"
+                    
+                    + " nonprofessionalApproxNumberEligible = ?,"
+                    + " nonprofessionalYES = ?,"
+                    + " nonprofessionalNO = ?,"
+                    + " nonprofessionalChallenged = ?,"
+                    + " nonprofessionalTotalVotes = ?,"
+                    + " nonprofessionalOutcome = ?,"
+                    + " nonprofessionalWhoPrevailed = ?,"
+                    + " nonprofessionalVoidBallots = ?,"
+                    + " nonprofessionalValidVotes = ?,"
+                    + " nonprofessionalVotesCastforNoRepresentative = ?,"
+                    + " nonprofessionalVotesCastForEEO = ?,"
+                    + " nonprofessionalVotesCastForIncumbentEEO = ?,"
+                    + " nonprofessionalVotesCastForRivalEEO1 = ?,"
+                    + " nonprofessionalVotesCastForRivalEEO2 = ?,"
+                    + " nonprofessionalVotesCastForRivalEEO3 = ?,"
+                    
+                    + " combinedApproxNumberEligible = ?,"
+                    + " combinedYES = ?,"
+                    + " combinedNO = ?,"
+                    + " combinedChallenged = ?,"
+                    + " combinedTotalVotes = ?,"
+                    + " combinedOutcome = ?,"
+                    + " combinedWhoPrevailed = ?,"
+                    + " combinedVoidBallots = ?,"
+                    + " combinedValidVotes = ?,"
+                    + " combinedVotesCastforNoRepresentative = ?,"
+                    + " combinedVotesCastForEEO = ?,"
+                    + " combinedVotesCastForIncumbentEEO = ?,"
+                    + " combinedVotesCastForRivalEEO1 = ?,"
+                    + " combinedVotesCastForRivalEEO2 = ?,"
+                    + " combinedVotesCastForRivalEEO3 = ?"
                     + " where caseYear = ?"
                     + " AND caseType = ?"
                     + " AND caseMonth = ?"
@@ -621,17 +869,77 @@ public class REPCase {
             preparedStatement.setTimestamp(15, newCaseInformation.ballotsCountTime);  
             preparedStatement.setTimestamp(16, newCaseInformation.eligibilityListDate);  
             preparedStatement.setTimestamp(17, newCaseInformation.preElectionConfDate);
-            preparedStatement.setString(18, newCaseInformation.selfReleasing);  
-            preparedStatement.setString(19, Global.caseYear);
-            preparedStatement.setString(20, Global.caseType);
-            preparedStatement.setString(21, Global.caseMonth);
-            preparedStatement.setString(22, Global.caseNumber);
+            preparedStatement.setObject(18, newCaseInformation.selfReleasing); 
+            preparedStatement.setObject(19, newCaseInformation.resultApproxNumberEligibleVotes); 
+            preparedStatement.setObject(20, newCaseInformation.resultVoidBallots);
+            preparedStatement.setObject(21, newCaseInformation.resultVotesCastForEEO);
+            preparedStatement.setObject(22, newCaseInformation.resultVotesCastForIncumbentEEO);
+            preparedStatement.setObject(23, newCaseInformation.resultVotesCastForRivalEEO1);
+            preparedStatement.setObject(24, newCaseInformation.resultVotesCastForRivalEEO2);
+            preparedStatement.setObject(25, newCaseInformation.resultVotesCastForRivalEEO3);
+            preparedStatement.setObject(26, newCaseInformation.resultVotesCastForNoRepresentative);
+            preparedStatement.setObject(27, newCaseInformation.resultValidVotesCounted);
+            preparedStatement.setObject(28, newCaseInformation.resultChallengedBallots);
+            preparedStatement.setObject(29, newCaseInformation.resultTotalBallotsCast);
+            preparedStatement.setObject(30, newCaseInformation.resultWHoPrevailed == null ? null : CaseParty.getElectionID(newCaseInformation.resultWHoPrevailed));
+            preparedStatement.setObject(31, professional[0].equals("") ? null : Integer.valueOf(professional[0]));
+            preparedStatement.setObject(32, professional[1].equals("") ? null : Integer.valueOf(professional[1]));
+            preparedStatement.setObject(33, professional[2].equals("") ? null : Integer.valueOf(professional[2]));
+            preparedStatement.setObject(34, professional[3].equals("") ? null : Integer.valueOf(professional[3]));
+            preparedStatement.setObject(35, professional[4].equals("") ? null : Integer.valueOf(professional[4]));
+            preparedStatement.setObject(36, professional[5].trim().equals("") ? null : professional[5]);
+            preparedStatement.setObject(37, professional[6].trim().equals("") ? null : CaseParty.getElectionID(professional[6].trim()));
+            preparedStatement.setObject(38, professional[7].equals("") ? null : Integer.valueOf(professional[7]));
+            preparedStatement.setObject(39, professional[8].equals("") ? null : Integer.valueOf(professional[8]));
+            preparedStatement.setObject(40, professional[9].equals("") ? null : Integer.valueOf(professional[9]));
+            preparedStatement.setObject(41, professional[10].equals("") ? null : Integer.valueOf(professional[10]));
+            preparedStatement.setObject(42, professional[11].equals("") ? null : Integer.valueOf(professional[11]));
+            preparedStatement.setObject(43, professional[12].equals("") ? null : Integer.valueOf(professional[12]));
+            preparedStatement.setObject(44, professional[13].equals("") ? null : Integer.valueOf(professional[13]));
+            preparedStatement.setObject(45, professional[14].equals("") ? null : Integer.valueOf(professional[14]));
+            
+            preparedStatement.setObject(46, nonprofessional[0].equals("") ? null : Integer.valueOf(nonprofessional[0]));
+            preparedStatement.setObject(47, nonprofessional[1].equals("") ? null : Integer.valueOf(nonprofessional[1]));
+            preparedStatement.setObject(48, nonprofessional[2].equals("") ? null : Integer.valueOf(nonprofessional[2]));
+            preparedStatement.setObject(49, nonprofessional[3].equals("") ? null : Integer.valueOf(nonprofessional[3]));
+            preparedStatement.setObject(50, nonprofessional[4].equals("") ? null : Integer.valueOf(nonprofessional[4]));
+            preparedStatement.setObject(51, nonprofessional[5].equals("") ? null : nonprofessional[5]);
+            preparedStatement.setObject(52, nonprofessional[6].trim().equals("") ? null : CaseParty.getElectionID(nonprofessional[6].trim()));
+            preparedStatement.setObject(53, nonprofessional[7].equals("") ? null : Integer.valueOf(nonprofessional[7]));
+            preparedStatement.setObject(54, nonprofessional[8].equals("") ? null : Integer.valueOf(nonprofessional[8]));
+            preparedStatement.setObject(55, nonprofessional[9].equals("") ? null : Integer.valueOf(nonprofessional[9]));
+            preparedStatement.setObject(56, nonprofessional[10].equals("") ? null : Integer.valueOf(nonprofessional[10]));
+            preparedStatement.setObject(57, nonprofessional[11].equals("") ? null : Integer.valueOf(nonprofessional[11]));
+            preparedStatement.setObject(58, nonprofessional[12].equals("") ? null : Integer.valueOf(nonprofessional[12]));
+            preparedStatement.setObject(59, nonprofessional[13].equals("") ? null : Integer.valueOf(nonprofessional[13]));
+            preparedStatement.setObject(60, nonprofessional[14].equals("") ? null : Integer.valueOf(nonprofessional[14]));
+            
+            preparedStatement.setObject(61, combined[0].equals("") ? null : Integer.valueOf(combined[0]));
+            preparedStatement.setObject(62, combined[1].equals("") ? null : Integer.valueOf(combined[1]));
+            preparedStatement.setObject(63, combined[2].equals("") ? null : Integer.valueOf(combined[2]));
+            preparedStatement.setObject(64, combined[3].equals("") ? null : Integer.valueOf(combined[3]));
+            preparedStatement.setObject(65, combined[4].equals("") ? null : Integer.valueOf(combined[4]));
+            preparedStatement.setObject(66, combined[5].equals("") ? null : combined[5]);
+            preparedStatement.setObject(67, combined[6].trim().equals("") ? null : CaseParty.getElectionID(combined[6].trim()));
+            preparedStatement.setObject(68, combined[7].equals("") ? null : Integer.valueOf(combined[7]));
+            preparedStatement.setObject(69, combined[8].equals("") ? null : Integer.valueOf(combined[8]));
+            preparedStatement.setObject(70, combined[9].equals("") ? null : Integer.valueOf(combined[9]));
+            preparedStatement.setObject(71, combined[10].equals("") ? null : Integer.valueOf(combined[10]));
+            preparedStatement.setObject(72, combined[11].equals("") ? null : Integer.valueOf(combined[11]));
+            preparedStatement.setObject(73, combined[12].equals("") ? null : Integer.valueOf(combined[12]));
+            preparedStatement.setObject(74, combined[13].equals("") ? null : Integer.valueOf(combined[13]));
+            preparedStatement.setObject(75, combined[14].equals("") ? null : Integer.valueOf(combined[14]));
+            
+            preparedStatement.setString(76, Global.caseYear);
+            preparedStatement.setString(77, Global.caseType);
+            preparedStatement.setString(78, Global.caseMonth);
+            preparedStatement.setString(79, Global.caseNumber);
 
             int success = preparedStatement.executeUpdate();
             
-//            if(success == 1) {
-//                detailedBoardStatusDetailsSaveInformation(newCaseInformation, caseInformation);
-//            }
+            if(success == 1) {
+                Activity.addActivty("Updated Election Information", null);
+            }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex.getMessage());
         }

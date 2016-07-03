@@ -9,6 +9,7 @@ import parker.serb.login.LogInDialog;
 import com.alee.laf.WebLookAndFeel;
 import com.apple.eawt.AppEvent;
 import com.apple.eawt.Application;
+import com.apple.eawt.QuitHandler;
 import com.apple.eawt.QuitResponse;
 import java.awt.Color;
 import javax.swing.UIManager;
@@ -26,10 +27,10 @@ public class SERB {
     
     public static void main(String[] args) {
         
-        //UIManager.put("InternalFrame.borderShadow", Color.gray);
-        
+        /**
+         * This is used to monitor Apple key commands on a mac
+         */
         if(System.getProperty("os.name").equalsIgnoreCase("Mac OS X")) {
-            //Used to watch for Apple-Q keys and handle the applicaiton being closed
             try {
                 Application macOSXApplication=Application.getApplication();
 

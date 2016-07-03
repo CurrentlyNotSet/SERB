@@ -31,15 +31,11 @@ import parker.serb.user.Preferences;
 import parker.serb.util.CreateNewCaseDialog;
 import parker.serb.login.ExitVerification;
 import parker.serb.publicRecords.fileSelector;
-import parker.serb.sql.CaseNumber;
 import parker.serb.sql.DocketLock;
 import parker.serb.sql.NewCaseLock;
-import parker.serb.util.FileService;
 import parker.serb.util.NewCaseLockDialog;
 import parker.serb.util.ReleaseNotesDialog;
 
-//TODO: This panel may have a memory leak for long running use....
-//TODO: Have an audit added to when a user accesses the System monitor panel 
 
 /**
  *
@@ -67,12 +63,7 @@ public class RootPanel extends javax.swing.JFrame {
         User.updateLastPCName();
         User.updateApplicationVersion();
         User.updateActiveLogIn();
-        //this needs to be updated on server
         Global.activeUser.activeLogIn = true;
-        
-        //FileService.setFilePath();
-        
-//        SlackNotification.sendNotification(Global.activeUser.firstName + " " + Global.activeUser.lastName + " logged in");
         Audit.addAuditEntry("Logged In");
         setLocationRelativeTo(null);
         setVisible(true);
@@ -111,6 +102,7 @@ public class RootPanel extends javax.swing.JFrame {
     
     /**
      * Sets the card displayed depending on the active section
+     * Sets the logo displayed depending on the active section
      */
     private void setHeaderCard() {
         CardLayout card = (CardLayout)jPanel9.getLayout();
@@ -163,6 +155,10 @@ public class RootPanel extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Add listeners that will watch for section change
+     */
+    
     private void addListeners() {
         jTabbedPane1.addChangeListener((ChangeEvent e) -> {
             if(Global.activeSection != null) {    
@@ -173,16 +169,13 @@ public class RootPanel extends javax.swing.JFrame {
                 setHeaderCard();
                 enableButtons();
                 
-                if(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()).equals("Docketing"))
-//                    Global.root.getDocketing().loadDocketList();
+                if(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()).equals("Docketing")) {
                     docketRootPanel1.loadDocketList();
-                
-                if(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()).equals("Employer Search"))
+                } else if(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()).equals("Employer Search")) {
                     if(companySearchPanel1.getModel() == null) {
-                        
                         companySearchPanel1.activity();
                     }
-//                    companySearchPanel1.lo/adPastData();
+                } 
             }
         });
     }
@@ -276,13 +269,13 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton2.setVisible(true);
                 jButton2.setText("Update");
                 jButton2.setEnabled(false);
-                jButton3.setVisible(false);
+                jButton3.setVisible(true);
                 jButton3.setText("Letters");
-                jButton4.setVisible(false);
+                jButton4.setVisible(true);
                 jButton4.setText("Reports");
-                jButton5.setVisible(false);
+                jButton5.setVisible(true);
                 jButton5.setText("Queue");
-                jButton6.setVisible(false);
+                jButton6.setVisible(true);
                 jButton6.setText("Public Records");
                 jButton7.setVisible(false);
                 jButton8.setVisible(false);
@@ -312,6 +305,13 @@ public class RootPanel extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * This will disable all tabs that are not of the active section, this
+     * prevents a user from navigating a way from the tab while editing.
+     * 
+     * @param activeTab - the current tab that represents teh section in use 
+     */
+    
     public void disableTabs(int activeTab) {
         for(int i = jTabbedPane1.getTabCount()-1; i >= 0; i--) {
             if(i != activeTab) {
@@ -322,6 +322,19 @@ public class RootPanel extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Enable all tabs after a save action or cancel action has bee completed
+     */
+    //TODO: Rename this to enableTabs
+    public void enableTabsAfterSave() {
+        for(int i = jTabbedPane1.getTabCount()-1; i >= 0; i--) {
+            jTabbedPane1.setEnabledAt(i, true);
+        }
+    }
+    
+    /**
+     * Disable all button when updating a panel
+     */
     private void disableButtons() {
         jButton1.setEnabled(false);
         jButton3.setEnabled(false);
@@ -335,6 +348,7 @@ public class RootPanel extends javax.swing.JFrame {
         
     }
     
+    
     public void enableButtonsAfterCancel() {
         jButton1.setEnabled(true);
         jButton3.setEnabled(true);
@@ -347,11 +361,7 @@ public class RootPanel extends javax.swing.JFrame {
         jButton9.setText("Delete");
     }
     
-    public void enableTabsAfterSave() {
-        for(int i = jTabbedPane1.getTabCount()-1; i >= 0; i--) {
-            jTabbedPane1.setEnabledAt(i, true);
-        }
-    }
+    
 
     public JTabbedPane getjTabbedPane1() {
         return jTabbedPane1;
@@ -408,12 +418,6 @@ public class RootPanel extends javax.swing.JFrame {
     public JPanel getDocketing() {
         return Docketing;
     }
-    
-    
-    
-    
-    
-    
 
     /**
      * This method is called from within the constructor to initialize the form.

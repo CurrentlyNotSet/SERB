@@ -33,6 +33,7 @@ public class AddREPBoardMeeting extends javax.swing.JDialog {
         initComponents();
         addListeners();
         loadRecComboBox();
+//        jScrollPane1.setVisible(false);
         setLocationRelativeTo(parent);
         setVisible(true);
     }
@@ -72,12 +73,13 @@ public class AddREPBoardMeeting extends javax.swing.JDialog {
             }
         });
         
-//        recommendationComboBox.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                enableAddButton();
-//            }
-//        });
+        recommendationComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(recommendationComboBox.getSelectedItem() != null)
+                    recommendationTextArea.setText(recommendationComboBox.getSelectedItem().toString());
+            }
+        });
     }
     
     private void loadRecComboBox() {
@@ -132,6 +134,8 @@ public class AddREPBoardMeeting extends javax.swing.JDialog {
         meetingDateTextBox = new com.alee.extended.date.WebDateField();
         jLabel5 = new javax.swing.JLabel();
         memoDateTextBox = new com.alee.extended.date.WebDateField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        recommendationTextArea = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -189,6 +193,12 @@ public class AddREPBoardMeeting extends javax.swing.JDialog {
             }
         });
 
+        recommendationTextArea.setColumns(20);
+        recommendationTextArea.setLineWrap(true);
+        recommendationTextArea.setRows(5);
+        recommendationTextArea.setWrapStyleWord(true);
+        jScrollPane1.setViewportView(recommendationTextArea);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -198,6 +208,10 @@ public class AddREPBoardMeeting extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(cancelBoardMeetingButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(addBoardMeetingButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel3)
                             .addComponent(jLabel2)
@@ -205,14 +219,11 @@ public class AddREPBoardMeeting extends javax.swing.JDialog {
                             .addComponent(jLabel5))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(recommendationComboBox, 0, 544, Short.MAX_VALUE)
+                            .addComponent(recommendationComboBox, 0, 444, Short.MAX_VALUE)
                             .addComponent(agendaItemTextBox)
                             .addComponent(meetingDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(memoDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(cancelBoardMeetingButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(addBoardMeetingButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(memoDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -232,15 +243,17 @@ public class AddREPBoardMeeting extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(recommendationComboBox)
                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(memoDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(memoDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(addBoardMeetingButton)
-                    .addComponent(cancelBoardMeetingButton))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(cancelBoardMeetingButton)
+                    .addComponent(addBoardMeetingButton))
+                .addContainerGap())
         );
 
         pack();
@@ -251,7 +264,7 @@ public class AddREPBoardMeeting extends javax.swing.JDialog {
     }//GEN-LAST:event_cancelBoardMeetingButtonActionPerformed
 
     private void addBoardMeetingButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBoardMeetingButtonActionPerformed
-        BoardMeeting.addREPBoardMeeting(meetingDateTextBox.getText(), agendaItemTextBox.getText(), recommendationComboBox.getSelectedItem().toString(), memoDateTextBox.getText());
+        BoardMeeting.addREPBoardMeeting(meetingDateTextBox.getText(), agendaItemTextBox.getText(), recommendationTextArea.getText().toString(), memoDateTextBox.getText());
         dispose();
     }//GEN-LAST:event_addBoardMeetingButtonActionPerformed
 
@@ -276,8 +289,10 @@ public class AddREPBoardMeeting extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JScrollPane jScrollPane1;
     private com.alee.extended.date.WebDateField meetingDateTextBox;
     private com.alee.extended.date.WebDateField memoDateTextBox;
     private javax.swing.JComboBox<String> recommendationComboBox;
+    private javax.swing.JTextArea recommendationTextArea;
     // End of variables declaration//GEN-END:variables
 }

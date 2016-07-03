@@ -7,11 +7,9 @@ package parker.serb;
 
 import java.awt.Color;
 import parker.serb.sql.User;
-import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-//import org.bson.Document;
 
 /**
  *
@@ -19,15 +17,18 @@ import java.util.List;
  */
 public class Global {
     
+    //TODO: implement verbose logging at project end
     public static final boolean verboseLogging = true;
     
+    //Update this value with each release
+    //TODO: Convert this to build number intead of version nuber, will lead
+    //to better tracking of what users are using.  In aiddtion it would make this
+    //auto update removing dev error
     public static final String applicationVersion = "3.0";
 
-    //Gets a temp directory for storing files.  This should only be used for MongoDB
-    //public static String tempDir = System.getProperty("java.io.tmpdir");
-    
-    //All Date formatters
+    //All Date and Time formatters
     public static SimpleDateFormat mmddyyyyhhmma = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
+    public static SimpleDateFormat hmma = new SimpleDateFormat("h:mm a");
     public static SimpleDateFormat mmddyyyy = new SimpleDateFormat("MM/dd/yyyy");
     public static SimpleDateFormat EMMMMMdyyyy = new SimpleDateFormat("E, MMMMM d, yyyy");
     
@@ -37,11 +38,10 @@ public class Global {
     public static String caseMonth = null;
     public static String caseNumber = null;
     
-    public static Color alternateRowColor = new Color(255, 255, 235); //very light 
+    //TODO: Convert this to another color for monitor saftey
+    public static Color alternateRowColor = new Color(255, 255, 180); //very light 
     
     public static String employerSearchTerm = null;
-//    public st
-    
     
     //List of all the roles the logged in user can access
     public static List<String> activeUserRoles = new ArrayList<>();
@@ -49,17 +49,17 @@ public class Global {
     //Information about the active user
     public static User activeUser = null;
     
-    
-    //public static REPCase rep = null;
-    
     //Slack Informaiton
+    //TODO: Move this hook and value to another gitignore file
     public static final String slackHook = "https://hooks.slack.com/services/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";
     public static final String slackIcon = ":computer:";
     public static final String slackChannel = "serbapplication";
     public static final String slackUser = "SERB";
     
+    //indicate which section the user is currently in
     public static String activeSection;
     
+    //overall root panel, referenced throughout the project
     public static RootPanel root;
     
     //list of all states -> can limit this down if client wants
@@ -70,9 +70,12 @@ public class Global {
         "RI", "SC", "SD", "TN", "TX", "UM", "UT", "VT", "VA", "VI", "WA", "WV",
         "WI", "WY"};
     
+    //Paths that are used to store locations of all files
     public static String scanPath;
     public static String emailPath;
     public static String activityPath;
     public static String mediaPath;
+    
+    //boolean about if notigication should be sent
     public static boolean errorNotifications;
 }

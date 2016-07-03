@@ -64,7 +64,7 @@ public class MEDRootPanel extends javax.swing.JPanel {
                 activityPanel1.loadAllActivity();
                 break;
             case "Parties":
-                partiesPanel1.loadULPParties();
+                partiesPanel1.loadParties();
                 break;
 //            case "Status":
 //                uLPStatusPanel1.loadInformation();
@@ -171,7 +171,7 @@ public class MEDRootPanel extends javax.swing.JPanel {
                 break;
             case "Parties":
                 new PartySearchDialog((JFrame) this.getRootPane().getParent(), true);
-                partiesPanel1.loadULPParties();
+                partiesPanel1.loadParties();
                 Global.root.getmEDHeaderPanel1().loadHeaderInformation();
 //                ULPCaseSearchData.updateCaseEntryFromParties(
 //                        Global.root.getuLPHeaderPanel1().getChargedPartyTextBox().getText().trim(),
@@ -247,7 +247,7 @@ public class MEDRootPanel extends javax.swing.JPanel {
                 break;
             case "Parties":
                 partiesPanel1.removeParty();
-                partiesPanel1.loadULPParties();
+                partiesPanel1.loadParties();
                 Global.root.getmEDHeaderPanel1().loadHeaderInformation();
 //                ULPCaseSearchData.updateCaseEntryFromParties(
 //                        Global.root.getmEDHeaderPanel1().getChargedPartyTextBox().getText().trim(),
@@ -294,7 +294,7 @@ public class MEDRootPanel extends javax.swing.JPanel {
 //                }
 //                break;
             case "Notes":
-                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+                cancel = new CancelUpdate(Global.root, true);
                 if(!cancel.isReset()) {
                 } else {
                     Global.root.enableButtonsAfterCancel();

@@ -65,7 +65,7 @@ public class REPRootPanel extends javax.swing.JPanel {
                 rEPCaseInformationPanel2.loadInformation();
                 break;
             case "Parties":
-                partiesPanel1.loadULPParties();
+                partiesPanel1.loadParties();
                 break;
             case "Details":
                 rEPCaseDetailsPanel1.loadInformation();
@@ -183,8 +183,8 @@ public class REPRootPanel extends javax.swing.JPanel {
                 }
                 break;
             case "Parties":
-                new PartySearchDialog((JFrame) this.getRootPane().getParent(), true);
-                partiesPanel1.loadULPParties();
+                new PartySearchDialog((JFrame) this.getRootPane().getParent().getParent(), true);
+                partiesPanel1.loadParties();
                 Global.root.getrEPHeaderPanel1().loadHeaderInformation();
                 REPCaseSearchData.updateCaseEntryFromParties(
                         Global.root.getrEPHeaderPanel1().getEmployerTextBox().getText().trim(),
@@ -227,7 +227,7 @@ public class REPRootPanel extends javax.swing.JPanel {
                 }
                 break;
             case "Mediation":
-                new REPAddMediationDialog((JFrame) Global.root.getParent(), true);
+                new REPAddMediationDialog(Global.root, true);
                 rEPMediationPanel1.loadAllMediations();
                 break;
             case "Notes":
@@ -254,7 +254,7 @@ public class REPRootPanel extends javax.swing.JPanel {
             case "Activity":
                 break;
             case "Information":
-                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+                cancel = new CancelUpdate(Global.root, true);
                 if(!cancel.isReset()) {
                 } else {
                     Global.root.enableButtonsAfterCancel();
@@ -273,7 +273,7 @@ public class REPRootPanel extends javax.swing.JPanel {
                         Global.root.getrEPHeaderPanel1().getIncumbentEEOTextBox().getText().trim());
                 break;
             case "Details":
-                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+                cancel = new CancelUpdate(Global.root, true);
                 if(!cancel.isReset()) {
                 } else {
                     Global.root.enableButtonsAfterCancel();
@@ -284,7 +284,7 @@ public class REPRootPanel extends javax.swing.JPanel {
                 }
                 break;
             case "Board Status":
-                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+                cancel = new CancelUpdate(Global.root, true);
                 if(!cancel.isReset()) {
                 } else {
                     Global.root.enableButtonsAfterCancel();

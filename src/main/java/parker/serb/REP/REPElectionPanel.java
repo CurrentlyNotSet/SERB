@@ -5,14 +5,31 @@
  */
 package parker.serb.REP;
 
+import com.alee.extended.date.WebDateField;
 import com.alee.extended.panel.GroupPanel;
 import com.alee.extended.panel.WebButtonGroup;
 import com.alee.laf.button.WebToggleButton;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.event.MouseEvent;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFrame;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
+import parker.serb.sql.CaseParty;
 import parker.serb.sql.REPCase;
+import parker.serb.sql.REPElectionMultiCase;
+import parker.serb.sql.REPElectionSiteInformation;
+import parker.serb.util.ClearDateDialog;
 import parker.serb.util.NumberFormatService;
 
 /**
@@ -23,19 +40,118 @@ public class REPElectionPanel extends javax.swing.JPanel {
 
     CardLayout resultsCard, siteCard;
     REPCase repCase;
+    String whereUserIsComingFrom = "Professional";
+    String[] professional = new String[]{"","","","","","","","","","","","","","",""};
+    String[] nonprofessional = new String[]{"","","","","","","","","","","","","","",""};
+    String[] combined = new String[]{"","","","","","","","","","","","","","",""};
+    
     /**
      * Creates new form REPElectionPanel
      */
     public REPElectionPanel() {
         
         initComponents();
-        
-        
+        addListeners();
         professionalButton.setSelected(true);
         resultsCard = (CardLayout)jPanel4.getLayout();
         siteCard = (CardLayout) jPanel14.getLayout();
         jPanel4.setVisible(false);
 //        hideNotRequiredInformation();
+    }
+    
+    private void addListeners() {
+        ballotsCountTime.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                if(ballotsCountTime.getText().equals("")) {
+                    amPMComboBox.setSelectedItem(" ");
+                } else {
+                    amPMComboBox.setSelectedItem(Integer.parseInt(ballotsCountTime.getText().split(":")[0]) >= 7 && Integer.parseInt(ballotsCountTime.getText().split(":")[0]) <= 11 ? "AM" : "PM");
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                if(ballotsCountTime.getText().equals("")) {
+                    amPMComboBox.setSelectedItem(" ");
+                } else {
+                    amPMComboBox.setSelectedItem(Integer.parseInt(ballotsCountTime.getText().split(":")[0]) >= 7 && Integer.parseInt(ballotsCountTime.getText().split(":")[0]) <= 11 ? "AM" : "PM");
+                }
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                if(ballotsCountTime.getText().equals("")) {
+                    amPMComboBox.setSelectedItem(" ");
+                } else {
+                    amPMComboBox.setSelectedItem(Integer.parseInt(ballotsCountTime.getText().split(":")[0]) >= 7 && Integer.parseInt(ballotsCountTime.getText().split(":")[0]) <= 11 ? "AM" : "PM");
+                }
+            }
+        });
+        
+//        ballotsCountTime.addKeyListener(new KeyListener() {
+//            @Override
+//            public void keyTyped(KeyEvent e) {
+//                
+//                if (ballotsCountTime.getText().length() == 5) {
+//                    e.consume();
+//                } else {
+//                    char c = e.getKeyChar();
+//                    if (!((c >= '0') && (c <= '9') ||
+//                       (c == KeyEvent.VK_BACK_SPACE) ||
+//                       (c == KeyEvent.VK_DELETE))) {
+//                      e.consume();
+//                    }
+//                } 
+//            }
+//
+//            @Override
+//            public void keyPressed(KeyEvent e) {}
+//
+//            @Override
+//            public void keyReleased(KeyEvent e) {}
+//        });
+        
+        pollingStartDate.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                try {
+                    Date startDate = Global.mmddyyyy.parse(pollingStartDate.getText());
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(startDate);
+                    cal.add(Calendar.DATE, 15);
+                    pollingEndDate.setText(Global.mmddyyyy.format(cal.getTime()));
+                } catch (ParseException ex) {
+                    pollingEndDate.setText("");
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                try {
+                    Date startDate = Global.mmddyyyy.parse(pollingStartDate.getText());
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(startDate);
+                    cal.add(Calendar.DATE, 15);
+                    pollingEndDate.setText(Global.mmddyyyy.format(cal.getTime()));
+                } catch (ParseException ex) {
+                    pollingEndDate.setText("");
+                }
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                try {
+                    Date startDate = Global.mmddyyyy.parse(pollingStartDate.getText());
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(startDate);
+                    cal.add(Calendar.DATE, 15);
+                    pollingEndDate.setText(Global.mmddyyyy.format(cal.getTime()));
+                } catch (ParseException ex) {
+                    pollingEndDate.setText("");
+                }
+            }
+        });
     }
     
     private void hideNotRequiredInformation() {
@@ -45,26 +161,288 @@ public class REPElectionPanel extends javax.swing.JPanel {
         jPanel4.setVisible(false);
         addMultiCaseElectionButton.setVisible(false);
         addSiteInformation.setVisible(false);
+//        professionalButton.setSelected(true);
+//        nonProfessionalButton.setSelected(false);
+//        combinedButton.setSelected(false);
+    }
+    
+    private void hanldeProfessionalNonProfessionalElection(String headedTo) {
+        switch(whereUserIsComingFrom) {
+            case "Professional":
+                professional[0] = approxNumberEligibleVotersTextBox.getText().trim();
+                professional[1] = yesTextBox.getText().trim();
+                professional[2] = noTextBox.getText().trim();
+                professional[3] = challengedTextBox.getText().trim();
+                professional[4] = totalBVotesTextBox.getText().trim();
+                professional[5] = outcomeComboBox.getSelectedItem().toString();
+                professional[6] = whoPrevailedComboBox.getSelectedItem().toString().trim();
+                professional[7] = voidBallotsTextBox.getText().trim();
+                professional[8] = validVotesTextBox.getText().trim();
+                professional[9] = votesCastForNoRepresentativeTextBox.getText().trim();
+                professional[10] = votesCastforEEOTextBox.getText().trim();
+                professional[11] = votesCastForIncumbentEEOTextBox.getText().trim();
+                professional[12] = votesCastForRivalEEO1TextBox.getText().trim();
+                professional[13] = votesCastForRivalEEO2TextBox.getText().trim();
+                professional[14] = votesCastForRivalEEO3TextBox.getText().trim();
+                break;
+            case "Non-Professional":
+                nonprofessional[0] = approxNumberEligibleVotersTextBox.getText().trim();
+                nonprofessional[1] = yesTextBox.getText().trim();
+                nonprofessional[2] = noTextBox.getText().trim();
+                nonprofessional[3] = challengedTextBox.getText().trim();
+                nonprofessional[4] = totalBVotesTextBox.getText().trim();
+                nonprofessional[5] = outcomeComboBox.getSelectedItem().toString();
+                nonprofessional[6] = whoPrevailedComboBox.getSelectedItem().toString().trim();
+                nonprofessional[7] = voidBallotsTextBox.getText().trim();
+                nonprofessional[8] = validVotesTextBox.getText().trim();
+                nonprofessional[9] = votesCastForNoRepresentativeTextBox.getText().trim();
+                nonprofessional[10] = votesCastforEEOTextBox.getText().trim();
+                nonprofessional[11] = votesCastForIncumbentEEOTextBox.getText().trim();
+                nonprofessional[12] = votesCastForRivalEEO1TextBox.getText().trim();
+                nonprofessional[13] = votesCastForRivalEEO2TextBox.getText().trim();
+                nonprofessional[14] = votesCastForRivalEEO3TextBox.getText().trim();
+                break;
+            case "Combined":
+                combined[0] = approxNumberEligibleVotersTextBox.getText().trim();
+                combined[1] = yesTextBox.getText().trim();
+                combined[2] = noTextBox.getText().trim();
+                combined[3] = challengedTextBox.getText().trim();
+                combined[4] = totalBVotesTextBox.getText().trim();
+                combined[5] = outcomeComboBox.getSelectedItem().toString();
+                combined[6] = whoPrevailedComboBox.getSelectedItem().toString().trim();
+                combined[7] = voidBallotsTextBox.getText().trim();
+                combined[8] = validVotesTextBox.getText().trim();
+                combined[9] = votesCastForNoRepresentativeTextBox.getText().trim();
+                combined[10] = votesCastforEEOTextBox.getText().trim();
+                combined[11] = votesCastForIncumbentEEOTextBox.getText().trim();
+                combined[12] = votesCastForRivalEEO1TextBox.getText().trim();
+                combined[13] = votesCastForRivalEEO2TextBox.getText().trim();
+                combined[14] = votesCastForRivalEEO3TextBox.getText().trim();
+                break;
+        }
+        
+        switch(headedTo) {
+            case "Professional":
+                approxNumberEligibleVotersTextBox.setText(professional[0]);
+                yesTextBox.setText(professional[1]);
+                noTextBox.setText(professional[2]);
+                challengedTextBox.setText(professional[3]);
+                totalBVotesTextBox.setText(professional[4]);
+                outcomeComboBox.setSelectedItem(professional[5].trim().equals("") ? " " : professional[5].trim());
+                whoPrevailedComboBox.setSelectedItem(professional[6]);
+                voidBallotsTextBox.setText(professional[7]);
+                validVotesTextBox.setText(professional[8]);
+                votesCastForNoRepresentativeTextBox.setText(professional[9]);
+                votesCastforEEOTextBox.setText(professional[10]);
+                votesCastForIncumbentEEOTextBox.setText(professional[11]);
+                votesCastForRivalEEO1TextBox.setText(professional[12]);
+                votesCastForRivalEEO2TextBox.setText(professional[13]);
+                votesCastForRivalEEO3TextBox.setText(professional[14]);
+                break;
+            case "Non-Professional":
+                approxNumberEligibleVotersTextBox.setText(nonprofessional[0]);
+                yesTextBox.setText(nonprofessional[1]);
+                noTextBox.setText(nonprofessional[2]);
+                challengedTextBox.setText(nonprofessional[3]);
+                totalBVotesTextBox.setText(nonprofessional[4]);
+                outcomeComboBox.setSelectedItem(nonprofessional[5].trim().equals("") ? " " : nonprofessional[5].trim());
+                whoPrevailedComboBox.setSelectedItem(nonprofessional[6]);
+                voidBallotsTextBox.setText(nonprofessional[7]);
+                validVotesTextBox.setText(nonprofessional[8]);
+                votesCastForNoRepresentativeTextBox.setText(nonprofessional[9]);
+                votesCastforEEOTextBox.setText(nonprofessional[10]);
+                votesCastForIncumbentEEOTextBox.setText(nonprofessional[11]);
+                votesCastForRivalEEO1TextBox.setText(nonprofessional[12]);
+                votesCastForRivalEEO2TextBox.setText(nonprofessional[13]);
+                votesCastForRivalEEO3TextBox.setText(nonprofessional[14]);
+                break;
+            case "Combined":
+                approxNumberEligibleVotersTextBox.setText(combined[0]);
+                yesTextBox.setText(combined[1]);
+                noTextBox.setText(combined[2]);
+                challengedTextBox.setText(combined[3]);
+                totalBVotesTextBox.setText(combined[4]);
+                outcomeComboBox.setSelectedItem(combined[5].trim().equals("") ? " " : combined[5].trim());
+                whoPrevailedComboBox.setSelectedItem(combined[6]);
+                voidBallotsTextBox.setText(combined[7]);
+                validVotesTextBox.setText(combined[8]);
+                votesCastForNoRepresentativeTextBox.setText(combined[9]);
+                votesCastforEEOTextBox.setText(combined[10]);
+                votesCastForIncumbentEEOTextBox.setText(combined[11]);
+                votesCastForRivalEEO1TextBox.setText(combined[12]);
+                votesCastForRivalEEO2TextBox.setText(combined[13]);
+                votesCastForRivalEEO3TextBox.setText(combined[14]);
+                break;
+        }
+        
+        whereUserIsComingFrom = headedTo;
+    }
+    
+    private void loadElectionArrays(REPCase repCase) {
+        professional[0] = repCase.professionalApproxNumberEligible == null ? "" : repCase.professionalApproxNumberEligible;
+        professional[1] = repCase.professionalYES == null ? "" : repCase.professionalYES;
+        professional[2] = repCase.professionalNO == null ? "" : repCase.professionalNO;
+        professional[3] = repCase.professionalChallenged == null ? "" : repCase.professionalChallenged;
+        professional[4] = repCase.professionalTotalVotes == null ? "" : repCase.professionalTotalVotes;
+        professional[5] = repCase.professionalOutcome == null ? "" : repCase.professionalOutcome;
+        professional[6] = repCase.professionalWhoPrevailed == null ? "" : repCase.professionalWhoPrevailed;
+        professional[7] = repCase.professionalVoidBallots == null ? "" : repCase.professionalVoidBallots;
+        professional[8] = repCase.professionalValidVotes == null ? "" : repCase.professionalValidVotes;
+        professional[9] = repCase.professionalVotesCastForNoRepresentative == null ? "" : repCase.professionalVotesCastForNoRepresentative;
+        professional[10] = repCase.professionalVotesCastForEEO == null ? "" : repCase.professionalVotesCastForEEO;
+        professional[11] = repCase.professionalVotesCastForIncumbentEEO == null ? "" : repCase.professionalVotesCastForIncumbentEEO;
+        professional[12] = repCase.professionalVotesCastForRivalEEO1 == null ? "" : repCase.professionalVotesCastForRivalEEO1;
+        professional[13] = repCase.professionalVotesCastForRivalEEO2 == null ? "" : repCase.professionalVotesCastForRivalEEO2;
+        professional[14] = repCase.professionalVotesCastForRivalEEO3 == null ? "" : repCase.professionalVotesCastForRivalEEO3;
+        
+        nonprofessional[0] = repCase.nonprofessionalApproxNumberEligible == null ? "" : repCase.nonprofessionalApproxNumberEligible;
+        nonprofessional[1] = repCase.nonprofessionalYES == null ? "" : repCase.nonprofessionalYES;
+        nonprofessional[2] = repCase.nonprofessionalNO == null ? "" : repCase.nonprofessionalNO;
+        nonprofessional[3] = repCase.nonprofessionalChallenged == null ? "" : repCase.nonprofessionalChallenged;
+        nonprofessional[4] = repCase.nonprofessionalTotalVotes == null ? "" : repCase.nonprofessionalTotalVotes;
+        nonprofessional[5] = repCase.nonprofessionalOutcome == null ? "" : repCase.nonprofessionalOutcome;
+        nonprofessional[6] = repCase.nonprofessionalWhoPrevailed == null ? "" : repCase.nonprofessionalWhoPrevailed;
+        nonprofessional[7] = repCase.nonprofessionalVoidBallots == null ? "" : repCase.nonprofessionalVoidBallots;
+        nonprofessional[8] = repCase.nonprofessionalValidVotes == null ? "" : repCase.nonprofessionalValidVotes;
+        nonprofessional[9] = repCase.nonprofessionalVotesCastForNoRepresentative == null ? "" : repCase.nonprofessionalVotesCastForNoRepresentative;
+        nonprofessional[10] = repCase.nonprofessionalVotesCastForEEO == null ? "" : repCase.nonprofessionalVotesCastForEEO;
+        nonprofessional[11] = repCase.nonprofessionalVotesCastForIncumbentEEO == null ? "" : repCase.nonprofessionalVotesCastForIncumbentEEO;
+        nonprofessional[12] = repCase.nonprofessionalVotesCastForRivalEEO1 == null ? "" : repCase.nonprofessionalVotesCastForRivalEEO1;
+        nonprofessional[13] = repCase.nonprofessionalVotesCastForRivalEEO2 == null ? "" : repCase.nonprofessionalVotesCastForRivalEEO2;
+        nonprofessional[14] = repCase.nonprofessionalVotesCastForRivalEEO3 == null ? "" : repCase.nonprofessionalVotesCastForRivalEEO3;
+        
+        combined[0] = repCase.combinedApproxNumberEligible == null ? "" : repCase.combinedApproxNumberEligible;
+        combined[1] = repCase.combinedYES == null ? "" : repCase.combinedYES;
+        combined[2] = repCase.combinedlNO == null ? "" : repCase.combinedlNO;
+        combined[3] = repCase.combinedChallenged == null ? "" : repCase.combinedChallenged;
+        combined[4] = repCase.combinedTotalVotes == null ? "" : repCase.combinedTotalVotes;
+        combined[5] = repCase.combinedOutcome == null ? "" : repCase.combinedOutcome;
+        combined[6] = repCase.combinedWhoPrevailed == null ? "" : repCase.combinedWhoPrevailed;
+        combined[7] = repCase.combinedVoidBallots == null ? "" : repCase.combinedVoidBallots;
+        combined[8] = repCase.combinedValidVotes == null ? "" : repCase.combinedValidVotes;
+        combined[9] = repCase.combinedVotesCastForNoRepresentative == null ? "" : repCase.combinedVotesCastForNoRepresentative;
+        combined[10] = repCase.combinedVotesCastForEEO == null ? "" : repCase.combinedVotesCastForEEO;
+        combined[11] = repCase.combinedVotesCastForIncumbentEEO == null ? "" : repCase.combinedVotesCastForIncumbentEEO;
+        combined[12] = repCase.combinedVotesCastForRivalEEO1 == null ? "" : repCase.combinedVotesCastForRivalEEO1;
+        combined[13] = repCase.combinedVotesCastForRivalEEO2 == null ? "" : repCase.combinedVotesCastForRivalEEO2;
+        combined[14] = repCase.combinedVotesCastForRivalEEO3 == null ? "" : repCase.combinedVotesCastForRivalEEO3;
+        
+        if(professionalButton.isSelected()) {
+            approxNumberEligibleVotersTextBox.setText(professional[0]);
+            yesTextBox.setText(professional[1]);
+            noTextBox.setText(professional[2]);
+            challengedTextBox.setText(professional[3]);
+            totalBVotesTextBox.setText(professional[4]);
+            outcomeComboBox.setSelectedItem(professional[5]);
+            whoPrevailedComboBox.setSelectedItem(professional[6]);
+            voidBallotsTextBox.setText(professional[7]);
+            validVotesTextBox.setText(professional[8]);
+            votesCastForNoRepresentativeTextBox.setText(professional[9]);
+            votesCastforEEOTextBox.setText(professional[10]);
+            votesCastForIncumbentEEOTextBox.setText(professional[11]);
+            votesCastForRivalEEO1TextBox.setText(professional[12]);
+            votesCastForRivalEEO2TextBox.setText(professional[13]);
+            votesCastForRivalEEO3TextBox.setText(professional[14]);
+        } else if(nonProfessionalButton.isSelected()) {
+            approxNumberEligibleVotersTextBox.setText(nonprofessional[0]);
+            yesTextBox.setText(nonprofessional[1]);
+            noTextBox.setText(nonprofessional[2]);
+            challengedTextBox.setText(nonprofessional[3]);
+            totalBVotesTextBox.setText(nonprofessional[4]);
+            outcomeComboBox.setSelectedItem(nonprofessional[5]);
+            whoPrevailedComboBox.setSelectedItem(nonprofessional[6]);
+            voidBallotsTextBox.setText(nonprofessional[7]);
+            validVotesTextBox.setText(nonprofessional[8]);
+            votesCastForNoRepresentativeTextBox.setText(nonprofessional[9]);
+            votesCastforEEOTextBox.setText(nonprofessional[10]);
+            votesCastForIncumbentEEOTextBox.setText(nonprofessional[11]);
+            votesCastForRivalEEO1TextBox.setText(nonprofessional[12]);
+            votesCastForRivalEEO2TextBox.setText(nonprofessional[13]);
+            votesCastForRivalEEO3TextBox.setText(nonprofessional[14]);
+        } else if(combinedButton.isSelected()) {
+            approxNumberEligibleVotersTextBox.setText(combined[0]);
+            yesTextBox.setText(combined[1]);
+            noTextBox.setText(combined[2]);
+            challengedTextBox.setText(combined[3]);
+            totalBVotesTextBox.setText(combined[4]);
+            outcomeComboBox.setSelectedItem(combined[5]);
+            whoPrevailedComboBox.setSelectedItem(combined[6]);
+            voidBallotsTextBox.setText(combined[7]);
+            validVotesTextBox.setText(combined[8]);
+            votesCastForNoRepresentativeTextBox.setText(combined[9]);
+            votesCastforEEOTextBox.setText(combined[10]);
+            votesCastForIncumbentEEOTextBox.setText(combined[11]);
+            votesCastForRivalEEO1TextBox.setText(combined[12]);
+            votesCastForRivalEEO2TextBox.setText(combined[13]);
+            votesCastForRivalEEO3TextBox.setText(combined[14]);
+        }
+    }
+    
+    private void loadWhoPrevailed() {
+        List comps = new ArrayList<>();
+        
+        comps = CaseParty.loadPartiesByCase();
+        
+        System.out.println(comps.size());
+        
+        whoPrevailedComboBox.removeAllItems();
+        resultsWhoPrevailed.removeAllItems();
+        
+        whoPrevailedComboBox.addItem("");
+        resultsWhoPrevailed.addItem("");
+        
+        whoPrevailedComboBox.addItem("No Representative");
+        resultsWhoPrevailed.addItem("No Representative");
+        
+        for(int i = 0; i < comps.size(); i++) {
+            CaseParty caseParty = (CaseParty) comps.get(i);
+            if(caseParty.companyName.equals("")) {
+                whoPrevailedComboBox.addItem(caseParty.firstName + " " + caseParty.lastName);
+                resultsWhoPrevailed.addItem(caseParty.firstName + " " + caseParty.lastName);
+            } else {
+                whoPrevailedComboBox.addItem(caseParty.companyName);
+                resultsWhoPrevailed.addItem(caseParty.companyName);
+            }
+        }
     }
     
     //if missing a descriptor it is on the electronic/mail panel
-    
     public void  loadInformation() {
+        clearAll();
+        loadWhoPrevailed();
+        
         repCase = REPCase.loadElectionInformation();
         
         multiCaseElectionCheckBox.setSelected(repCase.multicaseElection);
         
         if(multiCaseElectionCheckBox.isSelected()) {
-            //TODO: loadMultiCaseElection
-        }
-        
-        if(jPanel2.isVisible()) {
-            //TODO: loadSites
+            loadMultiCase();
         }
         
         electionType1ComboBox.setSelectedItem(repCase.electionType1 == null ? " " : repCase.electionType1);
         electionType2ComboBox.setSelectedItem(repCase.electionType2 == null ? " " : repCase.electionType2);
-        electionType3ComboBox.setSelectedItem(repCase.electionType3 == null ? " " : repCase.electionType3);
+        electionType3ComboBox.setSelectedItem(repCase.electionType3 == null ? "" : repCase.electionType3);
+        
+        if(jPanel2.isVisible()) {
+            loadSites();
+        }
+        
+        if(electionType3ComboBox.getSelectedItem().toString().equals("Professional/Non-Professional")) {
+            loadElectionArrays(repCase);
+        } else {
+            resultsApproxNumberOfEligibleVoters.setText(repCase.resultApproxNumberEligibleVotes == null ? "" : repCase.resultApproxNumberEligibleVotes);
+            resultsVoidBallots.setText(repCase.resultVoidBallots == null ? "" : repCase.resultVoidBallots);
+            resultsVotesCastForEEO.setText(repCase.resultVotesCastForEEO == null ? "" : repCase.resultVotesCastForEEO);
+            resultsVotesCastForIncumbentEEO.setText(repCase.resultVotesCastForIncumbentEEO == null ? "" : repCase.resultVotesCastForIncumbentEEO);
+            resultsVotesCastForRivalEEO1.setText(repCase.resultVotesCastForRivalEEO1 == null ? "" : repCase.resultVotesCastForRivalEEO1);
+            resultsVotesCastForRivalEEO2.setText(repCase.resultVotesCastForRivalEEO2 == null ? "" : repCase.resultVotesCastForRivalEEO2);
+            resultsVotesCastForRivalEEO3.setText(repCase.resultVotesCastForRivalEEO3 == null ? "" : repCase.resultVotesCastForRivalEEO3);
+            resultsVotesCastForNoRepresentative.setText(repCase.resultVotesCastForNoRepresentative == null ? "" : repCase.resultVotesCastForNoRepresentative);
+            resultsValidVotesCounted.setText(repCase.resultValidVotesCounted == null ? "" : repCase.resultValidVotesCounted);
+            resultsChallengedBallots.setText(repCase.resultChallengedBallots == null ? "" : repCase.resultChallengedBallots);
+            resultsTotalBallotsCast.setText(repCase.resultTotalBallotsCast == null ? "" : repCase.resultTotalBallotsCast);
+            resultsWhoPrevailed.setSelectedItem(repCase.resultWHoPrevailed == null ? "" : repCase.resultWHoPrevailed);
+        }
         
         eligibiltyDateTextBox.setText(repCase.eligibilityDate == null ? "" : Global.mmddyyyy.format(repCase.eligibilityDate.getTime()));
         eligibilityDate.setText(repCase.eligibilityDate == null ? "" : Global.mmddyyyy.format(repCase.eligibilityDate.getTime()));
@@ -79,11 +457,12 @@ public class REPElectionPanel extends javax.swing.JPanel {
         mailKitDate.setText(repCase.mailKitDate == null ? "" : Global.mmddyyyy.format(repCase.mailKitDate));
         pollingStartDate.setText(repCase.pollingStartDate == null ? "" : Global.mmddyyyy.format(repCase.pollingStartDate));
         pollingEndDate.setText(repCase.pollingEndDate == null ? "" : Global.mmddyyyy.format(repCase.pollingEndDate));
-        ballotsCountDay.setSelectedItem(repCase.ballotsCountDay == null ? "" : repCase.ballotsCountDay);
+        ballotsCountDay.setSelectedItem(repCase.ballotsCountDay == null ? " " : repCase.ballotsCountDay);
         ballotsCountDate.setText(repCase.ballotsCountDate == null ? "" : Global.mmddyyyy.format(repCase.ballotsCountDate));
-//        ballotsCountTime.setText(repCase.ballotsCountTime);
+        ballotsCountTime.setText(repCase.ballotsCountTime == null ? "" : Global.hmma.format(repCase.ballotsCountTime).split(" ")[0]);
+        amPMComboBox.setSelectedItem(repCase.ballotsCountTime == null ? " " : Global.hmma.format(repCase.ballotsCountTime).split(" ")[1]);
         eligibilityListDate.setText(repCase.eligibilityListDate == null ? "" : Global.mmddyyyy.format(repCase.eligibilityListDate));
-        preElectionConfDateTextBox.setText(repCase.preElectionConfDate == null ? "" : Global.mmddyyyy.format(repCase.preElectionConfDate.getTime()));
+        preElectionConfDateTextBox.setText(repCase.preElectionConfDate == null ? "" : Global.mmddyyyy.format(repCase.preElectionConfDate));
         selfReleasingTextBox.setText(repCase.selfReleasing == null ? "" : repCase.selfReleasing);
     }
     
@@ -138,6 +517,59 @@ public class REPElectionPanel extends javax.swing.JPanel {
         preElectionConfDateTextBox.setBackground(new Color(238, 238, 238));
         selfReleasingTextBox.setEnabled(false);
         selfReleasingTextBox.setBackground(new Color(238, 238, 238));
+        
+        resultsApproxNumberOfEligibleVoters.setEnabled(false);
+        resultsApproxNumberOfEligibleVoters.setBackground(new Color(238, 238, 238));
+        resultsVoidBallots.setEnabled(false);
+        resultsVoidBallots.setBackground(new Color(238, 238, 238));
+        resultsVotesCastForEEO.setEnabled(false);
+        resultsVotesCastForEEO.setBackground(new Color(238, 238, 238));
+        resultsVotesCastForIncumbentEEO.setEnabled(false);
+        resultsVotesCastForIncumbentEEO.setBackground(new Color(238, 238, 238));
+        resultsVotesCastForRivalEEO1.setEnabled(false);
+        resultsVotesCastForRivalEEO1.setBackground(new Color(238, 238, 238));
+        resultsVotesCastForRivalEEO2.setEnabled(false);
+        resultsVotesCastForRivalEEO2.setBackground(new Color(238, 238, 238));
+        resultsVotesCastForRivalEEO3.setEnabled(false);
+        resultsVotesCastForRivalEEO3.setBackground(new Color(238, 238, 238));
+        resultsVotesCastForNoRepresentative.setEnabled(false);
+        resultsVotesCastForNoRepresentative.setBackground(new Color(238, 238, 238));
+        resultsValidVotesCounted.setEnabled(false);
+        resultsValidVotesCounted.setBackground(new Color(238, 238, 238));
+        resultsChallengedBallots.setEnabled(false);
+        resultsChallengedBallots.setBackground(new Color(238, 238, 238));
+        resultsTotalBallotsCast.setEnabled(false);
+        resultsTotalBallotsCast.setBackground(new Color(238, 238, 238));
+        resultsWhoPrevailed.setEnabled(false);
+        
+        approxNumberEligibleVotersTextBox.setEnabled(false);
+        approxNumberEligibleVotersTextBox.setBackground(new Color(238, 238, 238));
+        yesTextBox.setEnabled(false);
+        yesTextBox.setBackground(new Color(238, 238, 238));
+        noTextBox.setEnabled(false);
+        noTextBox.setBackground(new Color(238, 238, 238));
+        challengedTextBox.setEnabled(false);
+        challengedTextBox.setBackground(new Color(238, 238, 238));
+//        totalBVotesTextBox.setEnabled(false);
+//        totalBVotesTextBox.setBackground(new Color(238, 238, 238));
+        outcomeComboBox.setEnabled(false);
+        whoPrevailedComboBox.setEnabled(false);
+        voidBallotsTextBox.setEnabled(false);
+        voidBallotsTextBox.setBackground(new Color(238, 238, 238));
+//        validVotesTextBox.setEnabled(false);
+//        validVotesTextBox.setBackground(new Color(238, 238, 238));
+        votesCastForNoRepresentativeTextBox.setEnabled(false);
+        votesCastForNoRepresentativeTextBox.setBackground(new Color(238, 238, 238));
+        votesCastforEEOTextBox.setEnabled(false);
+        votesCastforEEOTextBox.setBackground(new Color(238, 238, 238));
+        votesCastForIncumbentEEOTextBox.setEnabled(false);
+        votesCastForIncumbentEEOTextBox.setBackground(new Color(238, 238, 238));
+        votesCastForRivalEEO1TextBox.setEnabled(false);
+        votesCastForRivalEEO1TextBox.setBackground(new Color(238, 238, 238));
+        votesCastForRivalEEO2TextBox.setEnabled(false);
+        votesCastForRivalEEO2TextBox.setBackground(new Color(238, 238, 238));
+        votesCastForRivalEEO3TextBox.setEnabled(false);
+        votesCastForRivalEEO3TextBox.setBackground(new Color(238, 238, 238));
         
         addSiteInformation.setVisible(false);
         
@@ -199,10 +631,71 @@ public class REPElectionPanel extends javax.swing.JPanel {
         selfReleasingTextBox.setEnabled(true);
         selfReleasingTextBox.setBackground(Color.WHITE);
         
+        resultsApproxNumberOfEligibleVoters.setEnabled(true);
+        resultsApproxNumberOfEligibleVoters.setBackground(Color.WHITE);
+        resultsVoidBallots.setEnabled(true);
+        resultsVoidBallots.setBackground(Color.WHITE);
+        resultsVotesCastForEEO.setEnabled(true);
+        resultsVotesCastForEEO.setBackground(Color.WHITE);
+        resultsVotesCastForIncumbentEEO.setEnabled(true);
+        resultsVotesCastForIncumbentEEO.setBackground(Color.WHITE);
+        resultsVotesCastForRivalEEO1.setEnabled(true);
+        resultsVotesCastForRivalEEO1.setBackground(Color.WHITE);
+        resultsVotesCastForRivalEEO2.setEnabled(true);
+        resultsVotesCastForRivalEEO2.setBackground(Color.WHITE);
+        resultsVotesCastForRivalEEO3.setEnabled(true);
+        resultsVotesCastForRivalEEO3.setBackground(Color.WHITE);
+        resultsVotesCastForNoRepresentative.setEnabled(true);
+        resultsVotesCastForNoRepresentative.setBackground(Color.WHITE);
+//        resultsValidVotesCounted.setEnabled(true);
+//        resultsValidVotesCounted.setBackground(Color.WHITE);
+        resultsChallengedBallots.setEnabled(true);
+        resultsChallengedBallots.setBackground(Color.WHITE);
+//        resultsTotalBallotsCast.setEnabled(true);
+//        resultsTotalBallotsCast.setBackground(Color.WHITE);
+        resultsWhoPrevailed.setEnabled(true);
+        
+        approxNumberEligibleVotersTextBox.setEnabled(true);
+        approxNumberEligibleVotersTextBox.setBackground(Color.WHITE);
+        yesTextBox.setEnabled(true);
+        yesTextBox.setBackground(Color.WHITE);
+        noTextBox.setEnabled(true);
+        noTextBox.setBackground(Color.WHITE);
+        challengedTextBox.setEnabled(true);
+        challengedTextBox.setBackground(Color.WHITE);
+//        totalBVotesTextBox.setEnabled(true);
+//        totalBVotesTextBox.setBackground(Color.WHITE);
+        outcomeComboBox.setEnabled(true);
+        whoPrevailedComboBox.setEnabled(true);
+        voidBallotsTextBox.setEnabled(true);
+        voidBallotsTextBox.setBackground(Color.WHITE);
+//        validVotesTextBox.setEnabled(true);
+//        validVotesTextBox.setBackground(Color.WHITE);
+        votesCastForNoRepresentativeTextBox.setEnabled(true);
+        votesCastForNoRepresentativeTextBox.setBackground(Color.WHITE);
+        votesCastforEEOTextBox.setEnabled(true);
+        votesCastforEEOTextBox.setBackground(Color.WHITE);
+        votesCastForIncumbentEEOTextBox.setEnabled(true);
+        votesCastForIncumbentEEOTextBox.setBackground(Color.WHITE);
+        votesCastForRivalEEO1TextBox.setEnabled(true);
+        votesCastForRivalEEO1TextBox.setBackground(Color.WHITE);
+        votesCastForRivalEEO2TextBox.setEnabled(true);
+        votesCastForRivalEEO2TextBox.setBackground(Color.WHITE);
+        votesCastForRivalEEO3TextBox.setEnabled(true);
+        votesCastForRivalEEO3TextBox.setBackground(Color.WHITE);
+        
         addSiteInformation.setVisible(true);
     }
     
     private void saveInfomration(){
+        if(professionalButton.isSelected()) {
+            hanldeProfessionalNonProfessionalElection("Professional");
+        } else if(nonProfessionalButton.isSelected()) {
+            hanldeProfessionalNonProfessionalElection("Non-Professional");
+        } else if(combinedButton.isSelected()){
+            hanldeProfessionalNonProfessionalElection("Combined");
+        }
+        
         REPCase newCaseInformation = new REPCase();
         
         newCaseInformation.multicaseElection = multiCaseElectionCheckBox.isSelected();
@@ -263,7 +756,9 @@ public class REPElectionPanel extends javax.swing.JPanel {
             //ballotsCountDay
             newCaseInformation.ballotsCountDay = ballotsCountDay.getSelectedItem().toString().trim().equals("") ? null : ballotsCountDay.getSelectedItem().toString().trim();
             //ballotsCountDate
+            newCaseInformation.ballotsCountDate = ballotsCountDate.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(ballotsCountDate.getText()));
             //ballotsCountTime
+            newCaseInformation.ballotsCountTime = ballotsCountTime.getText().equals("") ? null : new Timestamp(NumberFormatService.converthmma(ballotsCountTime.getText() + " " + amPMComboBox.getSelectedItem().toString()));
             //eligibilityListDate
             newCaseInformation.eligibilityListDate = eligibilityListDate.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(eligibilityListDate.getText()));
             //preElectionConfDate --> null
@@ -299,16 +794,216 @@ public class REPElectionPanel extends javax.swing.JPanel {
             newCaseInformation.preElectionConfDate = null;
             //selfReleasing --> null
             newCaseInformation.selfReleasing = null;
-        }        
-        REPCase.updateElectionInformation(newCaseInformation, repCase);
+        }    
+        
+        if(jPanel5.isVisible()) {
+            newCaseInformation.resultApproxNumberEligibleVotes = resultsApproxNumberOfEligibleVoters.getText().equals("") ? null : resultsApproxNumberOfEligibleVoters.getText();
+            newCaseInformation.resultVoidBallots = resultsVoidBallots.getText().equals("") ? null : resultsVoidBallots.getText();
+            newCaseInformation.resultVotesCastForEEO = resultsVotesCastForEEO.getText().equals("") ? null : resultsVotesCastForEEO.getText();
+            newCaseInformation.resultVotesCastForIncumbentEEO = resultsVotesCastForIncumbentEEO.getText().equals("") ? null : resultsVotesCastForIncumbentEEO.getText();
+            newCaseInformation.resultVotesCastForRivalEEO1 = resultsVotesCastForRivalEEO1.getText().equals("") ? null : resultsVotesCastForRivalEEO1.getText();
+            newCaseInformation.resultVotesCastForRivalEEO2 = resultsVotesCastForRivalEEO2.getText().equals("") ? null : resultsVotesCastForRivalEEO2.getText();
+            newCaseInformation.resultVotesCastForRivalEEO3 = resultsVotesCastForRivalEEO3.getText().equals("") ? null : resultsVotesCastForRivalEEO3.getText();
+            newCaseInformation.resultVotesCastForNoRepresentative = resultsVotesCastForNoRepresentative.getText().equals("") ? null : resultsVotesCastForNoRepresentative.getText();
+            newCaseInformation.resultValidVotesCounted = resultsValidVotesCounted.getText().equals("") ? null : resultsValidVotesCounted.getText();
+            newCaseInformation.resultChallengedBallots = resultsChallengedBallots.getText().equals("") ? null : resultsChallengedBallots.getText();
+            newCaseInformation.resultTotalBallotsCast = resultsTotalBallotsCast.getText().equals("") ? null : resultsTotalBallotsCast.getText();
+            newCaseInformation.resultWHoPrevailed = resultsWhoPrevailed.getSelectedItem().toString().equals("") ? null : resultsWhoPrevailed.getSelectedItem().toString();
+        } else {
+            newCaseInformation.resultApproxNumberEligibleVotes = null;
+            newCaseInformation.resultVoidBallots = null;
+            newCaseInformation.resultVotesCastForEEO = null;
+            newCaseInformation.resultVotesCastForIncumbentEEO = null;
+            newCaseInformation.resultVotesCastForRivalEEO1 = null;
+            newCaseInformation.resultVotesCastForRivalEEO2 = null;
+            newCaseInformation.resultVotesCastForRivalEEO3 = null;
+            newCaseInformation.resultVotesCastForNoRepresentative = null;
+            newCaseInformation.resultValidVotesCounted = null;
+            newCaseInformation.resultChallengedBallots = null;
+            newCaseInformation.resultTotalBallotsCast = null;
+            newCaseInformation.resultWHoPrevailed = null;       
+        }
+        
+        REPCase.updateElectionInformation(newCaseInformation, repCase, professional, nonprofessional, combined);
     }
     
     public void clearAll() {
+        electionType3ComboBox.setSelectedIndex(1);
+        electionType1ComboBox.setSelectedItem(" ");
+        electionType2ComboBox.setSelectedItem(" ");
+        
+        DefaultTableModel model = (DefaultTableModel) multiCaseElectionTable.getModel();
+        model.setRowCount(0);
+        DefaultTableModel model2 = (DefaultTableModel) sitesTable.getModel();
+        model2.setRowCount(0);
         hideNotRequiredInformation();
         multiCaseElectionCheckBox.setSelected(false);
-        electionType1ComboBox.setSelectedItem("");
-        electionType2ComboBox.setSelectedItem("");
-        electionType3ComboBox.setSelectedItem("");
+        
+        ballotOne.setText("");
+        ballotOneTextBox.setText("");
+        ballotTwo.setText("");
+        ballotTwoTextBox.setText("");
+        ballotThree.setText("");
+        ballotThreeTextBox.setText("");
+        ballotFour.setText("");
+        ballotFourTextBox.setText("");
+        eligibilityDate.setText("");
+        preElectionConfDateTextBox.setText("");
+        selfReleasingTextBox.setText("");
+        eligibiltyDateTextBox.setText("");
+        mailKitDate.setText("");
+        pollingEndDate.setText("");
+        pollingStartDate.setText("");
+        ballotsCountDay.setSelectedIndex(7);
+        ballotsCountDate.setText("");
+        ballotsCountTime.setText("");
+        amPMComboBox.setSelectedIndex(2);
+        eligibilityListDate.setText("");
+        
+        professional = new String[]{"","","","","","","","","","","","","","",""};
+        nonprofessional = new String[]{"","","","","","","","","","","","","","",""};
+        combined = new String[]{"","","","","","","","","","","","","","",""};
+        
+        approxNumberEligibleVotersTextBox.setText("");
+        yesTextBox.setText("");
+        noTextBox.setText("");
+        challengedTextBox.setText("");
+        totalBVotesTextBox.setText("");
+        outcomeComboBox.setSelectedIndex(2);
+        whoPrevailedComboBox.setSelectedItem("");
+        voidBallotsTextBox.setText("");
+        validVotesTextBox.setText("");
+        votesCastForNoRepresentativeTextBox.setText("");
+        votesCastforEEOTextBox.setText("");
+        votesCastForIncumbentEEOTextBox.setText("");
+        votesCastForRivalEEO1TextBox.setText("");
+        votesCastForRivalEEO2TextBox.setText("");
+        votesCastForRivalEEO3TextBox.setText("");
+        
+        resultsApproxNumberOfEligibleVoters.setText("");
+        resultsVoidBallots.setText("");
+        resultsVotesCastForEEO.setText("");
+        resultsVotesCastForIncumbentEEO.setText("");
+        resultsVotesCastForRivalEEO1.setText("");
+        resultsVotesCastForRivalEEO2.setText("");
+        resultsVotesCastForRivalEEO3.setText("");
+        resultsVotesCastForNoRepresentative.setText("");
+        resultsValidVotesCounted.setText("");
+        resultsChallengedBallots.setText("");
+        resultsTotalBallotsCast.setText("");
+        whoPrevailedComboBox.setSelectedItem("");
+        
+    }
+    
+    
+    
+    private void loadMultiCase() {
+        DefaultTableModel model = (DefaultTableModel) multiCaseElectionTable.getModel();
+        
+        model.setRowCount(0);
+        
+        List relatedCases = REPElectionMultiCase.loadMultiCaseNumber();
+        
+        for (Object relatedCase : relatedCases) {
+            model.addRow(new Object[] {relatedCase});
+        }
+        multiCaseElectionTable.clearSelection();
+    }
+    
+    private void loadSites() {
+        DefaultTableModel model = (DefaultTableModel) sitesTable.getModel();
+        
+        model.setRowCount(0);
+        
+        List relatedCases = REPElectionSiteInformation.loadSiteInformationByCaseNumber();
+        
+        for (Object relatedCase : relatedCases) {
+            REPElectionSiteInformation siteData = (REPElectionSiteInformation) relatedCase;
+            model.addRow(new Object[] {
+                (siteData.siteDate == null ? "" : Global.mmddyyyy.format(siteData.siteDate.getTime())) 
+                        + " "
+                        + (siteData.siteTime == null ? "" : Global.hmma.format(siteData.siteTime.getTime())), 
+                siteData.sitePlace,
+                siteData.siteAddress1 + (siteData.siteAddress2 == null ? "" : ", " + siteData.siteAddress2),
+                siteData.siteLocation,
+                siteData.id
+            });
+        }
+        sitesTable.clearSelection();
+    }
+    
+    private void sumResultsVotes() {
+        int totalVotes = 0;
+        int ballotsCast = 0;
+        
+        totalVotes += resultsVotesCastForEEO.getText().equals("") ? 0 : Integer.valueOf(resultsVotesCastForEEO.getText());
+        totalVotes += resultsVotesCastForIncumbentEEO.getText().equals("") ? 0 : Integer.valueOf(resultsVotesCastForIncumbentEEO.getText());
+        totalVotes += resultsVotesCastForRivalEEO1.getText().equals("") ? 0 : Integer.valueOf(resultsVotesCastForRivalEEO1.getText());
+        totalVotes += resultsVotesCastForRivalEEO2.getText().equals("") ? 0 : Integer.valueOf(resultsVotesCastForRivalEEO2.getText());
+        totalVotes += resultsVotesCastForRivalEEO3.getText().equals("") ? 0 : Integer.valueOf(resultsVotesCastForRivalEEO3.getText());
+        totalVotes += resultsVotesCastForNoRepresentative.getText().equals("") ? 0 : Integer.valueOf(resultsVotesCastForNoRepresentative.getText());
+        
+        resultsValidVotesCounted.setText(String.valueOf(totalVotes));
+        
+        ballotsCast = totalVotes + (resultsChallengedBallots.getText().equals("") ? 0 : Integer.valueOf(resultsChallengedBallots.getText()));
+        resultsTotalBallotsCast.setText(String.valueOf(ballotsCast));
+    }
+    
+    private void sumVotes() {
+        //9-14
+        int professionalVotes = 0;
+        int nonprofessionalVotes = 0;
+        int combinedVotes = 0;
+        
+        int totalProfessional = 0;
+        int totalNonProfessional = 0;
+        int totalCombined = 0;
+        
+        if(professionalButton.isSelected()) {
+            professionalVotes += professional[9].equals("") ? 0 : Integer.valueOf(professional[9]);
+            professionalVotes += professional[10].equals("") ? 0 : Integer.valueOf(professional[10]);
+            professionalVotes += professional[11].equals("") ? 0 : Integer.valueOf(professional[11]);
+            professionalVotes += professional[12].equals("") ? 0 : Integer.valueOf(professional[12]);
+            professionalVotes += professional[13].equals("") ? 0 : Integer.valueOf(professional[13]);
+            professionalVotes += professional[14].equals("") ? 0 : Integer.valueOf(professional[14]);
+            validVotesTextBox.setText(String.valueOf(professionalVotes));
+            
+            totalProfessional = professionalVotes + (professional[3].equals("") ? 0 : Integer.valueOf(professional[3]));
+            totalBVotesTextBox.setText(String.valueOf(totalProfessional));
+            
+        } else if(nonProfessionalButton.isSelected()) {
+            nonprofessionalVotes += nonprofessional[9].equals("") ? 0 : Integer.valueOf(nonprofessional[9]);
+            nonprofessionalVotes += nonprofessional[10].equals("") ? 0 : Integer.valueOf(nonprofessional[10]);
+            nonprofessionalVotes += nonprofessional[11].equals("") ? 0 : Integer.valueOf(nonprofessional[11]);
+            nonprofessionalVotes += nonprofessional[12].equals("") ? 0 : Integer.valueOf(nonprofessional[12]);
+            nonprofessionalVotes += nonprofessional[13].equals("") ? 0 : Integer.valueOf(nonprofessional[13]);
+            nonprofessionalVotes += nonprofessional[14].equals("") ? 0 : Integer.valueOf(nonprofessional[14]);
+            validVotesTextBox.setText(String.valueOf(nonprofessionalVotes));
+            
+            totalNonProfessional = nonprofessionalVotes + (nonprofessional[3].equals("") ? 0 : Integer.valueOf(nonprofessional[3]));
+            totalBVotesTextBox.setText(String.valueOf(totalNonProfessional));
+        } else {
+            combinedVotes += combined[9].equals("") ? 0 : Integer.valueOf(combined[9]);
+            combinedVotes += combined[10].equals("") ? 0 : Integer.valueOf(combined[10]);
+            combinedVotes += combined[11].equals("") ? 0 : Integer.valueOf(combined[11]);
+            combinedVotes += combined[12].equals("") ? 0 : Integer.valueOf(combined[12]);
+            combinedVotes += combined[13].equals("") ? 0 : Integer.valueOf(combined[13]);
+            combinedVotes += combined[14].equals("") ? 0 : Integer.valueOf(combined[14]);
+            validVotesTextBox.setText(String.valueOf(combinedVotes));
+            
+            totalCombined = combinedVotes + (combined[3].equals("") ? 0 : Integer.valueOf(combined[3]));
+            totalBVotesTextBox.setText(String.valueOf(totalCombined));
+        }
+    }
+    
+    private void clearDate(WebDateField dateField, MouseEvent evt) {
+        if(evt.getButton() == MouseEvent.BUTTON3 && dateField.isEnabled()) {
+            ClearDateDialog dialog = new ClearDateDialog((JFrame) Global.root, true);
+            if(dialog.isReset()) {
+                dateField.setText("");
+            }
+            dialog.dispose();
+        }
     }
 
     /**
@@ -319,7 +1014,6 @@ public class REPElectionPanel extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         multiCaseElectionCheckBox = new javax.swing.JCheckBox();
@@ -335,7 +1029,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
         jLabel9 = new javax.swing.JLabel();
         addSiteInformation = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        sitesTable = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jPanel14 = new javax.swing.JPanel();
@@ -390,63 +1084,63 @@ public class REPElectionPanel extends javax.swing.JPanel {
         jLabel13 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
+        resultsApproxNumberOfEligibleVoters = new javax.swing.JTextField();
+        resultsVoidBallots = new javax.swing.JTextField();
+        resultsVotesCastForEEO = new javax.swing.JTextField();
         jLabel28 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        resultsVotesCastForIncumbentEEO = new javax.swing.JTextField();
         jLabel29 = new javax.swing.JLabel();
         jLabel30 = new javax.swing.JLabel();
         jLabel31 = new javax.swing.JLabel();
         jLabel32 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
-        jTextField7 = new javax.swing.JTextField();
-        jTextField8 = new javax.swing.JTextField();
+        resultsVotesCastForRivalEEO1 = new javax.swing.JTextField();
+        resultsVotesCastForRivalEEO2 = new javax.swing.JTextField();
+        resultsVotesCastForRivalEEO3 = new javax.swing.JTextField();
+        resultsVotesCastForNoRepresentative = new javax.swing.JTextField();
         jLabel33 = new javax.swing.JLabel();
         jLabel34 = new javax.swing.JLabel();
         jLabel35 = new javax.swing.JLabel();
         jLabel36 = new javax.swing.JLabel();
-        jTextField9 = new javax.swing.JTextField();
-        jTextField10 = new javax.swing.JTextField();
-        jTextField11 = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        resultsValidVotesCounted = new javax.swing.JTextField();
+        resultsChallengedBallots = new javax.swing.JTextField();
+        resultsTotalBallotsCast = new javax.swing.JTextField();
+        resultsWhoPrevailed = new javax.swing.JComboBox<>();
         jPanel6 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jPanel9 = new javax.swing.JPanel();
         professionalButton = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        nonProfessionalButton = new javax.swing.JButton();
+        combinedButton = new javax.swing.JButton();
         jLabel37 = new javax.swing.JLabel();
         jLabel38 = new javax.swing.JLabel();
         jLabel39 = new javax.swing.JLabel();
         jLabel40 = new javax.swing.JLabel();
         jLabel41 = new javax.swing.JLabel();
-        jTextField12 = new javax.swing.JTextField();
-        jTextField13 = new javax.swing.JTextField();
-        jTextField14 = new javax.swing.JTextField();
-        jTextField15 = new javax.swing.JTextField();
-        jTextField16 = new javax.swing.JTextField();
+        approxNumberEligibleVotersTextBox = new javax.swing.JTextField();
+        yesTextBox = new javax.swing.JTextField();
+        noTextBox = new javax.swing.JTextField();
+        totalBVotesTextBox = new javax.swing.JTextField();
+        challengedTextBox = new javax.swing.JTextField();
         jLabel42 = new javax.swing.JLabel();
         jLabel43 = new javax.swing.JLabel();
         jLabel44 = new javax.swing.JLabel();
         jLabel45 = new javax.swing.JLabel();
-        jTextField17 = new javax.swing.JTextField();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jTextField18 = new javax.swing.JTextField();
-        jTextField19 = new javax.swing.JTextField();
+        whoPrevailedComboBox = new javax.swing.JComboBox<>();
+        voidBallotsTextBox = new javax.swing.JTextField();
+        validVotesTextBox = new javax.swing.JTextField();
         jLabel46 = new javax.swing.JLabel();
         jLabel47 = new javax.swing.JLabel();
         jLabel48 = new javax.swing.JLabel();
         jLabel49 = new javax.swing.JLabel();
         jLabel50 = new javax.swing.JLabel();
         jLabel51 = new javax.swing.JLabel();
-        jTextField20 = new javax.swing.JTextField();
-        jTextField21 = new javax.swing.JTextField();
-        jTextField22 = new javax.swing.JTextField();
-        jTextField23 = new javax.swing.JTextField();
-        jTextField24 = new javax.swing.JTextField();
-        jTextField25 = new javax.swing.JTextField();
+        votesCastForNoRepresentativeTextBox = new javax.swing.JTextField();
+        votesCastforEEOTextBox = new javax.swing.JTextField();
+        votesCastForIncumbentEEOTextBox = new javax.swing.JTextField();
+        votesCastForRivalEEO1TextBox = new javax.swing.JTextField();
+        votesCastForRivalEEO2TextBox = new javax.swing.JTextField();
+        votesCastForRivalEEO3TextBox = new javax.swing.JTextField();
+        outcomeComboBox = new javax.swing.JComboBox<>();
 
         setMaximumSize(new java.awt.Dimension(32767, 570));
         setPreferredSize(new java.awt.Dimension(1032, 570));
@@ -474,7 +1168,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
         electionType2ComboBox.setSelectedIndex(4);
         electionType2ComboBox.setEnabled(false);
 
-        electionType3ComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Professional/Non-Professional", "" }));
+        electionType3ComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Professional/Non-Professional", "Standard" }));
         electionType3ComboBox.setSelectedIndex(1);
         electionType3ComboBox.setEnabled(false);
         electionType3ComboBox.addActionListener(new java.awt.event.ActionListener() {
@@ -505,6 +1199,11 @@ public class REPElectionPanel extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
+        multiCaseElectionTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                multiCaseElectionTableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(multiCaseElectionTable);
         if (multiCaseElectionTable.getColumnModel().getColumnCount() > 0) {
             multiCaseElectionTable.getColumnModel().getColumn(0).setResizable(false);
@@ -530,7 +1229,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(addMultiCaseElectionButton))
         );
@@ -541,17 +1240,36 @@ public class REPElectionPanel extends javax.swing.JPanel {
 
         addSiteInformation.setText("+");
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        sitesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Date / Time", "Place", "Address", "Location"
+                "Date / Time", "Place", "Address", "Location", "ID"
             }
-        ));
-        jTable2.setMinimumSize(new java.awt.Dimension(60, 29));
-        jTable2.setPreferredSize(new java.awt.Dimension(300, 30));
-        jScrollPane2.setViewportView(jTable2);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        sitesTable.setMinimumSize(new java.awt.Dimension(60, 29));
+        sitesTable.setPreferredSize(new java.awt.Dimension(300, 30));
+        jScrollPane2.setViewportView(sitesTable);
+        if (sitesTable.getColumnModel().getColumnCount() > 0) {
+            sitesTable.getColumnModel().getColumn(4).setResizable(false);
+            sitesTable.getColumnModel().getColumn(4).setPreferredWidth(0);
+        }
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -563,7 +1281,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
                     .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jScrollPane2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(10, 10, 10)
                         .addComponent(addSiteInformation, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())))
         );
@@ -573,9 +1291,9 @@ public class REPElectionPanel extends javax.swing.JPanel {
                 .addGap(0, 0, 0)
                 .addComponent(jLabel9)
                 .addGap(3, 3, 3)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(addSiteInformation, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(addSiteInformation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, 0))
         );
 
@@ -813,7 +1531,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
                     .addComponent(ballotThree)
                     .addComponent(ballotTwo)
                     .addComponent(ballotOne)
-                    .addComponent(eligibilityDate, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE))
+                    .addComponent(eligibilityDate, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel7Layout.setVerticalGroup(
@@ -854,7 +1572,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
 
         jLabel25.setText("Ballots Count Date:");
 
-        jLabel26.setText("Ballots Count TIme:");
+        jLabel26.setText("Ballots Count Time:");
 
         jLabel27.setText("Eligiblity List Date:");
 
@@ -883,6 +1601,21 @@ public class REPElectionPanel extends javax.swing.JPanel {
         pollingStartDate.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 pollingStartDateMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                pollingStartDateMouseEntered(evt);
+            }
+        });
+        pollingStartDate.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+            }
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+                pollingStartDateCaretPositionChanged(evt);
+            }
+        });
+        pollingStartDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pollingStartDateActionPerformed(evt);
             }
         });
 
@@ -940,7 +1673,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
                             .addGroup(jPanel8Layout.createSequentialGroup()
                                 .addComponent(ballotsCountTime)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(amPMComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(amPMComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(eligibilityListDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -952,8 +1685,8 @@ public class REPElectionPanel extends javax.swing.JPanel {
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(pollingStartDate, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(pollingEndDate, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(ballotsCountDay, javax.swing.GroupLayout.Alignment.LEADING, 0, 292, Short.MAX_VALUE)
-                            .addComponent(ballotsCountDate, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                            .addComponent(ballotsCountDate, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(ballotsCountDay, 0, 300, Short.MAX_VALUE)))))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1016,7 +1749,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jLabel2)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jPanel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1030,21 +1763,39 @@ public class REPElectionPanel extends javax.swing.JPanel {
 
         jLabel10.setText("Results:");
 
-        jLabel13.setText("Approx Number of Eligible Voters:");
+        jLabel13.setText("Number of Eligible Voters:");
 
         jLabel21.setText("Void Ballots:");
 
         jLabel22.setText("Votes Cast for EEO:");
 
-        jTextField1.setText("jTextField1");
+        resultsApproxNumberOfEligibleVoters.setBackground(new java.awt.Color(238, 238, 238));
+        resultsApproxNumberOfEligibleVoters.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        resultsApproxNumberOfEligibleVoters.setEnabled(false);
 
-        jTextField2.setText("jTextField2");
+        resultsVoidBallots.setBackground(new java.awt.Color(238, 238, 238));
+        resultsVoidBallots.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        resultsVoidBallots.setEnabled(false);
 
-        jTextField3.setText("jTextField3");
+        resultsVotesCastForEEO.setBackground(new java.awt.Color(238, 238, 238));
+        resultsVotesCastForEEO.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        resultsVotesCastForEEO.setEnabled(false);
+        resultsVotesCastForEEO.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                resultsVotesCastForEEOKeyReleased(evt);
+            }
+        });
 
         jLabel28.setText("Votes Cast for Incumbent EEO:");
 
-        jTextField4.setText("jTextField4");
+        resultsVotesCastForIncumbentEEO.setBackground(new java.awt.Color(238, 238, 238));
+        resultsVotesCastForIncumbentEEO.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        resultsVotesCastForIncumbentEEO.setEnabled(false);
+        resultsVotesCastForIncumbentEEO.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                resultsVotesCastForIncumbentEEOKeyReleased(evt);
+            }
+        });
 
         jLabel29.setText("Votes Cast For Rival EEO #1:");
 
@@ -1054,13 +1805,41 @@ public class REPElectionPanel extends javax.swing.JPanel {
 
         jLabel32.setText("Votes Cast For No Representative:");
 
-        jTextField5.setText("jTextField5");
+        resultsVotesCastForRivalEEO1.setBackground(new java.awt.Color(238, 238, 238));
+        resultsVotesCastForRivalEEO1.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        resultsVotesCastForRivalEEO1.setEnabled(false);
+        resultsVotesCastForRivalEEO1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                resultsVotesCastForRivalEEO1KeyReleased(evt);
+            }
+        });
 
-        jTextField6.setText("jTextField6");
+        resultsVotesCastForRivalEEO2.setBackground(new java.awt.Color(238, 238, 238));
+        resultsVotesCastForRivalEEO2.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        resultsVotesCastForRivalEEO2.setEnabled(false);
+        resultsVotesCastForRivalEEO2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                resultsVotesCastForRivalEEO2KeyReleased(evt);
+            }
+        });
 
-        jTextField7.setText("jTextField7");
+        resultsVotesCastForRivalEEO3.setBackground(new java.awt.Color(238, 238, 238));
+        resultsVotesCastForRivalEEO3.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        resultsVotesCastForRivalEEO3.setEnabled(false);
+        resultsVotesCastForRivalEEO3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                resultsVotesCastForRivalEEO3KeyReleased(evt);
+            }
+        });
 
-        jTextField8.setText("jTextField8");
+        resultsVotesCastForNoRepresentative.setBackground(new java.awt.Color(238, 238, 238));
+        resultsVotesCastForNoRepresentative.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        resultsVotesCastForNoRepresentative.setEnabled(false);
+        resultsVotesCastForNoRepresentative.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                resultsVotesCastForNoRepresentativeKeyReleased(evt);
+            }
+        });
 
         jLabel33.setText("Valid Votes Counted:");
 
@@ -1070,13 +1849,25 @@ public class REPElectionPanel extends javax.swing.JPanel {
 
         jLabel36.setText("Who Prevailed:");
 
-        jTextField9.setText("jTextField9");
+        resultsValidVotesCounted.setBackground(new java.awt.Color(238, 238, 238));
+        resultsValidVotesCounted.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        resultsValidVotesCounted.setEnabled(false);
 
-        jTextField10.setText("jTextField10");
+        resultsChallengedBallots.setBackground(new java.awt.Color(238, 238, 238));
+        resultsChallengedBallots.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        resultsChallengedBallots.setEnabled(false);
+        resultsChallengedBallots.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                resultsChallengedBallotsKeyReleased(evt);
+            }
+        });
 
-        jTextField11.setText("jTextField11");
+        resultsTotalBallotsCast.setBackground(new java.awt.Color(238, 238, 238));
+        resultsTotalBallotsCast.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        resultsTotalBallotsCast.setEnabled(false);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        resultsWhoPrevailed.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        resultsWhoPrevailed.setEnabled(false);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -1094,10 +1885,10 @@ public class REPElectionPanel extends javax.swing.JPanel {
                     .addComponent(jLabel13))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
+                    .addComponent(resultsVotesCastForEEO, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
+                    .addComponent(resultsVoidBallots, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(resultsVotesCastForIncumbentEEO)
+                    .addComponent(resultsApproxNumberOfEligibleVoters, javax.swing.GroupLayout.Alignment.LEADING))
                 .addGap(10, 10, 10)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel32)
@@ -1106,10 +1897,10 @@ public class REPElectionPanel extends javax.swing.JPanel {
                     .addComponent(jLabel29))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jTextField7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
-                    .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
+                    .addComponent(resultsVotesCastForRivalEEO3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
+                    .addComponent(resultsVotesCastForRivalEEO2, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(resultsVotesCastForRivalEEO1, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(resultsVotesCastForNoRepresentative))
                 .addGap(10, 10, 10)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel33, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -1120,11 +1911,11 @@ public class REPElectionPanel extends javax.swing.JPanel {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jTextField10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
-                            .addComponent(jTextField9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
-                            .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
+                            .addComponent(resultsChallengedBallots, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
+                            .addComponent(resultsValidVotesCounted, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(resultsTotalBallotsCast))
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jComboBox1, 0, 297, Short.MAX_VALUE))
+                    .addComponent(resultsWhoPrevailed, 0, 320, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
@@ -1134,36 +1925,36 @@ public class REPElectionPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel13)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(resultsApproxNumberOfEligibleVoters, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel29)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(resultsVotesCastForRivalEEO1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel33)
-                    .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(resultsValidVotesCounted, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel21)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(resultsVoidBallots, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel30)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(resultsVotesCastForRivalEEO2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel34)
-                    .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(resultsChallengedBallots, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel22)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(resultsVotesCastForEEO, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel31)
-                    .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(resultsVotesCastForRivalEEO3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel35)
-                    .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(resultsTotalBallotsCast, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel28)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(resultsVotesCastForIncumbentEEO, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel32)
-                    .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(resultsVotesCastForNoRepresentative, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel36)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 84, Short.MAX_VALUE))
+                    .addComponent(resultsWhoPrevailed, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 98, Short.MAX_VALUE))
         );
 
         jPanel4.add(jPanel5, "card2");
@@ -1172,22 +1963,32 @@ public class REPElectionPanel extends javax.swing.JPanel {
 
         professionalButton.setText("Professional");
         buttonGroup1.add(professionalButton);
-        jPanel9.add(professionalButton);
-
-        jButton4.setText("Non-Professional");
-        buttonGroup1.add(jButton4);
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        professionalButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                professionalButtonActionPerformed(evt);
             }
         });
-        jPanel9.add(jButton4);
+        jPanel9.add(professionalButton);
 
-        jButton2.setText("Combined");
-        buttonGroup1.add(jButton2);
-        jPanel9.add(jButton2);
+        nonProfessionalButton.setText("Non-Professional");
+        buttonGroup1.add(nonProfessionalButton);
+        nonProfessionalButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nonProfessionalButtonActionPerformed(evt);
+            }
+        });
+        jPanel9.add(nonProfessionalButton);
 
-        jLabel37.setText("Approx. Number of Eligible Voters:");
+        combinedButton.setText("Combined");
+        buttonGroup1.add(combinedButton);
+        combinedButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                combinedButtonActionPerformed(evt);
+            }
+        });
+        jPanel9.add(combinedButton);
+
+        jLabel37.setText("Number of Eligible Voters:");
 
         jLabel38.setText("YES:");
 
@@ -1197,15 +1998,30 @@ public class REPElectionPanel extends javax.swing.JPanel {
 
         jLabel41.setText("Total Votes:");
 
-        jTextField12.setText("jTextField12");
+        approxNumberEligibleVotersTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        approxNumberEligibleVotersTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        approxNumberEligibleVotersTextBox.setEnabled(false);
 
-        jTextField13.setText("jTextField12");
+        yesTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        yesTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        yesTextBox.setEnabled(false);
 
-        jTextField14.setText("jTextField12");
+        noTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        noTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        noTextBox.setEnabled(false);
 
-        jTextField15.setText("jTextField12");
+        totalBVotesTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        totalBVotesTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        totalBVotesTextBox.setEnabled(false);
 
-        jTextField16.setText("jTextField12");
+        challengedTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        challengedTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        challengedTextBox.setEnabled(false);
+        challengedTextBox.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                challengedTextBoxKeyReleased(evt);
+            }
+        });
 
         jLabel42.setText("Outcome:");
 
@@ -1215,13 +2031,16 @@ public class REPElectionPanel extends javax.swing.JPanel {
 
         jLabel45.setText("Valid Votes:");
 
-        jTextField17.setText("jTextField17");
+        whoPrevailedComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        whoPrevailedComboBox.setEnabled(false);
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        voidBallotsTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        voidBallotsTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        voidBallotsTextBox.setEnabled(false);
 
-        jTextField18.setText("jTextField18");
-
-        jTextField19.setText("jTextField19");
+        validVotesTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        validVotesTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        validVotesTextBox.setEnabled(false);
 
         jLabel46.setText("Votes Cast For No Representative:");
 
@@ -1229,23 +2048,75 @@ public class REPElectionPanel extends javax.swing.JPanel {
 
         jLabel48.setText("Votes Cast for Incumbent EEO:");
 
-        jLabel49.setText("Votes Cast for Rival EEO 1");
+        jLabel49.setText("Votes Cast for Rival EEO 1:");
 
         jLabel50.setText("Votes Cast For Rival EEO 2:");
 
         jLabel51.setText("Votes Cast for Rival EEO 3:");
 
-        jTextField20.setText("jTextField20");
+        votesCastForNoRepresentativeTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        votesCastForNoRepresentativeTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        votesCastForNoRepresentativeTextBox.setEnabled(false);
+        votesCastForNoRepresentativeTextBox.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                votesCastForNoRepresentativeTextBoxKeyTyped(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                votesCastForNoRepresentativeTextBoxKeyReleased(evt);
+            }
+        });
 
-        jTextField21.setText("jTextField21");
+        votesCastforEEOTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        votesCastforEEOTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        votesCastforEEOTextBox.setEnabled(false);
+        votesCastforEEOTextBox.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                votesCastforEEOTextBoxKeyTyped(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                votesCastforEEOTextBoxKeyReleased(evt);
+            }
+        });
 
-        jTextField22.setText("jTextField22");
+        votesCastForIncumbentEEOTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        votesCastForIncumbentEEOTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        votesCastForIncumbentEEOTextBox.setEnabled(false);
+        votesCastForIncumbentEEOTextBox.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                votesCastForIncumbentEEOTextBoxKeyReleased(evt);
+            }
+        });
 
-        jTextField23.setText("jTextField23");
+        votesCastForRivalEEO1TextBox.setBackground(new java.awt.Color(238, 238, 238));
+        votesCastForRivalEEO1TextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        votesCastForRivalEEO1TextBox.setEnabled(false);
+        votesCastForRivalEEO1TextBox.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                votesCastForRivalEEO1TextBoxKeyReleased(evt);
+            }
+        });
 
-        jTextField24.setText("jTextField24");
+        votesCastForRivalEEO2TextBox.setBackground(new java.awt.Color(238, 238, 238));
+        votesCastForRivalEEO2TextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        votesCastForRivalEEO2TextBox.setEnabled(false);
+        votesCastForRivalEEO2TextBox.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                votesCastForRivalEEO2TextBoxKeyReleased(evt);
+            }
+        });
 
-        jTextField25.setText("jTextField25");
+        votesCastForRivalEEO3TextBox.setBackground(new java.awt.Color(238, 238, 238));
+        votesCastForRivalEEO3TextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        votesCastForRivalEEO3TextBox.setEnabled(false);
+        votesCastForRivalEEO3TextBox.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                votesCastForRivalEEO3TextBoxKeyReleased(evt);
+            }
+        });
+
+        outcomeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Yes", "No", " " }));
+        outcomeComboBox.setSelectedIndex(2);
+        outcomeComboBox.setEnabled(false);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -1271,53 +2142,53 @@ public class REPElectionPanel extends javax.swing.JPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addGroup(jPanel6Layout.createSequentialGroup()
-                                        .addComponent(jTextField15, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(totalBVotesTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(jLabel50))
                                     .addGroup(jPanel6Layout.createSequentialGroup()
                                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                             .addGroup(jPanel6Layout.createSequentialGroup()
-                                                .addComponent(jTextField16, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(challengedTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                 .addComponent(jLabel45))
                                             .addGroup(jPanel6Layout.createSequentialGroup()
-                                                .addComponent(jTextField14, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(noTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                 .addComponent(jLabel44))
                                             .addGroup(jPanel6Layout.createSequentialGroup()
-                                                .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(approxNumberEligibleVotersTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                 .addComponent(jLabel42))
                                             .addGroup(jPanel6Layout.createSequentialGroup()
-                                                .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(yesTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(18, 18, 18)
                                                 .addComponent(jLabel43)))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                             .addGroup(jPanel6Layout.createSequentialGroup()
                                                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                    .addComponent(jTextField19, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
-                                                    .addComponent(jTextField18, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 192, Short.MAX_VALUE)
+                                                    .addComponent(validVotesTextBox, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
+                                                    .addComponent(voidBallotsTextBox, javax.swing.GroupLayout.Alignment.LEADING))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                     .addComponent(jLabel48, javax.swing.GroupLayout.Alignment.TRAILING)
                                                     .addComponent(jLabel49, javax.swing.GroupLayout.Alignment.TRAILING)))
                                             .addGroup(jPanel6Layout.createSequentialGroup()
-                                                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                    .addComponent(jTextField17)
-                                                    .addComponent(jComboBox2, 0, 225, Short.MAX_VALUE))
+                                                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(whoPrevailedComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(outcomeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                                     .addComponent(jLabel46)
                                                     .addComponent(jLabel47))))))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jTextField24, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
-                            .addComponent(jTextField23, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
-                            .addComponent(jTextField22, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
-                            .addComponent(jTextField21, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
-                            .addComponent(jTextField20, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
-                            .addComponent(jTextField25, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))))
+                            .addComponent(votesCastForRivalEEO2TextBox, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
+                            .addComponent(votesCastForRivalEEO1TextBox, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(votesCastForIncumbentEEOTextBox, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(votesCastforEEOTextBox, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(votesCastForNoRepresentativeTextBox, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(votesCastForRivalEEO3TextBox))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
@@ -1327,47 +2198,48 @@ public class REPElectionPanel extends javax.swing.JPanel {
                 .addGap(0, 0, 0)
                 .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel37)
-                    .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel42)
-                    .addComponent(jTextField17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel46)
-                    .addComponent(jTextField20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel42, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel37)
+                        .addComponent(approxNumberEligibleVotersTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel46)
+                        .addComponent(votesCastForNoRepresentativeTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(outcomeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(2, 2, 2)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel38)
-                    .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(yesTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(whoPrevailedComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel47)
-                    .addComponent(jTextField21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel43, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(votesCastforEEOTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel43, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(2, 2, 2)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel39)
-                    .addComponent(jTextField14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(noTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel44)
-                    .addComponent(jTextField18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(voidBallotsTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel48)
-                    .addComponent(jTextField22, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(votesCastForIncumbentEEOTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(2, 2, 2)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel40)
-                    .addComponent(jTextField16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(challengedTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel45)
-                    .addComponent(jTextField19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(validVotesTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel49)
-                    .addComponent(jTextField23, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(votesCastForRivalEEO1TextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(2, 2, 2)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel41)
-                    .addComponent(jTextField15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(totalBVotesTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel50)
-                    .addComponent(jTextField24, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(votesCastForRivalEEO2TextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(2, 2, 2)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel51)
-                    .addComponent(jTextField25, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(votesCastForRivalEEO3TextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(4, 4, 4))
         );
 
@@ -1413,10 +2285,13 @@ public class REPElectionPanel extends javax.swing.JPanel {
                     .addComponent(multiCaseElectionCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(2, 2, 2)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(4, 4, 4)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(4, 4, 4)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -1436,19 +2311,53 @@ public class REPElectionPanel extends javax.swing.JPanel {
 
             switch(electionType1ComboBox.getSelectedItem().toString()) {
                 case "On-Site":
+                    
                     jPanel14.remove(jPanel16);
                     jPanel14.add(jPanel15);
                     siteCard.show(jPanel14, "card2");
+                    if(electionType3ComboBox.getSelectedItem().toString().equals("Standard")) {
+                        if(electionType1ComboBox.getSelectedItem().toString().trim().equals("")) {
+                            jPanel4.setVisible(false);
+                        } else {
+                            jPanel4.setVisible(true);
+                            resultsCard.show(jPanel4, "card2");
+                        }
+                    } else {
+                        jPanel4.setVisible(true);
+                        resultsCard.show(jPanel4, "card3");
+                    }
                     break;
                 case "Mail":
                 case "Electronic":
                     jPanel14.add(jPanel16);
                     jPanel14.remove(jPanel15);
                     siteCard.show(jPanel14, "card3");
+                    if(electionType3ComboBox.getSelectedItem().toString().equals("Standard")) {
+                        if(electionType1ComboBox.getSelectedItem().toString().trim().equals("")) {
+                            jPanel4.setVisible(false);
+                        } else {
+                            jPanel4.setVisible(true);
+                            resultsCard.show(jPanel4, "card2");
+                        }
+                    } else {
+                        jPanel4.setVisible(true);
+                        resultsCard.show(jPanel4, "card3");
+                    }
                     break;
                 default:
                     jPanel3.setVisible(false);
                     jPanel4.setVisible(false);
+                    if(electionType3ComboBox.getSelectedItem().toString().equals("Standard")) {
+                        if(electionType1ComboBox.getSelectedItem().toString().trim().equals("")) {
+                            jPanel4.setVisible(false);
+                        } else {
+                            jPanel4.setVisible(true);
+                            resultsCard.show(jPanel4, "card2");
+                        }
+                    } else {
+                        jPanel4.setVisible(true);
+                        resultsCard.show(jPanel4, "card3");
+                    }
                     break;
             }
 //        }
@@ -1456,58 +2365,53 @@ public class REPElectionPanel extends javax.swing.JPanel {
 
     private void electionType3ComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_electionType3ComboBoxActionPerformed
         
-        if(electionType3ComboBox.getSelectedItem().toString().equals("")) {
-            if(electionType1ComboBox.getSelectedItem().toString().equals("")) {
+        if(electionType3ComboBox.getSelectedItem().toString().equals("Standard")) {
+            if(electionType1ComboBox.getSelectedItem().toString().trim().equals("")) {
                 jPanel4.setVisible(false);
             } else {
+                whereUserIsComingFrom = "Professional";
+                professionalButton.setSelected(true);
+                nonProfessionalButton.setSelected(false);
+                combinedButton.setSelected(false);
                 jPanel4.setVisible(true);
                 resultsCard.show(jPanel4, "card2");
             }
         } else {
-            WebToggleButton left = new WebToggleButton ( "Left" );
-        WebToggleButton right = new WebToggleButton ( "Right" );
-        WebButtonGroup textGroup = new WebButtonGroup ( true, left, right );
-        textGroup.setButtonsDrawFocus ( false );
-
-        
-        GroupPanel g1 = new GroupPanel ( 1, textGroup);
-        jPanel6.add(g1);
-        
             jPanel4.setVisible(true);
             resultsCard.show(jPanel4, "card3");
         }
     }//GEN-LAST:event_electionType3ComboBoxActionPerformed
 
     private void eligibiltyDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_eligibiltyDateTextBoxMouseClicked
-//        clearDate(registrationLetterSentTextBox, evt);
+        clearDate(eligibiltyDateTextBox, evt);
     }//GEN-LAST:event_eligibiltyDateTextBoxMouseClicked
 
     private void preElectionConfDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_preElectionConfDateTextBoxMouseClicked
-        // TODO add your handling code here:
+        clearDate(preElectionConfDateTextBox, evt);
     }//GEN-LAST:event_preElectionConfDateTextBoxMouseClicked
 
     private void eligibilityDateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_eligibilityDateMouseClicked
-        // TODO add your handling code here:
+        clearDate(eligibilityDate, evt);
     }//GEN-LAST:event_eligibilityDateMouseClicked
 
     private void mailKitDateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mailKitDateMouseClicked
-        // TODO add your handling code here:
+        clearDate(mailKitDate, evt);
     }//GEN-LAST:event_mailKitDateMouseClicked
 
     private void pollingStartDateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pollingStartDateMouseClicked
-        // TODO add your handling code here:
+        clearDate(pollingStartDate, evt);
     }//GEN-LAST:event_pollingStartDateMouseClicked
 
     private void pollingEndDateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pollingEndDateMouseClicked
-        // TODO add your handling code here:
+        clearDate(pollingEndDate, evt);
     }//GEN-LAST:event_pollingEndDateMouseClicked
 
     private void ballotsCountDateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ballotsCountDateMouseClicked
-        // TODO add your handling code here:
+        clearDate(ballotsCountDate, evt);
     }//GEN-LAST:event_ballotsCountDateMouseClicked
 
     private void eligibilityListDateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_eligibilityListDateMouseClicked
-        // TODO add your handling code here:
+        clearDate(eligibiltyDateTextBox, evt);
     }//GEN-LAST:event_eligibilityListDateMouseClicked
 
     private void multiCaseElectionCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_multiCaseElectionCheckBoxStateChanged
@@ -1515,26 +2419,165 @@ public class REPElectionPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_multiCaseElectionCheckBoxStateChanged
 
     private void addMultiCaseElectionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMultiCaseElectionButtonActionPerformed
-        
+        new AddMultiCaseElection((JFrame) Global.root.getRootPane().getParent(), true);
+        loadMultiCase();
     }//GEN-LAST:event_addMultiCaseElectionButtonActionPerformed
 
     private void pollingEndDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pollingEndDateActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_pollingEndDateActionPerformed
 
     private void ballotsCountTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ballotsCountTimeActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_ballotsCountTimeActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void nonProfessionalButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nonProfessionalButtonActionPerformed
+        professionalButton.setSelected(false);
+        nonProfessionalButton.setSelected(true);
+        combinedButton.setSelected(false);
+        
+        hanldeProfessionalNonProfessionalElection("Non-Professional");
+    }//GEN-LAST:event_nonProfessionalButtonActionPerformed
+
+    private void professionalButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_professionalButtonActionPerformed
+        professionalButton.setSelected(true);
+        nonProfessionalButton.setSelected(false);
+        combinedButton.setSelected(false);
+        
+        hanldeProfessionalNonProfessionalElection("Professional");
+    }//GEN-LAST:event_professionalButtonActionPerformed
+
+    private void combinedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combinedButtonActionPerformed
+        professionalButton.setSelected(false);
+        nonProfessionalButton.setSelected(false);
+        combinedButton.setSelected(true);
+        
+        hanldeProfessionalNonProfessionalElection("Combined");
+    }//GEN-LAST:event_combinedButtonActionPerformed
+
+    private void multiCaseElectionTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_multiCaseElectionTableMouseClicked
+        if(Global.root.getjButton2().getText().equals("Save")) {
+            if(multiCaseElectionTable.getSelectedRow() > -1) {
+                if(evt.getButton() == MouseEvent.BUTTON3) {
+                    new RemoveMultiCaseDialog(
+                        (JFrame) Global.root.getRootPane().getParent(),
+                        true,
+                        multiCaseElectionTable.getValueAt(multiCaseElectionTable.getSelectedRow(), 0).toString().trim()
+                    );
+                    loadMultiCase();
+                }
+            }
+        }
+    }//GEN-LAST:event_multiCaseElectionTableMouseClicked
+
+    private void votesCastForNoRepresentativeTextBoxKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_votesCastForNoRepresentativeTextBoxKeyTyped
+        hanldeProfessionalNonProfessionalElection(whereUserIsComingFrom);
+        sumVotes();
+    }//GEN-LAST:event_votesCastForNoRepresentativeTextBoxKeyTyped
+
+    private void votesCastforEEOTextBoxKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_votesCastforEEOTextBoxKeyTyped
+        hanldeProfessionalNonProfessionalElection(whereUserIsComingFrom);
+        sumVotes();
+    }//GEN-LAST:event_votesCastforEEOTextBoxKeyTyped
+
+    private void votesCastForNoRepresentativeTextBoxKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_votesCastForNoRepresentativeTextBoxKeyReleased
+        hanldeProfessionalNonProfessionalElection(whereUserIsComingFrom);
+        sumVotes();
+    }//GEN-LAST:event_votesCastForNoRepresentativeTextBoxKeyReleased
+
+    private void votesCastforEEOTextBoxKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_votesCastforEEOTextBoxKeyReleased
+        hanldeProfessionalNonProfessionalElection(whereUserIsComingFrom);
+        sumVotes();
+    }//GEN-LAST:event_votesCastforEEOTextBoxKeyReleased
+
+    private void votesCastForIncumbentEEOTextBoxKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_votesCastForIncumbentEEOTextBoxKeyReleased
+        hanldeProfessionalNonProfessionalElection(whereUserIsComingFrom);
+        sumVotes();
+    }//GEN-LAST:event_votesCastForIncumbentEEOTextBoxKeyReleased
+
+    private void votesCastForRivalEEO1TextBoxKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_votesCastForRivalEEO1TextBoxKeyReleased
+        hanldeProfessionalNonProfessionalElection(whereUserIsComingFrom);
+        sumVotes();
+    }//GEN-LAST:event_votesCastForRivalEEO1TextBoxKeyReleased
+
+    private void votesCastForRivalEEO2TextBoxKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_votesCastForRivalEEO2TextBoxKeyReleased
+        hanldeProfessionalNonProfessionalElection(whereUserIsComingFrom);
+        sumVotes();
+    }//GEN-LAST:event_votesCastForRivalEEO2TextBoxKeyReleased
+
+    private void votesCastForRivalEEO3TextBoxKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_votesCastForRivalEEO3TextBoxKeyReleased
+        hanldeProfessionalNonProfessionalElection(whereUserIsComingFrom);
+        sumVotes();
+    }//GEN-LAST:event_votesCastForRivalEEO3TextBoxKeyReleased
+
+    private void challengedTextBoxKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_challengedTextBoxKeyReleased
+        hanldeProfessionalNonProfessionalElection(whereUserIsComingFrom);
+        sumVotes();
+    }//GEN-LAST:event_challengedTextBoxKeyReleased
+
+    private void pollingStartDateMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pollingStartDateMouseEntered
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_pollingStartDateMouseEntered
+
+    private void pollingStartDateCaretPositionChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_pollingStartDateCaretPositionChanged
+        try {
+            Date startDate = Global.mmddyyyy.parse(pollingStartDate.getText());
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(startDate);
+            cal.add(Calendar.DATE, 14);
+            pollingEndDate.setText(Global.mmddyyyy.format(cal.getTime()));
+        } catch (ParseException ex) {
+            Logger.getLogger(REPElectionPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_pollingStartDateCaretPositionChanged
+
+    private void pollingStartDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pollingStartDateActionPerformed
+        try {
+            Date startDate = Global.mmddyyyy.parse(pollingStartDate.getText());
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(startDate);
+            cal.add(Calendar.DATE, 14);
+            pollingEndDate.setText(Global.mmddyyyy.format(cal.getTime()));
+        } catch (ParseException ex) {
+            Logger.getLogger(REPElectionPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_pollingStartDateActionPerformed
+
+    private void resultsVotesCastForEEOKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_resultsVotesCastForEEOKeyReleased
+        sumResultsVotes();
+    }//GEN-LAST:event_resultsVotesCastForEEOKeyReleased
+
+    private void resultsVotesCastForIncumbentEEOKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_resultsVotesCastForIncumbentEEOKeyReleased
+        sumResultsVotes();
+    }//GEN-LAST:event_resultsVotesCastForIncumbentEEOKeyReleased
+
+    private void resultsVotesCastForRivalEEO1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_resultsVotesCastForRivalEEO1KeyReleased
+        sumResultsVotes();
+    }//GEN-LAST:event_resultsVotesCastForRivalEEO1KeyReleased
+
+    private void resultsVotesCastForRivalEEO2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_resultsVotesCastForRivalEEO2KeyReleased
+        sumResultsVotes();
+    }//GEN-LAST:event_resultsVotesCastForRivalEEO2KeyReleased
+
+    private void resultsVotesCastForRivalEEO3KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_resultsVotesCastForRivalEEO3KeyReleased
+        sumResultsVotes();
+    }//GEN-LAST:event_resultsVotesCastForRivalEEO3KeyReleased
+
+    private void resultsVotesCastForNoRepresentativeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_resultsVotesCastForNoRepresentativeKeyReleased
+        sumResultsVotes();
+    }//GEN-LAST:event_resultsVotesCastForNoRepresentativeKeyReleased
+
+    private void resultsChallengedBallotsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_resultsChallengedBallotsKeyReleased
+        sumResultsVotes();
+    }//GEN-LAST:event_resultsChallengedBallotsKeyReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addMultiCaseElectionButton;
     private javax.swing.JButton addSiteInformation;
     private javax.swing.JComboBox<String> amPMComboBox;
+    private javax.swing.JTextField approxNumberEligibleVotersTextBox;
     private javax.swing.JTextField ballotFour;
     private javax.swing.JTextField ballotFourTextBox;
     private javax.swing.JTextField ballotOne;
@@ -1547,16 +2590,14 @@ public class REPElectionPanel extends javax.swing.JPanel {
     private javax.swing.JComboBox<String> ballotsCountDay;
     private javax.swing.JTextField ballotsCountTime;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JTextField challengedTextBox;
+    private javax.swing.JButton combinedButton;
     private javax.swing.JComboBox<String> electionType1ComboBox;
     private javax.swing.JComboBox<String> electionType2ComboBox;
     private javax.swing.JComboBox<String> electionType3ComboBox;
     private com.alee.extended.date.WebDateField eligibilityDate;
     private com.alee.extended.date.WebDateField eligibilityListDate;
     private com.alee.extended.date.WebDateField eligibiltyDateTextBox;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1624,39 +2665,40 @@ public class REPElectionPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField10;
-    private javax.swing.JTextField jTextField11;
-    private javax.swing.JTextField jTextField12;
-    private javax.swing.JTextField jTextField13;
-    private javax.swing.JTextField jTextField14;
-    private javax.swing.JTextField jTextField15;
-    private javax.swing.JTextField jTextField16;
-    private javax.swing.JTextField jTextField17;
-    private javax.swing.JTextField jTextField18;
-    private javax.swing.JTextField jTextField19;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField20;
-    private javax.swing.JTextField jTextField21;
-    private javax.swing.JTextField jTextField22;
-    private javax.swing.JTextField jTextField23;
-    private javax.swing.JTextField jTextField24;
-    private javax.swing.JTextField jTextField25;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
-    private javax.swing.JTextField jTextField9;
     private com.alee.extended.date.WebDateField mailKitDate;
     private javax.swing.JCheckBox multiCaseElectionCheckBox;
     private javax.swing.JTable multiCaseElectionTable;
+    private javax.swing.JTextField noTextBox;
+    private javax.swing.JButton nonProfessionalButton;
+    private javax.swing.JComboBox<String> outcomeComboBox;
     private com.alee.extended.date.WebDateField pollingEndDate;
     private com.alee.extended.date.WebDateField pollingStartDate;
     private com.alee.extended.date.WebDateField preElectionConfDateTextBox;
     private javax.swing.JButton professionalButton;
+    private javax.swing.JTextField resultsApproxNumberOfEligibleVoters;
+    private javax.swing.JTextField resultsChallengedBallots;
+    private javax.swing.JTextField resultsTotalBallotsCast;
+    private javax.swing.JTextField resultsValidVotesCounted;
+    private javax.swing.JTextField resultsVoidBallots;
+    private javax.swing.JTextField resultsVotesCastForEEO;
+    private javax.swing.JTextField resultsVotesCastForIncumbentEEO;
+    private javax.swing.JTextField resultsVotesCastForNoRepresentative;
+    private javax.swing.JTextField resultsVotesCastForRivalEEO1;
+    private javax.swing.JTextField resultsVotesCastForRivalEEO2;
+    private javax.swing.JTextField resultsVotesCastForRivalEEO3;
+    private javax.swing.JComboBox<String> resultsWhoPrevailed;
     private javax.swing.JTextField selfReleasingTextBox;
+    private javax.swing.JTable sitesTable;
+    private javax.swing.JTextField totalBVotesTextBox;
+    private javax.swing.JTextField validVotesTextBox;
+    private javax.swing.JTextField voidBallotsTextBox;
+    private javax.swing.JTextField votesCastForIncumbentEEOTextBox;
+    private javax.swing.JTextField votesCastForNoRepresentativeTextBox;
+    private javax.swing.JTextField votesCastForRivalEEO1TextBox;
+    private javax.swing.JTextField votesCastForRivalEEO2TextBox;
+    private javax.swing.JTextField votesCastForRivalEEO3TextBox;
+    private javax.swing.JTextField votesCastforEEOTextBox;
+    private javax.swing.JComboBox<String> whoPrevailedComboBox;
+    private javax.swing.JTextField yesTextBox;
     // End of variables declaration//GEN-END:variables
 }

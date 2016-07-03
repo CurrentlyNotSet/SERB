@@ -123,12 +123,26 @@ public class companySearchPanel extends javax.swing.JPanel {
         {
             if(tableData[i][3].toString().toLowerCase().contains(employerSearchTerm.getText().toLowerCase()) && !employerSearchTerm.equals(""))
             {
-                model.addRow(new Object[] {tableData[i][0]
-                , tableData[i][1], tableData[i][2], tableData[i][3]}); 
+                if(statusComboBox.getSelectedItem().toString().equals("All")) {
+                    model.addRow(new Object[] {tableData[i][0]
+                    , tableData[i][1], tableData[i][2], tableData[i][3]}); 
+                } else if(statusComboBox.getSelectedItem().toString().equals("Open")) {
+                    if(tableData[i][1].toString().toLowerCase().equals("open")) {
+                        model.addRow(new Object[] {tableData[i][0]
+                    , tableData[i][1], tableData[i][2], tableData[i][3]}); 
+                    }
+                } else if(statusComboBox.getSelectedItem().toString().equals("Closed")) {
+                    if(tableData[i][1].toString().toLowerCase().equals("closed")) {
+                        model.addRow(new Object[] {tableData[i][0]
+                    , tableData[i][1], tableData[i][2], tableData[i][3]}); 
+                    }
+                }
             }
         }
         employerTable.setModel(model);
     }
+    
+    
 
     public DefaultTableModel getModel() {
         return model;
@@ -327,7 +341,7 @@ public class companySearchPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_employerTableMouseClicked
 
     private void statusComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statusComboBoxActionPerformed
-        
+        limitCaseList();    
     }//GEN-LAST:event_statusComboBoxActionPerformed
 
 
