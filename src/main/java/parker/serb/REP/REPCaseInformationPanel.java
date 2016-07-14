@@ -79,6 +79,9 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         deemedCertifiedCheckBox.setEnabled(true);
         certificationRevokedCheckBox.setEnabled(true);
         
+        notesTextArea.setEnabled(true);
+        notesTextArea.setBackground(Color.WHITE);
+        
         addRelatedCaseButton.setVisible(true);
         
         //Dates
@@ -100,8 +103,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         returnSOIDueDateTextBox.setBackground(Color.WHITE);
         actualSOIReturnDateTextBox.setEnabled(true);
         actualSOIReturnDateTextBox.setBackground(Color.WHITE);
-        commentsTextBox.setEnabled(true);
-        commentsTextBox.setBackground(Color.WHITE);
+        SOIReturnInitials.setEnabled(true);
         REPClosedCaseDueDateTextBox.setEnabled(true);
         REPClosedCaseDueDateTextBox.setBackground(Color.WHITE);
         actualREPClosedDateTextBox.setEnabled(true);
@@ -138,8 +140,10 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         deemedCertifiedCheckBox.setEnabled(false);
         certificationRevokedCheckBox.setEnabled(false);
         
-        addRelatedCaseButton.setVisible(false);
+        notesTextArea.setEnabled(false);
+        notesTextArea.setBackground(new Color(238,238,238));
         
+        addRelatedCaseButton.setVisible(false);
         
         fileDateTextBox.setEnabled(false);
         fileDateTextBox.setBackground(new Color(238,238,238));
@@ -159,8 +163,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         returnSOIDueDateTextBox.setBackground(new Color(238,238,238));
         actualSOIReturnDateTextBox.setEnabled(false);
         actualSOIReturnDateTextBox.setBackground(new Color(238,238,238));
-        commentsTextBox.setEnabled(false);
-        commentsTextBox.setBackground(new Color(238,238,238));
+        SOIReturnInitials.setEnabled(false);
         REPClosedCaseDueDateTextBox.setEnabled(false);
         REPClosedCaseDueDateTextBox.setBackground(new Color(238,238,238));
         actualREPClosedDateTextBox.setEnabled(false);
@@ -188,6 +191,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         boardCertifiedCheckBox.setSelected(false);
         deemedCertifiedCheckBox.setSelected(false);
         certificationRevokedCheckBox.setSelected(false);
+        notesTextArea.setText("");
         fileDateTextBox.setText("");
         amendedFilingDateTextBox.setText("");
         alphaListRecepitDateTextBox.setText("");
@@ -197,7 +201,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         courtClosedDateTextBox.setText("");
         returnSOIDueDateTextBox.setText("");
         actualSOIReturnDateTextBox.setText("");
-        commentsTextBox.setText("");
+        SOIReturnInitials.setSelectedItem("");
         REPClosedCaseDueDateTextBox.setText("");
         actualREPClosedDateTextBox.setText("");
         repClosedUser.setSelectedItem("");
@@ -274,13 +278,16 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
     
     public void loadREPClosedByComboBox() {
         repClosedUser.removeAllItems();
+        SOIReturnInitials.removeAllItems();
         
         repClosedUser.addItem("");
+        SOIReturnInitials.addItem("");
         
         List currentOwnerList = User.loadREPComboBox();
         
         for (Object currentOwners : currentOwnerList) {
             repClosedUser.addItem(currentOwners.toString());
+            SOIReturnInitials.addItem(currentOwners.toString());
         }
     }
     
@@ -315,6 +322,8 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         deemedCertifiedCheckBox.setSelected(caseInformation.deemedCertified == true);
         certificationRevokedCheckBox.setSelected(caseInformation.certificationRevoked == true);
         
+        notesTextArea.setText(caseInformation.note == null ? "" : caseInformation.note);
+        
         fileDateTextBox.setText(caseInformation.fileDate != null ? Global.mmddyyyy.format(new Date(caseInformation.fileDate.getTime())) : ""); 
         amendedFilingDateTextBox.setText(caseInformation.amendedFiliingDate != null ? Global.mmddyyyy.format(new Date(caseInformation.amendedFiliingDate.getTime())) : "");
         alphaListRecepitDateTextBox.setText(caseInformation.alphaListDate != null ? Global.mmddyyyy.format(new Date(caseInformation.alphaListDate.getTime())) : "");
@@ -324,7 +333,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         courtClosedDateTextBox.setText(caseInformation.courtClosedDate != null ? Global.mmddyyyy.format(new Date(caseInformation.courtClosedDate.getTime())) : "");  
         returnSOIDueDateTextBox.setText(caseInformation.returnSOIDueDate != null ? Global.mmddyyyy.format(new Date(caseInformation.returnSOIDueDate.getTime())) : "");  
         actualSOIReturnDateTextBox.setText(caseInformation.actualSOIReturnDate != null ? Global.mmddyyyy.format(new Date(caseInformation.actualSOIReturnDate.getTime())) : "");  
-        commentsTextBox.setText(caseInformation.comments == null ? "" : caseInformation.comments);  
+        SOIReturnInitials.setSelectedItem(caseInformation.SOIReturnInitials == 0 ? "" : User.getNameByID(caseInformation.SOIReturnInitials));  
         REPClosedCaseDueDateTextBox.setText(caseInformation.REPClosedCaseDueDate != null ? Global.mmddyyyy.format(new Date(caseInformation.REPClosedCaseDueDate.getTime())) : "");  
         actualREPClosedDateTextBox.setText(caseInformation.actualREPClosedDate != null ? Global.mmddyyyy.format(new Date(caseInformation.actualREPClosedDate.getTime())) : "");  
         repClosedUser.setSelectedItem(caseInformation.REPClosedUser == 0 ? "" : User.getNameByID(caseInformation.REPClosedUser));
@@ -346,6 +355,8 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         newCaseInformation.deemedCertified = deemedCertifiedCheckBox.isSelected();
         newCaseInformation.certificationRevoked = certificationRevokedCheckBox.isSelected();
         
+        newCaseInformation.note = notesTextArea.getText().equals("") ? null : notesTextArea.getText();
+        
         newCaseInformation.fileDate = fileDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(fileDateTextBox.getText()));
         newCaseInformation.amendedFiliingDate = amendedFilingDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(amendedFilingDateTextBox.getText()));
         newCaseInformation.alphaListDate = alphaListRecepitDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(alphaListRecepitDateTextBox.getText()));
@@ -356,7 +367,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         newCaseInformation.courtClosedDate = courtClosedDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(courtClosedDateTextBox.getText()));
         newCaseInformation.returnSOIDueDate = returnSOIDueDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(returnSOIDueDateTextBox.getText()));
         newCaseInformation.actualSOIReturnDate = actualSOIReturnDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(actualSOIReturnDateTextBox.getText()));
-        newCaseInformation.comments = commentsTextBox.getText().equals("") ? null : commentsTextBox.getText().trim();
+        newCaseInformation.SOIReturnInitials = SOIReturnInitials.getSelectedItem().toString().equals("") ? 0 : User.getUserID(SOIReturnInitials.getSelectedItem().toString());
         newCaseInformation.REPClosedCaseDueDate = REPClosedCaseDueDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(REPClosedCaseDueDateTextBox.getText()));
         newCaseInformation.actualREPClosedDate = actualREPClosedDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(actualREPClosedDateTextBox.getText()));
         newCaseInformation.REPClosedUser = repClosedUser.getSelectedItem().equals("") ? 0 : User.getUserID(repClosedUser.getSelectedItem().toString());
@@ -453,6 +464,9 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         relatedCaseTable = new javax.swing.JTable();
         addRelatedCaseButton = new javax.swing.JButton();
         countyComboBox = new javax.swing.JComboBox<>();
+        jLabel24 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        notesTextArea = new javax.swing.JTextArea();
         jPanel2 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
@@ -476,7 +490,6 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         actualSOIReturnDateTextBox = new com.alee.extended.date.WebDateField();
         REPClosedCaseDueDateTextBox = new com.alee.extended.date.WebDateField();
         actualREPClosedDateTextBox = new com.alee.extended.date.WebDateField();
-        commentsTextBox = new javax.swing.JTextField();
         jLabel22 = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
         actualClerksClosedDate = new com.alee.extended.date.WebDateField();
@@ -484,6 +497,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         alphaListRecepitDateTextBox = new com.alee.extended.date.WebDateField();
         repClosedUser = new javax.swing.JComboBox<>();
         clerksClosedUser = new javax.swing.JComboBox<>();
+        SOIReturnInitials = new javax.swing.JComboBox<>();
 
         setLayout(new java.awt.GridLayout(1, 0));
 
@@ -597,6 +611,22 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
 
         countyComboBox.setEnabled(false);
 
+        jLabel24.setText("Notes:");
+
+        notesTextArea.setBackground(new java.awt.Color(238, 238, 238));
+        notesTextArea.setColumns(20);
+        notesTextArea.setLineWrap(true);
+        notesTextArea.setRows(4);
+        notesTextArea.setWrapStyleWord(true);
+        notesTextArea.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        notesTextArea.setEnabled(false);
+        notesTextArea.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                notesTextAreaMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(notesTextArea);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -604,12 +634,6 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(addRelatedCaseButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel8)
@@ -630,13 +654,24 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
                             .addComponent(countyComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(employerIDNumberTextBox)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGap(0, 12, Short.MAX_VALUE)
                         .addComponent(boardCertifiedCheckBox)
                         .addGap(18, 18, 18)
                         .addComponent(deemedCertifiedCheckBox)
                         .addGap(18, 18, 18)
                         .addComponent(certificationRevokedCheckBox)
-                        .addGap(19, 19, 19)))
+                        .addGap(19, 19, 19))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel24)
+                            .addComponent(jLabel9))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(addRelatedCaseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane1))))
                 .addGap(10, 10, 10))
         );
         jPanel1Layout.setVerticalGroup(
@@ -677,13 +712,17 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
                     .addComponent(certificationRevokedCheckBox)
                     .addComponent(deemedCertifiedCheckBox)
                     .addComponent(boardCertifiedCheckBox))
-                .addGap(10, 10, 10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel24)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(addRelatedCaseButton, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel9)
-                        .addGap(0, 177, Short.MAX_VALUE))
-                    .addComponent(addRelatedCaseButton, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -705,7 +744,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
 
         jLabel17.setText("Actual SOI Return Date:");
 
-        jLabel18.setText("Comments:");
+        jLabel18.setText("SOI Return Initials:");
 
         jLabel19.setText("REP Closed Case Due Date:");
 
@@ -823,10 +862,6 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
             }
         });
 
-        commentsTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        commentsTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        commentsTextBox.setEnabled(false);
-
         jLabel22.setText("REP Closed By:");
 
         jLabel23.setText("Actual Clerks Closed Date:");
@@ -859,6 +894,8 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         repClosedUser.setEnabled(false);
 
         clerksClosedUser.setEnabled(false);
+
+        SOIReturnInitials.setEnabled(false);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -894,11 +931,11 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
                     .addComponent(actualSOIReturnDateTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
                     .addComponent(REPClosedCaseDueDateTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
                     .addComponent(actualREPClosedDateTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
-                    .addComponent(commentsTextBox)
                     .addComponent(actualClerksClosedDate, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
                     .addComponent(alphaListRecepitDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
                     .addComponent(repClosedUser, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(clerksClosedUser, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(clerksClosedUser, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(SOIReturnInitials, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -941,9 +978,9 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
                     .addComponent(jLabel17)
                     .addComponent(actualSOIReturnDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel18)
-                    .addComponent(commentsTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(SOIReturnInitials)
+                    .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel19)
@@ -964,7 +1001,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(clerksClosedUser)
                     .addComponent(jLabel21, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         add(jPanel2);
@@ -1080,9 +1117,18 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         clearDate(alphaListRecepitDateTextBox, evt);
     }//GEN-LAST:event_alphaListRecepitDateTextBoxMouseClicked
 
+    private void notesTextAreaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_notesTextAreaMouseClicked
+        if(evt.getClickCount() == 2 && 
+            !notesTextArea.getText().equals("")) 
+        {
+            Global.root.getrEPRootPanel1().getjTabbedPane1().setSelectedIndex(Global.root.getrEPRootPanel1().getjTabbedPane1().indexOfTab("Notes"));
+        }
+    }//GEN-LAST:event_notesTextAreaMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.alee.extended.date.WebDateField REPClosedCaseDueDateTextBox;
+    private javax.swing.JComboBox<String> SOIReturnInitials;
     private com.alee.extended.date.WebDateField actualClerksClosedDate;
     private com.alee.extended.date.WebDateField actualREPClosedDateTextBox;
     private com.alee.extended.date.WebDateField actualSOIReturnDateTextBox;
@@ -1095,7 +1141,6 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
     private javax.swing.JComboBox caseTypeComboBox;
     private javax.swing.JCheckBox certificationRevokedCheckBox;
     private javax.swing.JComboBox<String> clerksClosedUser;
-    private javax.swing.JTextField commentsTextBox;
     private javax.swing.JComboBox<String> countyComboBox;
     private com.alee.extended.date.WebDateField courtClosedDateTextBox;
     private javax.swing.JComboBox currentOwnerComboBox;
@@ -1120,6 +1165,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1129,7 +1175,9 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextArea notesTextArea;
     private com.alee.extended.date.WebDateField registrationLetterSentTextBox;
     private javax.swing.JTable relatedCaseTable;
     private javax.swing.JComboBox<String> repClosedUser;

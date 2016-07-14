@@ -54,7 +54,8 @@ public class UpdateREPBoardMeeting extends javax.swing.JDialog {
     private void loadInformation(String date, String agendaNumber, String rec, String memoDate) {
         meetingDateTextBox.setText(date);
         agendaItemTextBox.setText(agendaNumber);
-        recommendationComboBox.setSelectedItem(rec);
+        recommendationComboBox.setSelectedItem("");
+        recommendationTextArea.setText(rec);
         memoDateTextBox.setText(memoDate);
     }
     
@@ -92,6 +93,14 @@ public class UpdateREPBoardMeeting extends javax.swing.JDialog {
                 enableAddButton();
             }
         });
+        
+        recommendationComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(recommendationComboBox.getSelectedItem() != null)
+                    recommendationTextArea.setText(recommendationComboBox.getSelectedItem().toString());
+            }
+        });
     }
     
     private void loadRecComboBox() {
@@ -122,6 +131,8 @@ public class UpdateREPBoardMeeting extends javax.swing.JDialog {
         agendaItemTextBox.setEnabled(true);
         agendaItemTextBox.setBackground(Color.white);
         recommendationComboBox.setEnabled(true);
+        recommendationTextArea.setEnabled(true);
+        recommendationTextArea.setBackground(Color.white);
         memoDateTextBox.setEnabled(true);
         memoDateTextBox.setBackground(Color.WHITE);
     }
@@ -140,6 +151,8 @@ public class UpdateREPBoardMeeting extends javax.swing.JDialog {
         recommendationComboBox.setEnabled(false);
         memoDateTextBox.setEnabled(false);
         memoDateTextBox.setBackground(new Color(238, 238, 238));
+        recommendationTextArea.setEnabled(false);
+        recommendationTextArea.setBackground(new Color(238, 238, 238));
     }
     
     private void saveInformation() {
@@ -147,7 +160,7 @@ public class UpdateREPBoardMeeting extends javax.swing.JDialog {
             id,
             meetingDateTextBox.getText(),
             agendaItemTextBox.getText(),
-            recommendationComboBox.getSelectedItem().toString(),
+            recommendationTextArea.getText(),
             memoDateTextBox.getText()
         );
     }
@@ -182,6 +195,8 @@ public class UpdateREPBoardMeeting extends javax.swing.JDialog {
         meetingDateTextBox = new com.alee.extended.date.WebDateField();
         jLabel5 = new javax.swing.JLabel();
         memoDateTextBox = new com.alee.extended.date.WebDateField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        recommendationTextArea = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -242,6 +257,15 @@ public class UpdateREPBoardMeeting extends javax.swing.JDialog {
             }
         });
 
+        recommendationTextArea.setBackground(new java.awt.Color(235, 235, 235));
+        recommendationTextArea.setColumns(20);
+        recommendationTextArea.setLineWrap(true);
+        recommendationTextArea.setRows(5);
+        recommendationTextArea.setWrapStyleWord(true);
+        recommendationTextArea.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        recommendationTextArea.setEnabled(false);
+        jScrollPane1.setViewportView(recommendationTextArea);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -250,6 +274,10 @@ public class UpdateREPBoardMeeting extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(updateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel3)
@@ -258,14 +286,11 @@ public class UpdateREPBoardMeeting extends javax.swing.JDialog {
                             .addComponent(jLabel5))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(recommendationComboBox, 0, 544, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(recommendationComboBox, 0, 444, Short.MAX_VALUE)
                             .addComponent(agendaItemTextBox)
                             .addComponent(meetingDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(memoDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(updateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(memoDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -285,11 +310,13 @@ public class UpdateREPBoardMeeting extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(recommendationComboBox)
                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(memoDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                    .addComponent(memoDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(updateButton)
                     .addComponent(closeButton))
@@ -341,9 +368,11 @@ public class UpdateREPBoardMeeting extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JScrollPane jScrollPane1;
     private com.alee.extended.date.WebDateField meetingDateTextBox;
     private com.alee.extended.date.WebDateField memoDateTextBox;
     private javax.swing.JComboBox<String> recommendationComboBox;
+    private javax.swing.JTextArea recommendationTextArea;
     private javax.swing.JButton updateButton;
     // End of variables declaration//GEN-END:variables
 }

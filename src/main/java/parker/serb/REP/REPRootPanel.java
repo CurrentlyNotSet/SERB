@@ -25,14 +25,6 @@ public class REPRootPanel extends javax.swing.JPanel {
      */
     public REPRootPanel() {
         initComponents();
-//        jTabbedPane1.remove(7); //NOTES
-//        jTabbedPane1.remove(6); //Mediation
-        jTabbedPane1.remove(5);
-//        jTabbedPane1.remove(4); //Board Status
-//        jTabbedPane1.remove(3); //Details
-//        jTabbedPane1.remove(2); //PARTIES
-//        jTabbedPane1.remove(1); //INFORMATION
-//        jTabbedPane1.remove(0); //Activity
         addListeners();
     }
     
@@ -46,6 +38,7 @@ public class REPRootPanel extends javax.swing.JPanel {
         notesPanel2.clearAll();
         partiesPanel1.clearAll();
         rEPCaseDetailsPanel1.clearAll();
+        rEPElectionPanel1.clearAll();
     }
     
     private void addListeners() {
@@ -72,7 +65,7 @@ public class REPRootPanel extends javax.swing.JPanel {
                 rEPCaseInformationPanel2.loadInformation();
                 break;
             case "Parties":
-                partiesPanel1.loadULPParties();
+                partiesPanel1.loadParties();
                 break;
             case "Details":
                 rEPCaseDetailsPanel1.loadInformation();
@@ -81,6 +74,7 @@ public class REPRootPanel extends javax.swing.JPanel {
                 rEPBoardStatusPanel1.loadInformation();
                 break;
             case "Elections":
+                rEPElectionPanel1.loadInformation();
                 break;
             case "Mediation":
                 rEPMediationPanel1.loadAllMediations();
@@ -189,8 +183,8 @@ public class REPRootPanel extends javax.swing.JPanel {
                 }
                 break;
             case "Parties":
-                new PartySearchDialog((JFrame) this.getRootPane().getParent(), true);
-                partiesPanel1.loadULPParties();
+                new PartySearchDialog((JFrame) this.getRootPane().getParent().getParent(), true);
+                partiesPanel1.loadParties();
                 Global.root.getrEPHeaderPanel1().loadHeaderInformation();
                 REPCaseSearchData.updateCaseEntryFromParties(
                         Global.root.getrEPHeaderPanel1().getEmployerTextBox().getText().trim(),
@@ -221,9 +215,19 @@ public class REPRootPanel extends javax.swing.JPanel {
                 }
                 break;
             case "Elections":
+                if(buttonText.equals("Update")) {
+                    disableTabs(jTabbedPane1.getSelectedIndex());
+                    rEPElectionPanel1.enableUpdate();
+                } else {
+                    enableTabs();
+                    Global.root.enableTabsAfterSave();
+                    Global.root.enableButtonsAfterCancel();
+                    rEPElectionPanel1.disableUpdate(true);
+                    rEPElectionPanel1.loadInformation();
+                }
                 break;
             case "Mediation":
-                new REPAddMediationDialog((JFrame) Global.root.getParent(), true);
+                new REPAddMediationDialog(Global.root, true);
                 rEPMediationPanel1.loadAllMediations();
                 break;
             case "Notes":
@@ -250,7 +254,7 @@ public class REPRootPanel extends javax.swing.JPanel {
             case "Activity":
                 break;
             case "Information":
-                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+                cancel = new CancelUpdate(Global.root, true);
                 if(!cancel.isReset()) {
                 } else {
                     Global.root.enableButtonsAfterCancel();
@@ -269,7 +273,7 @@ public class REPRootPanel extends javax.swing.JPanel {
                         Global.root.getrEPHeaderPanel1().getIncumbentEEOTextBox().getText().trim());
                 break;
             case "Details":
-                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+                cancel = new CancelUpdate(Global.root, true);
                 if(!cancel.isReset()) {
                 } else {
                     Global.root.enableButtonsAfterCancel();
@@ -280,7 +284,7 @@ public class REPRootPanel extends javax.swing.JPanel {
                 }
                 break;
             case "Board Status":
-                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+                cancel = new CancelUpdate(Global.root, true);
                 if(!cancel.isReset()) {
                 } else {
                     Global.root.enableButtonsAfterCancel();
@@ -291,6 +295,15 @@ public class REPRootPanel extends javax.swing.JPanel {
                 }
                 break;
             case "Elections":
+                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+                if(!cancel.isReset()) {
+                } else {
+                    Global.root.enableButtonsAfterCancel();
+                    Global.root.enableTabsAfterSave();
+                    enableTabs();
+                    rEPElectionPanel1.disableUpdate(false);
+                    rEPElectionPanel1.loadInformation();
+                }
                 break;
             case "Mediation":
                 rEPMediationPanel1.removeMediation();
@@ -338,6 +351,7 @@ public class REPRootPanel extends javax.swing.JPanel {
         jPanel5 = new javax.swing.JPanel();
         rEPBoardStatusPanel1 = new parker.serb.REP.REPBoardStatusPanel();
         jPanel6 = new javax.swing.JPanel();
+        rEPElectionPanel1 = new parker.serb.REP.REPElectionPanel();
         jPanel7 = new javax.swing.JPanel();
         rEPMediationPanel1 = new parker.serb.REP.REPMediationPanel();
         jPanel8 = new javax.swing.JPanel();
@@ -412,11 +426,11 @@ public class REPRootPanel extends javax.swing.JPanel {
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 972, Short.MAX_VALUE)
+            .addComponent(rEPElectionPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 575, Short.MAX_VALUE)
+            .addComponent(rEPElectionPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Elections", jPanel6);
@@ -476,6 +490,7 @@ public class REPRootPanel extends javax.swing.JPanel {
     private parker.serb.REP.REPCaseDetailsPanel rEPCaseDetailsPanel1;
     private parker.serb.REP.REPCaseInformationPanel rEPCaseInformationPanel1;
     private parker.serb.REP.REPCaseInformationPanel rEPCaseInformationPanel2;
+    private parker.serb.REP.REPElectionPanel rEPElectionPanel1;
     private parker.serb.REP.REPMediationPanel rEPMediationPanel1;
     // End of variables declaration//GEN-END:variables
 }

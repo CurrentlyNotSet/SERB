@@ -19,9 +19,17 @@ public class NumberFormatService {
     
     public static String convertStringToPhoneNumber(String number) {
         String formattedNumber = "";
-        formattedNumber += "(" + number.substring(0, 3) + ") ";
-        formattedNumber += number.substring(3, 6) + "-";
-        formattedNumber += number.substring(6);
+        if(number.length() >= 10) {
+            formattedNumber += "(" + number.substring(0, 3) + ") ";
+            formattedNumber += number.substring(3, 6) + "-";
+            formattedNumber += number.substring(6, 10);
+            
+            if(number.length() > 10) {
+                formattedNumber += " x" + number.substring(10);
+            }
+        } else {
+            formattedNumber = number;
+        }        
         return formattedNumber;
     }
     
@@ -37,6 +45,21 @@ public class NumberFormatService {
             Date date = null;
             try {
                 date = Global.mmddyyyy.parse(mmddyyyyDate);
+            } catch (ParseException ex) {
+                Logger.getLogger(NumberFormatService.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return date.getTime();
+        }
+    }
+    
+    public static long converthmma(String hmma) {
+         
+        if(hmma.equals("")) {
+            return 0;
+        } else {
+            Date date = null;
+            try {
+                date = Global.hmma.parse(hmma);
             } catch (ParseException ex) {
                 Logger.getLogger(NumberFormatService.class.getName()).log(Level.SEVERE, null, ex);
             }

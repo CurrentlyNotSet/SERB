@@ -31,6 +31,9 @@
   </Layout>
   <SubComponents>
     <Container class="javax.swing.JTabbedPane" name="jTabbedPane1">
+      <AccessibilityProperties>
+        <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Status"/>
+      </AccessibilityProperties>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
       <SubComponents>
@@ -51,7 +54,7 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="activityPanel1" alignment="0" pref="575" max="32767" attributes="0"/>
+                  <Component id="activityPanel1" alignment="0" pref="619" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -72,19 +75,15 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="rEPCaseInformationPanel2" alignment="0" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="972" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="rEPCaseInformationPanel2" alignment="0" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="619" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
-          <SubComponents>
-            <Component class="parker.serb.REP.REPCaseInformationPanel" name="rEPCaseInformationPanel2">
-            </Component>
-          </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="jPanel3">
           <Constraints>
@@ -103,7 +102,7 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="partiesPanel1" alignment="0" pref="575" max="32767" attributes="0"/>
+                  <Component id="partiesPanel1" alignment="0" pref="619" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -115,8 +114,8 @@
         <Container class="javax.swing.JPanel" name="jPanel4">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Details">
-                <Property name="tabTitle" type="java.lang.String" value="Details"/>
+              <JTabbedPaneConstraints tabName="Fact Finder Selection">
+                <Property name="tabTitle" type="java.lang.String" value="Fact Finder Selection"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -124,25 +123,21 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="rEPCaseDetailsPanel1" alignment="0" pref="1028" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="972" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="rEPCaseDetailsPanel1" alignment="0" pref="575" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="619" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
-          <SubComponents>
-            <Component class="parker.serb.REP.REPCaseDetailsPanel" name="rEPCaseDetailsPanel1">
-            </Component>
-          </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="jPanel5">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Board Status">
-                <Property name="tabTitle" type="java.lang.String" value="Board Status"/>
+              <JTabbedPaneConstraints tabName="Conciliation">
+                <Property name="tabTitle" type="java.lang.String" value="Conciliation"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -150,25 +145,25 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="rEPBoardStatusPanel1" alignment="0" pref="1028" max="32767" attributes="0"/>
+                  <Component id="mEDConciliationPanel2" alignment="0" pref="972" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="rEPBoardStatusPanel1" alignment="0" pref="575" max="32767" attributes="0"/>
+                  <Component id="mEDConciliationPanel2" alignment="0" pref="619" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="parker.serb.REP.REPBoardStatusPanel" name="rEPBoardStatusPanel1">
+            <Component class="parker.serb.MED.MEDConciliationPanel" name="mEDConciliationPanel2">
             </Component>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="jPanel6">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Elections">
-                <Property name="tabTitle" type="java.lang.String" value="Elections"/>
+              <JTabbedPaneConstraints tabName="Strike">
+                <Property name="tabTitle" type="java.lang.String" value="Strike"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -176,45 +171,15 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="rEPElectionPanel1" alignment="0" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="972" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="rEPElectionPanel1" alignment="0" pref="575" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="619" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
-          <SubComponents>
-            <Component class="parker.serb.REP.REPElectionPanel" name="rEPElectionPanel1">
-            </Component>
-          </SubComponents>
-        </Container>
-        <Container class="javax.swing.JPanel" name="jPanel7">
-          <Constraints>
-            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Mediation">
-                <Property name="tabTitle" type="java.lang.String" value="Mediation"/>
-              </JTabbedPaneConstraints>
-            </Constraint>
-          </Constraints>
-
-          <Layout>
-            <DimensionLayout dim="0">
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="rEPMediationPanel1" alignment="0" pref="1028" max="32767" attributes="0"/>
-              </Group>
-            </DimensionLayout>
-            <DimensionLayout dim="1">
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="rEPMediationPanel1" alignment="0" pref="575" max="32767" attributes="0"/>
-              </Group>
-            </DimensionLayout>
-          </Layout>
-          <SubComponents>
-            <Component class="parker.serb.REP.REPMediationPanel" name="rEPMediationPanel1">
-            </Component>
-          </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="jPanel8">
           <Constraints>
@@ -233,7 +198,7 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="notesPanel2" alignment="0" pref="575" max="32767" attributes="0"/>
+                  <Component id="notesPanel2" alignment="0" pref="619" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>

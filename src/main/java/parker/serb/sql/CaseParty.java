@@ -311,6 +311,146 @@ public class CaseParty {
         return partyID;
     }
     
+    public static String getCasePartyByIDForElection(int id) {
+        String party = null;
+        
+        try {
+            
+            if(id == 0) {
+                return "No Representative";
+            }
+            
+
+            Statement stmt = Database.connectToDB().createStatement();
+            
+            String sql = "Select * from CaseParty"
+                    + " where id = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+            
+            ResultSet casePartyRS = preparedStatement.executeQuery();
+            
+            while(casePartyRS.next()) {
+//                party = new CaseParty();
+//                party.id = casePartyRS.getInt("id");
+//                party.caseYear = casePartyRS.getString("caseYear");
+//                party.caseType = casePartyRS.getString("caseType");
+//                party.caseMonth = casePartyRS.getString("caseMonth");
+//                party.caseNumber = casePartyRS.getString("caseNumber");
+//                party.partyID = casePartyRS.getInt("partyID");
+//                party.caseRelation = casePartyRS.getString("caseRelation");
+//                party.prefix = casePartyRS.getString("prefix");
+//                party.firstName = casePartyRS.getString("firstName");
+//                party.middleInitial = casePartyRS.getString("middleInitial");
+//                party.lastName = casePartyRS.getString("lastName");
+//                party.suffix = casePartyRS.getString("suffix");
+//                party.nameTitle = casePartyRS.getString("nameTitle");
+//                party.jobTitle = casePartyRS.getString("jobTitle");
+//                party.companyName = casePartyRS.getString("companyName");
+//                party.address1 = casePartyRS.getString("address1");
+//                party.address2 = casePartyRS.getString("address2");
+//                party.address3 = casePartyRS.getString("address3");
+//                party.city = casePartyRS.getString("city");
+//                party.stateCode = casePartyRS.getString("stateCode");
+//                party.zipcode = casePartyRS.getString("zipcode");
+//                party.phone1 = casePartyRS.getString("phone1") == null ? "" : NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("phone1"));
+//                party.phone2 = casePartyRS.getString("phone2") == null ? "" : NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("phone2"));
+//                party.emailAddress = casePartyRS.getString("email");
+//                
+                if(casePartyRS.getString("companyName") == null) {
+                    party = casePartyRS.getString("firstName") + " " + casePartyRS.getString("LastName");
+                } else {
+                    party = casePartyRS.getString("companyName");
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return party;
+    }
+    
+    public static int getElectionID(String name) {
+        int partyID = 0;
+        
+        try {
+
+            Statement stmt = Database.connectToDB().createStatement();
+            
+            String sql = "Select COUNT(*) AS THERE from CaseParty"
+                    + " where companyName = ?"
+                    + " and caseYear = ?"
+                    + " and caseType = ?"
+                    + " and caseMonth = ?"
+                    + " and caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, Global.caseYear);
+            preparedStatement.setString(3, Global.caseType);
+            preparedStatement.setString(4, Global.caseMonth);
+            preparedStatement.setString(5, Global.caseNumber);
+            
+            ResultSet casePartyRS = preparedStatement.executeQuery();
+            
+            casePartyRS.next();
+            
+            if(casePartyRS.getInt("THERE") > 0) {
+                Statement stmt2 = Database.connectToDB().createStatement();
+            
+                String sql2 = "Select id from CaseParty"
+                        + " where companyName = ?"
+                        + " and caseYear = ? "
+                        + " and caseType = ?"
+                        + " and caseMonth = ?"
+                        + " and caseNumber = ?";
+
+                PreparedStatement preparedStatement2 = stmt2.getConnection().prepareStatement(sql2);
+                preparedStatement2.setString(1, name);
+                preparedStatement2.setString(2, Global.caseYear);
+                preparedStatement2.setString(3, Global.caseType);
+                preparedStatement2.setString(4, Global.caseMonth);
+                preparedStatement2.setString(5, Global.caseNumber);
+
+                ResultSet casePartyRS2 = preparedStatement2.executeQuery();
+                
+                if(casePartyRS2.next()) {
+                    partyID = casePartyRS2.getInt("id");
+                }
+                
+                
+                
+            } else {
+                Statement stmt3 = Database.connectToDB().createStatement();
+            
+                String sql3 = "Select id from CaseParty"
+                        + " where firstName = ? and LastName = ?"
+                        + " and caseYear = ? "
+                        + " and caseType = ?"
+                        + " and caseMonth = ?"
+                        + " and caseNumber = ?";
+
+                PreparedStatement preparedStatement3 = stmt3.getConnection().prepareStatement(sql3);
+                preparedStatement3.setString(1, name.split(" ")[0]);
+                preparedStatement3.setString(2, name.split(" ")[1]);
+                preparedStatement3.setString(3, Global.caseYear);
+                preparedStatement3.setString(4, Global.caseType);
+                preparedStatement3.setString(5, Global.caseMonth);
+                preparedStatement3.setString(6, Global.caseNumber);
+
+                ResultSet casePartyRS3 = preparedStatement3.executeQuery();
+                
+                if(casePartyRS3.next()) {
+                    partyID = casePartyRS3.getInt("id");
+                } 
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return partyID;
+    }
+    
     public static CaseParty getCasePartyByID(String id) {
         CaseParty party = null;
         
@@ -369,7 +509,7 @@ public class CaseParty {
             
             String sql = "Select partyID, caseRelation, prefix, "
                     + " firstName, middleInitial, lastName, suffix,"
-                    + " nameTitle from caseParty"
+                    + " nameTitle, companyName from caseParty"
                     + " where caseYear = ?"
                     + " AND caseType = ?"
                     + " AND caseMonth = ?"
@@ -394,6 +534,7 @@ public class CaseParty {
                 party.lastName = casePartyRS.getString("lastName");
                 party.suffix = casePartyRS.getString("suffix");
                 party.nameTitle = casePartyRS.getString("nameTitle");
+                party.companyName = casePartyRS.getString("companyName");
                 parties.add(party);
             }
         } catch (SQLException ex) {

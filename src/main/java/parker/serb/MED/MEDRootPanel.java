@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package parker.serb.ULP;
+package parker.serb.MED;
 
+import parker.serb.MED.*;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
@@ -19,26 +20,30 @@ import parker.serb.util.CancelUpdate;
  *
  * @author parker
  */
-public class ULPRootPanel extends javax.swing.JPanel {
+public class MEDRootPanel extends javax.swing.JPanel {
 
     String currentTab = "Activity";
     boolean singleFire = true;
     /**
      * Creates new form REPRootPanel
      */
-    public ULPRootPanel() {
+    public MEDRootPanel() {
         initComponents();
         addListeners();
+        jTabbedPane1.remove(5);
+        jTabbedPane1.remove(3);
+        jTabbedPane1.remove(1);
     }
     
     /**
      * Removes all content from previous stored cases
      */
     void clearAll() {
-        Global.root.getuLPHeaderPanel1().clearAll();
+        Global.root.getmEDHeaderPanel1().clearAll();
         activityPanel1.clearAll();
         partiesPanel1.clearAll();
         notesPanel2.clearAll();
+        mEDConciliationPanel2.clearAll();
     }
     
     private void addListeners() {
@@ -65,18 +70,18 @@ public class ULPRootPanel extends javax.swing.JPanel {
             case "Parties":
                 partiesPanel1.loadParties();
                 break;
-            case "Status":
-                uLPStatusPanel1.loadInformation();
+//            case "Status":
+//                uLPStatusPanel1.loadInformation();
+//                break;
+//            case "Statement":
+//                uLPStatement1.loadInformation();
+//                break;
+            case "Conciliation":
+                mEDConciliationPanel2.loadInformation();
                 break;
-            case "Statement":
-                uLPStatement1.loadInformation();
-                break;
-            case "Recommendation":
-                uLPRecommendation1.loadInformation();
-                break;
-            case "Investigation Reveals":
-                uLPInvestigationReveals1.loadInformation();
-                break;
+//            case "Strike":
+//                uLPInvestigationReveals1.loadInformation();
+//                break;
             case "Notes":
                 notesPanel2.loadInformation();
                 break;
@@ -107,30 +112,30 @@ public class ULPRootPanel extends javax.swing.JPanel {
                 Global.root.getjButton2().setEnabled(true);
                 Global.root.getjButton9().setVisible(true);
                 break;
-            case "Status":
+//            case "Status":
+//                System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
+//                Global.root.getjButton2().setText("Update");
+//                Global.root.getjButton2().setEnabled(true);
+//                Global.root.getjButton9().setVisible(false);
+//                break;
+//            case "Statement":
+//                System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
+//                Global.root.getjButton2().setText("Update");
+//                Global.root.getjButton2().setEnabled(true);
+//                Global.root.getjButton9().setVisible(false);
+//                break;
+            case "Conciliation":
                 System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
                 Global.root.getjButton2().setText("Update");
                 Global.root.getjButton2().setEnabled(true);
                 Global.root.getjButton9().setVisible(false);
                 break;
-            case "Statement":
-                System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
-                Global.root.getjButton2().setText("Update");
-                Global.root.getjButton2().setEnabled(true);
-                Global.root.getjButton9().setVisible(false);
-                break;
-            case "Recommendation":
-                System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
-                Global.root.getjButton2().setText("Update");
-                Global.root.getjButton2().setEnabled(true);
-                Global.root.getjButton9().setVisible(false);
-                break;
-            case "Investigation Reveals":
-                System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
-                Global.root.getjButton2().setText("Update");
-                Global.root.getjButton2().setEnabled(true);
-                Global.root.getjButton9().setVisible(false);
-                break;
+//            case "Strike":
+//                System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
+//                Global.root.getjButton2().setText("Update");
+//                Global.root.getjButton2().setEnabled(true);
+//                Global.root.getjButton9().setVisible(false);
+//                break;
             case "Notes":
                 System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
                 Global.root.getjButton2().setText("Update");
@@ -163,7 +168,7 @@ public class ULPRootPanel extends javax.swing.JPanel {
      * Uses the currently selected panel index
      * @param buttonText the text of the current button
      */
-    public void ulpUpdate(String buttonText) {
+    public void medUpdate(String buttonText) {
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
             case "Activity":
                 activityPanel1.loadAllActivity();
@@ -171,56 +176,56 @@ public class ULPRootPanel extends javax.swing.JPanel {
             case "Parties":
                 new PartySearchDialog((JFrame) this.getRootPane().getParent(), true);
                 partiesPanel1.loadParties();
-                Global.root.getuLPHeaderPanel1().loadHeaderInformation();
-                ULPCaseSearchData.updateCaseEntryFromParties(
-                        Global.root.getuLPHeaderPanel1().getChargedPartyTextBox().getText().trim(),
-                        Global.root.getuLPHeaderPanel1().getChargingPartyTextBox().getText().trim());
+                Global.root.getmEDHeaderPanel1().loadHeaderInformation();
+//                ULPCaseSearchData.updateCaseEntryFromParties(
+//                        Global.root.getuLPHeaderPanel1().getChargedPartyTextBox().getText().trim(),
+//                        Global.root.getuLPHeaderPanel1().getChargingPartyTextBox().getText().trim());
                 break;
-            case "Status":
+//            case "Status":
+//                if(buttonText.equals("Update")) {
+//                    disableTabs(jTabbedPane1.getSelectedIndex());
+//                    uLPStatusPanel1.enableUpdate();
+//                } else {
+//                    enableTabs();
+//                    Global.root.enableTabsAfterSave();
+//                    Global.root.enableButtonsAfterCancel();
+//                    uLPStatusPanel1.disableUpdate(true);
+//                    Global.root.getuLPHeaderPanel1().loadHeaderInformation();
+//                }
+//                break;
+//            case "Statement":
+//                if(buttonText.equals("Update")) {
+//                    disableTabs(jTabbedPane1.getSelectedIndex());
+//                    uLPStatement1.enableUpdate();
+//                } else {
+//                    enableTabs();
+//                    Global.root.enableTabsAfterSave();
+//                    Global.root.enableButtonsAfterCancel();
+//                    uLPStatement1.disableUpdate(true);
+//                }
+//                break;
+            case "Conciliation":
                 if(buttonText.equals("Update")) {
                     disableTabs(jTabbedPane1.getSelectedIndex());
-                    uLPStatusPanel1.enableUpdate();
+                    mEDConciliationPanel2.enableUpdate();
                 } else {
                     enableTabs();
                     Global.root.enableTabsAfterSave();
                     Global.root.enableButtonsAfterCancel();
-                    uLPStatusPanel1.disableUpdate(true);
-                    Global.root.getuLPHeaderPanel1().loadHeaderInformation();
+                    mEDConciliationPanel2.disableUpdate(true);
                 }
                 break;
-            case "Statement":
-                if(buttonText.equals("Update")) {
-                    disableTabs(jTabbedPane1.getSelectedIndex());
-                    uLPStatement1.enableUpdate();
-                } else {
-                    enableTabs();
-                    Global.root.enableTabsAfterSave();
-                    Global.root.enableButtonsAfterCancel();
-                    uLPStatement1.disableUpdate(true);
-                }
-                break;
-            case "Recommendation":
-                if(buttonText.equals("Update")) {
-                    disableTabs(jTabbedPane1.getSelectedIndex());
-                    uLPRecommendation1.enableUpdate();
-                } else {
-                    enableTabs();
-                    Global.root.enableTabsAfterSave();
-                    Global.root.enableButtonsAfterCancel();
-                    uLPRecommendation1.disableUpdate(true);
-                }
-                break;
-            case "Investigation Reveals":
-                if(buttonText.equals("Update")) {
-                    disableTabs(jTabbedPane1.getSelectedIndex());
-                    uLPInvestigationReveals1.enableUpdate();
-                } else {
-                    enableTabs();
-                    Global.root.enableTabsAfterSave();
-                    Global.root.enableButtonsAfterCancel();
-                    uLPInvestigationReveals1.disableUpdate(true);
-                }
-                break;
+//            case "Strike":
+//                if(buttonText.equals("Update")) {
+//                    disableTabs(jTabbedPane1.getSelectedIndex());
+//                    uLPInvestigationReveals1.enableUpdate();
+//                } else {
+//                    enableTabs();
+//                    Global.root.enableTabsAfterSave();
+//                    Global.root.enableButtonsAfterCancel();
+//                    uLPInvestigationReveals1.disableUpdate(true);
+//                }
+//                break;
             case "Notes":
                 if(buttonText.equals("Update")) {
                     disableTabs(jTabbedPane1.getSelectedIndex());
@@ -239,60 +244,61 @@ public class ULPRootPanel extends javax.swing.JPanel {
      * Determines if the delete button should be enabled, as well as the desired
      * functionality
      */
-    public void ulpDelete() {
+    public void medDelete() {
         CancelUpdate cancel;
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
             case "Activity":
                 break;
             case "Parties":
                 partiesPanel1.removeParty();
-                Global.root.getuLPHeaderPanel1().loadHeaderInformation();
-                ULPCaseSearchData.updateCaseEntryFromParties(
-                        Global.root.getuLPHeaderPanel1().getChargedPartyTextBox().getText().trim(),
-                        Global.root.getuLPHeaderPanel1().getChargingPartyTextBox().getText().trim());
+                partiesPanel1.loadParties();
+                Global.root.getmEDHeaderPanel1().loadHeaderInformation();
+//                ULPCaseSearchData.updateCaseEntryFromParties(
+//                        Global.root.getmEDHeaderPanel1().getChargedPartyTextBox().getText().trim(),
+//                        Global.root.getmEDHeaderPanel1().getChargingPartyTextBox().getText().trim());
                 break;
-            case "Status":
+//            case "Status":
+//                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+//                if(!cancel.isReset()) {
+//                } else {
+//                    Global.root.enableButtonsAfterCancel();
+//                    Global.root.enableTabsAfterSave();
+//                    enableTabs();
+//                    uLPStatusPanel1.disableUpdate(false);
+//                }
+//                break;
+//            case "Statement":
+//                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+//                if(!cancel.isReset()) {
+//                } else {
+//                    Global.root.enableButtonsAfterCancel();
+//                    Global.root.enableTabsAfterSave();
+//                    enableTabs();
+//                    uLPStatement1.disableUpdate(false);
+//                }
+//                break;
+            case "Conciliation":
                 cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
                 if(!cancel.isReset()) {
                 } else {
                     Global.root.enableButtonsAfterCancel();
                     Global.root.enableTabsAfterSave();
                     enableTabs();
-                    uLPStatusPanel1.disableUpdate(false);
+                    mEDConciliationPanel2.disableUpdate(false);
                 }
                 break;
-            case "Statement":
-                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
-                if(!cancel.isReset()) {
-                } else {
-                    Global.root.enableButtonsAfterCancel();
-                    Global.root.enableTabsAfterSave();
-                    enableTabs();
-                    uLPStatement1.disableUpdate(false);
-                }
-                break;
-            case "Recommendation":
-                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
-                if(!cancel.isReset()) {
-                } else {
-                    Global.root.enableButtonsAfterCancel();
-                    Global.root.enableTabsAfterSave();
-                    enableTabs();
-                    uLPRecommendation1.disableUpdate(false);
-                }
-                break;
-            case "Investigation Reveals":
-                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
-                if(!cancel.isReset()) {
-                } else {
-                    Global.root.enableButtonsAfterCancel();
-                    Global.root.enableTabsAfterSave();
-                    enableTabs();
-                    uLPInvestigationReveals1.disableUpdate(false);
-                }
-                break;
+//            case "Strike":
+//                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+//                if(!cancel.isReset()) {
+//                } else {
+//                    Global.root.enableButtonsAfterCancel();
+//                    Global.root.enableTabsAfterSave();
+//                    enableTabs();
+//                    uLPInvestigationReveals1.disableUpdate(false);
+//                }
+//                break;
             case "Notes":
-                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+                cancel = new CancelUpdate(Global.root, true);
                 if(!cancel.isReset()) {
                 } else {
                     Global.root.enableButtonsAfterCancel();
@@ -331,16 +337,13 @@ public class ULPRootPanel extends javax.swing.JPanel {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         activityPanel1 = new parker.serb.activity.ActivityPanel();
+        jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         partiesPanel1 = new parker.serb.party.PartiesPanel();
         jPanel4 = new javax.swing.JPanel();
-        uLPStatusPanel1 = new parker.serb.ULP.ULPStatusPanel();
         jPanel5 = new javax.swing.JPanel();
-        uLPStatement1 = new parker.serb.ULP.ULPStatement();
+        mEDConciliationPanel2 = new parker.serb.MED.MEDConciliationPanel();
         jPanel6 = new javax.swing.JPanel();
-        uLPRecommendation1 = new parker.serb.ULP.ULPRecommendationPanel();
-        jPanel7 = new javax.swing.JPanel();
-        uLPInvestigationReveals1 = new parker.serb.ULP.ULPInvestigationReveals();
         jPanel8 = new javax.swing.JPanel();
         notesPanel2 = new parker.serb.notes.NotesPanel();
 
@@ -356,6 +359,19 @@ public class ULPRootPanel extends javax.swing.JPanel {
         );
 
         jTabbedPane1.addTab("Activity", jPanel1);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 972, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 619, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Information", jPanel2);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -374,55 +390,40 @@ public class ULPRootPanel extends javax.swing.JPanel {
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(uLPStatusPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1028, Short.MAX_VALUE)
+            .addGap(0, 972, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(uLPStatusPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
+            .addGap(0, 619, Short.MAX_VALUE)
         );
 
-        uLPStatusPanel1.getAccessibleContext().setAccessibleName("Status");
-
-        jTabbedPane1.addTab("Status", jPanel4);
+        jTabbedPane1.addTab("Fact Finder Selection", jPanel4);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(uLPStatement1, javax.swing.GroupLayout.DEFAULT_SIZE, 1028, Short.MAX_VALUE)
+            .addComponent(mEDConciliationPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 972, Short.MAX_VALUE)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(uLPStatement1, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
+            .addComponent(mEDConciliationPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("Statement", jPanel5);
+        jTabbedPane1.addTab("Conciliation", jPanel5);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(uLPRecommendation1, javax.swing.GroupLayout.DEFAULT_SIZE, 1028, Short.MAX_VALUE)
+            .addGap(0, 972, Short.MAX_VALUE)
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(uLPRecommendation1, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
+            .addGap(0, 619, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("Recommendation", jPanel6);
-
-        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(uLPInvestigationReveals1, javax.swing.GroupLayout.DEFAULT_SIZE, 1028, Short.MAX_VALUE)
-        );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(uLPInvestigationReveals1, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
-        );
-
-        jTabbedPane1.addTab("Investigation Reveals", jPanel7);
+        jTabbedPane1.addTab("Strike", jPanel6);
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -454,19 +455,16 @@ public class ULPRootPanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private parker.serb.activity.ActivityPanel activityPanel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private parker.serb.MED.MEDConciliationPanel mEDConciliationPanel2;
     private parker.serb.notes.NotesPanel notesPanel2;
     private parker.serb.party.PartiesPanel partiesPanel1;
     private parker.serb.REP.REPCaseInformationPanel rEPCaseInformationPanel1;
-    private parker.serb.ULP.ULPInvestigationReveals uLPInvestigationReveals1;
-    private parker.serb.ULP.ULPRecommendationPanel uLPRecommendation1;
-    private parker.serb.ULP.ULPStatement uLPStatement1;
-    private parker.serb.ULP.ULPStatusPanel uLPStatusPanel1;
     // End of variables declaration//GEN-END:variables
 }

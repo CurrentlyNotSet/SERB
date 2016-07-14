@@ -5,18 +5,19 @@
  */
 package parker.serb.MED;
 
-import parker.serb.ULP.*;
-import parker.serb.REP.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 import parker.serb.Global;
 import parker.serb.sql.Audit;
 import parker.serb.sql.CaseParty;
-import parker.serb.sql.Party;
-import parker.serb.sql.REPCase;
+import parker.serb.sql.MEDCase;
+import parker.serb.util.CaseNotFoundDialog;
+import parker.serb.util.NumberFormatService;
 
 //
 
@@ -26,6 +27,8 @@ import parker.serb.sql.REPCase;
  */
 public class MEDHeaderPanel extends javax.swing.JPanel {
 
+    MEDCaseSearch search = null;
+    
     /**
      * Creates new form REPHeaderPanel
      */
@@ -35,123 +38,148 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
     }
     
     private void addListeners() {
-//        caseNumberComboBox.addActionListener((ActionEvent e) -> {
-//            if(caseNumberComboBox.getSelectedItem() != null) {
-//                Global.root.getrEPRootPanel1().getjTabbedPane1().setSelectedIndex(0);
-//                if(caseNumberComboBox.getSelectedItem().toString().trim().equals("")) {
-//                    if(Global.root != null) {
-//                        Global.root.getjButton2().setText("Update");
-//                        Global.root.getjButton2().setEnabled(false);
-//                        Global.caseNumber = null;
-//                        Global.root.getrEPRootPanel1().clearAll();
-//                    }
-//                } else {
-//                    loadInformation();
-//                    if(Global.root.getrEPRootPanel1().getjTabbedPane1().getSelectedIndex() == 0)
-//                        Global.root.getrEPRootPanel1().getActivityPanel1().loadAllActivity();
-//                    Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
-//                }
-//            }
-//        });
+        caseNumberComboBox.addActionListener((ActionEvent e) -> {
+            if(caseNumberComboBox.getSelectedItem() != null) {
+                Global.root.getmEDRootPanel1().getjTabbedPane1().setSelectedIndex(0);
+                if(caseNumberComboBox.getSelectedItem().toString().trim().equals("")) {
+                    if(Global.root != null) {
+                        Global.root.getjButton2().setText("Update");
+                        Global.root.getjButton2().setEnabled(false);
+                        Global.caseYear = null;
+                        Global.caseType = null;
+                        Global.caseMonth = null;
+                        Global.caseNumber = null;
+                        Global.root.getmEDRootPanel1().clearAll();
+                    }
+                } else {
+                    loadInformation();
+                    if(Global.root.getmEDRootPanel1().getjTabbedPane1().getSelectedIndex() == 0)
+                        Global.root.getmEDRootPanel1().getActivityPanel1().loadAllActivity();
+                    Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
+                }
+            }
+        });
     }
     
     private void loadInformation() {
-//        Global.caseNumber = caseNumberComboBox.getSelectedItem().toString().trim();
-//        loadHeaderInformation();
+        if(caseNumberComboBox.getSelectedItem().toString().trim().length() == 16) {
+            NumberFormatService.parseFullCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim());
+            loadHeaderInformation();
+        } else {
+            new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());  
+        }
     }
     
     public void loadHeaderInformation() {
-//        String employer = "";
-//        String employeeOrg = "";
-//        String incumbentEEO = "";
-//        String rivalEEO = "";
-//        
-//        
-//        if(Global.caseNumber != null) {
-//            REPCase rep = REPCase.loadHeaderInformation();
-//            if(rep == null) {
+        String employer = "";
+        String employerREP = "";
+        String employeeOrg = "";
+        String employeeOrgREP = "";
+        
+        if(Global.caseNumber != null) {
+            MEDCase med = MEDCase.loadHeaderInformation();
+            if(med == null) {
 //                new REPCaseNotFound((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
 //                caseNumberComboBox.setSelectedItem(Global.caseNumber);
-//            } else {
-//                filedDateTextBox.setText(rep.fileDate != null ? Global.mmddyyyy.format(new Date(rep.fileDate.getTime())) : "");
+            } else {
+                fileDateTextBox.setText(med.fileDate != null ? Global.mmddyyyy.format(new Date(med.fileDate.getTime())) : "");
 //                closedDateTextBox.setText(rep.courtClosedDate != null ? Global.mmddyyyy.format(new Date(rep.courtClosedDate.getTime())) : "");
 //                currentStatusTextBox.setText(rep.status1 != null ? rep.status1 : "");
 //                caseTypeTextBox.setText(rep.caseType != null ? rep.caseType : "");
 //                bargainingUnitTextBox.setText(rep.bargainingUnitNumber != null ? rep.bargainingUnitNumber : "");
-//
-//                List caseParties = CaseParty.loadPartiesByCase();
-//
-//                for(Object caseParty: caseParties) {
-//                    CaseParty partyInformation = (CaseParty) caseParty;
-//
-//                    switch (partyInformation.type) {
-//                        case "Employer":
-//                            if(employer.equals("")) {
-//                                employer += partyInformation.name;
-//                            } else {
-//                                employer += ", " + partyInformation.name;
-//                            }
-//                            break;
-//                        case "Employee Organization":
-//                            if(employeeOrg.equals("")) {
-//                                employeeOrg += partyInformation.name;
-//                            } else {
-//                                employeeOrg += ", " + partyInformation.name;
-//                            }
-//                            break;
-//                        case "Incumbent Employee Organization":
-//                            if(incumbentEEO.equals("")) {
-//                                incumbentEEO += partyInformation.name;
-//                            } else {
-//                                incumbentEEO += ", " + partyInformation.name;
-//                            }
-//                            break;
-//                        case "Rival Employee Organization":
-//                            if(rivalEEO.equals("")) {
-//                                rivalEEO += partyInformation.name;
-//                            } else {
-//                                rivalEEO += ", " + partyInformation.name;
-//                            }
-//                            break;
-//                    }
-//                }
-//                employerTextBox.setText(employer);
-//                employeeOrgTextBox.setText(employeeOrg);
-//                incumbentEEOTextBox.setText(incumbentEEO);
-//                rivalEEOTextBox.setText(rivalEEO);
-//            }
-//        }
+
+                List caseParties = CaseParty.loadPartiesByCase();
+
+                for(Object caseParty: caseParties) {
+                    CaseParty partyInformation = (CaseParty) caseParty;
+                    
+                    String name;
+                    
+                    if(partyInformation.firstName.equals("") && partyInformation.lastName.equals("")) {
+                        name = partyInformation.companyName;
+                    } else {
+                        name = (partyInformation.prefix.equals("") ? "" : (partyInformation.prefix + " "))
+                        + (partyInformation.firstName.equals("") ? "" : (partyInformation.firstName + " "))
+                        + (partyInformation.middleInitial.equals("") ? "" : (partyInformation.middleInitial + ". "))
+                        + (partyInformation.lastName.equals("") ? "" : (partyInformation.lastName))
+                        + (partyInformation.suffix.equals("") ? "" : (" " + partyInformation.suffix))
+                        + (partyInformation.nameTitle.equals("") ? "" : (", " + partyInformation.nameTitle));
+                    }
+
+                    
+                            
+
+                    switch (partyInformation.caseRelation) {
+                        case "Employer":
+                            if(employer.equals("")) {
+                                employer += name;
+                            } else {
+                                employer += ", " + name;
+                            }
+                            break;
+                        case "Employer REP":
+                            if(employerREP.equals("")) {
+                                employerREP += name;
+                            } else {
+                                employerREP += ", " + name;
+                            }
+                            break;
+                        case "Employee Organization":
+                            if(employeeOrg.equals("")) {
+                                employeeOrg += name;
+                            } else {
+                                employeeOrg += ", " + name;
+                            }
+                            break;
+                        case "Employee Organization REP":
+                            if(employeeOrgREP.equals("")) {
+                                employeeOrgREP += name;
+                            } else {
+                                employeeOrgREP += ", " + name;
+                            }
+                            break;
+                    }
+                }
+                employerTextBox.setText(employer);
+                employerTextBox.setCaretPosition(0);
+                employerRepTextBox.setText(employerREP);
+                employerRepTextBox.setCaretPosition(0);
+                employeeOrgTextBox.setText(employeeOrg);
+                employeeOrgTextBox.setCaretPosition(0);
+                employeeOrgRepTextBox.setText(employeeOrgREP);
+                employeeOrgRepTextBox.setCaretPosition(0);
+            }
+        }
     }
     
     public void loadCases() {
         caseNumberComboBox.removeAllItems();
         caseNumberComboBox.addItem("");
 
-        List caseNumberList = REPCase.loadREPCaseNumbers();
+        List caseNumberList = MEDCase.loadMEDCaseNumbers();
         
         caseNumberList.stream().forEach((caseNumber) -> {
             caseNumberComboBox.addItem(caseNumber.toString());
         });
     }
     
-    /**
-     * 
-     */
     void clearAll() {
         employerTextBox.setText("");
+        employerRepTextBox.setText("");
         employeeOrgTextBox.setText("");
-        incumbentEEOTextBox.setText("");
-        rivalEEOTextBox.setText("");
+        employeeOrgRepTextBox.setText("");
         closedDateTextBox.setText("");
 //        currentStatusTextBox.setText("");
-        caseTypeTextBox.setText("");
+        fileDateTextBox.setText("");
 //        bargainingUnitTextBox.setText("");
-        filedDateTextBox.setText("");
+        mediatorTextBox.setText("");
     }
 
     public JComboBox getjComboBox2() {
         return caseNumberComboBox;
     }
+    
+    
     
     
     
@@ -172,18 +200,18 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         employerTextBox = new javax.swing.JTextField();
-        employeeOrgTextBox = new javax.swing.JTextField();
+        employerRepTextBox = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        incumbentEEOTextBox = new javax.swing.JTextField();
-        rivalEEOTextBox = new javax.swing.JTextField();
+        employeeOrgTextBox = new javax.swing.JTextField();
+        employeeOrgRepTextBox = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
-        filedDateTextBox = new javax.swing.JTextField();
+        mediatorTextBox = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         closedDateTextBox = new javax.swing.JTextField();
-        caseTypeTextBox = new javax.swing.JTextField();
+        fileDateTextBox = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         rivalEEOTextBox2 = new javax.swing.JTextField();
 
@@ -195,6 +223,11 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
         setLayout(new java.awt.GridLayout(1, 0));
 
         jLabel11.setText("Case Number:");
+        jLabel11.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel11MouseClicked(evt);
+            }
+        });
 
         caseNumberComboBox.setEditable(true);
         caseNumberComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -211,18 +244,18 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
             }
         });
 
-        employeeOrgTextBox.setEditable(false);
-        employeeOrgTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        employerRepTextBox.setEditable(false);
+        employerRepTextBox.setBackground(new java.awt.Color(238, 238, 238));
 
         jLabel3.setText("Employee Org:");
 
         jLabel4.setText("Employee Org REP:");
 
-        incumbentEEOTextBox.setEditable(false);
-        incumbentEEOTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        employeeOrgTextBox.setEditable(false);
+        employeeOrgTextBox.setBackground(new java.awt.Color(238, 238, 238));
 
-        rivalEEOTextBox.setEditable(false);
-        rivalEEOTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        employeeOrgRepTextBox.setEditable(false);
+        employeeOrgRepTextBox.setBackground(new java.awt.Color(238, 238, 238));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -240,9 +273,9 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(caseNumberComboBox, 0, 200, Short.MAX_VALUE)
                     .addComponent(employerTextBox)
+                    .addComponent(employerRepTextBox)
                     .addComponent(employeeOrgTextBox)
-                    .addComponent(incumbentEEOTextBox)
-                    .addComponent(rivalEEOTextBox))
+                    .addComponent(employeeOrgRepTextBox))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -260,15 +293,15 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(employeeOrgTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(employerRepTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(incumbentEEOTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(employeeOrgTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(rivalEEOTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(employeeOrgRepTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
                 .addContainerGap(12, Short.MAX_VALUE))
         );
@@ -277,8 +310,8 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
 
         jLabel12.setText("Mediator:");
 
-        filedDateTextBox.setEditable(false);
-        filedDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        mediatorTextBox.setEditable(false);
+        mediatorTextBox.setBackground(new java.awt.Color(238, 238, 238));
 
         jLabel5.setText("Mediator Phone:");
 
@@ -287,8 +320,8 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
         closedDateTextBox.setEditable(false);
         closedDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
 
-        caseTypeTextBox.setEditable(false);
-        caseTypeTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        fileDateTextBox.setEditable(false);
+        fileDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
 
         jLabel8.setText("Status:");
 
@@ -308,9 +341,9 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
                     .addComponent(jLabel8))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(filedDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                    .addComponent(mediatorTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
                     .addComponent(closedDateTextBox)
-                    .addComponent(caseTypeTextBox)
+                    .addComponent(fileDateTextBox)
                     .addComponent(rivalEEOTextBox2))
                 .addContainerGap())
         );
@@ -320,14 +353,14 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel12)
-                    .addComponent(filedDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(mediatorTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(closedDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
                 .addGap(40, 40, 40)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(caseTypeTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(fileDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -343,15 +376,25 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_employerTextBoxActionPerformed
 
+    private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
+        if(SwingUtilities.isRightMouseButton(evt) || evt.getButton() == MouseEvent.BUTTON3) {
+            if(search == null) {
+                search = new MEDCaseSearch((JFrame) getRootPane().getParent(), true);
+            } else {
+                search.setVisible(true);
+            }
+        }
+    }//GEN-LAST:event_jLabel11MouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox caseNumberComboBox;
-    private javax.swing.JTextField caseTypeTextBox;
     private javax.swing.JTextField closedDateTextBox;
+    private javax.swing.JTextField employeeOrgRepTextBox;
     private javax.swing.JTextField employeeOrgTextBox;
+    private javax.swing.JTextField employerRepTextBox;
     private javax.swing.JTextField employerTextBox;
-    private javax.swing.JTextField filedDateTextBox;
-    private javax.swing.JTextField incumbentEEOTextBox;
+    private javax.swing.JTextField fileDateTextBox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -364,7 +407,7 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JTextField rivalEEOTextBox;
+    private javax.swing.JTextField mediatorTextBox;
     private javax.swing.JTextField rivalEEOTextBox1;
     private javax.swing.JTextField rivalEEOTextBox2;
     // End of variables declaration//GEN-END:variables

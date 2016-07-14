@@ -51,7 +51,11 @@ public class REPCaseDetailsPanel extends javax.swing.JPanel {
         bargainingUnitExcludedTextArea.setText(repCase.bargainingUnitExcluded);
         
         //hide/show opt in text area
-        if(repCase.type.equalsIgnoreCase("Opt-In VR") ||
+        if(repCase.type == null) {
+            optInIncludedLabel.setVisible(false);
+            optInIncludedScrollPane.setVisible(false);
+            optInIncludedTextArea.setText("");
+        } else if(repCase.type.equalsIgnoreCase("Opt-In VR") ||
                 repCase.type.equalsIgnoreCase("Opt-In RC")) {
             optInIncludedLabel.setVisible(true);
             optInIncludedScrollPane.setVisible(true);
@@ -76,7 +80,9 @@ public class REPCaseDetailsPanel extends javax.swing.JPanel {
             nonProfessionalExcludedTextArea.setText("");
         }
         
-        if(repCase.type.equalsIgnoreCase("AC") ||
+        if(repCase.type == null) {
+            displayCertificationsUnitChangeInformation(false);
+        } else if(repCase.type.equalsIgnoreCase("AC") ||
             repCase.type.equalsIgnoreCase("UC") ||
             repCase.type.equalsIgnoreCase("JTAC") ||
             repCase.type.equalsIgnoreCase("JTUC")) {
