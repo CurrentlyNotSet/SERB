@@ -76,7 +76,7 @@ public class PartySearchDialog extends javax.swing.JDialog {
             public void mouseClicked(MouseEvent e) {
                 if(e.getClickCount() == 2) {
 //                    if(duplicateParty()) {
-                        PartyTypeSelectionPanel partySelector = new PartyTypeSelectionPanel((JFrame) Global.root.getParent(), true, getPartyName(), getID());
+                        PartyTypeSelectionPanel partySelector = new PartyTypeSelectionPanel(Global.root, true, getPartyName(), getID());
                         if(partySelector.selected) {
                             dispose();
                         }
@@ -106,7 +106,7 @@ public class PartySearchDialog extends javax.swing.JDialog {
     }
     
     private String getPartyName() {
-        return jTable1.getValueAt(jTable1.getSelectedRow(), jTable1.getColumn("Name").getModelIndex()).toString();
+        return jTable1.getValueAt(jTable1.getSelectedRow(), jTable1.getColumn("Name").getModelIndex()).toString().equals("") ? jTable1.getValueAt(jTable1.getSelectedRow(), jTable1.getColumn("Company").getModelIndex()).toString() : jTable1.getValueAt(jTable1.getSelectedRow(), jTable1.getColumn("Name").getModelIndex()).toString();
     }
     
     private String getID() {

@@ -6,9 +6,6 @@
 package parker.serb.REP;
 
 import com.alee.extended.date.WebDateField;
-import com.alee.extended.panel.GroupPanel;
-import com.alee.extended.panel.WebButtonGroup;
-import com.alee.laf.button.WebToggleButton;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
@@ -25,6 +22,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
+import parker.serb.boardmeetings.RemoveBoardMeetingDialog;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.REPCase;
 import parker.serb.sql.REPElectionMultiCase;
@@ -52,11 +50,18 @@ public class REPElectionPanel extends javax.swing.JPanel {
         
         initComponents();
         addListeners();
+        setOnSiteTableColumnWidth();
         professionalButton.setSelected(true);
         resultsCard = (CardLayout)jPanel4.getLayout();
         siteCard = (CardLayout) jPanel14.getLayout();
         jPanel4.setVisible(false);
 //        hideNotRequiredInformation();
+    }
+    
+    private void setOnSiteTableColumnWidth() {
+        sitesTable.getColumnModel().getColumn(4).setPreferredWidth(0);
+        sitesTable.getColumnModel().getColumn(4).setMinWidth(0);
+        sitesTable.getColumnModel().getColumn(4).setMaxWidth(0);
     }
     
     private void addListeners() {
@@ -161,9 +166,6 @@ public class REPElectionPanel extends javax.swing.JPanel {
         jPanel4.setVisible(false);
         addMultiCaseElectionButton.setVisible(false);
         addSiteInformation.setVisible(false);
-//        professionalButton.setSelected(true);
-//        nonProfessionalButton.setSelected(false);
-//        combinedButton.setSelected(false);
     }
     
     private void hanldeProfessionalNonProfessionalElection(String headedTo) {
@@ -922,7 +924,8 @@ public class REPElectionPanel extends javax.swing.JPanel {
             model.addRow(new Object[] {
                 (siteData.siteDate == null ? "" : Global.mmddyyyy.format(siteData.siteDate.getTime())) 
                         + " "
-                        + (siteData.siteTime == null ? "" : Global.hmma.format(siteData.siteTime.getTime())), 
+                        + (siteData.siteStartTime == null ? "" : Global.hmma.format(siteData.siteStartTime.getTime()))
+                        + (siteData.siteEndTime == null ? "" : " - " + Global.hmma.format(siteData.siteEndTime.getTime())), 
                 siteData.sitePlace,
                 siteData.siteAddress1 + (siteData.siteAddress2 == null ? "" : ", " + siteData.siteAddress2),
                 siteData.siteLocation,
@@ -1239,6 +1242,11 @@ public class REPElectionPanel extends javax.swing.JPanel {
         jLabel9.setText("Site Information:");
 
         addSiteInformation.setText("+");
+        addSiteInformation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addSiteInformationActionPerformed(evt);
+            }
+        });
 
         sitesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -1265,6 +1273,11 @@ public class REPElectionPanel extends javax.swing.JPanel {
         });
         sitesTable.setMinimumSize(new java.awt.Dimension(60, 29));
         sitesTable.setPreferredSize(new java.awt.Dimension(300, 30));
+        sitesTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                sitesTableMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(sitesTable);
         if (sitesTable.getColumnModel().getColumnCount() > 0) {
             sitesTable.getColumnModel().getColumn(4).setResizable(false);
@@ -2571,6 +2584,25 @@ public class REPElectionPanel extends javax.swing.JPanel {
     private void resultsChallengedBallotsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_resultsChallengedBallotsKeyReleased
         sumResultsVotes();
     }//GEN-LAST:event_resultsChallengedBallotsKeyReleased
+
+    private void sitesTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sitesTableMouseClicked
+        if(Global.root.getjButton2().getText().equals("Save")) {
+            if(evt.getClickCount() == 2) {
+//            new REPUpdateMediationDialog((JFrame) Global.root.getRootPane().getParent(),
+//                    true,
+//                    mediationTable.getValueAt(mediationTable.getSelectedRow(),0).toString());
+//            loadAllMediations();
+            } else if(evt.getButton() == MouseEvent.BUTTON3) {
+                new RemoveSiteDialog(Global.root, true, (int)sitesTable.getValueAt(sitesTable.getSelectedRow(), 4));
+                loadSites();
+            }
+        }
+    }//GEN-LAST:event_sitesTableMouseClicked
+
+    private void addSiteInformationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addSiteInformationActionPerformed
+        new AddSiteElectionDialog(Global.root, true);
+        loadSites();
+    }//GEN-LAST:event_addSiteInformationActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

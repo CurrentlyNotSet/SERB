@@ -509,7 +509,7 @@ public class CaseParty {
             
             String sql = "Select partyID, caseRelation, prefix, "
                     + " firstName, middleInitial, lastName, suffix,"
-                    + " nameTitle from caseParty"
+                    + " nameTitle, companyName from caseParty"
                     + " where caseYear = ?"
                     + " AND caseType = ?"
                     + " AND caseMonth = ?"
@@ -534,6 +534,7 @@ public class CaseParty {
                 party.lastName = casePartyRS.getString("lastName");
                 party.suffix = casePartyRS.getString("suffix");
                 party.nameTitle = casePartyRS.getString("nameTitle");
+                party.companyName = casePartyRS.getString("companyName");
                 parties.add(party);
             }
         } catch (SQLException ex) {

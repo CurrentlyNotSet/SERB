@@ -5,8 +5,6 @@
  */
 package parker.serb.MED;
 
-import parker.serb.ULP.*;
-import parker.serb.REP.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.util.Date;
@@ -18,8 +16,6 @@ import parker.serb.Global;
 import parker.serb.sql.Audit;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.MEDCase;
-import parker.serb.sql.Party;
-import parker.serb.sql.REPCase;
 import parker.serb.util.CaseNotFoundDialog;
 import parker.serb.util.NumberFormatService;
 
@@ -96,13 +92,21 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
 
                 for(Object caseParty: caseParties) {
                     CaseParty partyInformation = (CaseParty) caseParty;
-
-                    String name = (partyInformation.prefix.equals("") ? "" : (partyInformation.prefix + " "))
+                    
+                    String name;
+                    
+                    if(partyInformation.firstName.equals("") && partyInformation.lastName.equals("")) {
+                        name = partyInformation.companyName;
+                    } else {
+                        name = (partyInformation.prefix.equals("") ? "" : (partyInformation.prefix + " "))
                         + (partyInformation.firstName.equals("") ? "" : (partyInformation.firstName + " "))
                         + (partyInformation.middleInitial.equals("") ? "" : (partyInformation.middleInitial + ". "))
                         + (partyInformation.lastName.equals("") ? "" : (partyInformation.lastName))
                         + (partyInformation.suffix.equals("") ? "" : (" " + partyInformation.suffix))
                         + (partyInformation.nameTitle.equals("") ? "" : (", " + partyInformation.nameTitle));
+                    }
+
+                    
                             
 
                     switch (partyInformation.caseRelation) {
@@ -137,9 +141,13 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
                     }
                 }
                 employerTextBox.setText(employer);
+                employerTextBox.setCaretPosition(0);
                 employerRepTextBox.setText(employerREP);
+                employerRepTextBox.setCaretPosition(0);
                 employeeOrgTextBox.setText(employeeOrg);
+                employeeOrgTextBox.setCaretPosition(0);
                 employeeOrgRepTextBox.setText(employeeOrgREP);
+                employeeOrgRepTextBox.setCaretPosition(0);
             }
         }
     }

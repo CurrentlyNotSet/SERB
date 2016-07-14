@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.dbutils.DbUtils;
 import parker.serb.Global;
+import parker.serb.util.NumberFormatService;
 
 /**
  *
@@ -26,65 +28,74 @@ public class REPElectionSiteInformation {
     public String caseMonth;
     public String caseNumber;
     public Timestamp siteDate;
-    public Timestamp siteTime;
+    public Timestamp siteStartTime;
+    public Timestamp siteEndTime;
     public String sitePlace;
     public String siteAddress1;
     public String siteAddress2;
     public String siteLocation;
     
-    /**
-     * Add an activity to the activity table, pulls the case number from the
-     * current selected case
-     * @param action the action that has been preformed
-     * @param fileName the fileName of a document - null if no file
-     */
-    public static void addSiteLocation() {
+    public static void addSiteLocation(String siteDate, String sitePlace,
+            String siteAddress1, String siteAddress2, String siteLocation,
+            String siteStartTime, String startAMPM, String siteEndTime, String endAMPM) {
         Statement stmt = null;
             
         try {
 
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "Insert INTO REPElectionMultiCase (caseYear, caseType, caseMonth, caseNumber, multiCase) VALUES (?,?,?,?,?)";
+            String sql = "Insert INTO REPElectionSiteInformation "
+                    + "(active,"
+                    + " caseYear,"
+                    + " caseType,"
+                    + " caseMonth,"
+                    + " caseNumber,"
+                    + " siteDate,"
+                    + " sitePlace,"
+                    + " siteAddress1,"
+                    + " siteAddress2,"
+                    + " siteLocation,"
+                    + " siteStartTime,"
+                    + " siteEndTime) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, Global.caseYear);
-            preparedStatement.setString(2, Global.caseType);
-            preparedStatement.setString(3, Global.caseMonth);
-            preparedStatement.setString(4, Global.caseNumber);
-//            preparedStatement.setString(5, caseNumber);
+            preparedStatement.setBoolean(1, true);
+            preparedStatement.setString(2, Global.caseYear);
+            preparedStatement.setString(3, Global.caseType);
+            preparedStatement.setString(4, Global.caseMonth);
+            preparedStatement.setString(5, Global.caseNumber);
+            preparedStatement.setTimestamp(6, siteDate.equals("") ? null : new Timestamp(Global.mmddyyyy.parse(siteDate).getTime()));
+            preparedStatement.setString(7, sitePlace);
+            preparedStatement.setString(8, siteAddress1);
+            preparedStatement.setString(9, siteAddress2);
+            preparedStatement.setString(10, siteLocation);
+            preparedStatement.setTimestamp(11, siteStartTime.equals("") ? null : new Timestamp(NumberFormatService.converthmma(siteStartTime + " " + startAMPM)));
+            preparedStatement.setTimestamp(12, siteEndTime.equals("") ? null : new Timestamp(NumberFormatService.converthmma(siteEndTime + " " + endAMPM)));
 
             preparedStatement.executeUpdate();
-
+            
+            Activity.addActivty("Added On-Site Election Location", siteDate);
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(REPElectionSiteInformation.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
     
-    public static void removeMultiCase(String caseNumber) {
+    public static void deleteSiteInformation(int id) {
             
         try {
-
             Statement stmt = Database.connectToDB().createStatement();
 
-            String sql = "Delete from REPElectionMultiCase where"
-                    + " caseYear = ? AND"
-                    + " caseType = ? AND"
-                    + " caseMonth = ? AND"
-                    + " caseNumber = ? AND"
-                    + " cast(multicase as nvarchar(max)) = ?";
+            String sql = "Delete from REPElectionSiteInformation where id = ?";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, Global.caseYear);
-            preparedStatement.setString(2, Global.caseType);
-            preparedStatement.setString(3, Global.caseMonth);
-            preparedStatement.setString(4, Global.caseNumber);
-            preparedStatement.setString(5, caseNumber);
+            preparedStatement.setInt(1, id);
 
             preparedStatement.executeUpdate();
-//            Activity.addActivty("Removed " + caseNumber + " from Related Case", null);
+            Activity.addActivty("Removed Site Election Information", null);
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -123,7 +134,8 @@ public class REPElectionSiteInformation {
             while(caseActivity.next()) {
                 REPElectionSiteInformation info = new REPElectionSiteInformation();
                 info.siteDate = caseActivity.getTimestamp("siteDate");
-                info.siteTime = caseActivity.getTimestamp("siteTime");
+                info.siteStartTime = caseActivity.getTimestamp("siteStartTime");
+                info.siteEndTime = caseActivity.getTimestamp("siteEndTime");
                 info.sitePlace = caseActivity.getString("sitePlace");
                 info.siteAddress1 = caseActivity.getString("siteAddress1"); 
                 info.siteAddress2 = caseActivity.getString("siteAddress2"); 

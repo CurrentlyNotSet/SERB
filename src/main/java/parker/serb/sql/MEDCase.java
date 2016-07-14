@@ -26,55 +26,27 @@ public class MEDCase {
     public String caseMonth;
     public String caseNumber;
     public Timestamp fileDate;
+    public Timestamp concilList1OrderDate;
+    public Timestamp concilList1SelectionDueDate;
+    public String concilList1Name1;
+    public String concilList1Name2;
+    public String concilList1Name3;
+    public String concilList1Name4;
+    public String concilList1Name5;
+    public Timestamp concilAppointmentDate;
+    public String concilType;
+    public String concilSelection;
+    public String concilReplacement;
+    public String concilOriginalConciliator;
+    public Timestamp concilOriginalConcilDate;
+    public Timestamp concilList2OrderDate;
+    public Timestamp concilList2SelectionDueDate;
+    public String concilList2Name1;
+    public String concilList2Name2;
+    public String concilList2Name3;
+    public String concilList2Name4;
+    public String concilList2Name5;
     
-//    public String type;
-//    public String status1;
-//    public String status2;
-//    public int currentOwnerID;
-//    public String county;
-//    public String employerIDNumber;
-//    public String deptInState;
-//    public String bargainingUnitNumber;
-//    public boolean boardCertified;
-//    public boolean deemedCertified;
-//    public boolean certificationRevoked;
-    
-//    public Timestamp amendedFiliingDate;
-//    public Timestamp alphaListDate;
-//    public Timestamp finalBoardDate;
-//    public Timestamp registrationLetterSent;
-//    public Timestamp dateOfAppeal;
-//    public Timestamp courtClosedDate;
-//    public Timestamp returnSOIDueDate;
-//    public Timestamp actualSOIReturnDate;
-//    public String comments;
-//    public Timestamp REPClosedCaseDueDate;
-//    public Timestamp actualREPClosedDate;
-//    public int REPClosedUser;
-//    public Timestamp actualClerksClosedDate;
-//    public int clerksClosedUser;
-//    public String fileBy;
-//    public String bargainingUnitIncluded;
-//    public String bargainingUnitExcluded;
-//    public String optInIncluded;
-//    public boolean professionalNonProfessional;
-//    public String professionalIncluded;
-//    public String professionalExcluded;
-//    public String nonProfessionalIncluded;
-//    public String nonProfessionalExcluded;
-//    public String toReflect;
-//    public String typeFiledBy;
-//    public String typeFiledVia;
-//    public String positionStatementFiledBy;
-//    public String EEONameChangeFrom;
-//    public String EEONameChangeTo;
-//    public String ERNameChangeFrom;
-//    public String ERNameChangeTo;
-//    public String boardActionType;
-//    public Timestamp boardActionDate;
-//    public int hearingPersonID;
-//    public String boardStatusNote;
-//    public String boardStatusBlurb;
     
     /**
      * Load a list of the most recent 250 REP case numbers
@@ -349,6 +321,75 @@ public class MEDCase {
         return rep;
     }
     
+    public static MEDCase loadConciliationInformation() {
+        MEDCase med = null;
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select"
+                    + " concilList1OrderDate,"
+                    + " concilList1SelectionDueDate,"
+                    + " concilList1Name1,"
+                    + " concilList1Name2,"
+                    + " concilList1Name3,"
+                    + " concilList1Name4,"
+                    + " concilList1Name5,"
+                    + " concilAppointmentDate,"
+                    + " concilType,"
+                    + " concilSelection,"
+                    + " concilReplacement,"
+                    + " concilOriginalConciliator,"
+                    + " concilOriginalConcilDate,"
+                    + " concilList2OrderDate,"
+                    + " concilList2SelectionDueDate,"
+                    + " concilList2Name1,"
+                    + " concilList2Name2,"
+                    + " concilList2Name3,"
+                    + " concilList2Name4,"
+                    + " concilList2Name5"
+                    + " from MEDCase where caseYear = ? "
+                    + " AND caseType = ? "
+                    + " AND caseMonth = ? "
+                    + " AND caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, Global.caseYear);
+            preparedStatement.setString(2, Global.caseType);
+            preparedStatement.setString(3, Global.caseMonth);
+            preparedStatement.setString(4, Global.caseNumber);
+
+            ResultSet caseInformation = preparedStatement.executeQuery();
+            
+            if(caseInformation.next()) {
+                med = new MEDCase();
+//                
+                med.concilList1OrderDate = caseInformation.getTimestamp("concilList1OrderDate");
+                med.concilList1SelectionDueDate = caseInformation.getTimestamp("concilList1SelectionDueDate");
+                med.concilList1Name1 = caseInformation.getString("concilList1Name1");
+                med.concilList1Name2 = caseInformation.getString("concilList1Name2");
+                med.concilList1Name3 = caseInformation.getString("concilList1Name3");
+                med.concilList1Name4 = caseInformation.getString("concilList1Name4");
+                med.concilList1Name5 = caseInformation.getString("concilList1Name5");
+                med.concilAppointmentDate = caseInformation.getTimestamp("concilAppointmentDate");
+                med.concilType = caseInformation.getString("concilType");
+                med.concilSelection = caseInformation.getString("concilSelection");
+                med.concilReplacement = caseInformation.getString("concilReplacement");
+                med.concilOriginalConciliator = caseInformation.getString("concilOriginalConciliator");
+                med.concilOriginalConcilDate = caseInformation.getTimestamp("concilOriginalConcilDate");
+                med.concilList2OrderDate = caseInformation.getTimestamp("concilList2OrderDate");
+                med.concilList2SelectionDueDate = caseInformation.getTimestamp("concilList2SelectionDueDate");
+                med.concilList2Name1 = caseInformation.getString("concilList2Name1");
+                med.concilList2Name2 = caseInformation.getString("concilList2Name2");
+                med.concilList2Name3 = caseInformation.getString("concilList2Name3");
+                med.concilList2Name4 = caseInformation.getString("concilList2Name4");
+                med.concilList2Name5 = caseInformation.getString("concilList2Name5");
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex.getMessage());
+        }
+        return med;
+    }
+    
     public static MEDCase loadCaseDetails() {
         MEDCase rep = null;
         try {
@@ -486,6 +527,59 @@ public class MEDCase {
 //        } catch (SQLException ex) {
 //            SlackNotification.sendNotification(ex.getMessage());
 //        }
+    }
+    
+    public static void updateConciliation(MEDCase newCaseInformation, MEDCase caseInformation) {
+        MEDCase med = null;
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+//
+            String sql = "Update MEDCase set"
+                    + " concilList1OrderDate = ?,"
+                    + " concilList1SelectionDueDate = ?,"
+                    + " concilList1Name1 = ?,"
+                    + " concilList1Name2 = ?,"
+                    + " concilList1Name3 = ?,"
+                    + " concilList1Name4 = ?,"
+                    + " concilList1Name5 = ?,"
+                    + " concilAppointmentDate = ?,"
+                    + " concilType = ?,"
+                    + " concilSelection = ?,"
+                    + " concilReplacement = ?,"
+                    + " concilOriginalConciliator = ?,"
+                    + " concilOriginalConcilDate = ?"
+                    + " where caseYear = ? "
+                    + " AND caseType = ? "
+                    + " AND caseMonth = ? "
+                    + " AND caseNumber = ?";
+//
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setTimestamp(1, newCaseInformation.concilList1OrderDate);
+            preparedStatement.setTimestamp(2, newCaseInformation.concilList1SelectionDueDate);
+            preparedStatement.setString(3, newCaseInformation.concilList1Name1);
+            preparedStatement.setString(4, newCaseInformation.concilList1Name2);
+            preparedStatement.setString(5, newCaseInformation.concilList1Name3);
+            preparedStatement.setString(6, newCaseInformation.concilList1Name4);
+            preparedStatement.setString(7, newCaseInformation.concilList1Name5);
+            preparedStatement.setTimestamp(8, newCaseInformation.concilAppointmentDate);
+            preparedStatement.setString(9, newCaseInformation.concilType);
+            preparedStatement.setString(10, newCaseInformation.concilSelection);
+            preparedStatement.setString(11, newCaseInformation.concilReplacement);
+            preparedStatement.setString(12, newCaseInformation.concilOriginalConciliator);
+            preparedStatement.setTimestamp(13, newCaseInformation.concilOriginalConcilDate);
+            preparedStatement.setString(14, Global.caseYear);
+            preparedStatement.setString(15, Global.caseType);
+            preparedStatement.setString(16, Global.caseMonth);
+            preparedStatement.setString(17, Global.caseNumber);
+//
+            int success = preparedStatement.executeUpdate();
+//            
+//            if(success == 1) {
+//                detailedBoardStatusDetailsSaveInformation(newCaseInformation, caseInformation);
+//            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex.getMessage());
+        }
     }
     
     public static void updateCaseDetails(MEDCase newCaseInformation, MEDCase caseInformation) {
