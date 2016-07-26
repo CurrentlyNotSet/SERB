@@ -470,11 +470,19 @@ public class MEDConciliationPanel extends javax.swing.JPanel {
             randomConcilList.remove(randomNumber);
             randomConcilList.add(concilList1Model.get(concilLocation).toString());
         } else if(whichList.equals("list2")) {
+            String oldName = concilList2Model.get(concilLocation).toString();
             concilList2Model.remove(concilLocation);
             int randomNumber = new Random().nextInt(randomConcilList.size());
-            concilList2Model.add(concilLocation, randomConcilList.get(randomNumber));
+            String newName = randomConcilList.get(randomNumber);
+            concilList2Model.add(concilLocation, newName);
+            MEDCase.replaceList2Concil(concilLocation, newName, oldName);
             randomConcilList.remove(randomNumber);
             randomConcilList.add(concilList2Model.get(concilLocation).toString());
+//            concilList2Model.remove(concilLocation);
+//            int randomNumber = new Random().nextInt(randomConcilList.size());
+//            concilList2Model.add(concilLocation, randomConcilList.get(randomNumber));
+//            randomConcilList.remove(randomNumber);
+//            randomConcilList.add(concilList2Model.get(concilLocation).toString());
         }
     }
     
@@ -869,7 +877,7 @@ public class MEDConciliationPanel extends javax.swing.JPanel {
             if(evt.getClickCount() == 2) {
                 System.out.println("MORE INFO: " + concilList1Model.get(conciliation1List.getSelectedIndex()));
             } else if(evt.getButton() == MouseEvent.BUTTON3) {
-                MEDRemoveConciliatorDialog remove = new MEDRemoveConciliatorDialog(Global.root, true);
+                MEDRemoveConciliatorDialog remove = new MEDRemoveConciliatorDialog(Global.root, true, concilList1Model.get(conciliation1List.getSelectedIndex()).toString());
                 if(remove.removeConcil) {
                     System.out.println("REMOVE: " + concilList1Model.get(conciliation1List.getSelectedIndex()));
                     replaceConcilAfterRemoval(conciliation1List.getSelectedIndex(), "list1");
@@ -885,7 +893,7 @@ public class MEDConciliationPanel extends javax.swing.JPanel {
             if(evt.getClickCount() == 2) {
                 System.out.println("MORE INFO: " + concilList2Model.get(conciliation2List.getSelectedIndex()));
             } else if(evt.getButton() == MouseEvent.BUTTON3) {
-                MEDRemoveConciliatorDialog remove = new MEDRemoveConciliatorDialog(Global.root, true);
+                MEDRemoveConciliatorDialog remove = new MEDRemoveConciliatorDialog(Global.root, true, concilList2Model.get(conciliation2List.getSelectedIndex()).toString());
                 if(remove.removeConcil) {
                     System.out.println("REMOVE: " + concilList2Model.get(conciliation2List.getSelectedIndex()));
                     replaceConcilAfterRemoval(conciliation2List.getSelectedIndex(), "list2");

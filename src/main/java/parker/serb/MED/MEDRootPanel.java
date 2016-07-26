@@ -146,7 +146,7 @@ public class MEDRootPanel extends javax.swing.JPanel {
     }
     
     private void disableTabs(int activeTab) {
-        Global.root.getuLPHeaderPanel1().getjComboBox2().setEnabled(false);
+        Global.root.getmEDHeaderPanel1().getjComboBox2().setEnabled(false);
         for(int i = jTabbedPane1.getTabCount()-1; i >= 0; i--) {
             if(i != activeTab) {
                 jTabbedPane1.setEnabledAt(i, false);
@@ -157,7 +157,7 @@ public class MEDRootPanel extends javax.swing.JPanel {
     }
     
     private void enableTabs() {
-        Global.root.getuLPHeaderPanel1().getjComboBox2().setEnabled(true);
+        Global.root.getmEDHeaderPanel1().getjComboBox2().setEnabled(true);
         for(int i = jTabbedPane1.getTabCount()-1; i >= 0; i--) {
             jTabbedPane1.setEnabledAt(i, true);
         }

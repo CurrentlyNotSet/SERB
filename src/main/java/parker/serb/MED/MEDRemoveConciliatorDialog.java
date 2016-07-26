@@ -15,10 +15,11 @@ public class MEDRemoveConciliatorDialog extends javax.swing.JDialog {
     /**
      * Creates new form MEDRemoveConciliatorDialog
      */
-    public MEDRemoveConciliatorDialog(java.awt.Frame parent, boolean modal) {
+    public MEDRemoveConciliatorDialog(java.awt.Frame parent, boolean modal, String name) {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(parent);
+        jLabel2.setText("Are you sure you want to replace " + name + "?");
         setVisible(true);
     }
 
@@ -71,7 +72,7 @@ public class MEDRemoveConciliatorDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 469, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
