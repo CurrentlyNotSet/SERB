@@ -47,18 +47,18 @@ public class ActivityPanel extends javax.swing.JPanel {
     }
     
     private void addListeners() {
-        actvityTable.setDefaultRenderer(Object.class, new TableCellRenderer(){
-            private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                Component c = DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-
-                if (!isSelected) {
-                    c.setBackground(row % 2 == 0 ? Color.WHITE : Global.alternateRowColor);
-                }
-                return c;
-            }
-        });
+//        actvityTable.setDefaultRenderer(Object.class, new TableCellRenderer(){
+//            private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
+//            @Override
+//            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+//                Component c = DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+//
+//                if (!isSelected) {
+//                    c.setBackground(row % 2 == 0 ? Color.WHITE : Global.alternateRowColor);
+//                }
+//                return c;
+//            }
+//        });
         
         
         searchTextBox.getDocument().addDocumentListener(new DocumentListener() {
@@ -299,11 +299,11 @@ public class ActivityPanel extends javax.swing.JPanel {
                 lbl.setIcon(null);
             }
             
-            if (!isSelected) {
-                    lbl.setBackground(row % 2 == 0 ? Color.WHITE : Global.alternateRowColor);
-            } else {
-                lbl.setBackground(table.getSelectionBackground());
-            }
+//            if (!isSelected) {
+//                    lbl.setBackground(row % 2 == 0 ? Color.WHITE : Global.alternateRowColor);
+//            } else {
+//                lbl.setBackground(table.getSelectionBackground());
+//            }
 
             lbl.setOpaque(true);
             lbl.setText("");
