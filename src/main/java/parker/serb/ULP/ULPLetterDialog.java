@@ -7,9 +7,7 @@ package parker.serb.ULP;
 
 //TODO: Load all of the letter types
 
-import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.List;
 import parker.serb.Global;
 import parker.serb.bookmarkProcessing.generateDocument;
