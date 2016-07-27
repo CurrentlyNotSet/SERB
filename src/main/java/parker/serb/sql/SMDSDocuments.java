@@ -28,7 +28,7 @@ public class SMDSDocuments {
     
     
     public static SMDSDocuments findDocumentByID(int id) {
-        SMDSDocuments user = new SMDSDocuments();
+        SMDSDocuments doc = new SMDSDocuments();
         
         try {
             
@@ -42,18 +42,47 @@ public class SMDSDocuments {
             ResultSet foundDoc = preparedStatement.executeQuery();
             
             if(foundDoc.next()) {
-                user.id = foundDoc.getInt("id");
-                user.active = foundDoc.getBoolean("active");
-                user.section = foundDoc.getString("section");
-                user.type = foundDoc.getString("type");
-                user.description = foundDoc.getString("description");
-                user.fileName = foundDoc.getString("fileName");
-                user.dueDate = foundDoc.getInt("dueDate");
+                doc.id = foundDoc.getInt("id");
+                doc.active = foundDoc.getBoolean("active");
+                doc.section = foundDoc.getString("section");
+                doc.type = foundDoc.getString("type");
+                doc.description = foundDoc.getString("description");
+                doc.fileName = foundDoc.getString("fileName");
+                doc.dueDate = foundDoc.getInt("dueDate");
             }
         } catch (SQLException ex) {
             Logger.getLogger(SMDSDocuments.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return user;
+        return doc;
+    }
+    
+    public static SMDSDocuments findDocumentByDescription(String description) {
+        SMDSDocuments doc = new SMDSDocuments();
+        
+        try {
+            
+            Statement stmt = Database.connectToDB().createStatement();
+            
+            String sql = "Select * from SMDSDocuments where description = ?";
+            
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, description);
+            
+            ResultSet foundDoc = preparedStatement.executeQuery();
+            
+            if(foundDoc.next()) {
+                doc.id = foundDoc.getInt("id");
+                doc.active = foundDoc.getBoolean("active");
+                doc.section = foundDoc.getString("section");
+                doc.type = foundDoc.getString("type");
+                doc.description = foundDoc.getString("description");
+                doc.fileName = foundDoc.getString("fileName");
+                doc.dueDate = foundDoc.getInt("dueDate");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SMDSDocuments.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return doc;
     }
     
 }

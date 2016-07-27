@@ -8,8 +8,8 @@ package parker.serb.ULP;
 //TODO: Load all of the letter types
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
+import parker.serb.bookmarkProcessing.generateDocument;
 import parker.serb.sql.SMDSLetter;
 
 
@@ -45,18 +45,7 @@ public class ULPLetterDialog extends javax.swing.JDialog {
             agendaComboBox.setSelectedItem("");
             enableGenerateButton();
         });
-        
-        directiveComboBox.addActionListener((ActionEvent e) -> {
-            letterComboBox.setSelectedItem("");
-            agendaComboBox.setSelectedItem("");
-            enableGenerateButton();
-        });
-        
-        agendaComboBox.addActionListener((ActionEvent e) -> {
-            directiveComboBox.setSelectedItem("");
-            letterComboBox.setSelectedItem("");
-            enableGenerateButton();
-        });
+
     }
     
     private void enableGenerateButton() {
@@ -113,11 +102,11 @@ public class ULPLetterDialog extends javax.swing.JDialog {
     
     
     private void generateDocument() {
-        if (!"".equals(letterComboBox.getSelectedItem().toString())){
+        if (!"".equals(letterComboBox.getSelectedItem().toString().trim())){
+            generateDocument.generateSMDSdocument(letterComboBox.getSelectedItem().toString().trim(), 0);
+        } else if (!"".equals(directiveComboBox.getSelectedItem().toString().trim())){
             
-        } else if (!"".equals(directiveComboBox.getSelectedItem().toString())){
-            
-        } else if (!"".equals(agendaComboBox.getSelectedItem().toString())){
+        } else if (!"".equals(agendaComboBox.getSelectedItem().toString().trim())){
             
         }
     }
@@ -182,15 +171,12 @@ public class ULPLetterDialog extends javax.swing.JDialog {
                     .addComponent(directiveComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(agendaComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(cancelButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(generateButton)))
+                        .addComponent(generateButton))
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(12, 12, 12))
         );
         layout.setVerticalGroup(
