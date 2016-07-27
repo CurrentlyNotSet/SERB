@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import parker.serb.Global;
 import parker.serb.login.Password;
+import parker.serb.util.NumberFormatService;
 
 /**
  *
@@ -638,4 +639,34 @@ public class User {
         return activeUsers;
     }
         
+    public static List loadAllUsers() {
+        
+        List allUsers = new ArrayList<>();
+        
+        try {
+            
+            Statement stmt = Database.connectToDB().createStatement();
+            
+            String sql = "SELECT * FROM Users";
+            
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            
+            ResultSet rs = preparedStatement.executeQuery();
+            
+            while(rs.next()) {
+                User user = new User();
+                user.id = rs.getInt("id");
+                user.firstName = rs.getString("firstName") == null ? "" : rs.getString("firstName");
+                user.middleInitial = rs.getString("middleInitial") == null ? "" : rs.getString("middleInitial");
+                user.lastName = rs.getString("lastName") == null ? "" : rs.getString("lastName");
+                user.workPhone = rs.getString("workPhone") == null ? "" : NumberFormatService.convertStringToPhoneNumber(rs.getString("workPhone"));
+                user.emailAddress = rs.getString("emailAddress") == null ? "" : rs.getString("emailAddress");
+                allUsers.add(user);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return allUsers;
+    }
+    
 }

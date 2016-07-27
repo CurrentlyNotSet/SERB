@@ -66,6 +66,11 @@
             <artifactId>eclipselink</artifactId>
             <version>2.5.2</version>
         </dependency>
+        <dependency> <!-- COM hook for Microsoft Word conversion to PDF -->
+          <groupId>local.net.sf.jacob-project</groupId>
+          <artifactId>jacob</artifactId>
+          <version>1.18</version>
+        </dependency>
     </dependencies>
         
         

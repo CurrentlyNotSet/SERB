@@ -21,6 +21,8 @@ public class ULPLetterDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form REPReportDialog
+     * @param parent
+     * @param modal
      */
     public ULPLetterDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -38,11 +40,22 @@ public class ULPLetterDialog extends javax.swing.JDialog {
     }
     
     private void addListeners() {
-        letterComboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                enableGenerateButton();
-            }
+        letterComboBox.addActionListener((ActionEvent e) -> {
+            directiveComboBox.setSelectedItem("");
+            agendaComboBox.setSelectedItem("");
+            enableGenerateButton();
+        });
+        
+        directiveComboBox.addActionListener((ActionEvent e) -> {
+            letterComboBox.setSelectedItem("");
+            agendaComboBox.setSelectedItem("");
+            enableGenerateButton();
+        });
+        
+        agendaComboBox.addActionListener((ActionEvent e) -> {
+            directiveComboBox.setSelectedItem("");
+            letterComboBox.setSelectedItem("");
+            enableGenerateButton();
         });
     }
     
@@ -96,6 +109,17 @@ public class ULPLetterDialog extends javax.swing.JDialog {
         }
         
         agendaComboBox.setSelectedItem("");
+    }
+    
+    
+    private void generateDocument() {
+        if (!"".equals(letterComboBox.getSelectedItem().toString())){
+            
+        } else if (!"".equals(directiveComboBox.getSelectedItem().toString())){
+            
+        } else if (!"".equals(agendaComboBox.getSelectedItem().toString())){
+            
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -197,7 +221,7 @@ public class ULPLetterDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
-        // TODO: generate letter
+        generateDocument();
     }//GEN-LAST:event_generateButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
