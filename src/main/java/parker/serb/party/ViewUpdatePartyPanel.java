@@ -8,6 +8,8 @@ package parker.serb.party;
 import parker.serb.util.NumberFormatService;
 import java.awt.Color;
 import java.awt.Desktop;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
@@ -56,6 +58,22 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
     }
     
     private void addListeners() {
+        middleInitialTextBox.addKeyListener(new KeyListener() {
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if (middleInitialTextBox.getText().length() == 1) {
+                    e.consume();
+                }
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {}
+
+            @Override
+            public void keyReleased(KeyEvent e) {}
+        });
+        
         emailAddressTextBox.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {

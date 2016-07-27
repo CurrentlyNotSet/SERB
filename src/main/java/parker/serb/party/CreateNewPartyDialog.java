@@ -6,6 +6,8 @@
 package parker.serb.party;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.List;
 import javax.swing.JFrame;
 import parker.serb.util.NumberFormatService;
@@ -54,6 +56,23 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
             public void changedUpdate(DocumentEvent e) {
                 validateCreateButton();
             }
+        });
+        
+        middleInitialTextBox.addKeyListener(new KeyListener() {
+           
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if (middleInitialTextBox.getText().length() == 1) {
+                    e.consume();
+                }
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {}
+
+            @Override
+            public void keyReleased(KeyEvent e) {}
         });
         
         address1TextBox.getDocument().addDocumentListener(new DocumentListener() {
