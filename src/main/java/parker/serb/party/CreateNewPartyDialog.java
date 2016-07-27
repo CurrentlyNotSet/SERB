@@ -295,7 +295,7 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
 
         prefix.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jLabel13.setText("Name Title:");
+        jLabel13.setText("Prof. Designation:");
 
         jLabel14.setText("Job Title:");
 
@@ -336,14 +336,14 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(lastNameTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(suffixTextBox))
+                                        .addComponent(suffixTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 61, Short.MAX_VALUE))
                                     .addComponent(nameTitleTextBox)
                                     .addComponent(jobTitleTextBox)))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGap(19, 19, 19)
+                                .addGap(60, 60, 60)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel4)
                                     .addComponent(jLabel5)
+                                    .addComponent(jLabel4)
                                     .addComponent(jLabel6)
                                     .addComponent(jLabel7)
                                     .addComponent(jLabel8)
@@ -352,12 +352,10 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
                                     .addComponent(jLabel15))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(address1TextBox)
-                                    .addComponent(companyTextBox)
-                                    .addComponent(address2TextBox)
-                                    .addComponent(address3TextBox)
+                                    .addComponent(phoneTextBox, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(emailTextBox, javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(cityTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(cityTextBox)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jLabel11)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -366,8 +364,10 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
                                         .addComponent(jLabel12)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(zipCodeTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(emailTextBox)
-                                    .addComponent(phoneTextBox)
+                                    .addComponent(address3TextBox, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(address2TextBox, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(address1TextBox, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(companyTextBox)
                                     .addComponent(phone2TextBox))))
                         .addContainerGap())))
         );

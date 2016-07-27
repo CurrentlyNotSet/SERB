@@ -378,7 +378,7 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
         nameTitleTextBox.setBackground(new java.awt.Color(238, 238, 238));
         nameTitleTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
 
-        jLabel13.setText("Job Title:");
+        jLabel13.setText("Prof. Designation:");
 
         jobTitleTextBox.setBackground(new java.awt.Color(238, 238, 238));
         jobTitleTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
@@ -440,7 +440,7 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
                             .addComponent(address2TextBox, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(address3TextBox, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(cityTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE)
+                                .addComponent(cityTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
                                 .addGap(12, 12, 12)
                                 .addComponent(jLabel11)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)

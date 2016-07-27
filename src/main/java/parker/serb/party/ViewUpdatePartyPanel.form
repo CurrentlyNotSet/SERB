@@ -70,7 +70,7 @@
                           <Component id="address2TextBox" alignment="1" max="32767" attributes="0"/>
                           <Component id="address3TextBox" alignment="1" max="32767" attributes="0"/>
                           <Group type="102" alignment="1" attributes="0">
-                              <Component id="cityTextBox" pref="317" max="32767" attributes="0"/>
+                              <Component id="cityTextBox" pref="276" max="32767" attributes="0"/>
                               <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                               <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
@@ -422,7 +422,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel13">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Job Title:"/>
+        <Property name="text" type="java.lang.String" value="Prof. Designation:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="jobTitleTextBox">
