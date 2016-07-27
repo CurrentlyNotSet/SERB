@@ -31,6 +31,11 @@ public class Global {
     public static SimpleDateFormat hmma = new SimpleDateFormat("h:mm a");
     public static SimpleDateFormat mmddyyyy = new SimpleDateFormat("MM/dd/yyyy");
     public static SimpleDateFormat EMMMMMdyyyy = new SimpleDateFormat("E, MMMMM d, yyyy");
+    public static SimpleDateFormat MMMMddyyyy = new SimpleDateFormat("MMMM dd, yyyy");
+    public static SimpleDateFormat MMMMMdyyyy = new SimpleDateFormat("MMMMM d, yyyy");
+    public static SimpleDateFormat MMMMM = new SimpleDateFormat("MMMMM");
+    public static SimpleDateFormat yyyy = new SimpleDateFormat("yyyy");
+    public static SimpleDateFormat hhmma = new SimpleDateFormat("hh:mm a");
     
     //The active selected case number of the user
     public static String caseYear = null;
@@ -73,9 +78,24 @@ public class Global {
     //Paths that are used to store locations of all files
     public static String scanPath;
     public static String emailPath;
+    public static String templatePath;
     public static String activityPath;
     public static String mediaPath;
     
     //boolean about if notigication should be sent
     public static boolean errorNotifications;
+    
+    //bookmark loop limit
+    public static final int bookmarkLimit = 10;
+    
+    //format Ending for dates
+    public static String[] daySuffixes =
+  //    0     1     2     3     4     5     6     7     8     9
+     { "th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th",
+  //    10    11    12    13    14    15    16    17    18    19
+       "th", "th", "th", "th", "th", "th", "th", "th", "th", "th",
+  //    20    21    22    23    24    25    26    27    28    29
+       "th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th",
+  //    30    31
+       "th", "st" };
 }
