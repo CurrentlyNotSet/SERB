@@ -8,8 +8,13 @@ package parker.serb.ULP;
 //TODO: Load all of the letter types
 
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.List;
+import parker.serb.Global;
 import parker.serb.bookmarkProcessing.generateDocument;
+import parker.serb.sql.Activity;
+import parker.serb.sql.SMDSDocuments;
 import parker.serb.sql.SMDSLetter;
 import parker.serb.util.FileService;
 
@@ -41,9 +46,21 @@ public class ULPLetterDialog extends javax.swing.JDialog {
     }
     
     private void addListeners() {
-        letterComboBox.addActionListener((ActionEvent e) -> {
+        letterComboBox.addItemListener((ItemEvent e) -> {
             directiveComboBox.setSelectedItem("");
             agendaComboBox.setSelectedItem("");
+            enableGenerateButton();
+        });
+
+        directiveComboBox.addItemListener((ItemEvent e) -> {
+            letterComboBox.setSelectedItem("");
+            agendaComboBox.setSelectedItem("");
+            enableGenerateButton();
+        });
+        
+        agendaComboBox.addItemListener((ItemEvent e) -> {
+            directiveComboBox.setSelectedItem("");
+            letterComboBox.setSelectedItem("");
             enableGenerateButton();
         });
 
@@ -103,13 +120,21 @@ public class ULPLetterDialog extends javax.swing.JDialog {
     
     
     private void generateDocument() {
-        if (!"".equals(letterComboBox.getSelectedItem().toString().trim())){
-            String docName = generateDocument.generateSMDSdocument(letterComboBox.getSelectedItem().toString().trim(), 0);
+        String selection = "";
+        if (!letterComboBox.getSelectedItem().toString().trim().equals("")){
+            selection = letterComboBox.getSelectedItem().toString().trim();
+        } else if (!directiveComboBox.getSelectedItem().toString().trim().equals("")){
+            selection = directiveComboBox.getSelectedItem().toString().trim();
+        } else if (!agendaComboBox.getSelectedItem().toString().trim().equals("")){
+            selection = agendaComboBox.getSelectedItem().toString().trim();
+        }
+        
+        if (!"".equals(selection)){
+            SMDSDocuments template = SMDSDocuments.findDocumentByDescription(selection);
+            String docName = generateDocument.generateSMDSdocument(template, 0);
+            Activity.addActivty("Created " + template.historyDescription, docName);
+            Global.root.getuLPRootPanel1().getActivityPanel1().loadAllActivity();
             FileService.openFile(docName);
-        } else if (!"".equals(directiveComboBox.getSelectedItem().toString().trim())){
-            
-        } else if (!"".equals(agendaComboBox.getSelectedItem().toString().trim())){
-            
         }
     }
 

@@ -26,9 +26,8 @@ import parker.serb.util.StringUtilities;
  */
 public class generateDocument {
     
-    public static String generateSMDSdocument(String documentDescription, int senderID){
+    public static String generateSMDSdocument(SMDSDocuments template, int senderID){
         //Setup Document
-        SMDSDocuments template = SMDSDocuments.findDocumentByDescription(documentDescription);
         File docPath = new File(Global.activityPath
                 + Global.activeSection + File.separator
                 + Global.caseYear + File.separator
