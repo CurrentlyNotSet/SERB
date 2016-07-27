@@ -40,6 +40,7 @@ public class FileService {
                     break;
                 //TODO: Add in other machines with the correct paths
                 case "Alienware15":
+                case "Optiplex3010":
                 case "Sniper":
                     Global.scanPath = "C:\\SERB\\Scan\\";
                     Global.emailPath = "C:\\SERB\\Email\\";

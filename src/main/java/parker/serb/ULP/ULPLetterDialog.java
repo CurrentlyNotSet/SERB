@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.util.List;
 import parker.serb.bookmarkProcessing.generateDocument;
 import parker.serb.sql.SMDSLetter;
+import parker.serb.util.FileService;
 
 
 /**
@@ -103,7 +104,8 @@ public class ULPLetterDialog extends javax.swing.JDialog {
     
     private void generateDocument() {
         if (!"".equals(letterComboBox.getSelectedItem().toString().trim())){
-            generateDocument.generateSMDSdocument(letterComboBox.getSelectedItem().toString().trim(), 0);
+            String docName = generateDocument.generateSMDSdocument(letterComboBox.getSelectedItem().toString().trim(), 0);
+            FileService.openFile(docName);
         } else if (!"".equals(directiveComboBox.getSelectedItem().toString().trim())){
             
         } else if (!"".equals(agendaComboBox.getSelectedItem().toString().trim())){

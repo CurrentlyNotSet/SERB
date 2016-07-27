@@ -34,7 +34,7 @@ public class generateDocument {
                 + Global.caseYear + File.separator
                 + NumberFormatService.generateFullCaseNumber());
         docPath.mkdirs();
-        String saveDocName = String.valueOf(new Date().getTime()) + "_" + template.type + ".docx";
+        String saveDocName = String.valueOf(new Date().getTime()) + "_" + template.historyFileName + ".docx";
         ActiveXComponent eolWord = null;
         eolWord = JacobCOMBridge.setWordActive(true, false, eolWord);
 
