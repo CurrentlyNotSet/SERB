@@ -1015,4 +1015,71 @@ public class ULPCase {
         
         return firstCase;
     }
+    
+    public static ULPCase loadULPCaseDetails(String caseYear,
+            String caseType,
+            String caseMonth,
+            String caseNumber) {
+        
+        ULPCase ulpCase = new ULPCase();
+            
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+            
+            
+            
+            String sql = "Select *"
+                    + " from ULPCase"
+                    + " where caseYear = ?"
+                    + " and caseType = ?"
+                    + " and caseMonth = ?"
+                    + " and caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            preparedStatement.setString(1, caseYear);
+            preparedStatement.setString(2, caseType);
+            preparedStatement.setString(3, caseMonth);
+            preparedStatement.setString(4, caseNumber);
+            
+            ResultSet rs = preparedStatement.executeQuery();
+            
+            if(rs.first()) {
+                ulpCase.id = rs.getInt("id");
+                ulpCase.caseYear = rs.getString("caseYear").trim();
+                ulpCase.caseType = rs.getString("caseType").trim();
+                ulpCase.caseMonth = rs.getString("caseMonth").trim();
+                ulpCase.caseNumber = rs.getString("caseNumber").trim();
+                ulpCase.employerIDNumber = rs.getString("employerIDNumber") == null ? "" : rs.getString("employerIDNumber").trim();
+                ulpCase.deptInState = rs.getString("deptInState") == null ? "" : rs.getString("deptInState").trim();
+                ulpCase.barginingUnitNo = rs.getString("barginingUnitNo") == null ? "" : rs.getString("barginingUnitNo").trim();
+                ulpCase.EONumber = rs.getString("EONumber") == null ? "" : rs.getString("EONumber").trim();
+                ulpCase.allegation = rs.getString("allegation") == null ? "" : rs.getString("allegation").trim();
+                ulpCase.currentStatus = rs.getString("currentStatus") == null ? "" : rs.getString("currentStatus").trim();
+                ulpCase.priority = rs.getBoolean("priority");
+                ulpCase.assignedDate = rs.getTimestamp("assignedDate");
+                ulpCase.turnInDate = rs.getTimestamp("turnInDate");
+                ulpCase.reportDueDate = rs.getTimestamp("reportDueDate");
+//                ulpCase.dismissalDate = rs.getTimestamp("dismissalDate");
+//                ulpCase.deferredDate = rs.getTimestamp("deferredDate");
+                ulpCase.fileDate = rs.getTimestamp("fileDate");
+                ulpCase.probableCause = rs.getBoolean("probableCause");
+                ulpCase.appealDateReceived = rs.getTimestamp("appealDateReceived");
+                ulpCase.appealDateSent = rs.getTimestamp("appealDateSent");
+                ulpCase.courtName = rs.getString("courtName") == null ? "" : rs.getString("courtName").trim();
+                ulpCase.courtCaseNumber = rs.getString("courtCaseNumber") == null ? "" : rs.getString("courtCaseNumber").trim();
+                ulpCase.SERBCaseNumber = rs.getString("SERBCaseNumber") == null ? "" : rs.getString("SERBCaseNumber").trim();
+                ulpCase.finalDispositionStatus = rs.getString("finalDispositionStatus") == null ? "" : rs.getString("finalDispositionStatus").trim();
+                ulpCase.investigatorID = rs.getInt("investigatorID");
+                ulpCase.mediatorAssignedID = rs.getInt("mediatorAssignedID");
+                ulpCase.aljID = rs.getInt("aljID");
+                ulpCase.statement = rs.getString("statement") == null ? "" : rs.getString("statement").trim();
+                ulpCase.recommendation = rs.getString("recommendation") == null ? "" : rs.getString("recommendation").trim();
+                ulpCase.investigationReveals = rs.getString("investigationReveals") == null ? "" : rs.getString("investigationReveals").trim();
+                ulpCase.note = rs.getString("note") == null ? "" : rs.getString("note").trim();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ulpCase;
+    }
 }
