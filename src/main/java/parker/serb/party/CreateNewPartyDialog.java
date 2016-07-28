@@ -59,7 +59,6 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
         });
         
         middleInitialTextBox.addKeyListener(new KeyListener() {
-           
 
             @Override
             public void keyTyped(KeyEvent e) {
