@@ -6,6 +6,16 @@
 package parker.serb.REP;
 
 //TODO: Load all of the letter types
+
+import java.awt.event.ItemEvent;
+import java.util.List;
+import parker.serb.Global;
+import parker.serb.bookmarkProcessing.generateDocument;
+import parker.serb.sql.Activity;
+import parker.serb.sql.SMDSDocuments;
+import parker.serb.sql.SMDSLetter;
+import parker.serb.util.FileService;
+
 //TODO: Load all directives
 //TODO: Load all memos
 //TODO: Load all agendas
@@ -20,15 +30,159 @@ public class REPLetterDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form REPReportDialog
+     * @param parent
+     * @param modal
      */
     public REPLetterDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        setUndecorated(true);
         initComponents();
+        loadDropDowns();
+        addListeners();
         setLocationRelativeTo(parent);
-        setVisible(true);
-        
+        setVisible(true); 
     }
+    
+    private void loadDropDowns() {
+        loadLetters();
+        loadDirectives();
+        loadMemos1();
+        loadMemos2();
+        loadAgendas();
+    }
+    
+    private void addListeners() {
+        lettersComboBox.addItemListener((ItemEvent e) -> {
+            directivesComboBox.setSelectedItem("");
+            memosComboBox1.setSelectedItem("");
+            memosComboBox2.setSelectedItem("");
+            agendaComboBox.setSelectedItem("");
+            enableGenerateButton();
+        });
+
+        directivesComboBox.addItemListener((ItemEvent e) -> {
+            lettersComboBox.setSelectedItem("");
+            memosComboBox1.setSelectedItem("");
+            memosComboBox2.setSelectedItem("");
+            agendaComboBox.setSelectedItem("");
+            enableGenerateButton();
+        });
+        
+        memosComboBox1.addItemListener((ItemEvent e) -> {
+            lettersComboBox.setSelectedItem("");
+            directivesComboBox.setSelectedItem("");
+            memosComboBox2.setSelectedItem("");
+            agendaComboBox.setSelectedItem("");
+            enableGenerateButton();
+        });
+        
+        memosComboBox2.addItemListener((ItemEvent e) -> {
+            lettersComboBox.setSelectedItem("");
+            directivesComboBox.setSelectedItem("");
+            memosComboBox1.setSelectedItem("");
+            agendaComboBox.setSelectedItem("");
+            enableGenerateButton();
+        });
+        
+        agendaComboBox.addItemListener((ItemEvent e) -> {
+            lettersComboBox.setSelectedItem("");
+            directivesComboBox.setSelectedItem("");
+            memosComboBox1.setSelectedItem("");
+            memosComboBox2.setSelectedItem("");
+            enableGenerateButton();
+        });       
+    }
+    
+    private void loadLetters() {
+        lettersComboBox.removeAllItems();
+        lettersComboBox.addItem("");
+        
+        List letterList = SMDSLetter.loadDocumentNamesByTypeAndSection("REP", "Letter");
+        for (Object letter : letterList) {
+            lettersComboBox.addItem((String) letter);
+        }
+        lettersComboBox.setSelectedItem("");
+    }
+       
+    private void loadDirectives() {
+        directivesComboBox.removeAllItems();
+        directivesComboBox.addItem("");
+        
+        List letterList = SMDSLetter.loadDocumentNamesByTypeAndSection("REP", "Directive");
+        for (Object letter : letterList) {
+            directivesComboBox.addItem((String) letter);
+        }
+        directivesComboBox.setSelectedItem("");
+    }
+    
+    private void loadMemos1() {
+        memosComboBox1.removeAllItems();
+        memosComboBox1.addItem("");
+        
+        List letterList = SMDSLetter.loadDocumentNamesByTypeAndSection("REP", "Memo");
+        for (Object letter : letterList) {
+            memosComboBox1.addItem((String) letter);
+        }
+        memosComboBox1.setSelectedItem("");
+    }
+    
+    private void loadMemos2() {
+        memosComboBox2.removeAllItems();
+        memosComboBox2.addItem("");
+        
+        List letterList = SMDSLetter.loadDocumentNamesByTypeAndSection("REP", "Misc");
+        for (Object letter : letterList) {
+            memosComboBox2.addItem((String) letter);
+        }
+        memosComboBox2.setSelectedItem("");
+    }
+    
+    private void loadAgendas() {
+        agendaComboBox.removeAllItems();
+        agendaComboBox.addItem("");
+        
+        List letterList = SMDSLetter.loadDocumentNamesByTypeAndSection("REP", "Agenda");
+        for (Object letter : letterList) {
+            agendaComboBox.addItem((String) letter);
+        }
+        agendaComboBox.setSelectedItem("");
+    }
+    
+    private void enableGenerateButton() {
+        if(lettersComboBox.getSelectedItem().toString().equals("") 
+                && directivesComboBox.getSelectedItem().toString().equals("")
+                && memosComboBox1.getSelectedItem().toString().equals("")
+                && memosComboBox2.getSelectedItem().toString().equals("")
+                && agendaComboBox.getSelectedItem().toString().equals("")) {
+            generateButton.setEnabled(false);
+        } else {
+            generateButton.setEnabled(true);
+        }
+    }
+    
+    private void generateDocument() {
+        String selection = "";
+
+        if (!lettersComboBox.getSelectedItem().toString().equals("")) {
+            selection = lettersComboBox.getSelectedItem().toString().trim();
+        } else if (!directivesComboBox.getSelectedItem().toString().equals("")) {
+            selection = directivesComboBox.getSelectedItem().toString().trim();
+        } else if (!memosComboBox1.getSelectedItem().toString().equals("")) {
+            selection = memosComboBox1.getSelectedItem().toString().trim();
+        } else if (!memosComboBox2.getSelectedItem().toString().equals("")) {
+            selection = memosComboBox2.getSelectedItem().toString().trim();
+        } else if (!agendaComboBox.getSelectedItem().toString().equals("")) {
+            selection = agendaComboBox.getSelectedItem().toString().trim();
+        }
+        
+        if (!"".equals(selection)){
+            SMDSDocuments template = SMDSDocuments.findDocumentByDescription(selection);
+            String docName = generateDocument.generateSMDSdocument(template, 0);
+            Activity.addActivty("Created " + template.historyDescription, docName);
+            Global.root.getuLPRootPanel1().getActivityPanel1().loadAllActivity();
+            FileService.openFile(docName);
+        }
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -42,16 +196,16 @@ public class REPLetterDialog extends javax.swing.JDialog {
         jSeparator4 = new javax.swing.JSeparator();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox();
+        lettersComboBox = new javax.swing.JComboBox();
         jLabel3 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox();
+        directivesComboBox = new javax.swing.JComboBox();
         jLabel4 = new javax.swing.JLabel();
-        jComboBox3 = new javax.swing.JComboBox();
-        jComboBox4 = new javax.swing.JComboBox();
+        memosComboBox1 = new javax.swing.JComboBox();
+        memosComboBox2 = new javax.swing.JComboBox();
         jLabel5 = new javax.swing.JLabel();
-        jComboBox5 = new javax.swing.JComboBox();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        agendaComboBox = new javax.swing.JComboBox();
+        generateButton = new javax.swing.JButton();
+        cancelButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -61,33 +215,33 @@ public class REPLetterDialog extends javax.swing.JDialog {
 
         jLabel2.setText("Letters");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        lettersComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel3.setText("Directives");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        directivesComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel4.setText("Memos");
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        memosComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        memosComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel5.setText("Agenda");
 
-        jComboBox5.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        agendaComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jButton1.setText("Generate");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        generateButton.setText("Generate");
+        generateButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                generateButtonActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Cancel");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        cancelButton.setText("Cancel");
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                cancelButtonActionPerformed(evt);
             }
         });
 
@@ -98,16 +252,16 @@ public class REPLetterDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGap(12, 12, 12)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lettersComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jComboBox3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jComboBox4, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jComboBox5, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(directivesComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(memosComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(memosComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(agendaComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton2)
+                        .addComponent(cancelButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 140, Short.MAX_VALUE)
-                        .addComponent(jButton1))
+                        .addComponent(generateButton))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
@@ -125,52 +279,52 @@ public class REPLetterDialog extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lettersComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(directivesComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(memosComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(memosComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(agendaComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(generateButton)
+                    .addComponent(cancelButton))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
+        generateDocument();
+    }//GEN-LAST:event_generateButtonActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         dispose();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_cancelButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox jComboBox1;
-    private javax.swing.JComboBox jComboBox2;
-    private javax.swing.JComboBox jComboBox3;
-    private javax.swing.JComboBox jComboBox4;
-    private javax.swing.JComboBox jComboBox5;
+    private javax.swing.JComboBox agendaComboBox;
+    private javax.swing.JButton cancelButton;
+    private javax.swing.JComboBox directivesComboBox;
+    private javax.swing.JButton generateButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JComboBox lettersComboBox;
+    private javax.swing.JComboBox memosComboBox1;
+    private javax.swing.JComboBox memosComboBox2;
     // End of variables declaration//GEN-END:variables
 }
