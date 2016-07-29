@@ -29,7 +29,7 @@ public class processREPbookmarks {
     public static Dispatch processDoAREPWordLetter(Dispatch Document, int senderID) {
         //get basic information
         User user = null; //Need to get user by ID
-        REPCase caseInfo = REPCase.loadCaseDetails();
+        REPCase caseInfo = REPCase.loadCaseDetails(Global.caseYear, Global.caseType, Global.caseMonth, Global.caseNumber);
         List<CaseParty> partyList = CaseParty.loadPartiesByCase(Global.caseYear, Global.caseType, Global.caseMonth, Global.caseNumber);
         List<String> relatedCasesList = RelatedCase.loadRelatedCases();
         List<REPMediation> mediationList = REPMediation.loadMediationsByCaseNumber();
