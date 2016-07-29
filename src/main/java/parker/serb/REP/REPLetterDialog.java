@@ -109,21 +109,14 @@ public class REPLetterDialog extends javax.swing.JDialog {
     }
     
     private void loadMemos1() {
-        memosComboBox1.removeAllItems();
-        memosComboBox1.addItem("");
-        
-        List letterList = SMDSLetter.loadDocumentNamesByTypeAndSection("REP", "Memo");
-        for (Object letter : letterList) {
-            memosComboBox1.addItem((String) letter);
-        }
-        memosComboBox1.setSelectedItem("");
+        //load memo types??
     }
     
     private void loadMemos2() {
         memosComboBox2.removeAllItems();
         memosComboBox2.addItem("");
         
-        List letterList = SMDSLetter.loadDocumentNamesByTypeAndSection("REP", "Misc");
+        List letterList = SMDSLetter.loadDocumentNamesByTypeAndSection("REP", "Memo");
         for (Object letter : letterList) {
             memosComboBox2.addItem((String) letter);
         }
@@ -208,21 +201,11 @@ public class REPLetterDialog extends javax.swing.JDialog {
 
         jLabel2.setText("Letters");
 
-        lettersComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         jLabel3.setText("Directives");
-
-        directivesComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel4.setText("Memos");
 
-        memosComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        memosComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         jLabel5.setText("Agenda");
-
-        agendaComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         generateButton.setText("Generate");
         generateButton.addActionListener(new java.awt.event.ActionListener() {
