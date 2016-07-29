@@ -16,12 +16,6 @@ import parker.serb.sql.SMDSDocuments;
 import parker.serb.sql.SMDSLetter;
 import parker.serb.util.FileService;
 
-//TODO: Load all directives
-//TODO: Load all memos
-//TODO: Load all agendas
-//TODO: Design table layout to handle types for all sections
-
-
 /**
  *
  * @author parker
@@ -183,7 +177,6 @@ public class REPLetterDialog extends javax.swing.JDialog {
         }
     }
     
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
