@@ -67,6 +67,7 @@
             <version>2.5.2</version>
         </dependency>
         <dependency> <!-- COM hook for Microsoft Word conversion to PDF -->
+        <!--mvn install:install-file -Dfile='/Users/parkerjohnston/Desktop/jacob.jar' -DgroupId='local.net.sf.jacob-project' -DartifactId='jacob' -Dversion='1.18' -Dpackaging='jar'-->
           <groupId>local.net.sf.jacob-project</groupId>
           <artifactId>jacob</artifactId>
           <version>1.18</version>

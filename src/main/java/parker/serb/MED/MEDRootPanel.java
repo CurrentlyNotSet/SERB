@@ -68,9 +68,9 @@ public class MEDRootPanel extends javax.swing.JPanel {
             case "Parties":
                 partiesPanel1.loadParties();
                 break;
-//            case "Status":
-//                uLPStatusPanel1.loadInformation();
-//                break;
+            case "Fact Finder":
+                mEDFactFinderPanel1.loadInformation();
+                break;
 //            case "Statement":
 //                uLPStatement1.loadInformation();
 //                break;
@@ -110,12 +110,12 @@ public class MEDRootPanel extends javax.swing.JPanel {
                 Global.root.getjButton2().setEnabled(true);
                 Global.root.getjButton9().setVisible(true);
                 break;
-//            case "Status":
-//                System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
-//                Global.root.getjButton2().setText("Update");
-//                Global.root.getjButton2().setEnabled(true);
-//                Global.root.getjButton9().setVisible(false);
-//                break;
+            case "Fact Finder":
+                System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
+                Global.root.getjButton2().setText("Update");
+                Global.root.getjButton2().setEnabled(true);
+                Global.root.getjButton9().setVisible(false);
+                break;
 //            case "Statement":
 //                System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
 //                Global.root.getjButton2().setText("Update");
@@ -202,6 +202,18 @@ public class MEDRootPanel extends javax.swing.JPanel {
 //                    uLPStatement1.disableUpdate(true);
 //                }
 //                break;
+            case "Fact Finder":
+                if(buttonText.equals("Update")) {
+                    disableTabs(jTabbedPane1.getSelectedIndex());
+                    mEDFactFinderPanel1.enableUpdate();
+                } else {
+                    enableTabs();
+                    Global.root.enableTabsAfterSave();
+                    Global.root.enableButtonsAfterCancel();
+                    mEDFactFinderPanel1.disableUpdate(true);
+                }
+                break;
+                
             case "Conciliation":
                 if(buttonText.equals("Update")) {
                     disableTabs(jTabbedPane1.getSelectedIndex());
@@ -275,6 +287,16 @@ public class MEDRootPanel extends javax.swing.JPanel {
 //                    uLPStatement1.disableUpdate(false);
 //                }
 //                break;
+            case "Fact Finder":
+                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+                if(!cancel.isReset()) {
+                } else {
+                    Global.root.enableButtonsAfterCancel();
+                    Global.root.enableTabsAfterSave();
+                    enableTabs();
+                    mEDFactFinderPanel1.disableUpdate(false);
+                }
+                break;  
             case "Conciliation":
                 cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
                 if(!cancel.isReset()) {
@@ -396,7 +418,7 @@ public class MEDRootPanel extends javax.swing.JPanel {
             .addComponent(mEDFactFinderPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("Fact Finder Selection", jPanel4);
+        jTabbedPane1.addTab("Fact Finder", jPanel4);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);

@@ -35,7 +35,7 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
     
     
     /**
-     * Creates new form MEDConciliationPanel
+     * Creates new form MEDFFPanel
      */
     public MEDFactFinderPanel() {
         initComponents();
@@ -75,7 +75,7 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
         appointmentDateTextBox.setEnabled(true);
         appointmentDateTextBox.setBackground(Color.white);
         FFTypeComboBox.setEnabled(true);
-        asAgreedToParties.setEnabled(true);
+        asAgreedToByPartiesCheckBox.setEnabled(true);
         
         if(!FFTypeComboBox.getSelectedItem().toString().trim().equals("")) {
             FFSelectionComboBox.setEnabled(true);
@@ -108,17 +108,12 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
         appointmentDateTextBox.setEnabled(false);
         appointmentDateTextBox.setBackground(new Color(238,238,238));
         FFTypeComboBox.setEnabled(false);
-        asAgreedToParties.setEnabled(false);
+        asAgreedToByPartiesCheckBox.setEnabled(false);
         
-//        if(!conciliationTypeComboBox.getSelectedItem().toString().trim().equals("")) {
-            FFSelectionComboBox.setEnabled(false);
-            replacementFFComboBox.setEnabled(false);
-            originalFFDateTextBox.setEnabled(false);
-            originalFFDateTextBox.setBackground(new Color(238,238,238));
-//        }
-        
-        
-        
+        FFSelectionComboBox.setEnabled(false);
+        replacementFFComboBox.setEnabled(false);
+        originalFFDateTextBox.setEnabled(false);
+        originalFFDateTextBox.setBackground(new Color(238,238,238));
         
         if(save) {
             saveInformation();
@@ -128,13 +123,12 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
     }
     
     public void loadInformation() {
-        loadFullConcilList();
+        loadFullFFList();
         
         orginalInformation = MEDCase.loadFFInformation();
         
         FF1OrderDate.setText(orginalInformation.FFList1OrderDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.FFList1OrderDate.getTime())) : "");
-        FF1SelectionDate.setText(orginalInformation.FFList1SelectionDueDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.FFList1SelectionDueDate.getTime())) : "");
-       
+        FF1SelectionDate.setText(orginalInformation.FFList1SelectionDueDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.FFList1SelectionDueDate.getTime())) : "");    
         
         if(orginalInformation.FFType != null) {
             switch(orginalInformation.FFType) {
@@ -157,14 +151,14 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
             } 
         }
         
-        if(orginalInformation.concilList1Name1 != null) {
-            concilList1Model.removeAllElements();
-            FF1List.setModel(concilList1Model);
-            concilList1Model.add(0, orginalInformation.FFList1Name1);
-            concilList1Model.add(1, orginalInformation.FFList1Name2);
-            concilList1Model.add(2, orginalInformation.FFList1Name3);
-            concilList1Model.add(3, orginalInformation.FFList1Name4);
-            concilList1Model.add(4, orginalInformation.FFlList1Name5);
+        if(orginalInformation.FFList1Name1 != null) {
+            FFList1Model.removeAllElements();
+            FF1List.setModel(FFList1Model);
+            FFList1Model.add(0, orginalInformation.FFList1Name1);
+            FFList1Model.add(1, orginalInformation.FFList1Name2);
+            FFList1Model.add(2, orginalInformation.FFList1Name3);
+            FFList1Model.add(3, orginalInformation.FFList1Name4);
+            FFList1Model.add(4, orginalInformation.FFList1Name5);
             FF1List.setModel(FFList1Model);
             
             if(Global.root.getjButton2().getText().equals("Save")) {
@@ -172,27 +166,25 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
             } else {
                 FF2GenerateButton.setEnabled(false);
             }
-            
-            
         } else {
-            concilList1Model.removeAllElements();
-            FF1List.setModel(concilList1Model);
+            FFList1Model.removeAllElements();
+            FF1List.setModel(FFList1Model);
         }
         
         appointmentDateTextBox.setText(orginalInformation.FFAppointmentDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.FFAppointmentDate.getTime())) : "");
         FFTypeComboBox.setSelectedItem(orginalInformation.FFType != null ? orginalInformation.FFType : "");
         FFSelectionComboBox.setSelectedItem(orginalInformation.FFSelection != null ? orginalInformation.FFSelection : "");
         replacementFFComboBox.setSelectedItem(orginalInformation.FFReplacement != null ? orginalInformation.FFReplacement : "");
-        concilOriginalFF.setText(orginalInformation.FFOriginalConciliator != null ? orginalInformation.FFOriginalConciliator : "");
-        originalFFDateTextBox.setText(orginalInformation.FFOriginalConcilDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.FFOriginalConcilDate.getTime())) : "");
-        asagreed
+        FFOriginalFactFinder.setText(orginalInformation.FFOriginalFactFinder != null ? orginalInformation.FFOriginalFactFinder : "");
+        originalFFDateTextBox.setText(orginalInformation.FFOriginalFactFinderDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.FFOriginalFactFinderDate.getTime())) : "");
+        asAgreedToByPartiesCheckBox.setSelected(orginalInformation.asAgreedToByParties);
 
         FF2OrderDateTextBox.setText(orginalInformation.FFList2OrderDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.FFList2OrderDate.getTime())) : "");
         FF2SelectionDateTextBox.setText(orginalInformation.FFList2SelectionDueDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.FFList2SelectionDueDate.getTime())) : "");
        
         if(orginalInformation.FFList2Name1 != null) {
             FFList2Model.removeAllElements();
-            FF2List.setModel(concilList2Model);
+            FF2List.setModel(FFList2Model);
             FFList2Model.add(0, orginalInformation.FFList2Name1);
             FFList2Model.add(1, orginalInformation.FFList2Name2);
             FFList2Model.add(2, orginalInformation.FFList2Name3);
@@ -203,18 +195,15 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
             FFList2Model.removeAllElements();
             FF2List.setModel(FFList2Model);
         }
-        
-//        populateConciliatorSelection();
-//        populateConciliatorReplacement();
     }
     
     private void saveInformation() {
         MEDCase newMEDCaseInformation = new MEDCase();
         
-        newMEDCaseInformation.concilList1OrderDate = conciliation1OrderDate.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(conciliation1OrderDate.getText()));
-        newMEDCaseInformation.concilList1SelectionDueDate = conciliation1SelectionDate.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(conciliation1SelectionDate.getText()));
+        newMEDCaseInformation.FFList1OrderDate = FF1OrderDate.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(FF1OrderDate.getText()));
+        newMEDCaseInformation.FFList1SelectionDueDate = FF1SelectionDate.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(FF1SelectionDate.getText()));
         
-        if(FFist1Model.getSize() == 5) {
+        if(FFList1Model.getSize() == 5) {
             newMEDCaseInformation.FFList1Name1 = FFList1Model.get(0).toString();
             newMEDCaseInformation.FFList1Name2 = FFList1Model.get(1).toString();
             newMEDCaseInformation.FFList1Name3 = FFList1Model.get(2).toString();
@@ -229,25 +218,25 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
         }
         
         newMEDCaseInformation.FFAppointmentDate = appointmentDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(appointmentDateTextBox.getText()));
-        newMEDCaseInformation.FFType = FFTypeComboBox.getSelectedItem().toString().equals("") ? null : FFFFTypeComboBox.getSelectedItem().toString();
-        newMEDCaseInformation.FFSelection = FFSelectionComboBox.getSelectedItem() == null || FFFFSelectionComboBox.getSelectedItem().toString().equals("") ? null : FFFFSelectionComboBox.getSelectedItem().toString();
-        newMEDCaseInformation.FFReplacement = replacementFFComboBox.getSelectedItem() == null || replacementFFFFComboBox.getSelectedItem().toString().equals("") ? null : replacementFFComboBox.getSelectedItem().toString();
+        newMEDCaseInformation.FFType = FFTypeComboBox.getSelectedItem().toString().equals("") ? null : FFTypeComboBox.getSelectedItem().toString();
+        newMEDCaseInformation.FFSelection = FFSelectionComboBox.getSelectedItem() == null || FFSelectionComboBox.getSelectedItem().toString().equals("") ? null : FFSelectionComboBox.getSelectedItem().toString();
+        newMEDCaseInformation.FFReplacement = replacementFFComboBox.getSelectedItem() == null || replacementFFComboBox.getSelectedItem().toString().equals("") ? null : replacementFFComboBox.getSelectedItem().toString();
         
         
         //only set the value if it is blank
         if(FFSelectionComboBox.getSelectedItem() == null) {
-            newMEDCaseInformation.FFOriginalConciliator = null;
-        } else if(FFOriginalConciliator.getText().equals("")) {
-            newMEDCaseInformation.FFOriginalConciliator = FFSelectionComboBox.getSelectedItem().toString().equals("") ? null : conciliatorSelectionComboBox.getSelectedItem().toString();
+            newMEDCaseInformation.FFOriginalFactFinder = null;
+        } else if(FFOriginalFactFinder.getText().equals("")) {
+            newMEDCaseInformation.FFOriginalFactFinder = FFSelectionComboBox.getSelectedItem().toString().equals("") ? null : FFSelectionComboBox.getSelectedItem().toString();
         } else {
-            newMEDCaseInformation.FFOriginalConciliator = orginalInformation.FFOriginalFF;
+            newMEDCaseInformation.FFOriginalFactFinder = orginalInformation.FFOriginalFactFinder;
         }
         
-        newMEDCaseInformation.FFOriginalFFDate = originalFFDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(originalFFDateTextBox.getText()));
-        asagreed
+        newMEDCaseInformation.FFOriginalFactFinderDate = originalFFDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(originalFFDateTextBox.getText()));
+        newMEDCaseInformation.asAgreedToByParties = asAgreedToByPartiesCheckBox.isSelected();
         
-        newMEDCaseInformation.concilList2OrderDate = FF2OrderDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(FF2OrderDateTextBox.getText()));
-        newMEDCaseInformation.concilList2SelectionDueDate = FF2SelectionDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(FF2SelectionDateTextBox.getText()));
+        newMEDCaseInformation.FFList2OrderDate = FF2OrderDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(FF2OrderDateTextBox.getText()));
+        newMEDCaseInformation.FFList2SelectionDueDate = FF2SelectionDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(FF2SelectionDateTextBox.getText()));
         
         if(FFList2Model.getSize() == 5) {
             newMEDCaseInformation.FFList2Name1 = FFList2Model.get(0).toString();
@@ -263,7 +252,7 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
             newMEDCaseInformation.FFList2Name5 = null;
         }
         
-        MEDCase.updateConciliation(newMEDCaseInformation, orginalInformation);
+        MEDCase.updateFF(newMEDCaseInformation, orginalInformation);
     }
     
     public void clearAll() {
@@ -284,17 +273,17 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
         FFTypeComboBox.setSelectedItem("");
         FFSelectionComboBox.setSelectedItem("");
         replacementFFComboBox.setSelectedItem("");
-        FFOriginalFF.setText("");
+        FFOriginalFactFinder.setText("");
         originalFFDateTextBox.setText("");
-        asAgreedToParties.setSelected(false);
+        asAgreedToByPartiesCheckBox.setSelected(false);
     }
     
     private void loadFullFFList() {
-        fullConcilList = FactFinder.loadAllConciliators();
-        randomConcilList = fullConcilList;
+        fullFFList = FactFinder.loadAllFF();
+        randomFFList = fullFFList;
     }
     
-    private void generateRandomConcilList(String whichList) {
+    private void generateRandomFFList(String whichList) {
         //remove list 1 names
         for(int i = 0; i < FF1List.getModel().getSize(); i++) {
             randomFFList.remove(FF1List.getModel().getElementAt(i));
@@ -325,8 +314,8 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
                 FFList2Model.add(0, randomFFList.get(randomNumber));
                 randomFFList.remove(randomNumber);
             }
-            conciliation2List.setModel(FFList2Model);
-            conciliation2GenerateButton.setEnabled(false);
+            FF2List.setModel(FFList2Model);
+            FF2GenerateButton.setEnabled(false);
             MEDCase.saveFFList2(FFList2Model);
         }
     }
@@ -347,79 +336,66 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
             FFSelectionComboBox.addItem(FF2List.getModel().getElementAt(i));
         }
         
-        FFSelectionComboBox.setSelectedItem(currentSelectedConcil);
+        FFSelectionComboBox.setSelectedItem(currentSelectedFF);
     }
     
-    private void populateFullConciliatorSelection() {
-        String currentSelectedConcil = "";
+    private void populateFullFFSelection() {
+        String currentSelectedFF = "";
         
-        currentSelectedConcil = conciliatorSelectionComboBox.getSelectedItem() == null ? "" : conciliatorSelectionComboBox.getSelectedItem().toString();
-//        
-//        conciliatorSelectionComboBox.setSelectedItem("");
-//        replacementConciliatorComboBox.setSelectedItem("");
+        currentSelectedFF = FFSelectionComboBox.getSelectedItem() == null ? "" : FFSelectionComboBox.getSelectedItem().toString();
         
-        conciliatorSelectionComboBox.removeAllItems();
-        conciliatorSelectionComboBox.addItem("");
+        FFSelectionComboBox.removeAllItems();
+        FFSelectionComboBox.addItem("");
         
-        for(int i = 0; i < fullConcilList.size(); i++) {
-            conciliatorSelectionComboBox.addItem(fullConcilList.get(i));
+        for(int i = 0; i < fullFFList.size(); i++) {
+            FFSelectionComboBox.addItem(fullFFList.get(i));
         }
         
-        conciliatorSelectionComboBox.setSelectedItem(currentSelectedConcil);
+        FFSelectionComboBox.setSelectedItem(currentSelectedFF);
     }
     
-    private void populateFullConciliatorReplacement() {
-        String currentSelectedConcil = "";
+    private void populateFullFFReplacement() {
+        String currentSelectedFF = "";
         
-        currentSelectedConcil = replacementConciliatorComboBox.getSelectedItem() == null ? "" : replacementConciliatorComboBox.getSelectedItem().toString();
+        currentSelectedFF = replacementFFComboBox.getSelectedItem() == null ? "" : replacementFFComboBox.getSelectedItem().toString();
         
-//        conciliatorSelectionComboBox.setSelectedItem("");
-//        replacementConciliatorComboBox.setSelectedItem("");
+        replacementFFComboBox.removeAllItems();
+        replacementFFComboBox.addItem("");
         
-        replacementConciliatorComboBox.removeAllItems();
-        replacementConciliatorComboBox.addItem("");
-        
-        for(int i = 0; i < fullConcilList.size(); i++) {
-            replacementConciliatorComboBox.addItem(fullConcilList.get(i));
+        for(int i = 0; i < fullFFList.size(); i++) {
+            replacementFFComboBox.addItem(fullFFList.get(i));
         }
         
-//        for(int i = 0; i < conciliation2List.getModel().getSize(); i++) {
-//            replacementConciliatorComboBox.addItem(conciliation2List.getModel().getElementAt(i));
-//        }
-        
-        if(conciliatorSelectionComboBox.getSelectedItem() != null &&
-                !conciliatorSelectionComboBox.getSelectedItem().toString().equals("")) {
-            replacementConciliatorComboBox.removeItem(conciliatorSelectionComboBox.getSelectedItem().toString());
+        if(FFSelectionComboBox.getSelectedItem() != null &&
+                !FFSelectionComboBox.getSelectedItem().toString().equals("")) {
+            replacementFFComboBox.removeItem(FFSelectionComboBox.getSelectedItem().toString());
         }
         
-        replacementConciliatorComboBox.setSelectedItem(currentSelectedConcil);
+        replacementFFComboBox.setSelectedItem(currentSelectedFF);
     }
     
-    private void populateConciliatorReplacement() {
-        String currentSelectedConcil = "";
+    private void populateFFReplacement() {
+        String currentSelectedFF = "";
         
-        currentSelectedConcil = replacementConciliatorComboBox.getSelectedItem() == null ? "" : replacementConciliatorComboBox.getSelectedItem().toString();
+        currentSelectedFF = replacementFFComboBox.getSelectedItem() == null ? "" : replacementFFComboBox.getSelectedItem().toString();
         
-//        conciliatorSelectionComboBox.setSelectedItem("");
-//        replacementConciliatorComboBox.setSelectedItem("");
+        replacementFFComboBox.removeAllItems();
+        replacementFFComboBox.addItem("");
         
-        replacementConciliatorComboBox.removeAllItems();
-        replacementConciliatorComboBox.addItem("");
-        
-        for(int i = 0; i < conciliation1List.getModel().getSize(); i++) {
-            replacementConciliatorComboBox.addItem(conciliation1List.getModel().getElementAt(i));
+        for(int i = 0; i < FF1List.getModel().getSize(); i++) {
+            replacementFFComboBox.addItem(FF1List.getModel().getElementAt(i));
         }
         
-        for(int i = 0; i < conciliation2List.getModel().getSize(); i++) {
-            replacementConciliatorComboBox.addItem(conciliation2List.getModel().getElementAt(i));
+        for(int i = 0; i < FF2List.getModel().getSize(); i++) {
+            replacementFFComboBox.addItem(FF2List.getModel().getElementAt(i));
         }
         
-        if(conciliatorSelectionComboBox.getSelectedItem() != null &&
-                !conciliatorSelectionComboBox.getSelectedItem().toString().equals("")) {
-            replacementConciliatorComboBox.removeItem(conciliatorSelectionComboBox.getSelectedItem().toString());
+        if(FFSelectionComboBox.getSelectedItem() != null &&
+                !FFSelectionComboBox.getSelectedItem().toString().equals("")) {
+            replacementFFComboBox.removeItem(FFSelectionComboBox.getSelectedItem().toString());
         }
         
-        replacementConciliatorComboBox.setSelectedItem(currentSelectedConcil);
+        replacementFFComboBox.setSelectedItem(currentSelectedFF);
     }
     
     private void clearDate(WebDateField dateField, MouseEvent evt) {
@@ -432,34 +408,27 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
         }
     }
     
-    private void replaceConcilAfterRemoval(int concilLocation, String whichList) {
+    private void replaceFFAfterRemoval(int FFLocation, String whichList) {
         if(whichList.equals("list1")) {
-            String oldName = concilList1Model.get(concilLocation).toString();
-            concilList1Model.remove(concilLocation);
-            int randomNumber = new Random().nextInt(randomConcilList.size());
-            String newName = randomConcilList.get(randomNumber);
-            concilList1Model.add(concilLocation, newName);
-            MEDCase.replaceList1Concil(concilLocation, newName, oldName);
-            randomConcilList.remove(randomNumber);
-            randomConcilList.add(concilList1Model.get(concilLocation).toString());
+            String oldName = FFList1Model.get(FFLocation).toString();
+            FFList1Model.remove(FFLocation);
+            int randomNumber = new Random().nextInt(randomFFList.size());
+            String newName = randomFFList.get(randomNumber);
+            FFList1Model.add(FFLocation, newName);
+            MEDCase.replaceList1FF(FFLocation, newName, oldName);
+            randomFFList.remove(randomNumber);
+            randomFFList.add(FFList1Model.get(FFLocation).toString());
         } else if(whichList.equals("list2")) {
-            String oldName = concilList2Model.get(concilLocation).toString();
-            concilList2Model.remove(concilLocation);
-            int randomNumber = new Random().nextInt(randomConcilList.size());
-            String newName = randomConcilList.get(randomNumber);
-            concilList2Model.add(concilLocation, newName);
-            MEDCase.replaceList2Concil(concilLocation, newName, oldName);
-            randomConcilList.remove(randomNumber);
-            randomConcilList.add(concilList2Model.get(concilLocation).toString());
-//            concilList2Model.remove(concilLocation);
-//            int randomNumber = new Random().nextInt(randomConcilList.size());
-//            concilList2Model.add(concilLocation, randomConcilList.get(randomNumber));
-//            randomConcilList.remove(randomNumber);
-//            randomConcilList.add(concilList2Model.get(concilLocation).toString());
+            String oldName = FFList2Model.get(FFLocation).toString();
+            FFList2Model.remove(FFLocation);
+            int randomNumber = new Random().nextInt(randomFFList.size());
+            String newName = randomFFList.get(randomNumber);
+            FFList2Model.add(FFLocation, newName);
+            MEDCase.replaceList2FF(FFLocation, newName, oldName);
+            randomFFList.remove(randomNumber);
+            randomFFList.add(FFList2Model.get(FFLocation).toString());
         }
     }
-    
-//    private void enableConcilComboBoxes()
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -477,31 +446,31 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        conciliationTypeComboBox = new javax.swing.JComboBox<>();
-        conciliatorSelectionComboBox = new javax.swing.JComboBox<>();
-        replacementConciliatorComboBox = new javax.swing.JComboBox<>();
-        concilOriginalConciliator = new javax.swing.JTextField();
+        FFTypeComboBox = new javax.swing.JComboBox<>();
+        FFSelectionComboBox = new javax.swing.JComboBox<>();
+        replacementFFComboBox = new javax.swing.JComboBox<>();
+        FFOriginalFactFinder = new javax.swing.JTextField();
         appointmentDateTextBox = new com.alee.extended.date.WebDateField();
-        originalConciliationDateTextBox = new com.alee.extended.date.WebDateField();
-        asAgreedToParties = new javax.swing.JCheckBox();
+        originalFFDateTextBox = new com.alee.extended.date.WebDateField();
+        asAgreedToByPartiesCheckBox = new javax.swing.JCheckBox();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        conciliation1List = new javax.swing.JList<>();
+        FF1List = new javax.swing.JList<>();
         jLabel1 = new javax.swing.JLabel();
-        conciliation1GenerateButton = new javax.swing.JButton();
+        FF1GenerateButton = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        conciliation1OrderDate = new com.alee.extended.date.WebDateField();
-        conciliation1SelectionDate = new com.alee.extended.date.WebDateField();
+        FF1OrderDate = new com.alee.extended.date.WebDateField();
+        FF1SelectionDate = new com.alee.extended.date.WebDateField();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        conciliation2List = new javax.swing.JList<>();
-        conciliation2GenerateButton = new javax.swing.JButton();
+        FF2List = new javax.swing.JList<>();
+        FF2GenerateButton = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        conciliation2OrderDateTextBox = new com.alee.extended.date.WebDateField();
-        conciliation2SelectionDateTextBox = new com.alee.extended.date.WebDateField();
+        FF2OrderDateTextBox = new com.alee.extended.date.WebDateField();
+        FF2SelectionDateTextBox = new com.alee.extended.date.WebDateField();
 
         jLabel7.setText("Appointment Date:");
 
@@ -515,27 +484,27 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
 
         jLabel12.setText("Original Fact Finder Date:");
 
-        conciliationTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selected by parties", "Discretionary", "Replacement", "Alternate Selection", "" }));
-        conciliationTypeComboBox.setSelectedIndex(4);
-        conciliationTypeComboBox.setEnabled(false);
-        conciliationTypeComboBox.addActionListener(new java.awt.event.ActionListener() {
+        FFTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selected by parties", "Discretionary", "Replacement", "Alternate Selection", "" }));
+        FFTypeComboBox.setSelectedIndex(4);
+        FFTypeComboBox.setEnabled(false);
+        FFTypeComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                conciliationTypeComboBoxActionPerformed(evt);
+                FFTypeComboBoxActionPerformed(evt);
             }
         });
 
-        conciliatorSelectionComboBox.setEnabled(false);
-        conciliatorSelectionComboBox.addActionListener(new java.awt.event.ActionListener() {
+        FFSelectionComboBox.setEnabled(false);
+        FFSelectionComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                conciliatorSelectionComboBoxActionPerformed(evt);
+                FFSelectionComboBoxActionPerformed(evt);
             }
         });
 
-        replacementConciliatorComboBox.setEnabled(false);
+        replacementFFComboBox.setEnabled(false);
 
-        concilOriginalConciliator.setBackground(new java.awt.Color(238, 238, 238));
-        concilOriginalConciliator.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        concilOriginalConciliator.setEnabled(false);
+        FFOriginalFactFinder.setBackground(new java.awt.Color(238, 238, 238));
+        FFOriginalFactFinder.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        FFOriginalFactFinder.setEnabled(false);
 
         appointmentDateTextBox.setEditable(false);
         appointmentDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
@@ -549,22 +518,22 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
             }
         });
 
-        originalConciliationDateTextBox.setEditable(false);
-        originalConciliationDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        originalConciliationDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
-        originalConciliationDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        originalConciliationDateTextBox.setEnabled(false);
-        originalConciliationDateTextBox.setDateFormat(Global.mmddyyyy);
-        originalConciliationDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+        originalFFDateTextBox.setEditable(false);
+        originalFFDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        originalFFDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+        originalFFDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        originalFFDateTextBox.setEnabled(false);
+        originalFFDateTextBox.setDateFormat(Global.mmddyyyy);
+        originalFFDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                originalConciliationDateTextBoxMouseClicked(evt);
+                originalFFDateTextBoxMouseClicked(evt);
             }
         });
 
-        asAgreedToParties.setText("As Agreed To By Parties");
-        asAgreedToParties.addActionListener(new java.awt.event.ActionListener() {
+        asAgreedToByPartiesCheckBox.setText("As Agreed To By Parties");
+        asAgreedToByPartiesCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                asAgreedToPartiesActionPerformed(evt);
+                asAgreedToByPartiesCheckBoxActionPerformed(evt);
             }
         });
 
@@ -583,14 +552,14 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(asAgreedToParties)
+                        .addComponent(asAgreedToByPartiesCheckBox)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(conciliationTypeComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(conciliatorSelectionComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(replacementConciliatorComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(concilOriginalConciliator)
+                    .addComponent(FFTypeComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(FFSelectionComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(replacementFFComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(FFOriginalFactFinder)
                     .addComponent(appointmentDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(originalConciliationDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(originalFFDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -602,46 +571,46 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
                     .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(conciliationTypeComboBox)
+                    .addComponent(FFTypeComboBox)
                     .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(conciliatorSelectionComboBox)
+                    .addComponent(FFSelectionComboBox)
                     .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(replacementConciliatorComboBox)
+                    .addComponent(replacementFFComboBox)
                     .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11)
-                    .addComponent(concilOriginalConciliator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(FFOriginalFactFinder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(originalConciliationDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(originalFFDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(asAgreedToParties)
+                .addComponent(asAgreedToByPartiesCheckBox)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        conciliation1List.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        conciliation1List.setEnabled(false);
-        conciliation1List.addMouseListener(new java.awt.event.MouseAdapter() {
+        FF1List.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        FF1List.setEnabled(false);
+        FF1List.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                conciliation1ListMouseClicked(evt);
+                FF1ListMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(conciliation1List);
+        jScrollPane1.setViewportView(FF1List);
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Fact Finder List");
 
-        conciliation1GenerateButton.setText("Generate List");
-        conciliation1GenerateButton.setEnabled(false);
-        conciliation1GenerateButton.addActionListener(new java.awt.event.ActionListener() {
+        FF1GenerateButton.setText("Generate List");
+        FF1GenerateButton.setEnabled(false);
+        FF1GenerateButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                conciliation1GenerateButtonActionPerformed(evt);
+                FF1GenerateButtonActionPerformed(evt);
             }
         });
 
@@ -649,27 +618,27 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
 
         jLabel4.setText("Selection DueDate:");
 
-        conciliation1OrderDate.setEditable(false);
-        conciliation1OrderDate.setBackground(new java.awt.Color(238, 238, 238));
-        conciliation1OrderDate.setCaretColor(new java.awt.Color(0, 0, 0));
-        conciliation1OrderDate.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        conciliation1OrderDate.setEnabled(false);
-        conciliation1OrderDate.setDateFormat(Global.mmddyyyy);
-        conciliation1OrderDate.addMouseListener(new java.awt.event.MouseAdapter() {
+        FF1OrderDate.setEditable(false);
+        FF1OrderDate.setBackground(new java.awt.Color(238, 238, 238));
+        FF1OrderDate.setCaretColor(new java.awt.Color(0, 0, 0));
+        FF1OrderDate.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        FF1OrderDate.setEnabled(false);
+        FF1OrderDate.setDateFormat(Global.mmddyyyy);
+        FF1OrderDate.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                conciliation1OrderDateMouseClicked(evt);
+                FF1OrderDateMouseClicked(evt);
             }
         });
 
-        conciliation1SelectionDate.setEditable(false);
-        conciliation1SelectionDate.setBackground(new java.awt.Color(238, 238, 238));
-        conciliation1SelectionDate.setCaretColor(new java.awt.Color(0, 0, 0));
-        conciliation1SelectionDate.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        conciliation1SelectionDate.setEnabled(false);
-        conciliation1SelectionDate.setDateFormat(Global.mmddyyyy);
-        conciliation1SelectionDate.addMouseListener(new java.awt.event.MouseAdapter() {
+        FF1SelectionDate.setEditable(false);
+        FF1SelectionDate.setBackground(new java.awt.Color(238, 238, 238));
+        FF1SelectionDate.setCaretColor(new java.awt.Color(0, 0, 0));
+        FF1SelectionDate.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        FF1SelectionDate.setEnabled(false);
+        FF1SelectionDate.setDateFormat(Global.mmddyyyy);
+        FF1SelectionDate.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                conciliation1SelectionDateMouseClicked(evt);
+                FF1SelectionDateMouseClicked(evt);
             }
         });
 
@@ -681,15 +650,15 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE)
-                    .addComponent(conciliation1GenerateButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(FF1GenerateButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel4)
                             .addComponent(jLabel3))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(conciliation1OrderDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(conciliation1SelectionDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(FF1OrderDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(FF1SelectionDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -699,33 +668,33 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(conciliation1OrderDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(FF1OrderDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(conciliation1SelectionDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(FF1SelectionDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(conciliation1GenerateButton)
+                .addComponent(FF1GenerateButton)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        conciliation2List.setEnabled(false);
-        conciliation2List.addMouseListener(new java.awt.event.MouseAdapter() {
+        FF2List.setEnabled(false);
+        FF2List.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                conciliation2ListMouseClicked(evt);
+                FF2ListMouseClicked(evt);
             }
         });
-        jScrollPane2.setViewportView(conciliation2List);
+        jScrollPane2.setViewportView(FF2List);
 
-        conciliation2GenerateButton.setText("Generate List");
-        conciliation2GenerateButton.setEnabled(false);
-        conciliation2GenerateButton.addActionListener(new java.awt.event.ActionListener() {
+        FF2GenerateButton.setText("Generate List");
+        FF2GenerateButton.setEnabled(false);
+        FF2GenerateButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                conciliation2GenerateButtonActionPerformed(evt);
+                FF2GenerateButtonActionPerformed(evt);
             }
         });
 
@@ -736,27 +705,27 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
 
         jLabel6.setText("Selection Due Date:");
 
-        conciliation2OrderDateTextBox.setEditable(false);
-        conciliation2OrderDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        conciliation2OrderDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
-        conciliation2OrderDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        conciliation2OrderDateTextBox.setEnabled(false);
-        conciliation2OrderDateTextBox.setDateFormat(Global.mmddyyyy);
-        conciliation2OrderDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+        FF2OrderDateTextBox.setEditable(false);
+        FF2OrderDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        FF2OrderDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+        FF2OrderDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        FF2OrderDateTextBox.setEnabled(false);
+        FF2OrderDateTextBox.setDateFormat(Global.mmddyyyy);
+        FF2OrderDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                conciliation2OrderDateTextBoxMouseClicked(evt);
+                FF2OrderDateTextBoxMouseClicked(evt);
             }
         });
 
-        conciliation2SelectionDateTextBox.setEditable(false);
-        conciliation2SelectionDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        conciliation2SelectionDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
-        conciliation2SelectionDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        conciliation2SelectionDateTextBox.setEnabled(false);
-        conciliation2SelectionDateTextBox.setDateFormat(Global.mmddyyyy);
-        conciliation2SelectionDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+        FF2SelectionDateTextBox.setEditable(false);
+        FF2SelectionDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        FF2SelectionDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+        FF2SelectionDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        FF2SelectionDateTextBox.setEnabled(false);
+        FF2SelectionDateTextBox.setDateFormat(Global.mmddyyyy);
+        FF2SelectionDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                conciliation2SelectionDateTextBoxMouseClicked(evt);
+                FF2SelectionDateTextBoxMouseClicked(evt);
             }
         });
 
@@ -767,7 +736,7 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(conciliation2GenerateButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(FF2GenerateButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
@@ -777,8 +746,8 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
                             .addComponent(jLabel5))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(conciliation2SelectionDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)
-                            .addComponent(conciliation2OrderDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(FF2SelectionDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)
+                            .addComponent(FF2OrderDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -787,17 +756,17 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(conciliation2OrderDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(FF2OrderDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(conciliation2SelectionDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(FF2SelectionDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(conciliation2GenerateButton)
+                .addComponent(FF2GenerateButton)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -828,166 +797,159 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
         clearDate(appointmentDateTextBox, evt);
     }//GEN-LAST:event_appointmentDateTextBoxMouseClicked
 
-    private void originalConciliationDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_originalConciliationDateTextBoxMouseClicked
-        clearDate(originalConciliationDateTextBox, evt);
-    }//GEN-LAST:event_originalConciliationDateTextBoxMouseClicked
+    private void originalFFDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_originalFFDateTextBoxMouseClicked
+        clearDate(originalFFDateTextBox, evt);
+    }//GEN-LAST:event_originalFFDateTextBoxMouseClicked
 
-    private void conciliation1OrderDateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_conciliation1OrderDateMouseClicked
-        clearDate(conciliation1OrderDate, evt);
-    }//GEN-LAST:event_conciliation1OrderDateMouseClicked
+    private void FF1OrderDateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FF1OrderDateMouseClicked
+        clearDate(FF1OrderDate, evt);
+    }//GEN-LAST:event_FF1OrderDateMouseClicked
 
-    private void conciliation1SelectionDateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_conciliation1SelectionDateMouseClicked
-        clearDate(conciliation1SelectionDate, evt);
-    }//GEN-LAST:event_conciliation1SelectionDateMouseClicked
+    private void FF1SelectionDateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FF1SelectionDateMouseClicked
+        clearDate(FF1SelectionDate, evt);
+    }//GEN-LAST:event_FF1SelectionDateMouseClicked
 
-    private void conciliation2OrderDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_conciliation2OrderDateTextBoxMouseClicked
-        clearDate(conciliation2OrderDateTextBox, evt);
-    }//GEN-LAST:event_conciliation2OrderDateTextBoxMouseClicked
+    private void FF2OrderDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FF2OrderDateTextBoxMouseClicked
+        clearDate(FF2OrderDateTextBox, evt);
+    }//GEN-LAST:event_FF2OrderDateTextBoxMouseClicked
 
-    private void conciliation2SelectionDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_conciliation2SelectionDateTextBoxMouseClicked
-        clearDate(conciliation2SelectionDateTextBox, evt);
-    }//GEN-LAST:event_conciliation2SelectionDateTextBoxMouseClicked
+    private void FF2SelectionDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FF2SelectionDateTextBoxMouseClicked
+        clearDate(FF2SelectionDateTextBox, evt);
+    }//GEN-LAST:event_FF2SelectionDateTextBoxMouseClicked
 
-    private void conciliation2GenerateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_conciliation2GenerateButtonActionPerformed
-        generateRandomConcilList("2");
-    }//GEN-LAST:event_conciliation2GenerateButtonActionPerformed
+    private void FF2GenerateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FF2GenerateButtonActionPerformed
+        generateRandomFFList("2");
+    }//GEN-LAST:event_FF2GenerateButtonActionPerformed
 
-    private void conciliation1GenerateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_conciliation1GenerateButtonActionPerformed
-        generateRandomConcilList("1");
-    }//GEN-LAST:event_conciliation1GenerateButtonActionPerformed
+    private void FF1GenerateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FF1GenerateButtonActionPerformed
+        generateRandomFFList("1");
+    }//GEN-LAST:event_FF1GenerateButtonActionPerformed
 
-    private void conciliation1ListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_conciliation1ListMouseClicked
-        if(conciliation1List.isEnabled() && conciliation1List.getSelectedIndex() >= 0) {
+    private void FF1ListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FF1ListMouseClicked
+        if(FF1List.isEnabled() && FF1List.getSelectedIndex() >= 0) {
             if(evt.getClickCount() == 2) {
-                System.out.println("MORE INFO: " + concilList1Model.get(conciliation1List.getSelectedIndex()));
+                System.out.println("MORE INFO: " + FFList1Model.get(FF1List.getSelectedIndex()));
             } else if(evt.getButton() == MouseEvent.BUTTON3) {
-                MEDRemoveConciliatorDialog remove = new MEDRemoveConciliatorDialog(Global.root, true, concilList1Model.get(conciliation1List.getSelectedIndex()).toString());
-                if(remove.removeConcil) {
-                    System.out.println("REMOVE: " + concilList1Model.get(conciliation1List.getSelectedIndex()));
-                    replaceConcilAfterRemoval(conciliation1List.getSelectedIndex(), "list1");
-                    conciliation1List.clearSelection();
-                }
-                remove.dispose();
+//                MEDRemoveFFDialog remove = new MEDRemoveFFDialog(Global.root, true, FFList1Model.get(FF1List.getSelectedIndex()).toString());
+//                if(remove.removeFF) {
+//                    System.out.println("REMOVE: " + FFList1Model.get(FF1List.getSelectedIndex()));
+//                    replaceFFAfterRemoval(FF1List.getSelectedIndex(), "list1");
+//                    FF1List.clearSelection();
+//                }
+//                remove.dispose();
             }
         }
-    }//GEN-LAST:event_conciliation1ListMouseClicked
+    }//GEN-LAST:event_FF1ListMouseClicked
 
-    private void conciliation2ListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_conciliation2ListMouseClicked
-        if(conciliation2List.isEnabled() && conciliation2List.getSelectedIndex() >= 0) {
+    private void FF2ListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FF2ListMouseClicked
+        if(FF2List.isEnabled() && FF2List.getSelectedIndex() >= 0) {
             if(evt.getClickCount() == 2) {
-                System.out.println("MORE INFO: " + concilList2Model.get(conciliation2List.getSelectedIndex()));
+                System.out.println("MORE INFO: " + FFList2Model.get(FF2List.getSelectedIndex()));
             } else if(evt.getButton() == MouseEvent.BUTTON3) {
-                MEDRemoveConciliatorDialog remove = new MEDRemoveConciliatorDialog(Global.root, true, concilList2Model.get(conciliation2List.getSelectedIndex()).toString());
-                if(remove.removeConcil) {
-                    System.out.println("REMOVE: " + concilList2Model.get(conciliation2List.getSelectedIndex()));
-                    replaceConcilAfterRemoval(conciliation2List.getSelectedIndex(), "list2");
-                    conciliation2List.clearSelection();
-                }
-                remove.dispose();
+//                MEDRemoveFFDialog remove = new MEDRemoveFFDialog(Global.root, true, FFList2Model.get(FF2List.getSelectedIndex()).toString());
+//                if(remove.removeFF) {
+//                    System.out.println("REMOVE: " + FFList2Model.get(FF2List.getSelectedIndex()));
+//                    replaceFFAfterRemoval(FF2List.getSelectedIndex(), "list2");
+//                    FF2List.clearSelection();
+//                }
+//                remove.dispose();
             }
         }
-    }//GEN-LAST:event_conciliation2ListMouseClicked
+    }//GEN-LAST:event_FF2ListMouseClicked
 
-    private void conciliatorSelectionComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_conciliatorSelectionComboBoxActionPerformed
-        switch(conciliationTypeComboBox.getSelectedItem().toString().trim()) {
+    private void FFSelectionComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FFSelectionComboBoxActionPerformed
+        switch(FFTypeComboBox.getSelectedItem().toString().trim()) {
+            case "Selected by parties":
+                populateFFReplacement();
+                break;
+            case "Discretionary":
+                populateFullFFReplacement();
+                break;
+            case "Replacement":
+                populateFullFFReplacement();
+                break;
+            case "Alternate Selection":
+                populateFullFFReplacement();
+                break;
+        }
+    }//GEN-LAST:event_FFSelectionComboBoxActionPerformed
+
+    private void FFTypeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FFTypeComboBoxActionPerformed
+        if(FFTypeComboBox.isEnabled()) {
+            switch(FFTypeComboBox.getSelectedItem().toString().trim()) {
                 case "Selected by parties":
-                    populateConciliatorReplacement();
+                    FFSelectionComboBox.setSelectedItem("");
+                    replacementFFComboBox.setSelectedItem("");
+                    FFSelectionComboBox.setEnabled(true);
+                    replacementFFComboBox.setEnabled(true);
+                    originalFFDateTextBox.setEnabled(true);
+                    originalFFDateTextBox.setBackground(Color.white);
+                    populateFFSelection();
+                    populateFFReplacement();
                     break;
                 case "Discretionary":
-                    populateFullConciliatorReplacement();
+                    FFSelectionComboBox.setSelectedItem("");
+                    replacementFFComboBox.setSelectedItem("");
+                    FFSelectionComboBox.setEnabled(true);
+                    replacementFFComboBox.setEnabled(true);
+                    originalFFDateTextBox.setEnabled(true);
+                    originalFFDateTextBox.setBackground(Color.white);
+                    populateFullFFSelection();
+                    populateFullFFReplacement();
                     break;
                 case "Replacement":
-                    populateFullConciliatorReplacement();
+                    FFSelectionComboBox.setSelectedItem("");
+                    replacementFFComboBox.setSelectedItem("");
+                    FFSelectionComboBox.setEnabled(false);
+                    FFSelectionComboBox.setSelectedItem("");
+                    replacementFFComboBox.setEnabled(true);
+                    originalFFDateTextBox.setEnabled(true);
+                    originalFFDateTextBox.setBackground(Color.white);
+                    populateFullFFSelection();
+                    populateFullFFReplacement();
                     break;
                 case "Alternate Selection":
-                    populateFullConciliatorReplacement();
-                    break;
-            }
-        
-//        populateConciliatorReplacement();
-    }//GEN-LAST:event_conciliatorSelectionComboBoxActionPerformed
-
-    private void conciliationTypeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_conciliationTypeComboBoxActionPerformed
-//        enableUpdate();
-//        System.out.println("TYPE: " + conciliationTypeComboBox.getSelectedItem().toString());
-        
-        if(conciliationTypeComboBox.isEnabled()) {
-            switch(conciliationTypeComboBox.getSelectedItem().toString().trim()) {
-                case "Selected by parties":
-                    conciliatorSelectionComboBox.setSelectedItem("");
-                    replacementConciliatorComboBox.setSelectedItem("");
-                    conciliatorSelectionComboBox.setEnabled(true);
-                    replacementConciliatorComboBox.setEnabled(true);
-                    originalConciliationDateTextBox.setEnabled(true);
-                    originalConciliationDateTextBox.setBackground(Color.white);
-                    populateConciliatorSelection();
-                    populateConciliatorReplacement();
-                    break;
-                case "Discretionary":
-                    conciliatorSelectionComboBox.setSelectedItem("");
-                    replacementConciliatorComboBox.setSelectedItem("");
-                    conciliatorSelectionComboBox.setEnabled(true);
-                    replacementConciliatorComboBox.setEnabled(true);
-                    originalConciliationDateTextBox.setEnabled(true);
-                    originalConciliationDateTextBox.setBackground(Color.white);
-                    populateFullConciliatorSelection();
-                    populateFullConciliatorReplacement();
-                    break;
-                case "Replacement":
-                    conciliatorSelectionComboBox.setSelectedItem("");
-                    replacementConciliatorComboBox.setSelectedItem("");
-                    conciliatorSelectionComboBox.setEnabled(false);
-                    conciliatorSelectionComboBox.setSelectedItem("");
-                    replacementConciliatorComboBox.setEnabled(true);
-                    originalConciliationDateTextBox.setEnabled(true);
-                    originalConciliationDateTextBox.setBackground(Color.white);
-                    populateFullConciliatorSelection();
-                    populateFullConciliatorReplacement();
-                    break;
-                case "Alternate Selection":
-                    conciliatorSelectionComboBox.setSelectedItem("");
-                    replacementConciliatorComboBox.setSelectedItem("");
-                    conciliatorSelectionComboBox.setEnabled(true);
-                    replacementConciliatorComboBox.setEnabled(true);
-                    originalConciliationDateTextBox.setEnabled(true);
-                    originalConciliationDateTextBox.setBackground(Color.white);
-                    populateFullConciliatorSelection();
-                    populateFullConciliatorReplacement();
+                    FFSelectionComboBox.setSelectedItem("");
+                    replacementFFComboBox.setSelectedItem("");
+                    FFSelectionComboBox.setEnabled(true);
+                    replacementFFComboBox.setEnabled(true);
+                    originalFFDateTextBox.setEnabled(true);
+                    originalFFDateTextBox.setBackground(Color.white);
+                    populateFullFFSelection();
+                    populateFullFFReplacement();
                     
                     break;
                 default:
-                    conciliatorSelectionComboBox.setEnabled(false);
-                    replacementConciliatorComboBox.setEnabled(false);
-                    originalConciliationDateTextBox.setEnabled(false);
-                    originalConciliationDateTextBox.setBackground(new Color(238,238,238));
-                    conciliatorSelectionComboBox.setSelectedItem("");
-                    replacementConciliatorComboBox.setSelectedItem("");
+                    FFSelectionComboBox.setEnabled(false);
+                    replacementFFComboBox.setEnabled(false);
+                    originalFFDateTextBox.setEnabled(false);
+                    originalFFDateTextBox.setBackground(new Color(238,238,238));
+                    FFSelectionComboBox.setSelectedItem("");
+                    replacementFFComboBox.setSelectedItem("");
                     break;
             }
         }
-        
-        
-    }//GEN-LAST:event_conciliationTypeComboBoxActionPerformed
+    }//GEN-LAST:event_FFTypeComboBoxActionPerformed
 
-    private void asAgreedToPartiesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_asAgreedToPartiesActionPerformed
+    private void asAgreedToByPartiesCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_asAgreedToByPartiesCheckBoxActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_asAgreedToPartiesActionPerformed
+    }//GEN-LAST:event_asAgreedToByPartiesCheckBoxActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton FF1GenerateButton;
+    private javax.swing.JList<String> FF1List;
+    private com.alee.extended.date.WebDateField FF1OrderDate;
+    private com.alee.extended.date.WebDateField FF1SelectionDate;
+    private javax.swing.JButton FF2GenerateButton;
+    private javax.swing.JList<String> FF2List;
+    private com.alee.extended.date.WebDateField FF2OrderDateTextBox;
+    private com.alee.extended.date.WebDateField FF2SelectionDateTextBox;
+    private javax.swing.JTextField FFOriginalFactFinder;
+    private javax.swing.JComboBox<String> FFSelectionComboBox;
+    private javax.swing.JComboBox<String> FFTypeComboBox;
     private com.alee.extended.date.WebDateField appointmentDateTextBox;
-    private javax.swing.JCheckBox asAgreedToParties;
-    private javax.swing.JTextField concilOriginalConciliator;
-    private javax.swing.JButton conciliation1GenerateButton;
-    private javax.swing.JList<String> conciliation1List;
-    private com.alee.extended.date.WebDateField conciliation1OrderDate;
-    private com.alee.extended.date.WebDateField conciliation1SelectionDate;
-    private javax.swing.JButton conciliation2GenerateButton;
-    private javax.swing.JList<String> conciliation2List;
-    private com.alee.extended.date.WebDateField conciliation2OrderDateTextBox;
-    private com.alee.extended.date.WebDateField conciliation2SelectionDateTextBox;
-    private javax.swing.JComboBox<String> conciliationTypeComboBox;
-    private javax.swing.JComboBox<String> conciliatorSelectionComboBox;
+    private javax.swing.JCheckBox asAgreedToByPartiesCheckBox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1005,7 +967,7 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private com.alee.extended.date.WebDateField originalConciliationDateTextBox;
-    private javax.swing.JComboBox<String> replacementConciliatorComboBox;
+    private com.alee.extended.date.WebDateField originalFFDateTextBox;
+    private javax.swing.JComboBox<String> replacementFFComboBox;
     // End of variables declaration//GEN-END:variables
 }

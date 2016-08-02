@@ -57,15 +57,15 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
-                          <Component id="asAgreedToParties" min="-2" max="-2" attributes="0"/>
+                          <Component id="asAgreedToByPartiesCheckBox" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
-                      <Component id="conciliationTypeComboBox" max="32767" attributes="0"/>
-                      <Component id="conciliatorSelectionComboBox" max="32767" attributes="0"/>
-                      <Component id="replacementConciliatorComboBox" alignment="0" max="32767" attributes="0"/>
-                      <Component id="concilOriginalConciliator" alignment="0" max="32767" attributes="0"/>
+                      <Component id="FFTypeComboBox" max="32767" attributes="0"/>
+                      <Component id="FFSelectionComboBox" max="32767" attributes="0"/>
+                      <Component id="replacementFFComboBox" alignment="0" max="32767" attributes="0"/>
+                      <Component id="FFOriginalFactFinder" alignment="0" max="32767" attributes="0"/>
                       <Component id="appointmentDateTextBox" alignment="0" max="32767" attributes="0"/>
-                      <Component id="originalConciliationDateTextBox" alignment="0" max="32767" attributes="0"/>
+                      <Component id="originalFFDateTextBox" alignment="0" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -81,31 +81,31 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="conciliationTypeComboBox" max="32767" attributes="0"/>
+                      <Component id="FFTypeComboBox" max="32767" attributes="0"/>
                       <Component id="jLabel8" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="conciliatorSelectionComboBox" max="32767" attributes="0"/>
+                      <Component id="FFSelectionComboBox" max="32767" attributes="0"/>
                       <Component id="jLabel9" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="replacementConciliatorComboBox" max="32767" attributes="0"/>
+                      <Component id="replacementFFComboBox" max="32767" attributes="0"/>
                       <Component id="jLabel10" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel11" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="concilOriginalConciliator" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="FFOriginalFactFinder" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="originalConciliationDateTextBox" max="32767" attributes="0"/>
+                      <Component id="originalFFDateTextBox" max="32767" attributes="0"/>
                       <Component id="jLabel12" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="asAgreedToParties" min="-2" max="-2" attributes="0"/>
+                  <Component id="asAgreedToByPartiesCheckBox" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -142,7 +142,7 @@
             <Property name="text" type="java.lang.String" value="Original Fact Finder Date:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JComboBox" name="conciliationTypeComboBox">
+        <Component class="javax.swing.JComboBox" name="FFTypeComboBox">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="5">
@@ -157,13 +157,13 @@
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="conciliationTypeComboBoxActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="FFTypeComboBoxActionPerformed"/>
           </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
         </Component>
-        <Component class="javax.swing.JComboBox" name="conciliatorSelectionComboBox">
+        <Component class="javax.swing.JComboBox" name="FFSelectionComboBox">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="0"/>
@@ -171,13 +171,13 @@
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="conciliatorSelectionComboBoxActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="FFSelectionComboBoxActionPerformed"/>
           </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
         </Component>
-        <Component class="javax.swing.JComboBox" name="replacementConciliatorComboBox">
+        <Component class="javax.swing.JComboBox" name="replacementFFComboBox">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="0"/>
@@ -188,7 +188,7 @@
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
         </Component>
-        <Component class="javax.swing.JTextField" name="concilOriginalConciliator">
+        <Component class="javax.swing.JTextField" name="FFOriginalFactFinder">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ee" green="ee" red="ee" type="rgb"/>
@@ -220,7 +220,7 @@
             <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="appointmentDateTextBox.setDateFormat(Global.mmddyyyy);"/>
           </AuxValues>
         </Component>
-        <Component class="com.alee.extended.date.WebDateField" name="originalConciliationDateTextBox">
+        <Component class="com.alee.extended.date.WebDateField" name="originalFFDateTextBox">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -235,18 +235,18 @@
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="originalConciliationDateTextBoxMouseClicked"/>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="originalFFDateTextBoxMouseClicked"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="originalConciliationDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="originalFFDateTextBox.setDateFormat(Global.mmddyyyy);"/>
           </AuxValues>
         </Component>
-        <Component class="javax.swing.JCheckBox" name="asAgreedToParties">
+        <Component class="javax.swing.JCheckBox" name="asAgreedToByPartiesCheckBox">
           <Properties>
             <Property name="text" type="java.lang.String" value="As Agreed To By Parties"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="asAgreedToPartiesActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="asAgreedToByPartiesCheckBoxActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>
@@ -260,7 +260,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="jScrollPane1" pref="311" max="32767" attributes="0"/>
-                      <Component id="conciliation1GenerateButton" alignment="0" max="32767" attributes="0"/>
+                      <Component id="FF1GenerateButton" alignment="0" max="32767" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="1" attributes="0">
                               <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
@@ -268,8 +268,8 @@
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="conciliation1OrderDate" max="32767" attributes="0"/>
-                              <Component id="conciliation1SelectionDate" max="32767" attributes="0"/>
+                              <Component id="FF1OrderDate" max="32767" attributes="0"/>
+                              <Component id="FF1SelectionDate" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <Component id="jLabel1" alignment="1" max="32767" attributes="0"/>
@@ -284,19 +284,19 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="conciliation1OrderDate" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="FF1OrderDate" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="conciliation1SelectionDate" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="FF1SelectionDate" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jScrollPane1" min="-2" pref="134" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="conciliation1GenerateButton" min="-2" max="-2" attributes="0"/>
+                  <Component id="FF1GenerateButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -310,7 +310,7 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="javax.swing.JList" name="conciliation1List">
+            <Component class="javax.swing.JList" name="FF1List">
               <Properties>
                 <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
                   <StringArray count="0"/>
@@ -319,7 +319,7 @@
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="conciliation1ListMouseClicked"/>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="FF1ListMouseClicked"/>
               </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
@@ -333,13 +333,13 @@
             <Property name="text" type="java.lang.String" value="Fact Finder List"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="conciliation1GenerateButton">
+        <Component class="javax.swing.JButton" name="FF1GenerateButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Generate List"/>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="conciliation1GenerateButtonActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="FF1GenerateButtonActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel3">
@@ -352,7 +352,7 @@
             <Property name="text" type="java.lang.String" value="Selection DueDate:"/>
           </Properties>
         </Component>
-        <Component class="com.alee.extended.date.WebDateField" name="conciliation1OrderDate">
+        <Component class="com.alee.extended.date.WebDateField" name="FF1OrderDate">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -367,13 +367,13 @@
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="conciliation1OrderDateMouseClicked"/>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="FF1OrderDateMouseClicked"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="conciliation1OrderDate.setDateFormat(Global.mmddyyyy);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="FF1OrderDate.setDateFormat(Global.mmddyyyy);"/>
           </AuxValues>
         </Component>
-        <Component class="com.alee.extended.date.WebDateField" name="conciliation1SelectionDate">
+        <Component class="com.alee.extended.date.WebDateField" name="FF1SelectionDate">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -388,10 +388,10 @@
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="conciliation1SelectionDateMouseClicked"/>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="FF1SelectionDateMouseClicked"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="conciliation1SelectionDate.setDateFormat(Global.mmddyyyy);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="FF1SelectionDate.setDateFormat(Global.mmddyyyy);"/>
           </AuxValues>
         </Component>
       </SubComponents>
@@ -404,7 +404,7 @@
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="conciliation2GenerateButton" max="32767" attributes="0"/>
+                      <Component id="FF2GenerateButton" max="32767" attributes="0"/>
                       <Component id="jScrollPane2" alignment="0" max="32767" attributes="0"/>
                       <Component id="jLabel2" alignment="0" max="32767" attributes="0"/>
                       <Group type="102" alignment="1" attributes="0">
@@ -415,8 +415,8 @@
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="conciliation2SelectionDateTextBox" pref="182" max="32767" attributes="0"/>
-                              <Component id="conciliation2OrderDateTextBox" max="32767" attributes="0"/>
+                              <Component id="FF2SelectionDateTextBox" pref="182" max="32767" attributes="0"/>
+                              <Component id="FF2OrderDateTextBox" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -430,19 +430,19 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="conciliation2OrderDateTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="FF2OrderDateTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="conciliation2SelectionDateTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="FF2SelectionDateTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jScrollPane2" min="-2" pref="134" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="conciliation2GenerateButton" min="-2" max="-2" attributes="0"/>
+                  <Component id="FF2GenerateButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -456,7 +456,7 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="javax.swing.JList" name="conciliation2List">
+            <Component class="javax.swing.JList" name="FF2List">
               <Properties>
                 <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
                   <StringArray count="0"/>
@@ -464,7 +464,7 @@
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="conciliation2ListMouseClicked"/>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="FF2ListMouseClicked"/>
               </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
@@ -472,13 +472,13 @@
             </Component>
           </SubComponents>
         </Container>
-        <Component class="javax.swing.JButton" name="conciliation2GenerateButton">
+        <Component class="javax.swing.JButton" name="FF2GenerateButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Generate List"/>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="conciliation2GenerateButtonActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="FF2GenerateButtonActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
@@ -497,7 +497,7 @@
             <Property name="text" type="java.lang.String" value="Selection Due Date:"/>
           </Properties>
         </Component>
-        <Component class="com.alee.extended.date.WebDateField" name="conciliation2OrderDateTextBox">
+        <Component class="com.alee.extended.date.WebDateField" name="FF2OrderDateTextBox">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -512,13 +512,13 @@
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="conciliation2OrderDateTextBoxMouseClicked"/>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="FF2OrderDateTextBoxMouseClicked"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="conciliation2OrderDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="FF2OrderDateTextBox.setDateFormat(Global.mmddyyyy);"/>
           </AuxValues>
         </Component>
-        <Component class="com.alee.extended.date.WebDateField" name="conciliation2SelectionDateTextBox">
+        <Component class="com.alee.extended.date.WebDateField" name="FF2SelectionDateTextBox">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -533,10 +533,10 @@
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="conciliation2SelectionDateTextBoxMouseClicked"/>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="FF2SelectionDateTextBoxMouseClicked"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="conciliation2SelectionDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="FF2SelectionDateTextBox.setDateFormat(Global.mmddyyyy);"/>
           </AuxValues>
         </Component>
       </SubComponents>
