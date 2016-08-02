@@ -74,6 +74,15 @@ public class MEDCase {
     public String FFList2Name3;
     public String FFList2Name4;
     public String FFList2Name5;
+    public String FFEmployerType;
+    public String FFEmployeeType;
+    public Timestamp FFReportIssueDate;
+    public boolean FFMediatedSettlement;
+    public String FFAcceptedBy;
+    public String FFDeemedAcceptedBy;
+    public String FFRejectedBy;
+    public String FFOverallResult;
+    public String FFNote;
     
     /**
      * Load a list of the most recent 250 REP case numbers
