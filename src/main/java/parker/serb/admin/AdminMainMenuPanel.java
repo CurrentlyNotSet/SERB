@@ -1,5 +1,7 @@
 package parker.serb.admin;
 
+import parker.serb.adminSearch.PreFixSearchDialog;
+
 /**
  * @author andrew.schmidt
  */
@@ -303,11 +305,12 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(FFConciliatorsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(UsersButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(SystemPBRButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(SystemSERBButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(FFConciliatorsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(SystemPBRButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(SystemSERBButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -405,7 +408,7 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void PreFixesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PreFixesButtonActionPerformed
-        // TODO add your handling code here:
+        PreFixSearchDialog dialog = new PreFixSearchDialog(null, true);
     }//GEN-LAST:event_PreFixesButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
