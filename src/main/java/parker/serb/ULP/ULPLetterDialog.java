@@ -61,7 +61,6 @@ public class ULPLetterDialog extends javax.swing.JDialog {
             letterComboBox.setSelectedItem("");
             enableGenerateButton();
         });
-
     }
     
     private void enableGenerateButton() {
@@ -76,58 +75,49 @@ public class ULPLetterDialog extends javax.swing.JDialog {
     
     private void loadLetters() {
         letterComboBox.removeAllItems();
-        
         letterComboBox.addItem("");
         
         List letterList = SMDSLetter.loadDocumentNamesByTypeAndSection("ULP", "Letter");
-        
         for (Object letter : letterList) {
             letterComboBox.addItem((String) letter);
         }
-        
         letterComboBox.setSelectedItem("");
     }
     
     private void loadDirectives() {
         directiveComboBox.removeAllItems();
-        
         directiveComboBox.addItem("");
         
         List letterList = SMDSLetter.loadDocumentNamesByTypeAndSection("ULP", "Directive");
-        
         for (Object letter : letterList) {
             directiveComboBox.addItem((String) letter);
         }
-        
         directiveComboBox.setSelectedItem("");
     }
     
     private void loadAgenda() {
         agendaComboBox.removeAllItems();
-        
         agendaComboBox.addItem("");
         
         List letterList = SMDSLetter.loadDocumentNamesByTypeAndSection("ULP", "Agenda");
-        
         for (Object letter : letterList) {
             agendaComboBox.addItem((String) letter);
         }
-        
         agendaComboBox.setSelectedItem("");
     }
     
     
     private void generateDocument() {
         String selection = "";
-        if (!letterComboBox.getSelectedItem().toString().trim().equals("")){
+        if (!letterComboBox.getSelectedItem().toString().trim().equals("")) {
             selection = letterComboBox.getSelectedItem().toString().trim();
-        } else if (!directiveComboBox.getSelectedItem().toString().trim().equals("")){
+        } else if (!directiveComboBox.getSelectedItem().toString().trim().equals("")) {
             selection = directiveComboBox.getSelectedItem().toString().trim();
-        } else if (!agendaComboBox.getSelectedItem().toString().trim().equals("")){
+        } else if (!agendaComboBox.getSelectedItem().toString().trim().equals("")) {
             selection = agendaComboBox.getSelectedItem().toString().trim();
         }
-        
-        if (!"".equals(selection)){
+
+        if (!"".equals(selection)) {
             SMDSDocuments template = SMDSDocuments.findDocumentByDescription(selection);
             String docName = generateDocument.generateSMDSdocument(template, 0);
             Activity.addActivty("Created " + template.historyDescription, docName);
