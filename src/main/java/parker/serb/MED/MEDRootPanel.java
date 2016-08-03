@@ -42,6 +42,7 @@ public class MEDRootPanel extends javax.swing.JPanel {
         partiesPanel1.clearAll();
         notesPanel2.clearAll();
         mEDConciliationPanel2.clearAll();
+        mEDFactFinderPanel1.clearAll();
     }
     
     private void addListeners() {
