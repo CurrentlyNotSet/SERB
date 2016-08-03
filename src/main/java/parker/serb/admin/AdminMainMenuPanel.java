@@ -211,7 +211,6 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
         jLabel8.setText("CMDS");
 
         PreFixesButton.setText("Prefixes");
-        PreFixesButton.setEnabled(false);
         PreFixesButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 PreFixesButtonActionPerformed(evt);

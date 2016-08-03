@@ -385,7 +385,6 @@
     <Component class="javax.swing.JButton" name="PreFixesButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Prefixes"/>
-        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="PreFixesButtonActionPerformed"/>

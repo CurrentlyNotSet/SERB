@@ -7,6 +7,7 @@ package parker.serb.adminSearch;
 
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
+import parker.serb.sql.ActiveStatus;
 import parker.serb.sql.NamePrefix;
 
 /**
@@ -15,9 +16,6 @@ import parker.serb.sql.NamePrefix;
  */
 public class PreFixSearchDialog extends javax.swing.JDialog {
 
-    DefaultTableModel model;
-    Object[][] tableData;
-    
     /**
      * Creates new form PreFixSearchDialog
      * @param parent
@@ -27,12 +25,14 @@ public class PreFixSearchDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         setColumnSize();
-        activity();
+        loadingThread();
+        this.setLocationRelativeTo(parent);
+        this.setVisible(true);
     }
 
-    private void activity() {
+    private void loadingThread() {
         Thread temp = new Thread(() -> {
-                loadPrefixes();
+                loadTable();
                 enableTextBoxes();
         });
         temp.start();
@@ -42,63 +42,51 @@ public class PreFixSearchDialog extends javax.swing.JDialog {
         searchTextBox.setEnabled(true);
     }
     
-    private void setColumnSize()   
-    {        
+    private void setColumnSize() {        
         //ID
         SearchTable.getColumnModel().getColumn(0).setMinWidth(0);
         SearchTable.getColumnModel().getColumn(0).setPreferredWidth(0);
         SearchTable.getColumnModel().getColumn(0).setMaxWidth(0);
         
         //Active (Yes/No)
-        SearchTable.getColumnModel().getColumn(1).setMinWidth(100);
-        SearchTable.getColumnModel().getColumn(1).setWidth(100);
-        SearchTable.getColumnModel().getColumn(1).setMaxWidth(100);
-        
-//        //Prefix
-//        SearchTable.getColumnModel().getColumn(2).setMinWidth(200);
-//        SearchTable.getColumnModel().getColumn(2).setWidth(200);
-//        SearchTable.getColumnModel().getColumn(2).setMaxWidth(200);
+        SearchTable.getColumnModel().getColumn(1).setMinWidth(60);
+        SearchTable.getColumnModel().getColumn(1).setWidth(60);
+        SearchTable.getColumnModel().getColumn(1).setMaxWidth(60);
     }
     
-    private void loadPrefixes() {
-        List prefixList = NamePrefix.loadAllPrefix();
-        
-        for (Object caseItem : prefixList) {
-            NamePrefix act = (NamePrefix) caseItem;
-            
-            model.addRow(new Object[] {
-                act.id, //ID
-                act.active, //Active
-                act.prefix //Prefix
-            }); 
-        }
-        getTableData();
-        SearchTable.setModel(model);
-    }
-    
-    public void getTableData() {
-        int nRow = model.getRowCount(), nCol = model.getColumnCount();
-        tableData = new Object[nRow][nCol];
-        for (int i = 0 ; i < nRow ; i++) {
-            for (int j = 0 ; j < nCol ; j++) {
-                tableData[i][j] = model.getValueAt(i,j);
-            }
-        }
-    }
-    
-    private void limitCaseList() {
+    private void loadTable() {
+        DefaultTableModel model = (DefaultTableModel)SearchTable.getModel();
         model.setRowCount(0);
         
-        for (Object[] tableData1 : tableData) {
-            if (tableData1[1].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals("")) {
-                model.addRow(new Object[]{
-                    tableData1[0], //ID
-                    tableData1[1], //Active
-                    tableData1[2] //Prefix
+        List<NamePrefix> databaseList = NamePrefix.loadAllPrefix();
+        
+        for (NamePrefix item : databaseList) {
+            if (item.prefix.toLowerCase().contains(searchTextBox.getText().toLowerCase())){
+                model.addRow(new Object[] {
+                    item.id, //ID
+                    item.active, //Active
+                    item.prefix //Prefix
                 }); 
             }
         }
-        SearchTable.setModel(model);
+    }
+     
+    private void tableClick(java.awt.event.MouseEvent evt) {
+        if (evt.getClickCount() == 1) {
+            if (SearchTable.getSelectedColumn() == 1){
+                update();
+            }
+            EditButton.setEnabled(true);
+        }
+    }
+
+    private void update(){
+        if (SearchTable.getSelectedRow() > -1) {
+            int id = (int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0);
+            boolean active = (boolean) SearchTable.getValueAt(SearchTable.getSelectedRow(), 1);
+            
+            ActiveStatus.updateActiveStatus("NamePreFix", active, id);
+        }
     }
     
     /**
@@ -153,7 +141,7 @@ public class PreFixSearchDialog extends javax.swing.JDialog {
                 java.lang.Object.class, java.lang.Boolean.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, true, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -165,7 +153,16 @@ public class PreFixSearchDialog extends javax.swing.JDialog {
             }
         });
         SearchTable.getTableHeader().setReorderingAllowed(false);
+        SearchTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                SearchTableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(SearchTable);
+        if (SearchTable.getColumnModel().getColumnCount() > 0) {
+            SearchTable.getColumnModel().getColumn(0).setResizable(false);
+            SearchTable.getColumnModel().getColumn(1).setResizable(false);
+        }
 
         EditButton.setText("Edit");
         EditButton.setEnabled(false);
@@ -190,17 +187,19 @@ public class PreFixSearchDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 518, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(searchTextBox)
-                        .addGap(18, 18, 18)
-                        .addComponent(AddNewButton, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(AddNewButton, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(CloseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(EditButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(EditButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 357, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -226,14 +225,12 @@ public class PreFixSearchDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void AddNewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddNewButtonActionPerformed
-//        AdminULPRecsNewPanel batnew = new AdminULPRecsNewPanel(null, true, global);
-        limitCaseList();
+        loadTable();
         EditButton.setEnabled(false);
     }//GEN-LAST:event_AddNewButtonActionPerformed
 
     private void EditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditButtonActionPerformed
-//        AdminULPRecsEditPanel batedit = new AdminULPRecsEditPanel(null, true, global, ULPRecsID);
-        limitCaseList();
+        loadTable();
         EditButton.setEnabled(false);
     }//GEN-LAST:event_EditButtonActionPerformed
 
@@ -242,8 +239,12 @@ public class PreFixSearchDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_CloseButtonActionPerformed
 
     private void searchTextBoxCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_searchTextBoxCaretUpdate
-        limitCaseList();
+        loadTable();
     }//GEN-LAST:event_searchTextBoxCaretUpdate
+
+    private void SearchTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SearchTableMouseClicked
+        tableClick(evt);
+    }//GEN-LAST:event_SearchTableMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AddNewButton;

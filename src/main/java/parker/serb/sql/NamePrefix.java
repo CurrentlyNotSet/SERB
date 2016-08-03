@@ -14,16 +14,16 @@ import java.util.logging.Logger;
  * @author parkerjohnston
  */
 public class NamePrefix {
-    
+
     public int id;
     public boolean active;
     public String prefix;
-    
+
     public static List loadActivePrefix() {
         List<String> prefixList = new ArrayList<>();
-        
+
         Statement stmt = null;
-            
+
         try {
 
             stmt = Database.connectToDB().createStatement();
@@ -34,8 +34,8 @@ public class NamePrefix {
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
             ResultSet prefixRS = preparedStatement.executeQuery();
-            
-            while(prefixRS.next()) {
+
+            while (prefixRS.next()) {
                 prefixList.add(prefixRS.getString("prefix"));
             }
         } catch (SQLException ex) {
@@ -44,24 +44,23 @@ public class NamePrefix {
         }
         return prefixList;
     }
-    
-   public static List loadAllPrefix() {
+
+    public static List loadAllPrefix() {
         List<NamePrefix> prefixList = new ArrayList<>();
-        
+
         Statement stmt = null;
-            
+
         try {
 
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "select prefix from NamePrefix where active = 1"
-                    + " order by prefix";
+            String sql = "SELECT * FROM NamePrefix ORDER BY prefix";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
             ResultSet prefixRS = preparedStatement.executeQuery();
-            
-            while(prefixRS.next()) {
+
+            while (prefixRS.next()) {
                 NamePrefix item = new NamePrefix();
                 item.id = prefixRS.getInt("id");
                 item.active = prefixRS.getBoolean("active");
@@ -74,4 +73,5 @@ public class NamePrefix {
         }
         return prefixList;
     }
+    
 }
