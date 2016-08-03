@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package parker.serb.adminSearch;
+package parker.serb.adminDBMaintenance;
 
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
@@ -69,6 +69,7 @@ public class PreFixSearchDialog extends javax.swing.JDialog {
                 }); 
             }
         }
+        EditButton.setEnabled(false);
     }
      
     private void tableClick(java.awt.event.MouseEvent evt) {
@@ -77,6 +78,8 @@ public class PreFixSearchDialog extends javax.swing.JDialog {
                 update();
             }
             EditButton.setEnabled(true);
+        } else if (evt.getClickCount() >= 2){
+            EditButtonActionPerformed(null);
         }
     }
 
@@ -225,13 +228,15 @@ public class PreFixSearchDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void AddNewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddNewButtonActionPerformed
+        new PreFixAddEdidDialog(null, true, 0);
         loadTable();
-        EditButton.setEnabled(false);
     }//GEN-LAST:event_AddNewButtonActionPerformed
 
     private void EditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditButtonActionPerformed
-        loadTable();
-        EditButton.setEnabled(false);
+        if ((int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0) > 0){
+            new PreFixAddEdidDialog(null, true, (int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0));
+            loadTable();
+        }
     }//GEN-LAST:event_EditButtonActionPerformed
 
     private void CloseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CloseButtonActionPerformed

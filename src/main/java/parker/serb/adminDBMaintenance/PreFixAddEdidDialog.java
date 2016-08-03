@@ -6,7 +6,7 @@
 package parker.serb.adminDBMaintenance;
 
 import com.alee.laf.optionpane.WebOptionPane;
-import java.awt.Color;
+import parker.serb.sql.NamePrefix;
 
 /**
  *
@@ -15,6 +15,7 @@ import java.awt.Color;
 public class PreFixAddEdidDialog extends javax.swing.JDialog {
 
     private int ID;
+    private NamePrefix item;
     
     /**
      * Creates new form AddCompanyContactPanel
@@ -31,44 +32,33 @@ public class PreFixAddEdidDialog extends javax.swing.JDialog {
     private void setDefaults(int itemIDpassed) {
         ID = itemIDpassed;
         if (ID > 0) {
-//            titleLabel.setText("Edit Name Prefix");
-//            editButton.setText("Edit");
-//            loadInformation();
-//            setFieldsEditable(false, global.disabledFields);
-//        } else {
-//            titleLabel.setText("Add Name Prefix");
-//            editButton.setText("Add");
-//            setFieldsEditable(true, global.enabledFields);
+            titleLabel.setText("Edit Name Prefix");
+            editButton.setText("Save");
+            loadInformation();
+        } else {
+            titleLabel.setText("Add Name Prefix");
+            editButton.setText("Add");
+            item = new NamePrefix();
         }
         this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
     
     private void loadInformation() {
-//        resellerModel item = reseller.getResellerByID(global, ID);
-//        
-//        BusinessNameTextField.setText(item.getBusinessName());
-
+        item = NamePrefix.getPreFixByID(ID);
+        
+        PrefixTextField.setText(item.prefix);
     }
     
     private void saveInformation() {
-//        resellerModel item = new resellerModel();
-//        item.setBusinessName(BusinessNameTextField.getText().trim());
-//        item.setId(ID);
-//                       
-//        if (ID > 0){
-//            reseller.updateReseller(global, item);
-//        } else {
-//            reseller.insertNewReseller(global, item);
-//        }
-    }
-
-    private void setFieldsEditable(boolean editable, Color color) {
-        //set the Background color of the fields
-        BusinessNameTextField.setBackground(color);
-        
-        //set the fields editable
-        BusinessNameTextField.setEnabled(editable);
+        item.prefix = PrefixTextField.getText().trim();
+        item.id = ID;
+                       
+        if (ID > 0){
+            NamePrefix.updatePrefix(item);
+        } else {
+            NamePrefix.createPrefix(item);
+        }
     }
     
     /**
@@ -82,9 +72,9 @@ public class PreFixAddEdidDialog extends javax.swing.JDialog {
 
         titleLabel = new javax.swing.JLabel();
         closeButton = new javax.swing.JButton();
-        editButton = new javax.swing.JToggleButton();
-        BusinessNameTextField = new javax.swing.JTextField();
+        PrefixTextField = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
+        editButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -101,22 +91,19 @@ public class PreFixAddEdidDialog extends javax.swing.JDialog {
             }
         });
 
-        editButton.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        editButton.setText("Edit");
+        PrefixTextField.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        PrefixTextField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel4.setText("Prefix:");
+
+        editButton.setText("<<EDIT>>");
         editButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editButtonActionPerformed(evt);
             }
         });
-
-        BusinessNameTextField.setBackground(new java.awt.Color(238, 238, 238));
-        BusinessNameTextField.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        BusinessNameTextField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        BusinessNameTextField.setEnabled(false);
-
-        jLabel4.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel4.setText("Prefix:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -129,7 +116,7 @@ public class PreFixAddEdidDialog extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(BusinessNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(PrefixTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(editButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -145,7 +132,7 @@ public class PreFixAddEdidDialog extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(BusinessNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(PrefixTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(closeButton)
@@ -157,44 +144,21 @@ public class PreFixAddEdidDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
-        if ("Edit".equals(editButton.getText())) {
+        int answer = WebOptionPane.showConfirmDialog(this, "Are you sure you wish to close this window. Any unsaved information will be lost.", "Cancel", WebOptionPane.YES_NO_OPTION);
+        if (answer == WebOptionPane.YES_OPTION) {
             this.dispose();
-        } else if ("Save".equals(editButton.getText()) || "Add".equals(editButton.getText())) {
-            int answer = WebOptionPane.showConfirmDialog(this, "Are you sure you wish to exit. Any unsaved information will be lost.", "Cancel", WebOptionPane.YES_NO_OPTION);
-            if (answer == WebOptionPane.YES_OPTION) {
-                this.dispose();
-            }
         }
     }//GEN-LAST:event_closeButtonActionPerformed
 
     private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
-        if (null != editButton.getText()) switch (editButton.getText()) {
-            case "Edit":
-//                setFieldsEditable(true);
-                editButton.setText("Save");
-                closeButton.setText("Cancel");
-                break;
-            case "Save":
-//                setFieldsEditable(false);
-                saveInformation();
-                editButton.setText("Edit");
-                closeButton.setText("Close");
-                this.dispose();
-                break;
-            case "Add":
-//                setFieldsEditable(false);
-                saveInformation();
-                this.dispose();
-                break;
-            default:
-                break;
-        }
+        saveInformation();
+        this.dispose();
     }//GEN-LAST:event_editButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField BusinessNameTextField;
+    private javax.swing.JTextField PrefixTextField;
     private javax.swing.JButton closeButton;
-    private javax.swing.JToggleButton editButton;
+    private javax.swing.JButton editButton;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel titleLabel;
     // End of variables declaration//GEN-END:variables

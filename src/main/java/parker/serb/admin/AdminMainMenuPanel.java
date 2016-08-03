@@ -1,6 +1,6 @@
 package parker.serb.admin;
 
-import parker.serb.adminSearch.PreFixSearchDialog;
+import parker.serb.adminDBMaintenance.PreFixSearchDialog;
 
 /**
  * @author andrew.schmidt
@@ -407,7 +407,7 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void PreFixesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PreFixesButtonActionPerformed
-        PreFixSearchDialog dialog = new PreFixSearchDialog(null, true);
+        new PreFixSearchDialog(null, true);
     }//GEN-LAST:event_PreFixesButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

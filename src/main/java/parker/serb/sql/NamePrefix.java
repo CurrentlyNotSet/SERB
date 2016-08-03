@@ -74,4 +74,67 @@ public class NamePrefix {
         return prefixList;
     }
     
+    public static NamePrefix getPreFixByID(int id) {
+        NamePrefix item = new NamePrefix();
+        
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT * FROM NamePrefix WHERE id = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+
+            ResultSet prefixRS = preparedStatement.executeQuery();
+            
+            while(prefixRS.next()) {
+                item.id = prefixRS.getInt("id");
+                item.active = prefixRS.getBoolean("active");
+                item.prefix = prefixRS.getString("prefix");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return item;
+    }
+    
+    public static void createPrefix(NamePrefix item) {
+        try {
+
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Insert INTO NamePrefix (active, prefix) VALUES (true, ?)";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(2, item.prefix.equals("") ? null : item.prefix.trim());
+            
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public static void updatePrefix(NamePrefix item ){
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "UPDATE NamePrefix SET "
+                    + "active = ?,"
+                    + "prefix = ? "
+                    + "where id = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setBoolean(1, item.active);
+            preparedStatement.setString(2, item.prefix.equals("") ? null : item.prefix);
+            preparedStatement.setInt(3, item.id);
+            
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
+    
+    
 }
