@@ -30,7 +30,7 @@ public class MEDRootPanel extends javax.swing.JPanel {
         addListeners();
         jTabbedPane1.remove(5);
 //        jTabbedPane1.remove(3);
-        jTabbedPane1.remove(1);
+//        jTabbedPane1.remove(1);
     }
     
     /**
