@@ -83,6 +83,19 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
             originalFFDateTextBox.setEnabled(true);
             originalFFDateTextBox.setBackground(Color.white);
         }   
+        
+        //lowerhalf
+        EmployerTypeComboBox.setEnabled(true);
+        EmployeeTypeComboBox.setEnabled(true);
+        FFReportIssueDateTextBox.setEnabled(true);
+        FFReportIssueDateTextBox.setBackground(Color.white);
+        MediatedSettlementCheckBox.setEnabled(true);
+        AcceptedByComboBox.setEnabled(true);
+        DeemedAcceptedByComboBox.setEnabled(true);
+        RejectedByComboBox.setEnabled(true);
+        OverallResultComboBox.setEnabled(true);
+        FFNote.setEnabled(true);
+        FFNote.setBackground(Color.white);
     }
     
     public void disableUpdate(boolean save) {
@@ -114,6 +127,19 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
         replacementFFComboBox.setEnabled(false);
         originalFFDateTextBox.setEnabled(false);
         originalFFDateTextBox.setBackground(new Color(238,238,238));
+        
+        //lowerhalf
+        EmployerTypeComboBox.setEnabled(false);
+        EmployeeTypeComboBox.setEnabled(false);
+        FFReportIssueDateTextBox.setEnabled(false);
+        FFReportIssueDateTextBox.setBackground(new Color(238,238,238));
+        MediatedSettlementCheckBox.setEnabled(false);
+        AcceptedByComboBox.setEnabled(false);
+        DeemedAcceptedByComboBox.setEnabled(false);
+        RejectedByComboBox.setEnabled(false);
+        OverallResultComboBox.setEnabled(false);
+        FFNote.setEnabled(false);
+        FFNote.setBackground(new Color(238,238,238));
         
         if(save) {
             saveInformation();
@@ -195,6 +221,17 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
             FFList2Model.removeAllElements();
             FF2List.setModel(FFList2Model);
         }
+        
+        //lower half
+        EmployerTypeComboBox.setSelectedItem(orginalInformation.FFEmployerType != null ? orginalInformation.FFEmployerType : " ");
+        EmployeeTypeComboBox.setSelectedItem(orginalInformation.FFEmployeeType != null ? orginalInformation.FFEmployeeType : " ");
+        FFReportIssueDateTextBox.setText(orginalInformation.FFReportIssueDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.FFReportIssueDate.getTime())) : "");
+        MediatedSettlementCheckBox.setSelected(orginalInformation.FFMediatedSettlement);
+        AcceptedByComboBox.setSelectedItem(orginalInformation.FFAcceptedBy != null ? orginalInformation.FFAcceptedBy : " ");
+        DeemedAcceptedByComboBox.setSelectedItem(orginalInformation.FFDeemedAcceptedBy != null ? orginalInformation.FFDeemedAcceptedBy : " ");
+        RejectedByComboBox.setSelectedItem(orginalInformation.FFRejectedBy != null ? orginalInformation.FFRejectedBy : " ");
+        OverallResultComboBox.setSelectedItem(orginalInformation.FFOverallResult != null ? orginalInformation.FFOverallResult : " ");
+        FFNote.setText(orginalInformation.FFNote == null ? "" : orginalInformation.FFNote);
     }
     
     private void saveInformation() {
@@ -252,6 +289,17 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
             newMEDCaseInformation.FFList2Name5 = null;
         }
         
+        //lowerhalf
+        newMEDCaseInformation.FFEmployerType = EmployerTypeComboBox.getSelectedItem().toString().trim().equals("") ? null : EmployerTypeComboBox.getSelectedItem().toString();
+        newMEDCaseInformation.FFEmployeeType = EmployeeTypeComboBox.getSelectedItem().toString().trim().equals("") ? null : EmployeeTypeComboBox.getSelectedItem().toString();
+        newMEDCaseInformation.FFReportIssueDate = FFReportIssueDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(FFReportIssueDateTextBox.getText()));
+        newMEDCaseInformation.FFMediatedSettlement = MediatedSettlementCheckBox.isSelected();
+        newMEDCaseInformation.FFAcceptedBy = AcceptedByComboBox.getSelectedItem().toString().trim().equals("") ? null : AcceptedByComboBox.getSelectedItem().toString();
+        newMEDCaseInformation.FFDeemedAcceptedBy = DeemedAcceptedByComboBox.getSelectedItem().toString().trim().equals("") ? null : DeemedAcceptedByComboBox.getSelectedItem().toString();
+        newMEDCaseInformation.FFRejectedBy = RejectedByComboBox.getSelectedItem().toString().trim().equals("") ? null : RejectedByComboBox.getSelectedItem().toString();
+        newMEDCaseInformation.FFOverallResult = OverallResultComboBox.getSelectedItem().toString().trim().equals("") ? null : OverallResultComboBox.getSelectedItem().toString();
+        newMEDCaseInformation.FFNote = FFNote.getText().trim().equals("") ? null : FFNote.getText();
+        
         MEDCase.updateFF(newMEDCaseInformation, orginalInformation);
     }
     
@@ -276,6 +324,17 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
         FFOriginalFactFinder.setText("");
         originalFFDateTextBox.setText("");
         asAgreedToByPartiesCheckBox.setSelected(false);
+        
+        //lower half
+        EmployerTypeComboBox.setSelectedItem(" ");
+        EmployeeTypeComboBox.setSelectedItem(" ");
+        FFReportIssueDateTextBox.setText("");
+        MediatedSettlementCheckBox.setSelected(false);
+        AcceptedByComboBox.setSelectedItem(" ");
+        DeemedAcceptedByComboBox.setSelectedItem(" ");
+        RejectedByComboBox.setSelectedItem(" ");
+        OverallResultComboBox.setSelectedItem(" ");
+        FFNote.setText("");
     }
     
     private void loadFullFFList() {
@@ -480,10 +539,18 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
         jLabel19 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
+        EmployerTypeComboBox = new javax.swing.JComboBox<>();
+        EmployeeTypeComboBox = new javax.swing.JComboBox<>();
+        AcceptedByComboBox = new javax.swing.JComboBox<>();
+        DeemedAcceptedByComboBox = new javax.swing.JComboBox<>();
+        RejectedByComboBox = new javax.swing.JComboBox<>();
+        OverallResultComboBox = new javax.swing.JComboBox<>();
+        FFReportIssueDateTextBox = new com.alee.extended.date.WebDateField();
+        MediatedSettlementCheckBox = new javax.swing.JCheckBox();
         jPanel5 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        FFNote = new javax.swing.JTextArea();
 
         jLabel7.setText("Appointment Date:");
 
@@ -544,6 +611,7 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
         });
 
         asAgreedToByPartiesCheckBox.setText("As Agreed To By Parties");
+        asAgreedToByPartiesCheckBox.setEnabled(false);
         asAgreedToByPartiesCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 asAgreedToByPartiesCheckBoxActionPerformed(evt);
@@ -799,6 +867,51 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
 
         jLabel21.setText("Overall Result:");
 
+        EmployerTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "City", "County", "School District", "Township", "University", "State Govt.", "Other", " " }));
+        EmployerTypeComboBox.setSelectedIndex(7);
+        EmployerTypeComboBox.setEnabled(false);
+
+        EmployeeTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Police", "Fire", "Teaching", "Nursing", "Other", " " }));
+        EmployeeTypeComboBox.setSelectedIndex(5);
+        EmployeeTypeComboBox.setEnabled(false);
+
+        AcceptedByComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Union", "Employer", "Both", " " }));
+        AcceptedByComboBox.setSelectedIndex(3);
+        AcceptedByComboBox.setEnabled(false);
+        AcceptedByComboBox.setInheritsPopupMenu(true);
+
+        DeemedAcceptedByComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Union", "Employer", "Both", " " }));
+        DeemedAcceptedByComboBox.setSelectedIndex(3);
+        DeemedAcceptedByComboBox.setEnabled(false);
+
+        RejectedByComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Union", "Employer", "Both", " " }));
+        RejectedByComboBox.setSelectedIndex(3);
+        RejectedByComboBox.setEnabled(false);
+        RejectedByComboBox.setFocusTraversalPolicyProvider(true);
+
+        OverallResultComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Accepted", "Rejected", " " }));
+        OverallResultComboBox.setSelectedIndex(2);
+        OverallResultComboBox.setEnabled(false);
+
+        FFReportIssueDateTextBox.setEditable(false);
+        FFReportIssueDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        FFReportIssueDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+        FFReportIssueDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        FFReportIssueDateTextBox.setEnabled(false);
+        FFReportIssueDateTextBox.setDateFormat(Global.mmddyyyy);
+        FFReportIssueDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                FFReportIssueDateTextBoxMouseClicked(evt);
+            }
+        });
+
+        MediatedSettlementCheckBox.setEnabled(false);
+        MediatedSettlementCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MediatedSettlementCheckBoxActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -814,37 +927,68 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
                     .addComponent(jLabel19)
                     .addComponent(jLabel20)
                     .addComponent(jLabel21))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(EmployerTypeComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(EmployeeTypeComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(AcceptedByComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(DeemedAcceptedByComboBox, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(RejectedByComboBox, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(OverallResultComboBox, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(FFReportIssueDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(MediatedSettlementCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel14)
+                .addGap(2, 2, 2)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(EmployerTypeComboBox)
+                    .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel15)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(EmployeeTypeComboBox)
+                    .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel16)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel16)
+                    .addComponent(FFReportIssueDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(8, 8, 8)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(MediatedSettlementCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(AcceptedByComboBox)
+                    .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel17)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
-                .addComponent(jLabel18)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(DeemedAcceptedByComboBox)
+                    .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel19)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(RejectedByComboBox)
+                    .addComponent(jLabel20, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel20)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel21)
-                .addGap(18, 18, 18))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(OverallResultComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(1, 1, 1)))
+                .addGap(11, 11, 11))
         );
 
         jLabel13.setText("Notes:");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setLineWrap(true);
-        jTextArea1.setRows(5);
-        jTextArea1.setWrapStyleWord(true);
-        jScrollPane3.setViewportView(jTextArea1);
+        FFNote.setBackground(new java.awt.Color(238, 238, 238));
+        FFNote.setColumns(20);
+        FFNote.setLineWrap(true);
+        FFNote.setRows(5);
+        FFNote.setWrapStyleWord(true);
+        FFNote.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        FFNote.setEnabled(false);
+        jScrollPane3.setViewportView(FFNote);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -864,7 +1008,8 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jLabel13)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3))
+                .addComponent(jScrollPane3)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -895,11 +1040,12 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(0, 0, 0)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -1045,8 +1191,20 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_asAgreedToByPartiesCheckBoxActionPerformed
 
+    private void FFReportIssueDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FFReportIssueDateTextBoxMouseClicked
+        clearDate(FFReportIssueDateTextBox, evt);
+    }//GEN-LAST:event_FFReportIssueDateTextBoxMouseClicked
+
+    private void MediatedSettlementCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MediatedSettlementCheckBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_MediatedSettlementCheckBoxActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> AcceptedByComboBox;
+    private javax.swing.JComboBox<String> DeemedAcceptedByComboBox;
+    private javax.swing.JComboBox<String> EmployeeTypeComboBox;
+    private javax.swing.JComboBox<String> EmployerTypeComboBox;
     private javax.swing.JButton FF1GenerateButton;
     private javax.swing.JList<String> FF1List;
     private com.alee.extended.date.WebDateField FF1OrderDate;
@@ -1055,9 +1213,14 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
     private javax.swing.JList<String> FF2List;
     private com.alee.extended.date.WebDateField FF2OrderDateTextBox;
     private com.alee.extended.date.WebDateField FF2SelectionDateTextBox;
+    private javax.swing.JTextArea FFNote;
     private javax.swing.JTextField FFOriginalFactFinder;
+    private com.alee.extended.date.WebDateField FFReportIssueDateTextBox;
     private javax.swing.JComboBox<String> FFSelectionComboBox;
     private javax.swing.JComboBox<String> FFTypeComboBox;
+    private javax.swing.JCheckBox MediatedSettlementCheckBox;
+    private javax.swing.JComboBox<String> OverallResultComboBox;
+    private javax.swing.JComboBox<String> RejectedByComboBox;
     private com.alee.extended.date.WebDateField appointmentDateTextBox;
     private javax.swing.JCheckBox asAgreedToByPartiesCheckBox;
     private javax.swing.JLabel jLabel1;
@@ -1089,7 +1252,6 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextArea jTextArea1;
     private com.alee.extended.date.WebDateField originalFFDateTextBox;
     private javax.swing.JComboBox<String> replacementFFComboBox;
     // End of variables declaration//GEN-END:variables
