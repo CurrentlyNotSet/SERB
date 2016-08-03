@@ -25,6 +25,7 @@ import parker.serb.ULP.ULPHeaderPanel;
 import parker.serb.ULP.ULPLetterDialog;
 import parker.serb.ULP.ULPReportDialog;
 import parker.serb.ULP.ULPRootPanel;
+import parker.serb.admin.AdminMainMenuPanel;
 import parker.serb.admin.SystemMontiorDialog;
 import parker.serb.sql.Audit;
 import parker.serb.user.Preferences;
@@ -484,6 +485,7 @@ public class RootPanel extends javax.swing.JFrame {
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        adminPanelMenuItem = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem6 = new javax.swing.JMenuItem();
@@ -687,7 +689,7 @@ public class RootPanel extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, 168, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -814,7 +816,6 @@ public class RootPanel extends javax.swing.JFrame {
         jPanel7.setMinimumSize(new java.awt.Dimension(108, 363));
 
         jButton1.setText("BUTTON 1");
-        jButton1.setSize(new java.awt.Dimension(108, 29));
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -931,6 +932,14 @@ public class RootPanel extends javax.swing.JFrame {
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Admin");
+
+        adminPanelMenuItem.setText("Admin Panel");
+        adminPanelMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                adminPanelMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu2.add(adminPanelMenuItem);
 
         jMenuItem5.setText("Tracking");
         jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
@@ -1100,6 +1109,10 @@ public class RootPanel extends javax.swing.JFrame {
         new ReleaseNotesDialog((JFrame) getRootPane().getParent(), true);
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
+    private void adminPanelMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adminPanelMenuItemActionPerformed
+        new AdminMainMenuPanel((JFrame) getRootPane().getParent(), true);
+    }//GEN-LAST:event_adminPanelMenuItemActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel CMDS;
     private javax.swing.JPanel CSC;
@@ -1109,6 +1122,7 @@ public class RootPanel extends javax.swing.JFrame {
     private javax.swing.JPanel ORG;
     private javax.swing.JPanel REP;
     private javax.swing.JPanel ULP;
+    private javax.swing.JMenuItem adminPanelMenuItem;
     private parker.serb.CMDS.CMDSHeaderPanel cMDSHeaderPanel1;
     private parker.serb.CSC.CSCHeaderPanel cSCHeaderPanel1;
     private parker.serb.companySearch.companySearchPanel companySearchPanel1;
