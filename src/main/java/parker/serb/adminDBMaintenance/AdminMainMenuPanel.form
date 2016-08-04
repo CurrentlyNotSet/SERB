@@ -48,7 +48,7 @@
                                   <Component id="UsersButton" linkSize="2" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
                                   <Component id="PartyButton" linkSize="2" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
                                   <Component id="HistoryTypesButton" linkSize="2" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
-                                  <Component id="BoardActionTypeButton" linkSize="2" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
+                                  <Component id="PreFixesButton" alignment="1" min="-2" pref="130" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" attributes="0">
@@ -74,6 +74,7 @@
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="BoardActionTypeButton" min="-2" pref="130" max="-2" attributes="0"/>
                           <Component id="REPStatusOptionsButton" min="-2" pref="130" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
@@ -92,10 +93,6 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jSeparator1" min="-2" pref="867" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="PreFixesButton" min="-2" pref="130" max="-2" attributes="0"/>
-                  </Group>
               </Group>
               <EmptySpace pref="24" max="32767" attributes="0"/>
           </Group>
@@ -104,7 +101,7 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
@@ -139,7 +136,7 @@
                           </Group>
                           <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                               <Component id="SERBExecButton" linkSize="4" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
-                              <Component id="BoardActionTypeButton" linkSize="4" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
+                              <Component id="HistoryTypesButton" linkSize="4" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -152,16 +149,15 @@
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="HearingPeopleButton" linkSize="4" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
-                  <Component id="HistoryTypesButton" linkSize="4" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
+                  <Component id="BoardActionTypeButton" linkSize="4" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
+                  <Component id="PreFixesButton" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="PartyButton" linkSize="4" min="-2" pref="40" max="-2" attributes="0"/>
                   <Component id="RedactionAdminButton" linkSize="4" min="-2" pref="40" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="PreFixesButton" min="-2" pref="40" max="-2" attributes="0"/>
-              <EmptySpace pref="58" max="32767" attributes="0"/>
+              <EmptySpace pref="44" max="32767" attributes="0"/>
               <Component id="jButton1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -318,7 +314,6 @@
     <Component class="javax.swing.JButton" name="BoardActionTypeButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Board Action Type"/>
-        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BoardActionTypeButtonActionPerformed"/>
@@ -381,7 +376,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="PreFixesButton">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Prefixes"/>
+        <Property name="text" type="java.lang.String" value="Name Prefixes"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="PreFixesButtonActionPerformed"/>

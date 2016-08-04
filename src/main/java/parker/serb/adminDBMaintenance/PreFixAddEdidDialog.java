@@ -39,6 +39,7 @@ public class PreFixAddEdidDialog extends javax.swing.JDialog {
         } else {
             titleLabel.setText("Add Name Prefix");
             editButton.setText("Add");
+            editButton.setEnabled(false);
             item = new NamePrefix();
         }
         this.setLocationRelativeTo(Global.root);

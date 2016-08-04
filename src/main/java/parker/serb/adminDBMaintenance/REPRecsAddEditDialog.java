@@ -39,6 +39,7 @@ public class REPRecsAddEditDialog extends javax.swing.JDialog {
         } else {
             titleLabel.setText("Add REP Recommendation");
             editButton.setText("Add");
+            editButton.setEnabled(false);
             item = new REPRecommendation();
         }
         this.setLocationRelativeTo(Global.root);

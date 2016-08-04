@@ -39,6 +39,7 @@ public class REPStatusOptionsAddEditDialog extends javax.swing.JDialog {
         } else {
             titleLabel.setText("Add REP Case Status Option");
             editButton.setText("Add");
+            editButton.setEnabled(false);
             item = new REPCaseStatus();
         }
         this.setLocationRelativeTo(Global.root);
