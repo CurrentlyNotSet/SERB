@@ -274,7 +274,6 @@
     <Component class="javax.swing.JButton" name="REPRecsButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;center&gt;REP&lt;br&gt;Recommendations&lt;/center&gt;&lt;/html&gt;"/>
-        <Property name="enabled" type="boolean" value="false"/>
         <Property name="horizontalTextPosition" type="int" value="0"/>
       </Properties>
       <Events>

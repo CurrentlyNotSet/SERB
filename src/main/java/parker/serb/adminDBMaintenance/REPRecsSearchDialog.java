@@ -8,20 +8,20 @@ package parker.serb.adminDBMaintenance;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.sql.ActiveStatus;
-import parker.serb.sql.ULPRecommendation;
+import parker.serb.sql.REPRecommendation;
 
 /**
  *
  * @author User
  */
-public class ULPRecsSearchDialog extends javax.swing.JDialog {
+public class REPRecsSearchDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form PreFixSearchDialog
      * @param parent
      * @param modal
      */
-    public ULPRecsSearchDialog(java.awt.Frame parent, boolean modal) {
+    public REPRecsSearchDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         setColumnSize();
@@ -54,9 +54,9 @@ public class ULPRecsSearchDialog extends javax.swing.JDialog {
         SearchTable.getColumnModel().getColumn(1).setMaxWidth(60);
         
         //Recommendation Code
-        SearchTable.getColumnModel().getColumn(2).setMinWidth(150);
-        SearchTable.getColumnModel().getColumn(2).setWidth(150);
-        SearchTable.getColumnModel().getColumn(2).setMaxWidth(150);
+        SearchTable.getColumnModel().getColumn(2).setMinWidth(100);
+        SearchTable.getColumnModel().getColumn(2).setWidth(100);
+        SearchTable.getColumnModel().getColumn(2).setMaxWidth(100);
     }
 
     private void loadTable() {
@@ -65,14 +65,14 @@ public class ULPRecsSearchDialog extends javax.swing.JDialog {
 
         String[] param = searchTextBox.getText().trim().split(" ");
         
-        List<ULPRecommendation> databaseList = ULPRecommendation.searchULPRecommendations(param);
+        List<REPRecommendation> databaseList = REPRecommendation.searchREPRecommendations(param);
 
-        for (ULPRecommendation item : databaseList) {
+        for (REPRecommendation item : databaseList) {
             model.addRow(new Object[]{
                 item.id,
                 item.active,
-                item.code,
-                item.description
+                item.type,
+                item.recommendation
             });
         }
         EditButton.setEnabled(false);
@@ -94,7 +94,7 @@ public class ULPRecsSearchDialog extends javax.swing.JDialog {
             int id = (int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0);
             boolean active = (boolean) SearchTable.getValueAt(SearchTable.getSelectedRow(), 1);
             
-            ActiveStatus.updateActiveStatus("ULPRecommendation", active, id);
+            ActiveStatus.updateActiveStatus("REPRecommendation", active, id);
         }
     }
     
@@ -129,7 +129,7 @@ public class ULPRecsSearchDialog extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("ULP Recommendations");
+        jLabel1.setText("REP Recommendations");
 
         AddNewButton.setText("Add New");
         AddNewButton.addActionListener(new java.awt.event.ActionListener() {
@@ -143,7 +143,7 @@ public class ULPRecsSearchDialog extends javax.swing.JDialog {
 
             },
             new String [] {
-                "ID", "Active", "Rec Code", "Description"
+                "ID", "Active", "Type", "Recommendation"
             }
         ) {
             Class[] types = new Class [] {
@@ -234,13 +234,13 @@ public class ULPRecsSearchDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void AddNewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddNewButtonActionPerformed
-        new ULPRecsAddEditDialog(null, true, 0);
+        new REPRecsAddEditDialog(null, true, 0);
         loadTable();
     }//GEN-LAST:event_AddNewButtonActionPerformed
 
     private void EditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditButtonActionPerformed
         if ((int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0) > 0){
-            new ULPRecsAddEditDialog(null, true, (int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0));
+            new REPRecsAddEditDialog(null, true, (int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0));
             loadTable();
         }
     }//GEN-LAST:event_EditButtonActionPerformed

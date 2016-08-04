@@ -135,7 +135,6 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
         });
 
         REPRecsButton.setText("<html><center>REP<br>Recommendations</center></html>");
-        REPRecsButton.setEnabled(false);
         REPRecsButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         REPRecsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -379,7 +378,7 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
     }//GEN-LAST:event_PBRExecsButtonActionPerformed
 
     private void REPRecsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_REPRecsButtonActionPerformed
-        // TODO add your handling code here:
+        new REPRecsSearchDialog(Global.root, true);
     }//GEN-LAST:event_REPRecsButtonActionPerformed
 
     private void REPStatusOptionsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_REPStatusOptionsButtonActionPerformed
