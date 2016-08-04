@@ -1,6 +1,7 @@
 package parker.serb.admin;
 
-import parker.serb.adminDBMaintenance.PreFixSearchDialog;
+import parker.serb.Global;
+import parker.serb.adminDBMaintenance.*;
 
 /**
  * @author andrew.schmidt
@@ -151,7 +152,6 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
         });
 
         ULPRecsButton.setText("<html><center>ULP<br>Recommendations</center></html>");
-        ULPRecsButton.setEnabled(false);
         ULPRecsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ULPRecsButtonActionPerformed(evt);
@@ -387,7 +387,7 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
     }//GEN-LAST:event_REPStatusOptionsButtonActionPerformed
 
     private void ULPRecsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ULPRecsButtonActionPerformed
-        // TODO add your handling code here:
+        new ULPRecsSearchDialog(Global.root, true);
     }//GEN-LAST:event_ULPRecsButtonActionPerformed
 
     private void HearingPeopleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HearingPeopleButtonActionPerformed
@@ -407,7 +407,7 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void PreFixesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PreFixesButtonActionPerformed
-        new PreFixSearchDialog(null, true);
+        new PreFixSearchDialog(Global.root, true);
     }//GEN-LAST:event_PreFixesButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
