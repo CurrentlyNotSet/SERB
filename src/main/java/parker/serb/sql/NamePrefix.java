@@ -103,10 +103,10 @@ public class NamePrefix {
 
             Statement stmt = Database.connectToDB().createStatement();
 
-            String sql = "Insert INTO NamePrefix (active, prefix) VALUES (true, ?)";
+            String sql = "Insert INTO NamePrefix (active, prefix) VALUES (1, ?)";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(2, item.prefix.equals("") ? null : item.prefix.trim());
+            preparedStatement.setString(1, item.prefix.equals("") ? null : item.prefix.trim());
             
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
@@ -119,7 +119,7 @@ public class NamePrefix {
             Statement stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE NamePrefix SET "
-                    + "active = ?,"
+                    + "active = ?, "
                     + "prefix = ? "
                     + "where id = ?";
 
@@ -133,8 +133,5 @@ public class NamePrefix {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    
-    
     
 }

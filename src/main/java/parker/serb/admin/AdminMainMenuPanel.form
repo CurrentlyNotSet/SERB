@@ -293,7 +293,6 @@
     <Component class="javax.swing.JButton" name="ULPRecsButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;center&gt;ULP&lt;br&gt;Recommendations&lt;/center&gt;&lt;/html&gt;"/>
-        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ULPRecsButtonActionPerformed"/>
