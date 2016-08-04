@@ -193,7 +193,40 @@ public class FactFinder {
             }
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return factFinderList;
+    }
+    
+    /**
+     * Loads all activities without a limited result
+     * @return list of all Activities per case
+     */
+    public static List loadAllFF() {
+        List<String> factFinderList = new ArrayList<>();
+        
+        Statement stmt = null;
+            
+        try {
 
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "select * from FactFinder"
+                    + " where status != 'O'"
+                    + " and active = 1"
+                    + " order by lastName asc";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+
+            ResultSet factFinderListRS = preparedStatement.executeQuery();
+            
+            while(factFinderListRS.next()) {
+                String name = factFinderListRS.getString("firstName") == null ? "" : factFinderListRS.getString("firstName");
+                name += factFinderListRS.getString("middleName") == null ? "" : " " + factFinderListRS.getString("middleName");
+                name += factFinderListRS.getString("lastName") == null ? "" : " " + factFinderListRS.getString("lastName");
+                factFinderList.add(name);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
         }
         return factFinderList;
     }

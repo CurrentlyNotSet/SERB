@@ -8,6 +8,8 @@ package parker.serb.party;
 import parker.serb.util.NumberFormatService;
 import java.awt.Color;
 import java.awt.Desktop;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
@@ -56,6 +58,22 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
     }
     
     private void addListeners() {
+        middleInitialTextBox.addKeyListener(new KeyListener() {
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if (middleInitialTextBox.getText().length() == 1) {
+                    e.consume();
+                }
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {}
+
+            @Override
+            public void keyReleased(KeyEvent e) {}
+        });
+        
         emailAddressTextBox.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -378,7 +396,7 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
         nameTitleTextBox.setBackground(new java.awt.Color(238, 238, 238));
         nameTitleTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
 
-        jLabel13.setText("Job Title:");
+        jLabel13.setText("Prof. Designation:");
 
         jobTitleTextBox.setBackground(new java.awt.Color(238, 238, 238));
         jobTitleTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
@@ -440,7 +458,7 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
                             .addComponent(address2TextBox, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(address3TextBox, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(cityTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE)
+                                .addComponent(cityTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
                                 .addGap(12, 12, 12)
                                 .addComponent(jLabel11)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)

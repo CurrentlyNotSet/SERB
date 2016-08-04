@@ -7,10 +7,14 @@ package parker.serb.ULP;
 
 //TODO: Load all of the letter types
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
 import java.util.List;
+import parker.serb.Global;
+import parker.serb.bookmarkProcessing.generateDocument;
+import parker.serb.sql.Activity;
+import parker.serb.sql.SMDSDocuments;
 import parker.serb.sql.SMDSLetter;
+import parker.serb.util.FileService;
 
 
 /**
@@ -21,6 +25,8 @@ public class ULPLetterDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form REPReportDialog
+     * @param parent
+     * @param modal
      */
     public ULPLetterDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -38,11 +44,22 @@ public class ULPLetterDialog extends javax.swing.JDialog {
     }
     
     private void addListeners() {
-        letterComboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                enableGenerateButton();
-            }
+        letterComboBox.addItemListener((ItemEvent e) -> {
+            directiveComboBox.setSelectedItem("");
+            agendaComboBox.setSelectedItem("");
+            enableGenerateButton();
+        });
+
+        directiveComboBox.addItemListener((ItemEvent e) -> {
+            letterComboBox.setSelectedItem("");
+            agendaComboBox.setSelectedItem("");
+            enableGenerateButton();
+        });
+        
+        agendaComboBox.addItemListener((ItemEvent e) -> {
+            directiveComboBox.setSelectedItem("");
+            letterComboBox.setSelectedItem("");
+            enableGenerateButton();
         });
     }
     
@@ -58,44 +75,55 @@ public class ULPLetterDialog extends javax.swing.JDialog {
     
     private void loadLetters() {
         letterComboBox.removeAllItems();
-        
         letterComboBox.addItem("");
         
         List letterList = SMDSLetter.loadDocumentNamesByTypeAndSection("ULP", "Letter");
-        
         for (Object letter : letterList) {
             letterComboBox.addItem((String) letter);
         }
-        
         letterComboBox.setSelectedItem("");
     }
     
     private void loadDirectives() {
         directiveComboBox.removeAllItems();
-        
         directiveComboBox.addItem("");
         
         List letterList = SMDSLetter.loadDocumentNamesByTypeAndSection("ULP", "Directive");
-        
         for (Object letter : letterList) {
             directiveComboBox.addItem((String) letter);
         }
-        
         directiveComboBox.setSelectedItem("");
     }
     
     private void loadAgenda() {
         agendaComboBox.removeAllItems();
-        
         agendaComboBox.addItem("");
         
         List letterList = SMDSLetter.loadDocumentNamesByTypeAndSection("ULP", "Agenda");
-        
         for (Object letter : letterList) {
             agendaComboBox.addItem((String) letter);
         }
-        
         agendaComboBox.setSelectedItem("");
+    }
+    
+    
+    private void generateDocument() {
+        String selection = "";
+        if (!letterComboBox.getSelectedItem().toString().trim().equals("")) {
+            selection = letterComboBox.getSelectedItem().toString().trim();
+        } else if (!directiveComboBox.getSelectedItem().toString().trim().equals("")) {
+            selection = directiveComboBox.getSelectedItem().toString().trim();
+        } else if (!agendaComboBox.getSelectedItem().toString().trim().equals("")) {
+            selection = agendaComboBox.getSelectedItem().toString().trim();
+        }
+
+        if (!"".equals(selection)) {
+            SMDSDocuments template = SMDSDocuments.findDocumentByDescription(selection);
+            String docName = generateDocument.generateSMDSdocument(template, 0);
+            Activity.addActivty("Created " + template.historyDescription, docName);
+            Global.root.getuLPRootPanel1().getActivityPanel1().loadAllActivity();
+            FileService.openFile(docName);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -158,15 +186,12 @@ public class ULPLetterDialog extends javax.swing.JDialog {
                     .addComponent(directiveComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(agendaComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(cancelButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(generateButton)))
+                        .addComponent(generateButton))
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(12, 12, 12))
         );
         layout.setVerticalGroup(
@@ -197,7 +222,7 @@ public class ULPLetterDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
-        // TODO: generate letter
+        generateDocument();
     }//GEN-LAST:event_generateButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed

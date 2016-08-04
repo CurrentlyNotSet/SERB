@@ -437,6 +437,174 @@ public class REPCase {
         return rep;
     }
     
+    public static REPCase loadCaseDetails(String caseYear, String caseType, String caseMonth, String caseNumber) {
+        REPCase rep = null;
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select * from "
+                    + "REPCase where caseYear = ? "
+                    + " AND caseType = ? "
+                    + " AND caseMonth = ? "
+                    + " AND caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, caseYear);
+            preparedStatement.setString(2, caseType);
+            preparedStatement.setString(3, caseMonth);
+            preparedStatement.setString(4, caseNumber);
+
+            ResultSet caseInformation = preparedStatement.executeQuery();
+            
+            if(caseInformation.next()) {
+                rep = new REPCase();
+                rep.id =  caseInformation.getInt("id");
+                rep.active = caseInformation.getBoolean("active");
+                rep.caseYear = caseInformation.getString("caseYear");
+                rep.caseType = caseInformation.getString("caseType"); 
+                rep.caseMonth = caseInformation.getString("caseMonth");
+                rep.caseNumber = caseInformation.getString("caseNumber");
+                rep.type = caseInformation.getString("type");
+                rep.status1 = caseInformation.getString("status1");
+                rep.status2 = caseInformation.getString("status2");
+                rep.currentOwnerID = caseInformation.getInt("currentOwnerID");
+                rep.county = caseInformation.getString("county");
+                rep.employerIDNumber = caseInformation.getString("employerIDNumber");
+                rep.deptInState = caseInformation.getString("deptInState");
+                rep.bargainingUnitNumber = caseInformation.getString("bargainingUnitNumber");
+                rep.boardCertified = caseInformation.getBoolean("boardCertified");
+                rep.deemedCertified = caseInformation.getBoolean("deemedCertified");
+                rep.certificationRevoked = caseInformation.getBoolean("certificationRevoked");
+                rep.note = caseInformation.getString("note");
+                rep.fileDate = caseInformation.getTimestamp("fileDate");
+                rep.amendedFiliingDate = caseInformation.getTimestamp("amendedFilingDate");
+                rep.alphaListDate = caseInformation.getTimestamp("alphaListDate");
+                rep.finalBoardDate = caseInformation.getTimestamp("finalBoardDate");
+                rep.registrationLetterSent = caseInformation.getTimestamp("registrationLetterSent");
+                rep.dateOfAppeal = caseInformation.getTimestamp("dateOfAppeal");
+                rep.courtClosedDate = caseInformation.getTimestamp("courtClosedDate");
+                rep.returnSOIDueDate = caseInformation.getTimestamp("returnSOIDueDate");
+                rep.actualSOIReturnDate = caseInformation.getTimestamp("actualSOIReturnDate");
+                rep.SOIReturnInitials = caseInformation.getInt("SOIReturnIntials");
+                rep.REPClosedCaseDueDate = caseInformation.getTimestamp("REPClosedCaseDueDate");
+                rep.actualREPClosedDate = caseInformation.getTimestamp("actualREPClosedDate");
+                rep.REPClosedUser = caseInformation.getInt("REPClosedUser");
+                rep.actualClerksClosedDate = caseInformation.getTimestamp("actualClerksClosedDate");
+                rep.clerksClosedUser = caseInformation.getInt("clerksClosedUser");                
+                rep.fileBy = caseInformation.getString("fileBy");
+                rep.bargainingUnitIncluded = caseInformation.getString("bargainingUnitIncluded");
+                rep.bargainingUnitExcluded = caseInformation.getString("bargainingUnitExcluded");
+                rep.optInIncluded = caseInformation.getString("optInIncluded");
+                rep.professionalNonProfessional = caseInformation.getBoolean("professionalNonProfessional");
+                rep.professionalIncluded = caseInformation.getString("professionalIncluded");
+                rep.professionalExcluded = caseInformation.getString("professionalExcluded");
+                rep.nonProfessionalIncluded = caseInformation.getString("nonProfessionalIncluded");
+                rep.nonProfessionalExcluded = caseInformation.getString("nonProfessionalExcluded");
+                rep.toReflect = caseInformation.getString("toReflect");
+                rep.typeFiledBy = caseInformation.getString("typeFiledBy");
+                rep.typeFiledVia = caseInformation.getString("typeFiledVia");
+                rep.positionStatementFiledBy = caseInformation.getString("positionStatementFiledBy");
+                rep.EEONameChangeFrom = caseInformation.getString("EEONameChangeFrom");
+                rep.EEONameChangeTo = caseInformation.getString("EEONameChangeTo");
+                rep.ERNameChangeFrom = caseInformation.getString("ERNameChangeFrom");
+                rep.ERNameChangeTo = caseInformation.getString("ERNameChangeTo");
+                rep.boardActionType = caseInformation.getString("boardActionType");
+                rep.boardActionDate = caseInformation.getTimestamp("boardActionDate");
+                rep.hearingPersonID = caseInformation.getInt("hearingPersonID");
+                rep.boardStatusNote = caseInformation.getString("boardStatusNote");
+                rep.boardStatusBlurb = caseInformation.getString("boardStatusBlurb");
+
+                //electionData
+                rep.multicaseElection = caseInformation.getBoolean("multicaseElection");
+                rep.electionType1 = caseInformation.getString("electionType1");
+                rep.electionType2 = caseInformation.getString("electionType2");
+                rep.electionType3 = caseInformation.getString("electionType3");
+                rep.eligibilityDate = caseInformation.getTimestamp("eligibilityDate");
+                rep.ballotOne = caseInformation.getString("ballotOne");
+                rep.ballotTwo = caseInformation.getString("ballotTwo");
+                rep.ballotThree = caseInformation.getString("ballotThree");
+                rep.ballotFour = caseInformation.getString("ballotFour");
+                rep.mailKitDate = caseInformation.getTimestamp("mailKitDate");
+                rep.pollingStartDate = caseInformation.getTimestamp("pollingStartDate");
+                rep.pollingEndDate = caseInformation.getTimestamp("pollingEndDate");
+                rep.ballotsCountDay = caseInformation.getString("ballotsCountDay");
+                rep.ballotsCountDate = caseInformation.getTimestamp("ballotsCountDate");
+                rep.ballotsCountTime = caseInformation.getTimestamp("ballotsCountTime");
+                rep.eligibilityListDate = caseInformation.getTimestamp("eligibilityListDate");
+                rep.preElectionConfDate = caseInformation.getTimestamp("preElectionConfDate");
+                rep.selfReleasing = caseInformation.getString("selfReleasing");
+
+                //Results
+                rep.resultApproxNumberEligibleVotes = caseInformation.getString("resultApproxNumberEligibleVoters");
+                rep.resultVoidBallots = caseInformation.getString("resultVoidBallots");
+                rep.resultVotesCastForEEO = caseInformation.getString("resultVotesCastForEEO");
+                rep.resultVotesCastForIncumbentEEO = caseInformation.getString("resultVotesCastForIncumbentEEO");
+                rep.resultVotesCastForRivalEEO1 = caseInformation.getString("resultVotesCastForRivalEEO1");
+                rep.resultVotesCastForRivalEEO2 = caseInformation.getString("resultVotesCastForRivalEEO2");
+                rep.resultVotesCastForRivalEEO3 = caseInformation.getString("resultVotesCastForRivalEEO3");
+                rep.resultVotesCastForNoRepresentative = caseInformation.getString("resultVotesCastForNoRepresentative");
+                rep.resultValidVotesCounted = caseInformation.getString("resultValidVotesCounted");
+                rep.resultChallengedBallots = caseInformation.getString("resultChallengedBallots");
+                rep.resultTotalBallotsCast = caseInformation.getString("resultTotalBallotsCast");
+                rep.resultWHoPrevailed = caseInformation.getObject("resultWHoPrevailed") == null ? "" : CaseParty.getCasePartyByIDForElection(caseInformation.getInt("resultWHoPrevailed"));
+
+                //Professional
+                rep.professionalApproxNumberEligible = caseInformation.getString("professionalApproxNumberEligible");
+                rep.professionalYES = caseInformation.getString("professionalYES");
+                rep.professionalNO = caseInformation.getString("professionalNO");
+                rep.professionalChallenged = caseInformation.getString("professionalChallenged");
+                rep.professionalTotalVotes = caseInformation.getString("professionalTotalVotes");
+                rep.professionalOutcome = caseInformation.getString("professionalOutcome");
+                rep.professionalWhoPrevailed = caseInformation.getObject("professionalWHoPrevailed") == null ? "" : CaseParty.getCasePartyByIDForElection(caseInformation.getInt("professionalWhoPrevailed"));
+                rep.professionalVoidBallots = caseInformation.getString("professionalVoidBallots");
+                rep.professionalValidVotes = caseInformation.getString("professionalValidVotes");
+                rep.professionalVotesCastForNoRepresentative = caseInformation.getString("professionalVotesCastForNoRepresentative");
+                rep.professionalVotesCastForEEO = caseInformation.getString("professionalVotesCastForEEO");
+                rep.professionalVotesCastForIncumbentEEO = caseInformation.getString("professionalVotesCastForIncumbentEEO");
+                rep.professionalVotesCastForRivalEEO1 = caseInformation.getString("professionalVotesCastForRivalEEO1");
+                rep.professionalVotesCastForRivalEEO2 = caseInformation.getString("professionalVotesCastForRivalEEO2");
+                rep.professionalVotesCastForRivalEEO3 = caseInformation.getString("professionalVotesCastForRivalEEO3");
+            
+                //Non-Professional
+                rep.nonprofessionalApproxNumberEligible = caseInformation.getString("nonprofessionalApproxNumberEligible");
+                rep.nonprofessionalYES = caseInformation.getString("nonprofessionalYES");
+                rep.nonprofessionalNO = caseInformation.getString("nonprofessionalNO");
+                rep.nonprofessionalChallenged = caseInformation.getString("nonprofessionalChallenged");
+                rep.nonprofessionalTotalVotes = caseInformation.getString("nonprofessionalTotalVotes");
+                rep.nonprofessionalOutcome = caseInformation.getString("nonprofessionalOutcome");
+                rep.nonprofessionalWhoPrevailed = caseInformation.getObject("nonprofessionalWhoPrevailed") == null ? "" : CaseParty.getCasePartyByIDForElection(caseInformation.getInt("nonprofessionalWHoPrevailed"));
+                rep.nonprofessionalVoidBallots = caseInformation.getString("nonprofessionalVoidBallots");
+                rep.nonprofessionalValidVotes = caseInformation.getString("nonprofessionalValidVotes");
+                rep.nonprofessionalVotesCastForNoRepresentative = caseInformation.getString("nonprofessionalVotesCastForNoRepresentative");
+                rep.nonprofessionalVotesCastForEEO = caseInformation.getString("nonprofessionalVotesCastForEEO");
+                rep.nonprofessionalVotesCastForIncumbentEEO = caseInformation.getString("nonprofessionalVotesCastForIncumbentEEO");
+                rep.nonprofessionalVotesCastForRivalEEO1 = caseInformation.getString("nonprofessionalVotesCastForRivalEEO1");
+                rep.nonprofessionalVotesCastForRivalEEO2 = caseInformation.getString("nonprofessionalVotesCastForRivalEEO2");
+                rep.nonprofessionalVotesCastForRivalEEO3 = caseInformation.getString("nonprofessionalVotesCastForRivalEEO3");
+
+                //Combined
+                rep.combinedApproxNumberEligible = caseInformation.getString("combinedApproxNumberEligible");
+                rep.combinedYES = caseInformation.getString("combinedYES");
+                rep.combinedlNO = caseInformation.getString("combinedNO");
+                rep.combinedChallenged = caseInformation.getString("combinedChallenged");
+                rep.combinedTotalVotes = caseInformation.getString("combinedTotalVotes");
+                rep.combinedOutcome = caseInformation.getString("combinedOutcome");
+                rep.combinedWhoPrevailed = caseInformation.getObject("combinedWhoPrevailed") == null ? "" : CaseParty.getCasePartyByIDForElection(caseInformation.getInt("combinedWHoPrevailed"));
+                rep.combinedVoidBallots = caseInformation.getString("combinedVoidBallots");
+                rep.combinedValidVotes = caseInformation.getString("combinedValidVotes");
+                rep.combinedVotesCastForNoRepresentative = caseInformation.getString("combinedVotesCastForNoRepresentative");
+                rep.combinedVotesCastForEEO = caseInformation.getString("combinedVotesCastForEEO");
+                rep.combinedVotesCastForIncumbentEEO = caseInformation.getString("combinedVotesCastForIncumbentEEO");
+                rep.combinedVotesCastForRivalEEO1 = caseInformation.getString("combinedVotesCastForRivalEEO1");
+                rep.combinedVotesCastForRivalEEO2 = caseInformation.getString("combinedVotesCastForRivalEEO2");
+                rep.combinedVotesCastForRivalEEO3 = caseInformation.getString("combinedVotesCastForRivalEEO3");
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex.getMessage());
+        }
+        return rep;
+    }
+    
     public static REPCase loadCaseDetails() {
         REPCase rep = null;
         try {

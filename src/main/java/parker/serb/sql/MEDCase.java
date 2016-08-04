@@ -29,6 +29,8 @@ public class MEDCase {
     public String caseMonth;
     public String caseNumber;
     public Timestamp fileDate;
+    
+    //concil
     public Timestamp concilList1OrderDate;
     public Timestamp concilList1SelectionDueDate;
     public String concilList1Name1;
@@ -50,6 +52,39 @@ public class MEDCase {
     public String concilList2Name4;
     public String concilList2Name5;
     
+    //FactFinder
+    public Timestamp FFList1OrderDate;
+    public Timestamp FFList1SelectionDueDate;
+    public String FFList1Name1;
+    public String FFList1Name2;
+    public String FFList1Name3;
+    public String FFList1Name4;
+    public String FFList1Name5;
+    public Timestamp FFAppointmentDate;
+    public String FFType;
+    public String FFSelection;
+    public String FFReplacement;
+    public String FFOriginalFactFinder;
+    public Timestamp FFOriginalFactFinderDate;
+    public boolean asAgreedToByParties;
+    public Timestamp FFList2OrderDate;
+    public Timestamp FFList2SelectionDueDate;
+    public String FFList2Name1;
+    public String FFList2Name2;
+    public String FFList2Name3;
+    public String FFList2Name4;
+    public String FFList2Name5;
+    
+    //lowerhalf of FF
+    public String FFEmployerType;
+    public String FFEmployeeType;
+    public Timestamp FFReportIssueDate;
+    public boolean FFMediatedSettlement;
+    public String FFAcceptedBy;
+    public String FFDeemedAcceptedBy;
+    public String FFRejectedBy;
+    public String FFOverallResult;
+    public String FFNote;
     
     /**
      * Load a list of the most recent 250 REP case numbers
@@ -393,6 +428,95 @@ public class MEDCase {
         return med;
     }
     
+    public static MEDCase loadFFInformation() {
+        MEDCase med = null;
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select"
+                    + " FFList1OrderDate,"
+                    + " FFList1SelectionDueDate,"
+                    + " FFList1Name1,"
+                    + " FFList1Name2,"
+                    + " FFList1Name3,"
+                    + " FFList1Name4,"
+                    + " FFList1Name5,"
+                    + " FFAppointmentDate,"
+                    + " FFType,"
+                    + " FFSelection,"
+                    + " FFReplacement,"
+                    + " FFOriginalFactFinder,"
+                    + " FFOriginalFactFinderDate,"
+                    + " asAgreedToByParties,"
+                    + " FFList2OrderDate,"
+                    + " FFList2SelectionDueDate,"
+                    + " FFList2Name1,"
+                    + " FFList2Name2,"
+                    + " FFList2Name3,"
+                    + " FFList2Name4,"
+                    + " FFList2Name5,"
+                    + " FFEmployerType,"
+                    + " FFEmployeeType,"
+                    + " FFReportIssueDate,"
+                    + " FFMediatedSettlement,"
+                    + " FFAcceptedBy,"
+                    + " FFDeemedAcceptedBy,"
+                    + " FFRejectedBy,"
+                    + " FFOverallResult,"
+                    + " FFNote"
+                    + " from MEDCase where caseYear = ? "
+                    + " AND caseType = ? "
+                    + " AND caseMonth = ? "
+                    + " AND caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, Global.caseYear);
+            preparedStatement.setString(2, Global.caseType);
+            preparedStatement.setString(3, Global.caseMonth);
+            preparedStatement.setString(4, Global.caseNumber);
+
+            ResultSet caseInformation = preparedStatement.executeQuery();
+            
+            if(caseInformation.next()) {
+                med = new MEDCase();
+//                
+                med.FFList1OrderDate = caseInformation.getTimestamp("FFList1OrderDate");
+                med.FFList1SelectionDueDate = caseInformation.getTimestamp("FFList1SelectionDueDate");
+                med.FFList1Name1 = caseInformation.getString("FFList1Name1");
+                med.FFList1Name2 = caseInformation.getString("FFList1Name2");
+                med.FFList1Name3 = caseInformation.getString("FFList1Name3");
+                med.FFList1Name4 = caseInformation.getString("FFList1Name4");
+                med.FFList1Name5 = caseInformation.getString("FFList1Name5");
+                med.FFAppointmentDate = caseInformation.getTimestamp("FFAppointmentDate");
+                med.FFType = caseInformation.getString("FFType");
+                med.FFSelection = caseInformation.getString("FFSelection");
+                med.FFReplacement = caseInformation.getString("FFReplacement");
+                med.FFOriginalFactFinder = caseInformation.getString("FFOriginalFactFinder");
+                med.FFOriginalFactFinderDate = caseInformation.getTimestamp("FFOriginalFactFinderDate");
+                med.asAgreedToByParties = caseInformation.getBoolean("asAgreedToByParties");
+                med.FFList2OrderDate = caseInformation.getTimestamp("FFList2OrderDate");
+                med.FFList2SelectionDueDate = caseInformation.getTimestamp("FFList2SelectionDueDate");
+                med.FFList2Name1 = caseInformation.getString("FFList2Name1");
+                med.FFList2Name2 = caseInformation.getString("FFList2Name2");
+                med.FFList2Name3 = caseInformation.getString("FFList2Name3");
+                med.FFList2Name4 = caseInformation.getString("FFList2Name4");
+                med.FFList2Name5 = caseInformation.getString("FFList2Name5");
+                med.FFEmployerType = caseInformation.getString("FFEmployerType");
+                med.FFEmployeeType = caseInformation.getString("FFEmployeeType");
+                med.FFReportIssueDate = caseInformation.getTimestamp("FFReportIssueDate");
+                med.FFMediatedSettlement = caseInformation.getBoolean("FFMediatedSettlement");
+                med.FFAcceptedBy = caseInformation.getString("FFAcceptedBy");
+                med.FFDeemedAcceptedBy = caseInformation.getString("FFDeemedAcceptedBy");
+                med.FFRejectedBy = caseInformation.getString("FFRejectedBy");
+                med.FFOverallResult = caseInformation.getString("FFOverallResult");
+                med.FFNote = caseInformation.getString("FFNote");
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex.getMessage());
+        }
+        return med;
+    }
+    
     public static MEDCase loadCaseDetails() {
         MEDCase rep = null;
         try {
@@ -639,6 +763,150 @@ public class MEDCase {
         }
     }
     
+    public static void saveFFList1(DefaultListModel concilList1Model) {
+        MEDCase med = null;
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+//
+            String sql = "Update MEDCase set"
+                    + " FFList1Name1 = ?,"
+                    + " FFList1Name2 = ?,"
+                    + " FFList1Name3 = ?,"
+                    + " FFList1Name4 = ?,"
+                    + " FFList1Name5 = ?"
+                    + " where caseYear = ? "
+                    + " AND caseType = ? "
+                    + " AND caseMonth = ? "
+                    + " AND caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, concilList1Model.get(0).toString());
+            preparedStatement.setString(2, concilList1Model.get(1).toString());
+            preparedStatement.setString(3, concilList1Model.get(2).toString());
+            preparedStatement.setString(4, concilList1Model.get(3).toString());
+            preparedStatement.setString(5, concilList1Model.get(4).toString());
+            preparedStatement.setString(6, Global.caseYear);
+            preparedStatement.setString(7, Global.caseType);
+            preparedStatement.setString(8, Global.caseMonth);
+            preparedStatement.setString(9, Global.caseNumber);
+
+            int success = preparedStatement.executeUpdate();
+            
+            if(success == 1) {
+                String names = concilList1Model.get(0).toString().substring(0, 1) + "." + concilList1Model.get(0).toString().substring(concilList1Model.get(0).toString().lastIndexOf(" "));
+                names += ", " + concilList1Model.get(1).toString().substring(0, 1) + "." + concilList1Model.get(1).toString().substring(concilList1Model.get(1).toString().lastIndexOf(" "));
+                names += ", " + concilList1Model.get(2).toString().substring(0, 1) + "." + concilList1Model.get(2).toString().substring(concilList1Model.get(2).toString().lastIndexOf(" "));
+                names += ", " + concilList1Model.get(3).toString().substring(0, 1) + "." + concilList1Model.get(3).toString().substring(concilList1Model.get(3).toString().lastIndexOf(" "));
+                names += ", " + concilList1Model.get(4).toString().substring(0, 1) + "." + concilList1Model.get(4).toString().substring(concilList1Model.get(4).toString().lastIndexOf(" "));
+
+                Activity.addActivty("Generated Fact Finder List (" + names + ")", null);
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex.getMessage());
+        }
+    }
+    
+    public static void saveFFList2(DefaultListModel concilList2Model) {
+        MEDCase med = null;
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Update MEDCase set"
+                    + " FFList2Name1 = ?,"
+                    + " FFList2Name2 = ?,"
+                    + " FFList2Name3 = ?,"
+                    + " FFList2Name4 = ?,"
+                    + " FFList2Name5 = ?"
+                    + " where caseYear = ? "
+                    + " AND caseType = ? "
+                    + " AND caseMonth = ? "
+                    + " AND caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, concilList2Model.get(0).toString());
+            preparedStatement.setString(2, concilList2Model.get(1).toString());
+            preparedStatement.setString(3, concilList2Model.get(2).toString());
+            preparedStatement.setString(4, concilList2Model.get(3).toString());
+            preparedStatement.setString(5, concilList2Model.get(4).toString());
+            preparedStatement.setString(6, Global.caseYear);
+            preparedStatement.setString(7, Global.caseType);
+            preparedStatement.setString(8, Global.caseMonth);
+            preparedStatement.setString(9, Global.caseNumber);
+
+            int success = preparedStatement.executeUpdate();
+            
+            if(success == 1) {
+                String names = concilList2Model.get(0).toString().substring(0, 1) + "." + concilList2Model.get(0).toString().substring(concilList2Model.get(0).toString().lastIndexOf(" "));
+                names += ", " + concilList2Model.get(1).toString().substring(0, 1) + "." + concilList2Model.get(1).toString().substring(concilList2Model.get(1).toString().lastIndexOf(" "));
+                names += ", " + concilList2Model.get(2).toString().substring(0, 1) + "." + concilList2Model.get(2).toString().substring(concilList2Model.get(2).toString().lastIndexOf(" "));
+                names += ", " + concilList2Model.get(3).toString().substring(0, 1) + "." + concilList2Model.get(3).toString().substring(concilList2Model.get(3).toString().lastIndexOf(" "));
+                names += ", " + concilList2Model.get(4).toString().substring(0, 1) + "." + concilList2Model.get(4).toString().substring(concilList2Model.get(4).toString().lastIndexOf(" "));
+
+                Activity.addActivty("Generated Fact Finder List (" + names + ")", null);
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex.getMessage());
+        }
+    }
+    
+    public static void replaceList2FF(int location, String newName, String oldName) {
+        MEDCase med = null;
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Update MEDCase set"
+                    + " FFList2Name" + String.valueOf(location + 1) + " = ?"
+                    + " where caseYear = ? "
+                    + " AND caseType = ? "
+                    + " AND caseMonth = ? "
+                    + " AND caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, newName);
+            preparedStatement.setString(2, Global.caseYear);
+            preparedStatement.setString(3, Global.caseType);
+            preparedStatement.setString(4, Global.caseMonth);
+            preparedStatement.setString(5, Global.caseNumber);
+
+            int success = preparedStatement.executeUpdate();
+            
+            if(success == 1) {
+                Activity.addActivty("Replaced " + oldName + " with " + newName, null);
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex.getMessage());
+        }
+    }
+    
+    public static void replaceList1FF(int location, String newName, String oldName) {
+        MEDCase med = null;
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Update MEDCase set"
+                    + " FFList1Name" + String.valueOf(location + 1) + " = ?"
+                    + " where caseYear = ? "
+                    + " AND caseType = ? "
+                    + " AND caseMonth = ? "
+                    + " AND caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, newName);
+            preparedStatement.setString(2, Global.caseYear);
+            preparedStatement.setString(3, Global.caseType);
+            preparedStatement.setString(4, Global.caseMonth);
+            preparedStatement.setString(5, Global.caseNumber);
+
+            int success = preparedStatement.executeUpdate();
+            
+            if(success == 1) {
+                Activity.addActivty("Replaced " + oldName + " with " + newName, null);
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex.getMessage());
+        }
+    }
+    
     public static void updateBoardStatus(MEDCase newCaseInformation, MEDCase caseInformation) {
 //        MEDCase rep = null;
 //        try {
@@ -717,6 +985,73 @@ public class MEDCase {
             
             if(success == 1) {
                 detailedConciliationDetailSaveInformation(newCaseInformation, caseInformation);
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex.getMessage());
+        }
+    }
+    
+    public static void updateFF(MEDCase newCaseInformation, MEDCase caseInformation) {
+        MEDCase med = null;
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+//
+            String sql = "Update MEDCase set"
+                    + " FFList1OrderDate = ?,"
+                    + " FFList1SelectionDueDate = ?,"
+                    + " FFAppointmentDate = ?,"
+                    + " FFType = ?,"
+                    + " FFSelection = ?,"
+                    + " FFReplacement = ?,"
+                    + " FFOriginalFactFinder = ?,"
+                    + " FFOriginalFactFinderDate = ?,"
+                    + " asAgreedToByParties = ?,"
+                    + " FFList2OrderDate = ?,"
+                    + " FFList2SelectionDueDate = ?,"
+                    + " FFEmployerType = ?,"
+                    + " FFEmployeeType = ?,"
+                    + " FFReportIssueDate = ?,"
+                    + " FFMediatedSettlement = ?,"
+                    + " FFAcceptedBy = ?,"
+                    + " FFDeemedAcceptedBy = ?,"
+                    + " FFRejectedBy = ?,"
+                    + " FFOverallResult = ?,"
+                    + " FFNote = ?"
+                    + " where caseYear = ? "
+                    + " AND caseType = ? "
+                    + " AND caseMonth = ? "
+                    + " AND caseNumber = ?";
+//
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setTimestamp(1, newCaseInformation.FFList1OrderDate);
+            preparedStatement.setTimestamp(2, newCaseInformation.FFList1SelectionDueDate);
+            preparedStatement.setTimestamp(3, newCaseInformation.FFAppointmentDate);
+            preparedStatement.setString(4, newCaseInformation.FFType);
+            preparedStatement.setString(5, newCaseInformation.FFSelection);
+            preparedStatement.setString(6, newCaseInformation.FFReplacement);
+            preparedStatement.setString(7, newCaseInformation.FFOriginalFactFinder);
+            preparedStatement.setTimestamp(8, newCaseInformation.FFOriginalFactFinderDate);
+            preparedStatement.setBoolean(9, newCaseInformation.asAgreedToByParties);
+            preparedStatement.setTimestamp(10, newCaseInformation.FFList2OrderDate);
+            preparedStatement.setTimestamp(11, newCaseInformation.FFList2SelectionDueDate);
+            preparedStatement.setString(12, newCaseInformation.FFEmployerType);
+            preparedStatement.setString(13, newCaseInformation.FFEmployeeType);
+            preparedStatement.setTimestamp(14, newCaseInformation.FFReportIssueDate);
+            preparedStatement.setBoolean(15, newCaseInformation.FFMediatedSettlement);
+            preparedStatement.setString(16, newCaseInformation.FFAcceptedBy);
+            preparedStatement.setString(17, newCaseInformation.FFDeemedAcceptedBy);
+            preparedStatement.setString(18, newCaseInformation.FFRejectedBy);
+            preparedStatement.setString(19, newCaseInformation.FFOverallResult);
+            preparedStatement.setString(20, newCaseInformation.FFNote);
+            preparedStatement.setString(21, Global.caseYear);
+            preparedStatement.setString(22, Global.caseType);
+            preparedStatement.setString(23, Global.caseMonth);
+            preparedStatement.setString(24, Global.caseNumber);
+
+            int success = preparedStatement.executeUpdate();
+            
+            if(success == 1) {
+                detailedFFDetailSaveInformation(newCaseInformation, caseInformation);
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex.getMessage());
@@ -1002,6 +1337,195 @@ public class MEDCase {
                 Activity.addActivty("Changed Conciliation List 2 Selection Due Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.concilList2SelectionDueDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.concilList2SelectionDueDate.getTime())), null);
         }
     }
+    
+    private static void detailedFFDetailSaveInformation(MEDCase newCaseInformation, MEDCase oldCaseInformation) {
+       
+        //list1orderdate
+        if(newCaseInformation.FFList1OrderDate == null && oldCaseInformation.FFList1OrderDate != null) {
+            Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.FFList1OrderDate.getTime())) + " from Fact Finder List 1 Order Date", null);
+        } else if(newCaseInformation.FFList1OrderDate != null && oldCaseInformation.FFList1OrderDate == null) {
+            Activity.addActivty("Set Fact Finder List 1 Order Date to " + Global.mmddyyyy.format(new Date(newCaseInformation.FFList1OrderDate.getTime())), null);
+        } else if(newCaseInformation.FFList1OrderDate != null && oldCaseInformation.FFList1OrderDate != null) {
+            if(!Global.mmddyyyy.format(new Date(oldCaseInformation.FFList1OrderDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.FFList1OrderDate.getTime()))))
+                Activity.addActivty("Changed Fact Finder List 1 Order Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.FFList1OrderDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.FFList1OrderDate.getTime())), null);
+        }
+        
+        //list1SelectionDueDate
+        if(newCaseInformation.FFList1SelectionDueDate == null && oldCaseInformation.FFList1SelectionDueDate != null) {
+            Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.FFList1SelectionDueDate.getTime())) + " from Fact Finder List 1 Selection Due Date", null);
+        } else if(newCaseInformation.FFList1SelectionDueDate != null && oldCaseInformation.FFList1SelectionDueDate == null) {
+            Activity.addActivty("Set Fact Finder List 1 Selection Due Date to " + Global.mmddyyyy.format(new Date(newCaseInformation.FFList1SelectionDueDate.getTime())), null);
+        } else if(newCaseInformation.FFList1SelectionDueDate != null && oldCaseInformation.FFList1SelectionDueDate != null) {
+            if(!Global.mmddyyyy.format(new Date(oldCaseInformation.FFList1SelectionDueDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.FFList1SelectionDueDate.getTime()))))
+                Activity.addActivty("Changed Fact Finder List 1 Selection Due Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.FFList1SelectionDueDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.FFList1SelectionDueDate.getTime())), null);
+        }
+        
+        //appointmentDate
+        if(newCaseInformation.FFAppointmentDate == null && oldCaseInformation.FFAppointmentDate != null) {
+            Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.FFAppointmentDate.getTime())) + " from Fact Finder Appointment Date", null);
+        } else if(newCaseInformation.FFList1SelectionDueDate != null && oldCaseInformation.FFAppointmentDate == null) {
+            Activity.addActivty("Set Fact Finder Appointment Date to " + Global.mmddyyyy.format(new Date(newCaseInformation.FFAppointmentDate.getTime())), null);
+        } else if(newCaseInformation.FFAppointmentDate != null && oldCaseInformation.FFAppointmentDate != null) {
+            if(!Global.mmddyyyy.format(new Date(oldCaseInformation.FFAppointmentDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.FFAppointmentDate.getTime()))))
+                Activity.addActivty("Changed Fact Finder Appointment Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.FFAppointmentDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.FFAppointmentDate.getTime())), null);
+        }
+        
+        //FFType
+        if(newCaseInformation.FFType == null && oldCaseInformation.FFType != null) {
+            Activity.addActivty("Removed " + oldCaseInformation.FFType + " from Fact Finder Type", null);
+        } else if(newCaseInformation.FFType != null && oldCaseInformation.FFType == null) {
+            Activity.addActivty("Set Fact Finder Type to " + newCaseInformation.FFType, null);
+        } else if(newCaseInformation.FFType != null && oldCaseInformation.FFType != null) {
+            if(!newCaseInformation.FFType.equals(oldCaseInformation.FFType)) 
+                Activity.addActivty("Changed Fact Finder Type from " + oldCaseInformation.FFType + " to " + newCaseInformation.FFType, null);
+        }
+        
+        //FFSelection
+        if(newCaseInformation.FFSelection == null && oldCaseInformation.FFSelection != null) {
+            Activity.addActivty("Removed " + oldCaseInformation.FFSelection + " from Fact Finder Selected", null);
+        } else if(newCaseInformation.FFSelection != null && oldCaseInformation.FFSelection == null) {
+            Activity.addActivty("Set Fact Finder Selected to " + newCaseInformation.FFSelection, null);
+        } else if(newCaseInformation.FFSelection != null && oldCaseInformation.FFSelection != null) {
+            if(!newCaseInformation.FFSelection.equals(oldCaseInformation.FFSelection)) 
+                Activity.addActivty("Changed Fact Finder Selected from " + oldCaseInformation.FFSelection + " to " + newCaseInformation.FFSelection, null);
+        }
+        
+        //replacementFF
+        if(newCaseInformation.FFReplacement == null && oldCaseInformation.FFReplacement != null) {
+            Activity.addActivty("Removed " + oldCaseInformation.FFReplacement + " from Replacement Fact Finder", null);
+        } else if(newCaseInformation.FFReplacement != null && oldCaseInformation.FFReplacement == null) {
+            Activity.addActivty("Set Replacement Fact Finder to " + newCaseInformation.FFReplacement, null);
+        } else if(newCaseInformation.FFReplacement != null && oldCaseInformation.FFReplacement != null) {
+            if(!newCaseInformation.FFReplacement.equals(oldCaseInformation.FFReplacement)) 
+                Activity.addActivty("Changed Replacement Fact Finder from " + oldCaseInformation.FFReplacement + " to " + newCaseInformation.FFReplacement, null);
+        }
+        
+        //orgFFDate
+        if(newCaseInformation.FFOriginalFactFinderDate == null && oldCaseInformation.FFOriginalFactFinderDate != null) {
+            Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.FFOriginalFactFinderDate.getTime())) + " from Original Fact Finder Date", null);
+        } else if(newCaseInformation.FFOriginalFactFinderDate != null && oldCaseInformation.FFOriginalFactFinderDate == null) {
+            Activity.addActivty("Set Original Fact Finder Date to " + Global.mmddyyyy.format(new Date(newCaseInformation.FFOriginalFactFinderDate.getTime())), null);
+        } else if(newCaseInformation.FFOriginalFactFinderDate != null && oldCaseInformation.FFOriginalFactFinderDate != null) {
+            if(!Global.mmddyyyy.format(new Date(oldCaseInformation.FFOriginalFactFinderDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.FFOriginalFactFinderDate.getTime()))))
+                Activity.addActivty("Changed Original Fact Finder Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.FFOriginalFactFinderDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.FFOriginalFactFinderDate.getTime())), null);
+        }
+        
+        //asAgreedToByParties
+        if(newCaseInformation.asAgreedToByParties == false && oldCaseInformation.asAgreedToByParties != false) {
+            Activity.addActivty("Unset As Agreed To By Parties", null);
+        } else if(newCaseInformation.asAgreedToByParties != false && oldCaseInformation.asAgreedToByParties == false) {
+            Activity.addActivty("Set As Agreed To By Parties", null);
+        } 
+        
+        //list2orderdate
+        if(newCaseInformation.FFList2OrderDate == null && oldCaseInformation.FFList2OrderDate != null) {
+            Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.FFList2OrderDate.getTime())) + " from Fact Finder List 2 Order Date", null);
+        } else if(newCaseInformation.FFList2OrderDate != null && oldCaseInformation.FFList2OrderDate == null) {
+            Activity.addActivty("Set Fact Finder List 2 Order Date to " + Global.mmddyyyy.format(new Date(newCaseInformation.FFList2OrderDate.getTime())), null);
+        } else if(newCaseInformation.FFList2OrderDate != null && oldCaseInformation.FFList2OrderDate != null) {
+            if(!Global.mmddyyyy.format(new Date(oldCaseInformation.FFList2OrderDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.FFList2OrderDate.getTime()))))
+                Activity.addActivty("Changed Fact Finder List 2 Order Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.FFList2OrderDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.FFList2OrderDate.getTime())), null);
+        }
+        
+        //list2SelectionDueDate
+        if(newCaseInformation.FFList2SelectionDueDate == null && oldCaseInformation.FFList2SelectionDueDate != null) {
+            Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.FFList2SelectionDueDate.getTime())) + " from Fact Finder List 2 Selection Due Date", null);
+        } else if(newCaseInformation.FFList2SelectionDueDate != null && oldCaseInformation.FFList2SelectionDueDate == null) {
+            Activity.addActivty("Set Fact Finder List 2 Selection Due Date to " + Global.mmddyyyy.format(new Date(newCaseInformation.FFList2SelectionDueDate.getTime())), null);
+        } else if(newCaseInformation.concilList1SelectionDueDate != null && oldCaseInformation.FFList2SelectionDueDate != null) {
+            if(!Global.mmddyyyy.format(new Date(oldCaseInformation.FFList2SelectionDueDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.FFList2SelectionDueDate.getTime()))))
+                Activity.addActivty("Changed Fact Finder List 2 Selection Due Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.FFList2SelectionDueDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.FFList2SelectionDueDate.getTime())), null);
+        }
+        
+        //EmployerType
+        if(newCaseInformation.FFEmployerType == null && oldCaseInformation.FFEmployerType != null) {
+            Activity.addActivty("Removed " + oldCaseInformation.FFEmployerType + " from Fact Finder Employer Type", null);
+        } else if(newCaseInformation.FFEmployerType != null && oldCaseInformation.FFEmployerType == null) {
+            Activity.addActivty("Set Fact Finder Employer Type to " + newCaseInformation.FFEmployerType, null);
+        } else if(newCaseInformation.FFEmployerType != null && oldCaseInformation.FFEmployerType != null) {
+            if(!newCaseInformation.FFEmployerType.equals(oldCaseInformation.FFEmployerType)) 
+                Activity.addActivty("Changed Fact Finder Employer Type from " + oldCaseInformation.FFEmployerType + " to " + newCaseInformation.FFEmployerType, null);
+        }
+        
+        //EmployeeType
+        if(newCaseInformation.FFEmployeeType == null && oldCaseInformation.FFEmployeeType != null) {
+            Activity.addActivty("Removed " + oldCaseInformation.FFEmployeeType + " from Fact Finder Employee Type", null);
+        } else if(newCaseInformation.FFEmployeeType != null && oldCaseInformation.FFEmployeeType == null) {
+            Activity.addActivty("Set Fact Finder Employee Type to " + newCaseInformation.FFEmployeeType, null);
+        } else if(newCaseInformation.FFEmployeeType != null && oldCaseInformation.FFEmployeeType != null) {
+            if(!newCaseInformation.FFEmployeeType.equals(oldCaseInformation.FFEmployeeType)) 
+                Activity.addActivty("Changed Fact Finder Employee Type from " + oldCaseInformation.FFEmployeeType + " to " + newCaseInformation.FFEmployeeType, null);
+        }
+        
+        //FFReportIssueDate
+        if(newCaseInformation.FFReportIssueDate == null && oldCaseInformation.FFReportIssueDate != null) {
+            Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.FFReportIssueDate.getTime())) + " from Fact Finder Report Issue Date", null);
+        } else if(newCaseInformation.FFReportIssueDate != null && oldCaseInformation.FFReportIssueDate == null) {
+            Activity.addActivty("Set Fact Finder Report Issue Date to " + Global.mmddyyyy.format(new Date(newCaseInformation.FFReportIssueDate.getTime())), null);
+        } else if(newCaseInformation.FFReportIssueDate != null && oldCaseInformation.FFReportIssueDate != null) {
+            if(!Global.mmddyyyy.format(new Date(oldCaseInformation.FFReportIssueDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.FFReportIssueDate.getTime()))))
+                Activity.addActivty("Changed Fact Finder Report Issue Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.FFReportIssueDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.FFList2OrderDate.getTime())), null);
+        }
+        
+        //MediatedSettlement
+        if(newCaseInformation.FFMediatedSettlement == false && oldCaseInformation.FFMediatedSettlement != false) {
+            Activity.addActivty("Unset Mediated Settlement", null);
+        } else if(newCaseInformation.FFMediatedSettlement != false && oldCaseInformation.FFMediatedSettlement == false) {
+            Activity.addActivty("Set Mediated Settlement", null);
+        } 
+        
+        //AcceptedBy
+        if(newCaseInformation.FFAcceptedBy == null && oldCaseInformation.FFAcceptedBy != null) {
+            Activity.addActivty("Removed " + oldCaseInformation.FFAcceptedBy + " from Fact Finder Accepted By", null);
+        } else if(newCaseInformation.FFAcceptedBy != null && oldCaseInformation.FFAcceptedBy == null) {
+            Activity.addActivty("Set Fact Finder Accepted By to " + newCaseInformation.FFAcceptedBy, null);
+        } else if(newCaseInformation.FFAcceptedBy != null && oldCaseInformation.FFAcceptedBy != null) {
+            if(!newCaseInformation.FFAcceptedBy.equals(oldCaseInformation.FFAcceptedBy)) 
+                Activity.addActivty("Changed Fact Finder Accepted By from " + oldCaseInformation.FFAcceptedBy + " to " + newCaseInformation.FFAcceptedBy, null);
+        }
+        
+        //DeemedAcceptedBy
+        if(newCaseInformation.FFDeemedAcceptedBy == null && oldCaseInformation.FFDeemedAcceptedBy != null) {
+            Activity.addActivty("Removed " + oldCaseInformation.FFDeemedAcceptedBy + " from Fact Finder Deemed Accepted By", null);
+        } else if(newCaseInformation.FFDeemedAcceptedBy != null && oldCaseInformation.FFDeemedAcceptedBy == null) {
+            Activity.addActivty("Set Fact Finder Deemed Accepted By to " + newCaseInformation.FFDeemedAcceptedBy, null);
+        } else if(newCaseInformation.FFDeemedAcceptedBy != null && oldCaseInformation.FFDeemedAcceptedBy != null) {
+            if(!newCaseInformation.FFDeemedAcceptedBy.equals(oldCaseInformation.FFDeemedAcceptedBy)) 
+                Activity.addActivty("Changed Fact Finder Deemed Accepted By from " + oldCaseInformation.FFDeemedAcceptedBy + " to " + newCaseInformation.FFDeemedAcceptedBy, null);
+        }
+        
+        //RejectedBy
+        if(newCaseInformation.FFRejectedBy == null && oldCaseInformation.FFRejectedBy != null) {
+            Activity.addActivty("Removed " + oldCaseInformation.FFRejectedBy + " from Fact Finder Rejected By", null);
+        } else if(newCaseInformation.FFRejectedBy != null && oldCaseInformation.FFRejectedBy == null) {
+            Activity.addActivty("Set Fact Finder Rejected By to " + newCaseInformation.FFRejectedBy, null);
+        } else if(newCaseInformation.FFRejectedBy != null && oldCaseInformation.FFRejectedBy != null) {
+            if(!newCaseInformation.FFRejectedBy.equals(oldCaseInformation.FFRejectedBy)) 
+                Activity.addActivty("Changed Fact Finder Rejected By from " + oldCaseInformation.FFRejectedBy + " to " + newCaseInformation.FFRejectedBy, null);
+        }
+        
+        //OverallResult
+        if(newCaseInformation.FFOverallResult == null && oldCaseInformation.FFOverallResult != null) {
+            Activity.addActivty("Removed " + oldCaseInformation.FFOverallResult + " from Fact Finder Overall Result", null);
+        } else if(newCaseInformation.FFOverallResult != null && oldCaseInformation.FFOverallResult == null) {
+            Activity.addActivty("Set Fact Finder Overall Result to " + newCaseInformation.FFOverallResult, null);
+        } else if(newCaseInformation.FFOverallResult != null && oldCaseInformation.FFOverallResult != null) {
+            if(!newCaseInformation.FFOverallResult.equals(oldCaseInformation.FFOverallResult)) 
+                Activity.addActivty("Changed Fact Finder Overall Result from " + oldCaseInformation.FFOverallResult + " to " + newCaseInformation.FFOverallResult, null);
+        }
+        
+        //Note
+        if(newCaseInformation.FFNote == null && oldCaseInformation.FFNote != null) {
+            Activity.addActivty("Update Fact Finder Notes", null);
+        } else if(newCaseInformation.FFNote != null && oldCaseInformation.FFNote == null) {
+            Activity.addActivty("Update Fact Finder Notes", null);
+        } else if(newCaseInformation.FFNote != null && oldCaseInformation.FFNote != null) {
+            if(!newCaseInformation.FFNote.equals(oldCaseInformation.FFNote)) 
+                Activity.addActivty("Update Fact Finder Notes", null);
+        }
+        
+    }
+
     
     public static List<String> loadRelatedCases() {
         
