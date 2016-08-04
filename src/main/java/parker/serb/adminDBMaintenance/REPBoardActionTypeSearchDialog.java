@@ -143,7 +143,7 @@ public class REPBoardActionTypeSearchDialog extends javax.swing.JDialog {
 
             },
             new String [] {
-                "ID", "Active", "Type", "Recommendation"
+                "ID", "Active", "Short", "Meaning"
             }
         ) {
             Class[] types = new Class [] {
