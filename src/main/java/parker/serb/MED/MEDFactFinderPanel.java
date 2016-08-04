@@ -1086,13 +1086,13 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
             if(evt.getClickCount() == 2) {
                 System.out.println("MORE INFO: " + FFList1Model.get(FF1List.getSelectedIndex()));
             } else if(evt.getButton() == MouseEvent.BUTTON3) {
-//                MEDRemoveFFDialog remove = new MEDRemoveFFDialog(Global.root, true, FFList1Model.get(FF1List.getSelectedIndex()).toString());
-//                if(remove.removeFF) {
-//                    System.out.println("REMOVE: " + FFList1Model.get(FF1List.getSelectedIndex()));
-//                    replaceFFAfterRemoval(FF1List.getSelectedIndex(), "list1");
-//                    FF1List.clearSelection();
-//                }
-//                remove.dispose();
+                MEDRemoveFFDialog remove = new MEDRemoveFFDialog(Global.root, true, FFList1Model.get(FF1List.getSelectedIndex()).toString());
+                if(remove.removeFF) {
+                    System.out.println("REMOVE: " + FFList1Model.get(FF1List.getSelectedIndex()));
+                    replaceFFAfterRemoval(FF1List.getSelectedIndex(), "list1");
+                    FF1List.clearSelection();
+                }
+                remove.dispose();
             }
         }
     }//GEN-LAST:event_FF1ListMouseClicked
@@ -1102,13 +1102,13 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
             if(evt.getClickCount() == 2) {
                 System.out.println("MORE INFO: " + FFList2Model.get(FF2List.getSelectedIndex()));
             } else if(evt.getButton() == MouseEvent.BUTTON3) {
-//                MEDRemoveFFDialog remove = new MEDRemoveFFDialog(Global.root, true, FFList2Model.get(FF2List.getSelectedIndex()).toString());
-//                if(remove.removeFF) {
-//                    System.out.println("REMOVE: " + FFList2Model.get(FF2List.getSelectedIndex()));
-//                    replaceFFAfterRemoval(FF2List.getSelectedIndex(), "list2");
-//                    FF2List.clearSelection();
-//                }
-//                remove.dispose();
+                MEDRemoveFFDialog remove = new MEDRemoveFFDialog(Global.root, true, FFList2Model.get(FF2List.getSelectedIndex()).toString());
+                if(remove.removeFF) {
+                    System.out.println("REMOVE: " + FFList2Model.get(FF2List.getSelectedIndex()));
+                    replaceFFAfterRemoval(FF2List.getSelectedIndex(), "list2");
+                    FF2List.clearSelection();
+                }
+                remove.dispose();
             }
         }
     }//GEN-LAST:event_FF2ListMouseClicked
