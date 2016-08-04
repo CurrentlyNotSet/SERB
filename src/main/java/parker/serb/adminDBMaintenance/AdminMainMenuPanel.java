@@ -1,4 +1,4 @@
-package parker.serb.admin;
+package parker.serb.adminDBMaintenance;
 
 import parker.serb.Global;
 import parker.serb.adminDBMaintenance.*;
@@ -61,7 +61,7 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Reference Table Maintenance");
 
-        FFConciliatorsButton.setText("FF/Conciliators");
+        FFConciliatorsButton.setText("<html><center>Fact Finders &<br>Conciliators</center></html>");
         FFConciliatorsButton.setEnabled(false);
         FFConciliatorsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -143,7 +143,6 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
         });
 
         REPStatusOptionsButton.setText("REP Status Options");
-        REPStatusOptionsButton.setEnabled(false);
         REPStatusOptionsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 REPStatusOptionsButtonActionPerformed(evt);
@@ -306,7 +305,6 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(UsersButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(FFConciliatorsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(SystemPBRButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(SystemSERBButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -320,7 +318,8 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
                                 .addComponent(BoardActionTypeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(REPRecsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(ULPRecsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(ULPRecsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(FFConciliatorsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(HearingPeopleButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -382,7 +381,7 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
     }//GEN-LAST:event_REPRecsButtonActionPerformed
 
     private void REPStatusOptionsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_REPStatusOptionsButtonActionPerformed
-        // TODO add your handling code here:
+        new REPStatusOptionsSearchDialog(Global.root, true);
     }//GEN-LAST:event_REPStatusOptionsButtonActionPerformed
 
     private void ULPRecsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ULPRecsButtonActionPerformed
