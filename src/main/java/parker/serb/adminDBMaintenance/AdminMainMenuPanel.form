@@ -157,7 +157,7 @@
                   <Component id="PartyButton" linkSize="4" min="-2" pref="40" max="-2" attributes="0"/>
                   <Component id="RedactionAdminButton" linkSize="4" min="-2" pref="40" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="109" max="32767" attributes="0"/>
+              <EmptySpace pref="44" max="32767" attributes="0"/>
               <Component id="jButton1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>

@@ -68,7 +68,7 @@ public class REPBoardActionType {
                             + "LIKE ?";
                 }
             }
-            sql += " ORDER BY statusType";
+            sql += " ORDER BY shortDescription";
 
             PreparedStatement ps = stmt.getConnection().prepareStatement(sql);
 

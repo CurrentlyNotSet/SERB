@@ -7,16 +7,16 @@ package parker.serb.adminDBMaintenance;
 
 import com.alee.laf.optionpane.WebOptionPane;
 import parker.serb.Global;
-import parker.serb.sql.ULPRecommendation;
+import parker.serb.sql.REPBoardActionType;
 
 /**
  *
  * @author Andrew
  */
-public class ULPRecsAddEditDialog extends javax.swing.JDialog {
+public class REPBoardActionTypeAddEditDialog extends javax.swing.JDialog {
 
     private int ID;
-    private ULPRecommendation item;
+    private REPBoardActionType item;
     
     /**
      * Creates new form AddCompanyContactPanel
@@ -24,7 +24,7 @@ public class ULPRecsAddEditDialog extends javax.swing.JDialog {
      * @param modal
      * @param itemIDpassed
      */
-    public ULPRecsAddEditDialog(java.awt.Frame parent, boolean modal, int itemIDpassed) {
+    public REPBoardActionTypeAddEditDialog(java.awt.Frame parent, boolean modal, int itemIDpassed) {
         super(parent, modal);
         initComponents();
         setDefaults(itemIDpassed);
@@ -33,35 +33,35 @@ public class ULPRecsAddEditDialog extends javax.swing.JDialog {
     private void setDefaults(int itemIDpassed) {
         ID = itemIDpassed;
         if (ID > 0) {
-            titleLabel.setText("Edit ULP Recommendation");
+            titleLabel.setText("Edit REP Board Action Type");
             editButton.setText("Save");
             loadInformation();
         } else {
-            titleLabel.setText("Add ULP Recommendation");
+            titleLabel.setText("Add REP Board Action Type");
             editButton.setText("Add");
             editButton.setEnabled(false);
-            item = new ULPRecommendation();
+            item = new REPBoardActionType();
         }
         this.setLocationRelativeTo(Global.root);
         this.setVisible(true);
     }
         
     private void loadInformation() {
-        item = ULPRecommendation.getULPReccomendationByID(ID);
+        item = REPBoardActionType.getREPBoardActionTypeByID(ID);
         
-        recCodeTextField.setText(item.code);
-        descriptionTextArea.setText(item.description);
+        recCodeTextField.setText(item.shortDescription);
+        descriptionTextArea.setText(item.longDescription);
     }
     
     private void saveInformation() {
         item.id = ID;
-        item.code = recCodeTextField.getText().trim();
-        item.description = descriptionTextArea.getText().trim();
+        item.shortDescription = recCodeTextField.getText().trim();
+        item.longDescription = descriptionTextArea.getText().trim();
                        
         if (ID > 0){
-            ULPRecommendation.updateULPRec(item);
+            REPBoardActionType.updateREPBoardActionType(item);
         } else {
-            ULPRecommendation.createULPRec(item);
+            REPBoardActionType.createREPBoardActionType(item);
         }
     }
 
@@ -117,7 +117,7 @@ public class ULPRecsAddEditDialog extends javax.swing.JDialog {
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel4.setText("Rec Code:");
+        jLabel4.setText("Short:");
 
         editButton.setText("<<EDIT>>");
         editButton.addActionListener(new java.awt.event.ActionListener() {
