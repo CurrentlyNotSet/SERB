@@ -7,16 +7,16 @@ package parker.serb.adminDBMaintenance;
 
 import com.alee.laf.optionpane.WebOptionPane;
 import parker.serb.Global;
-import parker.serb.sql.NamePrefix;
+import parker.serb.sql.REPBoardActionType;
 
 /**
  *
  * @author Andrew
  */
-public class PreFixAddEdidDialog extends javax.swing.JDialog {
+public class REPBoardActionTypeAddEditDialog extends javax.swing.JDialog {
 
     private int ID;
-    private NamePrefix item;
+    private REPBoardActionType item;
     
     /**
      * Creates new form AddCompanyContactPanel
@@ -24,7 +24,7 @@ public class PreFixAddEdidDialog extends javax.swing.JDialog {
      * @param modal
      * @param itemIDpassed
      */
-    public PreFixAddEdidDialog(java.awt.Frame parent, boolean modal, int itemIDpassed) {
+    public REPBoardActionTypeAddEditDialog(java.awt.Frame parent, boolean modal, int itemIDpassed) {
         super(parent, modal);
         initComponents();
         setDefaults(itemIDpassed);
@@ -33,43 +33,46 @@ public class PreFixAddEdidDialog extends javax.swing.JDialog {
     private void setDefaults(int itemIDpassed) {
         ID = itemIDpassed;
         if (ID > 0) {
-            titleLabel.setText("Edit Name Prefix");
+            titleLabel.setText("Edit REP Board Action Type");
             editButton.setText("Save");
             loadInformation();
         } else {
-            titleLabel.setText("Add Name Prefix");
+            titleLabel.setText("Add REP Board Action Type");
             editButton.setText("Add");
             editButton.setEnabled(false);
-            item = new NamePrefix();
+            item = new REPBoardActionType();
         }
         this.setLocationRelativeTo(Global.root);
         this.setVisible(true);
     }
-    
-    private void loadInformation() {
-        item = NamePrefix.getPreFixByID(ID);
         
-        PrefixTextField.setText(item.prefix);
+    private void loadInformation() {
+        item = REPBoardActionType.getREPBoardActionTypeByID(ID);
+        
+        recCodeTextField.setText(item.shortDescription);
+        descriptionTextArea.setText(item.longDescription);
     }
     
     private void saveInformation() {
-        item.prefix = PrefixTextField.getText().trim();
         item.id = ID;
+        item.shortDescription = recCodeTextField.getText().trim();
+        item.longDescription = descriptionTextArea.getText().trim();
                        
         if (ID > 0){
-            NamePrefix.updatePrefix(item);
+            REPBoardActionType.updateREPBoardActionType(item);
         } else {
-            NamePrefix.createPrefix(item);
+            REPBoardActionType.createREPBoardActionType(item);
         }
     }
-    
+
     private void checkButton(){
-        if (PrefixTextField.getText().trim().equals("")){
+        if (recCodeTextField.getText().trim().equals("") || 
+                descriptionTextArea.getText().trim().equals("")){
             editButton.setEnabled(false);
         } else {
             editButton.setEnabled(true);
         }
-    }
+    }    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -82,9 +85,12 @@ public class PreFixAddEdidDialog extends javax.swing.JDialog {
 
         titleLabel = new javax.swing.JLabel();
         closeButton = new javax.swing.JButton();
-        PrefixTextField = new javax.swing.JTextField();
+        recCodeTextField = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         editButton = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        descriptionTextArea = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -101,17 +107,17 @@ public class PreFixAddEdidDialog extends javax.swing.JDialog {
             }
         });
 
-        PrefixTextField.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        PrefixTextField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        PrefixTextField.addCaretListener(new javax.swing.event.CaretListener() {
+        recCodeTextField.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        recCodeTextField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        recCodeTextField.addCaretListener(new javax.swing.event.CaretListener() {
             public void caretUpdate(javax.swing.event.CaretEvent evt) {
-                PrefixTextFieldCaretUpdate(evt);
+                recCodeTextFieldCaretUpdate(evt);
             }
         });
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel4.setText("Prefix:");
+        jLabel4.setText("Short:");
 
         editButton.setText("<<EDIT>>");
         editButton.addActionListener(new java.awt.event.ActionListener() {
@@ -119,6 +125,21 @@ public class PreFixAddEdidDialog extends javax.swing.JDialog {
                 editButtonActionPerformed(evt);
             }
         });
+
+        jLabel5.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel5.setText("Description:");
+
+        descriptionTextArea.setColumns(20);
+        descriptionTextArea.setLineWrap(true);
+        descriptionTextArea.setRows(5);
+        descriptionTextArea.setWrapStyleWord(true);
+        descriptionTextArea.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                descriptionTextAreaCaretUpdate(evt);
+            }
+        });
+        jScrollPane1.setViewportView(descriptionTextArea);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -129,14 +150,18 @@ public class PreFixAddEdidDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(titleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(PrefixTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(editButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 290, Short.MAX_VALUE)
+                        .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(10, 10, 10)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE)
+                            .addComponent(recCodeTextField))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -144,11 +169,15 @@ public class PreFixAddEdidDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(titleLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(PrefixTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                    .addComponent(recCodeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(closeButton)
                     .addComponent(editButton))
@@ -170,15 +199,22 @@ public class PreFixAddEdidDialog extends javax.swing.JDialog {
         this.dispose();
     }//GEN-LAST:event_editButtonActionPerformed
 
-    private void PrefixTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_PrefixTextFieldCaretUpdate
+    private void recCodeTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_recCodeTextFieldCaretUpdate
         checkButton();
-    }//GEN-LAST:event_PrefixTextFieldCaretUpdate
+    }//GEN-LAST:event_recCodeTextFieldCaretUpdate
+
+    private void descriptionTextAreaCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_descriptionTextAreaCaretUpdate
+        checkButton();
+    }//GEN-LAST:event_descriptionTextAreaCaretUpdate
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField PrefixTextField;
     private javax.swing.JButton closeButton;
+    private javax.swing.JTextArea descriptionTextArea;
     private javax.swing.JButton editButton;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField recCodeTextField;
     private javax.swing.JLabel titleLabel;
     // End of variables declaration//GEN-END:variables
 }

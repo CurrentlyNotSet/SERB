@@ -257,17 +257,18 @@ public class MEDConciliationPanel extends javax.swing.JPanel {
         newMEDCaseInformation.concilReplacement = replacementConciliatorComboBox.getSelectedItem() == null || replacementConciliatorComboBox.getSelectedItem().toString().equals("") ? null : replacementConciliatorComboBox.getSelectedItem().toString();
         
         //only set the value if it is blank
-        if(conciliatorSelectionComboBox.getSelectedItem() == null) {
-            newMEDCaseInformation.concilOriginalConciliator = null;
-        } else if(concilOriginalConciliator.getText().equals("")) {
+        
+        if(concilOriginalConciliator.getText().equals("")) {
             newMEDCaseInformation.concilOriginalConciliator = conciliatorSelectionComboBox.getSelectedItem().toString().equals("") ? null : conciliatorSelectionComboBox.getSelectedItem().toString();
+        } else if(conciliatorSelectionComboBox.getSelectedItem() == null ||
+            conciliatorSelectionComboBox.getSelectedItem().toString().equals("")) {
+            newMEDCaseInformation.concilOriginalConciliator = null;
         } else {
             newMEDCaseInformation.concilOriginalConciliator = orginalInformation.concilOriginalConciliator;
         }
         
         newMEDCaseInformation.concilOriginalConcilDate = originalConciliationDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(originalConciliationDateTextBox.getText()));
 
-        
         newMEDCaseInformation.concilList2OrderDate = conciliation2OrderDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(conciliation2OrderDateTextBox.getText()));
         newMEDCaseInformation.concilList2SelectionDueDate = conciliation2SelectionDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(conciliation2SelectionDateTextBox.getText()));
         

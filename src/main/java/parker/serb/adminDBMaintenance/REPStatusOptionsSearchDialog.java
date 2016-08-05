@@ -9,20 +9,20 @@ import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
 import parker.serb.sql.ActiveStatus;
-import parker.serb.sql.NamePrefix;
+import parker.serb.sql.REPCaseStatus;
 
 /**
  *
  * @author User
  */
-public class PreFixSearchDialog extends javax.swing.JDialog {
+public class REPStatusOptionsSearchDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form PreFixSearchDialog
      * @param parent
      * @param modal
      */
-    public PreFixSearchDialog(java.awt.Frame parent, boolean modal) {
+    public REPStatusOptionsSearchDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         setColumnSize();
@@ -53,26 +53,40 @@ public class PreFixSearchDialog extends javax.swing.JDialog {
         SearchTable.getColumnModel().getColumn(1).setMinWidth(60);
         SearchTable.getColumnModel().getColumn(1).setWidth(60);
         SearchTable.getColumnModel().getColumn(1).setMaxWidth(60);
+        
+        //Recommendation Code
+        SearchTable.getColumnModel().getColumn(2).setMinWidth(180);
+        SearchTable.getColumnModel().getColumn(2).setWidth(180);
+        SearchTable.getColumnModel().getColumn(2).setMaxWidth(180);
     }
-    
+
     private void loadTable() {
-        DefaultTableModel model = (DefaultTableModel)SearchTable.getModel();
+        DefaultTableModel model = (DefaultTableModel) SearchTable.getModel();
         model.setRowCount(0);
+
+        String[] param = searchTextBox.getText().trim().split(" ");
         
-        List<NamePrefix> databaseList = NamePrefix.loadAllPrefix();
-        
-        for (NamePrefix item : databaseList) {
-            if (item.prefix.toLowerCase().contains(searchTextBox.getText().toLowerCase())){
-                model.addRow(new Object[] {
-                    item.id, //ID
-                    item.active, //Active
-                    item.prefix //Prefix
-                }); 
+        List<REPCaseStatus> databaseList = REPCaseStatus.searchREPStatusOptions(param);
+
+        for (REPCaseStatus item : databaseList) {
+            String statusType = "";
+            if (item.statusType.equals("1")) {
+                statusType = "Open or Closed";
+            } else if (item.statusType.equals("2")) {
+                statusType = "Status Options of Open Cases";
             }
+
+            
+            model.addRow(new Object[]{
+                item.id,
+                item.active,
+                statusType,
+                item.status
+            });
         }
         EditButton.setEnabled(false);
     }
-     
+
     private void tableClick(java.awt.event.MouseEvent evt) {
         if (evt.getClickCount() == 1) {
             if (SearchTable.getSelectedColumn() == 1){
@@ -89,7 +103,7 @@ public class PreFixSearchDialog extends javax.swing.JDialog {
             int id = (int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0);
             boolean active = (boolean) SearchTable.getValueAt(SearchTable.getSelectedRow(), 1);
             
-            ActiveStatus.updateActiveStatus("NamePreFix", active, id);
+            ActiveStatus.updateActiveStatus("REPCaseStatus", active, id);
         }
     }
     
@@ -124,7 +138,7 @@ public class PreFixSearchDialog extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Party Name Prefix");
+        jLabel1.setText("REP Case Status Options");
 
         AddNewButton.setText("Add New");
         AddNewButton.addActionListener(new java.awt.event.ActionListener() {
@@ -138,14 +152,14 @@ public class PreFixSearchDialog extends javax.swing.JDialog {
 
             },
             new String [] {
-                "ID", "Active", "Prefix"
+                "ID", "Active", "Type", "Status"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Boolean.class, java.lang.Object.class
+                java.lang.Object.class, java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, false
+                false, true, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -166,6 +180,8 @@ public class PreFixSearchDialog extends javax.swing.JDialog {
         if (SearchTable.getColumnModel().getColumnCount() > 0) {
             SearchTable.getColumnModel().getColumn(0).setResizable(false);
             SearchTable.getColumnModel().getColumn(1).setResizable(false);
+            SearchTable.getColumnModel().getColumn(2).setResizable(false);
+            SearchTable.getColumnModel().getColumn(3).setResizable(false);
         }
 
         EditButton.setText("Edit");
@@ -190,6 +206,7 @@ public class PreFixSearchDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -199,11 +216,8 @@ public class PreFixSearchDialog extends javax.swing.JDialog {
                         .addComponent(AddNewButton, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(CloseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(EditButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 357, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 491, Short.MAX_VALUE)
+                        .addComponent(EditButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -229,13 +243,13 @@ public class PreFixSearchDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void AddNewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddNewButtonActionPerformed
-        new PreFixAddEdidDialog(null, true, 0);
+        new REPStatusOptionsAddEditDialog(Global.root, true, 0);
         loadTable();
     }//GEN-LAST:event_AddNewButtonActionPerformed
 
     private void EditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditButtonActionPerformed
         if ((int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0) > 0){
-            new PreFixAddEdidDialog(null, true, (int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0));
+            new REPStatusOptionsAddEditDialog(Global.root, true, (int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0));
             loadTable();
         }
     }//GEN-LAST:event_EditButtonActionPerformed
