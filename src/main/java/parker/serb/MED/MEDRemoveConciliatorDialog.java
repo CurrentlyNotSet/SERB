@@ -50,7 +50,7 @@ public class MEDRemoveConciliatorDialog extends javax.swing.JDialog {
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Are you sure you want to replace this conciliator?");
 
-        jButton1.setText("Remove");
+        jButton1.setText("Replace");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);

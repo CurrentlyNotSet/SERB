@@ -7,16 +7,16 @@ package parker.serb.adminDBMaintenance;
 
 import com.alee.laf.optionpane.WebOptionPane;
 import parker.serb.Global;
-import parker.serb.sql.NamePrefix;
+import parker.serb.sql.REPCaseStatus;
 
 /**
  *
  * @author Andrew
  */
-public class PreFixAddEdidDialog extends javax.swing.JDialog {
+public class REPStatusOptionsAddEditDialog extends javax.swing.JDialog {
 
     private int ID;
-    private NamePrefix item;
+    private REPCaseStatus item;
     
     /**
      * Creates new form AddCompanyContactPanel
@@ -24,7 +24,7 @@ public class PreFixAddEdidDialog extends javax.swing.JDialog {
      * @param modal
      * @param itemIDpassed
      */
-    public PreFixAddEdidDialog(java.awt.Frame parent, boolean modal, int itemIDpassed) {
+    public REPStatusOptionsAddEditDialog(java.awt.Frame parent, boolean modal, int itemIDpassed) {
         super(parent, modal);
         initComponents();
         setDefaults(itemIDpassed);
@@ -33,43 +33,60 @@ public class PreFixAddEdidDialog extends javax.swing.JDialog {
     private void setDefaults(int itemIDpassed) {
         ID = itemIDpassed;
         if (ID > 0) {
-            titleLabel.setText("Edit Name Prefix");
+            titleLabel.setText("Edit REP Case Status Option");
             editButton.setText("Save");
             loadInformation();
         } else {
-            titleLabel.setText("Add Name Prefix");
+            titleLabel.setText("Add REP Case Status Option");
             editButton.setText("Add");
             editButton.setEnabled(false);
-            item = new NamePrefix();
+            item = new REPCaseStatus();
         }
         this.setLocationRelativeTo(Global.root);
         this.setVisible(true);
     }
-    
-    private void loadInformation() {
-        item = NamePrefix.getPreFixByID(ID);
         
-        PrefixTextField.setText(item.prefix);
+    private void loadInformation() {
+        item = REPCaseStatus.getREPCaseStatusByID(ID);
+        
+        if (item.statusType.equals("1")){
+            typeComboBox.setSelectedItem("Open or Closed");
+        } else if (item.statusType.equals("2")){
+            typeComboBox.setSelectedItem("Status Options of Open Cases");
+        }
+        
+        statusTextField.setText(item.status);
     }
     
     private void saveInformation() {
-        item.prefix = PrefixTextField.getText().trim();
         item.id = ID;
+        item.status = statusTextField.getText().trim();
+        if (null != typeComboBox.getSelectedItem().toString().trim()) switch (typeComboBox.getSelectedItem().toString().trim()) {
+            case "Open or Closed":
+                item.statusType = "1";
+                break;
+            case "Status Options of Open Cases":
+                item.statusType = "2";
+                break;
+            default:
+                break;
+        }
                        
         if (ID > 0){
-            NamePrefix.updatePrefix(item);
+            REPCaseStatus.updateREPStatusOption(item);
         } else {
-            NamePrefix.createPrefix(item);
+            REPCaseStatus.createREPStatusOption(item);
         }
     }
-    
+
     private void checkButton(){
-        if (PrefixTextField.getText().trim().equals("")){
+        if (statusTextField.getText().trim().equals("") || 
+                typeComboBox.getSelectedItem().toString().trim().equals("")){
             editButton.setEnabled(false);
         } else {
             editButton.setEnabled(true);
         }
-    }
+    }    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -82,9 +99,11 @@ public class PreFixAddEdidDialog extends javax.swing.JDialog {
 
         titleLabel = new javax.swing.JLabel();
         closeButton = new javax.swing.JButton();
-        PrefixTextField = new javax.swing.JTextField();
+        statusTextField = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         editButton = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        typeComboBox = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -101,17 +120,17 @@ public class PreFixAddEdidDialog extends javax.swing.JDialog {
             }
         });
 
-        PrefixTextField.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        PrefixTextField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        PrefixTextField.addCaretListener(new javax.swing.event.CaretListener() {
+        statusTextField.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        statusTextField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        statusTextField.addCaretListener(new javax.swing.event.CaretListener() {
             public void caretUpdate(javax.swing.event.CaretEvent evt) {
-                PrefixTextFieldCaretUpdate(evt);
+                statusTextFieldCaretUpdate(evt);
             }
         });
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel4.setText("Prefix:");
+        jLabel4.setText("Type:");
 
         editButton.setText("<<EDIT>>");
         editButton.addActionListener(new java.awt.event.ActionListener() {
@@ -119,6 +138,12 @@ public class PreFixAddEdidDialog extends javax.swing.JDialog {
                 editButtonActionPerformed(evt);
             }
         });
+
+        jLabel5.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel5.setText("Status:");
+
+        typeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "", "Open or Closed", "Status Options of Open Cases" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -129,14 +154,18 @@ public class PreFixAddEdidDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(titleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(PrefixTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(editButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 259, Short.MAX_VALUE)
+                        .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(statusTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE)
+                            .addComponent(typeComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -144,11 +173,15 @@ public class PreFixAddEdidDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(titleLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(PrefixTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                    .addComponent(typeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(statusTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(closeButton)
                     .addComponent(editButton))
@@ -170,15 +203,17 @@ public class PreFixAddEdidDialog extends javax.swing.JDialog {
         this.dispose();
     }//GEN-LAST:event_editButtonActionPerformed
 
-    private void PrefixTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_PrefixTextFieldCaretUpdate
+    private void statusTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_statusTextFieldCaretUpdate
         checkButton();
-    }//GEN-LAST:event_PrefixTextFieldCaretUpdate
+    }//GEN-LAST:event_statusTextFieldCaretUpdate
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField PrefixTextField;
     private javax.swing.JButton closeButton;
     private javax.swing.JButton editButton;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JTextField statusTextField;
     private javax.swing.JLabel titleLabel;
+    private javax.swing.JComboBox<String> typeComboBox;
     // End of variables declaration//GEN-END:variables
 }

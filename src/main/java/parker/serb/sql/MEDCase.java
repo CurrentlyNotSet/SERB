@@ -1363,7 +1363,7 @@ public class MEDCase {
         //appointmentDate
         if(newCaseInformation.FFAppointmentDate == null && oldCaseInformation.FFAppointmentDate != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.FFAppointmentDate.getTime())) + " from Fact Finder Appointment Date", null);
-        } else if(newCaseInformation.FFList1SelectionDueDate != null && oldCaseInformation.FFAppointmentDate == null) {
+        } else if(newCaseInformation.FFAppointmentDate != null && oldCaseInformation.FFAppointmentDate == null) {
             Activity.addActivty("Set Fact Finder Appointment Date to " + Global.mmddyyyy.format(new Date(newCaseInformation.FFAppointmentDate.getTime())), null);
         } else if(newCaseInformation.FFAppointmentDate != null && oldCaseInformation.FFAppointmentDate != null) {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.FFAppointmentDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.FFAppointmentDate.getTime()))))

@@ -261,10 +261,11 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
         
         
         //only set the value if it is blank
-        if(FFSelectionComboBox.getSelectedItem() == null) {
-            newMEDCaseInformation.FFOriginalFactFinder = null;
-        } else if(FFOriginalFactFinder.getText().equals("")) {
+        if(FFOriginalFactFinder.getText().equals("")) {
             newMEDCaseInformation.FFOriginalFactFinder = FFSelectionComboBox.getSelectedItem().toString().equals("") ? null : FFSelectionComboBox.getSelectedItem().toString();
+        } else if(FFSelectionComboBox.getSelectedItem() == null ||
+            FFSelectionComboBox.getSelectedItem().toString().equals("")) {
+            newMEDCaseInformation.FFOriginalFactFinder = null;
         } else {
             newMEDCaseInformation.FFOriginalFactFinder = orginalInformation.FFOriginalFactFinder;
         }
