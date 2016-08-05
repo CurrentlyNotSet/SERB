@@ -55,7 +55,6 @@
                                   <Component id="HearingPeopleButton" linkSize="2" min="-2" pref="130" max="-2" attributes="0"/>
                                   <Component id="SERBExecButton" linkSize="2" min="-2" pref="130" max="-2" attributes="0"/>
                                   <Component id="SystemSERBButton" linkSize="2" min="-2" pref="130" max="-2" attributes="0"/>
-                                  <Component id="RedactionAdminButton" linkSize="2" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <Component id="jLabel7" min="-2" pref="277" max="-2" attributes="0"/>
@@ -153,11 +152,8 @@
                   <Component id="PreFixesButton" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="PartyButton" linkSize="4" min="-2" pref="40" max="-2" attributes="0"/>
-                  <Component id="RedactionAdminButton" linkSize="4" min="-2" pref="40" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace pref="44" max="32767" attributes="0"/>
+              <Component id="PartyButton" linkSize="4" min="-2" pref="40" max="-2" attributes="0"/>
+              <EmptySpace pref="29" max="32767" attributes="0"/>
               <Component id="jButton1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -186,7 +182,6 @@
     <Component class="javax.swing.JButton" name="FFConciliatorsButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;center&gt;Fact Finders &amp;&lt;br&gt;Conciliators&lt;/center&gt;&lt;/html&gt;"/>
-        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="FFConciliatorsButtonActionPerformed"/>
@@ -299,16 +294,6 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="HearingPeopleButtonActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JButton" name="RedactionAdminButton">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;center&gt;Redaction&lt;br&gt;Permissions&lt;/center&gt;&lt;/html&gt;"/>
-        <Property name="enabled" type="boolean" value="false"/>
-        <Property name="horizontalTextPosition" type="int" value="0"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="RedactionAdminButtonActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="BoardActionTypeButton">
