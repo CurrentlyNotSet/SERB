@@ -39,7 +39,6 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
         REPStatusOptionsButton = new javax.swing.JButton();
         ULPRecsButton = new javax.swing.JButton();
         HearingPeopleButton = new javax.swing.JButton();
-        RedactionAdminButton = new javax.swing.JButton();
         BoardActionTypeButton = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -62,7 +61,6 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
         jLabel2.setText("Reference Table Maintenance");
 
         FFConciliatorsButton.setText("<html><center>Fact Finders &<br>Conciliators</center></html>");
-        FFConciliatorsButton.setEnabled(false);
         FFConciliatorsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 FFConciliatorsButtonActionPerformed(evt);
@@ -164,15 +162,6 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
             }
         });
 
-        RedactionAdminButton.setText("<html><center>Redaction<br>Permissions</center></html>");
-        RedactionAdminButton.setEnabled(false);
-        RedactionAdminButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        RedactionAdminButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                RedactionAdminButtonActionPerformed(evt);
-            }
-        });
-
         BoardActionTypeButton.setText("Board Action Type");
         BoardActionTypeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -244,8 +233,7 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(HearingPeopleButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(SERBExecButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(SystemSERBButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(RedactionAdminButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(SystemSERBButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -275,7 +263,7 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
                 .addContainerGap(24, Short.MAX_VALUE))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {HearingPeopleButton, HistoryTypesButton, PartyButton, REPRecsButton, RedactionAdminButton, SERBExecButton, SystemSERBButton, ULPRecsButton, UsersButton});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {HearingPeopleButton, HistoryTypesButton, PartyButton, REPRecsButton, SERBExecButton, SystemSERBButton, ULPRecsButton, UsersButton});
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {PBRExecsButton, SystemPBRButton});
 
@@ -323,15 +311,13 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
                     .addComponent(BoardActionTypeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(PreFixesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(PartyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(RedactionAdminButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
+                .addComponent(PartyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addContainerGap())
         );
 
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {BoardActionTypeButton, FFConciliatorsButton, HearingPeopleButton, HistoryTypesButton, MEDMediatorsButton, PBRExecsButton, PartyButton, REPRecsButton, REPStatusOptionsButton, RedactionAdminButton, SERBExecButton, SystemPBRButton, SystemSERBButton, ULPRecsButton, UsersButton});
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {BoardActionTypeButton, FFConciliatorsButton, HearingPeopleButton, HistoryTypesButton, MEDMediatorsButton, PBRExecsButton, PartyButton, REPRecsButton, REPStatusOptionsButton, SERBExecButton, SystemPBRButton, SystemSERBButton, ULPRecsButton, UsersButton});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -341,7 +327,7 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
     }//GEN-LAST:event_HistoryTypesButtonActionPerformed
 
     private void FFConciliatorsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FFConciliatorsButtonActionPerformed
-        // TODO add your handling code here:
+        new FactFinderConciliatorSearchDialog(Global.root, true);
     }//GEN-LAST:event_FFConciliatorsButtonActionPerformed
 
     private void MEDMediatorsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MEDMediatorsButtonActionPerformed
@@ -388,10 +374,6 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_HearingPeopleButtonActionPerformed
 
-    private void RedactionAdminButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RedactionAdminButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_RedactionAdminButtonActionPerformed
-
     private void BoardActionTypeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BoardActionTypeButtonActionPerformed
         new REPBoardActionTypeSearchDialog(Global.root, true);
     }//GEN-LAST:event_BoardActionTypeButtonActionPerformed
@@ -415,7 +397,6 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
     private javax.swing.JButton PreFixesButton;
     private javax.swing.JButton REPRecsButton;
     private javax.swing.JButton REPStatusOptionsButton;
-    private javax.swing.JButton RedactionAdminButton;
     private javax.swing.JButton SERBExecButton;
     private javax.swing.JButton SystemPBRButton;
     private javax.swing.JButton SystemSERBButton;
