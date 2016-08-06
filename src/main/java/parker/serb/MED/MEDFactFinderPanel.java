@@ -696,9 +696,9 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
             }
         });
 
-        jLabel3.setText("Order Date:");
+        jLabel3.setText("Selection Date:");
 
-        jLabel4.setText("Selection DueDate:");
+        jLabel4.setText("Selection Due Date:");
 
         FF1OrderDate.setEditable(false);
         FF1OrderDate.setBackground(new java.awt.Color(238, 238, 238));
@@ -783,7 +783,7 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Fact Finder List #2");
 
-        jLabel5.setText("Order Date:");
+        jLabel5.setText("Selection Date:");
 
         jLabel6.setText("Selection Due Date:");
 
