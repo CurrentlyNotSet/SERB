@@ -7,21 +7,22 @@ package parker.serb.adminDBMaintenance;
 
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
+import parker.serb.Global;
 import parker.serb.sql.ActiveStatus;
-import parker.serb.sql.NamePrefix;
+import parker.serb.sql.FactFinder;
 
 /**
  *
  * @author User
  */
-public class PreFixSearchDialog extends javax.swing.JDialog {
+public class FactFinderConciliatorSearchDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form PreFixSearchDialog
      * @param parent
      * @param modal
      */
-    public PreFixSearchDialog(java.awt.Frame parent, boolean modal) {
+    public FactFinderConciliatorSearchDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         setColumnSize();
@@ -52,26 +53,88 @@ public class PreFixSearchDialog extends javax.swing.JDialog {
         SearchTable.getColumnModel().getColumn(1).setMinWidth(60);
         SearchTable.getColumnModel().getColumn(1).setWidth(60);
         SearchTable.getColumnModel().getColumn(1).setMaxWidth(60);
+        
+        //Name
+        SearchTable.getColumnModel().getColumn(2).setMinWidth(160);
+        SearchTable.getColumnModel().getColumn(2).setWidth(160);
+        SearchTable.getColumnModel().getColumn(2).setMaxWidth(160);
+        
+//        //Address
+//        SearchTable.getColumnModel().getColumn(3).setMinWidth(160);
+//        SearchTable.getColumnModel().getColumn(3).setWidth(160);
+//        SearchTable.getColumnModel().getColumn(3).setMaxWidth(160);
+        
+        //Status (Single Letter)
+        SearchTable.getColumnModel().getColumn(4).setMinWidth(55);
+        SearchTable.getColumnModel().getColumn(4).setWidth(55);
+        SearchTable.getColumnModel().getColumn(4).setMaxWidth(55);
+        
+        //Email
+        SearchTable.getColumnModel().getColumn(5).setMinWidth(200);
+        SearchTable.getColumnModel().getColumn(5).setWidth(200);
+        SearchTable.getColumnModel().getColumn(5).setMaxWidth(200);
+        
+        //Phone Number
+        SearchTable.getColumnModel().getColumn(6).setMinWidth(110);
+        SearchTable.getColumnModel().getColumn(6).setWidth(110);
+        SearchTable.getColumnModel().getColumn(6).setMaxWidth(110);
+        
     }
     
     private void loadTable() {
-        DefaultTableModel model = (DefaultTableModel)SearchTable.getModel();
+        DefaultTableModel model = (DefaultTableModel) SearchTable.getModel();
         model.setRowCount(0);
-        
-        List<NamePrefix> databaseList = NamePrefix.loadAllPrefix();
-        
-        for (NamePrefix item : databaseList) {
-            if (item.prefix.toLowerCase().contains(searchTextBox.getText().toLowerCase())){
-                model.addRow(new Object[] {
-                    item.id, //ID
-                    item.active, //Active
-                    item.prefix //Prefix
-                }); 
+
+        String[] param = searchTextBox.getText().trim().split(" ");
+
+        List<FactFinder> databaseList = FactFinder.searchFactFinder(param);
+
+        for (FactFinder item : databaseList) {
+            String fullName = "";
+            String fullAddress = "";
+
+            if (!item.firstName.equals("")) {
+                fullName += item.firstName;
             }
+            if (!item.middleName.equals("")) {
+                fullName += " " + item.middleName;
+            }
+            if (!item.lastName.equals("")) {
+                fullName += " " + item.lastName;
+            }
+
+            if (!item.address1.equals("")) {
+                fullAddress += item.address1;
+            }
+            if (!item.address2.equals("")) {
+                fullAddress += ", " + item.address2;
+            }
+            if (!item.address3.equals("")) {
+                fullAddress += ", " + item.address3;
+            }
+            if (!item.city.equals("")) {
+                fullAddress += ", " + item.city;
+            }
+            if (!item.state.equals("")) {
+                fullAddress += ", " + item.state;
+            }
+            if (!item.zip.equals("")) {
+                fullAddress += " " + item.zip;
+            }
+
+            model.addRow(new Object[]{
+                item.id, //ID
+                item.active, //Active
+                fullName,
+                fullAddress,
+                item.status, 
+                item.email,//email
+                item.phone//phoneNumber
+            });
         }
         EditButton.setEnabled(false);
     }
-     
+
     private void tableClick(java.awt.event.MouseEvent evt) {
         if (evt.getClickCount() == 1) {
             if (SearchTable.getSelectedColumn() == 1){
@@ -88,7 +151,7 @@ public class PreFixSearchDialog extends javax.swing.JDialog {
             int id = (int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0);
             boolean active = (boolean) SearchTable.getValueAt(SearchTable.getSelectedRow(), 1);
             
-            ActiveStatus.updateActiveStatus("NamePreFix", active, id);
+            ActiveStatus.updateActiveStatus("FactFinder", active, id);
         }
     }
     
@@ -123,7 +186,7 @@ public class PreFixSearchDialog extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Party Name Prefix");
+        jLabel1.setText("FF / Conciliators Maintenance");
 
         AddNewButton.setText("Add New");
         AddNewButton.addActionListener(new java.awt.event.ActionListener() {
@@ -137,14 +200,14 @@ public class PreFixSearchDialog extends javax.swing.JDialog {
 
             },
             new String [] {
-                "ID", "Active", "Prefix"
+                "ID", "Active", "Name", "Address", "Status", "Email", "Phone Number"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Boolean.class, java.lang.Object.class
+                java.lang.Object.class, java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, false
+                false, true, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -189,7 +252,8 @@ public class PreFixSearchDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 873, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -199,10 +263,7 @@ public class PreFixSearchDialog extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(CloseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(EditButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 357, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(EditButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -228,13 +289,13 @@ public class PreFixSearchDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void AddNewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddNewButtonActionPerformed
-        new PreFixAddEdidDialog(null, true, 0);
+        new FactFinderConciliatorAddEdidDialog(Global.root, true, 0);
         loadTable();
     }//GEN-LAST:event_AddNewButtonActionPerformed
 
     private void EditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditButtonActionPerformed
         if ((int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0) > 0){
-            new PreFixAddEdidDialog(null, true, (int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0));
+            new FactFinderConciliatorAddEdidDialog(Global.root, true, (int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0));
             loadTable();
         }
     }//GEN-LAST:event_EditButtonActionPerformed
