@@ -393,7 +393,7 @@ public class MEDRootPanel extends javax.swing.JPanel {
             .addGap(0, 619, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("Information", jPanel2);
+        jTabbedPane1.addTab("Status", jPanel2);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
