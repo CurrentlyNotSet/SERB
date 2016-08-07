@@ -357,6 +357,7 @@ public class MEDRootPanel extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         activityPanel1 = new parker.serb.activity.ActivityPanel();
         jPanel2 = new javax.swing.JPanel();
+        mEDCaseStatusPanel1 = new parker.serb.MED.MEDCaseStatusPanel();
         jPanel3 = new javax.swing.JPanel();
         partiesPanel1 = new parker.serb.party.PartiesPanel();
         jPanel4 = new javax.swing.JPanel();
@@ -384,11 +385,11 @@ public class MEDRootPanel extends javax.swing.JPanel {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1010, Short.MAX_VALUE)
+            .addComponent(mEDCaseStatusPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1099, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 619, Short.MAX_VALUE)
+            .addComponent(mEDCaseStatusPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Status", jPanel2);
@@ -482,6 +483,7 @@ public class MEDRootPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private parker.serb.MED.MEDCaseStatusPanel mEDCaseStatusPanel1;
     private parker.serb.MED.MEDConciliationPanel mEDConciliationPanel2;
     private parker.serb.MED.MEDFactFinderPanel mEDFactFinderPanel1;
     private parker.serb.notes.NotesPanel notesPanel2;
