@@ -68,7 +68,7 @@
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="FFConciliatorsButton" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
-                          <Component id="MEDMediatorsButton" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
+                          <Component id="MediatorsButton" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
                           <Component id="jLabel4" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -129,7 +129,7 @@
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="MEDMediatorsButton" linkSize="4" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
+                              <Component id="MediatorsButton" linkSize="4" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                               <Component id="REPStatusOptionsButton" linkSize="4" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                               <Component id="PBRExecsButton" linkSize="4" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                           </Group>
@@ -187,13 +187,13 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="FFConciliatorsButtonActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="MEDMediatorsButton">
+    <Component class="javax.swing.JButton" name="MediatorsButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Mediators"/>
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="MEDMediatorsButtonActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="MediatorsButtonActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="HistoryTypesButton">
@@ -217,7 +217,6 @@
     <Component class="javax.swing.JButton" name="SystemSERBButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="SERB System Info"/>
-        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="SystemSERBButtonActionPerformed"/>
@@ -247,7 +246,6 @@
     <Component class="javax.swing.JButton" name="SystemPBRButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="PBR System Info"/>
-        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="SystemPBRButtonActionPerformed"/>

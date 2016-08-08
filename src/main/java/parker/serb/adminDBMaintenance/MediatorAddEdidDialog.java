@@ -13,32 +13,31 @@ import parker.serb.sql.FactFinder;
  *
  * @author Andrew
  */
-public class FactFinderConciliatorAddEdidDialog extends javax.swing.JDialog {
+public class MediatorAddEdidDialog extends javax.swing.JDialog {
 
     private int ID;
     private FactFinder item;
     
     /**
-     * Creates new form AddCompanyContactPanel
+     * Creates new form MediatorAddEdidDialog
      * @param parent
      * @param modal
      * @param itemIDpassed
      */
-    public FactFinderConciliatorAddEdidDialog(java.awt.Frame parent, boolean modal, int itemIDpassed) {
+    public MediatorAddEdidDialog(java.awt.Frame parent, boolean modal, int itemIDpassed) {
         super(parent, modal);
         initComponents();
         setDefaults(itemIDpassed);
     }
 
     private void setDefaults(int itemIDpassed) {
-        loadStateComboBox();
         ID = itemIDpassed;
         if (ID > 0) {
-            titleLabel.setText("Edit Fact Finder / Conciliator");
+            titleLabel.setText("Edit Mediator");
             editButton.setText("Save");
             loadInformation();
         } else {
-            titleLabel.setText("Add Fact Finder / Conciliator");
+            titleLabel.setText("Add Mediator");
             editButton.setText("Add");
             editButton.setEnabled(false);
             item = new FactFinder();
@@ -46,72 +45,46 @@ public class FactFinderConciliatorAddEdidDialog extends javax.swing.JDialog {
         this.setLocationRelativeTo(Global.root);
         this.setVisible(true);
     }
-    
-    private void loadStateComboBox() {
-        stateComboBox.removeAllItems();
         
-        for (String state : Global.states) {
-            stateComboBox.addItem(state);
-        }
-        stateComboBox.setSelectedItem("OH");
-    }
-    
     private void loadInformation() {
         item = FactFinder.getFactFinderByID(ID);
-                
-        Address1TextBox.setText(item.address1);
-        Address2TextBox.setText(item.address2);
-        Address3TextBox.setText(item.address3);
+        
         EmailTextBox.setText(item.email);
         FirstNameTextField.setText(item.firstName);
         MiddleNameTextField.setText(item.middleName);
         LastNameTextField.setText(item.lastName);
         PhoneTextBox.setText(item.phone);
-        cityTextBox.setText(item.city);
-        stateComboBox.setSelectedItem(item.state);
-        zipCodeTextBox.setText(item.zip);
         
-        //Status ComboBox Selection
+        //Type ComboBox Selection
         switch (item.status) {
-            case "F":
-                StatusComboBox.setSelectedItem("Fact Finder");
+            case "State":
+                TypeComboBox.setSelectedItem("State");
                 break;
-            case "C":
-                StatusComboBox.setSelectedItem("Conciliator & Fact Finder");
-                break;
-            case "O":
-                StatusComboBox.setSelectedItem("Off the list / Unavailable");
+            case "FMCS":
+                TypeComboBox.setSelectedItem("FMCS");
                 break;
             default:
-                StatusComboBox.setSelectedItem("");
+                TypeComboBox.setSelectedItem("");
                 break;
         }
+       
     }
    
     private void saveInformation() {
         item.firstName = FirstNameTextField.getText().trim();
         item.middleName = MiddleNameTextField.getText().trim();
         item.lastName = LastNameTextField.getText().trim();
-        item.address1 = Address1TextBox.getText().trim();
-        item.address2 = Address2TextBox.getText().trim();
-        item.address3 = Address3TextBox.getText().trim();
-        item.city = cityTextBox.getText().trim();
-        item.state = stateComboBox.getSelectedItem().toString().trim();
-        item.zip = zipCodeTextBox.getText().trim();
         item.email = EmailTextBox.getText().trim();
         item.phone = PhoneTextBox.getText().trim();
         item.id = ID;
         
-        if (null != StatusComboBox.getSelectedItem().toString().trim()) {
-            switch (StatusComboBox.getSelectedItem().toString().trim()) {
-                case "Fact Finder":
-                    item.status = "F";
+        if (null != TypeComboBox.getSelectedItem().toString().trim()) {
+            switch (TypeComboBox.getSelectedItem().toString().trim()) {
+                case "Status":
+                    item.status = "Status";
                     break;
-                case "Conciliator & Fact Finder":
-                    item.status = "C";
-                    break;
-                case "Off the list / Unavailable":
-                    item.status = "O";
+                case "FMCS":
+                    item.status = "FMCS";
                     break;
                 default:
                     item.status = null;
@@ -129,7 +102,7 @@ public class FactFinderConciliatorAddEdidDialog extends javax.swing.JDialog {
     private void checkButton(){
         if (FirstNameTextField.getText().trim().equals("") ||
                 LastNameTextField.getText().trim().equals("") ||
-                StatusComboBox.getSelectedItem().toString().trim().equals("")){
+                TypeComboBox.getSelectedItem().toString().trim().equals("")){
             editButton.setEnabled(false);
         } else {
             editButton.setEnabled(true);
@@ -152,26 +125,14 @@ public class FactFinderConciliatorAddEdidDialog extends javax.swing.JDialog {
         jLabel8 = new javax.swing.JLabel();
         EmailTextBox = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        StatusComboBox = new javax.swing.JComboBox();
+        TypeComboBox = new javax.swing.JComboBox();
         jLabel9 = new javax.swing.JLabel();
-        Address3TextBox = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        Address2TextBox = new javax.swing.JTextField();
-        jLabel10 = new javax.swing.JLabel();
-        Address1TextBox = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         FirstNameTextField = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         LastNameTextField = new javax.swing.JTextField();
         MiddleNameTextField = new javax.swing.JTextField();
-        zipCodeTextBox = new javax.swing.JTextField();
-        jLabel12 = new javax.swing.JLabel();
-        stateComboBox = new javax.swing.JComboBox();
-        jLabel13 = new javax.swing.JLabel();
-        cityTextBox = new javax.swing.JTextField();
-        jLabel14 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -203,26 +164,14 @@ public class FactFinderConciliatorAddEdidDialog extends javax.swing.JDialog {
 
         jLabel7.setText("Email:");
 
-        StatusComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "Fact Finder", "Conciliator & Fact Finder", "Off the list / Unavailable" }));
-        StatusComboBox.addActionListener(new java.awt.event.ActionListener() {
+        TypeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { " ", "FMCS", "State" }));
+        TypeComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                StatusComboBoxActionPerformed(evt);
+                TypeComboBoxActionPerformed(evt);
             }
         });
 
-        jLabel9.setText("Status:");
-
-        Address3TextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-
-        jLabel5.setText("Address 3:");
-
-        Address2TextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-
-        jLabel10.setText("Address 2:");
-
-        Address1TextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-
-        jLabel3.setText("Address 1:");
+        jLabel9.setText("Type:");
 
         jLabel2.setText("First Name:");
 
@@ -245,14 +194,11 @@ public class FactFinderConciliatorAddEdidDialog extends javax.swing.JDialog {
         });
 
         MiddleNameTextField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-
-        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel12.setText("Zip:");
-
-        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel13.setText("State:");
-
-        jLabel14.setText("City:");
+        MiddleNameTextField.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                MiddleNameTextFieldCaretUpdate(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -267,61 +213,36 @@ public class FactFinderConciliatorAddEdidDialog extends javax.swing.JDialog {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(MiddleNameTextField))
+                                .addComponent(MiddleNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(FirstNameTextField))
+                                .addComponent(FirstNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(EmailTextBox))
+                                .addComponent(EmailTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(StatusComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(TypeComboBox, 0, 300, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(Address1TextBox)
-                                    .addComponent(LastNameTextField)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(Address2TextBox))
+                                .addComponent(LastNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(PhoneTextBox))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE)
-                                    .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(cityTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(stateComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(zipCodeTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(Address3TextBox))))
+                                .addComponent(PhoneTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(editButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 319, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 247, Short.MAX_VALUE)
                         .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel10, jLabel11, jLabel14, jLabel2, jLabel3, jLabel4, jLabel5, jLabel7, jLabel8, jLabel9});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel11, jLabel2, jLabel4, jLabel7, jLabel8, jLabel9});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -331,7 +252,7 @@ public class FactFinderConciliatorAddEdidDialog extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
-                    .addComponent(StatusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(TypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -346,40 +267,20 @@ public class FactFinderConciliatorAddEdidDialog extends javax.swing.JDialog {
                     .addComponent(jLabel11))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(Address1TextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
-                    .addComponent(Address2TextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(Address3TextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel14)
-                    .addComponent(cityTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel13)
-                    .addComponent(stateComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel12)
-                    .addComponent(zipCodeTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(EmailTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(PhoneTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(closeButton)
                     .addComponent(editButton))
                 .addContainerGap())
         );
 
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {Address1TextBox, Address2TextBox, Address3TextBox, EmailTextBox, FirstNameTextField, LastNameTextField, MiddleNameTextField, PhoneTextBox, StatusComboBox, cityTextBox, jLabel10, jLabel11, jLabel12, jLabel13, jLabel14, jLabel2, jLabel3, jLabel4, jLabel5, jLabel7, jLabel8, jLabel9, stateComboBox, zipCodeTextBox});
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {EmailTextBox, FirstNameTextField, LastNameTextField, MiddleNameTextField, PhoneTextBox, TypeComboBox, jLabel11, jLabel2, jLabel4, jLabel7, jLabel8, jLabel9});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -396,45 +297,37 @@ public class FactFinderConciliatorAddEdidDialog extends javax.swing.JDialog {
         this.dispose();
     }//GEN-LAST:event_editButtonActionPerformed
 
-    private void StatusComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StatusComboBoxActionPerformed
+    private void TypeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TypeComboBoxActionPerformed
         checkButton();
-    }//GEN-LAST:event_StatusComboBoxActionPerformed
+    }//GEN-LAST:event_TypeComboBoxActionPerformed
 
     private void FirstNameTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_FirstNameTextFieldCaretUpdate
         checkButton();
     }//GEN-LAST:event_FirstNameTextFieldCaretUpdate
 
     private void LastNameTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_LastNameTextFieldCaretUpdate
-        checkButton();
+        // TODO add your handling code here:
     }//GEN-LAST:event_LastNameTextFieldCaretUpdate
 
+    private void MiddleNameTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_MiddleNameTextFieldCaretUpdate
+        // TODO add your handling code here:
+    }//GEN-LAST:event_MiddleNameTextFieldCaretUpdate
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField Address1TextBox;
-    private javax.swing.JTextField Address2TextBox;
-    private javax.swing.JTextField Address3TextBox;
     private javax.swing.JTextField EmailTextBox;
     private javax.swing.JTextField FirstNameTextField;
     private javax.swing.JTextField LastNameTextField;
     private javax.swing.JTextField MiddleNameTextField;
     private javax.swing.JTextField PhoneTextBox;
-    private javax.swing.JComboBox StatusComboBox;
-    private javax.swing.JTextField cityTextBox;
+    private javax.swing.JComboBox TypeComboBox;
     private javax.swing.JButton closeButton;
     private javax.swing.JButton editButton;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JComboBox stateComboBox;
     private javax.swing.JLabel titleLabel;
-    private javax.swing.JTextField zipCodeTextBox;
     // End of variables declaration//GEN-END:variables
 }
