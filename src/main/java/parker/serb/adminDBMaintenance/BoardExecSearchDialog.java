@@ -9,7 +9,6 @@ import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
 import parker.serb.sql.ActiveStatus;
-import parker.serb.sql.FactFinder;
 import parker.serb.sql.SystemExecutive;
 
 /**
