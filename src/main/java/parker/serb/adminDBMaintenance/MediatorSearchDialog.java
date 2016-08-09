@@ -59,20 +59,20 @@ public class MediatorSearchDialog extends javax.swing.JDialog {
         SearchTable.getColumnModel().getColumn(2).setWidth(100);
         SearchTable.getColumnModel().getColumn(2).setMaxWidth(100);
         
-//        //Name
+        //Name
 //        SearchTable.getColumnModel().getColumn(3).setMinWidth(160);
 //        SearchTable.getColumnModel().getColumn(3).setWidth(160);
 //        SearchTable.getColumnModel().getColumn(3).setMaxWidth(160);
                 
+        //Phone Number
+        SearchTable.getColumnModel().getColumn(4).setMinWidth(110);
+        SearchTable.getColumnModel().getColumn(4).setWidth(110);
+        SearchTable.getColumnModel().getColumn(4).setMaxWidth(110);
+
         //Email
         SearchTable.getColumnModel().getColumn(5).setMinWidth(200);
         SearchTable.getColumnModel().getColumn(5).setWidth(200);
         SearchTable.getColumnModel().getColumn(5).setMaxWidth(200);
-        
-        //Phone Number
-        SearchTable.getColumnModel().getColumn(6).setMinWidth(110);
-        SearchTable.getColumnModel().getColumn(6).setWidth(110);
-        SearchTable.getColumnModel().getColumn(6).setMaxWidth(110);
     }
     
     private void loadTable() {
@@ -174,7 +174,7 @@ public class MediatorSearchDialog extends javax.swing.JDialog {
 
             },
             new String [] {
-                "ID", "Active", "Status", "Name", "Email", "Phone Number"
+                "ID", "Active", "Status", "Name", "Phone Number", "Email"
             }
         ) {
             Class[] types = new Class [] {
@@ -263,13 +263,13 @@ public class MediatorSearchDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void AddNewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddNewButtonActionPerformed
-        new FactFinderConciliatorAddEdidDialog(Global.root, true, 0);
+        new MediatorAddEdidDialog(Global.root, true, 0);
         loadTable();
     }//GEN-LAST:event_AddNewButtonActionPerformed
 
     private void EditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditButtonActionPerformed
         if ((int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0) > 0){
-            new FactFinderConciliatorAddEdidDialog(Global.root, true, (int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0));
+            new MediatorAddEdidDialog(Global.root, true, (int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0));
             loadTable();
         }
     }//GEN-LAST:event_EditButtonActionPerformed

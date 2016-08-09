@@ -67,7 +67,6 @@ public class MediatorAddEdidDialog extends javax.swing.JDialog {
                 TypeComboBox.setSelectedItem("");
                 break;
         }
-       
     }
    
     private void saveInformation() {
@@ -91,7 +90,6 @@ public class MediatorAddEdidDialog extends javax.swing.JDialog {
                     break;
             }
         }
-        
         if (ID > 0) {
             FactFinder.updateFactFinder(item);
         } else {
@@ -194,11 +192,6 @@ public class MediatorAddEdidDialog extends javax.swing.JDialog {
         });
 
         MiddleNameTextField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        MiddleNameTextField.addCaretListener(new javax.swing.event.CaretListener() {
-            public void caretUpdate(javax.swing.event.CaretEvent evt) {
-                MiddleNameTextFieldCaretUpdate(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -306,12 +299,8 @@ public class MediatorAddEdidDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_FirstNameTextFieldCaretUpdate
 
     private void LastNameTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_LastNameTextFieldCaretUpdate
-        // TODO add your handling code here:
+        checkButton();
     }//GEN-LAST:event_LastNameTextFieldCaretUpdate
-
-    private void MiddleNameTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_MiddleNameTextFieldCaretUpdate
-        // TODO add your handling code here:
-    }//GEN-LAST:event_MiddleNameTextFieldCaretUpdate
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField EmailTextBox;

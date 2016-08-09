@@ -36,6 +36,11 @@ public class User {
     public boolean  passwordReset;
     public String   applicationVersion;
     public String   defaultSection;
+    public boolean  ULPCaseWroker;
+    public boolean  REPCaseWorker;
+    public boolean  ULPDocketing;
+    public boolean  REPDocketing;
+    public String   initials;
     
     /**
      * Create an empty User table
@@ -667,6 +672,54 @@ public class User {
             Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
         }
         return allUsers;
+    }
+    
+    public static List searchAllUsers(String[] param) {
+        List<User> list = new ArrayList<>();
+
+        try {
+
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT * FROM Users";
+            if (param.length > 0) {
+                sql += " WHERE";
+                for (int i = 0; i < param.length; i++) {
+                    if (i > 0) {
+                        sql += " AND";
+                    }
+                    sql += " CONCAT(firstName, lastName, username, "
+                            + "initials, emailAddress, workPhone) LIKE ?";
+                }
+            }
+            sql += " ORDER BY lastName";
+
+            PreparedStatement ps = stmt.getConnection().prepareStatement(sql);
+
+            for (int i = 0; i < param.length; i++) {
+                ps.setString((i + 1), "%" + param[i].trim() + "%");
+            }
+            
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                User item = new User();
+                item.id = rs.getInt("id");
+                item.active = rs.getBoolean("active");
+                item.firstName = rs.getString("firstName") == null ? "" : rs.getString("firstName");
+                item.middleInitial = rs.getString("middleInitial") == null ? "" : rs.getString("middleInitial");
+                item.lastName = rs.getString("lastName") == null ? "" : rs.getString("lastName");
+                item.username = rs.getString("username") == null ? "" : rs.getString("username");
+                item.initials = rs.getString("initials") == null ? "" : rs.getString("initials");
+                item.emailAddress = rs.getString("emailAddress") == null ? "" : rs.getString("emailAddress");
+                item.workPhone = rs.getString("workPhone") == null ? "" : NumberFormatService.convertStringToPhoneNumber(rs.getString("workPhone"));
+                list.add(item);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
+        return list;
     }
     
 }

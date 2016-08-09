@@ -231,9 +231,6 @@
           <Color blue="0" green="0" red="0" type="rgb"/>
         </Property>
       </Properties>
-      <Events>
-        <EventHandler event="caretUpdate" listener="javax.swing.event.CaretListener" parameters="javax.swing.event.CaretEvent" handler="MiddleNameTextFieldCaretUpdate"/>
-      </Events>
     </Component>
   </SubComponents>
 </Form>

@@ -23,15 +23,18 @@ public class BoardExecAddEdidDialog extends javax.swing.JDialog {
      * @param parent
      * @param modal
      * @param itemIDpassed
+     * @param deptPassed
      */
-    public BoardExecAddEdidDialog(java.awt.Frame parent, boolean modal, int itemIDpassed) {
+    public BoardExecAddEdidDialog(java.awt.Frame parent, boolean modal, int itemIDpassed, String deptPassed) {
         super(parent, modal);
         initComponents();
-        setDefaults(itemIDpassed);
+        setDefaults(itemIDpassed, deptPassed);
     }
 
-    private void setDefaults(int itemIDpassed) {
+    private void setDefaults(int itemIDpassed, String deptPassed) {
         ID = itemIDpassed;
+        DepartmentComboBox.setSelectedItem(deptPassed);
+        DepartmentComboBox.setEnabled(false);
         if (ID > 0) {
             titleLabel.setText("Edit Executive");
             editButton.setText("Save");
