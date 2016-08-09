@@ -10,27 +10,42 @@ import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
 import parker.serb.sql.ActiveStatus;
 import parker.serb.sql.FactFinder;
+import parker.serb.sql.SystemExecutive;
 
 /**
  *
  * @author User
  */
-public class MediatorSearchDialog extends javax.swing.JDialog {
+public class BoardExecSearchDialog extends javax.swing.JDialog {
 
+    private String dept;
+    
     /**
-     * Creates new form MediatorSearchDialog
+     * Creates new form BoardExecSearchDialog
      * @param parent
      * @param modal
+     * @param departmentPassed
      */
-    public MediatorSearchDialog(java.awt.Frame parent, boolean modal) {
+    public BoardExecSearchDialog(java.awt.Frame parent, boolean modal, String departmentPassed) {
         super(parent, modal);
         initComponents();
-        setColumnSize();
-        loadingThread();
+        defaults(departmentPassed);
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }
 
+    private void defaults(String departmentPassed){
+        dept = departmentPassed;
+        
+        if (dept.equals("SERB")) {
+            headerLabel.setText("SERB Executives Maintenance");
+        } else if (dept.equals("SPBR")) {
+            headerLabel.setText("PBR Executives Maintenance");
+        }
+        setColumnSize();
+        loadingThread();
+    }
+    
     private void loadingThread() {
         Thread temp = new Thread(() -> {
                 loadTable();
@@ -54,25 +69,27 @@ public class MediatorSearchDialog extends javax.swing.JDialog {
         SearchTable.getColumnModel().getColumn(1).setWidth(60);
         SearchTable.getColumnModel().getColumn(1).setMaxWidth(60);
         
-        //Type (State/FMCS)
-        SearchTable.getColumnModel().getColumn(2).setMinWidth(100);
-        SearchTable.getColumnModel().getColumn(2).setWidth(100);
-        SearchTable.getColumnModel().getColumn(2).setMaxWidth(100);
+        //Position
+        SearchTable.getColumnModel().getColumn(2).setMinWidth(200);
+        SearchTable.getColumnModel().getColumn(2).setWidth(200);
+        SearchTable.getColumnModel().getColumn(2).setMaxWidth(200);
         
 //        //Name
 //        SearchTable.getColumnModel().getColumn(3).setMinWidth(160);
 //        SearchTable.getColumnModel().getColumn(3).setWidth(160);
 //        SearchTable.getColumnModel().getColumn(3).setMaxWidth(160);
-                
-        //Email
-        SearchTable.getColumnModel().getColumn(5).setMinWidth(200);
-        SearchTable.getColumnModel().getColumn(5).setWidth(200);
-        SearchTable.getColumnModel().getColumn(5).setMaxWidth(200);
-        
+
         //Phone Number
-        SearchTable.getColumnModel().getColumn(6).setMinWidth(110);
-        SearchTable.getColumnModel().getColumn(6).setWidth(110);
-        SearchTable.getColumnModel().getColumn(6).setMaxWidth(110);
+        SearchTable.getColumnModel().getColumn(4).setMinWidth(110);
+        SearchTable.getColumnModel().getColumn(4).setWidth(110);
+        SearchTable.getColumnModel().getColumn(4).setMaxWidth(110);
+
+        //Email
+        SearchTable.getColumnModel().getColumn(5).setMinWidth(250);
+        SearchTable.getColumnModel().getColumn(5).setWidth(250);
+        SearchTable.getColumnModel().getColumn(5).setMaxWidth(250);
+        
+        
     }
     
     private void loadTable() {
@@ -81,9 +98,9 @@ public class MediatorSearchDialog extends javax.swing.JDialog {
 
         String[] param = searchTextBox.getText().trim().split(" ");
 
-        List<FactFinder> databaseList = FactFinder.searchFactFinder(param);
+        List<SystemExecutive> databaseList = SystemExecutive.loadExecsAllByDeptartment(dept, param);
 
-        for (FactFinder item : databaseList) {
+        for (SystemExecutive item : databaseList) {
             String fullName = "";
 
             if (!item.firstName.equals("")) {
@@ -97,13 +114,12 @@ public class MediatorSearchDialog extends javax.swing.JDialog {
             }
 
             model.addRow(new Object[]{
-                item.id,        //ID
-                item.active,    //Active
-                item.status,    //(State / FMCS)
+                item.id,
+                item.active,
+                item.position,
                 fullName,
-                item.phone,     //phoneNumber
-                item.email      //email
-                
+                item.phoneNumber,
+                item.email
             });
         }
         EditButton.setEnabled(false);
@@ -125,7 +141,7 @@ public class MediatorSearchDialog extends javax.swing.JDialog {
             int id = (int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0);
             boolean active = (boolean) SearchTable.getValueAt(SearchTable.getSelectedRow(), 1);
             
-            ActiveStatus.updateActiveStatus("Mediator", active, id);
+            ActiveStatus.updateActiveStatus("SystemExecutive", active, id);
         }
     }
     
@@ -140,7 +156,7 @@ public class MediatorSearchDialog extends javax.swing.JDialog {
 
         jLabel6 = new javax.swing.JLabel();
         searchTextBox = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
+        headerLabel = new javax.swing.JLabel();
         AddNewButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         SearchTable = new javax.swing.JTable();
@@ -158,9 +174,9 @@ public class MediatorSearchDialog extends javax.swing.JDialog {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Mediator Maintenance");
+        headerLabel.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        headerLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        headerLabel.setText("<<DEPT>> Executives Maintenance");
 
         AddNewButton.setText("Add New");
         AddNewButton.addActionListener(new java.awt.event.ActionListener() {
@@ -174,7 +190,7 @@ public class MediatorSearchDialog extends javax.swing.JDialog {
 
             },
             new String [] {
-                "ID", "Active", "Status", "Name", "Email", "Phone Number"
+                "ID", "Active", "Position", "Name", "Phone Number", "Email"
             }
         ) {
             Class[] types = new Class [] {
@@ -227,7 +243,7 @@ public class MediatorSearchDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 873, Short.MAX_VALUE)
+                    .addComponent(headerLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 873, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -244,7 +260,7 @@ public class MediatorSearchDialog extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(headerLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
@@ -263,13 +279,13 @@ public class MediatorSearchDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void AddNewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddNewButtonActionPerformed
-        new FactFinderConciliatorAddEdidDialog(Global.root, true, 0);
+        new BoardExecAddEdidDialog(Global.root, true, 0);
         loadTable();
     }//GEN-LAST:event_AddNewButtonActionPerformed
 
     private void EditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditButtonActionPerformed
         if ((int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0) > 0){
-            new FactFinderConciliatorAddEdidDialog(Global.root, true, (int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0));
+            new BoardExecAddEdidDialog(Global.root, true, (int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0));
             loadTable();
         }
     }//GEN-LAST:event_EditButtonActionPerformed
@@ -291,7 +307,7 @@ public class MediatorSearchDialog extends javax.swing.JDialog {
     private javax.swing.JButton CloseButton;
     private javax.swing.JButton EditButton;
     private javax.swing.JTable SearchTable;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel headerLabel;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField searchTextBox;

@@ -19,7 +19,7 @@ public class AdministrationInfoAddEdidDialog extends javax.swing.JDialog {
     int id;
     
     /**
-     * Creates new form AddCompanyContactPanel
+     * Creates new form AdministrationInfoAddEdidDialog
      * @param parent
      * @param modal
      * @param departmentPassed

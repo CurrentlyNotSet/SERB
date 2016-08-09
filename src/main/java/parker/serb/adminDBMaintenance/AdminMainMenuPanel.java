@@ -107,7 +107,6 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
         });
 
         SERBExecButton.setText("SERB Board");
-        SERBExecButton.setEnabled(false);
         SERBExecButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 SERBExecButtonActionPerformed(evt);
@@ -122,7 +121,6 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
         });
 
         PBRExecsButton.setText("PBR Board");
-        PBRExecsButton.setEnabled(false);
         PBRExecsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 PBRExecsButtonActionPerformed(evt);
@@ -340,7 +338,7 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
     }//GEN-LAST:event_SystemSERBButtonActionPerformed
 
     private void SERBExecButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SERBExecButtonActionPerformed
-        // TODO add your handling code here:
+        new BoardExecSearchDialog(Global.root, true, "SERB");
     }//GEN-LAST:event_SERBExecButtonActionPerformed
 
     private void UsersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UsersButtonActionPerformed
@@ -352,7 +350,7 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
     }//GEN-LAST:event_SystemPBRButtonActionPerformed
 
     private void PBRExecsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PBRExecsButtonActionPerformed
-        // TODO add your handling code here:
+        new BoardExecSearchDialog(Global.root, true, "SPBR");
     }//GEN-LAST:event_PBRExecsButtonActionPerformed
 
     private void REPRecsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_REPRecsButtonActionPerformed

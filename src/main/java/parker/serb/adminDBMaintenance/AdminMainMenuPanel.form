@@ -237,7 +237,6 @@
     <Component class="javax.swing.JButton" name="SERBExecButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="SERB Board"/>
-        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="SERBExecButtonActionPerformed"/>
@@ -254,7 +253,6 @@
     <Component class="javax.swing.JButton" name="PBRExecsButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="PBR Board"/>
-        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="PBRExecsButtonActionPerformed"/>
