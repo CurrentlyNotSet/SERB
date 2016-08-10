@@ -7,7 +7,7 @@ package parker.serb.adminDBMaintenance;
 
 import com.alee.laf.optionpane.WebOptionPane;
 import parker.serb.Global;
-import parker.serb.sql.FactFinder;
+import parker.serb.sql.Mediator;
 
 /**
  *
@@ -16,7 +16,7 @@ import parker.serb.sql.FactFinder;
 public class MediatorAddEdidDialog extends javax.swing.JDialog {
 
     private int ID;
-    private FactFinder item;
+    private Mediator item;
     
     /**
      * Creates new form MediatorAddEdidDialog
@@ -40,14 +40,14 @@ public class MediatorAddEdidDialog extends javax.swing.JDialog {
             titleLabel.setText("Add Mediator");
             editButton.setText("Add");
             editButton.setEnabled(false);
-            item = new FactFinder();
+            item = new Mediator();
         }
         this.setLocationRelativeTo(Global.root);
         this.setVisible(true);
     }
         
     private void loadInformation() {
-        item = FactFinder.getFactFinderByID(ID);
+        item = Mediator.getMediatorByID(ID);
         
         EmailTextBox.setText(item.email);
         FirstNameTextField.setText(item.firstName);
@@ -56,7 +56,7 @@ public class MediatorAddEdidDialog extends javax.swing.JDialog {
         PhoneTextBox.setText(item.phone);
         
         //Type ComboBox Selection
-        switch (item.status) {
+        switch (item.type) {
             case "State":
                 TypeComboBox.setSelectedItem("State");
                 break;
@@ -80,20 +80,20 @@ public class MediatorAddEdidDialog extends javax.swing.JDialog {
         if (null != TypeComboBox.getSelectedItem().toString().trim()) {
             switch (TypeComboBox.getSelectedItem().toString().trim()) {
                 case "Status":
-                    item.status = "Status";
+                    item.type = "Status";
                     break;
                 case "FMCS":
-                    item.status = "FMCS";
+                    item.type = "FMCS";
                     break;
                 default:
-                    item.status = null;
+                    item.type = null;
                     break;
             }
         }
         if (ID > 0) {
-            FactFinder.updateFactFinder(item);
+            Mediator.updateMediator(item);
         } else {
-            FactFinder.createFactFinder(item);
+            Mediator.createMediator(item);
         }
     }
 

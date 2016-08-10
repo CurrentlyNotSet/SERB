@@ -9,7 +9,7 @@ import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
 import parker.serb.sql.ActiveStatus;
-import parker.serb.sql.FactFinder;
+import parker.serb.sql.Mediator;
 
 /**
  *
@@ -81,9 +81,9 @@ public class MediatorSearchDialog extends javax.swing.JDialog {
 
         String[] param = searchTextBox.getText().trim().split(" ");
 
-        List<FactFinder> databaseList = FactFinder.searchFactFinder(param);
+        List<Mediator> databaseList = Mediator.searchMediator(param);
 
-        for (FactFinder item : databaseList) {
+        for (Mediator item : databaseList) {
             String fullName = "";
 
             if (!item.firstName.equals("")) {
@@ -99,7 +99,7 @@ public class MediatorSearchDialog extends javax.swing.JDialog {
             model.addRow(new Object[]{
                 item.id,        //ID
                 item.active,    //Active
-                item.status,    //(State / FMCS)
+                item.type,    //(State / FMCS)
                 fullName,
                 item.phone,     //phoneNumber
                 item.email      //email

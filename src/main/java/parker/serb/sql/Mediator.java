@@ -4,14 +4,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.commons.dbutils.DbUtils;
-import parker.serb.Global;
+import parker.serb.util.NumberFormatService;
 
 /**
  *
@@ -157,4 +154,147 @@ public class Mediator {
         }
         return id;
     }
+    
+    
+    
+    
+    public static List searchMediator(String[] param) {
+        List<Mediator> list = new ArrayList<>();
+
+        try {
+
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT * FROM Mediator";
+            if (param.length > 0) {
+                sql += " WHERE";
+                for (int i = 0; i < param.length; i++) {
+                    if (i > 0) {
+                        sql += " AND";
+                    }
+                    sql += " CONCAT(type, firstName, middleName, lastName, "
+                            + " email, phone) LIKE ?";
+                }
+            }
+            sql += " ORDER BY lastName";
+
+            PreparedStatement ps = stmt.getConnection().prepareStatement(sql);
+
+            for (int i = 0; i < param.length; i++) {
+                ps.setString((i + 1), "%" + param[i].trim() + "%");
+            }
+            
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Mediator item = new Mediator();
+                item.id = rs.getInt("id");
+                item.active = rs.getBoolean("active");
+                item.type = rs.getString("type") == null ? "" : rs.getString("type");
+                item.firstName = rs.getString("firstName") == null ? "" : rs.getString("firstName");
+                item.middleName = rs.getString("middleName") == null ? "" : rs.getString("middleName");
+                item.lastName = rs.getString("lastName") == null ? "" : rs.getString("lastName");
+                item.email = rs.getString("email") == null ? "" : rs.getString("email");
+                item.phone = rs.getString("phone") == null ? "" : NumberFormatService.convertStringToPhoneNumber(rs.getString("phone"));
+                list.add(item);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
+        return list;
+    }
+
+    public static Mediator getMediatorByID(int id) {
+        Mediator item = new Mediator();
+
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT * FROM Mediator WHERE id = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                item.id = rs.getInt("id");
+                item.active = rs.getBoolean("active");
+                item.type = rs.getString("type") == null ? "" : rs.getString("type");
+                item.firstName = rs.getString("firstName") == null ? "" : rs.getString("firstName");
+                item.middleName = rs.getString("middleName") == null ? "" : rs.getString("middleName");
+                item.lastName = rs.getString("lastName") == null ? "" : rs.getString("lastName");
+                item.email = rs.getString("email") == null ? "" : rs.getString("email");
+                item.phone = rs.getString("phone") == null ? "" : NumberFormatService.convertStringToPhoneNumber(rs.getString("phone"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return item;
+    }
+
+    public static void createMediator(Mediator item) {
+        try {
+
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Insert INTO Mediator ("
+                    + "active, "    //01
+                    + "type, "      //02
+                    + "firstName, " //03
+                    + "middleName, "//04
+                    + "lastName, "  //05
+                    + "email, "     //06
+                    + "phone "      //07
+                    + ") VALUES (";
+                    for(int i=0; i<6; i++){
+                        sql += "?, ";   //01-06
+                    }
+                     sql += "?)";   //07
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setBoolean(1, true);
+            preparedStatement.setString(2, item.type.equals("") ? null : item.type);
+            preparedStatement.setString(3, item.firstName.equals("") ? null : item.firstName);
+            preparedStatement.setString(4, item.middleName.equals("") ? null : item.middleName);
+            preparedStatement.setString(5, item.lastName.equals("") ? null : item.lastName);
+            preparedStatement.setString(6, item.email.equals("") ? null : item.email);
+            preparedStatement.setString(7, item.phone.equals("") ? null : NumberFormatService.convertPhoneNumberToString(item.phone));
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static void updateMediator(Mediator item) {
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "UPDATE Mediator SET "
+                    + "active = ?, "    //01
+                    + "type = ?, "      //02
+                    + "firstName = ?, " //03
+                    + "middleName = ?, "//04
+                    + "lastName = ?, "  //05
+                    + "email = ?, "     //06
+                    + "phone = ? "      //07
+                    + "where id = ?";   //08
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setBoolean(1, item.active);
+            preparedStatement.setString(2, item.type.equals("") ? null : item.type);
+            preparedStatement.setString(3, item.firstName.equals("") ? null : item.firstName);
+            preparedStatement.setString(4, item.middleName.equals("") ? null : item.middleName);
+            preparedStatement.setString(5, item.lastName.equals("") ? null : item.lastName);
+            preparedStatement.setString(6, item.email.equals("") ? null : item.email);
+            preparedStatement.setString(7, item.phone.equals("") ? null : NumberFormatService.convertPhoneNumberToString(item.phone));
+            preparedStatement.setInt(8, item.id);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
 }

@@ -66,7 +66,6 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
         });
 
         MediatorsButton.setText("Mediators");
-        MediatorsButton.setEnabled(false);
         MediatorsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 MediatorsButtonActionPerformed(evt);
