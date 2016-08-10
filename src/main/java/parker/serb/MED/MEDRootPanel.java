@@ -41,6 +41,7 @@ public class MEDRootPanel extends javax.swing.JPanel {
         notesPanel2.clearAll();
         mEDConciliationPanel2.clearAll();
         mEDFactFinderPanel1.clearAll();
+        mEDCaseStatusPanel1.clearAll();
     }
     
     private void addListeners() {
@@ -70,9 +71,9 @@ public class MEDRootPanel extends javax.swing.JPanel {
             case "Fact Finder":
                 mEDFactFinderPanel1.loadInformation();
                 break;
-//            case "Statement":
-//                uLPStatement1.loadInformation();
-//                break;
+            case "Status":
+                mEDCaseStatusPanel1.loadInformation();
+                break;
             case "Conciliation":
                 mEDConciliationPanel2.loadInformation();
                 break;
@@ -115,12 +116,12 @@ public class MEDRootPanel extends javax.swing.JPanel {
                 Global.root.getjButton2().setEnabled(true);
                 Global.root.getjButton9().setVisible(false);
                 break;
-//            case "Statement":
-//                System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
-//                Global.root.getjButton2().setText("Update");
-//                Global.root.getjButton2().setEnabled(true);
-//                Global.root.getjButton9().setVisible(false);
-//                break;
+            case "Status":
+                System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
+                Global.root.getjButton2().setText("Update");
+                Global.root.getjButton2().setEnabled(true);
+                Global.root.getjButton9().setVisible(false);
+                break;
             case "Conciliation":
                 System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
                 Global.root.getjButton2().setText("Update");
@@ -178,18 +179,18 @@ public class MEDRootPanel extends javax.swing.JPanel {
 //                        Global.root.getuLPHeaderPanel1().getChargedPartyTextBox().getText().trim(),
 //                        Global.root.getuLPHeaderPanel1().getChargingPartyTextBox().getText().trim());
                 break;
-//            case "Status":
-//                if(buttonText.equals("Update")) {
-//                    disableTabs(jTabbedPane1.getSelectedIndex());
-//                    uLPStatusPanel1.enableUpdate();
-//                } else {
-//                    enableTabs();
-//                    Global.root.enableTabsAfterSave();
-//                    Global.root.enableButtonsAfterCancel();
-//                    uLPStatusPanel1.disableUpdate(true);
-//                    Global.root.getuLPHeaderPanel1().loadHeaderInformation();
-//                }
-//                break;
+            case "Status":
+                if(buttonText.equals("Update")) {
+                    disableTabs(jTabbedPane1.getSelectedIndex());
+                    mEDCaseStatusPanel1.enableUpdate();
+                } else {
+                    enableTabs();
+                    Global.root.enableTabsAfterSave();
+                    Global.root.enableButtonsAfterCancel();
+                    mEDCaseStatusPanel1.disableUpdate(true);
+                    Global.root.getmEDHeaderPanel1().loadHeaderInformation();
+                }
+                break;
 //            case "Statement":
 //                if(buttonText.equals("Update")) {
 //                    disableTabs(jTabbedPane1.getSelectedIndex());
@@ -266,16 +267,16 @@ public class MEDRootPanel extends javax.swing.JPanel {
 //                        Global.root.getmEDHeaderPanel1().getChargedPartyTextBox().getText().trim(),
 //                        Global.root.getmEDHeaderPanel1().getChargingPartyTextBox().getText().trim());
                 break;
-//            case "Status":
-//                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
-//                if(!cancel.isReset()) {
-//                } else {
-//                    Global.root.enableButtonsAfterCancel();
-//                    Global.root.enableTabsAfterSave();
-//                    enableTabs();
-//                    uLPStatusPanel1.disableUpdate(false);
-//                }
-//                break;
+            case "Status":
+                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+                if(!cancel.isReset()) {
+                } else {
+                    Global.root.enableButtonsAfterCancel();
+                    Global.root.enableTabsAfterSave();
+                    enableTabs();
+                    mEDCaseStatusPanel1.disableUpdate(false);
+                }
+                break;
 //            case "Statement":
 //                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
 //                if(!cancel.isReset()) {

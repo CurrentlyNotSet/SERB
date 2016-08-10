@@ -191,9 +191,9 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="mediatorTextBox" pref="200" max="32767" attributes="0"/>
-                      <Component id="closedDateTextBox" max="32767" attributes="0"/>
+                      <Component id="mediatorPhoneNumber" max="32767" attributes="0"/>
                       <Component id="fileDateTextBox" alignment="0" max="32767" attributes="0"/>
-                      <Component id="rivalEEOTextBox2" alignment="0" max="32767" attributes="0"/>
+                      <Component id="statusTextBox" alignment="0" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -209,7 +209,7 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="closedDateTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="mediatorPhoneNumber" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
@@ -219,7 +219,7 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="rivalEEOTextBox2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="statusTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="12" max="32767" attributes="0"/>
@@ -251,7 +251,7 @@
             <Property name="text" type="java.lang.String" value="File Date:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="closedDateTextBox">
+        <Component class="javax.swing.JTextField" name="mediatorPhoneNumber">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -272,7 +272,7 @@
             <Property name="text" type="java.lang.String" value="Status:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="rivalEEOTextBox2">
+        <Component class="javax.swing.JTextField" name="statusTextBox">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">

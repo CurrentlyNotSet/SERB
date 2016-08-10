@@ -5,7 +5,22 @@
  */
 package parker.serb.MED;
 
+import java.awt.Color;
+import java.awt.event.MouseEvent;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.List;
+import javax.swing.JFrame;
+import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
+import parker.serb.bunumber.buNumberSearch;
+import parker.serb.employer.employerDetail;
+import parker.serb.employer.employerSearch;
+import parker.serb.sql.BargainingUnit;
+import parker.serb.sql.MEDCase;
+import parker.serb.sql.Mediator;
+import parker.serb.sql.RelatedCase;
+import parker.serb.util.NumberFormatService;
 
 /**
  *
@@ -13,11 +28,295 @@ import parker.serb.Global;
  */
 public class MEDCaseStatusPanel extends javax.swing.JPanel {
 
+    MEDCase orginalInformation;
+    DefaultTableModel relatedCaseModel;
     /**
      * Creates new form MEDCaseStatusPanel
      */
     public MEDCaseStatusPanel() {
         initComponents();
+        relatedCaseModel = (DefaultTableModel) relatedCaseTable.getModel();
+        addMultiCaseButton.setVisible(false);
+    }
+    
+    public void clearAll() {
+        
+        filingDateTextBox.setText("");
+        employerIDNumberTextBox.setText("");
+        bargainingUnitTextBox.setText("");
+        boardCertifiedCheckBox.setSelected(false);
+        deemedCertifiedCheckBox.setSelected(false);
+        approxNumberOfEmployeesTextBox.setText("");
+        duplicateCaseNumberTextBox.setText("");
+        relatedCaseNumberTextBox.setText("");
+        
+        negotiationTypeComboBox.setSelectedItem(" ");
+        expirationDateTextBox.setText("");
+        NTNFiledByComboBox.setSelectedItem("");
+        negotiationPeriodComboBox.setSelectedItem(" ");
+        multiUnitBargainingRequestedCheckBox.setSelected(false);
+        mediatorAppointedDateTextBox.setText("");
+        mediatorReplacementCheckBox.setSelected(false);
+        stateMediatorAppointedComboBox.setSelectedItem("");
+        jTextField6.setText("");
+        FCMSMediatorAppointedComboBox.setSelectedItem("");
+        jTextField7.setText("");
+        settlementDateTextBox.setText("");
+        statusComboBox.setSelectedItem(" ");
+        sendToBoardToCloseCheckBox.setSelected(false);
+        boardFinalDateTextBox.setText("");
+        retentionTicklerDateTextBox.setText("");
+        lateFilingCheckBox.setSelected(false);
+        impasseCheckBox.setSelected(false);
+        settledCheckBox.setSelected(false);
+        TACheckBox.setSelected(false);
+        MADCheckBox.setSelected(false);
+        withdrawlCheckBox.setSelected(false);
+        motionCheckBox.setSelected(false);
+        dismissedCheckBox.setSelected(false);
+        relatedCaseModel.setRowCount(0);
+    }
+    
+    public void enableUpdate() {
+        Global.root.getjButton2().setText("Save");
+        Global.root.getjButton9().setVisible(true);
+        
+        filingDateTextBox.setEnabled(true);
+        filingDateTextBox.setBackground(Color.white);
+        employerIDNumberTextBox.setEnabled(true);
+        employerIDNumberTextBox.setBackground(Color.white);
+        bargainingUnitTextBox.setEnabled(true);
+        bargainingUnitTextBox.setBackground(Color.white);
+        
+        approxNumberOfEmployeesTextBox.setEnabled(true);
+        approxNumberOfEmployeesTextBox.setBackground(Color.white);
+        duplicateCaseNumberTextBox.setEnabled(true);
+        duplicateCaseNumberTextBox.setBackground(Color.white);
+        relatedCaseNumberTextBox.setEnabled(true);
+        relatedCaseNumberTextBox.setBackground(Color.white);
+        addMultiCaseButton.setVisible(true);
+        
+        negotiationTypeComboBox.setEnabled(true);
+        expirationDateTextBox.setEnabled(true);
+        expirationDateTextBox.setBackground(Color.white);
+        NTNFiledByComboBox.setEnabled(true);
+        negotiationPeriodComboBox.setEnabled(true);
+        multiUnitBargainingRequestedCheckBox.setEnabled(true);
+        mediatorAppointedDateTextBox.setEnabled(true);
+        mediatorAppointedDateTextBox.setBackground(Color.white);
+        mediatorReplacementCheckBox.setEnabled(true);
+        stateMediatorAppointedComboBox.setEnabled(true);
+        FCMSMediatorAppointedComboBox.setEnabled(true);
+        settlementDateTextBox.setEnabled(true);
+        settlementDateTextBox.setBackground(Color.white);
+        statusComboBox.setEnabled(true);
+        sendToBoardToCloseCheckBox.setEnabled(true);
+        boardFinalDateTextBox.setEnabled(true);
+        boardFinalDateTextBox.setBackground(Color.white);
+        lateFilingCheckBox.setEnabled(true);
+        impasseCheckBox.setEnabled(true);
+        settledCheckBox.setEnabled(true);
+        TACheckBox.setEnabled(true);
+        MADCheckBox.setEnabled(true);
+        withdrawlCheckBox.setEnabled(true);
+        motionCheckBox.setEnabled(true);
+        dismissedCheckBox.setEnabled(true);
+    }
+    
+    
+    public void disableUpdate(boolean save) {
+        Global.root.getjButton2().setText("Update");
+        Global.root.getjButton9().setVisible(false);
+        
+        filingDateTextBox.setEnabled(false);
+        filingDateTextBox.setBackground(new Color(238,238,238));
+        employerIDNumberTextBox.setEnabled(false);
+        employerIDNumberTextBox.setBackground(new Color(238,238,238));
+        bargainingUnitTextBox.setEnabled(false);
+        bargainingUnitTextBox.setBackground(new Color(238,238,238));
+        
+        approxNumberOfEmployeesTextBox.setEnabled(false);
+        approxNumberOfEmployeesTextBox.setBackground(new Color(238,238,238));
+        duplicateCaseNumberTextBox.setEnabled(false);
+        duplicateCaseNumberTextBox.setBackground(new Color(238,238,238));
+        relatedCaseNumberTextBox.setEnabled(false);
+        relatedCaseNumberTextBox.setBackground(new Color(238,238,238));
+        addMultiCaseButton.setVisible(false);
+        
+        negotiationTypeComboBox.setEnabled(false);
+        expirationDateTextBox.setEnabled(false);
+        expirationDateTextBox.setBackground(new Color(238,238,238));
+        NTNFiledByComboBox.setEnabled(false);
+        negotiationPeriodComboBox.setEnabled(false);
+        multiUnitBargainingRequestedCheckBox.setEnabled(false);
+        mediatorAppointedDateTextBox.setEnabled(false);
+        mediatorAppointedDateTextBox.setBackground(new Color(238,238,238));
+        mediatorReplacementCheckBox.setEnabled(false);
+        stateMediatorAppointedComboBox.setEnabled(false);
+        FCMSMediatorAppointedComboBox.setEnabled(false);
+        settlementDateTextBox.setEnabled(false);
+        settlementDateTextBox.setBackground(new Color(238,238,238));
+        statusComboBox.setEnabled(false);
+        sendToBoardToCloseCheckBox.setEnabled(false);
+        boardFinalDateTextBox.setEnabled(false);
+        boardFinalDateTextBox.setBackground(new Color(238,238,238));
+        lateFilingCheckBox.setEnabled(false);
+        impasseCheckBox.setEnabled(false);
+        settledCheckBox.setEnabled(false);
+        TACheckBox.setEnabled(false);
+        MADCheckBox.setEnabled(false);
+        withdrawlCheckBox.setEnabled(false);
+        motionCheckBox.setEnabled(false);
+        dismissedCheckBox.setEnabled(false);
+        
+        if(save) {
+            saveInformation();
+        }
+        
+        loadInformation();
+    }
+    
+    private void saveInformation() {
+        MEDCase newInformation = new MEDCase();
+        
+        newInformation.fileDate = filingDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(filingDateTextBox.getText()));
+
+        newInformation.employerIDNumber = employerIDNumberTextBox.getText().equals("") ? null : employerIDNumberTextBox.getText();
+        newInformation.bargainingUnitNumber = bargainingUnitTextBox.getText().equals("") ? null : bargainingUnitTextBox.getText();
+        newInformation.duplicateCaseNumber = duplicateCaseNumberTextBox.getText().equals("") ? null : duplicateCaseNumberTextBox.getText();
+        newInformation.relatedCaseNumber = relatedCaseNumberTextBox.getText().equals("") ? null : relatedCaseNumberTextBox.getText();       
+        
+        newInformation.negotiationType = negotiationTypeComboBox.getSelectedItem().toString().trim().equals("") ? null : negotiationTypeComboBox.getSelectedItem().toString();
+        newInformation.expirationDate = expirationDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(expirationDateTextBox.getText()));
+        newInformation.NTNFiledBy = NTNFiledByComboBox.getSelectedItem().toString().trim().equals("") ? null : NTNFiledByComboBox.getSelectedItem().toString();
+        newInformation.negotiationPeriod = negotiationPeriodComboBox.getSelectedItem().toString().trim().equals("") ? null : negotiationPeriodComboBox.getSelectedItem().toString();
+        newInformation.multiunitBargainingRequested = multiUnitBargainingRequestedCheckBox.isSelected();
+        newInformation.mediatorAppointedDate = mediatorAppointedDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(mediatorAppointedDateTextBox.getText()));
+        newInformation.mediatorReplacement = mediatorReplacementCheckBox.isSelected();
+        newInformation.stateMediatorAppointedID = stateMediatorAppointedComboBox.getSelectedItem().toString().equals("") ? null : Mediator.getMediatorIDByName(stateMediatorAppointedComboBox.getSelectedItem().toString());
+        newInformation.FMCSMediatorAppointedID = FCMSMediatorAppointedComboBox.getSelectedItem().toString().equals("") ? null : Mediator.getMediatorIDByName(FCMSMediatorAppointedComboBox.getSelectedItem().toString());
+        newInformation.settlementDate = settlementDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(settlementDateTextBox.getText()));
+        newInformation.caseStatus = statusComboBox.getSelectedItem().toString().trim().equals("") ? null : statusComboBox.getSelectedItem().toString();
+        newInformation.sendToBoardToClose = sendToBoardToCloseCheckBox.isSelected();
+        newInformation.boardFinalDate = boardFinalDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(boardFinalDateTextBox.getText()));
+        newInformation.retentionTicklerDate = retentionTicklerDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(retentionTicklerDateTextBox.getText()));
+        newInformation.lateFiling = lateFilingCheckBox.isSelected();
+        newInformation.impasse = impasseCheckBox.isSelected();
+        newInformation.settled = settledCheckBox.isSelected();
+        newInformation.TA = TACheckBox.isSelected();
+        newInformation.MAD = MADCheckBox.isSelected();
+        newInformation.withdrawl = withdrawlCheckBox.isSelected();
+        newInformation.motion = motionCheckBox.isSelected();
+        newInformation.dismissed = dismissedCheckBox.isSelected();
+        
+        MEDCase.updateStatusInformation(newInformation, orginalInformation);
+    }
+    
+    public void loadStateMediators() {
+        stateMediatorAppointedComboBox.removeAllItems();
+        
+        stateMediatorAppointedComboBox.addItem("");
+        
+        List currentOwnerList = Mediator.loadMediators("State");
+        
+        for (Object currentOwners : currentOwnerList) {
+            Mediator med = (Mediator) currentOwners;
+            
+            stateMediatorAppointedComboBox.addItem(med.firstName + " " + med.lastName);
+        }
+    }
+    
+    public void loadFMCSMediators() {
+        FCMSMediatorAppointedComboBox.removeAllItems();
+        
+        FCMSMediatorAppointedComboBox.addItem("");
+        
+        List currentOwnerList = Mediator.loadMediators("FMCS");
+        
+        for (Object currentOwners : currentOwnerList) {
+            Mediator med = (Mediator) currentOwners;
+            
+            FCMSMediatorAppointedComboBox.addItem(med.firstName + " " + med.lastName);
+        }
+    }
+    
+    public void loadInformation() {
+        orginalInformation = MEDCase.loadStatusInformation();
+        
+        loadStateMediators();
+        loadFMCSMediators();
+        loadRelatedCasesTable();
+        
+        filingDateTextBox.setText(orginalInformation.fileDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.fileDate.getTime())) : "");
+        employerIDNumberTextBox.setText(orginalInformation.employerIDNumber != null ? orginalInformation.employerIDNumber : "");
+        bargainingUnitTextBox.setText(orginalInformation.bargainingUnitNumber != null ? orginalInformation.bargainingUnitNumber : "");
+        
+        if(orginalInformation.bargainingUnitNumber != null) {
+            setBUNumberCheckBoxes(BargainingUnit.getCertStatus(orginalInformation.bargainingUnitNumber));
+        }
+        
+        duplicateCaseNumberTextBox.setText(orginalInformation.duplicateCaseNumber != null ? orginalInformation.duplicateCaseNumber : "");
+        relatedCaseNumberTextBox.setText(orginalInformation.relatedCaseNumber != null ? orginalInformation.relatedCaseNumber : "");
+
+        //load multicase
+        //create table...
+        //load data
+        
+        negotiationTypeComboBox.setSelectedItem(orginalInformation.negotiationType != null ? orginalInformation.negotiationType : " ");
+        expirationDateTextBox.setText(orginalInformation.expirationDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.expirationDate.getTime())) : "");
+        NTNFiledByComboBox.setSelectedItem(orginalInformation.NTNFiledBy != null ? orginalInformation.NTNFiledBy : " ");
+        negotiationPeriodComboBox.setSelectedItem(orginalInformation.negotiationPeriod != null ? orginalInformation.negotiationPeriod : " ");
+        multiUnitBargainingRequestedCheckBox.setSelected(orginalInformation.multiunitBargainingRequested == true);
+        mediatorAppointedDateTextBox.setText(orginalInformation.mediatorAppointedDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.mediatorAppointedDate.getTime())) : "");
+        mediatorReplacementCheckBox.setSelected(orginalInformation.mediatorReplacement == true);
+        stateMediatorAppointedComboBox.setSelectedItem(orginalInformation.stateMediatorAppointedID != null ? Mediator.getMediatorNameByID(orginalInformation.stateMediatorAppointedID) : "");
+        jTextField6.setText(orginalInformation.stateMediatorAppointedID != null ? NumberFormatService.convertStringToPhoneNumber(Mediator.getMediatorPhoneByID(orginalInformation.stateMediatorAppointedID)) : "");
+        FCMSMediatorAppointedComboBox.setSelectedItem(orginalInformation.FMCSMediatorAppointedID != null ? Mediator.getMediatorNameByID(orginalInformation.FMCSMediatorAppointedID) : "");
+        jTextField7.setText(orginalInformation.FMCSMediatorAppointedID != null ? NumberFormatService.convertStringToPhoneNumber(Mediator.getMediatorPhoneByID(orginalInformation.FMCSMediatorAppointedID)) : "");
+        settlementDateTextBox.setText(orginalInformation.settlementDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.settlementDate.getTime())) : "");
+        sendToBoardToCloseCheckBox.setSelected(orginalInformation.sendToBoardToClose == true);
+        boardFinalDateTextBox.setText(orginalInformation.boardFinalDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.boardFinalDate.getTime())) : "");
+        retentionTicklerDateTextBox.setText(orginalInformation.retentionTicklerDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.retentionTicklerDate.getTime())) : "");
+        lateFilingCheckBox.setSelected(orginalInformation.lateFiling == true);
+        impasseCheckBox.setSelected(orginalInformation.impasse == true);
+        settledCheckBox.setSelected(orginalInformation.settled == true);
+        TACheckBox.setSelected(orginalInformation.TA == true);
+        MADCheckBox.setSelected(orginalInformation.MAD == true);
+        withdrawlCheckBox.setSelected(orginalInformation.withdrawl == true);
+        motionCheckBox.setSelected(orginalInformation.motion == true);
+        dismissedCheckBox.setSelected(orginalInformation.dismissed == true);
+    }
+    
+    private void setBUNumberCheckBoxes(String certStatus) {
+
+        switch(certStatus) {
+            case "B":
+                boardCertifiedCheckBox.setSelected(true);
+                deemedCertifiedCheckBox.setSelected(false);
+                break;
+            case "D":
+                boardCertifiedCheckBox.setSelected(false);
+                deemedCertifiedCheckBox.setSelected(true);
+                break;
+            default:
+                boardCertifiedCheckBox.setSelected(false);
+                deemedCertifiedCheckBox.setSelected(false);
+                break;
+        }
+    }
+    
+    public void loadRelatedCasesTable() {
+        
+//        DefaultTableModel relatedCaseModel = (DefaultTableModel) relatedCaseTable.getModel();
+        
+        relatedCaseModel.setRowCount(0);
+        
+        List relatedCases = RelatedCase.loadRelatedCases();
+        
+        for (Object relatedCase : relatedCases) {
+            relatedCaseModel.addRow(new Object[] {relatedCase});
+        }
+        relatedCaseTable.clearSelection();
     }
 
     /**
@@ -30,91 +329,114 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jCheckBox3 = new javax.swing.JCheckBox();
+        boardCertifiedCheckBox = new javax.swing.JCheckBox();
         jLabel4 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        bargainingUnitTextBox = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        approxNumberOfEmployeesTextBox = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jCheckBox4 = new javax.swing.JCheckBox();
+        employerIDNumberTextBox = new javax.swing.JTextField();
+        deemedCertifiedCheckBox = new javax.swing.JCheckBox();
         jLabel7 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         relatedCaseTable = new javax.swing.JTable();
-        addRelatedCaseButton = new javax.swing.JButton();
+        addMultiCaseButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
-        dismissalDateTextBox = new com.alee.extended.date.WebDateField();
+        duplicateCaseNumberTextBox = new javax.swing.JTextField();
+        relatedCaseNumberTextBox = new javax.swing.JTextField();
+        filingDateTextBox = new com.alee.extended.date.WebDateField();
         jPanel2 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jCheckBox1 = new javax.swing.JCheckBox();
+        multiUnitBargainingRequestedCheckBox = new javax.swing.JCheckBox();
         jLabel13 = new javax.swing.JLabel();
-        jCheckBox2 = new javax.swing.JCheckBox();
+        mediatorReplacementCheckBox = new javax.swing.JCheckBox();
         jLabel15 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
-        jCheckBox5 = new javax.swing.JCheckBox();
+        sendToBoardToCloseCheckBox = new javax.swing.JCheckBox();
         jLabel22 = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
-        jCheckBox6 = new javax.swing.JCheckBox();
-        jCheckBox7 = new javax.swing.JCheckBox();
-        jCheckBox8 = new javax.swing.JCheckBox();
-        jCheckBox9 = new javax.swing.JCheckBox();
-        jCheckBox10 = new javax.swing.JCheckBox();
-        jCheckBox11 = new javax.swing.JCheckBox();
-        jCheckBox12 = new javax.swing.JCheckBox();
-        jCheckBox13 = new javax.swing.JCheckBox();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        dismissalDateTextBox1 = new com.alee.extended.date.WebDateField();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jComboBox3 = new javax.swing.JComboBox<>();
-        dismissalDateTextBox2 = new com.alee.extended.date.WebDateField();
-        jComboBox4 = new javax.swing.JComboBox<>();
+        lateFilingCheckBox = new javax.swing.JCheckBox();
+        settledCheckBox = new javax.swing.JCheckBox();
+        impasseCheckBox = new javax.swing.JCheckBox();
+        TACheckBox = new javax.swing.JCheckBox();
+        withdrawlCheckBox = new javax.swing.JCheckBox();
+        MADCheckBox = new javax.swing.JCheckBox();
+        motionCheckBox = new javax.swing.JCheckBox();
+        dismissedCheckBox = new javax.swing.JCheckBox();
+        negotiationTypeComboBox = new javax.swing.JComboBox<>();
+        expirationDateTextBox = new com.alee.extended.date.WebDateField();
+        NTNFiledByComboBox = new javax.swing.JComboBox<>();
+        negotiationPeriodComboBox = new javax.swing.JComboBox<>();
+        mediatorAppointedDateTextBox = new com.alee.extended.date.WebDateField();
+        stateMediatorAppointedComboBox = new javax.swing.JComboBox<>();
         jTextField6 = new javax.swing.JTextField();
-        jComboBox5 = new javax.swing.JComboBox<>();
+        FCMSMediatorAppointedComboBox = new javax.swing.JComboBox<>();
         jTextField7 = new javax.swing.JTextField();
-        dismissalDateTextBox3 = new com.alee.extended.date.WebDateField();
-        dismissalDateTextBox4 = new com.alee.extended.date.WebDateField();
-        dismissalDateTextBox5 = new com.alee.extended.date.WebDateField();
-        jComboBox6 = new javax.swing.JComboBox<>();
+        settlementDateTextBox = new com.alee.extended.date.WebDateField();
+        boardFinalDateTextBox = new com.alee.extended.date.WebDateField();
+        retentionTicklerDateTextBox = new com.alee.extended.date.WebDateField();
+        statusComboBox = new javax.swing.JComboBox<>();
 
-        jCheckBox3.setText("Board Certified");
-        jCheckBox3.addActionListener(new java.awt.event.ActionListener() {
+        boardCertifiedCheckBox.setText("Board Certified");
+        boardCertifiedCheckBox.setEnabled(false);
+        boardCertifiedCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox3ActionPerformed(evt);
+                boardCertifiedCheckBoxActionPerformed(evt);
             }
         });
 
-        jLabel4.setText("Bargaining Unit Number:");
+        jLabel4.setText("BUN Number:");
 
-        jTextField2.setText("jTextField2");
+        bargainingUnitTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        bargainingUnitTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        bargainingUnitTextBox.setEnabled(false);
+        bargainingUnitTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bargainingUnitTextBoxMouseClicked(evt);
+            }
+        });
 
         jLabel11.setText("Related Case Number:");
 
-        jTextField1.setText("jTextField1");
+        approxNumberOfEmployeesTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        approxNumberOfEmployeesTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        approxNumberOfEmployeesTextBox.setEnabled(false);
+        approxNumberOfEmployeesTextBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                approxNumberOfEmployeesTextBoxActionPerformed(evt);
+            }
+        });
 
         jLabel10.setText("Duplicate Case Number:");
 
         jLabel3.setText("Employer ID Number:");
 
-        jTextField3.setText("jTextField3");
-
-        jCheckBox4.setText("Deemed Certified");
-        jCheckBox4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox4ActionPerformed(evt);
+        employerIDNumberTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        employerIDNumberTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        employerIDNumberTextBox.setEnabled(false);
+        employerIDNumberTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                employerIDNumberTextBoxMouseClicked(evt);
             }
         });
 
-        jLabel7.setText("Approx Number of Employeed:");
+        deemedCertifiedCheckBox.setText("Deemed Certified");
+        deemedCertifiedCheckBox.setEnabled(false);
+        deemedCertifiedCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deemedCertifiedCheckBoxActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setText("Approx Number of Employees:");
 
         jPanel4.setPreferredSize(new java.awt.Dimension(409, 107));
         jPanel4.setSize(new java.awt.Dimension(409, 107));
@@ -138,16 +460,21 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
             }
         });
         relatedCaseTable.setRequestFocusEnabled(false);
+        relatedCaseTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                relatedCaseTableMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(relatedCaseTable);
 
-        addRelatedCaseButton.setText("+");
-        addRelatedCaseButton.setMaximumSize(new java.awt.Dimension(29, 91));
-        addRelatedCaseButton.setMinimumSize(new java.awt.Dimension(29, 91));
-        addRelatedCaseButton.setPreferredSize(new java.awt.Dimension(29, 91));
-        addRelatedCaseButton.setSize(new java.awt.Dimension(29, 91));
-        addRelatedCaseButton.addActionListener(new java.awt.event.ActionListener() {
+        addMultiCaseButton.setText("+");
+        addMultiCaseButton.setMaximumSize(new java.awt.Dimension(29, 91));
+        addMultiCaseButton.setMinimumSize(new java.awt.Dimension(29, 91));
+        addMultiCaseButton.setPreferredSize(new java.awt.Dimension(29, 91));
+        addMultiCaseButton.setSize(new java.awt.Dimension(29, 91));
+        addMultiCaseButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addRelatedCaseButtonActionPerformed(evt);
+                addMultiCaseButtonActionPerformed(evt);
             }
         });
 
@@ -156,9 +483,9 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(addRelatedCaseButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(addMultiCaseButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(jLabel2)
                 .addContainerGap())
@@ -169,25 +496,41 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(addRelatedCaseButton, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
+                    .addComponent(addMultiCaseButton, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addGap(0, 0, 0))
         );
 
         jLabel1.setText("Filing Date:");
 
-        jTextField4.setText("jTextField4");
-
-        jTextField5.setText("jTextField5");
-
-        dismissalDateTextBox.setEditable(false);
-        dismissalDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        dismissalDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        dismissalDateTextBox.setEnabled(false);
-        dismissalDateTextBox.setDateFormat(Global.mmddyyyy);
-        dismissalDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+        duplicateCaseNumberTextBox.setEditable(false);
+        duplicateCaseNumberTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        duplicateCaseNumberTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        duplicateCaseNumberTextBox.setEnabled(false);
+        duplicateCaseNumberTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                dismissalDateTextBoxMouseClicked(evt);
+                duplicateCaseNumberTextBoxMouseClicked(evt);
+            }
+        });
+
+        relatedCaseNumberTextBox.setEditable(false);
+        relatedCaseNumberTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        relatedCaseNumberTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        relatedCaseNumberTextBox.setEnabled(false);
+        relatedCaseNumberTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                relatedCaseNumberTextBoxMouseClicked(evt);
+            }
+        });
+
+        filingDateTextBox.setEditable(false);
+        filingDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        filingDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        filingDateTextBox.setEnabled(false);
+        filingDateTextBox.setDateFormat(Global.mmddyyyy);
+        filingDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                filingDateTextBoxMouseClicked(evt);
             }
         });
 
@@ -195,36 +538,34 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(10, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 433, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jLabel4))
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel1)
                             .addComponent(jLabel10)
-                            .addComponent(jLabel11))
+                            .addComponent(jLabel11)
+                            .addComponent(jLabel4))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField2)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jTextField4, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jCheckBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jCheckBox4))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel7)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField5)
-                                    .addComponent(dismissalDateTextBox, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(0, 0, Short.MAX_VALUE))))))
+                                .addComponent(boardCertifiedCheckBox)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(deemedCertifiedCheckBox))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(jLabel7)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(approxNumberOfEmployeesTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE))
+                                .addComponent(employerIDNumberTextBox, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(filingDateTextBox, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(relatedCaseNumberTextBox, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(duplicateCaseNumberTextBox, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(bargainingUnitTextBox, javax.swing.GroupLayout.Alignment.LEADING)))))
+                .addGap(12, 12, 12))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -232,31 +573,31 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(dismissalDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(filingDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(employerIDNumberTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(bargainingUnitTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBox3)
-                    .addComponent(jCheckBox4))
+                    .addComponent(boardCertifiedCheckBox)
+                    .addComponent(deemedCertifiedCheckBox))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(approxNumberOfEmployeesTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(duplicateCaseNumberTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(relatedCaseNumberTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -270,19 +611,21 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
 
         jLabel9.setText("Negotiation Period:");
 
-        jCheckBox1.setText("Multi-Unit Bargaining Requested");
-        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+        multiUnitBargainingRequestedCheckBox.setText("Multi-Unit Bargaining Requested");
+        multiUnitBargainingRequestedCheckBox.setEnabled(false);
+        multiUnitBargainingRequestedCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox1ActionPerformed(evt);
+                multiUnitBargainingRequestedCheckBoxActionPerformed(evt);
             }
         });
 
         jLabel13.setText("Mediator Appointed Date:");
 
-        jCheckBox2.setText("Mediator Replacement");
-        jCheckBox2.addActionListener(new java.awt.event.ActionListener() {
+        mediatorReplacementCheckBox.setText("Mediator Replacement");
+        mediatorReplacementCheckBox.setEnabled(false);
+        mediatorReplacementCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox2ActionPerformed(evt);
+                mediatorReplacementCheckBoxActionPerformed(evt);
             }
         });
 
@@ -294,10 +637,11 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
 
         jLabel20.setText("Status:");
 
-        jCheckBox5.setText("Send To Board To Close");
-        jCheckBox5.addActionListener(new java.awt.event.ActionListener() {
+        sendToBoardToCloseCheckBox.setText("Send To Board To Close");
+        sendToBoardToCloseCheckBox.setEnabled(false);
+        sendToBoardToCloseCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox5ActionPerformed(evt);
+                sendToBoardToCloseCheckBoxActionPerformed(evt);
             }
         });
 
@@ -305,109 +649,150 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
 
         jLabel23.setText("Retention Tickler Date:");
 
-        jCheckBox6.setText("jCheckBox6");
-        jCheckBox6.addActionListener(new java.awt.event.ActionListener() {
+        lateFilingCheckBox.setText("Late Filing");
+        lateFilingCheckBox.setEnabled(false);
+        lateFilingCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox6ActionPerformed(evt);
+                lateFilingCheckBoxActionPerformed(evt);
             }
         });
 
-        jCheckBox7.setText("jCheckBox6");
-
-        jCheckBox8.setText("jCheckBox6");
-
-        jCheckBox9.setText("jCheckBox6");
-
-        jCheckBox10.setText("jCheckBox6");
-
-        jCheckBox11.setText("jCheckBox6");
-
-        jCheckBox12.setText("jCheckBox6");
-
-        jCheckBox13.setText("jCheckBox6");
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        dismissalDateTextBox1.setEditable(false);
-        dismissalDateTextBox1.setBackground(new java.awt.Color(238, 238, 238));
-        dismissalDateTextBox1.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        dismissalDateTextBox1.setEnabled(false);
-        dismissalDateTextBox.setDateFormat(Global.mmddyyyy);
-        dismissalDateTextBox1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                dismissalDateTextBox1MouseClicked(evt);
-            }
-        });
-
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        dismissalDateTextBox2.setEditable(false);
-        dismissalDateTextBox2.setBackground(new java.awt.Color(238, 238, 238));
-        dismissalDateTextBox2.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        dismissalDateTextBox2.setEnabled(false);
-        dismissalDateTextBox.setDateFormat(Global.mmddyyyy);
-        dismissalDateTextBox2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                dismissalDateTextBox2MouseClicked(evt);
-            }
-        });
-
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jTextField6.setText("jTextField6");
-
-        jComboBox5.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jTextField7.setText("jTextField6");
-
-        dismissalDateTextBox3.setEditable(false);
-        dismissalDateTextBox3.setBackground(new java.awt.Color(238, 238, 238));
-        dismissalDateTextBox3.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        dismissalDateTextBox3.setEnabled(false);
-        dismissalDateTextBox.setDateFormat(Global.mmddyyyy);
-        dismissalDateTextBox3.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                dismissalDateTextBox3MouseClicked(evt);
-            }
-        });
-
-        dismissalDateTextBox4.setEditable(false);
-        dismissalDateTextBox4.setBackground(new java.awt.Color(238, 238, 238));
-        dismissalDateTextBox4.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        dismissalDateTextBox4.setEnabled(false);
-        dismissalDateTextBox.setDateFormat(Global.mmddyyyy);
-        dismissalDateTextBox4.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                dismissalDateTextBox4MouseClicked(evt);
-            }
-        });
-
-        dismissalDateTextBox5.setEditable(false);
-        dismissalDateTextBox5.setBackground(new java.awt.Color(238, 238, 238));
-        dismissalDateTextBox5.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        dismissalDateTextBox5.setEnabled(false);
-        dismissalDateTextBox.setDateFormat(Global.mmddyyyy);
-        dismissalDateTextBox5.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                dismissalDateTextBox5MouseClicked(evt);
-            }
-        });
-        dismissalDateTextBox5.addActionListener(new java.awt.event.ActionListener() {
+        settledCheckBox.setText("Settled");
+        settledCheckBox.setEnabled(false);
+        settledCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                dismissalDateTextBox5ActionPerformed(evt);
+                settledCheckBoxActionPerformed(evt);
             }
         });
 
-        jComboBox6.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        impasseCheckBox.setText("Impasse");
+        impasseCheckBox.setEnabled(false);
+
+        TACheckBox.setText("TA");
+        TACheckBox.setEnabled(false);
+
+        withdrawlCheckBox.setText("Withdrawl");
+        withdrawlCheckBox.setEnabled(false);
+
+        MADCheckBox.setText("MAD");
+        MADCheckBox.setEnabled(false);
+
+        motionCheckBox.setText("Motion");
+        motionCheckBox.setEnabled(false);
+        motionCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                motionCheckBoxActionPerformed(evt);
+            }
+        });
+
+        dismissedCheckBox.setText("Dismissed");
+        dismissedCheckBox.setEnabled(false);
+
+        negotiationTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SE - Statutory Expiration", "SI - Statutory Initial", "SR - Statutory Reopener", "ZE - MAD Expiration", "ZI - MAD Initial", "ZR - MAD Reopener", " " }));
+        negotiationTypeComboBox.setSelectedIndex(6);
+        negotiationTypeComboBox.setEnabled(false);
+
+        expirationDateTextBox.setEditable(false);
+        expirationDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        expirationDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        expirationDateTextBox.setEnabled(false);
+        expirationDateTextBox.setDateFormat(Global.mmddyyyy);
+        expirationDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                expirationDateTextBoxMouseClicked(evt);
+            }
+        });
+
+        NTNFiledByComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Employer", "Union", "" }));
+        NTNFiledByComboBox.setSelectedIndex(2);
+        NTNFiledByComboBox.setEnabled(false);
+
+        negotiationPeriodComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "60", "90", " " }));
+        negotiationPeriodComboBox.setSelectedIndex(2);
+        negotiationPeriodComboBox.setEnabled(false);
+
+        mediatorAppointedDateTextBox.setEditable(false);
+        mediatorAppointedDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        mediatorAppointedDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        mediatorAppointedDateTextBox.setEnabled(false);
+        mediatorAppointedDateTextBox.setDateFormat(Global.mmddyyyy);
+        mediatorAppointedDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                mediatorAppointedDateTextBoxMouseClicked(evt);
+            }
+        });
+
+        stateMediatorAppointedComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        stateMediatorAppointedComboBox.setEnabled(false);
+        stateMediatorAppointedComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                stateMediatorAppointedComboBoxActionPerformed(evt);
+            }
+        });
+
+        jTextField6.setBackground(new java.awt.Color(238, 238, 238));
+        jTextField6.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        jTextField6.setEnabled(false);
+
+        FCMSMediatorAppointedComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        FCMSMediatorAppointedComboBox.setEnabled(false);
+        FCMSMediatorAppointedComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                FCMSMediatorAppointedComboBoxActionPerformed(evt);
+            }
+        });
+
+        jTextField7.setBackground(new java.awt.Color(238, 238, 238));
+        jTextField7.setEnabled(false);
+
+        settlementDateTextBox.setEditable(false);
+        settlementDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        settlementDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        settlementDateTextBox.setEnabled(false);
+        settlementDateTextBox.setDateFormat(Global.mmddyyyy);
+        settlementDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                settlementDateTextBoxMouseClicked(evt);
+            }
+        });
+
+        boardFinalDateTextBox.setEditable(false);
+        boardFinalDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        boardFinalDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        boardFinalDateTextBox.setEnabled(false);
+        boardFinalDateTextBox.setDateFormat(Global.mmddyyyy);
+        boardFinalDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                boardFinalDateTextBoxMouseClicked(evt);
+            }
+        });
+
+        retentionTicklerDateTextBox.setEditable(false);
+        retentionTicklerDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        retentionTicklerDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        retentionTicklerDateTextBox.setEnabled(false);
+        retentionTicklerDateTextBox.setDateFormat(Global.mmddyyyy);
+        retentionTicklerDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                retentionTicklerDateTextBoxMouseClicked(evt);
+            }
+        });
+        retentionTicklerDateTextBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                retentionTicklerDateTextBoxActionPerformed(evt);
+            }
+        });
+
+        statusComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Open", "Closed", "Error", " " }));
+        statusComboBox.setSelectedIndex(3);
+        statusComboBox.setEnabled(false);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(10, 10, 10)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel23)
                     .addComponent(jLabel22)
@@ -422,52 +807,46 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
                     .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jCheckBox1)
-                                    .addComponent(jCheckBox2)
-                                    .addComponent(jCheckBox5)
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(jCheckBox6)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jCheckBox8))
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(jCheckBox7)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jCheckBox9))
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(jCheckBox11)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jCheckBox10))
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(jCheckBox12)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jCheckBox13)))
-                                .addGap(0, 24, Short.MAX_VALUE))
-                            .addComponent(dismissalDateTextBox1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jComboBox3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(6, 6, 6))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(dismissalDateTextBox2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(stateMediatorAppointedComboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jTextField6, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(FCMSMediatorAppointedComboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jTextField7, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(settlementDateTextBox, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(statusComboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jTextField6, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBox4, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jComboBox5, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jTextField7, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(dismissalDateTextBox3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jComboBox6, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(mediatorAppointedDateTextBox, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(negotiationTypeComboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(multiUnitBargainingRequestedCheckBox)
+                                    .addComponent(mediatorReplacementCheckBox)
+                                    .addComponent(sendToBoardToCloseCheckBox)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(lateFilingCheckBox)
+                                            .addComponent(settledCheckBox)
+                                            .addComponent(MADCheckBox)
+                                            .addComponent(motionCheckBox))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(dismissedCheckBox)
+                                            .addComponent(withdrawlCheckBox)
+                                            .addComponent(TACheckBox)
+                                            .addComponent(impasseCheckBox))))
+                                .addGap(0, 30, Short.MAX_VALUE))
+                            .addComponent(expirationDateTextBox, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(NTNFiledByComboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(negotiationPeriodComboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(6, 6, 6))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(boardFinalDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(dismissalDateTextBox4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(dismissalDateTextBox5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(retentionTicklerDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())))
         );
         jPanel2Layout.setVerticalGroup(
@@ -475,76 +854,76 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jComboBox1)
+                    .addComponent(negotiationTypeComboBox)
                     .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(4, 4, 4)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(dismissalDateTextBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(expirationDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(4, 4, 4)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(NTNFiledByComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(4, 4, 4)
                         .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(4, 4, 4)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(negotiationPeriodComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(4, 4, 4)
-                .addComponent(jCheckBox1)
+                .addComponent(multiUnitBargainingRequestedCheckBox)
                 .addGap(4, 4, 4)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel13)
-                    .addComponent(dismissalDateTextBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(mediatorAppointedDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(4, 4, 4)
-                .addComponent(jCheckBox2)
+                .addComponent(mediatorReplacementCheckBox)
                 .addGap(4, 4, 4)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(stateMediatorAppointedComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(2, 2, 2)
                 .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(FCMSMediatorAppointedComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(2, 2, 2)
                 .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(4, 4, 4)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel19)
-                    .addComponent(dismissalDateTextBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(settlementDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(4, 4, 4)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(statusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(4, 4, 4)
-                .addComponent(jCheckBox5)
+                .addComponent(sendToBoardToCloseCheckBox)
                 .addGap(4, 4, 4)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel22)
-                    .addComponent(dismissalDateTextBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(boardFinalDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(4, 4, 4)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel23)
-                    .addComponent(dismissalDateTextBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(retentionTicklerDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(4, 4, 4)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBox6)
-                    .addComponent(jCheckBox8))
+                    .addComponent(lateFilingCheckBox)
+                    .addComponent(impasseCheckBox))
                 .addGap(3, 3, 3)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBox7)
-                    .addComponent(jCheckBox9))
+                    .addComponent(settledCheckBox)
+                    .addComponent(TACheckBox))
                 .addGap(3, 3, 3)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBox11)
-                    .addComponent(jCheckBox10))
+                    .addComponent(MADCheckBox)
+                    .addComponent(withdrawlCheckBox))
                 .addGap(2, 2, 2)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBox12)
-                    .addComponent(jCheckBox13))
+                    .addComponent(motionCheckBox)
+                    .addComponent(dismissedCheckBox))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -555,7 +934,8 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jPanel1, jPanel2});
@@ -570,91 +950,188 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void addRelatedCaseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRelatedCaseButtonActionPerformed
-//        new AddNewRelatedCase((JFrame) Global.root, true);
-//        loadRelatedCasesTable();
-    }//GEN-LAST:event_addRelatedCaseButtonActionPerformed
+    private void addMultiCaseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMultiCaseButtonActionPerformed
+        new AddMultiCaseDialog((JFrame) Global.root, true);
+        loadRelatedCasesTable();
+    }//GEN-LAST:event_addMultiCaseButtonActionPerformed
 
-    private void jCheckBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox3ActionPerformed
+    private void boardCertifiedCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boardCertifiedCheckBoxActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox3ActionPerformed
+    }//GEN-LAST:event_boardCertifiedCheckBoxActionPerformed
 
-    private void jCheckBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox4ActionPerformed
+    private void deemedCertifiedCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deemedCertifiedCheckBoxActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox4ActionPerformed
+    }//GEN-LAST:event_deemedCertifiedCheckBoxActionPerformed
 
-    private void dismissalDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dismissalDateTextBoxMouseClicked
+    private void filingDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_filingDateTextBoxMouseClicked
 //        clearDate(dismissalDateTextBox, evt);
-    }//GEN-LAST:event_dismissalDateTextBoxMouseClicked
+    }//GEN-LAST:event_filingDateTextBoxMouseClicked
 
-    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
+    private void multiUnitBargainingRequestedCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_multiUnitBargainingRequestedCheckBoxActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox1ActionPerformed
+    }//GEN-LAST:event_multiUnitBargainingRequestedCheckBoxActionPerformed
 
-    private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
+    private void mediatorReplacementCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediatorReplacementCheckBoxActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox2ActionPerformed
+    }//GEN-LAST:event_mediatorReplacementCheckBoxActionPerformed
 
-    private void jCheckBox5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox5ActionPerformed
+    private void sendToBoardToCloseCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendToBoardToCloseCheckBoxActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox5ActionPerformed
+    }//GEN-LAST:event_sendToBoardToCloseCheckBoxActionPerformed
 
-    private void dismissalDateTextBox1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dismissalDateTextBox1MouseClicked
+    private void expirationDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_expirationDateTextBoxMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_dismissalDateTextBox1MouseClicked
+    }//GEN-LAST:event_expirationDateTextBoxMouseClicked
 
-    private void dismissalDateTextBox2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dismissalDateTextBox2MouseClicked
+    private void mediatorAppointedDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mediatorAppointedDateTextBoxMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_dismissalDateTextBox2MouseClicked
+    }//GEN-LAST:event_mediatorAppointedDateTextBoxMouseClicked
 
-    private void dismissalDateTextBox3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dismissalDateTextBox3MouseClicked
+    private void settlementDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_settlementDateTextBoxMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_dismissalDateTextBox3MouseClicked
+    }//GEN-LAST:event_settlementDateTextBoxMouseClicked
 
-    private void dismissalDateTextBox4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dismissalDateTextBox4MouseClicked
+    private void boardFinalDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_boardFinalDateTextBoxMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_dismissalDateTextBox4MouseClicked
+    }//GEN-LAST:event_boardFinalDateTextBoxMouseClicked
 
-    private void dismissalDateTextBox5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dismissalDateTextBox5MouseClicked
+    private void retentionTicklerDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_retentionTicklerDateTextBoxMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_dismissalDateTextBox5MouseClicked
+    }//GEN-LAST:event_retentionTicklerDateTextBoxMouseClicked
 
-    private void jCheckBox6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox6ActionPerformed
+    private void lateFilingCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lateFilingCheckBoxActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox6ActionPerformed
+    }//GEN-LAST:event_lateFilingCheckBoxActionPerformed
 
-    private void dismissalDateTextBox5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dismissalDateTextBox5ActionPerformed
+    private void retentionTicklerDateTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_retentionTicklerDateTextBoxActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_dismissalDateTextBox5ActionPerformed
+    }//GEN-LAST:event_retentionTicklerDateTextBoxActionPerformed
+
+    private void approxNumberOfEmployeesTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_approxNumberOfEmployeesTextBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_approxNumberOfEmployeesTextBoxActionPerformed
+
+    private void settledCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settledCheckBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_settledCheckBoxActionPerformed
+
+    private void motionCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_motionCheckBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_motionCheckBoxActionPerformed
+
+    private void employerIDNumberTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_employerIDNumberTextBoxMouseClicked
+        if(evt.getClickCount() == 2) {
+            if(employerIDNumberTextBox.isEnabled()) {
+                employerSearch search = new employerSearch((JFrame) Global.root.getRootPane().getParent(), true, employerIDNumberTextBox.getText().trim());
+                employerIDNumberTextBox.setText(search.getEmployerNumber());
+                search.dispose();
+            } else {
+                new employerDetail((JFrame) Global.root.getRootPane().getParent(), true, employerIDNumberTextBox.getText().trim());
+            }
+        }    
+    }//GEN-LAST:event_employerIDNumberTextBoxMouseClicked
+
+    private void bargainingUnitTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bargainingUnitTextBoxMouseClicked
+        if(evt.getClickCount() == 2) {
+            if(bargainingUnitTextBox.isEnabled()) {
+                buNumberSearch search = new buNumberSearch((JFrame) Global.root.getRootPane().getParent(), true, employerIDNumberTextBox.getText().trim(), bargainingUnitTextBox.getText().trim());
+                bargainingUnitTextBox.setText(search.getBuNumber());
+                setBUNumberCheckBoxes(search.getCertStatus() != null ? search.getCertStatus() : "");
+                if(employerIDNumberTextBox.getText().equals("")) {
+                    employerIDNumberTextBox.setText(search.getBuNumber().split("-")[0]);
+                }
+                search.dispose();
+            } else {
+//                new employerDetail((JFrame) Global.root.getRootPane().getParent(), true, employerIDNumberTextBox.getText().trim());
+            }
+        }
+    }//GEN-LAST:event_bargainingUnitTextBoxMouseClicked
+
+    private void stateMediatorAppointedComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stateMediatorAppointedComboBoxActionPerformed
+        if(stateMediatorAppointedComboBox.isEnabled()) {
+            if(stateMediatorAppointedComboBox.getSelectedItem() != null || 
+                    stateMediatorAppointedComboBox.getSelectedItem().toString().equals("")) {
+            jTextField6.setText(NumberFormatService.convertStringToPhoneNumber(Mediator.getMediatorPhoneNumber(stateMediatorAppointedComboBox.getSelectedItem().toString())));
+            } else {
+                jTextField6.setText("");
+            }
+        } 
+    }//GEN-LAST:event_stateMediatorAppointedComboBoxActionPerformed
+
+    private void FCMSMediatorAppointedComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FCMSMediatorAppointedComboBoxActionPerformed
+        if(FCMSMediatorAppointedComboBox.isEnabled()) {
+            if(FCMSMediatorAppointedComboBox.getSelectedItem() != null || 
+                    FCMSMediatorAppointedComboBox.getSelectedItem().toString().equals("")) {
+            jTextField7.setText(NumberFormatService.convertStringToPhoneNumber(Mediator.getMediatorPhoneNumber(FCMSMediatorAppointedComboBox.getSelectedItem().toString())));
+            } else {
+                jTextField7.setText("");
+            }
+        } 
+    }//GEN-LAST:event_FCMSMediatorAppointedComboBoxActionPerformed
+
+    private void relatedCaseTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_relatedCaseTableMouseClicked
+        if(relatedCaseTable.getSelectedRow() > -1) {
+            if(evt.getButton() == MouseEvent.BUTTON3) {
+                new RemoveMultiCaseDialog(
+                    (JFrame) Global.root.getRootPane().getParent(),
+                    true,
+                    relatedCaseTable.getValueAt(relatedCaseTable.getSelectedRow(), 0).toString().trim()
+                );
+                loadRelatedCasesTable();
+            }
+        }
+    }//GEN-LAST:event_relatedCaseTableMouseClicked
+
+    private void duplicateCaseNumberTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_duplicateCaseNumberTextBoxMouseClicked
+        if(duplicateCaseNumberTextBox.isEnabled()) {
+            if(evt.getButton() == MouseEvent.BUTTON3) {
+                MEDClearCaseDialog clear = new MEDClearCaseDialog((JFrame) Global.root.getRootPane().getParent(), true);
+                if(clear.reset) {
+                    duplicateCaseNumberTextBox.setText("");
+                }
+                clear.dispose();
+            } else if(evt.getClickCount() == 2) {
+                MEDAddDuplicateCaseDialog related = new MEDAddDuplicateCaseDialog((JFrame) Global.root.getRootPane().getParent(), true);
+                duplicateCaseNumberTextBox.setText(related.getDuplicateCase());
+                related.dispose();
+            }
+        }
+    }//GEN-LAST:event_duplicateCaseNumberTextBoxMouseClicked
+
+    private void relatedCaseNumberTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_relatedCaseNumberTextBoxMouseClicked
+        if(relatedCaseNumberTextBox.isEnabled()) {
+            if(evt.getButton() == MouseEvent.BUTTON3) {
+                MEDClearCaseDialog clear = new MEDClearCaseDialog((JFrame) Global.root.getRootPane().getParent(), true);
+                if(clear.reset) {
+                    relatedCaseNumberTextBox.setText("");
+                }
+                clear.dispose();
+            } else if(evt.getClickCount() == 2) {
+                MEDAddRelatedCaseDialog related = new MEDAddRelatedCaseDialog((JFrame) Global.root.getRootPane().getParent(), true);
+                relatedCaseNumberTextBox.setText(related.getRelatedCase());
+                related.dispose();
+            }
+        }
+    }//GEN-LAST:event_relatedCaseNumberTextBoxMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton addRelatedCaseButton;
-    private com.alee.extended.date.WebDateField dismissalDateTextBox;
-    private com.alee.extended.date.WebDateField dismissalDateTextBox1;
-    private com.alee.extended.date.WebDateField dismissalDateTextBox2;
-    private com.alee.extended.date.WebDateField dismissalDateTextBox3;
-    private com.alee.extended.date.WebDateField dismissalDateTextBox4;
-    private com.alee.extended.date.WebDateField dismissalDateTextBox5;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox10;
-    private javax.swing.JCheckBox jCheckBox11;
-    private javax.swing.JCheckBox jCheckBox12;
-    private javax.swing.JCheckBox jCheckBox13;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JCheckBox jCheckBox3;
-    private javax.swing.JCheckBox jCheckBox4;
-    private javax.swing.JCheckBox jCheckBox5;
-    private javax.swing.JCheckBox jCheckBox6;
-    private javax.swing.JCheckBox jCheckBox7;
-    private javax.swing.JCheckBox jCheckBox8;
-    private javax.swing.JCheckBox jCheckBox9;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
-    private javax.swing.JComboBox<String> jComboBox4;
-    private javax.swing.JComboBox<String> jComboBox5;
-    private javax.swing.JComboBox<String> jComboBox6;
+    private javax.swing.JComboBox<String> FCMSMediatorAppointedComboBox;
+    private javax.swing.JCheckBox MADCheckBox;
+    private javax.swing.JComboBox<String> NTNFiledByComboBox;
+    private javax.swing.JCheckBox TACheckBox;
+    private javax.swing.JButton addMultiCaseButton;
+    private javax.swing.JTextField approxNumberOfEmployeesTextBox;
+    private javax.swing.JTextField bargainingUnitTextBox;
+    private javax.swing.JCheckBox boardCertifiedCheckBox;
+    private com.alee.extended.date.WebDateField boardFinalDateTextBox;
+    private javax.swing.JCheckBox deemedCertifiedCheckBox;
+    private javax.swing.JCheckBox dismissedCheckBox;
+    private javax.swing.JTextField duplicateCaseNumberTextBox;
+    private javax.swing.JTextField employerIDNumberTextBox;
+    private com.alee.extended.date.WebDateField expirationDateTextBox;
+    private com.alee.extended.date.WebDateField filingDateTextBox;
+    private javax.swing.JCheckBox impasseCheckBox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -677,13 +1154,23 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
     private javax.swing.JTextField jTextField7;
+    private javax.swing.JCheckBox lateFilingCheckBox;
+    private com.alee.extended.date.WebDateField mediatorAppointedDateTextBox;
+    private javax.swing.JCheckBox mediatorReplacementCheckBox;
+    private javax.swing.JCheckBox motionCheckBox;
+    private javax.swing.JCheckBox multiUnitBargainingRequestedCheckBox;
+    private javax.swing.JComboBox<String> negotiationPeriodComboBox;
+    private javax.swing.JComboBox<String> negotiationTypeComboBox;
+    private javax.swing.JTextField relatedCaseNumberTextBox;
     private javax.swing.JTable relatedCaseTable;
+    private com.alee.extended.date.WebDateField retentionTicklerDateTextBox;
+    private javax.swing.JCheckBox sendToBoardToCloseCheckBox;
+    private javax.swing.JCheckBox settledCheckBox;
+    private com.alee.extended.date.WebDateField settlementDateTextBox;
+    private javax.swing.JComboBox<String> stateMediatorAppointedComboBox;
+    private javax.swing.JComboBox<String> statusComboBox;
+    private javax.swing.JCheckBox withdrawlCheckBox;
     // End of variables declaration//GEN-END:variables
 }

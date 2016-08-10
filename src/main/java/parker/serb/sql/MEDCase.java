@@ -28,7 +28,7 @@ public class MEDCase {
     public String caseType; 
     public String caseMonth;
     public String caseNumber;
-    public Timestamp fileDate;
+   
     
     //concil
     public Timestamp concilList1OrderDate;
@@ -85,6 +85,37 @@ public class MEDCase {
     public String FFRejectedBy;
     public String FFOverallResult;
     public String FFNote;
+    
+    //caseStatus
+    public Timestamp fileDate;
+    public String employerIDNumber;
+    public String bargainingUnitNumber;
+    public String approxNumberOfEmployees;
+    public String duplicateCaseNumber;
+    public String relatedCaseNumber;
+    public String negotiationType;
+    public Timestamp expirationDate;
+    public String NTNFiledBy;
+    public String negotiationPeriod;
+    public boolean multiunitBargainingRequested;
+    public Timestamp mediatorAppointedDate;
+    public boolean mediatorReplacement;
+    public String stateMediatorAppointedID;
+    public String FMCSMediatorAppointedID;
+    public Timestamp settlementDate;
+    public String caseStatus;
+    public boolean sendToBoardToClose;
+    public Timestamp boardFinalDate;
+    public Timestamp retentionTicklerDate;
+    public boolean lateFiling;
+    public boolean impasse;
+    public boolean settled;
+    public boolean TA;
+    public boolean MAD;
+    public boolean withdrawl;
+    public boolean motion;
+    public boolean dismissed;
+    
     
     /**
      * Load a list of the most recent 250 REP case numbers
@@ -245,10 +276,10 @@ public class MEDCase {
             Statement stmt = Database.connectToDB().createStatement();
 
             String sql = "Select"
-                    + " fileDate"
-//                    + " status1,"
-//                    + " [type],"
-//                    + " bargainingUnitNumber"
+                    + " fileDate,"
+                    + " stateMediatorAppointedID,"
+                    + " FMCSMediatorAppointedID,"
+                    + " caseStatus"
                     + " from MEDCase where caseYear = ? AND"
                     + " caseType = ? AND"
                     + " caseMonth = ? AND"
@@ -265,10 +296,9 @@ public class MEDCase {
             if(caseHeader.next()) {
                 med = new MEDCase();
                 med.fileDate = caseHeader.getTimestamp("fileDate");
-//                rep.courtClosedDate = caseHeader.getTimestamp("courtClosedDate");
-//                rep.status1 = caseHeader.getString("status1");
-//                rep.type = caseHeader.getString("type");
-//                rep.bargainingUnitNumber = caseHeader.getString("bargainingUnitNumber");
+                med.stateMediatorAppointedID = caseHeader.getString("stateMediatorAppointedID");
+                med.FMCSMediatorAppointedID = caseHeader.getString("FMCSMediatorAppointedID");
+                med.caseStatus = caseHeader.getString("caseStatus");
             }
                 
             
@@ -276,87 +306,6 @@ public class MEDCase {
             SlackNotification.sendNotification(ex.getMessage());
         }
         return med;
-    }
-    
-    public static MEDCase loadCaseInformation() {
-        MEDCase rep = null;
-        try {
-            Statement stmt = Database.connectToDB().createStatement();
-
-            String sql = "Select"
-                    + " [type],"
-                    + " status1,"
-                    + " status2,"
-                    + " currentOwnerID,"
-                    + " county,"
-                    + " employerIDNumber,"
-                    + " deptInState,"
-                    + " bargainingUnitNumber,"
-                    + " boardCertified,"
-                    + " deemedCertified,"
-                    + " certificationRevoked,"
-                    + " fileDate,"
-                    + " amendedFilingDate,"
-                    + " finalBoardDate,"
-                    + " registrationLetterSent,"
-                    + " dateOfAppeal,"
-                    + " courtClosedDate,"
-                    + " returnSOIDueDate,"
-                    + " actualSOIReturnDate,"
-                    + " comments,"
-                    + " REPClosedCaseDueDate,"
-                    + " actualREPClosedDate,"
-                    + " REPClosedUser,"
-                    + " actualClerksClosedDate,"
-                    + " clerksClosedUser,"
-                    + " alphaListDate"
-                    + " from REPCase where caseYear = ? "
-                    + " AND caseType = ? "
-                    + " AND caseMonth = ? "
-                    + " AND caseNumber = ?";
-
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, Global.caseYear);
-            preparedStatement.setString(2, Global.caseType);
-            preparedStatement.setString(3, Global.caseMonth);
-            preparedStatement.setString(4, Global.caseNumber);
-
-            ResultSet caseInformation = preparedStatement.executeQuery();
-            
-            if(caseInformation.next()) {
-                rep = new MEDCase();
-//                rep.type = caseInformation.getString("type");
-//                rep.status1 = caseInformation.getString("status1");
-//                rep.status2 = caseInformation.getString("status2");
-//                rep.currentOwnerID = caseInformation.getInt("currentOwnerID");
-//                rep.county = caseInformation.getString("county");
-//                rep.employerIDNumber = caseInformation.getString("employerIDNumber");
-//                rep.deptInState = caseInformation.getString("deptInState");
-//                rep.bargainingUnitNumber = caseInformation.getString("bargainingUnitNumber");
-//                rep.boardCertified = caseInformation.getBoolean("boardCertified");
-//                rep.deemedCertified = caseInformation.getBoolean("deemedCertified");
-//                rep.certificationRevoked = caseInformation.getBoolean("certificationRevoked");
-//                
-//                rep.fileDate = caseInformation.getTimestamp("fileDate");
-//                rep.amendedFiliingDate = caseInformation.getTimestamp("amendedFilingDate");
-//                rep.alphaListDate = caseInformation.getTimestamp("alphaListDate");
-//                rep.finalBoardDate = caseInformation.getTimestamp("finalBoardDate");
-//                rep.registrationLetterSent = caseInformation.getTimestamp("registrationLetterSent");
-//                rep.dateOfAppeal = caseInformation.getTimestamp("dateOfAppeal");
-//                rep.courtClosedDate = caseInformation.getTimestamp("courtClosedDate");
-//                rep.returnSOIDueDate = caseInformation.getTimestamp("returnSOIDueDate");
-//                rep.actualSOIReturnDate = caseInformation.getTimestamp("actualSOIReturnDate");
-//                rep.comments = caseInformation.getString("comments");
-//                rep.REPClosedCaseDueDate = caseInformation.getTimestamp("REPClosedCaseDueDate");
-//                rep.actualREPClosedDate = caseInformation.getTimestamp("actualREPClosedDate");
-//                rep.REPClosedUser = caseInformation.getInt("REPClosedUser");
-//                rep.actualClerksClosedDate= caseInformation.getTimestamp("actualClerksClosedDate");
-//                rep.clerksClosedUser = caseInformation.getInt("clerksClosedUser");
-            }
-        } catch (SQLException ex) {
-//            SlackNotification.sendNotification(ex.getMessage());
-        }
-        return rep;
     }
     
     public static MEDCase loadConciliationInformation() {
@@ -517,31 +466,41 @@ public class MEDCase {
         return med;
     }
     
-    public static MEDCase loadCaseDetails() {
-        MEDCase rep = null;
+    public static MEDCase loadStatusInformation() {
+        MEDCase med = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
-
+            Statement stmt = Database.connectToDB().createStatement();            
+            
             String sql = "Select"
-                    + " type,"
-                    + " fileBy,"
-                    + " bargainingUnitIncluded,"
-                    + " bargainingUnitExcluded,"
-                    + " optInIncluded,"
-                    + " professionalNonProfessional,"
-                    + " professionalIncluded,"
-                    + " professionalExcluded,"
-                    + " nonProfessionalIncluded,"
-                    + " nonProfessionalExcluded,"
-                    + " toReflect,"
-                    + " typeFiledBy,"
-                    + " typeFiledVia,"
-                    + " positionStatementFiledBy,"
-                    + " EEONameChangeFrom,"
-                    + " EEONameChangeTo,"
-                    + " ERNameChangeFrom,"
-                    + " ERNameChangeTo"
-                    + " from REPCase where caseYear = ? "
+                    + " fileDate,"
+                    + " employerIDNumber,"
+                    + " bargainingUnitNumber,"
+                    + " approxNumberOfEmployees,"
+                    + " duplicateCaseNumber,"
+                    + " relatedCaseNumber,"
+                    + " negotiationType,"
+                    + " expirationDate,"
+                    + " NTNFiledBy,"
+                    + " negotiationPeriod,"
+                    + " multiunitBargainingRequested,"
+                    + " mediatorAppointedDate,"
+                    + " mediatorReplacement,"
+                    + " stateMediatorAppointedID,"
+                    + " FMCSMediatorAppointedID,"
+                    + " settlementDate,"
+                    + " caseStatus,"
+                    + " sendToBoardToClose,"
+                    + " boardFinalDate,"
+                    + " retentionTicklerDate,"
+                    + " lateFiling,"
+                    + " impasse,"
+                    + " settled,"
+                    + " TA,"
+                    + " MAD,"
+                    + " withdrawl,"
+                    + " motion,"
+                    + " dismissed"
+                    + " from MEDCase where caseYear = ? "
                     + " AND caseType = ? "
                     + " AND caseMonth = ? "
                     + " AND caseNumber = ?";
@@ -555,68 +514,41 @@ public class MEDCase {
             ResultSet caseInformation = preparedStatement.executeQuery();
             
             if(caseInformation.next()) {
-                rep = new MEDCase();
-//                rep.type = caseInformation.getString("type");
-//                rep.fileBy = caseInformation.getString("fileBy");
-//                rep.bargainingUnitIncluded = caseInformation.getString("bargainingUnitIncluded");
-//                rep.bargainingUnitExcluded = caseInformation.getString("bargainingUnitExcluded");
-//                rep.optInIncluded = caseInformation.getString("optInIncluded");
-//                rep.professionalNonProfessional = caseInformation.getBoolean("professionalNonProfessional");
-//                rep.professionalIncluded = caseInformation.getString("professionalIncluded");
-//                rep.professionalExcluded = caseInformation.getString("professionalExcluded");
-//                rep.nonProfessionalIncluded = caseInformation.getString("nonProfessionalIncluded");
-//                rep.nonProfessionalExcluded = caseInformation.getString("nonProfessionalExcluded");
-//                rep.toReflect = caseInformation.getString("toReflect");
-//                rep.typeFiledBy = caseInformation.getString("typeFiledBy");
-//                rep.typeFiledVia = caseInformation.getString("typeFiledVia");
-//                rep.positionStatementFiledBy = caseInformation.getString("positionStatementFiledBy");
-//                rep.EEONameChangeFrom = caseInformation.getString("EEONameChangeFrom");
-//                rep.EEONameChangeTo = caseInformation.getString("EEONameChangeTo");
-//                rep.ERNameChangeFrom = caseInformation.getString("ERNameChangeFrom");
-//                rep.ERNameChangeTo = caseInformation.getString("ERNameChangeTo");
+                med = new MEDCase();
+                med.fileDate = caseInformation.getTimestamp("fileDate");
+                med.employerIDNumber = caseInformation.getString("employerIDNumber");
+                med.bargainingUnitNumber = caseInformation.getString("bargainingUnitNumber");
+                med.approxNumberOfEmployees = caseInformation.getString("approxNumberOfEmployees");
+                med.duplicateCaseNumber = caseInformation.getString("duplicateCaseNumber");
+                med.relatedCaseNumber = caseInformation.getString("relatedCaseNumber");
+                med.negotiationType = caseInformation.getString("negotiationType");
+                med.expirationDate = caseInformation.getTimestamp("expirationDate");
+                med.NTNFiledBy = caseInformation.getString("NTNFiledBy");
+                med.negotiationPeriod = caseInformation.getString("negotiationPeriod");
+                med.multiunitBargainingRequested = caseInformation.getBoolean("multiunitBargainingRequested");
+                med.mediatorAppointedDate = caseInformation.getTimestamp("mediatorAppointedDate");
+                med.mediatorReplacement = caseInformation.getBoolean("mediatorReplacement");
+                med.stateMediatorAppointedID = caseInformation.getString("stateMediatorAppointedID");
+                med.FMCSMediatorAppointedID = caseInformation.getString("FMCSMediatorAppointedID");
+                med.settlementDate = caseInformation.getTimestamp("settlementDate");
+                med.caseStatus = caseInformation.getString("caseStatus");
+                med.sendToBoardToClose = caseInformation.getBoolean("sendToBoardToClose");
+                med.boardFinalDate = caseInformation.getTimestamp("boardFinalDate");
+                med.retentionTicklerDate = caseInformation.getTimestamp("retentionTicklerDate");
+                med.lateFiling = caseInformation.getBoolean("lateFiling");
+                med.impasse = caseInformation.getBoolean("impasse");
+                med.settled = caseInformation.getBoolean("settled");
+                med.TA = caseInformation.getBoolean("TA");
+                med.MAD = caseInformation.getBoolean("MAD");
+                med.withdrawl = caseInformation.getBoolean("withdrawl");
+                med.motion = caseInformation.getBoolean("motion");
+                med.dismissed = caseInformation.getBoolean("dismissed");
+                
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex.getMessage());
         }
-        return rep;
-    }
-    
-    public static MEDCase loadBoardStatus() {
-        MEDCase rep = null;
-        try {
-            Statement stmt = Database.connectToDB().createStatement();
-
-            String sql = "Select"
-                    + " boardActionType,"
-                    + " boardActionDate,"
-                    + " hearingPersonID,"
-                    + " boardStatusNote,"
-                    + " boardStatusBlurb"
-                    + " from REPCase where caseYear = ? "
-                    + " AND caseType = ? "
-                    + " AND caseMonth = ? "
-                    + " AND caseNumber = ?";
-
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, Global.caseYear);
-            preparedStatement.setString(2, Global.caseType);
-            preparedStatement.setString(3, Global.caseMonth);
-            preparedStatement.setString(4, Global.caseNumber);
-
-            ResultSet caseInformation = preparedStatement.executeQuery();
-            
-            if(caseInformation.next()) {
-                rep = new MEDCase();
-//                rep.boardActionType = caseInformation.getString("boardActionType");
-//                rep.boardActionDate = caseInformation.getTimestamp("boardActionDate");
-//                rep.hearingPersonID = caseInformation.getInt("hearingPersonID");
-//                rep.boardStatusNote = caseInformation.getString("boardStatusNote");
-//                rep.boardStatusBlurb = caseInformation.getString("boardStatusBlurb");
-            }
-        } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
-        }
-        return rep;
+        return med;
     }
     
     public static void saveConciliationList1(DefaultListModel concilList1Model) {
@@ -907,43 +839,6 @@ public class MEDCase {
         }
     }
     
-    public static void updateBoardStatus(MEDCase newCaseInformation, MEDCase caseInformation) {
-//        MEDCase rep = null;
-//        try {
-//            Statement stmt = Database.connectToDB().createStatement();
-//
-//            String sql = "Update REPCase set"
-//                    + " boardActionType = ?,"
-//                    + " boardActionDate = ?,"
-//                    + " hearingPersonID = ?,"
-//                    + " boardStatusNote = ?,"
-//                    + " boardStatusBlurb = ?"
-//                    + " from REPCase where caseYear = ? "
-//                    + " AND caseType = ? "
-//                    + " AND caseMonth = ? "
-//                    + " AND caseNumber = ?";
-//
-//            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-//            preparedStatement.setString(1, newCaseInformation.boardActionType);
-//            preparedStatement.setTimestamp(2, newCaseInformation.boardActionDate);
-//            preparedStatement.setInt(3, newCaseInformation.hearingPersonID);
-//            preparedStatement.setString(4, newCaseInformation.boardStatusNote);
-//            preparedStatement.setString(5, newCaseInformation.boardStatusBlurb);
-//            preparedStatement.setString(6, Global.caseYear);
-//            preparedStatement.setString(7, Global.caseType);
-//            preparedStatement.setString(8, Global.caseMonth);
-//            preparedStatement.setString(9, Global.caseNumber);
-//
-//            int success = preparedStatement.executeUpdate();
-//            
-//            if(success == 1) {
-//                detailedBoardStatusDetailsSaveInformation(newCaseInformation, caseInformation);
-//            }
-//        } catch (SQLException ex) {
-//            SlackNotification.sendNotification(ex.getMessage());
-//        }
-    }
-    
     public static void updateConciliation(MEDCase newCaseInformation, MEDCase caseInformation) {
         MEDCase med = null;
         try {
@@ -985,6 +880,89 @@ public class MEDCase {
             
             if(success == 1) {
                 detailedConciliationDetailSaveInformation(newCaseInformation, caseInformation);
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex.getMessage());
+        }
+    }
+    
+    public static void updateStatusInformation(MEDCase newCaseInformation, MEDCase caseInformation) {
+        MEDCase med = null;
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+//
+            String sql = "Update MEDCase set"
+                    + " fileDate = ?,"
+                    + " employerIDNumber = ?,"
+                    + " bargainingUnitNumber = ?,"
+                    + " approxNumberOfEmployees = ?,"
+                    + " duplicateCaseNumber = ?,"
+                    + " relatedCaseNumber = ?,"
+                    + " negotiationType = ?,"
+                    + " expirationDate = ?,"
+                    + " NTNFiledBy = ?,"
+                    + " negotiationPeriod = ?,"
+                    + " multiunitBargainingRequested = ?,"
+                    + " mediatorAppointedDate = ?,"
+                    + " mediatorReplacement = ?,"
+                    + " stateMediatorAppointedID = ?,"
+                    + " FMCSMediatorAppointedID = ?,"
+                    + " settlementDate = ?,"
+                    + " caseStatus = ?,"
+                    + " sendToBoardToClose = ?,"
+                    + " boardFinalDate = ?,"
+                    + " retentionTicklerDate = ?,"
+                    + " lateFiling = ?,"
+                    + " impasse = ?,"
+                    + " settled = ?,"
+                    + " TA = ?,"
+                    + " MAD = ?,"
+                    + " withdrawl = ?,"
+                    + " motion = ?,"
+                    + " dismissed = ?"
+                    + " where caseYear = ? "
+                    + " AND caseType = ? "
+                    + " AND caseMonth = ? "
+                    + " AND caseNumber = ?";
+//
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setTimestamp(1, newCaseInformation.fileDate);
+            preparedStatement.setString(2, newCaseInformation.employerIDNumber);
+            preparedStatement.setString(3, newCaseInformation.bargainingUnitNumber);
+            preparedStatement.setString(4, newCaseInformation.approxNumberOfEmployees);
+            preparedStatement.setString(5, newCaseInformation.duplicateCaseNumber);
+            preparedStatement.setString(6, newCaseInformation.relatedCaseNumber);
+            preparedStatement.setString(7, newCaseInformation.negotiationType);
+            preparedStatement.setTimestamp(8, newCaseInformation.expirationDate);
+            preparedStatement.setString(9, newCaseInformation.NTNFiledBy);
+            preparedStatement.setString(10, newCaseInformation.negotiationPeriod);
+            preparedStatement.setBoolean(11, newCaseInformation.multiunitBargainingRequested);
+            preparedStatement.setTimestamp(12, newCaseInformation.mediatorAppointedDate);
+            preparedStatement.setBoolean(13, newCaseInformation.mediatorReplacement);
+            preparedStatement.setString(14, newCaseInformation.stateMediatorAppointedID);
+            preparedStatement.setString(15, newCaseInformation.FMCSMediatorAppointedID);
+            preparedStatement.setTimestamp(16, newCaseInformation.settlementDate);
+            preparedStatement.setString(17, newCaseInformation.caseStatus);
+            preparedStatement.setBoolean(18, newCaseInformation.sendToBoardToClose);
+            preparedStatement.setTimestamp(19, newCaseInformation.boardFinalDate);
+            preparedStatement.setTimestamp(20, newCaseInformation.retentionTicklerDate);
+            preparedStatement.setBoolean(21, newCaseInformation.lateFiling);
+            preparedStatement.setBoolean(22, newCaseInformation.impasse);
+            preparedStatement.setBoolean(23, newCaseInformation.settled);
+            preparedStatement.setBoolean(24, newCaseInformation.TA);
+            preparedStatement.setBoolean(25, newCaseInformation.MAD);
+            preparedStatement.setBoolean(26, newCaseInformation.withdrawl);
+            preparedStatement.setBoolean(27, newCaseInformation.motion);
+            preparedStatement.setBoolean(28, newCaseInformation.dismissed);
+            preparedStatement.setString(29, Global.caseYear);
+            preparedStatement.setString(30, Global.caseType);
+            preparedStatement.setString(31, Global.caseMonth);
+            preparedStatement.setString(32, Global.caseNumber);
+
+            int success = preparedStatement.executeUpdate();
+            
+            if(success == 1) {
+//                detailedStatusSaveInformation(newCaseInformation, caseInformation);
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex.getMessage());
@@ -1058,66 +1036,7 @@ public class MEDCase {
         }
     }
     
-    public static void updateCaseDetails(MEDCase newCaseInformation, MEDCase caseInformation) {
-        MEDCase rep = null;
-        try {
-            Statement stmt = Database.connectToDB().createStatement();
-
-            String sql = "Update REPCase set"
-                    + " fileBy = ?,"
-                    + " bargainingUnitIncluded = ?,"
-                    + " bargainingUnitExcluded = ?,"
-                    + " optInIncluded = ?,"
-                    + " professionalNonProfessional = ?,"
-                    + " professionalIncluded = ?,"
-                    + " professionalExcluded = ?,"
-                    + " nonProfessionalIncluded = ?,"
-                    + " nonProfessionalExcluded = ?,"
-                    + " toReflect = ?,"
-                    + " typeFiledBy = ?,"
-                    + " typeFiledVia = ? ,"
-                    + " positionStatementFiledBy = ?,"
-                    + " EEONameChangeFrom = ?,"
-                    + " EEONameChangeTo = ?,"
-                    + " ERNameChangeFrom = ?,"
-                    + " ERNameChangeTo = ?"
-                    + " from REPCase where caseYear = ? "
-                    + " AND caseType = ? "
-                    + " AND caseMonth = ? "
-                    + " AND caseNumber = ?";
-
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-//            preparedStatement.setString(1, newCaseInformation.fileBy);
-//            preparedStatement.setString(2, newCaseInformation.bargainingUnitIncluded);
-//            preparedStatement.setString(3, newCaseInformation.bargainingUnitExcluded);
-//            preparedStatement.setString(4, newCaseInformation.optInIncluded);
-//            preparedStatement.setBoolean(5, newCaseInformation.professionalNonProfessional);
-//            preparedStatement.setString(6, newCaseInformation.professionalIncluded);
-//            preparedStatement.setString(7, newCaseInformation.professionalExcluded);
-//            preparedStatement.setString(8, newCaseInformation.nonProfessionalIncluded);
-//            preparedStatement.setString(9, newCaseInformation.nonProfessionalExcluded);
-//            preparedStatement.setString(10, newCaseInformation.toReflect);
-//            preparedStatement.setString(11, newCaseInformation.typeFiledBy);
-//            preparedStatement.setString(12, newCaseInformation.typeFiledVia);
-//            preparedStatement.setString(13, newCaseInformation.positionStatementFiledBy);
-//            preparedStatement.setString(14, newCaseInformation.EEONameChangeFrom);
-//            preparedStatement.setString(15, newCaseInformation.EEONameChangeTo);
-//            preparedStatement.setString(16, newCaseInformation.ERNameChangeFrom);
-//            preparedStatement.setString(17, newCaseInformation.ERNameChangeTo);
-            preparedStatement.setString(18, Global.caseYear);
-            preparedStatement.setString(19, Global.caseType);
-            preparedStatement.setString(20, Global.caseMonth);
-            preparedStatement.setString(21, Global.caseNumber);
-
-            int success = preparedStatement.executeUpdate();
-            
-            if(success == 1) {
-//                detailedCaseDetailsSaveInformation(newCaseInformation, caseInformation);
-            }
-        } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
-        }
-    }
+    
     
     /**
      * Creates a duplicate case, copying all case information, excluding activity,
@@ -1150,88 +1069,6 @@ public class MEDCase {
 //            SlackNotification.sendNotification(ex.getMessage());
 //        }
 //    }
-    
-    public static void updateCaseInformation(MEDCase newCaseInformation, MEDCase caseInformation) {
-        try {
-            Statement stmt = Database.connectToDB().createStatement();
-
-             String sql = "Update REPCase set"
-                    + " type = ?,"
-                    + " status1 = ?,"
-                    + " status2 = ?,"
-                    + " currentOwnerID = ?,"
-                    + " county = ?,"
-                    + " employerIDNumber = ?,"
-                    + " deptInState = ?,"
-                    + " bargainingUnitNumber = ?,"
-                    + " boardCertified = ?,"
-                    + " deemedCertified = ?,"
-                    + " certificationRevoked = ?,"
-                    + " fileDate = ?,"
-                    + " amendedFilingDate = ?,"
-                    + " finalBoardDate = ?,"
-                    + " registrationLetterSent = ?,"
-                    + " dateOfAppeal = ?,"
-                    + " courtClosedDate = ?,"
-                    + " returnSOIDueDate = ?,"
-                    + " actualSOIReturnDate = ?,"
-                    + " comments = ?,"
-                    + " REPClosedCaseDueDate = ?,"
-                    + " ActualREPClosedDate = ?,"
-                    + " REPClosedUser = ?,"
-                    + " ActualClerksClosedDate = ?,"
-                    + " ClerksClosedUser = ?,"
-                    + " alphaListDate = ?"
-                    + " where caseYear = ?"
-                    + " AND caseType = ?"
-                    + " AND caseMonth = ? "
-                    + " AND caseNumber = ?";
-
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-//            preparedStatement.setString(1, newCaseInformation.type);
-//            preparedStatement.setString(2, newCaseInformation.status1);
-//            preparedStatement.setString(3, newCaseInformation.status2);
-//            preparedStatement.setInt(4, newCaseInformation.currentOwnerID);
-//            preparedStatement.setString(5, newCaseInformation.county);
-//            preparedStatement.setString(6, newCaseInformation.employerIDNumber);
-//            preparedStatement.setString(7, newCaseInformation.deptInState);
-//            preparedStatement.setString(8, newCaseInformation.bargainingUnitNumber);
-//            preparedStatement.setBoolean(9, newCaseInformation.boardCertified);
-//            preparedStatement.setBoolean(10, newCaseInformation.deemedCertified);
-//            preparedStatement.setBoolean(11, newCaseInformation.certificationRevoked);
-//            preparedStatement.setTimestamp(12, newCaseInformation.fileDate);
-//            preparedStatement.setTimestamp(13, newCaseInformation.amendedFiliingDate);
-//            preparedStatement.setTimestamp(14, newCaseInformation.finalBoardDate);
-//            preparedStatement.setTimestamp(15, newCaseInformation.registrationLetterSent);
-//            preparedStatement.setTimestamp(16, newCaseInformation.dateOfAppeal);
-//            preparedStatement.setTimestamp(17, newCaseInformation.courtClosedDate);
-//            preparedStatement.setTimestamp(18, newCaseInformation.returnSOIDueDate);
-//            preparedStatement.setTimestamp(19, newCaseInformation.actualSOIReturnDate);
-//            preparedStatement.setString(20, newCaseInformation.comments);
-//            preparedStatement.setTimestamp(21, newCaseInformation.REPClosedCaseDueDate);
-//            preparedStatement.setTimestamp(22, newCaseInformation.actualREPClosedDate);
-//            preparedStatement.setInt(23, newCaseInformation.REPClosedUser);
-//            preparedStatement.setTimestamp(24, newCaseInformation.actualClerksClosedDate);
-//            preparedStatement.setInt(25, newCaseInformation.clerksClosedUser);
-//            preparedStatement.setTimestamp(26, newCaseInformation.alphaListDate);
-            preparedStatement.setString(27, Global.caseYear);
-            preparedStatement.setString(28, Global.caseType);
-            preparedStatement.setString(29, Global.caseMonth);
-            preparedStatement.setString(30, Global.caseNumber);
-
-            int success = preparedStatement.executeUpdate();
-            
-            if(success == 1) {
-//                detailedCaseInformationSaveInformation(newCaseInformation, caseInformation);
-//                REPCaseSearchData.updateCaseEntryFromCaseInformation(
-//                        newCaseInformation.bargainingUnitNumber,
-//                        newCaseInformation.county,
-//                        getCertificationText(newCaseInformation));
-            } 
-        } catch (SQLException ex) {
-//            SlackNotification.sendNotification(ex.getMessage());
-        }
-    }
     
 //    private static String getCertificationText(MEDCase newCase) {
 //        if(newCase.boardCertified) {
