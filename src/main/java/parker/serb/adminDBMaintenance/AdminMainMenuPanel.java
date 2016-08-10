@@ -80,7 +80,6 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
         });
 
         PartyButton.setText("Party Info");
-        PartyButton.setEnabled(false);
         PartyButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 PartyButtonActionPerformed(evt);
@@ -320,7 +319,7 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
     }//GEN-LAST:event_MediatorsButtonActionPerformed
 
     private void PartyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PartyButtonActionPerformed
-        // TODO add your handling code here:
+        new PartySearchDialog(Global.root, true);
     }//GEN-LAST:event_PartyButtonActionPerformed
 
     private void SystemSERBButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SystemSERBButtonActionPerformed

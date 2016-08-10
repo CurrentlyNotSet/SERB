@@ -24,6 +24,7 @@ import parker.serb.Global;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.NamePrefix;
 import parker.serb.sql.Party;
+import parker.serb.sql.PartyType;
 import parker.serb.util.CancelUpdate;
 
 //TODO: Allow for a party to be updated from this panel
@@ -33,7 +34,7 @@ import parker.serb.util.CancelUpdate;
  *
  * @author parker
  */
-public class ViewUpdatePartyPanel extends javax.swing.JDialog {
+public class ViewUpdateCasePartyPanel extends javax.swing.JDialog {
 
     String id;
     /**
@@ -42,10 +43,11 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
      * @param modal
      * @param passedId
      */
-    public ViewUpdatePartyPanel(java.awt.Frame parent, boolean modal, String passedId) {
+    public ViewUpdateCasePartyPanel(java.awt.Frame parent, boolean modal, String passedId) {
         super(parent, modal);
         initComponents();
         addListeners();
+        loadPartyTypeComboBox();
         loadPrefixComboBox();
         loadStateComboBox();
         id = passedId;
@@ -84,7 +86,7 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
                         desktop = Desktop.getDesktop();
                         desktop.mail(mailURI);
                     } catch (URISyntaxException | IOException ex) {
-                        Logger.getLogger(ViewUpdatePartyPanel.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(ViewUpdateCasePartyPanel.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }
@@ -110,7 +112,17 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
             stateComboBox.addItem(state);
         }
     }
+    
+    private void loadPartyTypeComboBox() {
+        List<String> partyList = PartyType.loadAllPartyTypesBySection();
         
+        partyTypeComboBox.removeAllItems();
+        
+        for (String type : partyList) {
+            partyTypeComboBox.addItem(type);
+        }
+    }
+    
     private void loadPrefixComboBox() {
         List<String> prefixList = NamePrefix.loadActivePrefix();
         
@@ -124,8 +136,9 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
     
     
     private void loadInformation(String id) {
-        Party partyInformation = Party.getPartyByID(String.valueOf(id));
+        CaseParty partyInformation = CaseParty.getCasePartyByID(id);
         
+        partyTypeComboBox.setSelectedItem(partyInformation.caseRelation);
         prefixComboBox.setSelectedItem(partyInformation.prefix);
         firstNameTextBox.setText(partyInformation.firstName);
         middleInitialTextBox.setText(partyInformation.middleInitial);
@@ -139,7 +152,7 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
         address3TextBox.setText(partyInformation.address3);
         cityTextBox.setText(partyInformation.city);
         stateComboBox.setSelectedItem(partyInformation.stateCode);
-        zipCodeTextBox.setText(partyInformation.zipCode);
+        zipCodeTextBox.setText(partyInformation.zipcode);
         phoneNumberTextBox.setText(partyInformation.phone1);
         phone2NumberTextBox.setText(partyInformation.phone2);
         emailAddressTextBox.setText(partyInformation.emailAddress);
@@ -148,6 +161,7 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
     private void enableAll() {
         jButton2.setText("Save");
         jButton1.setText("Cancel");
+        partyTypeComboBox.setEnabled(true);
         prefixComboBox.setEnabled(true);
         firstNameTextBox.setEnabled(true);
         firstNameTextBox.setBackground(Color.WHITE);
@@ -185,6 +199,7 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
     private void disableAll() {
         jButton2.setText("Update");
         jButton1.setText("Close");
+        partyTypeComboBox.setEnabled(false);
         prefixComboBox.setEnabled(false);
         firstNameTextBox.setEnabled(false);
         firstNameTextBox.setBackground(new Color(238,238,238));
@@ -222,6 +237,7 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
     private void updatePartyInformation() {
         CaseParty updateParty = new CaseParty();
         
+        updateParty.caseRelation = partyTypeComboBox.getSelectedItem().toString();
         updateParty.prefix = prefixComboBox.getSelectedItem() == null ? "" : prefixComboBox.getSelectedItem().toString().trim();
         updateParty.firstName = firstNameTextBox.getText().trim();
         updateParty.middleInitial = middleInitialTextBox.getText().trim();
@@ -241,7 +257,7 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
 
         updateParty.emailAddress = emailAddressTextBox.getText().trim();
         
-        Party.updateParty(updateParty, Integer.valueOf(id));
+        CaseParty.updateParty(updateParty, id);
     }
 
     /**
@@ -286,6 +302,8 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
         jobTitleTextBox = new javax.swing.JTextField();
         phone2NumberTextBox = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        partyTypeComboBox = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -388,6 +406,10 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
 
         jLabel14.setText("Phone 2:");
 
+        jLabel15.setText("Party Type:");
+
+        partyTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -412,7 +434,8 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
                             .addComponent(jLabel10)
                             .addComponent(jLabel13)
                             .addComponent(jLabel9)
-                            .addComponent(jLabel14))
+                            .addComponent(jLabel14)
+                            .addComponent(jLabel15))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(phone2NumberTextBox)
@@ -443,7 +466,8 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel12)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(zipCodeTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(zipCodeTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(partyTypeComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -452,6 +476,12 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(partyTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(4, 4, 4)
+                        .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(firstNameTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(middleInitialTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -553,6 +583,7 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -565,6 +596,7 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
     private javax.swing.JTextField lastNameTextBox;
     private javax.swing.JTextField middleInitialTextBox;
     private javax.swing.JTextField nameTitleTextBox;
+    private javax.swing.JComboBox<String> partyTypeComboBox;
     private javax.swing.JTextField phone2NumberTextBox;
     private javax.swing.JTextField phoneNumberTextBox;
     private javax.swing.JComboBox<String> prefixComboBox;
