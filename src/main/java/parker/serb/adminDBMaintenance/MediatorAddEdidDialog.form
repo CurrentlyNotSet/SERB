@@ -33,71 +33,39 @@
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel4" linkSize="1" min="-2" pref="75" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="MiddleNameTextField" max="32767" attributes="1"/>
+                              <Component id="MiddleNameTextField" pref="300" max="32767" attributes="1"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel2" linkSize="1" min="-2" pref="75" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="FirstNameTextField" max="32767" attributes="1"/>
+                              <Component id="FirstNameTextField" pref="300" max="32767" attributes="1"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel7" linkSize="1" min="-2" pref="75" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="EmailTextBox" max="32767" attributes="0"/>
+                              <Component id="EmailTextBox" pref="300" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel9" linkSize="1" min="-2" pref="75" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="StatusComboBox" max="32767" attributes="0"/>
+                              <Component id="TypeComboBox" pref="300" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jLabel11" linkSize="1" alignment="0" min="-2" pref="75" max="-2" attributes="0"/>
-                                  <Component id="jLabel3" linkSize="1" alignment="0" min="-2" pref="75" max="-2" attributes="0"/>
-                              </Group>
+                              <Component id="jLabel11" linkSize="1" min="-2" pref="75" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="Address1TextBox" max="32767" attributes="1"/>
-                                  <Component id="LastNameTextField" max="32767" attributes="1"/>
-                              </Group>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="jLabel10" linkSize="1" min="-2" pref="75" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="Address2TextBox" max="32767" attributes="0"/>
+                              <Component id="LastNameTextField" pref="300" max="32767" attributes="1"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel8" linkSize="1" min="-2" pref="75" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="PhoneTextBox" max="32767" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jLabel5" linkSize="1" pref="75" max="32767" attributes="0"/>
-                                  <Component id="jLabel14" linkSize="1" pref="75" max="32767" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="cityTextBox" pref="174" max="32767" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jLabel13" min="-2" pref="38" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="stateComboBox" min="-2" pref="67" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jLabel12" min="-2" pref="27" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="zipCodeTextBox" min="-2" pref="67" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Component id="Address3TextBox" max="32767" attributes="0"/>
-                              </Group>
+                              <Component id="PhoneTextBox" pref="300" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="editButton" min="-2" pref="100" max="-2" attributes="0"/>
-                      <EmptySpace pref="319" max="32767" attributes="0"/>
+                      <EmptySpace pref="247" max="32767" attributes="0"/>
                       <Component id="closeButton" min="-2" pref="100" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -113,7 +81,7 @@
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel9" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="StatusComboBox" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="TypeComboBox" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -132,30 +100,6 @@
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jLabel3" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="Address1TextBox" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jLabel10" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="Address2TextBox" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jLabel5" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="Address3TextBox" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jLabel14" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="cityTextBox" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel13" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="stateComboBox" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel12" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="zipCodeTextBox" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="EmailTextBox" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel7" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
@@ -164,7 +108,7 @@
                   <Component id="PhoneTextBox" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel8" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="40" max="32767" attributes="0"/>
+              <EmptySpace pref="57" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="closeButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="editButton" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -227,60 +171,23 @@
         <Property name="text" type="java.lang.String" value="Email:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JComboBox" name="StatusComboBox">
+    <Component class="javax.swing.JComboBox" name="TypeComboBox">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="4">
-            <StringItem index="0" value=""/>
-            <StringItem index="1" value="Fact Finder"/>
-            <StringItem index="2" value="Conciliator &amp; Fact Finder"/>
-            <StringItem index="3" value="Off the list / Unavailable"/>
+          <StringArray count="3">
+            <StringItem index="0" value=" "/>
+            <StringItem index="1" value="FMCS"/>
+            <StringItem index="2" value="State"/>
           </StringArray>
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="StatusComboBoxActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="TypeComboBoxActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel9">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Status:"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="Address3TextBox">
-      <Properties>
-        <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="0" green="0" red="0" type="rgb"/>
-        </Property>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="jLabel5">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Address 3:"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="Address2TextBox">
-      <Properties>
-        <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="0" green="0" red="0" type="rgb"/>
-        </Property>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="jLabel10">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Address 2:"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="Address1TextBox">
-      <Properties>
-        <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="0" green="0" red="0" type="rgb"/>
-        </Property>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="jLabel3">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Address 1:"/>
+        <Property name="text" type="java.lang.String" value="Type:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
@@ -323,34 +230,6 @@
         <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="0" green="0" red="0" type="rgb"/>
         </Property>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="zipCodeTextBox">
-    </Component>
-    <Component class="javax.swing.JLabel" name="jLabel12">
-      <Properties>
-        <Property name="horizontalAlignment" type="int" value="11"/>
-        <Property name="text" type="java.lang.String" value="Zip:"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JComboBox" name="stateComboBox">
-      <Properties>
-        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="0"/>
-        </Property>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="jLabel13">
-      <Properties>
-        <Property name="horizontalAlignment" type="int" value="11"/>
-        <Property name="text" type="java.lang.String" value="State:"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="cityTextBox">
-    </Component>
-    <Component class="javax.swing.JLabel" name="jLabel14">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="City:"/>
       </Properties>
     </Component>
   </SubComponents>

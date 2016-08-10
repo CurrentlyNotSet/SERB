@@ -69,4 +69,42 @@ public class AdministrationInformation {
         }
         return exec;
     }
+    
+    public static void updateAdministrationInformation(AdministrationInformation item) {
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "UPDATE AdministrationInformation SET "
+                    + "governorName = ?, "  //01
+                    + "LtGovernorName = ?, "//02
+                    + "address1 = ?, "      //03
+                    + "address2 = ?, "      //04
+                    + "city = ?, "          //05
+                    + "state = ?, "         //06
+                    + "zip = ?, "           //07
+                    + "url = ?, "           //08
+                    + "phone = ?, "         //09
+                    + "Fax = ?, "           //10
+                    + "Footer = ? "         //11
+                    + "where id = ?";       //12
+
+            PreparedStatement ps = stmt.getConnection().prepareStatement(sql);
+            ps.setString(1, item.governorName.equals("") ? null : item.governorName);
+            ps.setString(2, item.LtGovernorName.equals("") ? null : item.LtGovernorName);
+            ps.setString(3, item.Address1.equals("") ? null : item.Address1);
+            ps.setString(4, item.Address2.equals("") ? null : item.Address2);
+            ps.setString(5, item.City.equals("") ? null : item.City);
+            ps.setString(6, item.State.equals("") ? null : item.State);
+            ps.setString(7, item.Zip.equals("") ? null : item.Zip);
+            ps.setString(8, item.Url.equals("") ? null : item.Url);
+            ps.setString(9, item.Phone.equals("") ? null : NumberFormatService.convertPhoneNumberToString(item.Phone));
+            ps.setString(10, item.Fax.equals("") ? null : NumberFormatService.convertPhoneNumberToString(item.Fax));
+            ps.setString(11, item.Footer.equals("") ? null : item.Footer);
+            ps.setInt   (12, item.id);
+
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
