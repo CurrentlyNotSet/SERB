@@ -291,8 +291,10 @@ public class PartySearchDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_SearchTableMouseClicked
 
     private void EditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditButtonActionPerformed
-        new ViewUpdatePartyPanel((JFrame) Global.root.getParent(), true, getID());
-        loadAndSearch();
+        ViewUpdatePartyPanel party = new ViewUpdatePartyPanel((JFrame) Global.root.getParent(), true, getID());
+        if (party.updateStatus == 1){
+            loadAndSearch();
+        }
     }//GEN-LAST:event_EditButtonActionPerformed
 
     private void searchTextBoxCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_searchTextBoxCaretUpdate
