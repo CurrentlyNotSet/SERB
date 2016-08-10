@@ -38,6 +38,31 @@ public class BargainingUnit {
     public String caseRefMonth;
     public String caseRefSequence;
     public String unitDescription;
+    
+    public static String getCertStatus(String number) {
+        String[] buNumberParts = number.split("-");
+        String certStatus = "";
+            
+        try {
+
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "select cert from BarginingUnit where EmployerNumber = ? and UnitNumber = ?";
+                    
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, buNumberParts[0]);
+            preparedStatement.setString(2, buNumberParts[1]);
+
+            ResultSet caseActivity = preparedStatement.executeQuery();
+            
+            while(caseActivity.next()) {
+                certStatus = caseActivity.getString("cert");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return certStatus;
+    }
 
     public static List loadBUList() {
         List<BargainingUnit> employerList = new ArrayList<BargainingUnit>();
