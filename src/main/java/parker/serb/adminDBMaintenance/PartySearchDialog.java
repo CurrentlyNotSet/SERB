@@ -12,18 +12,20 @@ import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
 import parker.serb.sql.ActiveStatus;
 import parker.serb.sql.Party;
+import parker.serb.util.StringUtilities;
 
 //TODO: Check that a party is not already in the DB
-
 /**
  *
  * @author parker
  */
 public class PartySearchDialog extends javax.swing.JDialog {
 
-    List parties;
+    List<Party> parties;
+
     /**
      * Creates new form PartySearchDialog
+     *
      * @param parent
      * @param modal
      */
@@ -35,116 +37,109 @@ public class PartySearchDialog extends javax.swing.JDialog {
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }
-    
+
     private void setTableColumnWidths() {
         //ID
         SearchTable.getColumnModel().getColumn(0).setPreferredWidth(0);
         SearchTable.getColumnModel().getColumn(0).setMinWidth(0);
         SearchTable.getColumnModel().getColumn(0).setMaxWidth(0);
-        
+
         //Active
         SearchTable.getColumnModel().getColumn(1).setPreferredWidth(60);
         SearchTable.getColumnModel().getColumn(1).setMinWidth(60);
         SearchTable.getColumnModel().getColumn(1).setMaxWidth(60);
-        
+
         //Name
         SearchTable.getColumnModel().getColumn(2).setPreferredWidth(200);
         SearchTable.getColumnModel().getColumn(2).setMinWidth(200);
         SearchTable.getColumnModel().getColumn(2).setMaxWidth(200);
-        
+
         //Phone
         SearchTable.getColumnModel().getColumn(6).setPreferredWidth(125);
         SearchTable.getColumnModel().getColumn(6).setMinWidth(125);
         SearchTable.getColumnModel().getColumn(6).setMaxWidth(125);
     }
-    
+
     private String getID() {
         return SearchTable.getValueAt(SearchTable.getSelectedRow(), SearchTable.getColumn("ID").getModelIndex()).toString();
     }
-    
+
     private void loadAndSearch() {
-    Thread temp = new Thread(() -> {
+        Thread temp = new Thread(() -> {
             DefaultTableModel model = (DefaultTableModel) SearchTable.getModel();
             model.setRowCount(0);
-
             parties = Party.loadAllParties();
             searchParties();
         });
         temp.start();
     }
-    
+
     private void loadParties() {
-    Thread temp = new Thread(() -> {
+        Thread temp = new Thread(() -> {
             parties = Party.loadAllParties();
         });
         temp.start();
     }
-    
+
     private void searchParties() {
-    
         DefaultTableModel model = (DefaultTableModel) SearchTable.getModel();
         model.setRowCount(0);
-        
-        for(Object party: parties) {
-            Party partyInformation = (Party) party;
-            
-            if(searchlimiter(partyInformation))
-            model.addRow(new Object[] {
-                partyInformation.id,
-                partyInformation.active,
-               (partyInformation.prefix.equals("") ? "" : (partyInformation.prefix + " "))
-                        + (partyInformation.firstName.equals("") ? "" : (partyInformation.firstName + " "))
-                        + (partyInformation.middleInitial.equals("") ? "" : (partyInformation.middleInitial + ". "))
-                        + (partyInformation.lastName.equals("") ? "" : (partyInformation.lastName))
-                        + (partyInformation.suffix.equals("") ? "" : (" " + partyInformation.suffix))
-                        + (partyInformation.nameTitle.equals("") ? "" : (", " + partyInformation.nameTitle)),
-                partyInformation.companyName,
-                partyInformation.address1
-                        + (partyInformation.address2.equals("") ? "" : (", " + partyInformation.address2))
-                        + (partyInformation.address3.equals("") ? "" : (", " + partyInformation.address3))
-                        + (partyInformation.city.equals("") ? "" : (", " + partyInformation.city))
-                        + (partyInformation.stateCode.equals("") ? "" : (", " + partyInformation.stateCode))
-                        + (partyInformation.zipCode.equals("") ? "" : (", " + partyInformation.zipCode)),
-                partyInformation.emailAddress,
-                partyInformation.phone1});
+
+        for (Party party : parties) {
+            Party partyInfo = party;
+
+            if (searchlimiter(partyInfo)) {
+                model.addRow(
+                        new Object[]{
+                            partyInfo.id,
+                            partyInfo.active,
+                            StringUtilities.buildFullNameWithTitles(partyInfo),
+                            partyInfo.companyName,
+                            StringUtilities.buildAddressBlock(partyInfo),
+                            partyInfo.emailAddress,
+                            partyInfo.phone1
+                        }
+                );
+            }
         }
     }
 
-    private boolean searchlimiter(Party partyInformation){
-        return partyInformation.firstName.toLowerCase().contains(searchTextBox.getText().toLowerCase())
-                    || partyInformation.lastName.toLowerCase().contains(searchTextBox.getText().toLowerCase())
-                    || partyInformation.companyName.toLowerCase().contains(searchTextBox.getText().toLowerCase())
-                    || partyInformation.address1.toLowerCase().contains(searchTextBox.getText().toLowerCase())
-                    || partyInformation.address2.toLowerCase().contains(searchTextBox.getText().toLowerCase())
-                    || partyInformation.address3.toLowerCase().contains(searchTextBox.getText().toLowerCase())
-                    || partyInformation.city.toLowerCase().contains(searchTextBox.getText().toLowerCase())
-                    || partyInformation.stateCode.toLowerCase().contains(searchTextBox.getText().toLowerCase())
-                    || partyInformation.zipCode.toLowerCase().contains(searchTextBox.getText().toLowerCase())
-                    || partyInformation.emailAddress.toLowerCase().contains(searchTextBox.getText().toLowerCase())
-                    || partyInformation.phone1.contains(searchTextBox.getText().toLowerCase());
+    private boolean searchlimiter(Party partyInfo) {
+        String term = searchTextBox.getText().toLowerCase();
+        return partyInfo.firstName.toLowerCase().contains(term)
+                || partyInfo.lastName.toLowerCase().contains(term)
+                || partyInfo.companyName.toLowerCase().contains(term)
+                || partyInfo.address1.toLowerCase().contains(term)
+                || partyInfo.address2.toLowerCase().contains(term)
+                || partyInfo.address3.toLowerCase().contains(term)
+                || partyInfo.city.toLowerCase().contains(term)
+                || partyInfo.stateCode.toLowerCase().contains(term)
+                || partyInfo.zipCode.toLowerCase().contains(term)
+                || partyInfo.emailAddress.toLowerCase().contains(term)
+                || partyInfo.phone1.contains(term);
     }
-    
+
     private void tableClick(java.awt.event.MouseEvent evt) {
         if (evt.getClickCount() == 1) {
-            if (SearchTable.getSelectedColumn() == 1){
+            if (SearchTable.getSelectedColumn() == 1) {
                 update();
                 loadParties();
             }
             EditButton.setEnabled(true);
-        } else if (evt.getClickCount() >= 2){
+        } else if (evt.getClickCount() >= 2) {
             EditButtonActionPerformed(null);
         }
     }
-    
-    private void update(){
+
+    private void update() {
         if (SearchTable.getSelectedRow() > -1) {
             int id = (int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0);
             boolean active = (boolean) SearchTable.getValueAt(SearchTable.getSelectedRow(), 1);
-            
+
             ActiveStatus.updateActiveStatus("Party", active, id);
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -292,7 +287,7 @@ public class PartySearchDialog extends javax.swing.JDialog {
 
     private void EditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditButtonActionPerformed
         ViewUpdatePartyPanel party = new ViewUpdatePartyPanel((JFrame) Global.root.getParent(), true, getID());
-        if (party.updateStatus == 1){
+        if (party.updateStatus == 1) {
             loadAndSearch();
         }
     }//GEN-LAST:event_EditButtonActionPerformed
