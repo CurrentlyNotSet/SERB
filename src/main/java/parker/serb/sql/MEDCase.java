@@ -1525,11 +1525,12 @@ public class MEDCase {
                     + "AND   MEDCase.caseStatus = 'Open' "
                     + "AND   MEDCase.settlementDate IS NULL "
                     + "AND   MEDCase.caseYear = ? "
-                    + "AND   MEDCase.caseMonth = ?";
+                    + "AND   MEDCase.caseMonth = ? "
+                    + "ORDER BY MEDCase.caseYear, MEDCase.caseMonth, MEDCase.caseNumber";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, Global.caseYear);
-            preparedStatement.setString(2, Global.caseMonth);
+            preparedStatement.setString(1, caseYear);
+            preparedStatement.setString(2, caseMonth);
             ResultSet rs = preparedStatement.executeQuery();
             
             while(rs.next()) {
@@ -1541,6 +1542,7 @@ public class MEDCase {
                 item.caseNumber = rs.getString("caseNumber");
                 item.employerIDNumber = rs.getString("EmployerName");
                 item.fileDate = rs.getTimestamp("fileDate");
+                medcaseList.add(item);
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex.getMessage());

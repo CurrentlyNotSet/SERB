@@ -4,17 +4,12 @@
  */
 package parker.serb.MED;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
+import java.sql.Timestamp;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
+import parker.serb.Global;
+import parker.serb.sql.MEDCase;
+import parker.serb.util.NumberFormatService;
 
 /**
  *
@@ -50,10 +45,7 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
         caseTable.getColumnModel().getColumn(1).setMinWidth(125);
         caseTable.getColumnModel().getColumn(1).setPreferredWidth(125);
         caseTable.getColumnModel().getColumn(1).setMaxWidth(125);
-        
-        //Employer Name
-        //NONE
-        
+
         //Filed Date
         caseTable.getColumnModel().getColumn(3).setMinWidth(80);
         caseTable.getColumnModel().getColumn(3).setPreferredWidth(80);
@@ -75,69 +67,69 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
     }
     
     private void loadTable(){
-        String settleDateStart = startDateField.getText().trim();
-        String settleDateEnd = endDateField.getText().trim();
-        clearTable();
-        try {
-            String sql = "SELECT medcase.CaseNumber, medcase.EmployerName, "
-                    + "medcase.CaseFileDate, medcase.Status "
-                    + "FROM medcase "
-                    + "WHERE medcase.CBAReceivedDate BETWEEN CAST(? as datetime) AND CAST(? as datetime) "
-                    + "AND medcase.Active = 1 AND medcase.tempholder4 != 'Send to Brd to Close' ORDER BY medcase.CaseNumber";
-            PreparedStatement preparedStatement = global.getDba().getObjConn().prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            preparedStatement.setString(1, settleDateStart);
-            preparedStatement.setString(2, settleDateEnd);
-            ResultSet action = preparedStatement.executeQuery();
-            
-            while(action.next())
-            {                
-                ((DefaultTableModel) caseTable.getModel()).addRow(new Object[]{
-                    true,
-                    action.getString("CaseNumber"),
-                    action.getString("EmployerName"),
-                    action.getString("CaseFileDate")
-                });
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(MEDBulkSendToBoardDialog.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        countLabel.setText("Entries: " + caseTable.getRowCount());
+//        String settleDateStart = startDateField.getText().trim();
+//        String settleDateEnd = endDateField.getText().trim();
+//        clearTable();
+//        try {
+//            String sql = "SELECT medcase.CaseNumber, medcase.EmployerName, "
+//                    + "medcase.CaseFileDate, medcase.Status "
+//                    + "FROM medcase "
+//                    + "WHERE medcase.CBAReceivedDate BETWEEN CAST(? as datetime) AND CAST(? as datetime) "
+//                    + "AND medcase.Active = 1 AND medcase.tempholder4 != 'Send to Brd to Close' ORDER BY medcase.CaseNumber";
+//            PreparedStatement preparedStatement = global.getDba().getObjConn().prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+//            preparedStatement.setString(1, settleDateStart);
+//            preparedStatement.setString(2, settleDateEnd);
+//            ResultSet action = preparedStatement.executeQuery();
+//            
+//            while(action.next())
+//            {                
+//                ((DefaultTableModel) caseTable.getModel()).addRow(new Object[]{
+//                    true,
+//                    action.getString("CaseNumber"),
+//                    action.getString("EmployerName"),
+//                    action.getString("CaseFileDate")
+//                });
+//            }
+//        } catch (SQLException ex) {
+//            Logger.getLogger(MEDBulkSendToBoardDialog.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        countLabel.setText("Entries: " + caseTable.getRowCount());
     }
         
     private void updateList(){
-        for(int i = 0; i < caseTable.getRowCount(); i++){
-            if (caseTable.getValueAt(i, 0).equals(true)) {
-                try {
-                    String sql = "UPDATE medcase SET "
-                            + "tempholder4 =  ? "   //1
-                            + "WHERE CaseNumber = ?";    //2
-                    PreparedStatement preparedStatement = global.getDba().getObjConn().prepareStatement(sql);
-                    preparedStatement.setString(1,  "Send to Brd to Close");
-                    preparedStatement.setString(2,  caseTable.getValueAt(i, 1).toString());
-                    preparedStatement.executeUpdate();
-                } catch (SQLException ex) {
-                    Logger.getLogger(AdminSQLQueries.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
+//        for(int i = 0; i < caseTable.getRowCount(); i++){
+//            if (caseTable.getValueAt(i, 0).equals(true)) {
+//                try {
+//                    String sql = "UPDATE medcase SET "
+//                            + "tempholder4 =  ? "   //1
+//                            + "WHERE CaseNumber = ?";    //2
+//                    PreparedStatement preparedStatement = global.getDba().getObjConn().prepareStatement(sql);
+//                    preparedStatement.setString(1,  "Send to Brd to Close");
+//                    preparedStatement.setString(2,  caseTable.getValueAt(i, 1).toString());
+//                    preparedStatement.executeUpdate();
+//                } catch (SQLException ex) {
+//                    Logger.getLogger(AdminSQLQueries.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//            }
+//        }
     }
     
     private void printList(){
-        try {
-                HashMap para = new HashMap();
-                String dateParam = JOptionPane.showInputDialog("Please enter a start date (MM/DD/YYYY)");
-                Connection con = global.getDba().getObjConn();
-                para.put("Date", dateParam);
-                String reportPath = "G:\\XLNCMS\\SERBTemplates\\MED\\ReportTemplates\\MEDCasestobeClosedbyBoard.jrxml";
-                JasperReport jr = JasperCompileManager.compileReport(reportPath);
-                JasperPrint jp = JasperFillManager.fillReport(jr, para, con);
-                JasperViewer.viewReport(jp, false);
-            } catch (JRException ex) {
-                SystemErrorNotificationEMail SENE = new SystemErrorNotificationEMail(global.getMainFrame(), true, global);
-                StringWriter errors = new StringWriter();
-                ex.printStackTrace(new PrintWriter(errors));
-                SENE.loadInformation("MEDReportsPanel", "246", errors.toString());
-            }
+//        try {
+//                HashMap para = new HashMap();
+//                String dateParam = JOptionPane.showInputDialog("Please enter a start date (MM/DD/YYYY)");
+//                Connection con = global.getDba().getObjConn();
+//                para.put("Date", dateParam);
+//                String reportPath = "G:\\XLNCMS\\SERBTemplates\\MED\\ReportTemplates\\MEDCasestobeClosedbyBoard.jrxml";
+//                JasperReport jr = JasperCompileManager.compileReport(reportPath);
+//                JasperPrint jp = JasperFillManager.fillReport(jr, para, con);
+//                JasperViewer.viewReport(jp, false);
+//            } catch (JRException ex) {
+//                SystemErrorNotificationEMail SENE = new SystemErrorNotificationEMail(global.getMainFrame(), true, global);
+//                StringWriter errors = new StringWriter();
+//                ex.printStackTrace(new PrintWriter(errors));
+//                SENE.loadInformation("MEDReportsPanel", "246", errors.toString());
+//            }
     }
         
     /**
@@ -229,7 +221,6 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
         jLabel5.setText("End Date:");
 
         startDateField.setEditable(false);
-        startDateField.setBackground(new java.awt.Color(255, 255, 255));
         startDateField.setCaretColor(new java.awt.Color(0, 0, 0));
         startDateField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         startDateField.setDateFormat(Global.mmddyyyy);
@@ -240,7 +231,6 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
         });
 
         endDateField.setEditable(false);
-        endDateField.setBackground(new java.awt.Color(255, 255, 255));
         endDateField.setCaretColor(new java.awt.Color(0, 0, 0));
         endDateField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         startDateField.setDateFormat(Global.mmddyyyy);
@@ -292,12 +282,13 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
                 .addContainerGap()
                 .add(jLabel1)
                 .add(11, 11, 11)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabel5)
-                    .add(endDateField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                         .add(jLabel3)
-                        .add(startDateField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                        .add(startDateField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                        .add(jLabel5)
+                        .add(endDateField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(countLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 14, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)

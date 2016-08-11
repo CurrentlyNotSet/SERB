@@ -42,49 +42,50 @@ public class MEDBulkSettleCasesDialog extends javax.swing.JFrame {
         for (String year : yearList) {
             yearComboBox.addItem(year);
         }
+        loadMonthsComboBox();
     }
 
     private void loadMonthsComboBox() {
         monthComboBox.removeAllItems();
         monthComboBox.addItem("");
-        List<String> yearList = MEDCase.getSettleCaseYears();
-        for (String year : yearList) {
-            switch (year) {
+        List<String> monthList = MEDCase.getSettleCaseMonths(yearComboBox.getSelectedItem().toString());
+        for (String month : monthList) {
+            switch (month) {
                 case "01":
-                    yearComboBox.addItem("01 - January");
+                    monthComboBox.addItem("01 - January");
                     break;
                 case "02":
-                    yearComboBox.addItem("02 - February");
+                    monthComboBox.addItem("02 - February");
                     break;
                 case "03":
-                    yearComboBox.addItem("03 - March");
+                    monthComboBox.addItem("03 - March");
                     break;
                 case "04":
-                    yearComboBox.addItem("04 - April");
+                    monthComboBox.addItem("04 - April");
                     break;
                 case "05":
-                    yearComboBox.addItem("05 - May");
+                    monthComboBox.addItem("05 - May");
                     break;
                 case "06":
-                    yearComboBox.addItem("06 - June");
+                    monthComboBox.addItem("06 - June");
                     break;
                 case "07":
-                    yearComboBox.addItem("07 - July");
+                    monthComboBox.addItem("07 - July");
                     break;
                 case "08":
-                    yearComboBox.addItem("08 - August");
+                    monthComboBox.addItem("08 - August");
                     break;
                 case "09":
-                    yearComboBox.addItem("09 - September");
+                    monthComboBox.addItem("09 - September");
                     break;
                 case "10":
-                    yearComboBox.addItem("10 - October");
+                    monthComboBox.addItem("10 - October");
                     break;
                 case "11":
-                    yearComboBox.addItem("11 - November");
+                    monthComboBox.addItem("11 - November");
                     break;
                 case "12":
-                    yearComboBox.addItem("12 - December");
+                    monthComboBox.addItem("12 - December");
                     break;
                 default:
                     break;
@@ -106,9 +107,9 @@ public class MEDBulkSettleCasesDialog extends javax.swing.JFrame {
         //Employer Name
         //NONE
         //Filed Date
-        caseTable.getColumnModel().getColumn(3).setMinWidth(80);
-        caseTable.getColumnModel().getColumn(3).setPreferredWidth(80);
-        caseTable.getColumnModel().getColumn(3).setMaxWidth(80);
+        caseTable.getColumnModel().getColumn(3).setMinWidth(100);
+        caseTable.getColumnModel().getColumn(3).setPreferredWidth(100);
+        caseTable.getColumnModel().getColumn(3).setMaxWidth(100);
 
         //get Table
         model = (DefaultTableModel) caseTable.getModel();
@@ -117,12 +118,19 @@ public class MEDBulkSettleCasesDialog extends javax.swing.JFrame {
     private void clearTable() {
         model = (DefaultTableModel) caseTable.getModel();
         model.setRowCount(0);
+        countLabel.setText(" ");
+    }
+    
+    private void loadTableThread() {
+        clearTable();
+        jLayeredPane1.moveToFront(jPanel1);
+        Thread temp = new Thread(() -> {
+            loadTable();
+        });
+        temp.start();
     }
 
     private void loadTable() {
-        clearTable();
-        countLabel.setText(" ");
-
         String caseYear = yearComboBox.getSelectedItem().toString().trim();
         String caseMonth = monthComboBox.getSelectedItem().toString().trim().substring(0, 2);
 
@@ -136,10 +144,10 @@ public class MEDBulkSettleCasesDialog extends javax.swing.JFrame {
                 false,
                 caseNumber,
                 item.employerIDNumber,
-                item.fileDate
+                Global.mmddyyyy.format(item.fileDate)
             });
         }
-
+        jLayeredPane1.moveToBack(jPanel1);
         countLabel.setText("Entries: " + caseTable.getRowCount());
     }
 
@@ -155,23 +163,23 @@ public class MEDBulkSettleCasesDialog extends javax.swing.JFrame {
     }
 
     private void printList() {
-        try {
-            HashMap para = new HashMap();
-            String startDate = JOptionPane.showInputDialog("Please enter a start date (MM/DD/YYYY)");
-            String endDate = JOptionPane.showInputDialog("Please enter an end date (MM/DD/YYYY)");
-            Connection con = global.getDba().getObjConn();
-            para.put("startDate", startDate);
-            para.put("endDate", endDate);
-            String reportPath = "G:\\XLNCMS\\SERBTemplates\\MED\\ReportTemplates\\MEDCasestobeSettled.jrxml";
-            JasperReport jr = JasperCompileManager.compileReport(reportPath);
-            JasperPrint jp = JasperFillManager.fillReport(jr, para, con);
-            JasperViewer.viewReport(jp, false);
-        } catch (JRException ex) {
-            SystemErrorNotificationEMail SENE = new SystemErrorNotificationEMail(global.getMainFrame(), true, global);
-            StringWriter errors = new StringWriter();
-            ex.printStackTrace(new PrintWriter(errors));
-            SENE.loadInformation("MEDReportsPanel", "246", errors.toString());
-        }
+//        try {
+//            HashMap para = new HashMap();
+//            String startDate = JOptionPane.showInputDialog("Please enter a start date (MM/DD/YYYY)");
+//            String endDate = JOptionPane.showInputDialog("Please enter an end date (MM/DD/YYYY)");
+//            Connection con = global.getDba().getObjConn();
+//            para.put("startDate", startDate);
+//            para.put("endDate", endDate);
+//            String reportPath = "G:\\XLNCMS\\SERBTemplates\\MED\\ReportTemplates\\MEDCasestobeSettled.jrxml";
+//            JasperReport jr = JasperCompileManager.compileReport(reportPath);
+//            JasperPrint jp = JasperFillManager.fillReport(jr, para, con);
+//            JasperViewer.viewReport(jp, false);
+//        } catch (JRException ex) {
+//            SystemErrorNotificationEMail SENE = new SystemErrorNotificationEMail(global.getMainFrame(), true, global);
+//            StringWriter errors = new StringWriter();
+//            ex.printStackTrace(new PrintWriter(errors));
+//            SENE.loadInformation("MEDReportsPanel", "246", errors.toString());
+//        }
     }
 
     /**
@@ -187,8 +195,6 @@ public class MEDBulkSettleCasesDialog extends javax.swing.JFrame {
         updateButton = new javax.swing.JButton();
         printButton = new javax.swing.JButton();
         yearComboBox = new javax.swing.JComboBox();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        caseTable = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         monthComboBox = new javax.swing.JComboBox();
@@ -196,6 +202,11 @@ public class MEDBulkSettleCasesDialog extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         countLabel = new javax.swing.JLabel();
         settleDateField = new com.alee.extended.date.WebDateField();
+        jLayeredPane1 = new javax.swing.JLayeredPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        caseTable = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -225,6 +236,35 @@ public class MEDBulkSettleCasesDialog extends javax.swing.JFrame {
                 yearComboBoxActionPerformed(evt);
             }
         });
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Settle MED cases");
+
+        jLabel2.setText("Enter Settle Date:");
+
+        monthComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "01 - January", "02 - February", "03 - March", "04 - April", "05 - May", "06 - June", "07 - July", "08 - August", "09 - September", "10 - October", "11 - November", "12 - December" }));
+        monthComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                monthComboBoxActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel3.setText("Case Year:");
+
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel4.setText("Case Month:");
+
+        countLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+
+        settleDateField.setEditable(false);
+        settleDateField.setBackground(new java.awt.Color(255, 255, 255));
+        settleDateField.setCaretColor(new java.awt.Color(0, 0, 0));
+        settleDateField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        settleDateField.setDateFormat(Global.mmddyyyy);
+
+        jLayeredPane1.setLayout(new javax.swing.OverlayLayout(jLayeredPane1));
 
         caseTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -257,33 +297,37 @@ public class MEDBulkSettleCasesDialog extends javax.swing.JFrame {
             caseTable.getColumnModel().getColumn(3).setResizable(false);
         }
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Settle MED cases");
+        jLayeredPane1.add(jScrollPane1);
 
-        jLabel2.setText("Enter Settle Date:");
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setOpaque(false);
 
-        monthComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "01 - January", "02 - February", "03 - March", "04 - April", "05 - May", "06 - June", "07 - July", "08 - August", "09 - September", "10 - October", "11 - November", "12 - December" }));
-        monthComboBox.setEnabled(false);
-        monthComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                monthComboBoxActionPerformed(evt);
-            }
-        });
+        jLabel5.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/loading_spinner.gif"))); // NOI18N
 
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel3.setText("Case Year:");
+        org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 690, Short.MAX_VALUE)
+            .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                .add(jPanel1Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .add(jLabel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 670, Short.MAX_VALUE)
+                    .addContainerGap()))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 404, Short.MAX_VALUE)
+            .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                .add(jPanel1Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .add(jLabel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 382, Short.MAX_VALUE)
+                    .addContainerGap()))
+        );
 
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel4.setText("Case Month:");
-
-        countLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-
-        settleDateField.setEditable(false);
-        settleDateField.setBackground(new java.awt.Color(255, 255, 255));
-        settleDateField.setCaretColor(new java.awt.Color(0, 0, 0));
-        settleDateField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        settleDateField.setDateFormat(Global.mmddyyyy);
+        jLayeredPane1.add(jPanel1);
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -292,32 +336,37 @@ public class MEDBulkSettleCasesDialog extends javax.swing.JFrame {
             .add(layout.createSequentialGroup()
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jScrollPane1)
-                    .add(jLabel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                        .add(jLabel2)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(settleDateField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 157, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .add(printButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 191, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, countLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(layout.createSequentialGroup()
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jLabel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                                .add(jLabel2)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(settleDateField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 157, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .add(printButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 191, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                            .add(org.jdesktop.layout.GroupLayout.TRAILING, countLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .add(layout.createSequentialGroup()
                                 .add(updateButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 95, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                                 .add(416, 416, 416)
-                                .add(closeButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 100, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                            .add(layout.createSequentialGroup()
-                                .add(42, 42, 42)
-                                .add(jLabel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 64, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(yearComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 161, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(jLabel4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 86, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(monthComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 161, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                        .add(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                                .add(closeButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 100, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .add(0, 74, Short.MAX_VALUE)))
+                        .addContainerGap())
+                    .add(layout.createSequentialGroup()
+                        .add(42, 42, 42)
+                        .add(jLabel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 64, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(yearComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 161, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .add(jLabel4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 86, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(monthComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 161, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(65, 65, 65))))
+            .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                .add(layout.createSequentialGroup()
+                    .addContainerGap()
+                    .add(jLayeredPane1)
+                    .addContainerGap()))
         );
 
         layout.linkSize(new java.awt.Component[] {closeButton, updateButton}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
@@ -328,18 +377,14 @@ public class MEDBulkSettleCasesDialog extends javax.swing.JFrame {
                 .addContainerGap()
                 .add(jLabel1)
                 .add(18, 18, 18)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                        .add(monthComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(jLabel4))
-                    .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                        .add(yearComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(jLabel3)))
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(yearComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jLabel3)
+                    .add(monthComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jLabel4))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(countLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 14, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 423, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(440, 440, 440)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(printButton)
                     .add(jLabel2)
@@ -349,7 +394,14 @@ public class MEDBulkSettleCasesDialog extends javax.swing.JFrame {
                     .add(closeButton)
                     .add(updateButton))
                 .addContainerGap())
+            .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                .add(layout.createSequentialGroup()
+                    .add(109, 109, 109)
+                    .add(jLayeredPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 404, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(125, Short.MAX_VALUE)))
         );
+
+        layout.linkSize(new java.awt.Component[] {jLabel3, jLabel4, monthComboBox, yearComboBox}, org.jdesktop.layout.GroupLayout.VERTICAL);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -364,30 +416,24 @@ public class MEDBulkSettleCasesDialog extends javax.swing.JFrame {
 
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
         updateList();
-        loadTable();
+        loadTableThread();
     }//GEN-LAST:event_updateButtonActionPerformed
 
     private void yearComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_yearComboBoxActionPerformed
         if (!"".equals(yearComboBox.getSelectedItem().toString().trim())) {
-            if (monthComboBox.isEnabled() && !"".equals(monthComboBox.getSelectedItem().toString().trim())) {
-                loadTable();
-            } else {
-                monthComboBox.setEnabled(true);
-                loadMonthsComboBox();
-                clearTable();
-            }
-        } else {
-            monthComboBox.setEnabled(false);
-            monthComboBox.setSelectedItem("");
+            loadMonthsComboBox();
+            clearTable();
         }
     }//GEN-LAST:event_yearComboBoxActionPerformed
 
     private void monthComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_monthComboBoxActionPerformed
-        if (!"".equals(yearComboBox.getSelectedItem().toString().trim())
-                && !"".equals(monthComboBox.getSelectedItem().toString().trim())) {
-            loadTable();
-        } else {
-            clearTable();
+        if (monthComboBox.getSelectedItem() != null){
+                if (!"".equals(yearComboBox.getSelectedItem().toString().trim())
+                    && !"".equals(monthComboBox.getSelectedItem().toString().trim())) {
+                loadTableThread();
+            } else {
+                clearTable();
+            }
         }
     }//GEN-LAST:event_monthComboBoxActionPerformed
 
@@ -399,6 +445,9 @@ public class MEDBulkSettleCasesDialog extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLayeredPane jLayeredPane1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JComboBox monthComboBox;
     private javax.swing.JButton printButton;
