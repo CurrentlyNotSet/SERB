@@ -1422,4 +1422,29 @@ public class MEDCase {
         }
         return firstCase;
     }
+    
+    
+    public static List<String> getSettleCaseYears() {
+        
+        List<String> yearList = new ArrayList<>();
+            
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+            
+            String sql = "SELECT DISTINCT caseYear FROM medcase WHERE caseStatus = 'open' "
+                    + "AND settlementDate IS NULL ORDER BY caseYear DESC";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            
+            ResultSet caseNumberRS = preparedStatement.executeQuery();
+            
+            while(caseNumberRS.next()) {
+                yearList.add(caseNumberRS.getString("caseYear"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return yearList;
+    }
+    
 }
