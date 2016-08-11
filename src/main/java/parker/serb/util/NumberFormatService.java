@@ -17,6 +17,11 @@ import parker.serb.Global;
  */
 public class NumberFormatService {
     
+    public String caseYear;
+    public String caseType; 
+    public String caseMonth;
+    public String caseNumber;
+    
     public static String convertStringToPhoneNumber(String number) {
         String formattedNumber = "";
         if(number.length() >= 10) {
@@ -72,12 +77,28 @@ public class NumberFormatService {
                 + "-" + Global.caseMonth + "-" + Global.caseNumber;
     }
     
+    public static String generateFullCaseNumberNonGlobal(String caseYear, String caseType, String caseMonth, String caseNumber) {
+        return caseYear + "-" + caseType
+                + "-" + caseMonth + "-" + caseNumber;
+    }
+    
     public static void parseFullCaseNumber(String fullCaseNumber) {
         String[] parsedCaseNumber = fullCaseNumber.split("-");
         Global.caseYear = parsedCaseNumber[0];
         Global.caseType = parsedCaseNumber[1];
         Global.caseMonth = parsedCaseNumber[2];
         Global.caseNumber = parsedCaseNumber[3];
+    }
+    
+    public static NumberFormatService parseFullCaseNumberNoNGlobal(String fullCaseNumber) {
+        NumberFormatService num = new NumberFormatService();
+        
+        String[] parsedCaseNumber = fullCaseNumber.split("-");
+        num.caseYear = parsedCaseNumber[0];
+        num.caseType = parsedCaseNumber[1];
+        num.caseMonth = parsedCaseNumber[2];
+        num.caseNumber = parsedCaseNumber[3];
+        return num;
     }
     
     public static void clearCaseNumberInformation() {

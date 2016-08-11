@@ -229,10 +229,9 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
         jLabel5.setText("End Date:");
 
         startDateField.setEditable(false);
-        startDateField.setBackground(new java.awt.Color(238, 238, 238));
+        startDateField.setBackground(new java.awt.Color(255, 255, 255));
         startDateField.setCaretColor(new java.awt.Color(0, 0, 0));
         startDateField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        startDateField.setEnabled(false);
         startDateField.setDateFormat(Global.mmddyyyy);
         startDateField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -241,10 +240,9 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
         });
 
         endDateField.setEditable(false);
-        endDateField.setBackground(new java.awt.Color(238, 238, 238));
+        endDateField.setBackground(new java.awt.Color(255, 255, 255));
         endDateField.setCaretColor(new java.awt.Color(0, 0, 0));
         endDateField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        endDateField.setEnabled(false);
         startDateField.setDateFormat(Global.mmddyyyy);
         endDateField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

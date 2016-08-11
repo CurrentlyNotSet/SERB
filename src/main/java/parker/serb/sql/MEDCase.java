@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import parker.serb.Global;
+import parker.serb.util.NumberFormatService;
 import parker.serb.util.SlackNotification;
 
 /**
@@ -1442,9 +1443,109 @@ public class MEDCase {
                 yearList.add(caseNumberRS.getString("caseYear"));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex.getMessage());
         }
         return yearList;
+    }
+    
+    public static List<String> getSettleCaseMonths(String caseYear) {
+        
+        List<String> monthList = new ArrayList<>();
+            
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+            
+            String sql = "SELECT DISTINCT caseMonth FROM medcase WHERE caseStatus = 'open' "
+                    + "AND settlementDate IS NULL AND caseYear = ? ORDER BY caseMonth ASC";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, caseYear);
+            ResultSet caseNumberRS = preparedStatement.executeQuery();
+            
+            while(caseNumberRS.next()) {
+                monthList.add(caseNumberRS.getString("caseMonth"));
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex.getMessage());
+        }
+        return monthList;
+    }
+        
+    public static void updateSettledCases(String caseNumber, Date settleDate) {
+         NumberFormatService num = NumberFormatService.parseFullCaseNumberNoNGlobal(caseNumber);
+         
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Update MEDCase set"
+                    + " settlementDate = ?"
+                    + " where caseYear = ? "
+                    + " AND caseType = ? "
+                    + " AND caseMonth = ? "
+                    + " AND caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setDate(1, (java.sql.Date) settleDate);
+            preparedStatement.setString(2, num.caseYear);
+            preparedStatement.setString(3, num.caseType);
+            preparedStatement.setString(4, num.caseMonth);
+            preparedStatement.setString(5, num.caseNumber);
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex.getMessage());
+        }
+    }
+     
+     public static List<MEDCase> getSettleList(String caseYear, String caseMonth) {
+        
+        List<MEDCase> medcaseList = new ArrayList<>();
+            
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+            
+            String sql = "SELECT "
+                    + "MEDCase.caseYear AS CaseYear, "
+                    + "MEDCase.caseType AS CaseType, "
+                    + "MEDCase.caseMonth AS CaseMonth, "
+                    + "MEDCase.caseNumber AS CaseNumber,"
+                    
+                    + "(SELECT CASE WHEN (CaseParty.\"firstName\" IS NULL AND CaseParty.\"lastName\" IS NULL) "
+                    + "THEN (CaseParty.\"companyName\") ELSE ((ISNULL(CaseParty.\"firstName\" + ' ', '')) "
+                    + "+ (ISNULL(CaseParty.\"middleInitial\" + ' ', '')) + (ISNULL(CaseParty.\"lastName\" + ' ', '')) "
+                    + "+ (ISNULL(CaseParty.\"suffix\" + ' ', '')) + (ISNULL(CaseParty.\"nameTitle\" + ' ', '')) "
+                    + "+ (ISNULL(CaseParty.\"jobTitle\", ''))) END AS EmployerName FROM CaseParty "
+                    + "WHERE CaseParty.caseRelation = 'Employer' AND (CaseParty.caseYear =  MEDCase.caseYear  "
+                    + "AND CaseParty.caseType = MEDCase.caseType AND CaseParty.caseMonth =  MEDCase.caseMonth  "
+                    + "AND CaseParty.caseNumber =  MEDCase.caseNumber )) AS EmployerName, "
+                    
+                    + "MEDCase.fileDate AS FileDate "
+                    + "FROM  MEDCase "
+                    + "WHERE MEDCase.active = '1' "
+                    + "AND   MEDCase.caseStatus = 'Open' "
+                    + "AND   MEDCase.settlementDate IS NULL "
+                    + "AND   MEDCase.caseYear = ? "
+                    + "AND   MEDCase.caseMonth = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, Global.caseYear);
+            preparedStatement.setString(2, Global.caseMonth);
+            ResultSet rs = preparedStatement.executeQuery();
+            
+            while(rs.next()) {
+                MEDCase item = new MEDCase();
+                
+                item.caseYear = rs.getString("caseYear");
+                item.caseType = rs.getString("caseType");
+                item.caseMonth = rs.getString("caseMonth");
+                item.caseNumber = rs.getString("caseNumber");
+                item.employerIDNumber = rs.getString("EmployerName");
+                item.fileDate = rs.getTimestamp("fileDate");
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex.getMessage());
+        }
+        return medcaseList;
     }
     
 }
