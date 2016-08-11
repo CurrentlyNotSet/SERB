@@ -21,6 +21,7 @@ import parker.serb.util.NumberFormatService;
  */
 public class Party {
     public int id;
+    public boolean active;
     public String prefix;
     public String firstName;
     public String middleInitial;
@@ -104,6 +105,7 @@ public class Party {
             while(partyRS.next()) {
                 Party party = new Party();
                 party.id = partyRS.getInt("id");
+                party.active = partyRS.getBoolean("active");
                 party.prefix = partyRS.getString("prefix") == null ? "" : partyRS.getString("prefix");
                 party.firstName = partyRS.getString("firstName") == null ? "" : partyRS.getString("firstName");
                 party.middleInitial = partyRS.getString("middleInitial") == null ? "" : partyRS.getString("middleInitial");
@@ -156,6 +158,7 @@ public class Party {
                     + "?,"
                     + "?,"
                     + "?,"
+                    + "?,"
                     + "?)";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
@@ -176,7 +179,7 @@ public class Party {
             preparedStatement.setString(15, party.phone1.equals("") ? null : party.phone1);
             preparedStatement.setString(16, party.emailAddress.equals("") ? null : party.emailAddress);
             preparedStatement.setString(17, party.phone2.equals("") ? null : party.phone2);
-            
+            preparedStatement.setBoolean(18, true);
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);

@@ -80,7 +80,7 @@ public class PartiesPanel extends javax.swing.JPanel {
             public void mouseClicked(MouseEvent e) {
                 if(e.getClickCount() == 2) {
                     if(!jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("")) {
-                        new ViewUpdatePartyPanel((JFrame) Global.root.getParent(), true, jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString());
+                        new ViewUpdateCasePartyPanel((JFrame) Global.root.getParent(), true, jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString());
                         loadPartySearch(jTextField1.getText().trim());
                         updateHeader();
                     }
