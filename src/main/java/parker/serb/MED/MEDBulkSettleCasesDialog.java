@@ -5,6 +5,7 @@
 package parker.serb.MED;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
@@ -35,8 +36,16 @@ public class MEDBulkSettleCasesDialog extends javax.swing.JFrame {
     private void setActive() {
         loadYearsComboBox();
         setTableSize();
+        addListeners();
     }
 
+    private void addListeners() {
+        settleDateField.addDateSelectionListener((Date date) -> {
+            checkProcessable();
+        });
+        
+    }
+    
     private void loadYearsComboBox() {
         List<String> yearList = MEDCase.getSettleCaseYears();
         for (String year : yearList) {
@@ -160,6 +169,20 @@ public class MEDBulkSettleCasesDialog extends javax.swing.JFrame {
         }
     }
     
+    private void checkProcessable(){
+        if (yearComboBox.getSelectedItem() != null && monthComboBox.getSelectedItem() != null){
+            if (!yearComboBox.getSelectedItem().toString().equals("") 
+                    && !monthComboBox.getSelectedItem().toString().equals("")
+                    && !settleDateField.getText().equals("")){
+                updateButton.setEnabled(true);
+            } else {
+                updateButton.setEnabled(false);
+            }
+        } else {
+            updateButton.setEnabled(false);
+        }
+    }
+    
     private void printList() {
 //        try {
 //            HashMap para = new HashMap();
@@ -216,6 +239,7 @@ public class MEDBulkSettleCasesDialog extends javax.swing.JFrame {
         });
 
         updateButton.setText("Update");
+        updateButton.setEnabled(false);
         updateButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 updateButtonActionPerformed(evt);
@@ -257,7 +281,6 @@ public class MEDBulkSettleCasesDialog extends javax.swing.JFrame {
         countLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
         settleDateField.setEditable(false);
-        settleDateField.setBackground(new java.awt.Color(255, 255, 255));
         settleDateField.setCaretColor(new java.awt.Color(0, 0, 0));
         settleDateField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         settleDateField.setDateFormat(Global.mmddyyyy);
@@ -421,6 +444,7 @@ public class MEDBulkSettleCasesDialog extends javax.swing.JFrame {
             loadMonthsComboBox();
             clearTable();
         }
+        checkProcessable();
     }//GEN-LAST:event_yearComboBoxActionPerformed
 
     private void monthComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_monthComboBoxActionPerformed
@@ -432,6 +456,7 @@ public class MEDBulkSettleCasesDialog extends javax.swing.JFrame {
                 clearTable();
             }
         }
+        checkProcessable();
     }//GEN-LAST:event_monthComboBoxActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
