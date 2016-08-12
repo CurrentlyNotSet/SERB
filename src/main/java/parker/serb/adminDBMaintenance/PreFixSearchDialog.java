@@ -7,7 +7,6 @@ package parker.serb.adminDBMaintenance;
 
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
-import parker.serb.Global;
 import parker.serb.sql.ActiveStatus;
 import parker.serb.sql.NamePrefix;
 

@@ -366,12 +366,12 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Order Date:"/>
+            <Property name="text" type="java.lang.String" value="Selection Date:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel4">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Selection DueDate:"/>
+            <Property name="text" type="java.lang.String" value="Selection Due Date:"/>
           </Properties>
         </Component>
         <Component class="com.alee.extended.date.WebDateField" name="FF1OrderDate">
@@ -511,7 +511,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel5">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Order Date:"/>
+            <Property name="text" type="java.lang.String" value="Selection Date:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel6">

@@ -54,9 +54,18 @@ public class CaseValidation {
                     + " AND caseType = ?"
                     + " AND caseMonth = ?"
                     + " AND caseNumber = ?";
-        }else if(caseNumber.contains("REP")
+        } else if(caseNumber.contains("REP")
                 || caseNumber.contains("RBT")) {
             sql = "Select Count(*) AS totalrows from REPCase where"
+                    + " caseYear = ?"
+                    + " AND caseType = ?"
+                    + " AND caseMonth = ?"
+                    + " AND caseNumber = ?";
+        } else if(caseNumber.contains("STK")
+                || caseNumber.contains("MED")
+                || caseNumber.contains("NCN")
+                || caseNumber.contains("COM")) {
+            sql = "Select Count(*) AS totalrows from MEDCase where"
                     + " caseYear = ?"
                     + " AND caseType = ?"
                     + " AND caseMonth = ?"

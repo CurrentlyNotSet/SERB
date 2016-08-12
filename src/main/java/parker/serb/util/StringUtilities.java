@@ -6,6 +6,7 @@
 package parker.serb.util;
 
 import parker.serb.sql.CaseParty;
+import parker.serb.sql.Party;
 
 /**
  *
@@ -75,5 +76,24 @@ public class StringUtilities {
             addressBlock += "\n" + item.emailAddress;
         }
         return addressBlock.trim();
+    }
+    
+    public static String buildAddressBlock(Party item){
+        return (item.address1.equals("") ? "" : (item.address1))
+                + (item.address2.equals("") ? "" : (", " + item.address2))
+                + (item.address3.equals("") ? "" : (", " + item.address3))
+                + (item.city.equals("") ? "" : (", " + item.city))
+                + (item.stateCode.equals("") ? "" : (", " + item.stateCode))
+                + (item.zipCode.equals("") ? "" : (" " + item.zipCode));
+    }
+    
+    public static String buildFullNameWithTitles(Party item) {
+        return (item.prefix.equals("") ? "" : (item.prefix + " "))
+                + (item.firstName.equals("") ? "" : (item.firstName + " "))
+                + (item.middleInitial.equals("") ? "" : (item.middleInitial + ". "))
+                + (item.lastName.equals("") ? "" : (item.lastName))
+                + (item.suffix.equals("") ? "" : (" " + item.suffix))
+                + (item.nameTitle.equals("") ? "" : (", " + item.nameTitle)
+                + (item.jobTitle.equals("") ? "" : (", " + item.jobTitle)));
     }
 }

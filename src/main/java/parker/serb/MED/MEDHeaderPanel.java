@@ -16,6 +16,7 @@ import parker.serb.Global;
 import parker.serb.sql.Audit;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.MEDCase;
+import parker.serb.sql.Mediator;
 import parker.serb.util.CaseNotFoundDialog;
 import parker.serb.util.NumberFormatService;
 
@@ -79,15 +80,26 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
         if(Global.caseNumber != null) {
             MEDCase med = MEDCase.loadHeaderInformation();
             if(med == null) {
-//                new REPCaseNotFound((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
+//                new MEDCaseNotFound((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
 //                caseNumberComboBox.setSelectedItem(Global.caseNumber);
             } else {
                 fileDateTextBox.setText(med.fileDate != null ? Global.mmddyyyy.format(new Date(med.fileDate.getTime())) : "");
-//                closedDateTextBox.setText(rep.courtClosedDate != null ? Global.mmddyyyy.format(new Date(rep.courtClosedDate.getTime())) : "");
-//                currentStatusTextBox.setText(rep.status1 != null ? rep.status1 : "");
-//                caseTypeTextBox.setText(rep.caseType != null ? rep.caseType : "");
-//                bargainingUnitTextBox.setText(rep.bargainingUnitNumber != null ? rep.bargainingUnitNumber : "");
+                if(med.FMCSMediatorAppointedID == null &&
+                    med.stateMediatorAppointedID != null) {
+                    mediatorTextBox.setText(Mediator.getMediatorNameByID(med.stateMediatorAppointedID));
+                    mediatorPhoneNumber.setText(NumberFormatService.convertStringToPhoneNumber(Mediator.getMediatorPhoneByID(med.stateMediatorAppointedID)));  
+                } else if(med.FMCSMediatorAppointedID != null &&
+                    med.stateMediatorAppointedID == null) {
+                    mediatorTextBox.setText(Mediator.getMediatorNameByID(med.FMCSMediatorAppointedID));
+                    mediatorPhoneNumber.setText(NumberFormatService.convertStringToPhoneNumber(Mediator.getMediatorPhoneByID(med.FMCSMediatorAppointedID)));  
+                } else {
+                    mediatorTextBox.setText("");
+                    mediatorPhoneNumber.setText("");  
+                }
+                statusTextBox.setText(med.caseStatus != null ? med.caseStatus : "");
 
+                
+                
                 List caseParties = CaseParty.loadPartiesByCase();
 
                 for(Object caseParty: caseParties) {
@@ -168,20 +180,16 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
         employerRepTextBox.setText("");
         employeeOrgTextBox.setText("");
         employeeOrgRepTextBox.setText("");
-        closedDateTextBox.setText("");
-//        currentStatusTextBox.setText("");
+        mediatorTextBox.setText("");
+        mediatorPhoneNumber.setText("");
         fileDateTextBox.setText("");
-//        bargainingUnitTextBox.setText("");
+        statusTextBox.setText("");
         mediatorTextBox.setText("");
     }
 
     public JComboBox getjComboBox2() {
         return caseNumberComboBox;
     }
-    
-    
-    
-    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -210,10 +218,10 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
         mediatorTextBox = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        closedDateTextBox = new javax.swing.JTextField();
+        mediatorPhoneNumber = new javax.swing.JTextField();
         fileDateTextBox = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        rivalEEOTextBox2 = new javax.swing.JTextField();
+        statusTextBox = new javax.swing.JTextField();
 
         jMenuItem1.setText("jMenuItem1");
 
@@ -317,16 +325,16 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
 
         jLabel7.setText("File Date:");
 
-        closedDateTextBox.setEditable(false);
-        closedDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        mediatorPhoneNumber.setEditable(false);
+        mediatorPhoneNumber.setBackground(new java.awt.Color(238, 238, 238));
 
         fileDateTextBox.setEditable(false);
         fileDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
 
         jLabel8.setText("Status:");
 
-        rivalEEOTextBox2.setEditable(false);
-        rivalEEOTextBox2.setBackground(new java.awt.Color(238, 238, 238));
+        statusTextBox.setEditable(false);
+        statusTextBox.setBackground(new java.awt.Color(238, 238, 238));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -342,9 +350,9 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(mediatorTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-                    .addComponent(closedDateTextBox)
+                    .addComponent(mediatorPhoneNumber)
                     .addComponent(fileDateTextBox)
-                    .addComponent(rivalEEOTextBox2))
+                    .addComponent(statusTextBox))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -356,7 +364,7 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
                     .addComponent(mediatorTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(closedDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(mediatorPhoneNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
                 .addGap(40, 40, 40)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -364,7 +372,7 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
                     .addComponent(jLabel7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(rivalEEOTextBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(statusTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8))
                 .addContainerGap(12, Short.MAX_VALUE))
         );
@@ -389,7 +397,6 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox caseNumberComboBox;
-    private javax.swing.JTextField closedDateTextBox;
     private javax.swing.JTextField employeeOrgRepTextBox;
     private javax.swing.JTextField employeeOrgTextBox;
     private javax.swing.JTextField employerRepTextBox;
@@ -407,8 +414,9 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JTextField mediatorPhoneNumber;
     private javax.swing.JTextField mediatorTextBox;
     private javax.swing.JTextField rivalEEOTextBox1;
-    private javax.swing.JTextField rivalEEOTextBox2;
+    private javax.swing.JTextField statusTextBox;
     // End of variables declaration//GEN-END:variables
 }

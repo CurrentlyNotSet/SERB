@@ -1,7 +1,6 @@
 package parker.serb.adminDBMaintenance;
 
 import parker.serb.Global;
-import parker.serb.adminDBMaintenance.*;
 
 /**
  * @author andrew.schmidt
@@ -11,7 +10,7 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
     public AdminMainMenuPanel(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        this.setLocationRelativeTo(null);
+        this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }
 
@@ -27,7 +26,7 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         FFConciliatorsButton = new javax.swing.JButton();
-        MEDMediatorsButton = new javax.swing.JButton();
+        MediatorsButton = new javax.swing.JButton();
         HistoryTypesButton = new javax.swing.JButton();
         PartyButton = new javax.swing.JButton();
         SystemSERBButton = new javax.swing.JButton();
@@ -38,8 +37,6 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
         REPRecsButton = new javax.swing.JButton();
         REPStatusOptionsButton = new javax.swing.JButton();
         ULPRecsButton = new javax.swing.JButton();
-        HearingPeopleButton = new javax.swing.JButton();
-        RedactionAdminButton = new javax.swing.JButton();
         BoardActionTypeButton = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -62,23 +59,20 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
         jLabel2.setText("Reference Table Maintenance");
 
         FFConciliatorsButton.setText("<html><center>Fact Finders &<br>Conciliators</center></html>");
-        FFConciliatorsButton.setEnabled(false);
         FFConciliatorsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 FFConciliatorsButtonActionPerformed(evt);
             }
         });
 
-        MEDMediatorsButton.setText("Mediators");
-        MEDMediatorsButton.setEnabled(false);
-        MEDMediatorsButton.addActionListener(new java.awt.event.ActionListener() {
+        MediatorsButton.setText("Mediators");
+        MediatorsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MEDMediatorsButtonActionPerformed(evt);
+                MediatorsButtonActionPerformed(evt);
             }
         });
 
         HistoryTypesButton.setText("Doc History Types");
-        HistoryTypesButton.setEnabled(false);
         HistoryTypesButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 HistoryTypesButtonActionPerformed(evt);
@@ -86,7 +80,6 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
         });
 
         PartyButton.setText("Party Info");
-        PartyButton.setEnabled(false);
         PartyButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 PartyButtonActionPerformed(evt);
@@ -94,7 +87,6 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
         });
 
         SystemSERBButton.setText("SERB System Info");
-        SystemSERBButton.setEnabled(false);
         SystemSERBButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 SystemSERBButtonActionPerformed(evt);
@@ -111,7 +103,6 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
         });
 
         SERBExecButton.setText("SERB Board");
-        SERBExecButton.setEnabled(false);
         SERBExecButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 SERBExecButtonActionPerformed(evt);
@@ -119,7 +110,6 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
         });
 
         SystemPBRButton.setText("PBR System Info");
-        SystemPBRButton.setEnabled(false);
         SystemPBRButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 SystemPBRButtonActionPerformed(evt);
@@ -127,7 +117,6 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
         });
 
         PBRExecsButton.setText("PBR Board");
-        PBRExecsButton.setEnabled(false);
         PBRExecsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 PBRExecsButtonActionPerformed(evt);
@@ -153,23 +142,6 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
         ULPRecsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ULPRecsButtonActionPerformed(evt);
-            }
-        });
-
-        HearingPeopleButton.setText("Hearing ALJs");
-        HearingPeopleButton.setEnabled(false);
-        HearingPeopleButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                HearingPeopleButtonActionPerformed(evt);
-            }
-        });
-
-        RedactionAdminButton.setText("<html><center>Redaction<br>Permissions</center></html>");
-        RedactionAdminButton.setEnabled(false);
-        RedactionAdminButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        RedactionAdminButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                RedactionAdminButtonActionPerformed(evt);
             }
         });
 
@@ -236,27 +208,29 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(UsersButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(PartyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(HistoryTypesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(PreFixesButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(UsersButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(PreFixesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(SERBExecButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(SystemSERBButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(HearingPeopleButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(SERBExecButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(SystemSERBButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(RedactionAdminButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(SystemPBRButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(PBRExecsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(FFConciliatorsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(MEDMediatorsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(SystemPBRButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(PBRExecsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(FFConciliatorsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(MediatorsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(PartyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(HistoryTypesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(BoardActionTypeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -275,7 +249,7 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
                 .addContainerGap(24, Short.MAX_VALUE))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {HearingPeopleButton, HistoryTypesButton, PartyButton, REPRecsButton, RedactionAdminButton, SERBExecButton, SystemSERBButton, ULPRecsButton, UsersButton});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {HistoryTypesButton, PartyButton, REPRecsButton, SERBExecButton, SystemSERBButton, ULPRecsButton, UsersButton});
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {PBRExecsButton, SystemPBRButton});
 
@@ -307,69 +281,65 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(MEDMediatorsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(MediatorsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(REPStatusOptionsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(PBRExecsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(SERBExecButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(HistoryTypesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(PreFixesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(REPRecsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(ULPRecsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(FFConciliatorsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(HearingPeopleButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(BoardActionTypeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(PreFixesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(PartyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(RedactionAdminButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
+                    .addComponent(HistoryTypesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addContainerGap())
         );
 
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {BoardActionTypeButton, FFConciliatorsButton, HearingPeopleButton, HistoryTypesButton, MEDMediatorsButton, PBRExecsButton, PartyButton, REPRecsButton, REPStatusOptionsButton, RedactionAdminButton, SERBExecButton, SystemPBRButton, SystemSERBButton, ULPRecsButton, UsersButton});
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {BoardActionTypeButton, FFConciliatorsButton, HistoryTypesButton, MediatorsButton, PBRExecsButton, PartyButton, REPRecsButton, REPStatusOptionsButton, SERBExecButton, SystemPBRButton, SystemSERBButton, ULPRecsButton, UsersButton});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void HistoryTypesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HistoryTypesButtonActionPerformed
-        // TODO add your handling code here:
+        new ActivityTypeSearchDialog(Global.root, true);
     }//GEN-LAST:event_HistoryTypesButtonActionPerformed
 
     private void FFConciliatorsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FFConciliatorsButtonActionPerformed
-        // TODO add your handling code here:
+        new FactFinderConciliatorSearchDialog(Global.root, true);
     }//GEN-LAST:event_FFConciliatorsButtonActionPerformed
 
-    private void MEDMediatorsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MEDMediatorsButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_MEDMediatorsButtonActionPerformed
+    private void MediatorsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MediatorsButtonActionPerformed
+        new MediatorSearchDialog(Global.root, true);
+    }//GEN-LAST:event_MediatorsButtonActionPerformed
 
     private void PartyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PartyButtonActionPerformed
-        // TODO add your handling code here:
+        new PartySearchDialog(Global.root, true);
     }//GEN-LAST:event_PartyButtonActionPerformed
 
     private void SystemSERBButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SystemSERBButtonActionPerformed
-        // TODO add your handling code here:
+        new AdministrationInfoAddEdidDialog(Global.root, true, "SERB");
     }//GEN-LAST:event_SystemSERBButtonActionPerformed
 
     private void SERBExecButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SERBExecButtonActionPerformed
-        // TODO add your handling code here:
+        new BoardExecSearchDialog(Global.root, true, "SERB");
     }//GEN-LAST:event_SERBExecButtonActionPerformed
 
     private void UsersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UsersButtonActionPerformed
-        // TODO add your handling code here:
+        new UserSearchDialog(Global.root, true);
     }//GEN-LAST:event_UsersButtonActionPerformed
 
     private void SystemPBRButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SystemPBRButtonActionPerformed
-        // TODO add your handling code here:
+        new AdministrationInfoAddEdidDialog(Global.root, true, "SPBR");
     }//GEN-LAST:event_SystemPBRButtonActionPerformed
 
     private void PBRExecsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PBRExecsButtonActionPerformed
-        // TODO add your handling code here:
+        new BoardExecSearchDialog(Global.root, true, "SPBR");
     }//GEN-LAST:event_PBRExecsButtonActionPerformed
 
     private void REPRecsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_REPRecsButtonActionPerformed
@@ -383,14 +353,6 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
     private void ULPRecsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ULPRecsButtonActionPerformed
         new ULPRecsSearchDialog(Global.root, true);
     }//GEN-LAST:event_ULPRecsButtonActionPerformed
-
-    private void HearingPeopleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HearingPeopleButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_HearingPeopleButtonActionPerformed
-
-    private void RedactionAdminButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RedactionAdminButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_RedactionAdminButtonActionPerformed
 
     private void BoardActionTypeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BoardActionTypeButtonActionPerformed
         new REPBoardActionTypeSearchDialog(Global.root, true);
@@ -407,15 +369,13 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BoardActionTypeButton;
     private javax.swing.JButton FFConciliatorsButton;
-    private javax.swing.JButton HearingPeopleButton;
     private javax.swing.JButton HistoryTypesButton;
-    private javax.swing.JButton MEDMediatorsButton;
+    private javax.swing.JButton MediatorsButton;
     private javax.swing.JButton PBRExecsButton;
     private javax.swing.JButton PartyButton;
     private javax.swing.JButton PreFixesButton;
     private javax.swing.JButton REPRecsButton;
     private javax.swing.JButton REPStatusOptionsButton;
-    private javax.swing.JButton RedactionAdminButton;
     private javax.swing.JButton SERBExecButton;
     private javax.swing.JButton SystemPBRButton;
     private javax.swing.JButton SystemSERBButton;
