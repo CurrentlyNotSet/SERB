@@ -19,7 +19,10 @@ public class NumberFormatService {
     
     public static String convertStringToPhoneNumber(String number) {
         String formattedNumber = "";
-        if(number.length() >= 10) {
+        
+        if(number == null) {
+            formattedNumber = "";
+        } else if(number.length() >= 10) {
             formattedNumber += "(" + number.substring(0, 3) + ") ";
             formattedNumber += number.substring(3, 6) + "-";
             formattedNumber += number.substring(6, 10);

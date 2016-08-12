@@ -5,6 +5,7 @@
  */
 package parker.serb.MED;
 
+import com.alee.extended.date.WebDateField;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.sql.Timestamp;
@@ -20,6 +21,7 @@ import parker.serb.sql.BargainingUnit;
 import parker.serb.sql.MEDCase;
 import parker.serb.sql.Mediator;
 import parker.serb.sql.RelatedCase;
+import parker.serb.util.ClearDateDialog;
 import parker.serb.util.NumberFormatService;
 
 /**
@@ -183,8 +185,13 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
 
         newInformation.employerIDNumber = employerIDNumberTextBox.getText().equals("") ? null : employerIDNumberTextBox.getText();
         newInformation.bargainingUnitNumber = bargainingUnitTextBox.getText().equals("") ? null : bargainingUnitTextBox.getText();
+        
+        newInformation.approxNumberOfEmployees = approxNumberOfEmployeesTextBox.getText().equals("") ? null : approxNumberOfEmployeesTextBox.getText();
+        
         newInformation.duplicateCaseNumber = duplicateCaseNumberTextBox.getText().equals("") ? null : duplicateCaseNumberTextBox.getText();
         newInformation.relatedCaseNumber = relatedCaseNumberTextBox.getText().equals("") ? null : relatedCaseNumberTextBox.getText();       
+        
+        
         
         newInformation.negotiationType = negotiationTypeComboBox.getSelectedItem().toString().trim().equals("") ? null : negotiationTypeComboBox.getSelectedItem().toString();
         newInformation.expirationDate = expirationDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(expirationDateTextBox.getText()));
@@ -255,12 +262,10 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
             setBUNumberCheckBoxes(BargainingUnit.getCertStatus(orginalInformation.bargainingUnitNumber));
         }
         
+        approxNumberOfEmployeesTextBox.setText((orginalInformation.approxNumberOfEmployees != null ? orginalInformation.approxNumberOfEmployees : ""));
+        
         duplicateCaseNumberTextBox.setText(orginalInformation.duplicateCaseNumber != null ? orginalInformation.duplicateCaseNumber : "");
         relatedCaseNumberTextBox.setText(orginalInformation.relatedCaseNumber != null ? orginalInformation.relatedCaseNumber : "");
-
-        //load multicase
-        //create table...
-        //load data
         
         negotiationTypeComboBox.setSelectedItem(orginalInformation.negotiationType != null ? orginalInformation.negotiationType : " ");
         expirationDateTextBox.setText(orginalInformation.expirationDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.expirationDate.getTime())) : "");
@@ -317,6 +322,16 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
             relatedCaseModel.addRow(new Object[] {relatedCase});
         }
         relatedCaseTable.clearSelection();
+    }
+    
+    private void clearDate(WebDateField dateField, MouseEvent evt) {
+        if(evt.getButton() == MouseEvent.BUTTON3 && dateField.isEnabled()) {
+            ClearDateDialog dialog = new ClearDateDialog((JFrame) Global.root, true);
+            if(dialog.isReset()) {
+                dateField.setText("");
+            }
+            dialog.dispose();
+        }
     }
 
     /**
@@ -743,6 +758,7 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
         });
 
         jTextField7.setBackground(new java.awt.Color(238, 238, 238));
+        jTextField7.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         jTextField7.setEnabled(false);
 
         settlementDateTextBox.setEditable(false);
@@ -964,7 +980,7 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_deemedCertifiedCheckBoxActionPerformed
 
     private void filingDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_filingDateTextBoxMouseClicked
-//        clearDate(dismissalDateTextBox, evt);
+        clearDate(filingDateTextBox, evt);
     }//GEN-LAST:event_filingDateTextBoxMouseClicked
 
     private void multiUnitBargainingRequestedCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_multiUnitBargainingRequestedCheckBoxActionPerformed
@@ -980,23 +996,23 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_sendToBoardToCloseCheckBoxActionPerformed
 
     private void expirationDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_expirationDateTextBoxMouseClicked
-        // TODO add your handling code here:
+        clearDate(expirationDateTextBox, evt);
     }//GEN-LAST:event_expirationDateTextBoxMouseClicked
 
     private void mediatorAppointedDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mediatorAppointedDateTextBoxMouseClicked
-        // TODO add your handling code here:
+        clearDate(mediatorAppointedDateTextBox, evt);
     }//GEN-LAST:event_mediatorAppointedDateTextBoxMouseClicked
 
     private void settlementDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_settlementDateTextBoxMouseClicked
-        // TODO add your handling code here:
+        clearDate(settlementDateTextBox, evt);
     }//GEN-LAST:event_settlementDateTextBoxMouseClicked
 
     private void boardFinalDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_boardFinalDateTextBoxMouseClicked
-        // TODO add your handling code here:
+        clearDate(boardFinalDateTextBox, evt);
     }//GEN-LAST:event_boardFinalDateTextBoxMouseClicked
 
     private void retentionTicklerDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_retentionTicklerDateTextBoxMouseClicked
-        // TODO add your handling code here:
+        clearDate(retentionTicklerDateTextBox, evt);
     }//GEN-LAST:event_retentionTicklerDateTextBoxMouseClicked
 
     private void lateFilingCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lateFilingCheckBoxActionPerformed
@@ -1049,23 +1065,25 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
 
     private void stateMediatorAppointedComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stateMediatorAppointedComboBoxActionPerformed
         if(stateMediatorAppointedComboBox.isEnabled()) {
-            if(stateMediatorAppointedComboBox.getSelectedItem() != null || 
-                    stateMediatorAppointedComboBox.getSelectedItem().toString().equals("")) {
-            jTextField6.setText(NumberFormatService.convertStringToPhoneNumber(Mediator.getMediatorPhoneNumber(stateMediatorAppointedComboBox.getSelectedItem().toString())));
-            } else {
-                jTextField6.setText("");
+            if(stateMediatorAppointedComboBox.getSelectedItem() != null) {
+                if(!stateMediatorAppointedComboBox.getSelectedItem().toString().equals("")) {
+                    jTextField6.setText(NumberFormatService.convertStringToPhoneNumber(Mediator.getMediatorPhoneNumber(stateMediatorAppointedComboBox.getSelectedItem().toString())));
+                } else {
+                    jTextField6.setText("");
+                }
             }
         } 
     }//GEN-LAST:event_stateMediatorAppointedComboBoxActionPerformed
 
     private void FCMSMediatorAppointedComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FCMSMediatorAppointedComboBoxActionPerformed
         if(FCMSMediatorAppointedComboBox.isEnabled()) {
-            if(FCMSMediatorAppointedComboBox.getSelectedItem() != null || 
-                    FCMSMediatorAppointedComboBox.getSelectedItem().toString().equals("")) {
-            jTextField7.setText(NumberFormatService.convertStringToPhoneNumber(Mediator.getMediatorPhoneNumber(FCMSMediatorAppointedComboBox.getSelectedItem().toString())));
-            } else {
-                jTextField7.setText("");
-            }
+            if(FCMSMediatorAppointedComboBox.getSelectedItem() != null) {
+                if(!FCMSMediatorAppointedComboBox.getSelectedItem().toString().equals("")) {
+                    jTextField7.setText(NumberFormatService.convertStringToPhoneNumber(Mediator.getMediatorPhoneNumber(FCMSMediatorAppointedComboBox.getSelectedItem().toString())));
+                } else {
+                    jTextField7.setText("");
+                }
+            }  
         } 
     }//GEN-LAST:event_FCMSMediatorAppointedComboBoxActionPerformed
 
