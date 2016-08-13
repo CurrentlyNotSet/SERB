@@ -730,7 +730,6 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
             }
         });
 
-        stateMediatorAppointedComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         stateMediatorAppointedComboBox.setEnabled(false);
         stateMediatorAppointedComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -738,7 +737,6 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
             }
         });
 
-        FCMSMediatorAppointedComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         FCMSMediatorAppointedComboBox.setEnabled(false);
         FCMSMediatorAppointedComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
