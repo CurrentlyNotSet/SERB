@@ -28,7 +28,6 @@ public class MEDRootPanel extends javax.swing.JPanel {
     public MEDRootPanel() {
         initComponents();
         addListeners();
-        jTabbedPane1.remove(5);
     }
     
     /**
@@ -77,9 +76,9 @@ public class MEDRootPanel extends javax.swing.JPanel {
             case "Conciliation":
                 mEDConciliationPanel2.loadInformation();
                 break;
-//            case "Strike":
+            case "Strike":
 //                uLPInvestigationReveals1.loadInformation();
-//                break;
+                break;
             case "Notes":
                 notesPanel2.loadInformation();
                 break;
@@ -366,6 +365,7 @@ public class MEDRootPanel extends javax.swing.JPanel {
         jPanel5 = new javax.swing.JPanel();
         mEDConciliationPanel2 = new parker.serb.MED.MEDConciliationPanel();
         jPanel6 = new javax.swing.JPanel();
+        mEDStrikePanel1 = new parker.serb.MED.MEDStrikePanel();
         jPanel8 = new javax.swing.JPanel();
         notesPanel2 = new parker.serb.notes.NotesPanel();
 
@@ -377,7 +377,7 @@ public class MEDRootPanel extends javax.swing.JPanel {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(activityPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
+            .addComponent(activityPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Activity", jPanel1);
@@ -390,7 +390,9 @@ public class MEDRootPanel extends javax.swing.JPanel {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mEDCaseStatusPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(mEDCaseStatusPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Status", jPanel2);
@@ -403,7 +405,7 @@ public class MEDRootPanel extends javax.swing.JPanel {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(partiesPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
+            .addComponent(partiesPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Parties", jPanel3);
@@ -416,7 +418,7 @@ public class MEDRootPanel extends javax.swing.JPanel {
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mEDFactFinderPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
+            .addComponent(mEDFactFinderPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Fact Finder", jPanel4);
@@ -429,7 +431,7 @@ public class MEDRootPanel extends javax.swing.JPanel {
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mEDConciliationPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
+            .addComponent(mEDConciliationPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Conciliation", jPanel5);
@@ -438,11 +440,11 @@ public class MEDRootPanel extends javax.swing.JPanel {
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1010, Short.MAX_VALUE)
+            .addComponent(mEDStrikePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1099, Short.MAX_VALUE)
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 619, Short.MAX_VALUE)
+            .addComponent(mEDStrikePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Strike", jPanel6);
@@ -455,7 +457,7 @@ public class MEDRootPanel extends javax.swing.JPanel {
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(notesPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
+            .addComponent(notesPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Notes", jPanel8);
@@ -487,6 +489,7 @@ public class MEDRootPanel extends javax.swing.JPanel {
     private parker.serb.MED.MEDCaseStatusPanel mEDCaseStatusPanel1;
     private parker.serb.MED.MEDConciliationPanel mEDConciliationPanel2;
     private parker.serb.MED.MEDFactFinderPanel mEDFactFinderPanel1;
+    private parker.serb.MED.MEDStrikePanel mEDStrikePanel1;
     private parker.serb.notes.NotesPanel notesPanel2;
     private parker.serb.party.PartiesPanel partiesPanel1;
     private parker.serb.REP.REPCaseInformationPanel rEPCaseInformationPanel1;
