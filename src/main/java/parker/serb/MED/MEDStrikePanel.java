@@ -5,7 +5,9 @@
  */
 package parker.serb.MED;
 
+import java.awt.Color;
 import parker.serb.Global;
+import parker.serb.sql.MEDCase;
 
 /**
  *
@@ -13,6 +15,8 @@ import parker.serb.Global;
  */
 public class MEDStrikePanel extends javax.swing.JPanel {
 
+    MEDCase orginalInformation;
+    
     /**
      * Creates new form MEDStrikePanel
      */
@@ -21,23 +25,109 @@ public class MEDStrikePanel extends javax.swing.JPanel {
     }
     
     public void enableUpdate() {
+        strikeFileDateTextBox.setEnabled(true);
+        strikeFileDateTextBox.setBackground(Color.white);
+        //skip med case number
+        medCaseNumberTextBox.setEnabled(true);
+        medCaseNumberTextBox.setBackground(Color.white);
+        descriptionTextBox.setEnabled(true);
+        descriptionTextBox.setBackground(Color.white);
+        unitSizeTextBox.setEnabled(true);
+        unitSizeTextBox.setBackground(Color.white);
+        unauthorizedStrikeCheckBox.setEnabled(true);
+        noticeOfIntentToStrikeOnlyCheckBox.setEnabled(true);
+        intendedDateStrikeTextBox.setEnabled(true);
+        intendedDateStrikeTextBox.setBackground(Color.white);
+        noticeOfIntentToPicketOnlyCheckBox.setEnabled(true);
+        intendedDatePicketTextBox.setEnabled(true);
+        intendedDatePicketTextBox.setBackground(Color.white);
+        informationCheckBox.setEnabled(true);
+        noticeOfIntentToStrikeAndPicketCheckBox.setEnabled(true);
         
+        strikeOccuredComboBox.setEnabled(true);
+        strikeStatusComboBox.setEnabled(true);
+        strikeBeganTextBox.setEnabled(true);
+        strikeBeganTextBox.setBackground(Color.white);
+        strikeEndedTextBox.setEnabled(true);
+        strikeEndedTextBox.setBackground(Color.white);
+        //skip total number of days
+        mediatorAppointedComboBox.setEnabled(true);
+        strikeNotesTextArea.setEnabled(true);
+        strikeNotesTextArea.setBackground(Color.white);
     }
     
     public void disableUpdate(boolean save) {
+        strikeFileDateTextBox.setEnabled(false);
+        strikeFileDateTextBox.setBackground(new Color(238,238,238));
+        //skip med case number
+        medCaseNumberTextBox.setEnabled(false);
+        medCaseNumberTextBox.setBackground(Color.white);
+        descriptionTextBox.setEnabled(false);
+        descriptionTextBox.setBackground(Color.white);
+        unitSizeTextBox.setEnabled(false);
+        unitSizeTextBox.setBackground(Color.white);
+        unauthorizedStrikeCheckBox.setEnabled(false);
+        noticeOfIntentToStrikeOnlyCheckBox.setEnabled(false);
+        intendedDateStrikeTextBox.setEnabled(false);
+        intendedDateStrikeTextBox.setBackground(Color.white);
+        noticeOfIntentToPicketOnlyCheckBox.setEnabled(false);
+        intendedDatePicketTextBox.setEnabled(false);
+        intendedDatePicketTextBox.setBackground(Color.white);
+        informationCheckBox.setEnabled(false);
+        noticeOfIntentToStrikeAndPicketCheckBox.setEnabled(false);
         
+        strikeOccuredComboBox.setEnabled(false);
+        strikeStatusComboBox.setEnabled(false);
+        strikeBeganTextBox.setEnabled(false);
+        strikeBeganTextBox.setBackground(Color.white);
+        strikeEndedTextBox.setEnabled(false);
+        strikeEndedTextBox.setBackground(Color.white);
+        //skip total number of days
+        mediatorAppointedComboBox.setEnabled(false);
+        strikeNotesTextArea.setEnabled(false);
+        strikeNotesTextArea.setBackground(Color.white);
+        
+        if(save) {
+            saveInformation();
+        }
+        
+        loadInformaiton();
     }
     
     public void loadInformaiton() {
+        
+//        orginalInformation = MEDCase.loadStrikeInformation();
+        
         
     }
     
     public void saveInformation() {
         
+        
+        
     }
     
     public void clearAll() {
+        strikeFileDateTextBox.setText("");
+        strikeCaseNumberTextBox.setText("");
+        medCaseNumberTextBox.setText("");
+        descriptionTextBox.setText("");
+        unitSizeTextBox.setText("");
+        unauthorizedStrikeCheckBox.setSelected(false);
+        noticeOfIntentToStrikeOnlyCheckBox.setSelected(false);
+        intendedDateStrikeTextBox.setText("");
+        noticeOfIntentToPicketOnlyCheckBox.setSelected(false);
+        intendedDatePicketTextBox.setText("");
+        informationCheckBox.setSelected(false);
+        noticeOfIntentToStrikeAndPicketCheckBox.setSelected(false);
         
+        strikeOccuredComboBox.setSelectedItem(" ");
+        strikeStatusComboBox.setSelectedItem(" ");
+        strikeBeganTextBox.setText("");
+        strikeEndedTextBox.setText("");
+        totalNumberOfDaysTextBox.setText("");
+        mediatorAppointedComboBox.setSelectedItem(" ");
+        strikeNotesTextArea.setText("");
     }
 
     /**
@@ -174,7 +264,7 @@ public class MEDStrikePanel extends javax.swing.JPanel {
         unitSizeTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         unitSizeTextBox.setEnabled(false);
 
-        jLabel7.setText("Notice Of Intent to Strike Only:");
+        jLabel7.setText("Notice of Intent to Strike Only:");
 
         strikeCaseNumberTextBox.setBackground(new java.awt.Color(238, 238, 238));
         strikeCaseNumberTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
