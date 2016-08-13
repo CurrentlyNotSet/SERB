@@ -234,7 +234,7 @@ public class MEDCase {
         try {
             Statement stmt = Database.connectToDB().createStatement();
 
-            String sql = "Insert into MEDCase (CaseYear, CaseType, CaseMonth, CaseNumber, FileDate) Values (?,?,?,?,?)";
+            String sql = "Insert into MEDCase (CaseYear, CaseType, CaseMonth, CaseNumber, FileDate, caseStatus) Values (?,?,?,?,?,'Open')";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, caseYear);
