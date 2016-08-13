@@ -41,6 +41,7 @@ public class MEDRootPanel extends javax.swing.JPanel {
         mEDConciliationPanel2.clearAll();
         mEDFactFinderPanel1.clearAll();
         mEDCaseStatusPanel1.clearAll();
+        mEDStrikePanel1.clearAll();
     }
     
     private void addListeners() {
@@ -77,7 +78,7 @@ public class MEDRootPanel extends javax.swing.JPanel {
                 mEDConciliationPanel2.loadInformation();
                 break;
             case "Strike":
-//                uLPInvestigationReveals1.loadInformation();
+                mEDStrikePanel1.loadInformaiton();
                 break;
             case "Notes":
                 notesPanel2.loadInformation();
@@ -127,12 +128,12 @@ public class MEDRootPanel extends javax.swing.JPanel {
                 Global.root.getjButton2().setEnabled(true);
                 Global.root.getjButton9().setVisible(false);
                 break;
-//            case "Strike":
-//                System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
-//                Global.root.getjButton2().setText("Update");
-//                Global.root.getjButton2().setEnabled(true);
-//                Global.root.getjButton9().setVisible(false);
-//                break;
+            case "Strike":
+                System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
+                Global.root.getjButton2().setText("Update");
+                Global.root.getjButton2().setEnabled(true);
+                Global.root.getjButton9().setVisible(false);
+                break;
             case "Notes":
                 System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
                 Global.root.getjButton2().setText("Update");
@@ -190,17 +191,17 @@ public class MEDRootPanel extends javax.swing.JPanel {
                     Global.root.getmEDHeaderPanel1().loadHeaderInformation();
                 }
                 break;
-//            case "Statement":
-//                if(buttonText.equals("Update")) {
-//                    disableTabs(jTabbedPane1.getSelectedIndex());
-//                    uLPStatement1.enableUpdate();
-//                } else {
-//                    enableTabs();
-//                    Global.root.enableTabsAfterSave();
-//                    Global.root.enableButtonsAfterCancel();
-//                    uLPStatement1.disableUpdate(true);
-//                }
-//                break;
+            case "Strike":
+                if(buttonText.equals("Update")) {
+                    disableTabs(jTabbedPane1.getSelectedIndex());
+                    mEDStrikePanel1.enableUpdate();
+                } else {
+                    enableTabs();
+                    Global.root.enableTabsAfterSave();
+                    Global.root.enableButtonsAfterCancel();
+                    mEDStrikePanel1.disableUpdate(true);
+                }
+                break;
             case "Fact Finder":
                 if(buttonText.equals("Update")) {
                     disableTabs(jTabbedPane1.getSelectedIndex());
@@ -224,17 +225,6 @@ public class MEDRootPanel extends javax.swing.JPanel {
                     mEDConciliationPanel2.disableUpdate(true);
                 }
                 break;
-//            case "Strike":
-//                if(buttonText.equals("Update")) {
-//                    disableTabs(jTabbedPane1.getSelectedIndex());
-//                    uLPInvestigationReveals1.enableUpdate();
-//                } else {
-//                    enableTabs();
-//                    Global.root.enableTabsAfterSave();
-//                    Global.root.enableButtonsAfterCancel();
-//                    uLPInvestigationReveals1.disableUpdate(true);
-//                }
-//                break;
             case "Notes":
                 if(buttonText.equals("Update")) {
                     disableTabs(jTabbedPane1.getSelectedIndex());
@@ -276,16 +266,6 @@ public class MEDRootPanel extends javax.swing.JPanel {
                     mEDCaseStatusPanel1.disableUpdate(false);
                 }
                 break;
-//            case "Statement":
-//                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
-//                if(!cancel.isReset()) {
-//                } else {
-//                    Global.root.enableButtonsAfterCancel();
-//                    Global.root.enableTabsAfterSave();
-//                    enableTabs();
-//                    uLPStatement1.disableUpdate(false);
-//                }
-//                break;
             case "Fact Finder":
                 cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
                 if(!cancel.isReset()) {
@@ -306,16 +286,16 @@ public class MEDRootPanel extends javax.swing.JPanel {
                     mEDConciliationPanel2.disableUpdate(false);
                 }
                 break;
-//            case "Strike":
-//                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
-//                if(!cancel.isReset()) {
-//                } else {
-//                    Global.root.enableButtonsAfterCancel();
-//                    Global.root.enableTabsAfterSave();
-//                    enableTabs();
-//                    uLPInvestigationReveals1.disableUpdate(false);
-//                }
-//                break;
+            case "Strike":
+                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+                if(!cancel.isReset()) {
+                } else {
+                    Global.root.enableButtonsAfterCancel();
+                    Global.root.enableTabsAfterSave();
+                    enableTabs();
+                    mEDStrikePanel1.disableUpdate(false);
+                }
+                break;
             case "Notes":
                 cancel = new CancelUpdate(Global.root, true);
                 if(!cancel.isReset()) {
