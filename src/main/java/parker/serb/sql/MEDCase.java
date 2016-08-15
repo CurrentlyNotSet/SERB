@@ -1775,14 +1775,13 @@ public class MEDCase {
                     + "MEDCase.caseMonth AS CaseMonth, "
                     + "MEDCase.caseNumber AS CaseNumber,"
                     
-                    + "(SELECT CASE WHEN (CaseParty.\"firstName\" IS NULL AND CaseParty.\"lastName\" IS NULL) "
-                    + "THEN (CaseParty.\"companyName\") ELSE ((ISNULL(CaseParty.\"firstName\" + ' ', '')) "
-                    + "+ (ISNULL(CaseParty.\"middleInitial\" + ' ', '')) + (ISNULL(CaseParty.\"lastName\" + ' ', '')) "
-                    + "+ (ISNULL(CaseParty.\"suffix\" + ' ', '')) + (ISNULL(CaseParty.\"nameTitle\" + ' ', '')) "
-                    + "+ (ISNULL(CaseParty.\"jobTitle\", ''))) END AS EmployerName FROM CaseParty "
-                    + "WHERE CaseParty.caseRelation = 'Employer' AND (CaseParty.caseYear =  MEDCase.caseYear  "
-                    + "AND CaseParty.caseType = MEDCase.caseType AND CaseParty.caseMonth =  MEDCase.caseMonth  "
-                    + "AND CaseParty.caseNumber =  MEDCase.caseNumber )) AS EmployerName, "
+                    + "EmployerName = STUFF((SELECT ';  ' + CASE WHEN (CaseParty.\"firstName\" IS NULL AND CaseParty.\"lastName\" IS NULL) "
+                    + "THEN (CaseParty.\"companyName\") ELSE ((ISNULL(CaseParty.\"firstName\" + ' ', '')) + (ISNULL(CaseParty.\"middleInitial\" + ' ', '')) "
+                    + "+ (ISNULL(CaseParty.\"lastName\" + ' ', '')) + (ISNULL(CaseParty.\"suffix\" + ' ', '')) + (ISNULL(CaseParty.\"nameTitle\" + ' ', '')) "
+                    + "+ (ISNULL(CaseParty.\"jobTitle\", ''))) END AS EmployerName FROM caseparty "
+                    + "WHERE CaseParty.caseYear = medcase.caseYear AND CaseParty.caseType = medcase.caseType "
+                    + "AND CaseParty.caseMonth = medcase.caseMonth AND CaseParty.caseNumber = medcase.caseNumber "
+                    + "AND CaseParty.caseRelation = 'Employer' FOR XML PATH(''), TYPE).value('.', 'NVARCHAR(MAX)'), 1, 1, ''), "
                     
                     + "MEDCase.fileDate AS FileDate "
                     + "FROM  MEDCase "
@@ -1822,15 +1821,30 @@ public class MEDCase {
         try {
             Statement stmt = Database.connectToDB().createStatement();
             
-            String sql = "SELECT medcase.CaseNumber, medcase.EmployerName, " 
-                    + "medcase.CaseFileDate, medcase.Status" 
-                    + "FROM medcase" 
-                    + "WHERE medcase.CBAReceivedDate BETWEEN CAST(? as datetime) AND CAST(? as datetime)" 
-                    + "AND medcase.Active = 1 AND medcase.tempholder4 != 'Send to Brd to Close' ORDER BY medcase.CaseNumber";
+            String sql = "SELECT "
+                    + "MEDCase.caseYear AS CaseYear, "
+                    + "MEDCase.caseType AS CaseType, "
+                    + "MEDCase.caseMonth AS CaseMonth, "
+                    + "MEDCase.caseNumber AS CaseNumber,"
+                    
+                    + "EmployerName = STUFF((SELECT ';  ' + CASE WHEN (CaseParty.\"firstName\" IS NULL AND CaseParty.\"lastName\" IS NULL) "
+                    + "THEN (CaseParty.\"companyName\") ELSE ((ISNULL(CaseParty.\"firstName\" + ' ', '')) + (ISNULL(CaseParty.\"middleInitial\" + ' ', '')) "
+                    + "+ (ISNULL(CaseParty.\"lastName\" + ' ', '')) + (ISNULL(CaseParty.\"suffix\" + ' ', '')) + (ISNULL(CaseParty.\"nameTitle\" + ' ', '')) "
+                    + "+ (ISNULL(CaseParty.\"jobTitle\", ''))) END AS EmployerName FROM caseparty "
+                    + "WHERE CaseParty.caseYear = medcase.caseYear AND CaseParty.caseType = medcase.caseType "
+                    + "AND CaseParty.caseMonth = medcase.caseMonth AND CaseParty.caseNumber = medcase.caseNumber "
+                    + "AND CaseParty.caseRelation = 'Employer' FOR XML PATH(''), TYPE).value('.', 'NVARCHAR(MAX)'), 1, 1, ''), "
+                    
+                    + "MEDCase.fileDate AS FileDate "
+                    + "FROM  MEDCase "
+                    + "WHERE MEDCase.SendToBoardToClose = 1 "
+                    + "AND MEDCase.SettlementDate > ? " 
+                    + "AND MEDCase.SettlementDate < ? "
+                    + "ORDER BY MEDCase.caseYear, MEDCase.caseMonth, MEDCase.caseNumber";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setDate(1, (java.sql.Date) startDate);
-            preparedStatement.setDate(2, (java.sql.Date) endDate);
+            preparedStatement.setDate(1, new java.sql.Date(startDate.getTime()));
+            preparedStatement.setDate(2, new java.sql.Date(endDate.getTime()));
             ResultSet rs = preparedStatement.executeQuery();
             
             while(rs.next()) {

@@ -93,8 +93,8 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
     }
     
     private void loadTable(){
-        Date startDate = new Timestamp(NumberFormatService.convertMMDDYYYY(startDateField.getText()));
-        Date endDate = new Timestamp(NumberFormatService.convertMMDDYYYY(endDateField.getText()));
+        Date startDate = new Date(NumberFormatService.convertMMDDYYYY(startDateField.getText()));
+        Date endDate = new Date(NumberFormatService.convertMMDDYYYY(endDateField.getText()));
 
         List<MEDCase> caseList = MEDCase.getCloseList(startDate, endDate);
 
@@ -136,10 +136,7 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
 //                JasperPrint jp = JasperFillManager.fillReport(jr, para, con);
 //                JasperViewer.viewReport(jp, false);
 //            } catch (JRException ex) {
-//                SystemErrorNotificationEMail SENE = new SystemErrorNotificationEMail(global.getMainFrame(), true, global);
-//                StringWriter errors = new StringWriter();
-//                ex.printStackTrace(new PrintWriter(errors));
-//                SENE.loadInformation("MEDReportsPanel", "246", errors.toString());
+//
 //            }
     }
         

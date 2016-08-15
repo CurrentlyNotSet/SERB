@@ -196,10 +196,7 @@ public class MEDBulkSettleCasesDialog extends javax.swing.JFrame {
 //            JasperPrint jp = JasperFillManager.fillReport(jr, para, con);
 //            JasperViewer.viewReport(jp, false);
 //        } catch (JRException ex) {
-//            SystemErrorNotificationEMail SENE = new SystemErrorNotificationEMail(global.getMainFrame(), true, global);
-//            StringWriter errors = new StringWriter();
-//            ex.printStackTrace(new PrintWriter(errors));
-//            SENE.loadInformation("MEDReportsPanel", "246", errors.toString());
+//
 //        }
     }
 
