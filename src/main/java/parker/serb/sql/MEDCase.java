@@ -1496,6 +1496,32 @@ public class MEDCase {
             SlackNotification.sendNotification(ex.getMessage());
         }
     }
+    
+    public static void updateClosedCases(String caseNumber, Date closeDate) {
+         NumberFormatService num = NumberFormatService.parseFullCaseNumberNoNGlobal(caseNumber);
+         
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Update MEDCase set"
+                    + " SendToBoardToClose = ?"
+                    + " where caseYear = ? "
+                    + " AND caseType = ? "
+                    + " AND caseMonth = ? "
+                    + " AND caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setDate(1, (java.sql.Date) closeDate);
+            preparedStatement.setString(2, num.caseYear);
+            preparedStatement.setString(3, num.caseType);
+            preparedStatement.setString(4, num.caseMonth);
+            preparedStatement.setString(5, num.caseNumber);
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex.getMessage());
+        }
+    }
      
      public static List<MEDCase> getSettleList(String caseYear, String caseMonth) {
         
@@ -1549,5 +1575,42 @@ public class MEDCase {
         }
         return medcaseList;
     }
+     
+     public static List<MEDCase> getCloseList(Date startDate, Date endDate) {
+        
+        List<MEDCase> medcaseList = new ArrayList<>();
+            
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+            
+            String sql = "SELECT medcase.CaseNumber, medcase.EmployerName, " 
+                    + "medcase.CaseFileDate, medcase.Status" 
+                    + "FROM medcase" 
+                    + "WHERE medcase.CBAReceivedDate BETWEEN CAST(? as datetime) AND CAST(? as datetime)" 
+                    + "AND medcase.Active = 1 AND medcase.tempholder4 != 'Send to Brd to Close' ORDER BY medcase.CaseNumber";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setDate(1, (java.sql.Date) startDate);
+            preparedStatement.setDate(2, (java.sql.Date) endDate);
+            ResultSet rs = preparedStatement.executeQuery();
+            
+            while(rs.next()) {
+                MEDCase item = new MEDCase();
+                
+                item.caseYear = rs.getString("caseYear");
+                item.caseType = rs.getString("caseType");
+                item.caseMonth = rs.getString("caseMonth");
+                item.caseNumber = rs.getString("caseNumber");
+                item.employerIDNumber = rs.getString("EmployerName");
+                item.fileDate = rs.getTimestamp("fileDate");
+                medcaseList.add(item);
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex.getMessage());
+        }
+        return medcaseList;
+    }
+     
+     
     
 }

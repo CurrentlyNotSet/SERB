@@ -4,9 +4,14 @@
  */
 package parker.serb.MED;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
+import parker.serb.sql.MEDCase;
+import parker.serb.util.NumberFormatService;
 
 /**
  *
@@ -15,6 +20,8 @@ import parker.serb.Global;
 public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
 
     String dateForm;
+    DefaultTableModel model;
+    
     /**
      * Creates new form MEDsettleCases
      * @param parent
@@ -58,69 +65,64 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
         caseTable.getColumnModel().getColumn(3).setMinWidth(80);
         caseTable.getColumnModel().getColumn(3).setPreferredWidth(80);
         caseTable.getColumnModel().getColumn(3).setMaxWidth(80);
+    //get Table
+        model = (DefaultTableModel) caseTable.getModel();
+    }
+
+    private void clearTable() {
+        model = (DefaultTableModel) caseTable.getModel();
+        model.setRowCount(0);
+        countLabel.setText(" ");
+    }
+    
+    private void loadTableThread() {
+        clearTable();
+        jLayeredPane1.moveToFront(jPanel1);
+        Thread temp = new Thread(() -> {
+            loadTable();
+        });
+        temp.start();
     }
     
     private void checkIfTableIsLoadable(){
         if(!"".equals(startDateField.getText().trim()) && !"".equals(endDateField.getText().trim())){
-            loadTable();
+            loadTableThread();
         }else{
             clearTable();
         }
     }
     
-    private void clearTable(){
-        DefaultTableModel model = (DefaultTableModel) caseTable.getModel();
-        model.setRowCount(0);
-        countLabel.setText(" ");
-    }
-    
     private void loadTable(){
-        System.out.println("YEAY");
-//        String settleDateStart = startDateField.getText().trim();
-//        String settleDateEnd = endDateField.getText().trim();
-//        clearTable();
-//        try {
-//            String sql = "SELECT medcase.CaseNumber, medcase.EmployerName, "
-//                    + "medcase.CaseFileDate, medcase.Status "
-//                    + "FROM medcase "
-//                    + "WHERE medcase.CBAReceivedDate BETWEEN CAST(? as datetime) AND CAST(? as datetime) "
-//                    + "AND medcase.Active = 1 AND medcase.tempholder4 != 'Send to Brd to Close' ORDER BY medcase.CaseNumber";
-//            PreparedStatement preparedStatement = global.getDba().getObjConn().prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-//            preparedStatement.setString(1, settleDateStart);
-//            preparedStatement.setString(2, settleDateEnd);
-//            ResultSet action = preparedStatement.executeQuery();
-//            
-//            while(action.next())
-//            {                
-//                ((DefaultTableModel) caseTable.getModel()).addRow(new Object[]{
-//                    true,
-//                    action.getString("CaseNumber"),
-//                    action.getString("EmployerName"),
-//                    action.getString("CaseFileDate")
-//                });
-//            }
-//        } catch (SQLException ex) {
-//            Logger.getLogger(MEDBulkSendToBoardDialog.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        countLabel.setText("Entries: " + caseTable.getRowCount());
+        Date startDate = new Timestamp(NumberFormatService.convertMMDDYYYY(startDateField.getText()));
+        Date endDate = new Timestamp(NumberFormatService.convertMMDDYYYY(endDateField.getText()));
+
+        List<MEDCase> caseList = MEDCase.getCloseList(startDate, endDate);
+
+        for (MEDCase item : caseList) {
+            String caseNumber = NumberFormatService.generateFullCaseNumberNonGlobal(
+                    item.caseYear, item.caseType, item.caseMonth, item.caseNumber);
+
+            model.addRow(new Object[]{
+                false,
+                caseNumber,
+                item.employerIDNumber,
+                Global.mmddyyyy.format(item.fileDate)
+            });
+        }
+        jLayeredPane1.moveToBack(jPanel1);
+        countLabel.setText("Entries: " + caseTable.getRowCount());
     }
         
     private void updateList(){
-//        for(int i = 0; i < caseTable.getRowCount(); i++){
-//            if (caseTable.getValueAt(i, 0).equals(true)) {
-//                try {
-//                    String sql = "UPDATE medcase SET "
-//                            + "tempholder4 =  ? "   //1
-//                            + "WHERE CaseNumber = ?";    //2
-//                    PreparedStatement preparedStatement = global.getDba().getObjConn().prepareStatement(sql);
-//                    preparedStatement.setString(1,  "Send to Brd to Close");
-//                    preparedStatement.setString(2,  caseTable.getValueAt(i, 1).toString());
-//                    preparedStatement.executeUpdate();
-//                } catch (SQLException ex) {
-//                    Logger.getLogger(AdminSQLQueries.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-//            }
-//        }
+        Timestamp settleDate = new Timestamp(Calendar.getInstance().getTime().getTime());
+        
+        for (int i = 0; i < caseTable.getRowCount(); i++) {
+            if (caseTable.getValueAt(i, 0).equals(true)) {
+                String caseNumber = caseTable.getValueAt(i, 1).toString();
+                
+                MEDCase.updateClosedCases(caseNumber, settleDate);
+            }
+        }
     }
     
     private void printList(){
