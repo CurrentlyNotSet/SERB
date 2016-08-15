@@ -69,7 +69,7 @@ public class RootPanel extends javax.swing.JFrame {
         Global.activeUser.activeLogIn = true;
         Audit.addAuditEntry("Logged In");
         setLocationRelativeTo(null);
-        setVisible(true);
+        setVisible(true);        
     }
     
     /**
@@ -83,6 +83,7 @@ public class RootPanel extends javax.swing.JFrame {
     public void enableTabs() {
         if(!Global.activeUserRoles.contains("Admin")) {
             jMenuBar1.remove(jMenu2);
+            jMenuBar1.remove(caseManagementMenu);
             for(int i = jTabbedPane1.getTabCount()-1; i >= 0; i--) {
                 if(!Global.activeUserRoles.contains(jTabbedPane1.getTitleAt(i))) {
                     jTabbedPane1.remove(i);
@@ -486,7 +487,7 @@ public class RootPanel extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
-        jMenu5 = new javax.swing.JMenu();
+        caseManagementMenu = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
         MEDSendToBoardToCloseMenuItem = new javax.swing.JMenuItem();
         MEDSettleCasesMenuItem = new javax.swing.JMenuItem();
@@ -937,7 +938,7 @@ public class RootPanel extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
-        jMenu5.setText("Case Management");
+        caseManagementMenu.setText("Case Management");
 
         jMenu4.setText("MED Bulk Edit");
 
@@ -957,9 +958,9 @@ public class RootPanel extends javax.swing.JFrame {
         });
         jMenu4.add(MEDSettleCasesMenuItem);
 
-        jMenu5.add(jMenu4);
+        caseManagementMenu.add(jMenu4);
 
-        jMenuBar1.add(jMenu5);
+        jMenuBar1.add(caseManagementMenu);
 
         jMenu2.setText("Admin");
 
@@ -1165,6 +1166,7 @@ public class RootPanel extends javax.swing.JFrame {
     private javax.swing.JMenuItem adminPanelMenuItem;
     private parker.serb.CMDS.CMDSHeaderPanel cMDSHeaderPanel1;
     private parker.serb.CSC.CSCHeaderPanel cSCHeaderPanel1;
+    private javax.swing.JMenu caseManagementMenu;
     private parker.serb.companySearch.companySearchPanel companySearchPanel1;
     private parker.serb.docket.DocketRootPanel docketRootPanel;
     private parker.serb.docket.DocketRootPanel docketRootPanel1;
@@ -1184,7 +1186,6 @@ public class RootPanel extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
-    private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
