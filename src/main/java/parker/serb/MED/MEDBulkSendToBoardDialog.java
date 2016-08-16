@@ -133,7 +133,7 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
     
     private void printList(){
         SMDSDocuments report = SMDSDocuments.findDocumentByFileName("MEDCasestobeClosedbyBoard.jasper");
-        new RequestedInfoOneDatePanel(this, true, "MEDCasestobeClosedbyBoard.jasper", report.id);
+        new RequestedInfoOneDatePanel(this, true, report);
     }
         
     /**

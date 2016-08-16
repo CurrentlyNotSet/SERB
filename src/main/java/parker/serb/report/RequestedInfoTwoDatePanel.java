@@ -7,6 +7,7 @@ package parker.serb.report;
 
 import parker.serb.Global;
 import javax.swing.JOptionPane;
+import parker.serb.sql.SMDSDocuments;
 
 /**
  *
@@ -14,21 +15,20 @@ import javax.swing.JOptionPane;
  */
 public class RequestedInfoTwoDatePanel extends javax.swing.JDialog {
 
-    int reportID;
+    SMDSDocuments report;
 
     /**
      * Creates new form RequestedReportInformationPanel
      *
      * @param parent
      * @param modal
-     * @param reportName
-     * @param reportIDPassed
+     * @param reportPassed
      */
-    public RequestedInfoTwoDatePanel(java.awt.Frame parent, boolean modal, String reportName, int reportIDPassed) {
+    public RequestedInfoTwoDatePanel(java.awt.Frame parent, boolean modal, SMDSDocuments reportPassed) {
         super(parent, modal);
-        reportID = reportIDPassed;
+        report = reportPassed;
         initComponents();
-        setText(reportName);
+        setText(report.fileName);
         generateButton();
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
@@ -168,7 +168,7 @@ public class RequestedInfoTwoDatePanel extends javax.swing.JDialog {
     }//GEN-LAST:event_CancelButtonActionPerformed
 
     private void GenerateReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GenerateReportButtonActionPerformed
-        GenerateReport.generateTwoDatesReport(startDateField.getDate(), endDateField.getDate(), reportID);
+        GenerateReport.generateTwoDatesReport(startDateField.getDate(), endDateField.getDate(), report);
     }//GEN-LAST:event_GenerateReportButtonActionPerformed
 
     private void startDateFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startDateFieldActionPerformed

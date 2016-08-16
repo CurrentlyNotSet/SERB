@@ -27,9 +27,8 @@ import parker.serb.util.FileService;
  */
 public class GenerateReport {
     
-    private static void generateReport(int reportID, HashMap hash) {
+    private static void generateReport(SMDSDocuments report, HashMap hash) {
         Connection conn = null;
-        SMDSDocuments report = SMDSDocuments.findDocumentByID(reportID);
         hash.put("current user", Global.activeUser.id);
         if (report.fileName == null) {
             WebOptionPane.showMessageDialog(Global.root, "<html><center> Sorry, unable to locate report. <br><br>" + report.fileName + "</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
@@ -65,17 +64,17 @@ public class GenerateReport {
         }
     }   
     
-    public static void generateSingleDatesReport(Date date, int reportID) {
+    public static void generateSingleDatesReport(Date date, SMDSDocuments report) {
         HashMap hash = new HashMap();
         hash.put("date", Global.SQLDateFormat.format(date) + " 00:00:00");
-        generateReport(reportID, hash);
+        generateReport(report, hash);
     }
     
-    public static void generateTwoDatesReport(Date Start, Date End, int reportID) {
+    public static void generateTwoDatesReport(Date Start, Date End, SMDSDocuments report) {
         HashMap hash = new HashMap();
         hash.put("BeginDate", Global.SQLDateFormat.format(Start) + " 00:00:00");
         hash.put("EndDate", Global.SQLDateFormat.format(End) + " 23:59:59");
-        generateReport(reportID, hash);
+        generateReport(report, hash);
     }
     
 }

@@ -186,7 +186,7 @@ public class MEDBulkSettleCasesDialog extends javax.swing.JFrame {
     
     private void printList() {
         SMDSDocuments report = SMDSDocuments.findDocumentByFileName("MEDCasestobeSettled.jasper");
-        new RequestedInfoTwoDatePanel(this, true, "MEDCasestobeSettled.jasper", report.id);
+        new RequestedInfoTwoDatePanel(this, true, report);
     }
 
     /**
