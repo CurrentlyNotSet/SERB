@@ -30,6 +30,7 @@ public class GenerateReport {
     private static void generateReport(int reportID, HashMap hash) {
         Connection conn = null;
         SMDSDocuments report = SMDSDocuments.findDocumentByID(reportID);
+        hash.put("current user", Global.activeUser.id);
         if (report.fileName == null) {
             WebOptionPane.showMessageDialog(Global.root, "<html><center> Sorry, unable to locate report. <br><br>" + report.fileName + "</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
         } else {

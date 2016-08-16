@@ -4,8 +4,6 @@
  */
 package parker.serb.MED;
 
-import java.sql.Timestamp;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
@@ -23,6 +21,8 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
 
     String dateForm;
     DefaultTableModel model;
+    String startDate = "";
+    String endDate = "";
     
     /**
      * Creates new form MEDsettleCases
@@ -41,13 +41,19 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
         addListeners();
     }
   
-    private void addListeners() {
+    private void addListeners() {        
         startDateField.addDateSelectionListener((Date date) -> {
-            checkIfTableIsLoadable();
+            if (!startDateField.getText().equals(startDate)){
+                startDate = startDateField.getText();
+                checkIfTableIsLoadable();
+            }
         });
         
         endDateField.addDateSelectionListener((Date date) -> {
-            checkIfTableIsLoadable();
+            if (!endDateField.getText().equals(endDate)){
+                endDate = endDateField.getText();
+                checkIfTableIsLoadable();
+            }
         });
     }
 
@@ -87,7 +93,7 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
     }
     
     private void checkIfTableIsLoadable(){
-        if(!"".equals(startDateField.getText().trim()) && !"".equals(endDateField.getText().trim())){
+        if(!"".equals(startDate) && !"".equals(endDate)){
             loadTableThread();
         }else{
             clearTable();
@@ -95,10 +101,10 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
     }
     
     private void loadTable(){
-        Date startDate = new Date(NumberFormatService.convertMMDDYYYY(startDateField.getText()));
-        Date endDate = new Date(NumberFormatService.convertMMDDYYYY(endDateField.getText()));
+        Date start = new Date(NumberFormatService.convertMMDDYYYY(startDateField.getText()));
+        Date end = new Date(NumberFormatService.convertMMDDYYYY(endDateField.getText()));
 
-        List<MEDCase> caseList = MEDCase.getCloseList(startDate, endDate);
+        List<MEDCase> caseList = MEDCase.getCloseList(start, end);
 
         for (MEDCase item : caseList) {
             String caseNumber = NumberFormatService.generateFullCaseNumberNonGlobal(
@@ -116,13 +122,11 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
     }
         
     private void updateList(){
-        Timestamp settleDate = new Timestamp(Calendar.getInstance().getTime().getTime());
-        
         for (int i = 0; i < caseTable.getRowCount(); i++) {
             if (caseTable.getValueAt(i, 0).equals(true)) {
                 String caseNumber = caseTable.getValueAt(i, 1).toString();
                 
-                MEDCase.updateClosedCases(caseNumber, settleDate);
+                MEDCase.updateClosedCases(caseNumber);
             }
         }
     }
@@ -341,7 +345,7 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
 
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
         updateList();
-        loadTable();
+        loadTableThread();
     }//GEN-LAST:event_updateButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

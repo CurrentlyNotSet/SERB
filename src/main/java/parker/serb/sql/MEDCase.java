@@ -1710,21 +1710,21 @@ public class MEDCase {
         return monthList;
     }
         
-    public static void updateSettledCases(String caseNumber, Date settleDate) {
+    public static void updateSettledCases(String caseNumber, java.sql.Date settleDate) {
          NumberFormatService num = NumberFormatService.parseFullCaseNumberNoNGlobal(caseNumber);
          
         try {
             Statement stmt = Database.connectToDB().createStatement();
 
-            String sql = "Update MEDCase set"
-                    + " settlementDate = ?"
+            String sql = "Update MEDCase set "
+                    + " settlementDate = ? "
                     + " where caseYear = ? "
                     + " AND caseType = ? "
                     + " AND caseMonth = ? "
                     + " AND caseNumber = ?";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setDate(1, (java.sql.Date) settleDate);
+            preparedStatement.setDate(1, settleDate);
             preparedStatement.setString(2, num.caseYear);
             preparedStatement.setString(3, num.caseType);
             preparedStatement.setString(4, num.caseMonth);
@@ -1736,21 +1736,21 @@ public class MEDCase {
         }
     }
     
-    public static void updateClosedCases(String caseNumber, Date closeDate) {
+    public static void updateClosedCases(String caseNumber) {
          NumberFormatService num = NumberFormatService.parseFullCaseNumberNoNGlobal(caseNumber);
          
         try {
             Statement stmt = Database.connectToDB().createStatement();
 
-            String sql = "Update MEDCase set"
-                    + " SendToBoardToClose = ?"
-                    + " where caseYear = ? "
-                    + " AND caseType = ? "
-                    + " AND caseMonth = ? "
-                    + " AND caseNumber = ?";
+            String sql = "Update MEDCase set "
+                    + "SendToBoardToClose = ? "
+                    + "WHERE caseYear = ? "
+                    + "AND caseType = ? "
+                    + "AND caseMonth = ? "
+                    + "AND caseNumber = ?";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setDate(1, (java.sql.Date) closeDate);
+            preparedStatement.setBoolean(1, true);
             preparedStatement.setString(2, num.caseYear);
             preparedStatement.setString(3, num.caseType);
             preparedStatement.setString(4, num.caseMonth);
@@ -1837,7 +1837,7 @@ public class MEDCase {
                     
                     + "MEDCase.fileDate AS FileDate "
                     + "FROM  MEDCase "
-                    + "WHERE MEDCase.SendToBoardToClose = 1 "
+                    + "WHERE MEDCase.SendToBoardToClose != 1 "
                     + "AND MEDCase.SettlementDate > ? " 
                     + "AND MEDCase.SettlementDate < ? "
                     + "ORDER BY MEDCase.caseYear, MEDCase.caseMonth, MEDCase.caseNumber";
