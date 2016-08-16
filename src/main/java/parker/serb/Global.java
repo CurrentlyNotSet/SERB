@@ -36,6 +36,8 @@ public class Global {
     public static SimpleDateFormat MMMMM = new SimpleDateFormat("MMMMM");
     public static SimpleDateFormat yyyy = new SimpleDateFormat("yyyy");
     public static SimpleDateFormat hhmma = new SimpleDateFormat("hh:mm a");
+    public static SimpleDateFormat SQLDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    public static SimpleDateFormat SQLDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     
     //The active selected case number of the user
     public static String caseYear = null;
@@ -81,6 +83,7 @@ public class Global {
     public static String templatePath;
     public static String activityPath;
     public static String mediaPath;
+    public static String reportingPath;
     
     //boolean about if notigication should be sent
     public static boolean errorNotifications;

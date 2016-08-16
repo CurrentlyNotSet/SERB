@@ -10,7 +10,9 @@ import java.util.Date;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
+import parker.serb.report.RequestedInfoOneDatePanel;
 import parker.serb.sql.MEDCase;
+import parker.serb.sql.SMDSDocuments;
 import parker.serb.util.NumberFormatService;
 
 /**
@@ -126,18 +128,8 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
     }
     
     private void printList(){
-//        try {
-//                HashMap para = new HashMap();
-//                String dateParam = JOptionPane.showInputDialog("Please enter a start date (MM/DD/YYYY)");
-//                Connection con = global.getDba().getObjConn();
-//                para.put("Date", dateParam);
-//                String reportPath = "G:\\XLNCMS\\SERBTemplates\\MED\\ReportTemplates\\MEDCasestobeClosedbyBoard.jrxml";
-//                JasperReport jr = JasperCompileManager.compileReport(reportPath);
-//                JasperPrint jp = JasperFillManager.fillReport(jr, para, con);
-//                JasperViewer.viewReport(jp, false);
-//            } catch (JRException ex) {
-//
-//            }
+        SMDSDocuments report = SMDSDocuments.findDocumentByFileName("MEDCasestobeClosedbyBoard.jasper");
+        new RequestedInfoOneDatePanel(this, true, "MEDCasestobeClosedbyBoard.jasper", report.id);
     }
         
     /**
