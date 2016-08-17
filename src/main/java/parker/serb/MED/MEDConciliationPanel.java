@@ -662,7 +662,7 @@ public class MEDConciliationPanel extends javax.swing.JPanel {
 
         jLabel3.setText("Order Date:");
 
-        jLabel4.setText("Selection DueDate:");
+        jLabel4.setText("Selection Due Date:");
 
         conciliation1OrderDate.setEditable(false);
         conciliation1OrderDate.setBackground(new java.awt.Color(238, 238, 238));

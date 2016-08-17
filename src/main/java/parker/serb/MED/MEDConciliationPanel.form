@@ -339,7 +339,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel4">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Selection DueDate:"/>
+            <Property name="text" type="java.lang.String" value="Selection Due Date:"/>
           </Properties>
         </Component>
         <Component class="com.alee.extended.date.WebDateField" name="conciliation1OrderDate">

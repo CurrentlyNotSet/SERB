@@ -12,6 +12,7 @@ import parker.serb.activity.ActivityPanel;
 import parker.serb.Global;
 import parker.serb.party.PartiesPanel;
 import parker.serb.party.PartySearchDialog;
+import parker.serb.sql.MEDCaseSearchData;
 import parker.serb.util.CancelUpdate;
 
 /**
@@ -28,7 +29,6 @@ public class MEDRootPanel extends javax.swing.JPanel {
     public MEDRootPanel() {
         initComponents();
         addListeners();
-        jTabbedPane1.remove(5);
     }
     
     /**
@@ -42,6 +42,7 @@ public class MEDRootPanel extends javax.swing.JPanel {
         mEDConciliationPanel2.clearAll();
         mEDFactFinderPanel1.clearAll();
         mEDCaseStatusPanel1.clearAll();
+        mEDStrikePanel1.clearAll();
     }
     
     private void addListeners() {
@@ -77,9 +78,9 @@ public class MEDRootPanel extends javax.swing.JPanel {
             case "Conciliation":
                 mEDConciliationPanel2.loadInformation();
                 break;
-//            case "Strike":
-//                uLPInvestigationReveals1.loadInformation();
-//                break;
+            case "Strike":
+                mEDStrikePanel1.loadInformaiton();
+                break;
             case "Notes":
                 notesPanel2.loadInformation();
                 break;
@@ -128,12 +129,12 @@ public class MEDRootPanel extends javax.swing.JPanel {
                 Global.root.getjButton2().setEnabled(true);
                 Global.root.getjButton9().setVisible(false);
                 break;
-//            case "Strike":
-//                System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
-//                Global.root.getjButton2().setText("Update");
-//                Global.root.getjButton2().setEnabled(true);
-//                Global.root.getjButton9().setVisible(false);
-//                break;
+            case "Strike":
+                System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
+                Global.root.getjButton2().setText("Update");
+                Global.root.getjButton2().setEnabled(true);
+                Global.root.getjButton9().setVisible(false);
+                break;
             case "Notes":
                 System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
                 Global.root.getjButton2().setText("Update");
@@ -175,9 +176,9 @@ public class MEDRootPanel extends javax.swing.JPanel {
                 new PartySearchDialog((JFrame) this.getRootPane().getParent(), true);
                 partiesPanel1.loadParties();
                 Global.root.getmEDHeaderPanel1().loadHeaderInformation();
-//                ULPCaseSearchData.updateCaseEntryFromParties(
-//                        Global.root.getuLPHeaderPanel1().getChargedPartyTextBox().getText().trim(),
-//                        Global.root.getuLPHeaderPanel1().getChargingPartyTextBox().getText().trim());
+                MEDCaseSearchData.updateCaseEntryFromParties(
+                        Global.root.getmEDHeaderPanel1().getEmployerTextBox().getText().trim(),
+                        Global.root.getmEDHeaderPanel1().getEmployeeOrgTextBox().getText().trim());
                 break;
             case "Status":
                 if(buttonText.equals("Update")) {
@@ -191,17 +192,17 @@ public class MEDRootPanel extends javax.swing.JPanel {
                     Global.root.getmEDHeaderPanel1().loadHeaderInformation();
                 }
                 break;
-//            case "Statement":
-//                if(buttonText.equals("Update")) {
-//                    disableTabs(jTabbedPane1.getSelectedIndex());
-//                    uLPStatement1.enableUpdate();
-//                } else {
-//                    enableTabs();
-//                    Global.root.enableTabsAfterSave();
-//                    Global.root.enableButtonsAfterCancel();
-//                    uLPStatement1.disableUpdate(true);
-//                }
-//                break;
+            case "Strike":
+                if(buttonText.equals("Update")) {
+                    disableTabs(jTabbedPane1.getSelectedIndex());
+                    mEDStrikePanel1.enableUpdate();
+                } else {
+                    enableTabs();
+                    Global.root.enableTabsAfterSave();
+                    Global.root.enableButtonsAfterCancel();
+                    mEDStrikePanel1.disableUpdate(true);
+                }
+                break;
             case "Fact Finder":
                 if(buttonText.equals("Update")) {
                     disableTabs(jTabbedPane1.getSelectedIndex());
@@ -225,17 +226,6 @@ public class MEDRootPanel extends javax.swing.JPanel {
                     mEDConciliationPanel2.disableUpdate(true);
                 }
                 break;
-//            case "Strike":
-//                if(buttonText.equals("Update")) {
-//                    disableTabs(jTabbedPane1.getSelectedIndex());
-//                    uLPInvestigationReveals1.enableUpdate();
-//                } else {
-//                    enableTabs();
-//                    Global.root.enableTabsAfterSave();
-//                    Global.root.enableButtonsAfterCancel();
-//                    uLPInvestigationReveals1.disableUpdate(true);
-//                }
-//                break;
             case "Notes":
                 if(buttonText.equals("Update")) {
                     disableTabs(jTabbedPane1.getSelectedIndex());
@@ -263,9 +253,9 @@ public class MEDRootPanel extends javax.swing.JPanel {
                 partiesPanel1.removeParty();
                 partiesPanel1.loadParties();
                 Global.root.getmEDHeaderPanel1().loadHeaderInformation();
-//                ULPCaseSearchData.updateCaseEntryFromParties(
-//                        Global.root.getmEDHeaderPanel1().getChargedPartyTextBox().getText().trim(),
-//                        Global.root.getmEDHeaderPanel1().getChargingPartyTextBox().getText().trim());
+                MEDCaseSearchData.updateCaseEntryFromParties(
+                        Global.root.getmEDHeaderPanel1().getEmployerTextBox().getText().trim(),
+                        Global.root.getmEDHeaderPanel1().getEmployeeOrgTextBox().getText().trim());
                 break;
             case "Status":
                 cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
@@ -277,16 +267,6 @@ public class MEDRootPanel extends javax.swing.JPanel {
                     mEDCaseStatusPanel1.disableUpdate(false);
                 }
                 break;
-//            case "Statement":
-//                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
-//                if(!cancel.isReset()) {
-//                } else {
-//                    Global.root.enableButtonsAfterCancel();
-//                    Global.root.enableTabsAfterSave();
-//                    enableTabs();
-//                    uLPStatement1.disableUpdate(false);
-//                }
-//                break;
             case "Fact Finder":
                 cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
                 if(!cancel.isReset()) {
@@ -307,16 +287,16 @@ public class MEDRootPanel extends javax.swing.JPanel {
                     mEDConciliationPanel2.disableUpdate(false);
                 }
                 break;
-//            case "Strike":
-//                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
-//                if(!cancel.isReset()) {
-//                } else {
-//                    Global.root.enableButtonsAfterCancel();
-//                    Global.root.enableTabsAfterSave();
-//                    enableTabs();
-//                    uLPInvestigationReveals1.disableUpdate(false);
-//                }
-//                break;
+            case "Strike":
+                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+                if(!cancel.isReset()) {
+                } else {
+                    Global.root.enableButtonsAfterCancel();
+                    Global.root.enableTabsAfterSave();
+                    enableTabs();
+                    mEDStrikePanel1.disableUpdate(false);
+                }
+                break;
             case "Notes":
                 cancel = new CancelUpdate(Global.root, true);
                 if(!cancel.isReset()) {
@@ -366,6 +346,7 @@ public class MEDRootPanel extends javax.swing.JPanel {
         jPanel5 = new javax.swing.JPanel();
         mEDConciliationPanel2 = new parker.serb.MED.MEDConciliationPanel();
         jPanel6 = new javax.swing.JPanel();
+        mEDStrikePanel1 = new parker.serb.MED.MEDStrikePanel();
         jPanel8 = new javax.swing.JPanel();
         notesPanel2 = new parker.serb.notes.NotesPanel();
 
@@ -377,7 +358,7 @@ public class MEDRootPanel extends javax.swing.JPanel {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(activityPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
+            .addComponent(activityPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Activity", jPanel1);
@@ -390,7 +371,9 @@ public class MEDRootPanel extends javax.swing.JPanel {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mEDCaseStatusPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(mEDCaseStatusPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Status", jPanel2);
@@ -403,7 +386,7 @@ public class MEDRootPanel extends javax.swing.JPanel {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(partiesPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
+            .addComponent(partiesPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Parties", jPanel3);
@@ -416,7 +399,7 @@ public class MEDRootPanel extends javax.swing.JPanel {
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mEDFactFinderPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
+            .addComponent(mEDFactFinderPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Fact Finder", jPanel4);
@@ -429,7 +412,7 @@ public class MEDRootPanel extends javax.swing.JPanel {
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mEDConciliationPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
+            .addComponent(mEDConciliationPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Conciliation", jPanel5);
@@ -438,11 +421,11 @@ public class MEDRootPanel extends javax.swing.JPanel {
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1010, Short.MAX_VALUE)
+            .addComponent(mEDStrikePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1099, Short.MAX_VALUE)
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 619, Short.MAX_VALUE)
+            .addComponent(mEDStrikePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Strike", jPanel6);
@@ -455,7 +438,7 @@ public class MEDRootPanel extends javax.swing.JPanel {
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(notesPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
+            .addComponent(notesPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Notes", jPanel8);
@@ -487,6 +470,7 @@ public class MEDRootPanel extends javax.swing.JPanel {
     private parker.serb.MED.MEDCaseStatusPanel mEDCaseStatusPanel1;
     private parker.serb.MED.MEDConciliationPanel mEDConciliationPanel2;
     private parker.serb.MED.MEDFactFinderPanel mEDFactFinderPanel1;
+    private parker.serb.MED.MEDStrikePanel mEDStrikePanel1;
     private parker.serb.notes.NotesPanel notesPanel2;
     private parker.serb.party.PartiesPanel partiesPanel1;
     private parker.serb.REP.REPCaseInformationPanel rEPCaseInformationPanel1;

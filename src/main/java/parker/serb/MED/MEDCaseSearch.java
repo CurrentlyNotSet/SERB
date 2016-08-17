@@ -194,11 +194,11 @@ public class MEDCaseSearch extends javax.swing.JDialog {
             
             model.addRow(new Object[] {
                 (act.caseYear + "-" + act.caseType + "-" + act.caseMonth + "-" + act.caseNumber),
-                "", //employer name
-                "", //union name
-                "", //county
-                act.county, //employerID
-                "" //BUN Number
+                act.employerName, //employer name
+                act.unionName, //union name
+                act.county, //county
+                act.employerID, //employerID
+                act.bunNumber //BUN Number
             }); 
         }
         getTableData();
@@ -286,17 +286,18 @@ public class MEDCaseSearch extends javax.swing.JDialog {
 
             },
             new String [] {
-                "Case Number", "Employer Name", "BU Number", "Description", "County", "Board/Deemed", "Employee Org", "Incumbent"
+                "Case Number", "Employer Name", "Union Name", "County", "Employer ID", "BUN Number"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
+        caseSearchTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(caseSearchTable);
 
         jLayeredPane1.add(jScrollPane1);

@@ -46,6 +46,36 @@
             </MenuItem>
           </SubComponents>
         </Menu>
+        <Menu class="javax.swing.JMenu" name="caseManagementMenu">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Case Management"/>
+          </Properties>
+          <SubComponents>
+            <Menu class="javax.swing.JMenu" name="jMenu4">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="MED Bulk Edit"/>
+              </Properties>
+              <SubComponents>
+                <MenuItem class="javax.swing.JMenuItem" name="MEDSendToBoardToCloseMenuItem">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Send to Board"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="MEDSendToBoardToCloseMenuItemActionPerformed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="MEDSettleCasesMenuItem">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Settle Cases"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="MEDSettleCasesMenuItemActionPerformed"/>
+                  </Events>
+                </MenuItem>
+              </SubComponents>
+            </Menu>
+          </SubComponents>
+        </Menu>
         <Menu class="javax.swing.JMenu" name="jMenu2">
           <Properties>
             <Property name="text" type="java.lang.String" value="Admin"/>
@@ -136,7 +166,7 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jPanel7" max="32767" attributes="0"/>
                   <Component id="jTabbedPane1" max="32767" attributes="0"/>
@@ -508,7 +538,7 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="docketRootPanel1" alignment="0" pref="677" max="32767" attributes="0"/>
+                  <Component id="docketRootPanel1" alignment="0" pref="681" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -534,7 +564,7 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="rEPRootPanel1" alignment="0" pref="677" max="32767" attributes="0"/>
+                  <Component id="rEPRootPanel1" alignment="0" pref="681" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -560,7 +590,7 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="677" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="681" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -582,7 +612,7 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="uLPRootPanel1" alignment="0" pref="677" max="32767" attributes="0"/>
+                  <Component id="uLPRootPanel1" alignment="0" pref="681" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -608,7 +638,7 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="mEDRootPanel1" alignment="1" pref="677" max="32767" attributes="0"/>
+                  <Component id="mEDRootPanel1" alignment="0" pref="681" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -634,7 +664,7 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="677" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="681" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -656,7 +686,7 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="677" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="681" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -678,7 +708,7 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="677" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="681" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -700,7 +730,7 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="companySearchPanel1" alignment="0" pref="677" max="32767" attributes="0"/>
+                  <Component id="companySearchPanel1" alignment="0" pref="681" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>

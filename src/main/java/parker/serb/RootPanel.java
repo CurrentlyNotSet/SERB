@@ -19,6 +19,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
+import parker.serb.MED.MEDBulkSendToBoardDialog;
+import parker.serb.MED.MEDBulkSettleCasesDialog;
 import parker.serb.MED.MEDHeaderPanel;
 import parker.serb.MED.MEDRootPanel;
 import parker.serb.ULP.ULPHeaderPanel;
@@ -67,7 +69,7 @@ public class RootPanel extends javax.swing.JFrame {
         Global.activeUser.activeLogIn = true;
         Audit.addAuditEntry("Logged In");
         setLocationRelativeTo(null);
-        setVisible(true);
+        setVisible(true);        
     }
     
     /**
@@ -81,6 +83,7 @@ public class RootPanel extends javax.swing.JFrame {
     public void enableTabs() {
         if(!Global.activeUserRoles.contains("Admin")) {
             jMenuBar1.remove(jMenu2);
+            jMenuBar1.remove(caseManagementMenu);
             for(int i = jTabbedPane1.getTabCount()-1; i >= 0; i--) {
                 if(!Global.activeUserRoles.contains(jTabbedPane1.getTitleAt(i))) {
                     jTabbedPane1.remove(i);
@@ -484,6 +487,10 @@ public class RootPanel extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
+        caseManagementMenu = new javax.swing.JMenu();
+        jMenu4 = new javax.swing.JMenu();
+        MEDSendToBoardToCloseMenuItem = new javax.swing.JMenuItem();
+        MEDSettleCasesMenuItem = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         adminPanelMenuItem = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
@@ -703,7 +710,7 @@ public class RootPanel extends javax.swing.JFrame {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(docketRootPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 677, Short.MAX_VALUE)
+            .addComponent(docketRootPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 681, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Docketing", jPanel2);
@@ -716,7 +723,7 @@ public class RootPanel extends javax.swing.JFrame {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(rEPRootPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 677, Short.MAX_VALUE)
+            .addComponent(rEPRootPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 681, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("REP", jPanel3);
@@ -729,7 +736,7 @@ public class RootPanel extends javax.swing.JFrame {
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 677, Short.MAX_VALUE)
+            .addGap(0, 681, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("ORG", jPanel4);
@@ -742,7 +749,7 @@ public class RootPanel extends javax.swing.JFrame {
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(uLPRootPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 677, Short.MAX_VALUE)
+            .addComponent(uLPRootPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 681, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("ULP", jPanel5);
@@ -755,7 +762,7 @@ public class RootPanel extends javax.swing.JFrame {
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mEDRootPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 677, Short.MAX_VALUE)
+            .addComponent(mEDRootPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 681, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("MED", jPanel6);
@@ -768,7 +775,7 @@ public class RootPanel extends javax.swing.JFrame {
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 677, Short.MAX_VALUE)
+            .addGap(0, 681, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Civil Service Commission", jPanel10);
@@ -781,7 +788,7 @@ public class RootPanel extends javax.swing.JFrame {
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 677, Short.MAX_VALUE)
+            .addGap(0, 681, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("CMDS", jPanel11);
@@ -794,7 +801,7 @@ public class RootPanel extends javax.swing.JFrame {
         );
         jPanel12Layout.setVerticalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 677, Short.MAX_VALUE)
+            .addGap(0, 681, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Hearings", jPanel12);
@@ -807,7 +814,7 @@ public class RootPanel extends javax.swing.JFrame {
         );
         jPanel14Layout.setVerticalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(companySearchPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 677, Short.MAX_VALUE)
+            .addComponent(companySearchPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 681, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Employer Search", jPanel14);
@@ -931,6 +938,30 @@ public class RootPanel extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
+        caseManagementMenu.setText("Case Management");
+
+        jMenu4.setText("MED Bulk Edit");
+
+        MEDSendToBoardToCloseMenuItem.setText("Send to Board");
+        MEDSendToBoardToCloseMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MEDSendToBoardToCloseMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu4.add(MEDSendToBoardToCloseMenuItem);
+
+        MEDSettleCasesMenuItem.setText("Settle Cases");
+        MEDSettleCasesMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MEDSettleCasesMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu4.add(MEDSettleCasesMenuItem);
+
+        caseManagementMenu.add(jMenu4);
+
+        jMenuBar1.add(caseManagementMenu);
+
         jMenu2.setText("Admin");
 
         adminPanelMenuItem.setText("Admin Panel");
@@ -980,7 +1011,7 @@ public class RootPanel extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(2, 2, 2)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jTabbedPane1)))
@@ -1113,18 +1144,29 @@ public class RootPanel extends javax.swing.JFrame {
         new AdminMainMenuPanel((JFrame) getRootPane().getParent(), true);
     }//GEN-LAST:event_adminPanelMenuItemActionPerformed
 
+    private void MEDSendToBoardToCloseMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MEDSendToBoardToCloseMenuItemActionPerformed
+        new MEDBulkSendToBoardDialog((JFrame) getRootPane().getParent(), true);
+    }//GEN-LAST:event_MEDSendToBoardToCloseMenuItemActionPerformed
+
+    private void MEDSettleCasesMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MEDSettleCasesMenuItemActionPerformed
+        new MEDBulkSettleCasesDialog((JFrame) getRootPane().getParent(), true);
+    }//GEN-LAST:event_MEDSettleCasesMenuItemActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel CMDS;
     private javax.swing.JPanel CSC;
     private javax.swing.JPanel Docketing;
     private javax.swing.JPanel Hearing;
     private javax.swing.JPanel MED;
+    private javax.swing.JMenuItem MEDSendToBoardToCloseMenuItem;
+    private javax.swing.JMenuItem MEDSettleCasesMenuItem;
     private javax.swing.JPanel ORG;
     private javax.swing.JPanel REP;
     private javax.swing.JPanel ULP;
     private javax.swing.JMenuItem adminPanelMenuItem;
     private parker.serb.CMDS.CMDSHeaderPanel cMDSHeaderPanel1;
     private parker.serb.CSC.CSCHeaderPanel cSCHeaderPanel1;
+    private javax.swing.JMenu caseManagementMenu;
     private parker.serb.companySearch.companySearchPanel companySearchPanel1;
     private parker.serb.docket.DocketRootPanel docketRootPanel;
     private parker.serb.docket.DocketRootPanel docketRootPanel1;
@@ -1143,6 +1185,7 @@ public class RootPanel extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
