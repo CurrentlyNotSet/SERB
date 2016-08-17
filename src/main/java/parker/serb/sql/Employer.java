@@ -186,4 +186,33 @@ public class Employer {
         }
 //        return employer;
     }
+    
+    public static String getEmployerCountyByID(String id) {
+ 
+        String county = "";
+        
+        try {
+
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select county from Employers"
+                    + " WHERE employerIDNumber = ?";
+                    
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, id);
+
+            ResultSet caseActivity = preparedStatement.executeQuery();
+            
+            if(caseActivity == null) {
+                county = "";
+            }
+            
+            while(caseActivity.next()) {
+                county = caseActivity.getString("county");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return county;
+    }
 }

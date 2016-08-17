@@ -47,13 +47,11 @@ public class MEDCaseSearchData {
                 repCase.caseType = caseActivity.getString("caseType");
                 repCase.caseMonth = caseActivity.getString("caseMonth");
                 repCase.caseNumber = caseActivity.getString("caseNumber");
-//                repCase.employerName = caseActivity.getString("employerName") == null ? "" : caseActivity.getString("employerName");
-//                repCase.bunNumber = caseActivity.getString("bunNumber") == null ? "" : caseActivity.getString("bunNumber");
-//                repCase.description = caseActivity.getString("description") == null ? "" : caseActivity.getString("description");
-//                repCase.county = caseActivity.getString("county") == null ? "" : caseActivity.getString("county");
-//                repCase.boardDeemed = caseActivity.getString("boardDeemed") == null ? "" : caseActivity.getString("boardDeemed");
-//                repCase.employeeOrg = caseActivity.getString("employeeOrg") == null ? "" : caseActivity.getString("employeeOrg");
-//                repCase.incumbent = caseActivity.getString("incumbent") == null ? "" : caseActivity.getString("incumbent");
+                repCase.employerName = caseActivity.getString("employerName") == null ? "" : caseActivity.getString("employerName");
+                repCase.unionName = caseActivity.getString("unionName") == null ? "" : caseActivity.getString("unionName");
+                repCase.county = caseActivity.getString("county") == null ? "" : caseActivity.getString("county");
+                repCase.employerID = caseActivity.getString("employerID") == null ? "" : caseActivity.getString("employerID");
+                repCase.bunNumber = caseActivity.getString("bunNumber") == null ? "" : caseActivity.getString("bunNumber");
                 ulpCaseList.add(repCase);
             }
         } catch (SQLException ex) {
@@ -84,7 +82,7 @@ public class MEDCaseSearchData {
         }
     }
     
-    public static void updateCaseEntryFromParties(String employer, String employeeOrg, String incumbent) {
+    public static void updateCaseEntryFromParties(String employer, String unionName) {
             
         try {
 
@@ -92,8 +90,7 @@ public class MEDCaseSearchData {
 
             String sql = "UPDATE MEDCaseSearch SET"
                     + " employerName = ?,"
-                    + " employeeOrg = ?,"
-                    + " incumbent = ?"
+                    + " unionName = ?"
                     + " WHERE caseYear = ? AND"
                     + " caseType = ? AND"
                     + " caseMonth = ? AND"
@@ -101,12 +98,11 @@ public class MEDCaseSearchData {
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, employer);
-            preparedStatement.setString(2, employeeOrg);
-            preparedStatement.setString(3, incumbent);
-            preparedStatement.setString(4, Global.caseYear);
-            preparedStatement.setString(5, Global.caseType);
-            preparedStatement.setString(6, Global.caseMonth);
-            preparedStatement.setString(7, Global.caseNumber);
+            preparedStatement.setString(2, unionName);
+            preparedStatement.setString(3, Global.caseYear);
+            preparedStatement.setString(4, Global.caseType);
+            preparedStatement.setString(5, Global.caseMonth);
+            preparedStatement.setString(6, Global.caseNumber);
 
             preparedStatement.executeUpdate();
             
@@ -115,33 +111,31 @@ public class MEDCaseSearchData {
         }
     }
     
-    public static void updateCaseEntryFromCaseInformation(
-            String bunnumber, String county, String boarddeemed) {
+    public static void updateCaseEntryFromCaseStatus(
+            String employerID, String bunnumber) {
             
         try {
 
             Statement stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE MEDCaseSearch SET"
+                    + " employerID = ?,"
                     + " bunnumber = ?,"
-                    + " county = ?,"
-                    + " boarddeemed = ?,"
-                    + " description = ?"
+                    + " county = ?"
                     + " WHERE caseYear = ? AND"
                     + " caseType = ? AND"
                     + " caseMonth = ? AND"
                     + " caseNumber = ?";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, bunnumber);
-            preparedStatement.setString(2, county);
-            preparedStatement.setString(3, boarddeemed);
-            preparedStatement.setString(4, bunnumber == null ? "" : BargainingUnit.getUnitDescription(bunnumber));
-            preparedStatement.setString(5, Global.caseYear);
-            preparedStatement.setString(6, Global.caseType);
-            preparedStatement.setString(7, Global.caseMonth);
-            preparedStatement.setString(8, Global.caseNumber);
-
+            preparedStatement.setString(1, employerID);
+            preparedStatement.setString(2, bunnumber);
+            preparedStatement.setString(3, Employer.getEmployerCountyByID(employerID));
+            preparedStatement.setString(4, Global.caseYear);
+            preparedStatement.setString(5, Global.caseType);
+            preparedStatement.setString(6, Global.caseMonth);
+            preparedStatement.setString(7, Global.caseNumber);
+            
             preparedStatement.executeUpdate();
             
         } catch (SQLException ex) {

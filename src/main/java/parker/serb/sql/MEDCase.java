@@ -8,6 +8,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
@@ -116,6 +117,27 @@ public class MEDCase {
     public boolean withdrawl;
     public boolean motion;
     public boolean dismissed;
+    
+    //strike informatin
+    public Timestamp strikeFileDate;
+    public String strikeCaseNumber;
+    public String medCaseNumber;
+    public String description;
+    public String unitSize;
+    public boolean unauthorizedStrike;
+    public boolean noticeOfIntentToStrikeOnly;
+    public Timestamp intendedDateStrike;
+    public boolean noticeOfIntentToPicketOnly;
+    public Timestamp intendedDatePicket;
+    public boolean informational;
+    public boolean noticeOfIntentToStrikeAndPicket;
+    public String strikeOccured;
+    public String strikeStatus;
+    public Timestamp strikeBegan;
+    public Timestamp strikeEnded;
+    public String totalNumberOfDays;
+    public String strikeMediatorAppointedID;
+    public String strikeNotes;
     
     
     /**
@@ -552,11 +574,144 @@ public class MEDCase {
         return med;
     }
     
+    public static MEDCase loadStrikeInformation() {
+        MEDCase med = null;
+        try {
+            Statement stmt = Database.connectToDB().createStatement();  
+            
+            String sql = "Select"
+                    + " strikeFileDate,"
+                    + " strikeCaseNumber,"
+                    + " medCaseNumber,"
+                    + " unitDescription,"
+                    + " unitSize,"
+                    + " unauthorizedStrike,"
+                    + " noticeOfIntentToStrikeOnly,"
+                    + " intendedDateStrike,"
+                    + " noticeOfIntentToPicketOnly,"
+                    + " intendedDatePicket,"
+                    + " informational,"
+                    + " noticeOfIntentToStrikeAndPicket,"
+                    + " strikeOccured,"
+                    + " strikeStatus,"
+                    + " strikeBegan,"
+                    + " strikeEnded,"
+                    + " totalNumberOfDays,"
+                    + " strikeMediatorAppointedID,"
+                    + " strikeNote"
+                    + " from MEDCase where caseYear = ? "
+                    + " AND caseType = ? "
+                    + " AND caseMonth = ? "
+                    + " AND caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, Global.caseYear);
+            preparedStatement.setString(2, Global.caseType);
+            preparedStatement.setString(3, Global.caseMonth);
+            preparedStatement.setString(4, Global.caseNumber);
+
+            ResultSet caseInformation = preparedStatement.executeQuery();
+            
+            if(caseInformation.next()) {
+                med = new MEDCase();
+                
+                med.strikeFileDate = caseInformation.getTimestamp("strikeFileDate");
+                med.strikeCaseNumber = caseInformation.getString("strikeCaseNumber");
+                med.medCaseNumber = caseInformation.getString("medCaseNumber");
+                med.description = caseInformation.getString("unitDescription");
+                med.unitSize = caseInformation.getString("unitSize");
+                med.unauthorizedStrike = caseInformation.getBoolean("unauthorizedStrike");
+                med.noticeOfIntentToStrikeOnly = caseInformation.getBoolean("noticeOfIntentToStrikeOnly");
+                med.intendedDateStrike = caseInformation.getTimestamp("intendedDateStrike");
+                med.noticeOfIntentToPicketOnly = caseInformation.getBoolean("noticeOfIntentToPicketOnly");
+                med.intendedDatePicket = caseInformation.getTimestamp("intendedDatePicket");
+                med.informational = caseInformation.getBoolean("informational");
+                med.noticeOfIntentToStrikeAndPicket = caseInformation.getBoolean("noticeOfIntentToStrikeAndPicket");
+                med.strikeOccured = caseInformation.getString("strikeOccured");
+                med.strikeStatus = caseInformation.getString("strikeStatus");
+                med.strikeBegan = caseInformation.getTimestamp("strikeBegan");
+                med.strikeEnded = caseInformation.getTimestamp("strikeEnded");
+                med.totalNumberOfDays = caseInformation.getString("totalNumberOfDays");
+                med.strikeMediatorAppointedID = caseInformation.getString("strikeMediatorAppointedID");
+                med.strikeNotes = caseInformation.getString("strikeNote");
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex.getMessage());
+        }
+        return med;
+    }
+    
+    public static void updateStrikeInformation(MEDCase newCaseInformation, MEDCase caseInformation) {
+        MEDCase med = null;
+        try {
+            Statement stmt = Database.connectToDB().createStatement();  
+            
+            String sql = "Update MEDCase Set"
+                    + " strikeFileDate = ?,"
+                    + " strikeCaseNumber = ?,"
+                    + " medCaseNumber = ?,"
+                    + " unitDescription = ?,"
+                    + " unitSize = ? ,"
+                    + " unauthorizedStrike = ?,"
+                    + " noticeOfIntentToStrikeOnly = ?,"
+                    + " intendedDateStrike = ?,"
+                    + " noticeOfIntentToPicketOnly = ?,"
+                    + " intendedDatePicket = ?,"
+                    + " informational = ?,"
+                    + " noticeOfIntentToStrikeAndPicket = ?,"
+                    + " strikeOccured = ?,"
+                    + " strikeStatus = ?,"
+                    + " strikeBegan = ?,"
+                    + " strikeEnded = ?,"
+                    + " totalNumberOfDays = ?,"
+                    + " strikeMediatorAppointedID = ?,"
+                    + " strikeNote = ?"
+                    + " from MEDCase where caseYear = ? "
+                    + " AND caseType = ? "
+                    + " AND caseMonth = ? "
+                    + " AND caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setTimestamp(1, newCaseInformation.strikeFileDate);
+            preparedStatement.setString(2, newCaseInformation.strikeCaseNumber);
+            preparedStatement.setString(3, newCaseInformation.medCaseNumber);
+            preparedStatement.setString(4, newCaseInformation.description);
+            preparedStatement.setString(5, newCaseInformation.unitSize);
+            preparedStatement.setBoolean(6, newCaseInformation.unauthorizedStrike);
+            preparedStatement.setBoolean(7, newCaseInformation.noticeOfIntentToStrikeOnly);
+            preparedStatement.setTimestamp(8, newCaseInformation.intendedDateStrike);
+            preparedStatement.setBoolean(9, newCaseInformation.noticeOfIntentToPicketOnly);
+            preparedStatement.setTimestamp(10, newCaseInformation.intendedDatePicket);
+            preparedStatement.setBoolean(11, newCaseInformation.informational);
+            preparedStatement.setBoolean(12, newCaseInformation.noticeOfIntentToStrikeAndPicket);
+            preparedStatement.setString(13, newCaseInformation.strikeOccured);
+            preparedStatement.setString(14, newCaseInformation.strikeStatus);
+            preparedStatement.setTimestamp(15, newCaseInformation.strikeBegan);
+            preparedStatement.setTimestamp(16, newCaseInformation.strikeEnded);
+            preparedStatement.setString(17, newCaseInformation.totalNumberOfDays);
+            preparedStatement.setString(18, newCaseInformation.strikeMediatorAppointedID);
+            preparedStatement.setString(19, newCaseInformation.strikeNotes);
+            preparedStatement.setString(20, Global.caseYear);
+            preparedStatement.setString(21, Global.caseType);
+            preparedStatement.setString(22, Global.caseMonth);
+            preparedStatement.setString(23, Global.caseNumber);
+
+            int success = preparedStatement.executeUpdate();
+            
+            if(success == 1) {
+                
+                detailedStrikeSaveInformation(newCaseInformation, caseInformation);
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex.getMessage());
+        }
+    }
+    
     public static void saveConciliationList1(DefaultListModel concilList1Model) {
         MEDCase med = null;
         try {
             Statement stmt = Database.connectToDB().createStatement();
-//
+
             String sql = "Update MEDCase set"
                     + " concilList1Name1 = ?,"
                     + " concilList1Name2 = ?,"
@@ -963,6 +1118,7 @@ public class MEDCase {
             int success = preparedStatement.executeUpdate();
             
             if(success == 1) {
+                MEDCaseSearchData.updateCaseEntryFromCaseStatus(newCaseInformation.employerIDNumber, newCaseInformation.bargainingUnitNumber);
                 detailedStatusSaveInformation(newCaseInformation, caseInformation);
             }
         } catch (SQLException ex) {
@@ -1354,12 +1510,12 @@ public class MEDCase {
         
         //Note
         if(newCaseInformation.FFNote == null && oldCaseInformation.FFNote != null) {
-            Activity.addActivty("Update Fact Finder Notes", null);
+            Activity.addActivty("Updated Fact Finder Notes", null);
         } else if(newCaseInformation.FFNote != null && oldCaseInformation.FFNote == null) {
-            Activity.addActivty("Update Fact Finder Notes", null);
+            Activity.addActivty("Updated Fact Finder Notes", null);
         } else if(newCaseInformation.FFNote != null && oldCaseInformation.FFNote != null) {
             if(!newCaseInformation.FFNote.equals(oldCaseInformation.FFNote)) 
-                Activity.addActivty("Update Fact Finder Notes", null);
+                Activity.addActivty("Updated Fact Finder Notes", null);
         }
         
     }
@@ -1627,6 +1783,176 @@ public class MEDCase {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
         }
         return caseNumberList;
+    }
+    
+    private static void detailedStrikeSaveInformation(MEDCase newCaseInformation, MEDCase oldCaseInformation) {
+       
+        // strike file date - T
+        if(newCaseInformation.strikeFileDate == null && oldCaseInformation.strikeFileDate != null) {
+            Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.strikeFileDate.getTime())) + " from Strike File Date", null);
+        } else if(newCaseInformation.strikeFileDate != null && oldCaseInformation.strikeFileDate == null) {
+            Activity.addActivty("Set Strike File Date to " + Global.mmddyyyy.format(new Date(newCaseInformation.strikeFileDate.getTime())), null);
+        } else if(newCaseInformation.strikeFileDate != null && oldCaseInformation.strikeFileDate != null) {
+            if(!Global.mmddyyyy.format(new Date(oldCaseInformation.strikeFileDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.strikeFileDate.getTime()))))
+                Activity.addActivty("Changed Strike File Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.strikeFileDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.strikeFileDate.getTime())), null);
+        }
+        
+        //strike case number
+//        if(newCaseInformation.strikeCaseNumber == null && oldCaseInformation.strikeCaseNumber != null) {
+//            Activity.addActivty("Removed " + oldCaseInformation.strikeCaseNumber + " from Strike Case Number", null);
+//        } else if(newCaseInformation.strikeCaseNumber != null && oldCaseInformation.strikeCaseNumber == null) {
+//            Activity.addActivty("Set Strike Case Number to " + newCaseInformation.strikeCaseNumber, null);
+//        } else if(newCaseInformation.strikeCaseNumber != null && oldCaseInformation.strikeCaseNumber != null) {
+//            if(!newCaseInformation.strikeCaseNumber.equals(oldCaseInformation.strikeCaseNumber)) 
+//                Activity.addActivty("Changed Strike Case Number from " + oldCaseInformation.strikeCaseNumber + " to " + newCaseInformation.strikeCaseNumber, null);
+//        }
+        
+        //med case number
+//        if(newCaseInformation.medCaseNumber == null && oldCaseInformation.medCaseNumber != null) {
+//            Activity.addActivty("Removed " + oldCaseInformation.medCaseNumber + " from MED Case Number", null);
+//        } else if(newCaseInformation.medCaseNumber != null && oldCaseInformation.medCaseNumber == null) {
+//            Activity.addActivty("Set MED Case Number to " + newCaseInformation.medCaseNumber, null);
+//        } else if(newCaseInformation.medCaseNumber != null && oldCaseInformation.medCaseNumber != null) {
+//            if(!newCaseInformation.medCaseNumber.equals(oldCaseInformation.medCaseNumber)) 
+//                Activity.addActivty("Changed MED Case Number from " + oldCaseInformation.medCaseNumber + " to " + newCaseInformation.medCaseNumber, null);
+//        }
+        
+        
+        //description - T
+        if(newCaseInformation.description == null && oldCaseInformation.description != null) {
+            Activity.addActivty("Removed " + oldCaseInformation.description + " from Unit Description", null);
+        } else if(newCaseInformation.description != null && oldCaseInformation.description == null) {
+            Activity.addActivty("Set Unit Description to " + newCaseInformation.description, null);
+        } else if(newCaseInformation.description != null && oldCaseInformation.description != null) {
+            if(!newCaseInformation.description.equals(oldCaseInformation.description)) 
+                Activity.addActivty("Changed Unit Description from " + oldCaseInformation.description + " to " + newCaseInformation.description, null);
+        }        
+        
+        //unitsize - T
+        if(newCaseInformation.unitSize == null && oldCaseInformation.unitSize != null) {
+            Activity.addActivty("Removed " + oldCaseInformation.unitSize + " from Unit Size", null);
+        } else if(newCaseInformation.unitSize != null && oldCaseInformation.unitSize == null) {
+            Activity.addActivty("Set Unit Size to " + newCaseInformation.unitSize, null);
+        } else if(newCaseInformation.unitSize != null && oldCaseInformation.unitSize != null) {
+            if(!newCaseInformation.unitSize.equals(oldCaseInformation.unitSize)) 
+                Activity.addActivty("Changed Unit Size from " + oldCaseInformation.unitSize + " to " + newCaseInformation.unitSize, null);
+        } 
+        
+        //unautorized strike
+        if(newCaseInformation.unauthorizedStrike == false && oldCaseInformation.unauthorizedStrike != false) {
+            Activity.addActivty("Unset Unauthorized Strike", null);
+        } else if(newCaseInformation.unauthorizedStrike != false && oldCaseInformation.unauthorizedStrike == false) {
+            Activity.addActivty("Set Unauthorized Strike", null);
+        }
+        
+        //notice of intent to strike only
+        if(newCaseInformation.noticeOfIntentToStrikeOnly == false && oldCaseInformation.noticeOfIntentToStrikeOnly != false) {
+            Activity.addActivty("Unset Notice of Intent to Strike Only", null);
+        } else if(newCaseInformation.noticeOfIntentToStrikeOnly != false && oldCaseInformation.noticeOfIntentToStrikeOnly == false) {
+            Activity.addActivty("Set Notice of Intent to Strike Only", null);
+        }
+        
+        //intended strike date
+        if(newCaseInformation.intendedDateStrike == null && oldCaseInformation.intendedDateStrike != null) {
+            Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.intendedDateStrike.getTime())) + " from Intended Strike Date", null);
+        } else if(newCaseInformation.intendedDateStrike != null && oldCaseInformation.intendedDateStrike == null) {
+            Activity.addActivty("Set Intended Strike Date to " + Global.mmddyyyy.format(new Date(newCaseInformation.intendedDateStrike.getTime())), null);
+        } else if(newCaseInformation.intendedDateStrike != null && oldCaseInformation.intendedDateStrike != null) {
+            if(!Global.mmddyyyy.format(new Date(oldCaseInformation.intendedDateStrike.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.intendedDateStrike.getTime()))))
+                Activity.addActivty("Changed Intended Strike Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.intendedDateStrike.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.intendedDateStrike.getTime())), null);
+        }
+        
+        //notice of intent to picket only
+        if(newCaseInformation.noticeOfIntentToPicketOnly == false && oldCaseInformation.noticeOfIntentToPicketOnly != false) {
+            Activity.addActivty("Unset Notice of Intent to Picket Only", null);
+        } else if(newCaseInformation.noticeOfIntentToPicketOnly != false && oldCaseInformation.noticeOfIntentToPicketOnly == false) {
+            Activity.addActivty("Set Notice of Intent to Picket Only", null);
+        }
+        
+        //intended picket date
+        if(newCaseInformation.intendedDatePicket == null && oldCaseInformation.intendedDatePicket != null) {
+            Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.intendedDatePicket.getTime())) + " from Intended Picket Date", null);
+        } else if(newCaseInformation.intendedDatePicket != null && oldCaseInformation.intendedDatePicket == null) {
+            Activity.addActivty("Set Intended Picket Date to " + Global.mmddyyyy.format(new Date(newCaseInformation.intendedDatePicket.getTime())), null);
+        } else if(newCaseInformation.intendedDatePicket != null && oldCaseInformation.intendedDatePicket != null) {
+            if(!Global.mmddyyyy.format(new Date(oldCaseInformation.intendedDatePicket.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.intendedDatePicket.getTime()))))
+                Activity.addActivty("Changed Intended Picket Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.intendedDatePicket.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.intendedDatePicket.getTime())), null);
+        }
+        
+        //infomrational
+        if(newCaseInformation.informational == false && oldCaseInformation.informational != false) {
+            Activity.addActivty("Unset Informational", null);
+        } else if(newCaseInformation.informational != false && oldCaseInformation.informational == false) {
+            Activity.addActivty("Set Informational", null);
+        }
+        
+        //notice of intent to strike and picket
+        if(newCaseInformation.noticeOfIntentToStrikeAndPicket == false && oldCaseInformation.noticeOfIntentToStrikeAndPicket != false) {
+            Activity.addActivty("Unset Notice of Intent to Strike and Picket", null);
+        } else if(newCaseInformation.noticeOfIntentToStrikeAndPicket != false && oldCaseInformation.noticeOfIntentToStrikeAndPicket == false) {
+            Activity.addActivty("Set Notice of Intent to Strike and Picket", null);
+        }
+        
+        //strike occured
+        if(newCaseInformation.strikeOccured == null && oldCaseInformation.strikeOccured != null) {
+            Activity.addActivty("Removed " + oldCaseInformation.strikeOccured + " from Strike Occured", null);
+        } else if(newCaseInformation.strikeOccured != null && oldCaseInformation.strikeOccured == null) {
+            Activity.addActivty("Set Strike Occured to " + newCaseInformation.strikeOccured, null);
+        } else if(newCaseInformation.strikeOccured != null && oldCaseInformation.strikeOccured != null) {
+            if(!newCaseInformation.strikeOccured.equals(oldCaseInformation.strikeOccured)) 
+                Activity.addActivty("Changed Strike Occured from " + oldCaseInformation.strikeOccured + " to " + newCaseInformation.strikeOccured, null);
+        }
+        
+        //strike status
+        if(newCaseInformation.strikeStatus == null && oldCaseInformation.strikeStatus != null) {
+            Activity.addActivty("Removed " + oldCaseInformation.strikeStatus + " from Strike Status", null);
+        } else if(newCaseInformation.strikeStatus != null && oldCaseInformation.strikeStatus == null) {
+            Activity.addActivty("Set Strike Status to " + newCaseInformation.strikeStatus, null);
+        } else if(newCaseInformation.strikeStatus != null && oldCaseInformation.strikeStatus != null) {
+            if(!newCaseInformation.strikeStatus.equals(oldCaseInformation.strikeStatus)) 
+                Activity.addActivty("Changed Strike Status from " + oldCaseInformation.strikeStatus + " to " + newCaseInformation.strikeStatus, null);
+        }
+        
+        //strike began
+        if(newCaseInformation.strikeBegan == null && oldCaseInformation.strikeBegan != null) {
+            Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.strikeBegan.getTime())) + " from Strike Began", null);
+        } else if(newCaseInformation.strikeBegan != null && oldCaseInformation.strikeBegan == null) {
+            Activity.addActivty("Set Strike Began to " + Global.mmddyyyy.format(new Date(newCaseInformation.strikeBegan.getTime())), null);
+        } else if(newCaseInformation.strikeBegan != null && oldCaseInformation.strikeBegan != null) {
+            if(!Global.mmddyyyy.format(new Date(oldCaseInformation.strikeBegan.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.strikeBegan.getTime()))))
+                Activity.addActivty("Changed Strike Began from " + Global.mmddyyyy.format(new Date(oldCaseInformation.strikeBegan.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.strikeBegan.getTime())), null);
+        }
+        
+        //strike ended
+        if(newCaseInformation.strikeEnded == null && oldCaseInformation.strikeEnded != null) {
+            Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.strikeEnded.getTime())) + " from Strike Ended", null);
+        } else if(newCaseInformation.strikeEnded != null && oldCaseInformation.strikeEnded == null) {
+            Activity.addActivty("Set Strike Ended to " + Global.mmddyyyy.format(new Date(newCaseInformation.strikeEnded.getTime())), null);
+        } else if(newCaseInformation.strikeEnded != null && oldCaseInformation.strikeEnded != null) {
+            if(!Global.mmddyyyy.format(new Date(oldCaseInformation.strikeEnded.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.strikeEnded.getTime()))))
+                Activity.addActivty("Changed Strike Ended from " + Global.mmddyyyy.format(new Date(oldCaseInformation.strikeEnded.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.strikeEnded.getTime())), null);
+        }
+        
+        //mediator appointed id
+        if(newCaseInformation.strikeMediatorAppointedID == null && oldCaseInformation.strikeMediatorAppointedID != null) {
+            Activity.addActivty("Removed " + Mediator.getMediatorNameByID(oldCaseInformation.strikeMediatorAppointedID) + " from Strike Mediator Appointed", null);
+        } else if(newCaseInformation.strikeMediatorAppointedID != null && oldCaseInformation.strikeMediatorAppointedID == null) {
+            Activity.addActivty("Set Strike Mediator Appointed to " + Mediator.getMediatorNameByID(newCaseInformation.strikeMediatorAppointedID), null);
+        } else if(newCaseInformation.strikeMediatorAppointedID != null && oldCaseInformation.strikeMediatorAppointedID != null) {
+            if(!newCaseInformation.strikeMediatorAppointedID.equals(oldCaseInformation.strikeMediatorAppointedID)) 
+                Activity.addActivty("Changed Strike Mediator Appointed from " + Mediator.getMediatorNameByID(oldCaseInformation.strikeMediatorAppointedID) + " to " + Mediator.getMediatorNameByID(newCaseInformation.strikeMediatorAppointedID), null);
+        }
+        
+        //strike notes
+        if(newCaseInformation.strikeNotes == null && oldCaseInformation.strikeNotes != null) {
+            Activity.addActivty("Updated Strike Notes", null);
+        } else if(newCaseInformation.strikeNotes != null && oldCaseInformation.strikeNotes == null) {
+            Activity.addActivty("Updated Strike Notes", null);
+        } else if(newCaseInformation.strikeNotes != null && oldCaseInformation.strikeNotes != null) {
+            if(!newCaseInformation.strikeNotes.equals(oldCaseInformation.strikeNotes)) 
+                Activity.addActivty("Updated Strike Notes", null);
+        }
+        
     }
     
     public static boolean checkIfFristCaseOfMonth(String year, String type, String month) {
