@@ -5,9 +5,25 @@
  */
 package parker.serb.MED;
 
+import com.alee.extended.date.WebDateField;
+import com.alee.utils.swing.DocumentChangeListener;
 import java.awt.Color;
+import java.awt.event.MouseEvent;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFrame;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import parker.serb.Global;
 import parker.serb.sql.MEDCase;
+import parker.serb.sql.Mediator;
+import parker.serb.util.ClearDateDialog;
+import parker.serb.util.NumberFormatService;
 
 /**
  *
@@ -22,14 +38,72 @@ public class MEDStrikePanel extends javax.swing.JPanel {
      */
     public MEDStrikePanel() {
         initComponents();
+        addListeners();
     }
     
+    private void addListeners() {
+        strikeBeganTextBox.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                calculateTotalDays();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                calculateTotalDays();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                calculateTotalDays();
+            }
+        });
+        
+        strikeEndedTextBox.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                calculateTotalDays();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                calculateTotalDays();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                calculateTotalDays();
+            }
+        });
+    }
+    
+    private void calculateTotalDays() {
+        if(strikeBeganTextBox.getText().equals("") ||
+                strikeEndedTextBox.getText().equals("")) {
+            totalNumberOfDaysTextBox.setText("");
+        } else {
+            try {
+                Date date1 = Global.mmddyyyy.parse(strikeBeganTextBox.getText());
+                Date date2 = Global.mmddyyyy.parse(strikeEndedTextBox.getText());
+                long diffInMillies = date2.getTime() - date1.getTime();
+                int days = (int) (diffInMillies / (1000*60*60*24));
+                totalNumberOfDaysTextBox.setText(Integer.toString(days));
+            } catch (ParseException ex) {
+                Logger.getLogger(MEDStrikePanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+        
+    
     public void enableUpdate() {
+        Global.root.getjButton2().setText("Save");
+        Global.root.getjButton9().setVisible(true);
+        
         strikeFileDateTextBox.setEnabled(true);
         strikeFileDateTextBox.setBackground(Color.white);
         //skip med case number
-        medCaseNumberTextBox.setEnabled(true);
-        medCaseNumberTextBox.setBackground(Color.white);
+//        medCaseNumberTextBox.setEnabled(true); //remove ability to edit per Andrew
+//        medCaseNumberTextBox.setBackground(Color.white); //remove ability to edit per Andrew
         descriptionTextBox.setEnabled(true);
         descriptionTextBox.setBackground(Color.white);
         unitSizeTextBox.setEnabled(true);
@@ -57,35 +131,39 @@ public class MEDStrikePanel extends javax.swing.JPanel {
     }
     
     public void disableUpdate(boolean save) {
+        
+        Global.root.getjButton2().setText("Update");
+        Global.root.getjButton9().setVisible(false);
+        
         strikeFileDateTextBox.setEnabled(false);
         strikeFileDateTextBox.setBackground(new Color(238,238,238));
         //skip med case number
-        medCaseNumberTextBox.setEnabled(false);
-        medCaseNumberTextBox.setBackground(Color.white);
+//        medCaseNumberTextBox.setEnabled(false); //remove ability to edit per Andrew
+//        medCaseNumberTextBox.setBackground(Color.white); //remove ability to edit per Andrew
         descriptionTextBox.setEnabled(false);
-        descriptionTextBox.setBackground(Color.white);
+        descriptionTextBox.setBackground(new Color(238,238,238));
         unitSizeTextBox.setEnabled(false);
-        unitSizeTextBox.setBackground(Color.white);
+        unitSizeTextBox.setBackground(new Color(238,238,238));
         unauthorizedStrikeCheckBox.setEnabled(false);
         noticeOfIntentToStrikeOnlyCheckBox.setEnabled(false);
         intendedDateStrikeTextBox.setEnabled(false);
-        intendedDateStrikeTextBox.setBackground(Color.white);
+        intendedDateStrikeTextBox.setBackground(new Color(238,238,238));
         noticeOfIntentToPicketOnlyCheckBox.setEnabled(false);
         intendedDatePicketTextBox.setEnabled(false);
-        intendedDatePicketTextBox.setBackground(Color.white);
+        intendedDatePicketTextBox.setBackground(new Color(238,238,238));
         informationCheckBox.setEnabled(false);
         noticeOfIntentToStrikeAndPicketCheckBox.setEnabled(false);
         
         strikeOccuredComboBox.setEnabled(false);
         strikeStatusComboBox.setEnabled(false);
         strikeBeganTextBox.setEnabled(false);
-        strikeBeganTextBox.setBackground(Color.white);
+        strikeBeganTextBox.setBackground(new Color(238,238,238));
         strikeEndedTextBox.setEnabled(false);
-        strikeEndedTextBox.setBackground(Color.white);
+        strikeEndedTextBox.setBackground(new Color(238,238,238));
         //skip total number of days
         mediatorAppointedComboBox.setEnabled(false);
         strikeNotesTextArea.setEnabled(false);
-        strikeNotesTextArea.setBackground(Color.white);
+        strikeNotesTextArea.setBackground(new Color(238,238,238));
         
         if(save) {
             saveInformation();
@@ -94,17 +172,74 @@ public class MEDStrikePanel extends javax.swing.JPanel {
         loadInformaiton();
     }
     
+    public void loadMediators() {
+        mediatorAppointedComboBox.removeAllItems();
+        
+        mediatorAppointedComboBox.addItem("");
+        
+        List currentOwnerList = Mediator.loadAllMediators();
+        
+        for (Object currentOwners : currentOwnerList) {
+            Mediator med = (Mediator) currentOwners;
+            
+            mediatorAppointedComboBox.addItem(med.firstName + " " + med.lastName);
+        }
+    }
+    
     public void loadInformaiton() {
         
-//        orginalInformation = MEDCase.loadStrikeInformation();
+        loadMediators();
         
+        orginalInformation = MEDCase.loadStrikeInformation();
         
+        strikeFileDateTextBox.setText(orginalInformation.strikeFileDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.strikeFileDate.getTime())) : "");
+        strikeCaseNumberTextBox.setText(orginalInformation.strikeCaseNumber != null ? orginalInformation.strikeCaseNumber : "");
+        medCaseNumberTextBox.setText(orginalInformation.medCaseNumber != null ? orginalInformation.medCaseNumber : "");
+        descriptionTextBox.setText(orginalInformation.description != null ? orginalInformation.description : "");
+        unitSizeTextBox.setText(orginalInformation.unitSize != null ? orginalInformation.unitSize : "");
+        unauthorizedStrikeCheckBox.setSelected(orginalInformation.unauthorizedStrike == true);
+        noticeOfIntentToStrikeOnlyCheckBox.setSelected(orginalInformation.noticeOfIntentToStrikeOnly == true);
+        intendedDateStrikeTextBox.setText(orginalInformation.intendedDateStrike != null ? Global.mmddyyyy.format(new Date(orginalInformation.intendedDateStrike.getTime())) : "");
+        noticeOfIntentToPicketOnlyCheckBox.setSelected(orginalInformation.noticeOfIntentToPicketOnly == true);
+        intendedDatePicketTextBox.setText(orginalInformation.intendedDatePicket != null ? Global.mmddyyyy.format(new Date(orginalInformation.intendedDatePicket.getTime())) : "");
+        informationCheckBox.setSelected(orginalInformation.informational == true);
+        noticeOfIntentToStrikeAndPicketCheckBox.setSelected(orginalInformation.noticeOfIntentToStrikeAndPicket == true);
+        strikeOccuredComboBox.setSelectedItem(orginalInformation.strikeOccured != null ? orginalInformation.strikeOccured : " ");
+        strikeStatusComboBox.setSelectedItem(orginalInformation.strikeStatus != null ? orginalInformation.strikeStatus : " ");
+        strikeBeganTextBox.setText(orginalInformation.strikeBegan != null ? Global.mmddyyyy.format(new Date(orginalInformation.strikeBegan.getTime())) : "");
+        strikeEndedTextBox.setText(orginalInformation.strikeEnded != null ? Global.mmddyyyy.format(new Date(orginalInformation.strikeEnded.getTime())) : "");
+        totalNumberOfDaysTextBox.setText(orginalInformation.totalNumberOfDays != null ? orginalInformation.totalNumberOfDays : "");
+        mediatorAppointedComboBox.setSelectedItem(orginalInformation.strikeMediatorAppointedID != null ? Mediator.getMediatorNameByID(orginalInformation.strikeMediatorAppointedID) : "");
+        strikeNotesTextArea.setText(orginalInformation.strikeNotes != null ? orginalInformation.strikeNotes : "");
     }
     
     public void saveInformation() {
         
+        MEDCase newCaseInformation = new MEDCase();
         
+        newCaseInformation.strikeFileDate = strikeFileDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(strikeFileDateTextBox.getText()));
+        newCaseInformation.strikeCaseNumber = strikeCaseNumberTextBox.getText().equals("") ? null : strikeCaseNumberTextBox.getText();
+        newCaseInformation.medCaseNumber = medCaseNumberTextBox.getText().equals("") ? null : medCaseNumberTextBox.getText();
+        newCaseInformation.description = descriptionTextBox.getText().equals("") ? null : descriptionTextBox.getText();
+        newCaseInformation.unitSize = unitSizeTextBox.getText().equals("") ? null : unitSizeTextBox.getText();
+        newCaseInformation.unauthorizedStrike = unauthorizedStrikeCheckBox.isSelected();
+        newCaseInformation.noticeOfIntentToStrikeOnly = noticeOfIntentToStrikeOnlyCheckBox.isSelected();
+        newCaseInformation.intendedDateStrike = intendedDateStrikeTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(intendedDateStrikeTextBox.getText()));
+        newCaseInformation.noticeOfIntentToPicketOnly = noticeOfIntentToPicketOnlyCheckBox.isSelected();        
+        newCaseInformation.intendedDatePicket = intendedDatePicketTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(intendedDatePicketTextBox.getText()));
+        newCaseInformation.informational = informationCheckBox.isSelected();        
+        newCaseInformation.noticeOfIntentToStrikeAndPicket = noticeOfIntentToStrikeAndPicketCheckBox.isSelected();        
+        newCaseInformation.informational = informationCheckBox.isSelected();        
+        newCaseInformation.strikeOccured = strikeOccuredComboBox.getSelectedItem().toString().trim().equals("") ? null : strikeOccuredComboBox.getSelectedItem().toString();
+        newCaseInformation.strikeStatus = strikeStatusComboBox.getSelectedItem().toString().trim().equals("") ? null : strikeStatusComboBox.getSelectedItem().toString();
+        newCaseInformation.strikeBegan = strikeBeganTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(strikeBeganTextBox.getText()));
+        newCaseInformation.strikeEnded = strikeEndedTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(strikeEndedTextBox.getText()));
+        newCaseInformation.strikeEnded = strikeEndedTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(strikeEndedTextBox.getText()));
+        newCaseInformation.totalNumberOfDays = totalNumberOfDaysTextBox.getText().equals("") ? null : totalNumberOfDaysTextBox.getText();
+        newCaseInformation.strikeMediatorAppointedID = mediatorAppointedComboBox.getSelectedItem().toString().equals("") ? null : Mediator.getMediatorIDByName(mediatorAppointedComboBox.getSelectedItem().toString());
+        newCaseInformation.strikeNotes = strikeNotesTextArea.getText().equals("") ? null : strikeNotesTextArea.getText();
         
+        MEDCase.updateStrikeInformation(newCaseInformation, orginalInformation);
     }
     
     public void clearAll() {
@@ -121,14 +256,25 @@ public class MEDStrikePanel extends javax.swing.JPanel {
         informationCheckBox.setSelected(false);
         noticeOfIntentToStrikeAndPicketCheckBox.setSelected(false);
         
-        strikeOccuredComboBox.setSelectedItem(" ");
-        strikeStatusComboBox.setSelectedItem(" ");
+        strikeOccuredComboBox.setSelectedItem("");
+        strikeStatusComboBox.setSelectedItem("");
         strikeBeganTextBox.setText("");
         strikeEndedTextBox.setText("");
         totalNumberOfDaysTextBox.setText("");
-        mediatorAppointedComboBox.setSelectedItem(" ");
+        mediatorAppointedComboBox.setSelectedItem("");
         strikeNotesTextArea.setText("");
     }
+    
+    private void clearDate(WebDateField dateField, MouseEvent evt) {
+        if(evt.getButton() == MouseEvent.BUTTON3 && dateField.isEnabled()) {
+            ClearDateDialog dialog = new ClearDateDialog((JFrame) Global.root, true);
+            if(dialog.isReset()) {
+                dateField.setText("");
+            }
+            dialog.dispose();
+        }
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -218,10 +364,15 @@ public class MEDStrikePanel extends javax.swing.JPanel {
         intendedDatePicketTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
         intendedDatePicketTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         intendedDatePicketTextBox.setEnabled(false);
-        strikeFileDateTextBox.setDateFormat(Global.mmddyyyy);
+        intendedDatePicketTextBox.setDateFormat(Global.mmddyyyy);
         intendedDatePicketTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 intendedDatePicketTextBoxMouseClicked(evt);
+            }
+        });
+        intendedDatePicketTextBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                intendedDatePicketTextBoxActionPerformed(evt);
             }
         });
 
@@ -242,7 +393,7 @@ public class MEDStrikePanel extends javax.swing.JPanel {
         intendedDateStrikeTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
         intendedDateStrikeTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         intendedDateStrikeTextBox.setEnabled(false);
-        strikeFileDateTextBox.setDateFormat(Global.mmddyyyy);
+        intendedDateStrikeTextBox.setDateFormat(Global.mmddyyyy);
         intendedDateStrikeTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 intendedDateStrikeTextBoxMouseClicked(evt);
@@ -252,11 +403,6 @@ public class MEDStrikePanel extends javax.swing.JPanel {
         jLabel10.setText("Notice of Intent to Strike AND Picket:");
 
         noticeOfIntentToStrikeOnlyCheckBox.setEnabled(false);
-        noticeOfIntentToStrikeOnlyCheckBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                noticeOfIntentToStrikeOnlyCheckBoxActionPerformed(evt);
-            }
-        });
 
         jLabel3.setText("MED Case Number:");
 
@@ -371,12 +517,14 @@ public class MEDStrikePanel extends javax.swing.JPanel {
 
         jLabel13.setText("Strike Occured:");
 
-        strikeOccuredComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        strikeOccuredComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Yes", "No", " " }));
+        strikeOccuredComboBox.setSelectedIndex(2);
         strikeOccuredComboBox.setEnabled(false);
 
         jLabel14.setText("Strike Status:");
 
-        strikeStatusComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        strikeStatusComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "TA Reached", "Settlement Reached", "STRIKE", "Negotiations Continued", " " }));
+        strikeStatusComboBox.setSelectedIndex(4);
         strikeStatusComboBox.setEnabled(false);
 
         jLabel15.setText("Strike Began:");
@@ -399,7 +547,7 @@ public class MEDStrikePanel extends javax.swing.JPanel {
         strikeBeganTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
         strikeBeganTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         strikeBeganTextBox.setEnabled(false);
-        strikeFileDateTextBox.setDateFormat(Global.mmddyyyy);
+        strikeBeganTextBox.setDateFormat(Global.mmddyyyy);
         strikeBeganTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 strikeBeganTextBoxMouseClicked(evt);
@@ -411,7 +559,7 @@ public class MEDStrikePanel extends javax.swing.JPanel {
         strikeEndedTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
         strikeEndedTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         strikeEndedTextBox.setEnabled(false);
-        strikeFileDateTextBox.setDateFormat(Global.mmddyyyy);
+        strikeEndedTextBox.setDateFormat(Global.mmddyyyy);
         strikeEndedTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 strikeEndedTextBoxMouseClicked(evt);
@@ -422,7 +570,6 @@ public class MEDStrikePanel extends javax.swing.JPanel {
         totalNumberOfDaysTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         totalNumberOfDaysTextBox.setEnabled(false);
 
-        mediatorAppointedComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         mediatorAppointedComboBox.setEnabled(false);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -446,8 +593,8 @@ public class MEDStrikePanel extends javax.swing.JPanel {
                             .addComponent(jLabel13))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(strikeOccuredComboBox, 0, 372, Short.MAX_VALUE)
-                            .addComponent(strikeStatusComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(strikeOccuredComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(strikeStatusComboBox, 0, 372, Short.MAX_VALUE)
                             .addComponent(strikeBeganTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(strikeEndedTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(totalNumberOfDaysTextBox)
@@ -457,12 +604,10 @@ public class MEDStrikePanel extends javax.swing.JPanel {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(strikeOccuredComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(4, 4, 4)
-                        .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(6, 6, 6)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(strikeOccuredComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(strikeStatusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -511,28 +656,28 @@ public class MEDStrikePanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void strikeFileDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_strikeFileDateTextBoxMouseClicked
-//        clearDate(FF1OrderDate, evt);
+        clearDate(strikeFileDateTextBox, evt);
     }//GEN-LAST:event_strikeFileDateTextBoxMouseClicked
 
-    private void noticeOfIntentToStrikeOnlyCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noticeOfIntentToStrikeOnlyCheckBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_noticeOfIntentToStrikeOnlyCheckBoxActionPerformed
-
-    private void intendedDateStrikeTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_intendedDateStrikeTextBoxMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_intendedDateStrikeTextBoxMouseClicked
-
-    private void intendedDatePicketTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_intendedDatePicketTextBoxMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_intendedDatePicketTextBoxMouseClicked
-
     private void strikeBeganTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_strikeBeganTextBoxMouseClicked
-        // TODO add your handling code here:
+        clearDate(strikeBeganTextBox, evt);
     }//GEN-LAST:event_strikeBeganTextBoxMouseClicked
 
     private void strikeEndedTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_strikeEndedTextBoxMouseClicked
-        // TODO add your handling code here:
+        clearDate(strikeEndedTextBox, evt);
     }//GEN-LAST:event_strikeEndedTextBoxMouseClicked
+
+    private void intendedDatePicketTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_intendedDatePicketTextBoxActionPerformed
+//        clearDate(intendedDatePicketTextBox, evt);
+    }//GEN-LAST:event_intendedDatePicketTextBoxActionPerformed
+
+    private void intendedDateStrikeTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_intendedDateStrikeTextBoxMouseClicked
+        clearDate(intendedDateStrikeTextBox, evt);
+    }//GEN-LAST:event_intendedDateStrikeTextBoxMouseClicked
+
+    private void intendedDatePicketTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_intendedDatePicketTextBoxMouseClicked
+        clearDate(intendedDatePicketTextBox, evt);
+    }//GEN-LAST:event_intendedDatePicketTextBoxMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

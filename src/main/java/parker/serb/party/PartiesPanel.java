@@ -18,6 +18,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
 import parker.serb.sql.CaseParty;
+import parker.serb.sql.MEDCaseSearchData;
 import parker.serb.sql.REPCaseSearchData;
 import parker.serb.sql.ULPCaseSearchData;
 
@@ -118,10 +119,9 @@ public class PartiesPanel extends javax.swing.JPanel {
                 break;   
             case "MED":
                 Global.root.getmEDHeaderPanel1().loadHeaderInformation();
-//                REPCaseSearchData.updateCaseEntryFromParties(
-//                        Global.root.getrEPHeaderPanel1().getEmployerTextBox().getText().trim(),
-//                        Global.root.getrEPHeaderPanel1().getEmployeeOrgTextBox().getText().trim(),
-//                        Global.root.getrEPHeaderPanel1().getIncumbentEEOTextBox().getText().trim());
+                MEDCaseSearchData.updateCaseEntryFromParties(
+                        Global.root.getmEDHeaderPanel1().getEmployerTextBox().getText().trim(),
+                        Global.root.getmEDHeaderPanel1().getEmployeeOrgTextBox().getText().trim());
                 break; 
         }
     }

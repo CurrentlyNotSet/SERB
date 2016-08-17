@@ -58,6 +58,36 @@ public class Mediator {
         return mediatorList;
     }
     
+    public static List loadAllMediators() {
+        List<Mediator> mediatorList = new ArrayList<Mediator>();
+            
+        try {
+
+            Statement stmt = Database.connectToDB().createStatement();
+            
+            String sql = "select firstName, middleName, lastName"
+                    + " from Mediator"
+                    + " Where active = 1"
+                    + " ORDER BY lastName ASC ";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            
+            ResultSet employerListRS = preparedStatement.executeQuery();
+            
+            
+            while(employerListRS.next()) {
+                Mediator med = new Mediator();
+                med.firstName = employerListRS.getString("firstName") == null ? "" : employerListRS.getString("firstName");
+                med.middleName = employerListRS.getString("middleName") == null ? "" : employerListRS.getString("middleName");
+                med.lastName = employerListRS.getString("lastName") == null ? "" : employerListRS.getString("lastName");
+                mediatorList.add(med);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return mediatorList;
+    }
+    
     public static String getMediatorPhoneNumber(String name) {
         String[] nameParts = name.split(" ");
         String phone = "";

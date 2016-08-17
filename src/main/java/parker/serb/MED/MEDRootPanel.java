@@ -12,6 +12,7 @@ import parker.serb.activity.ActivityPanel;
 import parker.serb.Global;
 import parker.serb.party.PartiesPanel;
 import parker.serb.party.PartySearchDialog;
+import parker.serb.sql.MEDCaseSearchData;
 import parker.serb.util.CancelUpdate;
 
 /**
@@ -175,9 +176,9 @@ public class MEDRootPanel extends javax.swing.JPanel {
                 new PartySearchDialog((JFrame) this.getRootPane().getParent(), true);
                 partiesPanel1.loadParties();
                 Global.root.getmEDHeaderPanel1().loadHeaderInformation();
-//                ULPCaseSearchData.updateCaseEntryFromParties(
-//                        Global.root.getuLPHeaderPanel1().getChargedPartyTextBox().getText().trim(),
-//                        Global.root.getuLPHeaderPanel1().getChargingPartyTextBox().getText().trim());
+                MEDCaseSearchData.updateCaseEntryFromParties(
+                        Global.root.getmEDHeaderPanel1().getEmployerTextBox().getText().trim(),
+                        Global.root.getmEDHeaderPanel1().getEmployeeOrgTextBox().getText().trim());
                 break;
             case "Status":
                 if(buttonText.equals("Update")) {
@@ -252,9 +253,9 @@ public class MEDRootPanel extends javax.swing.JPanel {
                 partiesPanel1.removeParty();
                 partiesPanel1.loadParties();
                 Global.root.getmEDHeaderPanel1().loadHeaderInformation();
-//                ULPCaseSearchData.updateCaseEntryFromParties(
-//                        Global.root.getmEDHeaderPanel1().getChargedPartyTextBox().getText().trim(),
-//                        Global.root.getmEDHeaderPanel1().getChargingPartyTextBox().getText().trim());
+                MEDCaseSearchData.updateCaseEntryFromParties(
+                        Global.root.getmEDHeaderPanel1().getEmployerTextBox().getText().trim(),
+                        Global.root.getmEDHeaderPanel1().getEmployeeOrgTextBox().getText().trim());
                 break;
             case "Status":
                 cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
