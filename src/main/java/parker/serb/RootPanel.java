@@ -83,7 +83,7 @@ public class RootPanel extends javax.swing.JFrame {
     public void enableTabs() {
         if(!Global.activeUserRoles.contains("Admin")) {
             jMenuBar1.remove(jMenu2);
-//            jMenuBar1.remove(caseManagementMenu);
+            jMenuBar1.remove(caseManagementMenu);
             for(int i = jTabbedPane1.getTabCount()-1; i >= 0; i--) {
                 if(!Global.activeUserRoles.contains(jTabbedPane1.getTitleAt(i))) {
                     jTabbedPane1.remove(i);
