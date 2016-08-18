@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
+import parker.serb.report.GenerateReport;
 import parker.serb.report.RequestedInfoOneDatePanel;
 import parker.serb.sql.MEDCase;
 import parker.serb.sql.SMDSDocuments;
@@ -132,8 +133,9 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
     }
     
     private void printList(){
-        SMDSDocuments report = SMDSDocuments.findDocumentByFileName("MEDCasestobeClosedbyBoard.jasper");
-        new RequestedInfoOneDatePanel(this, true, report);
+        SMDSDocuments report = SMDSDocuments.findDocumentByFileName("MED Cases to be Closed by Board.jasper");
+        GenerateReport generate = new GenerateReport();
+        generate.runReport(report);
     }
         
     /**

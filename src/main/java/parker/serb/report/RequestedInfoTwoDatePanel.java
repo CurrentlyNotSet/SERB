@@ -6,7 +6,6 @@
 package parker.serb.report;
 
 import parker.serb.Global;
-import javax.swing.JOptionPane;
 import parker.serb.sql.SMDSDocuments;
 
 /**
@@ -161,14 +160,11 @@ public class RequestedInfoTwoDatePanel extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void CancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelButtonActionPerformed
-        int answer = JOptionPane.showConfirmDialog(this, "<html><center>Are you sure you want to navigate away from this window? <br>You will lose any unsaved changes you have made.</html></center>", "Cancel", JOptionPane.YES_NO_OPTION);
-        if (answer == JOptionPane.YES_OPTION) {
-            this.dispose();
-        }
+        this.dispose();
     }//GEN-LAST:event_CancelButtonActionPerformed
 
     private void GenerateReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GenerateReportButtonActionPerformed
-        GenerateReport.generateTwoDatesReport(startDateField.getDate(), endDateField.getDate(), report);
+        GenerateReport.generateTwoDatesReport(startDateField.getText(), endDateField.getText(), report);
     }//GEN-LAST:event_GenerateReportButtonActionPerformed
 
     private void startDateFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startDateFieldActionPerformed

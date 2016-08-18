@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
+import parker.serb.report.GenerateReport;
 import parker.serb.report.RequestedInfoTwoDatePanel;
 import parker.serb.sql.MEDCase;
 import parker.serb.sql.SMDSDocuments;
@@ -185,8 +186,9 @@ public class MEDBulkSettleCasesDialog extends javax.swing.JFrame {
     }
     
     private void printList() {
-        SMDSDocuments report = SMDSDocuments.findDocumentByFileName("MEDCasestobeSettled.jasper");
-        new RequestedInfoTwoDatePanel(this, true, report);
+        SMDSDocuments report = SMDSDocuments.findDocumentByFileName("MED Cases to be Settled.jasper");
+        GenerateReport generate = new GenerateReport();
+        generate.runReport(report);
     }
 
     /**
