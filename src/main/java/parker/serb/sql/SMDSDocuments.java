@@ -27,6 +27,7 @@ public class SMDSDocuments {
     public String group;
     public String historyFileName;
     public String historyDescription;
+    public String parameters;
     
     
     
@@ -55,6 +56,40 @@ public class SMDSDocuments {
                 doc.group = foundDoc.getString("group");
                 doc.historyFileName = foundDoc.getString("historyFileName");
                 doc.historyDescription = foundDoc.getString("historyDescription");
+                doc.parameters = foundDoc.getString("parameters");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SMDSDocuments.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return doc;
+    }
+    
+    public static SMDSDocuments findDocumentByFileName(String fileName) {
+        SMDSDocuments doc = new SMDSDocuments();
+        
+        try {
+            
+            Statement stmt = Database.connectToDB().createStatement();
+            
+            String sql = "Select * from SMDSDocuments where fileName = ?";
+            
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, fileName);
+            
+            ResultSet foundDoc = preparedStatement.executeQuery();
+            
+            if(foundDoc.next()) {
+                doc.id = foundDoc.getInt("id");
+                doc.active = foundDoc.getBoolean("active");
+                doc.section = foundDoc.getString("section");
+                doc.type = foundDoc.getString("type");
+                doc.description = foundDoc.getString("description");
+                doc.fileName = foundDoc.getString("fileName");
+                doc.dueDate = foundDoc.getInt("dueDate");
+                doc.group = foundDoc.getString("group");
+                doc.historyFileName = foundDoc.getString("historyFileName");
+                doc.historyDescription = foundDoc.getString("historyDescription");
+                doc.parameters = foundDoc.getString("parameters");
             }
         } catch (SQLException ex) {
             Logger.getLogger(SMDSDocuments.class.getName()).log(Level.SEVERE, null, ex);
@@ -87,6 +122,7 @@ public class SMDSDocuments {
                 doc.group = foundDoc.getString("group");
                 doc.historyFileName = foundDoc.getString("historyFileName");
                 doc.historyDescription = foundDoc.getString("historyDescription");
+                doc.parameters = foundDoc.getString("parameters");
             }
         } catch (SQLException ex) {
             Logger.getLogger(SMDSDocuments.class.getName()).log(Level.SEVERE, null, ex);

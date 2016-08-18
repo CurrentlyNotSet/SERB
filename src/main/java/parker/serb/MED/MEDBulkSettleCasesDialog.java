@@ -4,12 +4,14 @@
  */
 package parker.serb.MED;
 
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
+import parker.serb.report.GenerateReport;
+import parker.serb.report.RequestedInfoTwoDatePanel;
 import parker.serb.sql.MEDCase;
+import parker.serb.sql.SMDSDocuments;
 import parker.serb.util.NumberFormatService;
 
 /**
@@ -162,7 +164,7 @@ public class MEDBulkSettleCasesDialog extends javax.swing.JFrame {
         for (int i = 0; i < caseTable.getRowCount(); i++) {
             if (caseTable.getValueAt(i, 0).equals(true)) {
                 String caseNumber = caseTable.getValueAt(i, 1).toString();
-                Timestamp settleDate = new Timestamp(NumberFormatService.convertMMDDYYYY(settleDateField.getText()));
+                java.sql.Date settleDate = new java.sql.Date(new Date(NumberFormatService.convertMMDDYYYY(settleDateField.getText())).getTime());
 
                 MEDCase.updateSettledCases(caseNumber, settleDate);
             }
@@ -184,20 +186,9 @@ public class MEDBulkSettleCasesDialog extends javax.swing.JFrame {
     }
     
     private void printList() {
-//        try {
-//            HashMap para = new HashMap();
-//            String startDate = JOptionPane.showInputDialog("Please enter a start date (MM/DD/YYYY)");
-//            String endDate = JOptionPane.showInputDialog("Please enter an end date (MM/DD/YYYY)");
-//            Connection con = global.getDba().getObjConn();
-//            para.put("startDate", startDate);
-//            para.put("endDate", endDate);
-//            String reportPath = "G:\\XLNCMS\\SERBTemplates\\MED\\ReportTemplates\\MEDCasestobeSettled.jrxml";
-//            JasperReport jr = JasperCompileManager.compileReport(reportPath);
-//            JasperPrint jp = JasperFillManager.fillReport(jr, para, con);
-//            JasperViewer.viewReport(jp, false);
-//        } catch (JRException ex) {
-//
-//        }
+        SMDSDocuments report = SMDSDocuments.findDocumentByFileName("MED Cases to be Settled.jasper");
+        GenerateReport generate = new GenerateReport();
+        generate.runReport(report);
     }
 
     /**
