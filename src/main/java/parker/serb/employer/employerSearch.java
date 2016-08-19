@@ -26,6 +26,7 @@ import parker.serb.util.FileService;
 public class employerSearch extends javax.swing.JDialog {
 
     String employerNumber;
+    String employerName;
     List employers;
     /**
      * Creates new form employerSearch
@@ -71,6 +72,7 @@ public class employerSearch extends javax.swing.JDialog {
             public void mouseClicked(MouseEvent e) {
                 if(e.getClickCount() == 2) {
                    employerNumber = employerTable.getValueAt(employerTable.getSelectedRow(), 0).toString().trim();
+                   employerName = employerTable.getValueAt(employerTable.getSelectedRow(), 1).toString().trim();
                     setVisible(false);
                 } 
             }
@@ -123,6 +125,10 @@ public class employerSearch extends javax.swing.JDialog {
         return employerNumber;
     }
 
+    public String getEmployerName() {
+        return employerName;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

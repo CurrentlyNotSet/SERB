@@ -13,7 +13,6 @@ import parker.serb.Global;
 import parker.serb.bookmarkProcessing.generateDocument;
 import parker.serb.sql.Activity;
 import parker.serb.sql.SMDSDocuments;
-import parker.serb.sql.SMDSLetter;
 import parker.serb.util.FileService;
 
 /**
@@ -90,7 +89,7 @@ public class REPLetterDialog extends javax.swing.JDialog {
         lettersComboBox.removeAllItems();
         lettersComboBox.addItem("");
         
-        List letterList = SMDSLetter.loadDocumentNamesByTypeAndSection("REP", "Letter");
+        List letterList = SMDSDocuments.loadDocumentNamesByTypeAndSection("REP", "Letter");
         for (Object letter : letterList) {
             lettersComboBox.addItem((String) letter);
         }
@@ -101,7 +100,7 @@ public class REPLetterDialog extends javax.swing.JDialog {
         directivesComboBox.removeAllItems();
         directivesComboBox.addItem("");
         
-        List letterList = SMDSLetter.loadDocumentNamesByTypeAndSection("REP", "Directive");
+        List letterList = SMDSDocuments.loadDocumentNamesByTypeAndSection("REP", "Directive");
         for (Object letter : letterList) {
             directivesComboBox.addItem((String) letter);
         }
@@ -116,7 +115,7 @@ public class REPLetterDialog extends javax.swing.JDialog {
         memosComboBox2.removeAllItems();
         memosComboBox2.addItem("");
         
-        List letterList = SMDSLetter.loadDocumentNamesByTypeAndSection("REP", "Memo");
+        List letterList = SMDSDocuments.loadDocumentNamesByTypeAndSection("REP", "Memo");
         for (Object letter : letterList) {
             memosComboBox2.addItem((String) letter);
         }
@@ -127,7 +126,7 @@ public class REPLetterDialog extends javax.swing.JDialog {
         agendaComboBox.removeAllItems();
         agendaComboBox.addItem("");
         
-        List letterList = SMDSLetter.loadDocumentNamesByTypeAndSection("REP", "Agenda");
+        List letterList = SMDSDocuments.loadDocumentNamesByTypeAndSection("REP", "Agenda");
         for (Object letter : letterList) {
             agendaComboBox.addItem((String) letter);
         }

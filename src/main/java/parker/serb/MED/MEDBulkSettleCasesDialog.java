@@ -187,8 +187,7 @@ public class MEDBulkSettleCasesDialog extends javax.swing.JFrame {
     
     private void printList() {
         SMDSDocuments report = SMDSDocuments.findDocumentByFileName("MED Cases to be Settled.jasper");
-        GenerateReport generate = new GenerateReport();
-        generate.runReport(report);
+        GenerateReport.runReport(report);
     }
 
     /**

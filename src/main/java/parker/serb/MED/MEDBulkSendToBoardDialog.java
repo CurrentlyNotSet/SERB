@@ -134,8 +134,7 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
     
     private void printList(){
         SMDSDocuments report = SMDSDocuments.findDocumentByFileName("MED Cases to be Closed by Board.jasper");
-        GenerateReport generate = new GenerateReport();
-        generate.runReport(report);
+        GenerateReport.runReport(report);
     }
         
     /**

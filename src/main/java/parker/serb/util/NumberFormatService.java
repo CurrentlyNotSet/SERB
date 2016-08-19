@@ -7,6 +7,7 @@ package parker.serb.util;
 
 import java.text.ParseException;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import parker.serb.Global;
@@ -109,5 +110,19 @@ public class NumberFormatService {
         Global.caseType = "";
         Global.caseMonth = "";
         Global.caseNumber = "";
+    }
+    
+    public static String convertLongToTime(long millis) {
+        String duration = String.format("%02dhr %02dmin %02dsec",
+                TimeUnit.MILLISECONDS.toHours(millis),
+                TimeUnit.MILLISECONDS.toMinutes(millis)
+                - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)),
+                TimeUnit.MILLISECONDS.toSeconds(millis)
+                - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
+        if (TimeUnit.MILLISECONDS.toHours(millis) == 0) {
+            String[] split = duration.split("hr");
+            duration = split[1].trim();
+        }
+        return duration.trim();
     }
 }
