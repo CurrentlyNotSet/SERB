@@ -19,6 +19,7 @@ import parker.serb.Global;
 import parker.serb.sql.Database;
 import parker.serb.sql.SMDSDocuments;
 import parker.serb.util.FileService;
+import parker.serb.util.NumberFormatService;
 import parker.serb.util.StringUtilities;
 
 /**
@@ -27,14 +28,26 @@ import parker.serb.util.StringUtilities;
  */
 public class GenerateReport {
  
-    public void runReport(SMDSDocuments report) {
+    public static void runReport(SMDSDocuments report) {
         if (report.parameters != null) {
             switch (report.parameters) {
-                case "begin date, end date":
-                    new RequestedInfoTwoDatePanel(Global.root, true, report);
+                case "EmployerID":
+                    new RequestedInfoEmployerIDPanel(Global.root, true, report);
                     break;
                 case "date":
                     new RequestedInfoOneDatePanel(Global.root, true, report);
+                    break;
+                case "begin date, end date":
+                    new RequestedInfoTwoDatePanel(Global.root, true, report);
+                    break;
+                case "begin date, end date, investigatorID":
+                    new RequestedInfoTwoDateIDPanel(Global.root, true, report, "InvestigatorID");
+                    break;
+                case "begin date, end date, UserID":
+                    new RequestedInfoTwoDateIDPanel(Global.root, true, report, "UserID");
+                    break;
+                case "begin date, end date, LikeString":
+                    new RequestedInfoTwoDateLikeStringPanel(Global.root, true, report);
                     break;
                 default:
                     HashMap hash = new HashMap();
@@ -47,7 +60,54 @@ public class GenerateReport {
         }
     }
     
+    public static void generateSingleDatesReport(String date, SMDSDocuments report) {
+        HashMap hash = new HashMap();
+        hash.put("date", date);
+        generateReport(report, hash);
+    }
+    
+    public static void generateIDReport(String ID, SMDSDocuments report) {
+        HashMap hash = new HashMap();
+        hash.put("ID", ID);
+        generateReport(report, hash);
+    }
+    
+    public static void generateTwoDatesReport(String Start, String End, SMDSDocuments report) {
+        HashMap hash = new HashMap();
+        hash.put("begin date", Start);
+        hash.put("end date", End);
+        generateReport(report, hash);
+    }
+    
+    public static void generateTwoDatesIDReport(String Start, String End, String ID, SMDSDocuments report) {
+        HashMap hash = new HashMap();
+        hash.put("begin date", Start);
+        hash.put("end date", End);
+        hash.put("ID", ID);
+        generateReport(report, hash);
+    }
+    
+    public static void generateTwoDatesLikeStringReport(String Start, String End, String Like, SMDSDocuments report) {
+        HashMap hash = new HashMap();
+        hash.put("begin date", Start);
+        hash.put("end date", End);
+        hash.put("LikeString", Like);
+        generateReport(report, hash);
+    }
+    
+    public static void generateCasenumberReport(String CaseNumber, SMDSDocuments report) {
+        NumberFormatService num = NumberFormatService.parseFullCaseNumberNoNGlobal(CaseNumber);
+        
+        HashMap hash = new HashMap();
+        hash.put("caseYear", num.caseYear);
+        hash.put("caseType", num.caseType);
+        hash.put("caseMonth", num.caseMonth);
+        hash.put("CaseNumber", num.caseNumber);
+        generateReport(report, hash);
+    }
+    
     private static void generateReport(SMDSDocuments report, HashMap hash) {
+        long lStartTime = System.currentTimeMillis();
         Connection conn = null;
         hash.put("current user", StringUtilities.buildFullName(
                 Global.activeUser.firstName, 
@@ -79,6 +139,8 @@ public class GenerateReport {
                 File recentReport = new File(pdfFileName);
                 if (recentReport.exists()) {
                     FileService.openFileFullPath(recentReport);
+                    long lEndTime = System.currentTimeMillis();
+                    System.out.println("Report Generation Time: " + NumberFormatService.convertLongToTime(lEndTime - lStartTime));                    
                 }
             } catch (JRException ex) {
                 ex.printStackTrace();
@@ -87,18 +149,5 @@ public class GenerateReport {
             }
         }
     }   
-    
-    public static void generateSingleDatesReport(String date, SMDSDocuments report) {
-        HashMap hash = new HashMap();
-        hash.put("date", date);
-        generateReport(report, hash);
-    }
-    
-    public static void generateTwoDatesReport(String Start, String End, SMDSDocuments report) {
-        HashMap hash = new HashMap();
-        hash.put("begin date", Start);
-        hash.put("end date", End);
-        generateReport(report, hash);
-    }
     
 }

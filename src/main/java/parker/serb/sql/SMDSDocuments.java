@@ -9,6 +9,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,9 +29,50 @@ public class SMDSDocuments {
     public String group;
     public String historyFileName;
     public String historyDescription;
+    public String CHDCHG;
+    public String questionsFileName;
+    public String historyQuestionsDescription;
     public String parameters;
     
-    
+    public static List loadDocumentNamesByTypeAndSection(String section, String type) {
+        List<SMDSDocuments> documentList = new ArrayList<>();
+            
+        try {
+
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "select * from SMDSDocuments where"
+                    + " section = ? AND"
+                    + " type = ? AND"
+                    + " active = 1"
+                    + " order by cast(description as nvarchar(max))";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, section);
+            preparedStatement.setString(2, type);
+
+            ResultSet docList = preparedStatement.executeQuery();
+            
+            while(docList.next()) {
+                SMDSDocuments doc = new SMDSDocuments();
+                doc.id = docList.getInt("id");
+                doc.active = docList.getBoolean("active");
+                doc.section = docList.getString("section");
+                doc.type = docList.getString("type");
+                doc.description = docList.getString("description");
+                doc.fileName = docList.getString("fileName");
+                doc.dueDate = docList.getInt("dueDate");
+                doc.group = docList.getString("group");
+                doc.historyFileName = docList.getString("historyFileName");
+                doc.historyDescription = docList.getString("historyDescription");
+                doc.parameters = docList.getString("parameters");
+                documentList.add(doc);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return documentList;
+    }
     
     public static SMDSDocuments findDocumentByID(int id) {
         SMDSDocuments doc = new SMDSDocuments();
