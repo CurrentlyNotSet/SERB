@@ -165,7 +165,7 @@ public class RequestedInfoEmployerIDPanel extends javax.swing.JDialog {
     private void employerNameTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_employerNameTextFieldCaretUpdate
         String employer = NumberFormatService.convertPhoneNumberToString(employerNameTextField.getText().trim());
         if (employer.length() > 3){
-            employerID = employer.substring(0, 3);
+            employerID = employer.substring(0, 4);
         } else {
             employerID = "";
         }
