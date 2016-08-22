@@ -66,7 +66,7 @@ public class GenerateReport {
         generateReport(report, hash);
     }
     
-    public static void generateIDReport(int ID, SMDSDocuments report) {
+    public static void generateIDReport(String ID, SMDSDocuments report) {
         HashMap hash = new HashMap();
         hash.put("ID", ID);
         generateReport(report, hash);
@@ -79,7 +79,7 @@ public class GenerateReport {
         generateReport(report, hash);
     }
     
-    public static void generateTwoDatesIDReport(String Start, String End, int ID, SMDSDocuments report) {
+    public static void generateTwoDatesIDReport(String Start, String End, String ID, SMDSDocuments report) {
         HashMap hash = new HashMap();
         hash.put("begin date", Start);
         hash.put("end date", End);
@@ -87,7 +87,7 @@ public class GenerateReport {
         generateReport(report, hash);
     }
     
-    public static void generateTwoDatesIDReport(String Start, String End, String Like, SMDSDocuments report) {
+    public static void generateTwoDatesLikeStringReport(String Start, String End, String Like, SMDSDocuments report) {
         HashMap hash = new HashMap();
         hash.put("begin date", Start);
         hash.put("end date", End);

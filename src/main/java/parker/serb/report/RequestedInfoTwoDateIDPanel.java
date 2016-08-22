@@ -227,7 +227,7 @@ public class RequestedInfoTwoDateIDPanel extends javax.swing.JDialog {
     }//GEN-LAST:event_CancelButtonActionPerformed
 
     private void GenerateReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GenerateReportButtonActionPerformed
-        GenerateReport.generateTwoDatesIDReport(startDateField.getText(), endDateField.getText(), comboBoxID, report);
+        GenerateReport.generateTwoDatesIDReport(startDateField.getText(), endDateField.getText(), String.valueOf(comboBoxID), report);
     }//GEN-LAST:event_GenerateReportButtonActionPerformed
 
     private void startDateFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startDateFieldActionPerformed

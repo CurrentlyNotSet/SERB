@@ -18,7 +18,7 @@ import parker.serb.util.NumberFormatService;
 public class RequestedInfoEmployerIDPanel extends javax.swing.JDialog {
 
     private final SMDSDocuments report;
-    private int employerID;
+    private String employerID = "";
 
     /**
      * Creates new form RequestedReportInformationPanel
@@ -42,7 +42,7 @@ public class RequestedInfoEmployerIDPanel extends javax.swing.JDialog {
     }
 
     private void generateButton() {
-        if (employerID > 0) {
+        if (employerID.length() != 4) {
             GenerateReportButton.setEnabled(false);
         } else {
             GenerateReportButton.setEnabled(true);
@@ -63,7 +63,7 @@ public class RequestedInfoEmployerIDPanel extends javax.swing.JDialog {
         CancelButton = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         employerNameTextField = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        searchEmployersButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Reqired Report Information");
@@ -91,7 +91,6 @@ public class RequestedInfoEmployerIDPanel extends javax.swing.JDialog {
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("REPORTNAME");
 
-        employerNameTextField.setBackground(new java.awt.Color(255, 255, 255));
         employerNameTextField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         employerNameTextField.addCaretListener(new javax.swing.event.CaretListener() {
             public void caretUpdate(javax.swing.event.CaretEvent evt) {
@@ -99,10 +98,10 @@ public class RequestedInfoEmployerIDPanel extends javax.swing.JDialog {
             }
         });
 
-        jButton1.setText("Search Employers");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        searchEmployersButton.setText("Search Employers");
+        searchEmployersButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                searchEmployersButtonActionPerformed(evt);
             }
         });
 
@@ -123,7 +122,7 @@ public class RequestedInfoEmployerIDPanel extends javax.swing.JDialog {
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(203, 203, 203)
-                .addComponent(jButton1)
+                .addComponent(searchEmployersButton)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -136,7 +135,7 @@ public class RequestedInfoEmployerIDPanel extends javax.swing.JDialog {
                 .addGap(30, 30, 30)
                 .addComponent(employerNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
+                .addComponent(searchEmployersButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(CancelButton)
@@ -155,19 +154,20 @@ public class RequestedInfoEmployerIDPanel extends javax.swing.JDialog {
         GenerateReport.generateIDReport(employerID, report);
     }//GEN-LAST:event_GenerateReportButtonActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        employerSearch search = new employerSearch((JFrame) Global.root.getRootPane().getParent(), true, employerNameTextField.getText().trim());
+    private void searchEmployersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchEmployersButtonActionPerformed
+        employerSearch search = new employerSearch((JFrame) Global.root.getRootPane().getParent(), true, employerID);
         employerNameTextField.setText(search.getEmployerNumber() + " - " + search.getEmployerName());
-        employerID = Integer.parseInt(search.getEmployerNumber());
+        employerID = search.getEmployerNumber();
         search.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+        generateButton();
+    }//GEN-LAST:event_searchEmployersButtonActionPerformed
 
     private void employerNameTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_employerNameTextFieldCaretUpdate
         String employer = NumberFormatService.convertPhoneNumberToString(employerNameTextField.getText().trim());
         if (employer.length() > 3){
-            employerID = Integer.parseInt(employer.substring(0, 3));
+            employerID = employer.substring(0, 3);
         } else {
-            employerID = 0;
+            employerID = "";
         }
         generateButton();
     }//GEN-LAST:event_employerNameTextFieldCaretUpdate
@@ -176,8 +176,8 @@ public class RequestedInfoEmployerIDPanel extends javax.swing.JDialog {
     private javax.swing.JButton CancelButton;
     private javax.swing.JButton GenerateReportButton;
     private javax.swing.JTextField employerNameTextField;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JButton searchEmployersButton;
     // End of variables declaration//GEN-END:variables
 }
