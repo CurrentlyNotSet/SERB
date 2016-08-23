@@ -1,13 +1,12 @@
 package parker.serb.sql;
 
+import com.alee.laf.optionpane.WebOptionPane;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,6 +24,7 @@ public class Database {
     public Date nextBackup;
     
     public static Connection connectToDB() {
+        int nbAttempts = 0;
         Connection connection = null;
         ResultSet rs = null;
         String url = DBConnectionInfo.url;
@@ -34,7 +34,28 @@ public class Database {
         try {
             Class.forName(driver);
             connection = DriverManager.getConnection(url, userName, password);
-        } catch (ClassNotFoundException | SQLException e) {} 
+        } catch (ClassNotFoundException | SQLException e) {
+            nbAttempts++;
+                System.out.println("Write Failed. Waiting and trying again.");
+                if (nbAttempts == 2) {
+                    WebOptionPane.showMessageDialog(Global.root, "<html><center>Unable to connect to the database.<br>"
+                            + "Please ensure you are connected to the network and press OK to try again.</center></html>",
+                            "Connection Error", WebOptionPane.WARNING_MESSAGE);
+                }
+                try {
+                    Thread.sleep(3000);
+                } catch (Exception exi) {
+                    System.err.println(exi.getMessage());
+                }
+                if (nbAttempts == 3) {
+                    WebOptionPane.showMessageDialog(Global.root, "<html><center>"
+                            + "Still unable to connect to database.<br><br>"
+                            + "The application must now close. The information will not be saved.<br> "
+                            + "Make note of that information and press OK to exit the application.</center></html>", 
+                            "Connection Error", WebOptionPane.ERROR_MESSAGE);
+                    System.exit(0);
+                }
+        } 
         return connection;
     }
     

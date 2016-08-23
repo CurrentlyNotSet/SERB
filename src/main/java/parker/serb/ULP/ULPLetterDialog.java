@@ -13,7 +13,6 @@ import parker.serb.Global;
 import parker.serb.bookmarkProcessing.generateDocument;
 import parker.serb.sql.Activity;
 import parker.serb.sql.SMDSDocuments;
-import parker.serb.sql.SMDSLetter;
 import parker.serb.util.FileService;
 
 
@@ -77,7 +76,7 @@ public class ULPLetterDialog extends javax.swing.JDialog {
         letterComboBox.removeAllItems();
         letterComboBox.addItem("");
         
-        List letterList = SMDSLetter.loadDocumentNamesByTypeAndSection("ULP", "Letter");
+        List letterList = SMDSDocuments.loadDocumentNamesByTypeAndSection("ULP", "Letter");
         for (Object letter : letterList) {
             letterComboBox.addItem((String) letter);
         }
@@ -88,7 +87,7 @@ public class ULPLetterDialog extends javax.swing.JDialog {
         directiveComboBox.removeAllItems();
         directiveComboBox.addItem("");
         
-        List letterList = SMDSLetter.loadDocumentNamesByTypeAndSection("ULP", "Directive");
+        List letterList = SMDSDocuments.loadDocumentNamesByTypeAndSection("ULP", "Directive");
         for (Object letter : letterList) {
             directiveComboBox.addItem((String) letter);
         }
@@ -99,7 +98,7 @@ public class ULPLetterDialog extends javax.swing.JDialog {
         agendaComboBox.removeAllItems();
         agendaComboBox.addItem("");
         
-        List letterList = SMDSLetter.loadDocumentNamesByTypeAndSection("ULP", "Agenda");
+        List letterList = SMDSDocuments.loadDocumentNamesByTypeAndSection("ULP", "Agenda");
         for (Object letter : letterList) {
             agendaComboBox.addItem((String) letter);
         }

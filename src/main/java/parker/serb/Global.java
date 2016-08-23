@@ -36,6 +36,8 @@ public class Global {
     public static SimpleDateFormat MMMMM = new SimpleDateFormat("MMMMM");
     public static SimpleDateFormat yyyy = new SimpleDateFormat("yyyy");
     public static SimpleDateFormat hhmma = new SimpleDateFormat("hh:mm a");
+    public static SimpleDateFormat SQLDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    public static SimpleDateFormat SQLDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     
     //The active selected case number of the user
     public static String caseYear = null;
@@ -68,12 +70,12 @@ public class Global {
     public static RootPanel root;
     
     //list of all states -> can limit this down if client wants
-    public static String states[] = {"AL", "AK", "AS", "AZ", "AR", "CA", "CO", "CT", "DE", "DC",
-        "FL", "FM", "GA", "GU", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA",
-        "ME", "MH", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH",
-        "NJ", "NM", "NY", "NC", "ND", "MP", "OH", "OK", "OR", "PW", "PA", "PR",
-        "RI", "SC", "SD", "TN", "TX", "UM", "UT", "VT", "VA", "VI", "WA", "WV",
-        "WI", "WY"};
+    public static String states[] = { "AL", "AK", "AS", "AZ", "AR", "CA", "CO", 
+        "CT", "DE", "DC", "FL", "FM", "GA", "GU", "HI", "ID", "IL", "IN", "IA", 
+        "KS", "KY", "LA", "ME", "MH", "MD", "MA", "MI", "MN", "MS", "MO", "MT", 
+        "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "MP", "OH", "OK", "OR", 
+        "PW", "PA", "PR", "RI", "SC", "SD", "TN", "TX", "UM", "UT", "VT", "VA", 
+        "VI", "WA", "WV", "WI", "WY"};
     
     //Paths that are used to store locations of all files
     public static String scanPath;
@@ -81,6 +83,7 @@ public class Global {
     public static String templatePath;
     public static String activityPath;
     public static String mediaPath;
+    public static String reportingPath;
     
     //boolean about if notigication should be sent
     public static boolean errorNotifications;

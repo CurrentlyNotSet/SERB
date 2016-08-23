@@ -5,6 +5,7 @@
  */
 package parker.serb.util;
 
+import com.alee.laf.optionpane.WebOptionPane;
 import com.alee.utils.FileUtils;
 import java.awt.Desktop;
 import java.io.File;
@@ -37,6 +38,7 @@ public class FileService {
                     Global.activityPath = "/Users/parkerjohnston/Desktop/SERB/Activity/";
                     Global.mediaPath = "/Users/parkerjohnston/Desktop/SERB/Media/";
                     Global.templatePath = "/Users/parkerjohnston/Desktop/SERB/Template/";
+                    Global.reportingPath = "/Users/parkerjohnston/Desktop/SERB/Reporting/";
                     break;
                 //TODO: Add in other machines with the correct paths
                 case "Alienware15":
@@ -47,6 +49,7 @@ public class FileService {
                     Global.activityPath = "C:\\SERB\\Activity\\";
                     Global.mediaPath = "C:\\SERB\\Media\\";
                     Global.templatePath = "C:\\SERB\\Template\\";
+                    Global.reportingPath = "C:\\SERB\\Reporting\\";
                     break;
                 case "NW103087":
                     Global.scanPath = "C:\\Users\\johnp10\\Desktop\\SERB\\Scan\\";
@@ -54,6 +57,7 @@ public class FileService {
                     Global.activityPath = "C:\\Users\\johnp10\\Desktop\\SERB\\Activity\\";
                     Global.mediaPath = "C:\\Users\\johnp10\\Desktop\\SERB\\Media\\";
                     Global.templatePath = "C:\\Users\\johnp10\\Desktop\\SERB\\Template\\";
+                    Global.reportingPath = "C:\\Users\\johnp10\\Desktop\\SERB\\Reporting\\";
                     break;    
                 default:
                     //SERB LOCATIONS
@@ -306,4 +310,15 @@ public class FileService {
                 + "-" + Global.caseMonth + "-" + Global.caseNumber
                 + File.separator + fileName).delete();
     }
+
+    public static void openFileFullPath(File filePathName) {
+        try {
+            Desktop desktop = Desktop.getDesktop();
+            desktop.open(filePathName);
+        } catch (IOException ex) {
+            new FileNotFoundDialog((JFrame) Global.root.getRootPane().getParent(), true, filePathName.toString());
+            SlackNotification.sendNotification(ex.getMessage());
+        }
+    }
+
 }
