@@ -22,6 +22,13 @@ public class CancelUpdate extends javax.swing.JDialog {
         setLocationRelativeTo(parent);
         setVisible(true);
     }
+    
+    public CancelUpdate(java.awt.Dialog parent, boolean modal) {
+        super(parent, modal);
+        initComponents();
+        setLocationRelativeTo(parent);
+        setVisible(true);
+    }
 
     public boolean isReset() {
         return reset;

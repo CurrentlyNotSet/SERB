@@ -295,13 +295,13 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton2.setVisible(true);
                 jButton2.setText("Update");
                 jButton2.setEnabled(false);
-                jButton3.setVisible(true);
+                jButton3.setVisible(false);
                 jButton3.setText("Letters");
-                jButton4.setVisible(true);
+                jButton4.setVisible(false);
                 jButton4.setText("Reports");
-                jButton5.setVisible(true);
+                jButton5.setVisible(false);
                 jButton5.setText("Queue");
-                jButton6.setVisible(true);
+                jButton6.setVisible(false);
                 jButton6.setText("Public Records");
                 jButton7.setVisible(false);
                 jButton8.setVisible(false);

@@ -17,8 +17,8 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <Component id="jPanel1" max="32767" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel2" max="32767" attributes="0"/>
           </Group>
       </Group>
@@ -63,8 +63,7 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="allegationTextBox" max="32767" attributes="0"/>
-                      <Component id="statusComboBox" pref="154" max="32767" attributes="0"/>
+                      <Component id="statusComboBox" max="32767" attributes="0"/>
                       <Component id="priorityComboBox" alignment="0" max="32767" attributes="0"/>
                       <Component id="assignedDateTextBox" alignment="0" max="32767" attributes="0"/>
                       <Component id="reportDueDateTextBox" alignment="0" max="32767" attributes="0"/>
@@ -73,12 +72,13 @@
                       <Component id="appealReceivedTextBox" alignment="0" max="32767" attributes="0"/>
                       <Component id="appealSentTextBox" alignment="0" max="32767" attributes="0"/>
                       <Component id="courtTextBox" alignment="0" max="32767" attributes="0"/>
-                      <Component id="courtCaseNumberTextBox" alignment="0" max="32767" attributes="0"/>
-                      <Component id="serbCaseNumberTextBox" alignment="0" max="32767" attributes="0"/>
                       <Component id="finalDispositionComboBox" alignment="0" max="32767" attributes="0"/>
                       <Component id="investigatorComboBox" alignment="0" max="32767" attributes="0"/>
                       <Component id="aljComboBox" alignment="0" max="32767" attributes="0"/>
                       <Component id="mediatorAssignedComboBox" alignment="0" max="32767" attributes="0"/>
+                      <Component id="courtCaseNumberTextBox" alignment="0" pref="267" max="32767" attributes="0"/>
+                      <Component id="serbCaseNumberTextBox" alignment="0" pref="267" max="32767" attributes="0"/>
+                      <Component id="allegationTextBox" alignment="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -261,6 +261,9 @@
               <Color blue="0" green="0" red="0" type="rgb"/>
             </Property>
             <Property name="enabled" type="boolean" value="false"/>
+            <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[267, 2147483647]"/>
+            </Property>
           </Properties>
         </Component>
         <Component class="javax.swing.JComboBox" name="statusComboBox">
@@ -307,7 +310,7 @@
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="assignedDateTextBoxMouseClicked"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="assignedDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="assignedDateTextBox.setDateFormat(Global.mmddyyyy);&#xa;&#xa;assignedDateTextBox.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
           </AuxValues>
         </Component>
         <Component class="com.alee.extended.date.WebDateField" name="reportDueDateTextBox">
@@ -328,7 +331,7 @@
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="reportDueDateTextBoxMouseClicked"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="reportDueDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="reportDueDateTextBox.setDateFormat(Global.mmddyyyy);&#xa;&#xa;reportDueDateTextBox.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
           </AuxValues>
         </Component>
         <Component class="com.alee.extended.date.WebDateField" name="dismissalDateTextBox">
@@ -346,7 +349,7 @@
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="dismissalDateTextBoxMouseClicked"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="dismissalDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="dismissalDateTextBox.setDateFormat(Global.mmddyyyy);&#xa;&#xa;dismissalDateTextBox.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
           </AuxValues>
         </Component>
         <Component class="com.alee.extended.date.WebDateField" name="deferredDateTextBox">
@@ -364,7 +367,7 @@
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="deferredDateTextBoxMouseClicked"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="deferredDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="deferredDateTextBox.setDateFormat(Global.mmddyyyy);&#xa;&#xa;deferredDateTextBox.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
           </AuxValues>
         </Component>
         <Component class="com.alee.extended.date.WebDateField" name="appealReceivedTextBox">
@@ -382,7 +385,7 @@
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="appealReceivedTextBoxMouseClicked"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="appealReceivedTextBox.setDateFormat(Global.mmddyyyy);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="appealReceivedTextBox.setDateFormat(Global.mmddyyyy);&#xa;&#xa;appealReceivedTextBox.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
           </AuxValues>
         </Component>
         <Component class="com.alee.extended.date.WebDateField" name="appealSentTextBox">
@@ -400,7 +403,7 @@
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="appealSentTextBoxMouseClicked"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="appealSentTextBox.setDateFormat(Global.mmddyyyy);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="appealSentTextBox.setDateFormat(Global.mmddyyyy);&#xa;&#xa;appealSentTextBox.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JTextField" name="courtTextBox">
@@ -423,6 +426,9 @@
               <Color blue="0" green="0" red="0" type="rgb"/>
             </Property>
             <Property name="enabled" type="boolean" value="false"/>
+            <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[267, 2147483647]"/>
+            </Property>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="serbCaseNumberTextBox">
@@ -434,6 +440,9 @@
               <Color blue="0" green="0" red="0" type="rgb"/>
             </Property>
             <Property name="enabled" type="boolean" value="false"/>
+            <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[267, 2147483647]"/>
+            </Property>
           </Properties>
         </Component>
         <Component class="javax.swing.JComboBox" name="finalDispositionComboBox">
@@ -499,7 +508,7 @@
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="filedDateTextBox" pref="167" max="32767" attributes="0"/>
+                              <Component id="filedDateTextBox" pref="60" max="32767" attributes="0"/>
                               <Component id="employerNumberTextBox" max="32767" attributes="0"/>
                               <Component id="barginingUnitNoTextBox" max="32767" attributes="0"/>
                           </Group>
@@ -546,7 +555,7 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jPanel4" pref="442" max="32767" attributes="0"/>
+                  <Component id="jPanel4" pref="335" max="32767" attributes="0"/>
                   <Component id="jPanel5" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
@@ -789,7 +798,7 @@
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="filedDateTextBoxMouseClicked"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="filedDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="filedDateTextBox.setDateFormat(Global.mmddyyyy);&#xa;&#xa;filedDateTextBox.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JCheckBox" name="probableCauseCheckBox">
