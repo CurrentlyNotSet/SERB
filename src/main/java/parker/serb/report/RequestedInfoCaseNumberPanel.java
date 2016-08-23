@@ -24,6 +24,7 @@ public class RequestedInfoCaseNumberPanel extends javax.swing.JDialog {
      * Creates new form AddNewRelatedCase
      * @param parent
      * @param modal
+     * @param reportPassed
      */
     public RequestedInfoCaseNumberPanel(java.awt.Frame parent, boolean modal, SMDSDocuments reportPassed) {
         super(parent, modal);
@@ -68,8 +69,13 @@ public class RequestedInfoCaseNumberPanel extends javax.swing.JDialog {
         if(caseNumberTextBox.getText().equals("") ||
                 parsedCaseNumber.length < 4) {
             generateReportButton.setEnabled(false);
+            caseNotFoundLabel.setText("Invalid Case Number");
         } else {
+            if (CaseValidation.validateCaseNumber(caseNumberTextBox.getText().trim().toUpperCase())){
             generateReportButton.setEnabled(true);
+            } else {
+                caseNotFoundLabel.setText("Case Number Not Found");
+            }
         }
     }
 
@@ -171,23 +177,7 @@ public class RequestedInfoCaseNumberPanel extends javax.swing.JDialog {
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void generateReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateReportButtonActionPerformed
-        if(caseNumberTextBox.getText().trim().length() == 16) {
-            if(caseNumberTextBox.getText().trim().toUpperCase().equals(NumberFormatService.generateFullCaseNumber())) {
-                caseNotFoundLabel.setText("Current case can't be a related case");
-            }
-            else if(!RelatedCase.checkCaseIsAlreadyRelated(caseNumberTextBox.getText().trim().toUpperCase())) {
-                caseNotFoundLabel.setText("Case is already a related case");
-            }
-            else if(CaseValidation.validateCaseNumber(caseNumberTextBox.getText().trim().toUpperCase())) {
-                RelatedCase.addNewRelatedCase(caseNumberTextBox.getText().trim().toUpperCase());
-                dispose();
-            }
-            else {
-                caseNotFoundLabel.setText("Case Number Not Found");
-            }
-        } else {
-            caseNotFoundLabel.setText("Invalid Case Number");
-        }
+        GenerateReport.generateCasenumberReport(caseNumberTextBox.getText().trim().toUpperCase(), report);
     }//GEN-LAST:event_generateReportButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
