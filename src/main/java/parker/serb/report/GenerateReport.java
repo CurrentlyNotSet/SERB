@@ -105,7 +105,7 @@ public class GenerateReport {
         hash.put("caseYear", num.caseYear);
         hash.put("caseType", num.caseType);
         hash.put("caseMonth", num.caseMonth);
-        hash.put("CaseNumber", num.caseNumber);
+        hash.put("caseNumber", num.caseNumber);
         generateReport(report, hash);
     }
     
