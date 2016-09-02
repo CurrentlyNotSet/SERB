@@ -30,6 +30,7 @@ public class MEDCase {
     public String caseType; 
     public String caseMonth;
     public String caseNumber;
+    public String note;
    
     
     //concil
@@ -2190,6 +2191,136 @@ public class MEDCase {
         return medcaseList;
     }
      
-     
+     public static MEDCase loadEntireCaseInformation() {
+        MEDCase med = null;
+        try {
+            Statement stmt = Database.connectToDB().createStatement();  
+            
+            String sql = "SELECT * FROM MEDCase"
+                    + " WHERE caseYear = ? "
+                    + " AND caseType = ? "
+                    + " AND caseMonth = ? "
+                    + " AND caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, Global.caseYear);
+            preparedStatement.setString(2, Global.caseType);
+            preparedStatement.setString(3, Global.caseMonth);
+            preparedStatement.setString(4, Global.caseNumber);
+
+            ResultSet rs = preparedStatement.executeQuery();
+            
+            if(rs.next()) {
+                med = new MEDCase();
+                med.id = rs.getInt("id");
+                med.active = rs.getBoolean("active");
+                med.caseYear = rs.getString("caseYear");
+                med.caseType = rs.getString("caseType");
+                med.caseMonth = rs.getString("caseMonth");
+                med.caseNumber = rs.getString("caseNumber");
+                med.note = rs.getString("note");
+                med.fileDate = rs.getTimestamp("fileDate");
+                med.concilList1OrderDate = rs.getTimestamp("concilList1OrderDate");
+                med.concilList1SelectionDueDate = rs.getTimestamp("concilList1SelectionDueDate");
+                med.concilList1Name1 = rs.getString("concilList1Name1");
+                med.concilList1Name2 = rs.getString("concilList1Name2");
+                med.concilList1Name3 = rs.getString("concilList1Name3");
+                med.concilList1Name4 = rs.getString("concilList1Name4");
+                med.concilList1Name5 = rs.getString("concilList1Name5");
+                med.concilAppointmentDate = rs.getTimestamp("concilAppointmentDate");
+                med.concilType = rs.getString("concilType");
+                med.concilSelection = rs.getString("concilSelection");
+                med.concilReplacement = rs.getString("concilReplacement");
+                med.concilOriginalConciliator = rs.getString("concilOriginalConciliator");
+                med.concilOriginalConcilDate = rs.getTimestamp("concilOriginalConcilDate");
+                med.concilList2OrderDate = rs.getTimestamp("concilList2OrderDate");
+                med.concilList2SelectionDueDate = rs.getTimestamp("concilList2SelectionDueDate");
+                med.concilList2Name1 = rs.getString("concilList2Name1");
+                med.concilList2Name2 = rs.getString("concilList2Name2");
+                med.concilList2Name3 = rs.getString("concilList2Name3");
+                med.concilList2Name4 = rs.getString("concilList2Name4");
+                med.concilList2Name5 = rs.getString("concilList2Name5");
+                med.FFList1OrderDate = rs.getTimestamp("FFList1OrderDate");
+                med.FFList1SelectionDueDate = rs.getTimestamp("FFList1SelectionDueDate");
+                med.FFList1Name1 = rs.getString("FFList1Name1");
+                med.FFList1Name2 = rs.getString("FFList1Name2");
+                med.FFList1Name3 = rs.getString("FFList1Name3");
+                med.FFList1Name4 = rs.getString("FFList1Name4");
+                med.FFList1Name5 = rs.getString("FFList1Name5");
+                med.FFAppointmentDate = rs.getTimestamp("FFAppointmentDate");
+                med.FFType = rs.getString("FFType");
+                med.FFSelection = rs.getString("FFSelection");
+                med.FFReplacement = rs.getString("FFReplacement");
+                med.FFOriginalFactFinder = rs.getString("FFOriginalFactFinder");
+                med.FFOriginalFactFinderDate = rs.getTimestamp("FFOriginalFactFinderDate");
+                med.asAgreedToByParties = rs.getBoolean("asAgreedToByParties");
+                med.FFList2OrderDate = rs.getTimestamp("FFList2OrderDate");
+                med.FFList2SelectionDueDate = rs.getTimestamp("FFList2SelectionDueDate");
+                med.FFList2Name1 = rs.getString("FFList2Name1");
+                med.FFList2Name2 = rs.getString("FFList2Name2");
+                med.FFList2Name3 = rs.getString("FFList2Name3");
+                med.FFList2Name4 = rs.getString("FFList2Name4");
+                med.FFList2Name5 = rs.getString("FFList2Name5");
+                med.FFEmployerType = rs.getString("FFEmployerType");
+                med.FFEmployeeType = rs.getString("FFEmployeeType");
+                med.FFReportIssueDate = rs.getTimestamp("FFReportIssueDate");
+                med.FFMediatedSettlement = rs.getBoolean("FFMediatedSettlement");
+                med.FFAcceptedBy = rs.getString("FFAcceptedBy");
+                med.FFDeemedAcceptedBy = rs.getString("FFDeemedAcceptedBy");
+                med.FFRejectedBy = rs.getString("FFRejectedBy");
+                med.FFOverallResult = rs.getString("FFOverallResult");
+                med.FFNote = rs.getString("FFNote");
+                med.employerIDNumber = rs.getString("employerIDNumber");
+                med.bargainingUnitNumber = rs.getString("bargainingUnitNumber");
+                med.approxNumberOfEmployees = rs.getString("approxNumberOfEmployees");
+                med.duplicateCaseNumber = rs.getString("duplicateCaseNumber");
+                med.relatedCaseNumber = rs.getString("relatedCaseNumber");
+                med.negotiationType = rs.getString("negotiationType");
+                med.expirationDate = rs.getTimestamp("expirationDate");
+                med.NTNFiledBy = rs.getString("NTNFiledBy");
+                med.negotiationPeriod = rs.getString("negotiationPeriod");
+                med.multiunitBargainingRequested = rs.getBoolean("multiunitBargainingRequested");
+                med.mediatorAppointedDate = rs.getTimestamp("mediatorAppointedDate");
+                med.mediatorReplacement = rs.getBoolean("mediatorReplacement");
+                med.stateMediatorAppointedID = rs.getString("stateMediatorAppointedID");
+                med.FMCSMediatorAppointedID = rs.getString("FMCSMediatorAppointedID");
+                med.settlementDate = rs.getTimestamp("settlementDate");
+                med.caseStatus = rs.getString("caseStatus");
+                med.sendToBoardToClose = rs.getBoolean("sendToBoardToClose");
+                med.boardFinalDate = rs.getTimestamp("boardFinalDate");
+                med.retentionTicklerDate = rs.getTimestamp("retentionTicklerDate");
+                med.lateFiling = rs.getBoolean("lateFiling");
+                med.impasse = rs.getBoolean("impasse");
+                med.settled = rs.getBoolean("settled");
+                med.TA = rs.getBoolean("TA");
+                med.MAD = rs.getBoolean("MAD");
+                med.withdrawl = rs.getBoolean("withdrawl");
+                med.motion = rs.getBoolean("motion");
+                med.dismissed = rs.getBoolean("dismissed");
+                med.strikeFileDate = rs.getTimestamp("strikeFileDate");
+                med.strikeCaseNumber = rs.getString("strikeCaseNumber");
+                med.medCaseNumber = rs.getString("medCaseNumber");
+                med.description = rs.getString("description");
+                med.unitSize = rs.getString("unitSize");
+                med.unauthorizedStrike = rs.getBoolean("unauthorizedStrike");
+                med.noticeOfIntentToStrikeOnly = rs.getBoolean("noticeOfIntentToStrikeOnly");
+                med.intendedDateStrike = rs.getTimestamp("intendedDateStrike");
+                med.noticeOfIntentToPicketOnly = rs.getBoolean("noticeOfIntentToPicketOnly");
+                med.intendedDatePicket = rs.getTimestamp("intendedDatePicket");
+                med.informational = rs.getBoolean("informational");
+                med.noticeOfIntentToStrikeAndPicket = rs.getBoolean("noticeOfIntentToStrikeAndPicket");
+                med.strikeOccured = rs.getString("strikeOccured");
+                med.strikeStatus = rs.getString("strikeStatus");
+                med.strikeBegan = rs.getTimestamp("strikeBegan");
+                med.strikeEnded = rs.getTimestamp("strikeEnded");
+                med.totalNumberOfDays = rs.getString("totalNumberOfDays");
+                med.strikeMediatorAppointedID = rs.getString("strikeMediatorAppointedID");
+                med.strikeNotes = rs.getString("strikeNotes");
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex.getMessage());
+        }
+        return med;
+    }
     
 }
