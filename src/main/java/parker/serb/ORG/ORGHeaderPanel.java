@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import parker.serb.Global;
 import parker.serb.sql.Audit;
 import parker.serb.sql.CaseParty;
+import parker.serb.sql.ORGCase;
 import parker.serb.sql.Party;
 import parker.serb.sql.REPCase;
 
@@ -34,102 +35,67 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
     }
     
     private void addListeners() {
-//        caseNumberComboBox.addActionListener((ActionEvent e) -> {
-//            if(caseNumberComboBox.getSelectedItem() != null) {
-//                Global.root.getrEPRootPanel1().getjTabbedPane1().setSelectedIndex(0);
-//                if(caseNumberComboBox.getSelectedItem().toString().trim().equals("")) {
-//                    if(Global.root != null) {
-//                        Global.root.getjButton2().setText("Update");
-//                        Global.root.getjButton2().setEnabled(false);
-//                        Global.caseNumber = null;
-//                        Global.root.getrEPRootPanel1().clearAll();
-//                    }
-//                } else {
-//                    loadInformation();
-//                    if(Global.root.getrEPRootPanel1().getjTabbedPane1().getSelectedIndex() == 0)
-//                        Global.root.getrEPRootPanel1().getActivityPanel1().loadAllActivity();
-//                    Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
-//                }
-//            }
-//        });
+        caseNumberComboBox.addActionListener((ActionEvent e) -> {
+            if(caseNumberComboBox.getSelectedItem() != null) {
+                Global.root.getoRGRootPanel1().getjTabbedPane1().setSelectedIndex(0);
+                if(caseNumberComboBox.getSelectedItem().toString().trim().equals("")) {
+                    if(Global.root != null) {
+                        Global.root.getjButton2().setText("Update");
+                        Global.root.getjButton2().setEnabled(false);
+                        Global.caseNumber = null;
+                        Global.caseMonth = null;
+                        Global.caseType = null;
+                        Global.caseYear = null;
+                        Global.root.getoRGRootPanel1().clearAll();
+                    }
+                } else {
+                    loadInformation();
+                    if(Global.root.getoRGRootPanel1().getjTabbedPane1().getSelectedIndex() == 0)
+                        Global.root.getoRGRootPanel1().getActivityPanel1().loadAllActivity();
+                    Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
+                }
+            }
+        });
     }
     
     private void loadInformation() {
-//        Global.caseNumber = caseNumberComboBox.getSelectedItem().toString().trim();
-//        loadHeaderInformation();
+        Global.caseYear = null;
+        Global.caseType = "ORG";
+        Global.caseMonth = null;
+        Global.caseNumber = caseNumberComboBox.getSelectedItem().toString().trim();
+        loadHeaderInformation();
     }
     
     public void loadHeaderInformation() {
-//        String employer = "";
-//        String employeeOrg = "";
-//        String incumbentEEO = "";
-//        String rivalEEO = "";
-//        
-//        
-//        if(Global.caseNumber != null) {
-//            REPCase rep = REPCase.loadHeaderInformation();
-//            if(rep == null) {
-//                new REPCaseNotFound((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
-//                caseNumberComboBox.setSelectedItem(Global.caseNumber);
-//            } else {
-//                filedDateTextBox.setText(rep.fileDate != null ? Global.mmddyyyy.format(new Date(rep.fileDate.getTime())) : "");
-//                closedDateTextBox.setText(rep.courtClosedDate != null ? Global.mmddyyyy.format(new Date(rep.courtClosedDate.getTime())) : "");
-//                currentStatusTextBox.setText(rep.status1 != null ? rep.status1 : "");
-//                caseTypeTextBox.setText(rep.caseType != null ? rep.caseType : "");
-//                bargainingUnitTextBox.setText(rep.bargainingUnitNumber != null ? rep.bargainingUnitNumber : "");
-//
-//                List caseParties = CaseParty.loadPartiesByCase();
-//
-//                for(Object caseParty: caseParties) {
-//                    CaseParty partyInformation = (CaseParty) caseParty;
-//
-//                    switch (partyInformation.type) {
-//                        case "Employer":
-//                            if(employer.equals("")) {
-//                                employer += partyInformation.name;
-//                            } else {
-//                                employer += ", " + partyInformation.name;
-//                            }
-//                            break;
-//                        case "Employee Organization":
-//                            if(employeeOrg.equals("")) {
-//                                employeeOrg += partyInformation.name;
-//                            } else {
-//                                employeeOrg += ", " + partyInformation.name;
-//                            }
-//                            break;
-//                        case "Incumbent Employee Organization":
-//                            if(incumbentEEO.equals("")) {
-//                                incumbentEEO += partyInformation.name;
-//                            } else {
-//                                incumbentEEO += ", " + partyInformation.name;
-//                            }
-//                            break;
-//                        case "Rival Employee Organization":
-//                            if(rivalEEO.equals("")) {
-//                                rivalEEO += partyInformation.name;
-//                            } else {
-//                                rivalEEO += ", " + partyInformation.name;
-//                            }
-//                            break;
-//                    }
-//                }
-//                employerTextBox.setText(employer);
-//                employeeOrgTextBox.setText(employeeOrg);
-//                incumbentEEOTextBox.setText(incumbentEEO);
-//                rivalEEOTextBox.setText(rivalEEO);
-//            }
-//        }
+        
+        if(Global.caseNumber != null) {
+            ORGCase org = ORGCase.loadHeaderInformation();
+            if(org == null) {
+//                new ORG((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
+                caseNumberComboBox.setSelectedItem(Global.caseNumber);
+            } else {
+                Global.caseNumber = org.orgNumber != null ? org.orgNumber : "";
+                Global.caseType = "ORG";
+                orgNumberTextBox.setText(org.orgNumber != null ? org.orgNumber : "");
+                fiscalYearEndingTextBox.setText(org.fiscalYearEnding != null ? org.fiscalYearEnding : "");
+                filingDueDateTextBox.setText(org.filingDueDate != null ? org.filingDueDate : "");
+                annualReportTextBox.setText(org.annualReport != null ? Global.mmddyyyy.format(new Date(org.annualReport.getTime())) : "");
+                financialReportTextBox.setText(org.financialReport != null ? Global.mmddyyyy.format(new Date(org.financialReport.getTime())) : "");
+                registrationReportTextBox.setText(org.registrationReport != null ? Global.mmddyyyy.format(new Date(org.registrationReport.getTime())) : "");
+                constructionAndByLawsTextBox.setText(org.constructionAndByLaws != null ? Global.mmddyyyy.format(new Date(org.constructionAndByLaws.getTime())) : "");
+                filedByParentTextBox.setText("Yes");
+            }
+        }
     }
     
     public void loadCases() {
         caseNumberComboBox.removeAllItems();
         caseNumberComboBox.addItem("");
 
-        List caseNumberList = REPCase.loadREPCaseNumbers();
+        List caseNumberList = ORGCase.loadORGNames();
         
         caseNumberList.stream().forEach((caseNumber) -> {
-            caseNumberComboBox.addItem(caseNumber.toString());
+            caseNumberComboBox.addItem(caseNumber);
         });
     }
     
@@ -138,19 +104,20 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
      */
     void clearAll() {
         orgNumberTextBox.setText("");
-//        employeeOrgTextBox.setText("");
-//        incumbentEEOTextBox.setText("");
-//        rivalEEOTextBox.setText("");
-//        closedDateTextBox.setText("");
-//        currentStatusTextBox.setText("");
-//        caseTypeTextBox.setText("");
-////        bargainingUnitTextBox.setText("");
-//        filedDateTextBox.setText("");
+        fiscalYearEndingTextBox.setText("");
+        filingDueDateTextBox.setText("");
+        annualReportTextBox.setText("");
+        financialReportTextBox.setText("");
+        registrationReportTextBox.setText("");
+        constructionAndByLawsTextBox.setText("");
+        filedByParentTextBox.setText("");
     }
 
     public JComboBox getjComboBox2() {
         return caseNumberComboBox;
     }
+    
+    
     
     
     

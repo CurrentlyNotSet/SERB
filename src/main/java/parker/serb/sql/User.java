@@ -690,6 +690,30 @@ public class User {
         }
         return activeUsers;
     }
+    
+    public static List loadORGComboBox() {
+        
+        List activeUsers = new ArrayList<>();
+        
+        try {
+            
+            Statement stmt = Database.connectToDB().createStatement();
+            
+            String sql = "Select * from Users where REPCaseWorker = ? and active = 1";
+            
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setBoolean(1, true);
+            
+            ResultSet users = preparedStatement.executeQuery();
+            
+            while(users.next()) {
+                activeUsers.add(users.getString("firstName") + " " + users.getString("lastName"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return activeUsers;
+    }
         
     public static List loadAllUsers() {
         

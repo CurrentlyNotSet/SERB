@@ -17,23 +17,13 @@ import parker.serb.Global;
  *
  * @author parkerjohnston
  */
-public class Activity {
+public class ORGParentChildLink {
     
     public int id;
-    public String caseYear;
-    public String caseType;
-    public String caseMonth;
-    public String caseNumber;
-    public String user;
-    public String date;
-    public String action;
-    public String fileName;
-    public String from;
-    public String to;
-    public String type;
-    public String comment;
-    public boolean redacted;
-    public boolean awaitingScan;
+    public boolean active;
+    public String parentOrgNumber;
+    public String childOrgNumber;
+    public String orgName;
     
     /**
      * Add an activity to the activity table, pulls the case number from the
@@ -202,8 +192,8 @@ public class Activity {
      * @param searchTerm term to limit the search results
      * @return List of Activities
      */
-    public static List loadCaseNumberActivity(String searchTerm) {
-        List<Activity> activityList = new ArrayList<>();
+    public static List loadParentCaseNumbers(String orgID) {
+        List<ORGParentChildLink> activityList = new ArrayList<>();
         PreparedStatement preparedStatement = null;
         
         Statement stmt = null;
@@ -212,112 +202,25 @@ public class Activity {
 
             stmt = Database.connectToDB().createStatement();
 
-            if(Global.caseType.equals("ORG")) {
-                String sql = "select Activity.id,"
-                    + " caseYear,"
-                    + " caseType,"
-                    + " caseMonth,"
-                    + " caseNumber,"
-                    + " date,"
-                    + " action,"
-                    + " firstName,"
-                    + " lastName,"
-                    + " fileName"
-                    + " from Activity"
-                    + " LEFT JOIN Users"
-                    + " ON Activity.userID = Users.id"
-                    + " where "
-//                    + " caseYear = ? and"
-                    + " caseType = ? and"
-//                    + " caseMonth = ? and"
-                    + " caseNumber = ? and"
-                    + " (firstName like ? or"
-                    + " lastName like ? or"
-                    + " action like ?) ORDER BY date DESC ";
+            String sql = "select ORGParentChildLink.*, orgname "
+                    + " from ORGParentChildLink"
+                    + " JOIN ORGCase on ORGParentChildLink.childOrgNumber = ORGCase.orgNumber"
+                    + " where parentOrgNumber = ?"
+                    + " and ORGParentChildLink.active = 1"
+                    + " order by orgname asc";
 
-                preparedStatement = stmt.getConnection().prepareStatement(sql);
-                preparedStatement.setObject(1, Global.caseType);
-                preparedStatement.setObject(2, Global.caseNumber);
-                preparedStatement.setString(3, "%" + searchTerm + "%");
-                preparedStatement.setString(4, "%" + searchTerm + "%");
-                preparedStatement.setString(5, "%" + searchTerm + "%");
-            } else {
-                String sql = "select Activity.id,"
-                    + " caseYear,"
-                    + " caseType,"
-                    + " caseMonth,"
-                    + " caseNumber,"
-                    + " date,"
-                    + " action,"
-                    + " firstName,"
-                    + " lastName,"
-                    + " fileName"
-                    + " from Activity"
-                    + " LEFT JOIN Users"
-                    + " ON Activity.userID = Users.id"
-                    + " where caseYear = ? and"
-                    + " caseType = ? and"
-                    + " caseMonth = ? and"
-                    + " caseNumber = ? and"
-                    + " (firstName like ? or"
-                    + " lastName like ? or"
-                    + " action like ?) ORDER BY date DESC ";
-
-                preparedStatement = stmt.getConnection().prepareStatement(sql);
-                preparedStatement.setObject(1, Global.caseYear);
-                preparedStatement.setObject(2, Global.caseType);
-                preparedStatement.setObject(3, Global.caseMonth);
-                preparedStatement.setObject(4, Global.caseNumber);
-                preparedStatement.setString(5, "%" + searchTerm + "%");
-                preparedStatement.setString(6, "%" + searchTerm + "%");
-                preparedStatement.setString(7, "%" + searchTerm + "%");
-            }
-            
-//            String sql = "select Activity.id,"
-//                    + " caseYear,"
-//                    + " caseType,"
-//                    + " caseMonth,"
-//                    + " caseNumber,"
-//                    + " date,"
-//                    + " action,"
-//                    + " firstName,"
-//                    + " lastName,"
-//                    + " fileName"
-//                    + " from Activity"
-//                    + " LEFT JOIN Users"
-//                    + " ON Activity.userID = Users.id"
-//                    + " where caseYear = ? and"
-//                    + " caseType = ? and"
-//                    + " caseMonth = ? and"
-//                    + " caseNumber = ? and"
-//                    + " (firstName like ? or"
-//                    + " lastName like ? or"
-//                    + " action like ?) ORDER BY date DESC ";
-//
-//            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-//            preparedStatement.setObject(1, Global.caseYear);
-//            preparedStatement.setObject(2, Global.caseType);
-//            preparedStatement.setObject(3, Global.caseMonth);
-//            preparedStatement.setObject(4, Global.caseNumber);
-//            preparedStatement.setString(5, "%" + searchTerm + "%");
-//            preparedStatement.setString(6, "%" + searchTerm + "%");
-//            preparedStatement.setString(7, "%" + searchTerm + "%");
-
+            preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, orgID);
+                
             ResultSet caseActivity = preparedStatement.executeQuery();
             
             while(caseActivity.next()) {
-                Activity act = new Activity();
+                ORGParentChildLink act = new ORGParentChildLink();
                 
-                if(caseActivity.getString("firstName") == null && caseActivity.getString("lastName") == null) {
-                    act.user = "SYSTEM";
-                } else {
-                    act.user = caseActivity.getString("firstName") + " " + caseActivity.getString("lastName");
-                }
-                
+                act.parentOrgNumber = caseActivity.getString("parentOrgNumber");
+                act.childOrgNumber = caseActivity.getString("childOrgNumber");
+                act.orgName = caseActivity.getString("orgName");
                 act.id = caseActivity.getInt("id");
-                act.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
-                act.action = caseActivity.getString("action");
-                act.fileName = caseActivity.getString("fileName");
                 activityList.add(act);
             }
         } catch (SQLException ex) {
@@ -327,12 +230,88 @@ public class Activity {
         return activityList;
     }
     
+    public static List loadChildCaseNumbers(String orgID) {
+        List<ORGParentChildLink> activityList = new ArrayList<>();
+        PreparedStatement preparedStatement = null;
+        
+        Statement stmt = null;
+            
+        try {
+
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "select ORGParentChildLink.*, orgname "
+                    + " from ORGParentChildLink"
+                    + " JOIN ORGCase on ORGParentChildLink.parentOrgNumber = ORGCase.orgNumber"
+                    + " where childOrgNumber = ?"
+                    + " and ORGParentChildLink.active = 1"
+                    + " order by orgname asc";
+
+            preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, orgID);
+                
+            ResultSet caseActivity = preparedStatement.executeQuery();
+            
+            while(caseActivity.next()) {
+                ORGParentChildLink act = new ORGParentChildLink();
+                
+                act.parentOrgNumber = caseActivity.getString("parentOrgNumber");
+                act.childOrgNumber = caseActivity.getString("childOrgNumber");
+                act.orgName = caseActivity.getString("orgName");
+                act.id = caseActivity.getInt("id");
+                activityList.add(act);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
+        return activityList;
+    }
+    
+    public static void removeLinkByID(String id) {
+        try {
+
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "delete ORGParentChildLink where id = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public static void addNewLink(String id, String relation) {
+        try {
+
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Insert into ORGParentChildLink values (1, ?,?)";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            
+            if(relation.equals("parent")) {
+                preparedStatement.setString(1, id);
+                preparedStatement.setString(2, Global.caseNumber);
+            } else if(relation.equals("child")) {
+                preparedStatement.setString(1, Global.caseNumber);
+                preparedStatement.setString(2, id);
+            }
+            
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     /**
      * Loads all activities without a limited result
      * @return list of all Activities per case
      */
     public static List loadAllActivity() {
-        List<Activity> activityList = new ArrayList<Activity>();
+        List<ORGParentChildLink> activityList = new ArrayList<ORGParentChildLink>();
         
         Statement stmt = null;
             
@@ -366,16 +345,16 @@ public class Activity {
             ResultSet caseActivity = preparedStatement.executeQuery();
             
             while(caseActivity.next()) {
-                Activity act = new Activity();
+                ORGParentChildLink act = new ORGParentChildLink();
                 act.id = caseActivity.getInt("id");
-                act.user = caseActivity.getString("firstName") + " " + caseActivity.getString("lastName");
-                act.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
-                act.action = caseActivity.getString("action");
-                act.caseYear = caseActivity.getString("caseYear");
-                act.caseType = caseActivity.getString("caseType");
-                act.caseMonth = caseActivity.getString("caseMonth");
-                act.caseNumber = caseActivity.getString("caseNumber");
-                act.fileName = caseActivity.getString("fileName");
+//                act.user = caseActivity.getString("firstName") + " " + caseActivity.getString("lastName");
+//                act.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
+//                act.action = caseActivity.getString("action");
+//                act.caseYear = caseActivity.getString("caseYear");
+//                act.caseType = caseActivity.getString("caseType");
+//                act.caseMonth = caseActivity.getString("caseMonth");
+//                act.caseNumber = caseActivity.getString("caseNumber");
+//                act.fileName = caseActivity.getString("fileName");
                 activityList.add(act);
             }
         } catch (SQLException ex) {
@@ -385,8 +364,8 @@ public class Activity {
         return activityList;
     }
     
-    public static Activity loadActivityByID(String id) {
-        Activity activity = new Activity();
+    public static ORGParentChildLink loadActivityByID(String id) {
+        ORGParentChildLink activity = new ORGParentChildLink();
         
         Statement stmt = null;
             
@@ -420,18 +399,18 @@ public class Activity {
             
             while(caseActivity.next()) {
                 activity.id = caseActivity.getInt("id");
-                activity.user = caseActivity.getString("firstName") + " " + caseActivity.getString("lastName");
-                activity.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
-                activity.action = caseActivity.getString("action");
-                activity.caseYear = caseActivity.getString("caseYear");
-                activity.caseType = caseActivity.getString("caseType");
-                activity.caseMonth = caseActivity.getString("caseMonth");
-                activity.caseNumber = caseActivity.getString("caseNumber");
-                activity.fileName = caseActivity.getString("fileName");
-                activity.to = caseActivity.getString("to");
-                activity.type = caseActivity.getString("type");
-                activity.comment = caseActivity.getString("comment");
-                activity.from = caseActivity.getString("from");
+//                activity.user = caseActivity.getString("firstName") + " " + caseActivity.getString("lastName");
+//                activity.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
+//                activity.action = caseActivity.getString("action");
+//                activity.caseYear = caseActivity.getString("caseYear");
+//                activity.caseType = caseActivity.getString("caseType");
+//                activity.caseMonth = caseActivity.getString("caseMonth");
+//                activity.caseNumber = caseActivity.getString("caseNumber");
+//                activity.fileName = caseActivity.getString("fileName");
+//                activity.to = caseActivity.getString("to");
+//                activity.type = caseActivity.getString("type");
+//                activity.comment = caseActivity.getString("comment");
+//                activity.from = caseActivity.getString("from");
                 
             }
         } catch (SQLException ex) {
@@ -441,7 +420,7 @@ public class Activity {
         return activity;
     }
     
-    public static void updateActivtyEntry(Activity activty) {
+    public static void updateActivtyEntry(ORGParentChildLink activty) {
         try {
 
             Statement stmt = Database.connectToDB().createStatement();
@@ -456,12 +435,12 @@ public class Activity {
                     + " Where id = ?";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, activty.to);
-            preparedStatement.setString(2, activty.from);
-            preparedStatement.setString(3, activty.type);
-            preparedStatement.setString(4, activty.comment);
-            preparedStatement.setString(5, activty.action);
-            preparedStatement.setString(6, activty.fileName);
+//            preparedStatement.setString(1, activty.to);
+//            preparedStatement.setString(2, activty.from);
+//            preparedStatement.setString(3, activty.type);
+//            preparedStatement.setString(4, activty.comment);
+//            preparedStatement.setString(5, activty.action);
+//            preparedStatement.setString(6, activty.fileName);
             preparedStatement.setInt(7, activty.id);
 
             preparedStatement.executeUpdate();
