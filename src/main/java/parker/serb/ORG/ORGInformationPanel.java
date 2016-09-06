@@ -61,7 +61,7 @@ public class ORGInformationPanel extends javax.swing.JPanel {
         fiscalYearEndingComboBox.removeAllItems();
         fiscalYearEndingComboBox.addItem("");
         fiscalYearEndingComboBox.addItem("January");
-        fiscalYearEndingComboBox.addItem("February");
+        fiscalYearEndingComboBox.addItem("Febuary");
         fiscalYearEndingComboBox.addItem("March");
         fiscalYearEndingComboBox.addItem("April");
         fiscalYearEndingComboBox.addItem("May");
@@ -123,7 +123,7 @@ public class ORGInformationPanel extends javax.swing.JPanel {
         caseTextBox.setText("");
         dueDateTextBox.setText("");
         dateFiledTextBox.setText("");
-        certifiedDateTextBox.setText("");
+//        certifiedDateTextBox.setText("");
         registrationLetterSentTextBox.setText("");
         extensionDateTextBox.setText("");
     }
@@ -183,8 +183,8 @@ public class ORGInformationPanel extends javax.swing.JPanel {
         caseTextBox.setBackground(Color.white);
         dateFiledTextBox.setEnabled(true);
         dateFiledTextBox.setBackground(Color.white);
-        certifiedDateTextBox.setEnabled(true);
-        certifiedDateTextBox.setBackground(Color.white);
+//        certifiedDateTextBox.setEnabled(true);
+//        certifiedDateTextBox.setBackground(Color.white);
         registrationLetterSentTextBox.setEnabled(true);
         registrationLetterSentTextBox.setBackground(Color.white);
         extensionDateTextBox.setEnabled(true);
@@ -246,8 +246,8 @@ public class ORGInformationPanel extends javax.swing.JPanel {
         caseTextBox.setBackground(new Color(238,238,238));
         dateFiledTextBox.setEnabled(false);
         dateFiledTextBox.setBackground(new Color(238,238,238));
-        certifiedDateTextBox.setEnabled(false);
-        certifiedDateTextBox.setBackground(new Color(238,238,238));
+//        certifiedDateTextBox.setEnabled(false);
+//        certifiedDateTextBox.setBackground(new Color(238,238,238));
         registrationLetterSentTextBox.setEnabled(false);
         registrationLetterSentTextBox.setBackground(new Color(238,238,238));
         extensionDateTextBox.setEnabled(false);
@@ -293,7 +293,7 @@ public class ORGInformationPanel extends javax.swing.JPanel {
         newInformation.outsideCase = caseTextBox.getText().trim().equals("") ? null : caseTextBox.getText().trim();
         newInformation.filingDueDate = dueDateTextBox.getText().trim().equals("") ? null : dueDateTextBox.getText().trim();
         newInformation.dateFiled = dateFiledTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(dateFiledTextBox.getText()));
-        newInformation.certifiedDate = certifiedDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(certifiedDateTextBox.getText()));
+//        newInformation.certifiedDate = certifiedDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(certifiedDateTextBox.getText()));
         newInformation.registrationLetterSent = registrationLetterSentTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(registrationLetterSentTextBox.getText()));
         newInformation.extensionDate = extensionDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(extensionDateTextBox.getText()));
 
@@ -340,7 +340,7 @@ public class ORGInformationPanel extends javax.swing.JPanel {
         caseTextBox.setText(orginalInformation.outsideCase != null ? orginalInformation.outsideCase : "");      
         dueDateTextBox.setText(orginalInformation.filingDueDate != null ? orginalInformation.filingDueDate : "");
         dateFiledTextBox.setText(orginalInformation.dateFiled != null ? Global.mmddyyyy.format(new Date(orginalInformation.dateFiled.getTime())) : "");
-        certifiedDateTextBox.setText(orginalInformation.certifiedDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.certifiedDate.getTime())) : "");
+//        certifiedDateTextBox.setText(orginalInformation.certifiedDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.certifiedDate.getTime())) : "");
         registrationLetterSentTextBox.setText(orginalInformation.registrationLetterSent != null ? Global.mmddyyyy.format(new Date(orginalInformation.registrationLetterSent.getTime())) : "");
         extensionDateTextBox.setText(orginalInformation.extensionDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.extensionDate.getTime())) : "");
     }
@@ -409,7 +409,6 @@ public class ORGInformationPanel extends javax.swing.JPanel {
         jLabel26 = new javax.swing.JLabel();
         jLabel27 = new javax.swing.JLabel();
         jLabel28 = new javax.swing.JLabel();
-        jLabel29 = new javax.swing.JLabel();
         jLabel30 = new javax.swing.JLabel();
         jLabel31 = new javax.swing.JLabel();
         fiscalYearEndingComboBox = new javax.swing.JComboBox<>();
@@ -421,7 +420,6 @@ public class ORGInformationPanel extends javax.swing.JPanel {
         parent2TextBox = new javax.swing.JTextField();
         caseTextBox = new javax.swing.JTextField();
         dateFiledTextBox = new com.alee.extended.date.WebDateField();
-        certifiedDateTextBox = new com.alee.extended.date.WebDateField();
         registrationLetterSentTextBox = new com.alee.extended.date.WebDateField();
         extensionDateTextBox = new com.alee.extended.date.WebDateField();
         deemedCertifiedCheckBox = new javax.swing.JCheckBox();
@@ -570,7 +568,7 @@ public class ORGInformationPanel extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(orgNameTextBox)
                     .addComponent(orgNumberTextBox)
-                    .addComponent(orgTypeComboBox, 0, 395, Short.MAX_VALUE)
+                    .addComponent(orgTypeComboBox, 0, 396, Short.MAX_VALUE)
                     .addComponent(orgPhone1TextBox, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(orgPhone2TextBox, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(orgFaxTextBox, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -659,7 +657,7 @@ public class ORGInformationPanel extends javax.swing.JPanel {
 
         jLabel19.setText("Registration Report LF:");
 
-        jLabel20.setText("Construction and By Laws Filed:");
+        jLabel20.setText("Constitution and By Laws Filed:");
 
         jLabel21.setText("Last Notification:");
 
@@ -672,8 +670,6 @@ public class ORGInformationPanel extends javax.swing.JPanel {
         jLabel27.setText("Due Date:");
 
         jLabel28.setText("Date Filed:");
-
-        jLabel29.setText("Certified Date:");
 
         jLabel30.setText("Registration Letter Sent:");
 
@@ -759,18 +755,6 @@ public class ORGInformationPanel extends javax.swing.JPanel {
             }
         });
 
-        certifiedDateTextBox.setEditable(false);
-        certifiedDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        certifiedDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
-        certifiedDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        certifiedDateTextBox.setEnabled(false);
-        certifiedDateTextBox.setDateFormat(Global.mmddyyyy);
-        certifiedDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                certifiedDateTextBoxMouseClicked(evt);
-            }
-        });
-
         registrationLetterSentTextBox.setEditable(false);
         registrationLetterSentTextBox.setBackground(new java.awt.Color(238, 238, 238));
         registrationLetterSentTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
@@ -844,7 +828,6 @@ public class ORGInformationPanel extends javax.swing.JPanel {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel31)
                     .addComponent(jLabel30)
-                    .addComponent(jLabel29)
                     .addComponent(jLabel28)
                     .addComponent(jLabel27)
                     .addComponent(jLabel26)
@@ -869,7 +852,6 @@ public class ORGInformationPanel extends javax.swing.JPanel {
                     .addComponent(parent2TextBox, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(caseTextBox, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(dateFiledTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(certifiedDateTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(registrationLetterSentTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(extensionDateTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -880,7 +862,7 @@ public class ORGInformationPanel extends javax.swing.JPanel {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(validCheckBox)
                             .addComponent(boardCertifiedCheckBox))
-                        .addGap(0, 21, Short.MAX_VALUE))
+                        .addGap(0, 23, Short.MAX_VALUE))
                     .addComponent(lastNotificationTextBox)
                     .addComponent(dueDateTextBox, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
@@ -946,17 +928,13 @@ public class ORGInformationPanel extends javax.swing.JPanel {
                     .addComponent(dateFiledTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel29)
-                    .addComponent(certifiedDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel30)
-                    .addComponent(registrationLetterSentTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(registrationLetterSentTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel30))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel31)
                     .addComponent(extensionDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -994,10 +972,6 @@ public class ORGInformationPanel extends javax.swing.JPanel {
     private void dateFiledTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dateFiledTextBoxMouseClicked
         clearDate(dateFiledTextBox, evt);
     }//GEN-LAST:event_dateFiledTextBoxMouseClicked
-
-    private void certifiedDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_certifiedDateTextBoxMouseClicked
-        clearDate(certifiedDateTextBox, evt);
-    }//GEN-LAST:event_certifiedDateTextBoxMouseClicked
 
     private void registrationLetterSentTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_registrationLetterSentTextBoxMouseClicked
         clearDate(registrationLetterSentTextBox, evt);
@@ -1111,7 +1085,7 @@ public class ORGInformationPanel extends javax.swing.JPanel {
                     dueDateTextBox.setText("January 15th");
                     break;
                 case "September":
-                    dueDateTextBox.setText("Febrary 15th");
+                    dueDateTextBox.setText("Febuary 15th");
                     break;
                 case "October":
                     dueDateTextBox.setText("March 15th");
@@ -1137,7 +1111,6 @@ public class ORGInformationPanel extends javax.swing.JPanel {
     private com.alee.extended.date.WebDateField annualReportLastFiledTextBox;
     private javax.swing.JCheckBox boardCertifiedCheckBox;
     private javax.swing.JTextField caseTextBox;
-    private com.alee.extended.date.WebDateField certifiedDateTextBox;
     private com.alee.extended.date.WebDateField constrctionAndByLawsFiledTextBox;
     private com.alee.extended.date.WebDateField dateFiledTextBox;
     private javax.swing.JCheckBox deemedCertifiedCheckBox;
@@ -1168,7 +1141,6 @@ public class ORGInformationPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
-    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel31;
