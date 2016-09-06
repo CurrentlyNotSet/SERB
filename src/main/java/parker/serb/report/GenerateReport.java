@@ -37,6 +37,9 @@ public class GenerateReport {
                 case "date":
                     new RequestedInfoOneDatePanel(Global.root, true, report);
                     break;
+                case "caseNumber":
+                    new RequestedInfoCaseNumberPanel(Global.root, true, report);
+                    break;
                 case "begin date, end date":
                     new RequestedInfoTwoDatePanel(Global.root, true, report);
                     break;
@@ -102,7 +105,7 @@ public class GenerateReport {
         hash.put("caseYear", num.caseYear);
         hash.put("caseType", num.caseType);
         hash.put("caseMonth", num.caseMonth);
-        hash.put("CaseNumber", num.caseNumber);
+        hash.put("caseNumber", num.caseNumber);
         generateReport(report, hash);
     }
     
@@ -114,7 +117,9 @@ public class GenerateReport {
                 Global.activeUser.middleInitial, 
                 Global.activeUser.lastName)
         );
-        if (report.fileName == null) {
+        String jasperFileName = Global.reportingPath  + report.section + File.separator + report.fileName;
+        
+        if (report.fileName == null || !new File(jasperFileName).exists()) {
             WebOptionPane.showMessageDialog(Global.root, "<html><center> Sorry, unable to locate report. <br><br>" + report.fileName + "</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
         } else {
             try {
@@ -124,8 +129,7 @@ public class GenerateReport {
                 } else {
                     fileName = fileName + "_" + System.currentTimeMillis();
                 }
-
-                String jasperFileName = Global.reportingPath  + report.section + File.separator + report.fileName;
+                
                 String pdfFileName = System.getProperty("java.io.tmpdir") + fileName + ".pdf";
 
                 conn = Database.connectToDB();

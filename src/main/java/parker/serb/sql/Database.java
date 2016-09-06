@@ -1,6 +1,5 @@
 package parker.serb.sql;
 
-import com.alee.laf.optionpane.WebOptionPane;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -12,7 +11,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.lang3.time.DateUtils;
 import parker.serb.DBConnectionInfo;
-import parker.serb.Global;
 
 /**
  *
@@ -26,36 +24,20 @@ public class Database {
     public static Connection connectToDB() {
         int nbAttempts = 0;
         Connection connection = null;
-        ResultSet rs = null;
         String url = DBConnectionInfo.url;
         String driver = DBConnectionInfo.driver;
         String userName = DBConnectionInfo.userName;
         String password = DBConnectionInfo.password;
-        try {
-            Class.forName(driver);
-            connection = DriverManager.getConnection(url, userName, password);
-        } catch (ClassNotFoundException | SQLException e) {
-            nbAttempts++;
-                System.out.println("Write Failed. Waiting and trying again.");
-                if (nbAttempts == 2) {
-                    WebOptionPane.showMessageDialog(Global.root, "<html><center>Unable to connect to the database.<br>"
-                            + "Please ensure you are connected to the network and press OK to try again.</center></html>",
-                            "Connection Error", WebOptionPane.WARNING_MESSAGE);
-                }
-                try {
-                    Thread.sleep(3000);
-                } catch (Exception exi) {
-                    System.err.println(exi.getMessage());
-                }
-                if (nbAttempts == 3) {
-                    WebOptionPane.showMessageDialog(Global.root, "<html><center>"
-                            + "Still unable to connect to database.<br><br>"
-                            + "The application must now close. The information will not be saved.<br> "
-                            + "Make note of that information and press OK to exit the application.</center></html>", 
-                            "Connection Error", WebOptionPane.ERROR_MESSAGE);
-                    System.exit(0);
-                }
-        } 
+        while (true) {
+            try {
+                Class.forName(driver);
+                connection = DriverManager.getConnection(url, userName, password);
+                DriverManager.setLoginTimeout(30);
+                break;
+            } catch (ClassNotFoundException | SQLException e) {
+                nbAttempts = DatabaseExceptionCatch.DatabaseConnectionError(nbAttempts);
+            }
+        }
         return connection;
     }
     
