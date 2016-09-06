@@ -99,61 +99,7 @@ public class FactFinder {
         }
         return factFinderList;
     }
-    
-    public static String getFullType(String typeAbbrv) {
-        String fullType = "";
         
-        Statement stmt = null;
-            
-        try {
-
-            stmt = Database.connectToDB().createStatement();
-
-            String sql = "select * from ActivityType"
-                    + " where descriptionAbbrv = ?";
-
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, typeAbbrv);
-
-            ResultSet activityTypeListRS = preparedStatement.executeQuery();
-            
-            while(activityTypeListRS.next()) {
-                fullType = activityTypeListRS.getString("descriptionFull");
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
-        }
-        return fullType;
-    }
-    
-    public static String getTypeAbbrv(String typeFull) {
-        String typeAbbrv = "";
-        
-        Statement stmt = null;
-            
-        try {
-
-            stmt = Database.connectToDB().createStatement();
-
-            String sql = "select * from ActivityType"
-                    + " where descriptionFull = ?";
-
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, typeFull);
-
-            ResultSet activityTypeListRS = preparedStatement.executeQuery();
-            
-            while(activityTypeListRS.next()) {
-                typeAbbrv = activityTypeListRS.getString("descriptionAbbrv");
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
-        }
-        return typeAbbrv;
-    }
-    
     public static List searchFactFinder(String[] param) {
         List<FactFinder> recommendationList = new ArrayList<>();
 
@@ -243,6 +189,43 @@ public class FactFinder {
         return item;
     }
 
+    public static FactFinder getFactFinderLikeName(String firstName, String lastName) {
+        FactFinder item = null;
+
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT * FROM FactFinder WHERE firstname LIKE ? AND lastname LIKE ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, "%" + firstName + "%");
+            preparedStatement.setString(2, "%" + lastName + "%");
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                item = new FactFinder();
+                item.id = rs.getInt("id");
+                item.active = rs.getBoolean("active");
+                item.status = rs.getString("status") == null ? "" : rs.getString("status");
+                item.firstName = rs.getString("firstName") == null ? "" : rs.getString("firstName");
+                item.middleName = rs.getString("middleName") == null ? "" : rs.getString("middleName");
+                item.lastName = rs.getString("lastName") == null ? "" : rs.getString("lastName");
+                item.address1 = rs.getString("address1") == null ? "" : rs.getString("address1");
+                item.address2 = rs.getString("address2") == null ? "" : rs.getString("address2");
+                item.address3 = rs.getString("address3") == null ? "" : rs.getString("address3");
+                item.city = rs.getString("city") == null ? "" : rs.getString("city");
+                item.state = rs.getString("state") == null ? "" : rs.getString("state");
+                item.zip = rs.getString("zip") == null ? "" : rs.getString("zip");
+                item.email = rs.getString("email") == null ? "" : rs.getString("email");
+                item.phone = rs.getString("phone") == null ? "" : NumberFormatService.convertStringToPhoneNumber(rs.getString("phone"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return item;
+    }
+    
     public static void createFactFinder(FactFinder item) {
         try {
 

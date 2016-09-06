@@ -78,6 +78,28 @@ public class CaseNumber {
         return nextNumber;
     }
     
+    public static String getORGNumber() {
+        String nextNumber = null;
+            
+        try {
+
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select caseNumber from CaseNumber where caseType = 'ORG'";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+
+            ResultSet caseNumber = preparedStatement.executeQuery();
+            
+            if(caseNumber.next()) {
+                nextNumber = caseNumber.getString("caseNumber");
+            } 
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return nextNumber;
+    }
+    
     /**
      * Update the case number to the next number.  This will reflect a new case
      * number has been created
@@ -101,6 +123,23 @@ public class CaseNumber {
             if(success == 0) {
                 createCaseNumber(caseYear, caseType);
             }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public static void updateOrgCaseNumber(String orgNumber) {
+        try {
+
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Update CaseNumber set caseNumber = ? where caseType = 'ORG'";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, String.valueOf(Integer.parseInt(orgNumber) + 1));
+
+            preparedStatement.executeUpdate();
+            
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
         }

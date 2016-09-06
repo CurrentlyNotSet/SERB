@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import parker.serb.Global;
 import parker.serb.sql.Audit;
 import parker.serb.sql.CaseParty;
+import parker.serb.sql.ORGCase;
 import parker.serb.sql.Party;
 import parker.serb.sql.REPCase;
 
@@ -34,102 +35,67 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
     }
     
     private void addListeners() {
-//        caseNumberComboBox.addActionListener((ActionEvent e) -> {
-//            if(caseNumberComboBox.getSelectedItem() != null) {
-//                Global.root.getrEPRootPanel1().getjTabbedPane1().setSelectedIndex(0);
-//                if(caseNumberComboBox.getSelectedItem().toString().trim().equals("")) {
-//                    if(Global.root != null) {
-//                        Global.root.getjButton2().setText("Update");
-//                        Global.root.getjButton2().setEnabled(false);
-//                        Global.caseNumber = null;
-//                        Global.root.getrEPRootPanel1().clearAll();
-//                    }
-//                } else {
-//                    loadInformation();
-//                    if(Global.root.getrEPRootPanel1().getjTabbedPane1().getSelectedIndex() == 0)
-//                        Global.root.getrEPRootPanel1().getActivityPanel1().loadAllActivity();
-//                    Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
-//                }
-//            }
-//        });
+        caseNumberComboBox.addActionListener((ActionEvent e) -> {
+            if(caseNumberComboBox.getSelectedItem() != null) {
+                Global.root.getoRGRootPanel1().getjTabbedPane1().setSelectedIndex(0);
+                if(caseNumberComboBox.getSelectedItem().toString().trim().equals("")) {
+                    if(Global.root != null) {
+                        Global.root.getjButton2().setText("Update");
+                        Global.root.getjButton2().setEnabled(false);
+                        Global.caseNumber = null;
+                        Global.caseMonth = null;
+                        Global.caseType = null;
+                        Global.caseYear = null;
+                        Global.root.getoRGRootPanel1().clearAll();
+                    }
+                } else {
+                    loadInformation();
+                    if(Global.root.getoRGRootPanel1().getjTabbedPane1().getSelectedIndex() == 0)
+                        Global.root.getoRGRootPanel1().getActivityPanel1().loadAllActivity();
+                    Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
+                }
+            }
+        });
     }
     
     private void loadInformation() {
-//        Global.caseNumber = caseNumberComboBox.getSelectedItem().toString().trim();
-//        loadHeaderInformation();
+        Global.caseYear = null;
+        Global.caseType = "ORG";
+        Global.caseMonth = null;
+        Global.caseNumber = caseNumberComboBox.getSelectedItem().toString().trim();
+        loadHeaderInformation();
     }
     
     public void loadHeaderInformation() {
-//        String employer = "";
-//        String employeeOrg = "";
-//        String incumbentEEO = "";
-//        String rivalEEO = "";
-//        
-//        
-//        if(Global.caseNumber != null) {
-//            REPCase rep = REPCase.loadHeaderInformation();
-//            if(rep == null) {
-//                new REPCaseNotFound((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
-//                caseNumberComboBox.setSelectedItem(Global.caseNumber);
-//            } else {
-//                filedDateTextBox.setText(rep.fileDate != null ? Global.mmddyyyy.format(new Date(rep.fileDate.getTime())) : "");
-//                closedDateTextBox.setText(rep.courtClosedDate != null ? Global.mmddyyyy.format(new Date(rep.courtClosedDate.getTime())) : "");
-//                currentStatusTextBox.setText(rep.status1 != null ? rep.status1 : "");
-//                caseTypeTextBox.setText(rep.caseType != null ? rep.caseType : "");
-//                bargainingUnitTextBox.setText(rep.bargainingUnitNumber != null ? rep.bargainingUnitNumber : "");
-//
-//                List caseParties = CaseParty.loadPartiesByCase();
-//
-//                for(Object caseParty: caseParties) {
-//                    CaseParty partyInformation = (CaseParty) caseParty;
-//
-//                    switch (partyInformation.type) {
-//                        case "Employer":
-//                            if(employer.equals("")) {
-//                                employer += partyInformation.name;
-//                            } else {
-//                                employer += ", " + partyInformation.name;
-//                            }
-//                            break;
-//                        case "Employee Organization":
-//                            if(employeeOrg.equals("")) {
-//                                employeeOrg += partyInformation.name;
-//                            } else {
-//                                employeeOrg += ", " + partyInformation.name;
-//                            }
-//                            break;
-//                        case "Incumbent Employee Organization":
-//                            if(incumbentEEO.equals("")) {
-//                                incumbentEEO += partyInformation.name;
-//                            } else {
-//                                incumbentEEO += ", " + partyInformation.name;
-//                            }
-//                            break;
-//                        case "Rival Employee Organization":
-//                            if(rivalEEO.equals("")) {
-//                                rivalEEO += partyInformation.name;
-//                            } else {
-//                                rivalEEO += ", " + partyInformation.name;
-//                            }
-//                            break;
-//                    }
-//                }
-//                employerTextBox.setText(employer);
-//                employeeOrgTextBox.setText(employeeOrg);
-//                incumbentEEOTextBox.setText(incumbentEEO);
-//                rivalEEOTextBox.setText(rivalEEO);
-//            }
-//        }
+        
+        if(Global.caseNumber != null) {
+            ORGCase org = ORGCase.loadHeaderInformation();
+            if(org == null) {
+//                new ORG((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
+                caseNumberComboBox.setSelectedItem(Global.caseNumber);
+            } else {
+                Global.caseNumber = org.orgNumber != null ? org.orgNumber : "";
+                Global.caseType = "ORG";
+                orgNumberTextBox.setText(org.orgNumber != null ? org.orgNumber : "");
+                fiscalYearEndingTextBox.setText(org.fiscalYearEnding != null ? org.fiscalYearEnding : "");
+                filingDueDateTextBox.setText(org.filingDueDate != null ? org.filingDueDate : "");
+                annualReportTextBox.setText(org.annualReport != null ? Global.mmddyyyy.format(new Date(org.annualReport.getTime())) : "");
+                financialReportTextBox.setText(org.financialReport != null ? Global.mmddyyyy.format(new Date(org.financialReport.getTime())) : "");
+                registrationReportTextBox.setText(org.registrationReport != null ? Global.mmddyyyy.format(new Date(org.registrationReport.getTime())) : "");
+                constructionAndByLawsTextBox.setText(org.constructionAndByLaws != null ? Global.mmddyyyy.format(new Date(org.constructionAndByLaws.getTime())) : "");
+                filedByParentTextBox.setText("Yes");
+            }
+        }
     }
     
     public void loadCases() {
         caseNumberComboBox.removeAllItems();
         caseNumberComboBox.addItem("");
 
-        List caseNumberList = REPCase.loadREPCaseNumbers();
+        List caseNumberList = ORGCase.loadORGNames();
         
         caseNumberList.stream().forEach((caseNumber) -> {
-            caseNumberComboBox.addItem(caseNumber.toString());
+            caseNumberComboBox.addItem(caseNumber);
         });
     }
     
@@ -137,20 +103,21 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
      * 
      */
     void clearAll() {
-        employerTextBox.setText("");
-//        employeeOrgTextBox.setText("");
-//        incumbentEEOTextBox.setText("");
-//        rivalEEOTextBox.setText("");
-//        closedDateTextBox.setText("");
-//        currentStatusTextBox.setText("");
-//        caseTypeTextBox.setText("");
-////        bargainingUnitTextBox.setText("");
-//        filedDateTextBox.setText("");
+        orgNumberTextBox.setText("");
+        fiscalYearEndingTextBox.setText("");
+        filingDueDateTextBox.setText("");
+        annualReportTextBox.setText("");
+        financialReportTextBox.setText("");
+        registrationReportTextBox.setText("");
+        constructionAndByLawsTextBox.setText("");
+        filedByParentTextBox.setText("");
     }
 
     public JComboBox getjComboBox2() {
         return caseNumberComboBox;
     }
+    
+    
     
     
     
@@ -168,8 +135,22 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
         jLabel11 = new javax.swing.JLabel();
         caseNumberComboBox = new javax.swing.JComboBox();
         jLabel1 = new javax.swing.JLabel();
-        employerTextBox = new javax.swing.JTextField();
+        orgNumberTextBox = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        fiscalYearEndingTextBox = new javax.swing.JTextField();
+        filingDueDateTextBox = new javax.swing.JTextField();
+        annualReportTextBox = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        financialReportTextBox = new javax.swing.JTextField();
+        registrationReportTextBox = new javax.swing.JTextField();
+        constructionAndByLawsTextBox = new javax.swing.JTextField();
+        filedByParentTextBox = new javax.swing.JTextField();
 
         jMenuItem1.setText("jMenuItem1");
 
@@ -182,13 +163,31 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
 
         jLabel1.setText("ORG Number:");
 
-        employerTextBox.setEditable(false);
-        employerTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        employerTextBox.addActionListener(new java.awt.event.ActionListener() {
+        orgNumberTextBox.setEditable(false);
+        orgNumberTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        orgNumberTextBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                employerTextBoxActionPerformed(evt);
+                orgNumberTextBoxActionPerformed(evt);
             }
         });
+
+        jLabel2.setText("Fiscal Year Ending:");
+
+        jLabel3.setText("Filing Due Date:");
+
+        jLabel4.setText("Annual Report:");
+
+        fiscalYearEndingTextBox.setEditable(false);
+        fiscalYearEndingTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        fiscalYearEndingTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+
+        filingDueDateTextBox.setEditable(false);
+        filingDueDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        filingDueDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+
+        annualReportTextBox.setEditable(false);
+        annualReportTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        annualReportTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -197,12 +196,18 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(12, 12, 12)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel2)
                     .addComponent(jLabel1)
                     .addComponent(jLabel11))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(caseNumberComboBox, 0, 226, Short.MAX_VALUE)
-                    .addComponent(employerTextBox))
+                    .addComponent(caseNumberComboBox, 0, 193, Short.MAX_VALUE)
+                    .addComponent(orgNumberTextBox)
+                    .addComponent(fiscalYearEndingTextBox)
+                    .addComponent(filingDueDateTextBox)
+                    .addComponent(annualReportTextBox))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -216,39 +221,119 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
                         .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(employerTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(orgNumberTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
-                .addContainerGap(115, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(fiscalYearEndingTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(filingDueDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(annualReportTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         add(jPanel1);
+
+        jLabel5.setText("Financial Report:");
+
+        jLabel6.setText("Registration Report:");
+
+        jLabel7.setText("Construction and By Laws:");
+
+        jLabel8.setText("Filed By Parent:");
+
+        financialReportTextBox.setEditable(false);
+        financialReportTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        financialReportTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+
+        registrationReportTextBox.setEditable(false);
+        registrationReportTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        registrationReportTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+
+        constructionAndByLawsTextBox.setEditable(false);
+        constructionAndByLawsTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        constructionAndByLawsTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+
+        filedByParentTextBox.setEditable(false);
+        filedByParentTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        filedByParentTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 335, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(financialReportTextBox)
+                    .addComponent(registrationReportTextBox)
+                    .addComponent(constructionAndByLawsTextBox, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(filedByParentTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 179, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(financialReportTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(registrationReportTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(constructionAndByLawsTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(filedByParentTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
 
         add(jPanel2);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void employerTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employerTextBoxActionPerformed
+    private void orgNumberTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_orgNumberTextBoxActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_employerTextBoxActionPerformed
+    }//GEN-LAST:event_orgNumberTextBoxActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField annualReportTextBox;
     private javax.swing.JComboBox caseNumberComboBox;
-    private javax.swing.JTextField employerTextBox;
+    private javax.swing.JTextField constructionAndByLawsTextBox;
+    private javax.swing.JTextField filedByParentTextBox;
+    private javax.swing.JTextField filingDueDateTextBox;
+    private javax.swing.JTextField financialReportTextBox;
+    private javax.swing.JTextField fiscalYearEndingTextBox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JTextField orgNumberTextBox;
+    private javax.swing.JTextField registrationReportTextBox;
     // End of variables declaration//GEN-END:variables
 }

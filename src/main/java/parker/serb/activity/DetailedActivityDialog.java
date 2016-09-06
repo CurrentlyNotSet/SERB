@@ -56,6 +56,7 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
             case "ULP":  userList = User.loadULPComboBox(); break;
             case "REP":  userList = User.loadREPComboBox(); break;
             case "MED":  userList = User.loadREPComboBox(); break;
+            case "ORG":  userList = User.loadORGComboBox(); break;
             default: break;
         }
         

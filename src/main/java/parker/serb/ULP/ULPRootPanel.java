@@ -252,7 +252,7 @@ public class ULPRootPanel extends javax.swing.JPanel {
                         Global.root.getuLPHeaderPanel1().getChargingPartyTextBox().getText().trim());
                 break;
             case "Status":
-                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+                cancel = new CancelUpdate(Global.root, true);
                 if(!cancel.isReset()) {
                 } else {
                     Global.root.enableButtonsAfterCancel();
@@ -262,7 +262,7 @@ public class ULPRootPanel extends javax.swing.JPanel {
                 }
                 break;
             case "Statement":
-                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+                cancel = new CancelUpdate(Global.root, true);
                 if(!cancel.isReset()) {
                 } else {
                     Global.root.enableButtonsAfterCancel();
@@ -272,7 +272,7 @@ public class ULPRootPanel extends javax.swing.JPanel {
                 }
                 break;
             case "Recommendation":
-                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+                cancel = new CancelUpdate(Global.root, true);
                 if(!cancel.isReset()) {
                 } else {
                     Global.root.enableButtonsAfterCancel();
@@ -282,7 +282,7 @@ public class ULPRootPanel extends javax.swing.JPanel {
                 }
                 break;
             case "Investigation Reveals":
-                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+                cancel = new CancelUpdate(Global.root, true);
                 if(!cancel.isReset()) {
                 } else {
                     Global.root.enableButtonsAfterCancel();
@@ -292,7 +292,7 @@ public class ULPRootPanel extends javax.swing.JPanel {
                 }
                 break;
             case "Notes":
-                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+                cancel = new CancelUpdate(Global.root, true);
                 if(!cancel.isReset()) {
                 } else {
                     Global.root.enableButtonsAfterCancel();

@@ -5,12 +5,11 @@
  */
 package parker.serb.ULP;
 
-//TODO: Load all REP Reports
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
-import parker.serb.sql.SMDSLetter;
+import javax.swing.DefaultComboBoxModel;
+import parker.serb.report.GenerateReport;
+import parker.serb.sql.SMDSDocuments;
+import parker.serb.util.Item;
 
 //TODO: Look into PDFBox vs. Apache vs. iText
 
@@ -29,42 +28,36 @@ public class ULPReportDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         loadReports();
-        addListeners();
         setLocationRelativeTo(parent);
         setVisible(true);
     }
     
-    private void addListeners() {
-        reportComboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                enableGenerateButton();
-            }
-        });
-    }
-    
     private void enableGenerateButton() {
         if(reportComboBox.getSelectedItem().toString().equals("")) {
-            generateButton.setEnabled(true);
-        } else {
             generateButton.setEnabled(false);
+        } else {
+            generateButton.setEnabled(true);
         }
     }
     
     private void loadReports() {
-        reportComboBox.removeAllItems();
-        
-        reportComboBox.addItem("");
-        
-        List letterList = SMDSLetter.loadDocumentNamesByTypeAndSection("ULP", "Report");
-        
-        for (Object letter : letterList) {
-            reportComboBox.addItem((String) letter);
+        List<SMDSDocuments> letterList = SMDSDocuments.loadDocumentNamesByTypeAndSection("ULP", "Report");
+            
+        DefaultComboBoxModel dt = new DefaultComboBoxModel();
+        reportComboBox.setModel(dt);
+        reportComboBox.addItem(new Item<>("0", ""));
+                
+        for (SMDSDocuments letter : letterList) {
+            reportComboBox.addItem(new Item<>( String.valueOf(letter.id), letter.description ));
         }
-        
-        reportComboBox.setSelectedItem("");
+        reportComboBox.setSelectedItem(new Item<>("0", "" ));
     }
 
+    private void generateReport(){
+        SMDSDocuments report = SMDSDocuments.findDocumentByDescription(reportComboBox.getSelectedItem().toString());
+        GenerateReport.runReport(report);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -91,6 +84,11 @@ public class ULPReportDialog extends javax.swing.JDialog {
         jLabel2.setText("Please Select a Report to Generate");
 
         reportComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        reportComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reportComboBoxActionPerformed(evt);
+            }
+        });
 
         generateButton.setText("Generate");
         generateButton.setEnabled(false);
@@ -118,7 +116,7 @@ public class ULPReportDialog extends javax.swing.JDialog {
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(cancelButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 140, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 263, Short.MAX_VALUE)
                         .addComponent(generateButton))
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(12, 12, 12))
@@ -128,11 +126,11 @@ public class ULPReportDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(reportComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(generateButton)
                     .addComponent(cancelButton))
@@ -143,12 +141,16 @@ public class ULPReportDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
-        // TODO: generate report
+        generateReport();
     }//GEN-LAST:event_generateButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         dispose();
     }//GEN-LAST:event_cancelButtonActionPerformed
+
+    private void reportComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportComboBoxActionPerformed
+        enableGenerateButton();
+    }//GEN-LAST:event_reportComboBoxActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;

@@ -256,8 +256,8 @@ public class MEDStrikePanel extends javax.swing.JPanel {
         informationCheckBox.setSelected(false);
         noticeOfIntentToStrikeAndPicketCheckBox.setSelected(false);
         
-        strikeOccuredComboBox.setSelectedItem("");
-        strikeStatusComboBox.setSelectedItem("");
+        strikeOccuredComboBox.setSelectedItem(" ");
+        strikeStatusComboBox.setSelectedItem(" ");
         strikeBeganTextBox.setText("");
         strikeEndedTextBox.setText("");
         totalNumberOfDaysTextBox.setText("");

@@ -204,6 +204,7 @@ public class Activity {
      */
     public static List loadCaseNumberActivity(String searchTerm) {
         List<Activity> activityList = new ArrayList<>();
+        PreparedStatement preparedStatement = null;
         
         Statement stmt = null;
             
@@ -211,7 +212,37 @@ public class Activity {
 
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "select Activity.id,"
+            if(Global.caseType.equals("ORG")) {
+                String sql = "select Activity.id,"
+                    + " caseYear,"
+                    + " caseType,"
+                    + " caseMonth,"
+                    + " caseNumber,"
+                    + " date,"
+                    + " action,"
+                    + " firstName,"
+                    + " lastName,"
+                    + " fileName"
+                    + " from Activity"
+                    + " LEFT JOIN Users"
+                    + " ON Activity.userID = Users.id"
+                    + " where "
+//                    + " caseYear = ? and"
+                    + " caseType = ? and"
+//                    + " caseMonth = ? and"
+                    + " caseNumber = ? and"
+                    + " (firstName like ? or"
+                    + " lastName like ? or"
+                    + " action like ?) ORDER BY date DESC ";
+
+                preparedStatement = stmt.getConnection().prepareStatement(sql);
+                preparedStatement.setObject(1, Global.caseType);
+                preparedStatement.setObject(2, Global.caseNumber);
+                preparedStatement.setString(3, "%" + searchTerm + "%");
+                preparedStatement.setString(4, "%" + searchTerm + "%");
+                preparedStatement.setString(5, "%" + searchTerm + "%");
+            } else {
+                String sql = "select Activity.id,"
                     + " caseYear,"
                     + " caseType,"
                     + " caseMonth,"
@@ -232,14 +263,45 @@ public class Activity {
                     + " lastName like ? or"
                     + " action like ?) ORDER BY date DESC ";
 
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, Global.caseYear);
-            preparedStatement.setString(2, Global.caseType);
-            preparedStatement.setString(3, Global.caseMonth);
-            preparedStatement.setString(4, Global.caseNumber);
-            preparedStatement.setString(5, "%" + searchTerm + "%");
-            preparedStatement.setString(6, "%" + searchTerm + "%");
-            preparedStatement.setString(7, "%" + searchTerm + "%");
+                preparedStatement = stmt.getConnection().prepareStatement(sql);
+                preparedStatement.setObject(1, Global.caseYear);
+                preparedStatement.setObject(2, Global.caseType);
+                preparedStatement.setObject(3, Global.caseMonth);
+                preparedStatement.setObject(4, Global.caseNumber);
+                preparedStatement.setString(5, "%" + searchTerm + "%");
+                preparedStatement.setString(6, "%" + searchTerm + "%");
+                preparedStatement.setString(7, "%" + searchTerm + "%");
+            }
+            
+//            String sql = "select Activity.id,"
+//                    + " caseYear,"
+//                    + " caseType,"
+//                    + " caseMonth,"
+//                    + " caseNumber,"
+//                    + " date,"
+//                    + " action,"
+//                    + " firstName,"
+//                    + " lastName,"
+//                    + " fileName"
+//                    + " from Activity"
+//                    + " LEFT JOIN Users"
+//                    + " ON Activity.userID = Users.id"
+//                    + " where caseYear = ? and"
+//                    + " caseType = ? and"
+//                    + " caseMonth = ? and"
+//                    + " caseNumber = ? and"
+//                    + " (firstName like ? or"
+//                    + " lastName like ? or"
+//                    + " action like ?) ORDER BY date DESC ";
+//
+//            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+//            preparedStatement.setObject(1, Global.caseYear);
+//            preparedStatement.setObject(2, Global.caseType);
+//            preparedStatement.setObject(3, Global.caseMonth);
+//            preparedStatement.setObject(4, Global.caseNumber);
+//            preparedStatement.setString(5, "%" + searchTerm + "%");
+//            preparedStatement.setString(6, "%" + searchTerm + "%");
+//            preparedStatement.setString(7, "%" + searchTerm + "%");
 
             ResultSet caseActivity = preparedStatement.executeQuery();
             
@@ -278,6 +340,12 @@ public class Activity {
 
             stmt = Database.connectToDB().createStatement();
 
+            if(Global.caseType.equals("ORG")) {
+                
+            } else {
+                
+            }
+            
             String sql = "select Activity.id,"
                     + " caseYear,"
                     + " caseType,"

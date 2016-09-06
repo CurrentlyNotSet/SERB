@@ -67,4 +67,36 @@ public class County {
         }
         return countyList;
     }
+    
+    public static List loadCountyListByState(String stateCode) {
+        List<County> countyList = new ArrayList<>();
+        
+        Statement stmt = null;
+            
+        try {
+
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "select countyName "
+                    + " FROM County"
+                    + " WHERE active = 1 and stateCode = ?"
+                    + " ORDER BY countyName ASC";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, stateCode);
+            
+
+            ResultSet caseActivity = preparedStatement.executeQuery();
+            
+            
+            while(caseActivity.next()) {
+                County county = new County();
+                county.countyName = caseActivity.getString("countyName");
+                countyList.add(county);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return countyList;
+    }
 }

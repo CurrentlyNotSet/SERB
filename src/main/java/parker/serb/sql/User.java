@@ -36,11 +36,12 @@ public class User {
     public boolean  passwordReset;
     public String   applicationVersion;
     public String   defaultSection;
-    public boolean  ULPCaseWroker;
+    public boolean  ULPCaseWorker;
     public boolean  REPCaseWorker;
     public boolean  ULPDocketing;
     public boolean  REPDocketing;
     public String   initials;
+    public boolean  investigator;
     
     /**
      * Create an empty User table
@@ -187,6 +188,52 @@ public class User {
                 user.lastLogInDateTime = users.getTimestamp("lastLogInDateTime");
                 user.workPhone = users.getString("workPhone");
                 user.middleInitial = users.getString("middleInitial");
+                activeUsers.add(user);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return activeUsers;
+    }
+    
+    public static List getEnabledUsers() {
+        
+        List activeUsers = new ArrayList<User>();
+        
+        try {
+            
+            Statement stmt = Database.connectToDB().createStatement();
+            
+            String sql = "Select * from Users where active = 1";
+            
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            
+            ResultSet users = preparedStatement.executeQuery();
+            
+            while(users.next()) {
+                User user = new User();
+                user.id = users.getInt("id");
+                user.active = users.getBoolean("active");
+                user.firstName = users.getString("firstName");
+                user.middleInitial = users.getString("middleInitial");
+                user.lastName = users.getString("lastName");
+                user.workPhone = users.getString("workPhone");
+                user.emailAddress = users.getString("emailAddress");
+                user.username = users.getString("username");
+                user.passwordSalt = users.getLong("passwordSalt");
+                user.password = users.getString("password");
+                user.lastLogInDateTime = users.getTimestamp("lastLogInDateTime");
+                user.lastLogInPCName = users.getString("lastLogInPCName");
+                user.activeLogIn = users.getBoolean("activeLogIn");
+                user.passwordReset = users.getBoolean("passwordReset");
+                user.applicationVersion = users.getString("applicationVersion");
+                user.defaultSection = users.getString("defaultSection");
+                user.ULPCaseWorker = users.getBoolean("ULPCaseWorker");
+                user.REPCaseWorker = users.getBoolean("REPCaseWorker");
+                user.ULPDocketing = users.getBoolean("ULPDocketing");
+                user.REPDocketing = users.getBoolean("REPDocketing");
+                user.initials = users.getString("initials");
+                user.investigator = users.getBoolean("investigator");
                 activeUsers.add(user);
             }
         } catch (SQLException ex) {
@@ -621,6 +668,30 @@ public class User {
     }
     
     public static List loadREPComboBox() {
+        
+        List activeUsers = new ArrayList<>();
+        
+        try {
+            
+            Statement stmt = Database.connectToDB().createStatement();
+            
+            String sql = "Select * from Users where REPCaseWorker = ? and active = 1";
+            
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setBoolean(1, true);
+            
+            ResultSet users = preparedStatement.executeQuery();
+            
+            while(users.next()) {
+                activeUsers.add(users.getString("firstName") + " " + users.getString("lastName"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return activeUsers;
+    }
+    
+    public static List loadORGComboBox() {
         
         List activeUsers = new ArrayList<>();
         

@@ -8,6 +8,7 @@ package parker.serb.party;
 import parker.serb.util.NumberFormatService;
 import java.awt.Color;
 import java.awt.Desktop;
+import java.awt.Dialog;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -545,7 +546,7 @@ public class ViewUpdateCasePartyPanel extends javax.swing.JDialog {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         if(jButton1.getText().equals("Cancel")) {
-            CancelUpdate cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+            CancelUpdate cancel = new CancelUpdate(this, true);
             if(!cancel.isReset()) {
             } else {
                 loadInformation(id);

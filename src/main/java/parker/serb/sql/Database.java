@@ -6,14 +6,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.lang3.time.DateUtils;
 import parker.serb.DBConnectionInfo;
-import parker.serb.Global;
 
 /**
  *
@@ -25,16 +22,22 @@ public class Database {
     public Date nextBackup;
     
     public static Connection connectToDB() {
+        int nbAttempts = 0;
         Connection connection = null;
-        ResultSet rs = null;
         String url = DBConnectionInfo.url;
         String driver = DBConnectionInfo.driver;
         String userName = DBConnectionInfo.userName;
         String password = DBConnectionInfo.password;
-        try {
-            Class.forName(driver);
-            connection = DriverManager.getConnection(url, userName, password);
-        } catch (ClassNotFoundException | SQLException e) {} 
+        while (true) {
+            try {
+                Class.forName(driver);
+                connection = DriverManager.getConnection(url, userName, password);
+                DriverManager.setLoginTimeout(30);
+                break;
+            } catch (ClassNotFoundException | SQLException e) {
+                nbAttempts = DatabaseExceptionCatch.DatabaseConnectionError(nbAttempts);
+            }
+        }
         return connection;
     }
     
