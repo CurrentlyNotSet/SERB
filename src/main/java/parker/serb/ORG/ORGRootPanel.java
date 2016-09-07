@@ -191,6 +191,7 @@ public class ORGRootPanel extends javax.swing.JPanel {
                     Global.root.enableTabsAfterSave();
                     Global.root.enableButtonsAfterCancel();
                     oRGInformationPanel1.disableUpdate(true);
+                    Global.root.getoRGHeaderPanel2().loadUpdatedHeaderInformation();
                 }
                 break;
 //            case "Fact Finder":

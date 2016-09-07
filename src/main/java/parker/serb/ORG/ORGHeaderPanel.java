@@ -7,11 +7,14 @@ package parker.serb.ORG;
 
 import parker.serb.REP.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 import parker.serb.Global;
+import parker.serb.ULP.ULPCaseSearch;
 import parker.serb.sql.Audit;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.ORGCase;
@@ -26,6 +29,8 @@ import parker.serb.sql.REPCase;
  */
 public class ORGHeaderPanel extends javax.swing.JPanel {
 
+    ORGCaseSearch search = null;
+    
     /**
      * Creates new form REPHeaderPanel
      */
@@ -69,6 +74,29 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
     public void loadHeaderInformation() {
         
         if(Global.caseNumber != null) {
+            ORGCase org = ORGCase.loadHeaderInformation();
+            if(org == null) {
+//                new ORG((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
+                caseNumberComboBox.setSelectedItem(Global.caseNumber);
+            } else {
+                Global.caseNumber = org.orgNumber != null ? org.orgNumber : "";
+                Global.caseType = "ORG";
+                orgNumberTextBox.setText(org.orgNumber != null ? org.orgNumber : "");
+                fiscalYearEndingTextBox.setText(org.fiscalYearEnding != null ? org.fiscalYearEnding : "");
+                filingDueDateTextBox.setText(org.filingDueDate != null ? org.filingDueDate : "");
+                annualReportTextBox.setText(org.annualReport != null ? Global.mmddyyyy.format(new Date(org.annualReport.getTime())) : "");
+                financialReportTextBox.setText(org.financialReport != null ? Global.mmddyyyy.format(new Date(org.financialReport.getTime())) : "");
+                registrationReportTextBox.setText(org.registrationReport != null ? Global.mmddyyyy.format(new Date(org.registrationReport.getTime())) : "");
+                constructionAndByLawsTextBox.setText(org.constructionAndByLaws != null ? Global.mmddyyyy.format(new Date(org.constructionAndByLaws.getTime())) : "");
+                filedByParentTextBox.setText("Yes");
+            }
+        }
+    }
+    
+    public void loadUpdatedHeaderInformation() {
+        
+        if(Global.caseNumber != null) {
+            Global.caseNumber = ORGCase.getORGName();
             ORGCase org = ORGCase.loadHeaderInformation();
             if(org == null) {
 //                new ORG((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
@@ -157,6 +185,11 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
         setLayout(new java.awt.GridLayout(1, 0));
 
         jLabel11.setText("ORG Name:");
+        jLabel11.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel11MouseClicked(evt);
+            }
+        });
 
         caseNumberComboBox.setEditable(true);
         caseNumberComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -312,6 +345,16 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
     private void orgNumberTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_orgNumberTextBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_orgNumberTextBoxActionPerformed
+
+    private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
+        if(SwingUtilities.isRightMouseButton(evt) || evt.getButton() == MouseEvent.BUTTON3) {
+            if(search == null) {
+                search = new ORGCaseSearch(Global.root, true);
+            } else {
+                search.setVisible(true);
+            }
+        }
+    }//GEN-LAST:event_jLabel11MouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

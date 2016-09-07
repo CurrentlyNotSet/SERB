@@ -78,7 +78,7 @@ public class ULPLetterDialog extends javax.swing.JDialog {
         
         List letterList = SMDSDocuments.loadDocumentNamesByTypeAndSection("ULP", "Letter");
         for (Object letter : letterList) {
-            letterComboBox.addItem((String) letter);
+            letterComboBox.addItem((SMDSDocuments) letter);
         }
         letterComboBox.setSelectedItem("");
     }

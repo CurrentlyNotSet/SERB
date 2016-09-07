@@ -215,4 +215,33 @@ public class Employer {
         }
         return county;
     }
+    
+    public static String getEmployerNameByID(String id) {
+ 
+        String name = "";
+        
+        try {
+
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select employerName from Employers"
+                    + " WHERE employerIDNumber = ?";
+                    
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, id);
+
+            ResultSet caseActivity = preparedStatement.executeQuery();
+            
+            if(caseActivity == null) {
+                name = "";
+            }
+            
+            while(caseActivity.next()) {
+                name = caseActivity.getString("employerName");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return name;
+    }
 }
