@@ -258,6 +258,8 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
         jobTitleTextBox = new javax.swing.JTextField();
         phone2TextBox = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
+        faxTextBox = new javax.swing.JTextField();
+        jLabel16 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -283,12 +285,6 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
         jLabel9.setText("Email:");
 
         jLabel10.setText("Phone 1:");
-
-        companyTextBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                companyTextBoxActionPerformed(evt);
-            }
-        });
 
         jLabel11.setText("State:");
 
@@ -318,6 +314,8 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
         jLabel14.setText("Job Title:");
 
         jLabel15.setText("Phone 2:");
+
+        jLabel16.setText("Fax:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -388,6 +386,12 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
                                     .addComponent(companyTextBox)
                                     .addComponent(phone2TextBox))))
                         .addContainerGap())))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(97, 97, 97)
+                .addComponent(jLabel16)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(faxTextBox)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -448,7 +452,11 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(phone2TextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel15))
-                .addGap(18, 18, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(faxTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel16))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
@@ -487,15 +495,12 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
         party.emailAddress = emailTextBox.getText().trim();
         party.phone1 = NumberFormatService.convertPhoneNumberToString(phoneTextBox.getText().trim());
         party.phone2 = NumberFormatService.convertPhoneNumberToString(phone2TextBox.getText().trim());
-        
+        party.fax = NumberFormatService.convertPhoneNumberToString(faxTextBox.getText().trim());
+                
         Party.createParty(party);
         
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void companyTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_companyTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_companyTextBoxActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField address1TextBox;
@@ -504,6 +509,7 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
     private javax.swing.JTextField cityTextBox;
     private javax.swing.JTextField companyTextBox;
     private javax.swing.JTextField emailTextBox;
+    private javax.swing.JTextField faxTextBox;
     private javax.swing.JTextField firstNameTextBox;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -514,6 +520,7 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

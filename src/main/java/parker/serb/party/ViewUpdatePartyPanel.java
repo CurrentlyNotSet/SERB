@@ -144,6 +144,7 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
         phoneNumberTextBox.setText(partyInformation.phone1);
         phone2NumberTextBox.setText(partyInformation.phone2);
         emailAddressTextBox.setText(partyInformation.emailAddress);
+        faxNumberTextBox.setText(partyInformation.fax);
     }
     
     private void enableAll() {
@@ -181,6 +182,8 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
         zipCodeTextBox.setEnabled(true);
         zipCodeTextBox.setBackground(Color.WHITE);
         stateComboBox.setEnabled(true);
+        faxNumberTextBox.setEnabled(true);
+        faxNumberTextBox.setBackground(Color.WHITE);
     }
     
     private void disableAll() {
@@ -218,6 +221,8 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
         zipCodeTextBox.setEnabled(false);
         zipCodeTextBox.setBackground(new Color(238,238,238));
         stateComboBox.setEnabled(false);
+        faxNumberTextBox.setEnabled(false);
+        faxNumberTextBox.setBackground(new Color(238,238,238));
     }
     
     private void updatePartyInformation() {
@@ -239,7 +244,7 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
         updateParty.zipcode = zipCodeTextBox.getText().trim();
         updateParty.phone1 = NumberFormatService.convertPhoneNumberToString(phoneNumberTextBox.getText().trim()).length() >= 10 ? NumberFormatService.convertPhoneNumberToString(phoneNumberTextBox.getText().trim()) : null;
         updateParty.phone2 = NumberFormatService.convertPhoneNumberToString(phone2NumberTextBox.getText().trim()).length() >= 10 ? NumberFormatService.convertPhoneNumberToString(phone2NumberTextBox.getText().trim()) : null;
-
+        updateParty.fax = NumberFormatService.convertPhoneNumberToString(faxNumberTextBox.getText().trim()).length() >= 10 ? NumberFormatService.convertPhoneNumberToString(faxNumberTextBox.getText().trim()) : null;
         updateParty.emailAddress = emailAddressTextBox.getText().trim();
         
         Party.updateParty(updateParty, Integer.valueOf(id));
@@ -287,6 +292,8 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
         jobTitleTextBox = new javax.swing.JTextField();
         phone2NumberTextBox = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
+        faxNumberTextBox = new javax.swing.JTextField();
+        jLabel15 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -389,6 +396,11 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
 
         jLabel14.setText("Phone 2:");
 
+        faxNumberTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        faxNumberTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+
+        jLabel15.setText("Fax:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -413,9 +425,11 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
                             .addComponent(jLabel10)
                             .addComponent(jLabel13)
                             .addComponent(jLabel9)
-                            .addComponent(jLabel14))
+                            .addComponent(jLabel14)
+                            .addComponent(jLabel15))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(faxNumberTextBox, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(phone2NumberTextBox)
                             .addComponent(companyTextBox)
                             .addComponent(phoneNumberTextBox)
@@ -496,10 +510,14 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(phoneNumberTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(phone2NumberTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel14))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(faxNumberTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel15))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(emailAddressTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -548,6 +566,7 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
     private javax.swing.JButton closeButton;
     private javax.swing.JTextField companyTextBox;
     private javax.swing.JTextField emailAddressTextBox;
+    private javax.swing.JTextField faxNumberTextBox;
     private javax.swing.JTextField firstNameTextBox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -555,6 +574,7 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
