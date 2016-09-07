@@ -41,6 +41,7 @@ public class CaseParty {
     public String phone1;
     public String emailAddress;
     public String phone2;
+    public String fax;
     
     
     public static void createParty(String id, String type) {
@@ -51,6 +52,7 @@ public class CaseParty {
             Statement stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert INTO CaseParty VALUES ("
+                    + "?,"
                     + "?,"
                     + "?,"
                     + "?,"
@@ -99,7 +101,7 @@ public class CaseParty {
             preparedStatement.setString(21, party.phone1 == null ? null : NumberFormatService.convertPhoneNumberToString(party.phone1));
             preparedStatement.setString(22, party.emailAddress == null ? null : party.emailAddress);
             preparedStatement.setString(23, party.phone2 == null ? null : NumberFormatService.convertPhoneNumberToString(party.phone2));
-            
+            preparedStatement.setString(23, party.fax == null ? null : NumberFormatService.convertPhoneNumberToString(party.fax));
             
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
@@ -138,6 +140,7 @@ public class CaseParty {
                     + "?," //phone1
                     + "?" //email
                     + "?," //phone2
+                    + "?," //fax
                     + ")";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
@@ -164,6 +167,7 @@ public class CaseParty {
             preparedStatement.setString(21, partyInformation.phone1.equals("") ? "" : NumberFormatService.convertPhoneNumberToString(partyInformation.phone1));
             preparedStatement.setString(22, partyInformation.emailAddress);
             preparedStatement.setString(23, partyInformation.phone2.equals("") ? "" : NumberFormatService.convertPhoneNumberToString(partyInformation.phone2));
+            preparedStatement.setString(24, partyInformation.fax.equals("") ? "" : NumberFormatService.convertPhoneNumberToString(partyInformation.fax));
             
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
@@ -224,6 +228,7 @@ public class CaseParty {
                 party.phone1 = casePartyRS.getString("phone1") == null ? "" : NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("phone1"));
                 party.phone2 = casePartyRS.getString("phone2") == null ? "" : NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("phone2"));
                 party.emailAddress = casePartyRS.getString("email") == null ? "" : casePartyRS.getString("email");
+                party.fax = casePartyRS.getString("fax") == null ? "" : NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("fax"));
                 
                 parties.add(party);
             }
@@ -255,7 +260,8 @@ public class CaseParty {
                     + " zipCode = ?,"
                     + " phone1 = ?,"
                     + " phone2 = ?,"
-                    + " email = ?"
+                    + " email = ?,"
+                    + " fax = ? "
                     + " where id = ?";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
@@ -277,7 +283,8 @@ public class CaseParty {
             preparedStatement.setString(16, party.phone1 == null ? null : NumberFormatService.convertPhoneNumberToString(party.phone1));
             preparedStatement.setString(17, party.phone2 == null ? null : NumberFormatService.convertPhoneNumberToString(party.phone2));
             preparedStatement.setString(18, party.emailAddress.equals("") ? null : party.emailAddress);
-            preparedStatement.setString(19, id);
+            preparedStatement.setString(19, party.fax == null ? null : NumberFormatService.convertPhoneNumberToString(party.fax));
+            preparedStatement.setString(20, id);
             
             if(preparedStatement.executeUpdate() == 1) {
                 Party.updateParty(party, CaseParty.getPartyID(id));
@@ -491,6 +498,7 @@ public class CaseParty {
                 party.zipcode = casePartyRS.getString("zipcode");
                 party.phone1 = casePartyRS.getString("phone1") == null ? "" : NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("phone1"));
                 party.phone2 = casePartyRS.getString("phone2") == null ? "" : NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("phone2"));
+                party.fax = casePartyRS.getString("fax") == null ? "" : NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("fax"));
                 party.emailAddress = casePartyRS.getString("email");
             }
         } catch (SQLException ex) {
