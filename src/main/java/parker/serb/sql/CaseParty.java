@@ -101,7 +101,7 @@ public class CaseParty {
             preparedStatement.setString(21, party.phone1 == null ? null : NumberFormatService.convertPhoneNumberToString(party.phone1));
             preparedStatement.setString(22, party.emailAddress == null ? null : party.emailAddress);
             preparedStatement.setString(23, party.phone2 == null ? null : NumberFormatService.convertPhoneNumberToString(party.phone2));
-            preparedStatement.setString(23, party.fax == null ? null : NumberFormatService.convertPhoneNumberToString(party.fax));
+            preparedStatement.setString(24, party.fax == null ? null : NumberFormatService.convertPhoneNumberToString(party.fax));
             
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
