@@ -131,7 +131,6 @@ public class ORGCaseSearch extends javax.swing.JDialog {
         
         for (int i = 0; i<tableData.length; i++)
         {
-            String[] parsedCaseNumber = String.valueOf(tableData[i][0]).split("-");
             if(((tableData[i][0].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals(""))
                 || (tableData[i][1].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals(""))
                 || (tableData[i][2].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals("")))) {
