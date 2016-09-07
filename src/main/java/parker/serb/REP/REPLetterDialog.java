@@ -89,9 +89,9 @@ public class REPLetterDialog extends javax.swing.JDialog {
         lettersComboBox.removeAllItems();
         lettersComboBox.addItem("");
         
-        List letterList = SMDSDocuments.loadDocumentNamesByTypeAndSection("REP", "Letter");
-        for (Object letter : letterList) {
-            lettersComboBox.addItem((String) letter);
+        List<SMDSDocuments> letterList = SMDSDocuments.loadDocumentNamesByTypeAndSection("REP", "Letter");
+        for (SMDSDocuments letter : letterList) {
+            lettersComboBox.addItem(letter.description);
         }
         lettersComboBox.setSelectedItem("");
     }
@@ -100,9 +100,9 @@ public class REPLetterDialog extends javax.swing.JDialog {
         directivesComboBox.removeAllItems();
         directivesComboBox.addItem("");
         
-        List letterList = SMDSDocuments.loadDocumentNamesByTypeAndSection("REP", "Directive");
-        for (Object letter : letterList) {
-            directivesComboBox.addItem((String) letter);
+        List<SMDSDocuments> letterList = SMDSDocuments.loadDocumentNamesByTypeAndSection("REP", "Directive");
+        for (SMDSDocuments letter : letterList) {
+            directivesComboBox.addItem(letter.description);
         }
         directivesComboBox.setSelectedItem("");
     }

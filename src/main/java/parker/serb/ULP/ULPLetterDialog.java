@@ -76,9 +76,9 @@ public class ULPLetterDialog extends javax.swing.JDialog {
         letterComboBox.removeAllItems();
         letterComboBox.addItem("");
         
-        List letterList = SMDSDocuments.loadDocumentNamesByTypeAndSection("ULP", "Letter");
-        for (Object letter : letterList) {
-            letterComboBox.addItem((SMDSDocuments) letter);
+        List<SMDSDocuments> letterList = SMDSDocuments.loadDocumentNamesByTypeAndSection("ULP", "Letter");
+        for (SMDSDocuments letter : letterList) {
+            letterComboBox.addItem(letter.description);
         }
         letterComboBox.setSelectedItem("");
     }
@@ -87,9 +87,9 @@ public class ULPLetterDialog extends javax.swing.JDialog {
         directiveComboBox.removeAllItems();
         directiveComboBox.addItem("");
         
-        List letterList = SMDSDocuments.loadDocumentNamesByTypeAndSection("ULP", "Directive");
-        for (Object letter : letterList) {
-            directiveComboBox.addItem((String) letter);
+        List<SMDSDocuments> letterList = SMDSDocuments.loadDocumentNamesByTypeAndSection("ULP", "Directive");
+        for (SMDSDocuments letter : letterList) {
+            directiveComboBox.addItem(letter.description);
         }
         directiveComboBox.setSelectedItem("");
     }
@@ -98,9 +98,9 @@ public class ULPLetterDialog extends javax.swing.JDialog {
         agendaComboBox.removeAllItems();
         agendaComboBox.addItem("");
         
-        List letterList = SMDSDocuments.loadDocumentNamesByTypeAndSection("ULP", "Agenda");
-        for (Object letter : letterList) {
-            agendaComboBox.addItem((String) letter);
+        List<SMDSDocuments> letterList = SMDSDocuments.loadDocumentNamesByTypeAndSection("ULP", "Agenda");
+        for (SMDSDocuments letter : letterList) {
+            agendaComboBox.addItem(letter.description);
         }
         agendaComboBox.setSelectedItem("");
     }
