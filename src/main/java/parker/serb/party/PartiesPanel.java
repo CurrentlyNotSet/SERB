@@ -631,7 +631,7 @@ public class PartiesPanel extends javax.swing.JPanel {
                 
                 model.addRow(new Object[] {charginingPartyInformation.id,
                     name,
-                    charginingPartyInformation.jobTitle, 
+                    charginingPartyInformation.caseRelation, 
                     charginingPartyInformation.address1
                     + (charginingPartyInformation.address2.equals("") ? "" : (", " + charginingPartyInformation.address2))
                     + (charginingPartyInformation.address3.equals("") ? "" : (", " + charginingPartyInformation.address3))
@@ -1148,7 +1148,7 @@ public class PartiesPanel extends javax.swing.JPanel {
                 
                 model.addRow(new Object[] {chargedPartyInformation.id,
                     name,
-                    chargedPartyInformation.jobTitle, 
+                    chargedPartyInformation.caseRelation, 
                     chargedPartyInformation.address1
                     + (chargedPartyInformation.address2.equals("") ? "" : (", " + chargedPartyInformation.address2))
                     + (chargedPartyInformation.address3.equals("") ? "" : (", " + chargedPartyInformation.address3))
