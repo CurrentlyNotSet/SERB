@@ -53,7 +53,25 @@ public class PartiesPanel extends javax.swing.JPanel {
             if(jTable1.getSelectionModel().isSelectionEmpty()) {
                 Global.root.getjButton9().setEnabled(false);
             } else {
-                Global.root.getjButton9().setEnabled(true);
+                if(!jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("") &&
+                    !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Officer") &&
+                    !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Representative") &&
+                    !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Charging Party") &&
+                    !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Charged Party") &&
+                    !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Employer") &&
+                    !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Employee Organization") &&
+                    !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Rival Employee Organization") &&
+                    !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Rival Employee Organization 2") &&
+                    !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Rival Employee Organization 3") &&
+                    !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Incumbent Employee Organization") &&
+                    !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Intervener") &&
+                    !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Petitioner") &&
+                    !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Conversion School")) {
+                    Global.root.getjButton9().setEnabled(true);
+                } else {
+                    Global.root.getjButton9().setEnabled(false);
+                }
+                
             }
         });
         
