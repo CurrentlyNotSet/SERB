@@ -234,7 +234,7 @@ public class Party {
             preparedStatement.setString(15, party.phone1 == null ? null : NumberFormatService.convertPhoneNumberToString(party.phone1));
             preparedStatement.setString(16, party.emailAddress.equals("") ? null : party.emailAddress);
             preparedStatement.setString(17, party.phone2 == null ? null : NumberFormatService.convertPhoneNumberToString(party.phone2));
-            preparedStatement.setString(18, party.fax.equals("") ? null : party.fax);
+            preparedStatement.setString(18, party.fax == null ? null : NumberFormatService.convertPhoneNumberToString(party.fax));
             preparedStatement.setInt(19, id);
             
             preparedStatement.executeUpdate();

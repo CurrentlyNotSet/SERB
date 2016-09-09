@@ -95,8 +95,10 @@ public class PartiesPanel extends javax.swing.JPanel {
                     if(!jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("")) {
                         new ViewUpdateCasePartyPanel(Global.root, true, jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString());
                         if(Global.activeSection.equalsIgnoreCase("ORG")) {
+                            loadORGParties();
                             loadORGPartySearch(jTextField1.getText().trim());
                         } else {
+                            loadParties();
                             loadPartySearch(jTextField1.getText().trim());
                             updateHeader();
                         }
