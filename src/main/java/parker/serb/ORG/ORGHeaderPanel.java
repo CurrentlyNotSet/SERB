@@ -7,11 +7,14 @@ package parker.serb.ORG;
 
 import parker.serb.REP.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 import parker.serb.Global;
+import parker.serb.ULP.ULPCaseSearch;
 import parker.serb.sql.Audit;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.ORGCase;
@@ -26,6 +29,8 @@ import parker.serb.sql.REPCase;
  */
 public class ORGHeaderPanel extends javax.swing.JPanel {
 
+    ORGCaseSearch search = null;
+    
     /**
      * Creates new form REPHeaderPanel
      */
@@ -69,6 +74,29 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
     public void loadHeaderInformation() {
         
         if(Global.caseNumber != null) {
+            ORGCase org = ORGCase.loadHeaderInformation();
+            if(org == null) {
+//                new ORG((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
+                caseNumberComboBox.setSelectedItem(Global.caseNumber);
+            } else {
+                Global.caseNumber = org.orgNumber != null ? org.orgNumber : "";
+                Global.caseType = "ORG";
+                orgNumberTextBox.setText(org.orgNumber != null ? org.orgNumber : "");
+                fiscalYearEndingTextBox.setText(org.fiscalYearEnding != null ? org.fiscalYearEnding : "");
+                filingDueDateTextBox.setText(org.filingDueDate != null ? org.filingDueDate : "");
+                annualReportTextBox.setText(org.annualReport != null ? Global.mmddyyyy.format(new Date(org.annualReport.getTime())) : "");
+                financialReportTextBox.setText(org.financialReport != null ? Global.mmddyyyy.format(new Date(org.financialReport.getTime())) : "");
+                registrationReportTextBox.setText(org.registrationReport != null ? Global.mmddyyyy.format(new Date(org.registrationReport.getTime())) : "");
+                constructionAndByLawsTextBox.setText(org.constructionAndByLaws != null ? Global.mmddyyyy.format(new Date(org.constructionAndByLaws.getTime())) : "");
+                filedByParentTextBox.setText("Yes");
+            }
+        }
+    }
+    
+    public void loadUpdatedHeaderInformation() {
+        
+        if(Global.caseNumber != null) {
+            Global.caseNumber = ORGCase.getORGName();
             ORGCase org = ORGCase.loadHeaderInformation();
             if(org == null) {
 //                new ORG((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
@@ -138,25 +166,30 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
         orgNumberTextBox = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         fiscalYearEndingTextBox = new javax.swing.JTextField();
         filingDueDateTextBox = new javax.swing.JTextField();
-        annualReportTextBox = new javax.swing.JTextField();
+        filedByParentTextBox = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
         financialReportTextBox = new javax.swing.JTextField();
         registrationReportTextBox = new javax.swing.JTextField();
         constructionAndByLawsTextBox = new javax.swing.JTextField();
-        filedByParentTextBox = new javax.swing.JTextField();
+        annualReportTextBox = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
 
         jMenuItem1.setText("jMenuItem1");
 
         setLayout(new java.awt.GridLayout(1, 0));
 
         jLabel11.setText("ORG Name:");
+        jLabel11.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel11MouseClicked(evt);
+            }
+        });
 
         caseNumberComboBox.setEditable(true);
         caseNumberComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -175,8 +208,6 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
 
         jLabel3.setText("Filing Due Date:");
 
-        jLabel4.setText("Annual Report:");
-
         fiscalYearEndingTextBox.setEditable(false);
         fiscalYearEndingTextBox.setBackground(new java.awt.Color(238, 238, 238));
         fiscalYearEndingTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
@@ -185,9 +216,11 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
         filingDueDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
         filingDueDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
 
-        annualReportTextBox.setEditable(false);
-        annualReportTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        annualReportTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        filedByParentTextBox.setEditable(false);
+        filedByParentTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        filedByParentTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+
+        jLabel8.setText("Filed By Parent:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -196,18 +229,18 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(12, 12, 12)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel4)
                     .addComponent(jLabel3)
                     .addComponent(jLabel2)
                     .addComponent(jLabel1)
-                    .addComponent(jLabel11))
+                    .addComponent(jLabel11)
+                    .addComponent(jLabel8))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(filedByParentTextBox)
                     .addComponent(caseNumberComboBox, 0, 193, Short.MAX_VALUE)
                     .addComponent(orgNumberTextBox)
                     .addComponent(fiscalYearEndingTextBox)
-                    .addComponent(filingDueDateTextBox)
-                    .addComponent(annualReportTextBox))
+                    .addComponent(filingDueDateTextBox))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -233,8 +266,8 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
                     .addComponent(filingDueDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(annualReportTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(filedByParentTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
                 .addContainerGap(19, Short.MAX_VALUE))
         );
 
@@ -244,9 +277,7 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
 
         jLabel6.setText("Registration Report:");
 
-        jLabel7.setText("Construction and By Laws:");
-
-        jLabel8.setText("Filed By Parent:");
+        jLabel7.setText("Constitution and By Laws:");
 
         financialReportTextBox.setEditable(false);
         financialReportTextBox.setBackground(new java.awt.Color(238, 238, 238));
@@ -260,9 +291,11 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
         constructionAndByLawsTextBox.setBackground(new java.awt.Color(238, 238, 238));
         constructionAndByLawsTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
 
-        filedByParentTextBox.setEditable(false);
-        filedByParentTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        filedByParentTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        annualReportTextBox.setEditable(false);
+        annualReportTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        annualReportTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+
+        jLabel4.setText("Annual Report:");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -271,16 +304,17 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel5))
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel7)
+                        .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(financialReportTextBox)
+                    .addComponent(financialReportTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
                     .addComponent(registrationReportTextBox)
                     .addComponent(constructionAndByLawsTextBox, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(filedByParentTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE))
+                    .addComponent(annualReportTextBox, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -288,20 +322,20 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(financialReportTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(annualReportTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(registrationReportTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(financialReportTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(constructionAndByLawsTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(registrationReportTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(filedByParentTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(constructionAndByLawsTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7))
                 .addContainerGap(51, Short.MAX_VALUE))
         );
 
@@ -311,6 +345,16 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
     private void orgNumberTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_orgNumberTextBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_orgNumberTextBoxActionPerformed
+
+    private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
+        if(SwingUtilities.isRightMouseButton(evt) || evt.getButton() == MouseEvent.BUTTON3) {
+            if(search == null) {
+                search = new ORGCaseSearch(Global.root, true);
+            } else {
+                search.setVisible(true);
+            }
+        }
+    }//GEN-LAST:event_jLabel11MouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

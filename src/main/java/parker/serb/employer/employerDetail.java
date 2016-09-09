@@ -57,8 +57,8 @@ public class employerDetail extends javax.swing.JDialog {
         jurisdictionComboBox.setSelectedItem(emp.jurisdiction);
         phoneNumberTextBox.setText(emp.phoneNumber1);
         emailAddressTextBox.setText(emp.emailAddress);
-        
-        
+        populationTextBox.setText(emp.population);
+        employerIRNTextBox.setText(emp.employerIRN);
     }
     
     private void loadComboBoxes() { 
@@ -142,6 +142,11 @@ public class employerDetail extends javax.swing.JDialog {
         phoneNumberTextBox.setBackground(Color.white);
         emailAddressTextBox.setEnabled(true);
         emailAddressTextBox.setBackground(Color.white);
+        populationTextBox.setEnabled(true);
+        populationTextBox.setBackground(Color.white);
+        employerIRNTextBox.setEnabled(true);
+        employerIRNTextBox.setBackground(Color.white);
+        
 //        additionalInformationTextArea.setEnabled(true);
 //        additionalInformationTextArea.setBackground(Color.white);
     }
@@ -183,6 +188,10 @@ public class employerDetail extends javax.swing.JDialog {
         phoneNumberTextBox.setBackground(new Color(238,238,238));
         emailAddressTextBox.setEnabled(false);
         emailAddressTextBox.setBackground(new Color(238,238,238));
+        populationTextBox.setEnabled(true);
+        populationTextBox.setBackground(new Color(238,238,238));
+        employerIRNTextBox.setEnabled(true);
+        employerIRNTextBox.setBackground(new Color(238,238,238));
     }
     
     private void saveInformation() {
@@ -204,6 +213,8 @@ public class employerDetail extends javax.swing.JDialog {
         updateEmployer.jurisdiction = jurisdictionComboBox.getSelectedItem().toString();
         updateEmployer.phoneNumber1 = phoneNumberTextBox.getText().trim();
         updateEmployer.emailAddress = emailAddressTextBox.getText().trim();
+        updateEmployer.population = populationTextBox.getText().trim();
+        updateEmployer.employerIRN = employerIRNTextBox.getText().trim();
         
         Employer.updateEmployerByEmployerIDNumber(updateEmployer.employerName, updateEmployer);
     }
@@ -251,6 +262,10 @@ public class employerDetail extends javax.swing.JDialog {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         salutationComboBox = new javax.swing.JComboBox<>();
+        populationTextBox = new javax.swing.JTextField();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        employerIRNTextBox = new javax.swing.JTextField();
 
         jRadioButton1.setText("jRadioButton1");
 
@@ -364,6 +379,18 @@ public class employerDetail extends javax.swing.JDialog {
         salutationComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         salutationComboBox.setEnabled(false);
 
+        populationTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        populationTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        populationTextBox.setEnabled(false);
+
+        jLabel15.setText("Population:");
+
+        jLabel16.setText("EmployerIRN:");
+
+        employerIRNTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        employerIRNTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        employerIRNTextBox.setEnabled(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -381,16 +408,19 @@ public class employerDetail extends javax.swing.JDialog {
                             .addComponent(jLabel6)
                             .addComponent(jLabel8)
                             .addComponent(jLabel11)
-                            .addComponent(jLabel13))
+                            .addComponent(jLabel13)
+                            .addComponent(jLabel15))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(address1TextBox)
                             .addComponent(address2TextBox)
                             .addComponent(address3TextBox)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(phoneNumberTextBox, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(countyComboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, 188, Short.MAX_VALUE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(phoneNumberTextBox, javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(countyComboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, 188, Short.MAX_VALUE))
+                                    .addComponent(populationTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
@@ -400,7 +430,13 @@ public class employerDetail extends javax.swing.JDialog {
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel14)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(emailAddressTextBox))))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(jLabel16)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(employerIRNTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(0, 0, Short.MAX_VALUE))
+                                            .addComponent(emailAddressTextBox)))))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(cityTextBox)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -488,7 +524,14 @@ public class employerDetail extends javax.swing.JDialog {
                     .addComponent(phoneNumberTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel14)
                     .addComponent(emailAddressTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel15)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel16)
+                        .addComponent(employerIRNTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(populationTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
                     .addComponent(jButton1))
@@ -533,6 +576,7 @@ public class employerDetail extends javax.swing.JDialog {
     private javax.swing.JTextField cityTextBox;
     private javax.swing.JComboBox<String> countyComboBox;
     private javax.swing.JTextField emailAddressTextBox;
+    private javax.swing.JTextField employerIRNTextBox;
     private javax.swing.JTextField employerNameTextBox;
     private javax.swing.JTextField firstNameTextBox;
     private javax.swing.JTextField idNumberTextBox;
@@ -544,6 +588,8 @@ public class employerDetail extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -557,6 +603,7 @@ public class employerDetail extends javax.swing.JDialog {
     private javax.swing.JTextField lastNameTextBox;
     private javax.swing.JTextField middleInitialTextBox;
     private javax.swing.JTextField phoneNumberTextBox;
+    private javax.swing.JTextField populationTextBox;
     private javax.swing.JComboBox<String> salutationComboBox;
     private javax.swing.JComboBox<String> stateComboBox;
     private javax.swing.JTextField suffixTextBox;

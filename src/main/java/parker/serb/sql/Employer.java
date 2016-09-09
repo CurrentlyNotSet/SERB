@@ -48,6 +48,8 @@ public class Employer {
     public String assistantLastName;
     public String assistantEmail;
     public String county;
+    public String population;
+    public String employerIRN;
 
     public static List loadEmployerList() {
         List<Employer> employerList = new ArrayList<Employer>();
@@ -128,6 +130,8 @@ public class Employer {
                 employer.assistantMiddleInitial = caseActivity.getString("assistantMiddleInitial");
                 employer.assistantLastName = caseActivity.getString("assistantLastName");
                 employer.county = caseActivity.getString("county");
+                employer.population = caseActivity.getString("population");
+                employer.employerIRN = caseActivity.getString("EmployerIRN");
             }
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
@@ -157,7 +161,9 @@ public class Employer {
                     + " county = ?,"
                     + " jurisdiction = ?,"
                     + " phone1 = ?,"
-                    + " emailAddress = ?"
+                    + " emailAddress = ?,"
+                    + " population = ?,"
+                    + " employerIRN = ? "
                     + " WHERE employerIDNumber = ?";
                     
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
@@ -177,7 +183,9 @@ public class Employer {
             preparedStatement.setString(14, emp.jurisdiction);
             preparedStatement.setString(15, emp.phoneNumber1);
             preparedStatement.setString(16, emp.emailAddress);
-            preparedStatement.setString(17, emp.employerIDNumber);
+            preparedStatement.setString(17, emp.population);
+            preparedStatement.setString(18, emp.employerIRN);
+            preparedStatement.setString(19, emp.employerIDNumber);
 
             preparedStatement.executeUpdate();
 
@@ -214,5 +222,34 @@ public class Employer {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
         }
         return county;
+    }
+    
+    public static String getEmployerNameByID(String id) {
+ 
+        String name = "";
+        
+        try {
+
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select employerName from Employers"
+                    + " WHERE employerIDNumber = ?";
+                    
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, id);
+
+            ResultSet caseActivity = preparedStatement.executeQuery();
+            
+            if(caseActivity == null) {
+                name = "";
+            }
+            
+            while(caseActivity.next()) {
+                name = caseActivity.getString("employerName");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return name;
     }
 }

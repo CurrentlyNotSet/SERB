@@ -53,7 +53,25 @@ public class PartiesPanel extends javax.swing.JPanel {
             if(jTable1.getSelectionModel().isSelectionEmpty()) {
                 Global.root.getjButton9().setEnabled(false);
             } else {
-                Global.root.getjButton9().setEnabled(true);
+                if(!jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("") &&
+                    !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Officer") &&
+                    !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Representative") &&
+                    !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Charging Party") &&
+                    !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Charged Party") &&
+                    !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Employer") &&
+                    !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Employee Organization") &&
+                    !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Rival Employee Organization") &&
+                    !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Rival Employee Organization 2") &&
+                    !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Rival Employee Organization 3") &&
+                    !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Incumbent Employee Organization") &&
+                    !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Intervener") &&
+                    !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Petitioner") &&
+                    !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Conversion School")) {
+                    Global.root.getjButton9().setEnabled(true);
+                } else {
+                    Global.root.getjButton9().setEnabled(false);
+                }
+                
             }
         });
         
@@ -61,17 +79,29 @@ public class PartiesPanel extends javax.swing.JPanel {
 
             @Override
             public void insertUpdate(DocumentEvent e) {
-                loadPartySearch(jTextField1.getText().trim());
+                if(Global.activeSection.equalsIgnoreCase("ORG")) {
+                    loadORGPartySearch(jTextField1.getText().trim());
+                } else {
+                    loadPartySearch(jTextField1.getText().trim());
+                }
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                loadPartySearch(jTextField1.getText().trim());
+                if(Global.activeSection.equalsIgnoreCase("ORG")) {
+                    loadORGPartySearch(jTextField1.getText().trim());
+                } else {
+                    loadPartySearch(jTextField1.getText().trim());
+                }
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                loadPartySearch(jTextField1.getText().trim());
+                if(Global.activeSection.equalsIgnoreCase("ORG")) {
+                    loadORGPartySearch(jTextField1.getText().trim());
+                } else {
+                    loadPartySearch(jTextField1.getText().trim());
+                }
             }
         });
         
@@ -82,8 +112,14 @@ public class PartiesPanel extends javax.swing.JPanel {
                 if(e.getClickCount() == 2) {
                     if(!jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("")) {
                         new ViewUpdateCasePartyPanel(Global.root, true, jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString());
-                        loadPartySearch(jTextField1.getText().trim());
-                        updateHeader();
+                        if(Global.activeSection.equalsIgnoreCase("ORG")) {
+                            loadORGParties();
+                            loadORGPartySearch(jTextField1.getText().trim());
+                        } else {
+                            loadParties();
+                            loadPartySearch(jTextField1.getText().trim());
+                            updateHeader();
+                        }
                     }
                 }
             }
@@ -138,6 +174,7 @@ public class PartiesPanel extends javax.swing.JPanel {
         List<CaseParty> intervenerParties = new ArrayList<>();
         List<CaseParty> petitionerParties = new ArrayList<>();
         List<CaseParty> conversionParties = new ArrayList<>();
+        
         
         
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
@@ -538,6 +575,112 @@ public class PartiesPanel extends javax.swing.JPanel {
                 model.addRow(new Object[] {chargedPartyInformation.id,
                     name,
                     chargedPartyInformation.caseRelation, 
+                    chargedPartyInformation.address1
+                    + (chargedPartyInformation.address2.equals("") ? "" : (", " + chargedPartyInformation.address2))
+                    + (chargedPartyInformation.address3.equals("") ? "" : (", " + chargedPartyInformation.address3))
+                    + (chargedPartyInformation.city.equals("") ? "" : (", " + chargedPartyInformation.city))
+                    + (chargedPartyInformation.stateCode.equals("") ? "" : (", " + chargedPartyInformation.stateCode))
+                    + (chargedPartyInformation.zipcode.equals("") ? "" : (", " + chargedPartyInformation.zipcode)),
+                    chargedPartyInformation.phone1, chargedPartyInformation.emailAddress});
+            }
+            model.addRow(new Object[] {"", "", "", "", "", ""});
+        }
+        
+        //remove blank row
+        if(model.getRowCount() > 0) {
+            if(model.getValueAt(model.getRowCount()-1, 0).toString().equals("")) {
+                model.removeRow(model.getRowCount()-1);
+            }
+        } 
+    }
+    
+    private void loadORGPartySearch(String searchTerm) {
+        List<CaseParty> representativeParties = new ArrayList<>();
+        List<CaseParty> officerParties = new ArrayList<>();
+        
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0);
+        
+        for(Object caseParty: caseParties) {
+            CaseParty partyInformation = (CaseParty) caseParty;
+            
+            if(partyInformation.firstName.toLowerCase().contains(searchTerm.toLowerCase())
+                    || partyInformation.middleInitial.toLowerCase().contains(searchTerm.toLowerCase())
+                    || partyInformation.lastName.toLowerCase().contains(searchTerm.toLowerCase())
+                    || partyInformation.companyName.toLowerCase().contains(searchTerm.toLowerCase())
+                    || partyInformation.jobTitle.toLowerCase().contains(searchTerm.toLowerCase())
+                    || partyInformation.address1.toLowerCase().contains(searchTerm.toLowerCase())
+                    || partyInformation.address2.toLowerCase().contains(searchTerm.toLowerCase())
+                    || partyInformation.address3.toLowerCase().contains(searchTerm.toLowerCase())
+                    || partyInformation.city.toLowerCase().contains(searchTerm.toLowerCase())
+                    || partyInformation.stateCode.toLowerCase().contains(searchTerm.toLowerCase())
+                    || partyInformation.zipcode.toLowerCase().contains(searchTerm.toLowerCase())
+                    || partyInformation.phone1.toLowerCase().contains(searchTerm.toLowerCase())
+                    || partyInformation.emailAddress.toLowerCase().contains(searchTerm.toLowerCase())
+                    ) 
+            {
+                
+                if(partyInformation.caseRelation.contains("Representative")) {
+                    representativeParties.add(partyInformation);
+                }
+
+                if(partyInformation.caseRelation.contains("Officer")) {
+                    officerParties.add(partyInformation);
+                } 
+            }  
+        }
+        
+        if(representativeParties.size() > 0) {
+            model.addRow(new Object[] {"", "<html><b>Representatives</b></html>", "", "", "", ""});
+            for(int i = 0; i < representativeParties.size(); i++) {
+                CaseParty charginingPartyInformation = representativeParties.get(i);
+                
+                if(charginingPartyInformation.firstName.equals("") 
+                        && charginingPartyInformation.lastName.equals("")) {
+                    name = charginingPartyInformation.companyName;
+                } else {
+                    name = (charginingPartyInformation.prefix.equals("") ? "" : (charginingPartyInformation.prefix + " "))
+                        + (charginingPartyInformation.firstName.equals("") ? "" : (charginingPartyInformation.firstName + " "))
+                        + (charginingPartyInformation.middleInitial.equals("") ? "" : (charginingPartyInformation.middleInitial + ". "))
+                        + (charginingPartyInformation.lastName.equals("") ? "" : (charginingPartyInformation.lastName))
+                        + (charginingPartyInformation.suffix.equals("") ? "" : (" " + charginingPartyInformation.suffix))
+                        + (charginingPartyInformation.nameTitle.equals("") ? "" : (", " + charginingPartyInformation.nameTitle));
+                }
+                
+                model.addRow(new Object[] {charginingPartyInformation.id,
+                    name,
+                    charginingPartyInformation.caseRelation, 
+                    charginingPartyInformation.address1
+                    + (charginingPartyInformation.address2.equals("") ? "" : (", " + charginingPartyInformation.address2))
+                    + (charginingPartyInformation.address3.equals("") ? "" : (", " + charginingPartyInformation.address3))
+                    + (charginingPartyInformation.city.equals("") ? "" : (", " + charginingPartyInformation.city))
+                    + (charginingPartyInformation.stateCode.equals("") ? "" : (", " + charginingPartyInformation.stateCode))
+                    + (charginingPartyInformation.zipcode.equals("") ? "" : (", " + charginingPartyInformation.zipcode)),
+                    charginingPartyInformation.phone1, charginingPartyInformation.emailAddress});
+            }
+            model.addRow(new Object[] {"", "", "", "", "", ""});
+        }
+
+        if(officerParties.size() > 0) {
+            model.addRow(new Object[] {"", "<html><b>Officers</b></html>", "", "", "", ""});
+            for(int i = 0; i < officerParties.size(); i++) {
+                CaseParty chargedPartyInformation = officerParties.get(i);
+                
+                if(chargedPartyInformation.firstName.equals("") 
+                        && chargedPartyInformation.lastName.equals("")) {
+                    name = chargedPartyInformation.companyName;
+                } else {
+                    name = (chargedPartyInformation.prefix.equals("") ? "" : (chargedPartyInformation.prefix + " "))
+                        + (chargedPartyInformation.firstName.equals("") ? "" : (chargedPartyInformation.firstName + " "))
+                        + (chargedPartyInformation.middleInitial.equals("") ? "" : (chargedPartyInformation.middleInitial + ". "))
+                        + (chargedPartyInformation.lastName.equals("") ? "" : (chargedPartyInformation.lastName))
+                        + (chargedPartyInformation.suffix.equals("") ? "" : (" " + chargedPartyInformation.suffix))
+                        + (chargedPartyInformation.nameTitle.equals("") ? "" : (", " + chargedPartyInformation.nameTitle));
+                }
+                
+                model.addRow(new Object[] {chargedPartyInformation.id,
+                    name,
+                    chargedPartyInformation.jobTitle, 
                     chargedPartyInformation.address1
                     + (chargedPartyInformation.address2.equals("") ? "" : (", " + chargedPartyInformation.address2))
                     + (chargedPartyInformation.address3.equals("") ? "" : (", " + chargedPartyInformation.address3))
@@ -981,6 +1124,102 @@ public class PartiesPanel extends javax.swing.JPanel {
         validateParties();
     }
     
+    
+    public void loadORGParties() {
+        List<CaseParty> officerParties = new ArrayList<>();
+        List<CaseParty> representativeParties = new ArrayList<>();
+        
+        jTextField1.setText("");
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0);
+        
+        caseParties = CaseParty.loadORGPartiesByCase();
+        
+        for(Object caseParty: caseParties) {
+            CaseParty partyInformation = (CaseParty) caseParty;
+            
+            if(partyInformation.caseRelation.contains("Officer")) {
+                officerParties.add(partyInformation);
+            }
+            
+            if(partyInformation.caseRelation.contains("Representative")) {
+                representativeParties.add(partyInformation);
+            }
+        }
+        
+        if(representativeParties.size() > 0) {
+            model.addRow(new Object[] {"", "<html><b>Representatives</b></html>", "", "", "", ""});
+            for(int i = 0; i < representativeParties.size(); i++) {
+                CaseParty chargedPartyInformation = representativeParties.get(i);
+                
+                if(chargedPartyInformation.firstName.equals("") 
+                        && chargedPartyInformation.lastName.equals("")) {
+                    name = chargedPartyInformation.companyName;
+                } else {
+                    name = (chargedPartyInformation.prefix.equals("") ? "" : (chargedPartyInformation.prefix + " "))
+                        + (chargedPartyInformation.firstName.equals("") ? "" : (chargedPartyInformation.firstName + " "))
+                        + (chargedPartyInformation.middleInitial.equals("") ? "" : (chargedPartyInformation.middleInitial + ". "))
+                        + (chargedPartyInformation.lastName.equals("") ? "" : (chargedPartyInformation.lastName))
+                        + (chargedPartyInformation.suffix.equals("") ? "" : (" " + chargedPartyInformation.suffix))
+                        + (chargedPartyInformation.nameTitle.equals("") ? "" : (", " + chargedPartyInformation.nameTitle));
+                }
+                
+                model.addRow(new Object[] {chargedPartyInformation.id,
+                    name,
+                    chargedPartyInformation.caseRelation, 
+                    chargedPartyInformation.address1
+                    + (chargedPartyInformation.address2.equals("") ? "" : (", " + chargedPartyInformation.address2))
+                    + (chargedPartyInformation.address3.equals("") ? "" : (", " + chargedPartyInformation.address3))
+                    + (chargedPartyInformation.city.equals("") ? "" : (", " + chargedPartyInformation.city))
+                    + (chargedPartyInformation.stateCode.equals("") ? "" : (", " + chargedPartyInformation.stateCode))
+                    + (chargedPartyInformation.zipcode.equals("") ? "" : (", " + chargedPartyInformation.zipcode)),
+                    chargedPartyInformation.phone1, chargedPartyInformation.emailAddress});
+            }
+            model.addRow(new Object[] {"", "", "", "", "", ""});
+        }
+        
+        if(officerParties.size() > 0) {
+            model.addRow(new Object[] {"", "<html><b>Officers</b></html>", "", "", "", ""});
+            for(int i = 0; i < officerParties.size(); i++) {
+                CaseParty charginingPartyInformation = officerParties.get(i);
+                
+                if(charginingPartyInformation.firstName.equals("") 
+                        && charginingPartyInformation.lastName.equals("")) {
+                    name = charginingPartyInformation.companyName;
+                } else {
+                    name = (charginingPartyInformation.prefix.equals("") ? "" : (charginingPartyInformation.prefix + " "))
+                        + (charginingPartyInformation.firstName.equals("") ? "" : (charginingPartyInformation.firstName + " "))
+                        + (charginingPartyInformation.middleInitial.equals("") ? "" : (charginingPartyInformation.middleInitial + ". "))
+                        + (charginingPartyInformation.lastName.equals("") ? "" : (charginingPartyInformation.lastName))
+                        + (charginingPartyInformation.suffix.equals("") ? "" : (" " + charginingPartyInformation.suffix))
+                        + (charginingPartyInformation.nameTitle.equals("") ? "" : (", " + charginingPartyInformation.nameTitle));
+                }
+                
+                model.addRow(new Object[] {charginingPartyInformation.id,
+                    name,
+                    charginingPartyInformation.jobTitle, 
+                    charginingPartyInformation.address1
+                    + (charginingPartyInformation.address2.equals("") ? "" : (", " + charginingPartyInformation.address2))
+                    + (charginingPartyInformation.address3.equals("") ? "" : (", " + charginingPartyInformation.address3))
+                    + (charginingPartyInformation.city.equals("") ? "" : (", " + charginingPartyInformation.city))
+                    + (charginingPartyInformation.stateCode.equals("") ? "" : (", " + charginingPartyInformation.stateCode))
+                    + (charginingPartyInformation.zipcode.equals("") ? "" : (", " + charginingPartyInformation.zipcode)),
+                    charginingPartyInformation.phone1, charginingPartyInformation.emailAddress});
+            }
+            model.addRow(new Object[] {"", "", "", "", "", ""});
+        }
+
+        
+        
+        //remove blank row
+        if(model.getRowCount() > 0) {
+            if(model.getValueAt(model.getRowCount()-1, 0).toString().equals("")) {
+                model.removeRow(model.getRowCount()-1);
+            }
+        }
+        validateParties();
+    }
+    
     private void validateParties() {
         switch(Global.activeSection) {
             case "ULP":
@@ -991,6 +1230,9 @@ public class PartiesPanel extends javax.swing.JPanel {
                 break;
             case "MED":
                 validateMEDParties();
+                break;
+            case "ORG":
+                validateORGParties();
                 break;
         }
     }
@@ -1063,6 +1305,10 @@ public class PartiesPanel extends javax.swing.JPanel {
                     
             missingParties.setText(missingPartiesText.replace("  ", ", ").trim());
         }
+    }
+    
+    private  void validateORGParties() {
+            missingParties.setText("");
     }
     
     private  void validateREPParties() {
@@ -1215,7 +1461,6 @@ public class PartiesPanel extends javax.swing.JPanel {
         }
     }
     
-    
     public void removeParty() {
         new DeletePartyDialog(Global.root,
                 true,
@@ -1223,7 +1468,11 @@ public class PartiesPanel extends javax.swing.JPanel {
                 jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString(),
                 jTable1.getValueAt(jTable1.getSelectedRow(), 2).toString());
         
-        loadParties();
+        if(Global.activeSection.equalsIgnoreCase("ORG")) {
+            loadORGParties();
+        } else {
+            loadParties();
+        }
     }
 
     public JTable getjTable1() {

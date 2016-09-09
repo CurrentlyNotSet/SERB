@@ -59,7 +59,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="orgNameTextBox" max="32767" attributes="0"/>
                       <Component id="orgNumberTextBox" max="32767" attributes="0"/>
-                      <Component id="orgTypeComboBox" alignment="0" pref="395" max="32767" attributes="0"/>
+                      <Component id="orgTypeComboBox" alignment="0" pref="396" max="32767" attributes="0"/>
                       <Component id="orgPhone1TextBox" alignment="1" max="32767" attributes="0"/>
                       <Component id="orgPhone2TextBox" alignment="1" max="32767" attributes="0"/>
                       <Component id="orgFaxTextBox" alignment="1" max="32767" attributes="0"/>
@@ -155,7 +155,7 @@
                       <Component id="jLabel14" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="orgEmailTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="26" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -442,7 +442,6 @@
                   <Group type="103" groupAlignment="1" attributes="0">
                       <Component id="jLabel31" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel30" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel29" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel28" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel27" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel26" min="-2" max="-2" attributes="0"/>
@@ -459,7 +458,6 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="fiscalYearEndingComboBox" max="32767" attributes="0"/>
                       <Component id="annualReportLastFiledTextBox" max="32767" attributes="0"/>
                       <Component id="financialStatementLastFiledTextBox" alignment="1" max="32767" attributes="0"/>
                       <Component id="regiestionReportLastFiledTextBox" alignment="1" max="32767" attributes="0"/>
@@ -467,24 +465,24 @@
                       <Component id="parent1TextBox" alignment="0" max="32767" attributes="0"/>
                       <Component id="parent2TextBox" alignment="1" max="32767" attributes="0"/>
                       <Component id="caseTextBox" alignment="1" max="32767" attributes="0"/>
-                      <Component id="dateFiledTextBox" alignment="0" max="32767" attributes="0"/>
-                      <Component id="certifiedDateTextBox" alignment="1" max="32767" attributes="0"/>
                       <Component id="registrationLetterSentTextBox" alignment="1" max="32767" attributes="0"/>
                       <Component id="extensionDateTextBox" alignment="1" max="32767" attributes="0"/>
+                      <Component id="lastNotificationTextBox" max="32767" attributes="0"/>
+                      <Component id="fiscalYearEndingComboBox" alignment="0" max="32767" attributes="0"/>
+                      <Component id="dueDateTextBox" alignment="1" max="32767" attributes="0"/>
+                      <Component id="dateFiledTextBox" alignment="1" max="32767" attributes="0"/>
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="deemedCertifiedCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="filedByParentCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="deemedCertifiedCheckBox" min="-2" max="-2" attributes="0"/>
+                              <Component id="filedByParentCheckBox" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="validCheckBox" min="-2" max="-2" attributes="0"/>
                               <Component id="boardCertifiedCheckBox" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace min="0" pref="21" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="23" max="32767" attributes="0"/>
                       </Group>
-                      <Component id="lastNotificationTextBox" max="32767" attributes="0"/>
-                      <Component id="dueDateTextBox" alignment="1" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -495,49 +493,66 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="fiscalYearEndingComboBox" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel16" min="-2" pref="27" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel17" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="annualReportLastFiledTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel18" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="financialStatementLastFiledTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel19" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="regiestionReportLastFiledTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel20" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="constrctionAndByLawsFiledTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel21" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="lastNotificationTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Component id="fiscalYearEndingComboBox" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel16" min="-2" pref="27" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="dueDateTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel27" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="jLabel28" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="dateFiledTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="annualReportLastFiledTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel17" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="financialStatementLastFiledTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel18" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="regiestionReportLastFiledTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel19" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="jLabel20" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="constrctionAndByLawsFiledTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="jLabel31" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="extensionDateTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="jLabel21" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="lastNotificationTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jLabel22" min="-2" pref="23" max="-2" attributes="0"/>
+                      </Group>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="deemedCertifiedCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="boardCertifiedCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="jLabel22" max="32767" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="1" attributes="0">
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="filedByParentCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="validCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="filedByParentCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="jLabel23" max="32767" attributes="0"/>
+                      <Component id="jLabel23" min="-2" pref="23" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -546,8 +561,8 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel25" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="parent2TextBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel25" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -556,30 +571,10 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel27" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="dueDateTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel28" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="dateFiledTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel29" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="certifiedDateTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel30" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="registrationLetterSentTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel31" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="extensionDateTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace pref="23" max="32767" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -607,7 +602,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel20">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Construction and By Laws Filed:"/>
+            <Property name="text" type="java.lang.String" value="Constitution and By Laws Filed:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel21">
@@ -642,11 +637,6 @@
         <Component class="javax.swing.JLabel" name="jLabel28">
           <Properties>
             <Property name="text" type="java.lang.String" value="Date Filed:"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JLabel" name="jLabel29">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Certified Date:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel30">
@@ -694,6 +684,7 @@
           </Properties>
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="annualReportLastFiledTextBoxMouseClicked"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="annualReportLastFiledTextBoxActionPerformed"/>
           </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="annualReportLastFiledTextBox.setDateFormat(Global.mmddyyyy);"/>
@@ -814,27 +805,6 @@
           </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="dateFiledTextBox.setDateFormat(Global.mmddyyyy);"/>
-          </AuxValues>
-        </Component>
-        <Component class="com.alee.extended.date.WebDateField" name="certifiedDateTextBox">
-          <Properties>
-            <Property name="editable" type="boolean" value="false"/>
-            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="ee" green="ee" red="ee" type="rgb"/>
-            </Property>
-            <Property name="caretColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="0" green="0" red="0" type="rgb"/>
-            </Property>
-            <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="0" green="0" red="0" type="rgb"/>
-            </Property>
-            <Property name="enabled" type="boolean" value="false"/>
-          </Properties>
-          <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="certifiedDateTextBoxMouseClicked"/>
-          </Events>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="certifiedDateTextBox.setDateFormat(Global.mmddyyyy);"/>
           </AuxValues>
         </Component>
         <Component class="com.alee.extended.date.WebDateField" name="registrationLetterSentTextBox">

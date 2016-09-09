@@ -103,6 +103,13 @@
                   </Group>
               </Group>
           </Group>
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace min="-2" pref="97" max="-2" attributes="0"/>
+              <Component id="jLabel16" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="faxTextBox" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -175,7 +182,12 @@
                   <Component id="phone2TextBox" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel15" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="separate" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="faxTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabel16" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace pref="22" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jButton2" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -244,9 +256,6 @@
     <Component class="javax.swing.JTextField" name="firstNameTextBox">
     </Component>
     <Component class="javax.swing.JTextField" name="companyTextBox">
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="companyTextBoxActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="address1TextBox">
     </Component>
@@ -341,6 +350,13 @@
     <Component class="javax.swing.JLabel" name="jLabel15">
       <Properties>
         <Property name="text" type="java.lang.String" value="Phone 2:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="faxTextBox">
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel16">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Fax:"/>
       </Properties>
     </Component>
   </SubComponents>

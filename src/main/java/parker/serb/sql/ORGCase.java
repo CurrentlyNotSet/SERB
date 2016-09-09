@@ -57,7 +57,7 @@ public class ORGCase {
     public String outsideCase;
 //    public String dueDate;
     public Timestamp dateFiled;
-    public Timestamp certifiedDate;
+//    public Timestamp certifiedDate;
     public Timestamp registrationLetterSent;
     public Timestamp extensionDate;
     
@@ -144,6 +144,35 @@ public class ORGCase {
         return orgNameList;
     }
     
+    public static List getCaseSearchData() {
+        
+        List orgNameList = new ArrayList<>();
+            
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select "
+                    + " orgName, orgNumber, alsoKnownAs" 
+                    + " from ORGCase"
+                    + " Order By orgName ASC";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+
+            ResultSet caseNumberRS = preparedStatement.executeQuery();
+            
+            while(caseNumberRS.next()) {
+                ORGCase org = new ORGCase();
+                org.orgName = caseNumberRS.getString("orgName") != null ? caseNumberRS.getString("orgName") : "";
+                org.orgNumber = caseNumberRS.getString("orgNumber") != null ? caseNumberRS.getString("orgNumber") : "";
+                org.alsoKnownAs = caseNumberRS.getString("alsoKnownAs") != null ? caseNumberRS.getString("alsoKnownAs") : "";
+                orgNameList.add(org);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return orgNameList;
+    }
+    
     /**
      * Loads the notes that are related to the case
      * @return a stringified note
@@ -171,6 +200,31 @@ public class ORGCase {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
         }
         return note;
+    }
+    
+    public static String getORGName() {
+        String name = null;
+            
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select orgName"
+                    + " from ORGCase"
+                    + " where orgNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, Global.caseNumber);
+
+            ResultSet caseNumberRS = preparedStatement.executeQuery();
+            
+            caseNumberRS.next();
+            
+            name = caseNumberRS.getString("orgName");
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return name;
     }
 //    
     /**
@@ -316,7 +370,7 @@ public class ORGCase {
                     + " outsideCase,"
                     + " filingDueDate,"
                     + " dateFiled,"
-                    + " certifiedDate,"
+//                    + " certifiedDate,"
                     + " registrationLetterSent,"
                     + " extensionDate"
                     + " from ORGCase where orgNumber = ?";
@@ -358,7 +412,7 @@ public class ORGCase {
                 org.outsideCase = caseInformation.getString("outsideCase");
                 org.filingDueDate = caseInformation.getString("filingDueDate");
                 org.dateFiled = caseInformation.getTimestamp("dateFiled");
-                org.certifiedDate = caseInformation.getTimestamp("certifiedDate");
+//                org.certifiedDate = caseInformation.getTimestamp("certifiedDate");
                 org.registrationLetterSent = caseInformation.getTimestamp("registrationLetterSent");
                 org.extensionDate = caseInformation.getTimestamp("extensionDate");
             }
@@ -406,7 +460,7 @@ public class ORGCase {
                     + " outsideCase = ?,"
                     + " filingDueDate = ?,"
                     + " dateFiled = ?,"
-                    + " certifiedDate = ?,"
+//                    + " certifiedDate = ?,"
                     + " registrationLetterSent = ?,"
                     + " extensionDate = ?"
                     + " from ORGCase where orgNumber = ?";
@@ -442,15 +496,14 @@ public class ORGCase {
             preparedStatement.setString(28, newCaseInformation.outsideCase);
             preparedStatement.setString(29, newCaseInformation.filingDueDate);
             preparedStatement.setTimestamp(30, newCaseInformation.dateFiled);
-            preparedStatement.setTimestamp(31, newCaseInformation.certifiedDate);
-            preparedStatement.setTimestamp(32, newCaseInformation.registrationLetterSent);
-            preparedStatement.setTimestamp(33, newCaseInformation.extensionDate);
-            preparedStatement.setString(34, Global.caseNumber);
+//            preparedStatement.setTimestamp(31, newCaseInformation.certifiedDate);
+            preparedStatement.setTimestamp(31, newCaseInformation.registrationLetterSent);
+            preparedStatement.setTimestamp(32, newCaseInformation.extensionDate);
+            preparedStatement.setString(33, Global.caseNumber);
 
             int success = preparedStatement.executeUpdate();
             
             if(success == 1) {
-                
                 detailedSaveOrgInformation(newCaseInformation, caseInformation);
             }
         } catch (SQLException ex) {
@@ -739,15 +792,15 @@ public class ORGCase {
                 Activity.addActivty("Changed Date Filed from " + Global.mmddyyyy.format(new Date(oldCaseInformation.dateFiled.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.dateFiled.getTime())), null);
         }
         
-        //certifiedDate
-        if(newCaseInformation.certifiedDate == null && oldCaseInformation.certifiedDate != null) {
-            Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.certifiedDate.getTime())) + " from Certified Date", null);
-        } else if(newCaseInformation.certifiedDate != null && oldCaseInformation.certifiedDate == null) {
-            Activity.addActivty("Set Certified Date to " + Global.mmddyyyy.format(new Date(newCaseInformation.certifiedDate.getTime())), null);
-        } else if(newCaseInformation.certifiedDate != null && oldCaseInformation.certifiedDate != null) {
-            if(!Global.mmddyyyy.format(new Date(oldCaseInformation.certifiedDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.certifiedDate.getTime()))))
-                Activity.addActivty("Changed Certified Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.certifiedDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.certifiedDate.getTime())), null);
-        }
+//        //certifiedDate
+//        if(newCaseInformation.certifiedDate == null && oldCaseInformation.certifiedDate != null) {
+//            Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.certifiedDate.getTime())) + " from Certified Date", null);
+//        } else if(newCaseInformation.certifiedDate != null && oldCaseInformation.certifiedDate == null) {
+//            Activity.addActivty("Set Certified Date to " + Global.mmddyyyy.format(new Date(newCaseInformation.certifiedDate.getTime())), null);
+//        } else if(newCaseInformation.certifiedDate != null && oldCaseInformation.certifiedDate != null) {
+//            if(!Global.mmddyyyy.format(new Date(oldCaseInformation.certifiedDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.certifiedDate.getTime()))))
+//                Activity.addActivty("Changed Certified Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.certifiedDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.certifiedDate.getTime())), null);
+//        }
         
         //registrationLetterSent
         if(newCaseInformation.registrationLetterSent == null && oldCaseInformation.registrationLetterSent != null) {

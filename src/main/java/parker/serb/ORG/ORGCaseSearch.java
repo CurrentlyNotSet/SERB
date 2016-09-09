@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package parker.serb.ULP;
+package parker.serb.ORG;
 
+import parker.serb.ORG.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
@@ -12,13 +13,14 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
+import parker.serb.sql.ORGCase;
 import parker.serb.sql.ULPCaseSearchData;
 
 /**
  *
  * @author parkerjohnston
  */
-public class ULPCaseSearch extends javax.swing.JDialog {
+public class ORGCaseSearch extends javax.swing.JDialog {
 
     DefaultTableModel model;
     List caseList;
@@ -26,7 +28,7 @@ public class ULPCaseSearch extends javax.swing.JDialog {
     /**
      * Creates new form REPCaseSearch
      */
-    public ULPCaseSearch(java.awt.Frame parent, boolean modal) {
+    public ORGCaseSearch(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         jLayeredPane1.moveToFront(jPanel1);
@@ -37,78 +39,6 @@ public class ULPCaseSearch extends javax.swing.JDialog {
     }
     
     private void addListeners() {
-        caseYearTextBox.getDocument().addDocumentListener(new DocumentListener() {
-
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                limitCaseList();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                limitCaseList();
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                limitCaseList();
-            }
-        });
-        
-        caseTypeTextBox.getDocument().addDocumentListener(new DocumentListener() {
-
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                limitCaseList();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                limitCaseList();
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                limitCaseList();
-            }
-        });
-        
-        caseMonthTextBox.getDocument().addDocumentListener(new DocumentListener() {
-
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                limitCaseList();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                limitCaseList();
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                limitCaseList();
-            }
-        });
-        
-        caseNumberTextBox.getDocument().addDocumentListener(new DocumentListener() {
-
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                limitCaseList();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                limitCaseList();
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                limitCaseList();
-            }
-        });
-        
         searchTextBox.getDocument().addDocumentListener(new DocumentListener() {
 
             @Override
@@ -133,10 +63,7 @@ public class ULPCaseSearch extends javax.swing.JDialog {
             public void mouseClicked(MouseEvent e) {
                 if(e.getClickCount() == 2) {
                     setVisible(false);
-//                    Global.selectedFullCaseNumber = caseSearchTable.getValueAt(caseSearchTable.getSelectedRow(), 0).toString();
-//                    Global.caseNumber = caseSearchTable.getValueAt(caseSearchTable.getSelectedRow(), 0).toString();
-                    Global.root.getuLPHeaderPanel1().getjComboBox2().setSelectedItem(caseSearchTable.getValueAt(caseSearchTable.getSelectedRow(), 0).toString());
-                    
+                    Global.root.getoRGHeaderPanel2().getjComboBox2().setSelectedItem(caseSearchTable.getValueAt(caseSearchTable.getSelectedRow(), 1).toString());
                 }
             }
 
@@ -168,10 +95,6 @@ public class ULPCaseSearch extends javax.swing.JDialog {
     }
     
     private void enableTextBoxes() {
-        caseYearTextBox.setEnabled(true);
-        caseTypeTextBox.setEnabled(true);
-        caseMonthTextBox.setEnabled(true);
-        caseNumberTextBox.setEnabled(true);
         searchTextBox.setEnabled(true);
     }
     
@@ -186,19 +109,16 @@ public class ULPCaseSearch extends javax.swing.JDialog {
             }   
         };
        
-        model.addColumn("Case Number");
-        model.addColumn("Charging Party");
-        model.addColumn("Charged Party");
-        model.addColumn("Employer Number");
-        model.addColumn("Union Number");
+        model.addColumn("Org Number");
+        model.addColumn("Org Name");
+        model.addColumn("Also Known As");
         
-        caseList = ULPCaseSearchData.loadULPCaseList();
+        caseList = ORGCase.getCaseSearchData();
         
         for (Object caseItem : caseList) {
-            ULPCaseSearchData act = (ULPCaseSearchData) caseItem;
+            ORGCase act = (ORGCase) caseItem;
             
-            model.addRow(new Object[] {(act.caseYear + "-" + act.caseType + "-" + act.caseMonth + "-" + act.caseNumber)
-                    , act.chargingParty, act.chargedParty, act.employerNumber, act.unionNumber}); 
+            model.addRow(new Object[] {act.orgNumber, act.orgName, act.alsoKnownAs}); 
         }
         getTableData();
         caseSearchTable.setModel(model);
@@ -211,17 +131,11 @@ public class ULPCaseSearch extends javax.swing.JDialog {
         
         for (int i = 0; i<tableData.length; i++)
         {
-            String[] parsedCaseNumber = String.valueOf(tableData[i][0]).split("-");
-            if(((parsedCaseNumber[0].contains(caseYearTextBox.getText()) && !caseYearTextBox.equals(""))
-                && (parsedCaseNumber[1].toLowerCase().contains(caseTypeTextBox.getText().toLowerCase()) && !caseTypeTextBox.equals(""))
-                && (parsedCaseNumber[2].contains(caseMonthTextBox.getText()) && !caseMonthTextBox.equals(""))
-                && (parsedCaseNumber[3].contains(caseNumberTextBox.getText()) && !caseNumberTextBox.equals("")))
-                && ((tableData[i][1].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals(""))
-                || (tableData[i][2].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals(""))
-                || (tableData[i][3].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals(""))
-                || (tableData[i][4].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals("")))) {
+            if(((tableData[i][0].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals(""))
+                || (tableData[i][1].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals(""))
+                || (tableData[i][2].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals("")))) {
                 model.addRow(new Object[] {tableData[i][0]
-                , tableData[i][1], tableData[i][2], tableData[i][3], tableData[i][4]}); 
+                , tableData[i][1], tableData[i][2]}); 
             }
         }
         caseSearchTable.setModel(model);
@@ -255,14 +169,6 @@ public class ULPCaseSearch extends javax.swing.JDialog {
         jLabel4 = new javax.swing.JLabel();
         searchTextBox = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
-        jLabel3 = new javax.swing.JLabel();
-        caseYearTextBox = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        caseTypeTextBox = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        caseMonthTextBox = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        caseNumberTextBox = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -283,14 +189,14 @@ public class ULPCaseSearch extends javax.swing.JDialog {
 
             },
             new String [] {
-                "Case Number", "Charging Party", "Charged Party", "Employer Number", "Union Number"
+                "Org Number", "Org Name", "Also Known As"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, true, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -340,37 +246,6 @@ public class ULPCaseSearch extends javax.swing.JDialog {
             }
         });
 
-        jLabel3.setText("Case Search:");
-
-        caseYearTextBox.setEnabled(false);
-        caseYearTextBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                caseYearTextBoxActionPerformed(evt);
-            }
-        });
-
-        jLabel5.setText("-");
-
-        caseTypeTextBox.setEnabled(false);
-
-        jLabel6.setText("-");
-
-        caseMonthTextBox.setEnabled(false);
-        caseMonthTextBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                caseMonthTextBoxActionPerformed(evt);
-            }
-        });
-
-        jLabel7.setText("-");
-
-        caseNumberTextBox.setEnabled(false);
-        caseNumberTextBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                caseNumberTextBoxActionPerformed(evt);
-            }
-        });
-
         jButton2.setText("Refresh");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -389,22 +264,6 @@ public class ULPCaseSearch extends javax.swing.JDialog {
                     .addComponent(jLayeredPane1)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(caseYearTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(jLabel5)
-                        .addGap(0, 0, 0)
-                        .addComponent(caseTypeTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(jLabel6)
-                        .addGap(0, 0, 0)
-                        .addComponent(caseMonthTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(jLabel7)
-                        .addGap(0, 0, 0)
-                        .addComponent(caseNumberTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(searchTextBox)
@@ -419,17 +278,9 @@ public class ULPCaseSearch extends javax.swing.JDialog {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
                     .addComponent(searchTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3)
-                    .addComponent(caseYearTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5)
-                    .addComponent(caseTypeTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6)
-                    .addComponent(caseMonthTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7)
-                    .addComponent(caseNumberTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2))
+                    .addComponent(jButton2)
+                    .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
                 .addGap(11, 11, 11)
@@ -444,18 +295,6 @@ public class ULPCaseSearch extends javax.swing.JDialog {
         setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void caseYearTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_caseYearTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_caseYearTextBoxActionPerformed
-
-    private void caseMonthTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_caseMonthTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_caseMonthTextBoxActionPerformed
-
-    private void caseNumberTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_caseNumberTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_caseNumberTextBoxActionPerformed
-
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         jButton2.setEnabled(false);
         model.setNumRows(0);
@@ -465,20 +304,12 @@ public class ULPCaseSearch extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField caseMonthTextBox;
-    private javax.swing.JTextField caseNumberTextBox;
     private javax.swing.JTable caseSearchTable;
-    private javax.swing.JTextField caseTypeTextBox;
-    private javax.swing.JTextField caseYearTextBox;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
