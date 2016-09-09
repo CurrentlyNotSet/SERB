@@ -41,6 +41,7 @@ public class ORGRootPanel extends javax.swing.JPanel {
         oRGParentChildPanel1.clearAll();
         notesPanel2.clearAll();
         oRGInformationPanel1.clearAll();
+        partiesPanel1.clearAll();
     }
     
     private void addListeners() {
@@ -70,9 +71,9 @@ public class ORGRootPanel extends javax.swing.JPanel {
             case "Org Information":
                 oRGInformationPanel1.loadInformation();
                 break;
-//            case "Status":
-//                mEDCaseStatusPanel1.loadInformation();
-//                break;
+            case "Parties":
+                partiesPanel1.loadORGParties();
+                break;
 //            case "Conciliation":
 //                mEDConciliationPanel2.loadInformation();
 //                break;
@@ -103,12 +104,12 @@ public class ORGRootPanel extends javax.swing.JPanel {
                 Global.root.getjButton2().setEnabled(true);
                 Global.root.getjButton9().setVisible(false);
                 break;
-//            case "Parties":
-//                System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
-//                Global.root.getjButton2().setText("Add Party");
-//                Global.root.getjButton2().setEnabled(true);
-//                Global.root.getjButton9().setVisible(true);
-//                break;
+            case "Parties":
+                System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
+                Global.root.getjButton2().setText("Add Party");
+                Global.root.getjButton2().setEnabled(true);
+                Global.root.getjButton9().setVisible(true);
+                break;
             case "Org Information":
                 System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
                 Global.root.getjButton2().setText("Update");
@@ -170,14 +171,10 @@ public class ORGRootPanel extends javax.swing.JPanel {
             case "Activity":
                 activityPanel1.loadAllActivity();
                 break;
-//            case "Parties":
-//                new PartySearchDialog((JFrame) this.getRootPane().getParent(), true);
-//                partiesPanel1.loadParties();
-//                Global.root.getmEDHeaderPanel1().loadHeaderInformation();
-//                MEDCaseSearchData.updateCaseEntryFromParties(
-//                        Global.root.getmEDHeaderPanel1().getEmployerTextBox().getText().trim(),
-//                        Global.root.getmEDHeaderPanel1().getEmployeeOrgTextBox().getText().trim());
-//                break;
+            case "Parties":
+                new PartySearchDialog((JFrame) this.getRootPane().getParent(), true);
+                partiesPanel1.loadORGParties();
+                break;
             case "Related Orgs":
                 new ORGAddLinkedOrg(Global.root, true);
                 oRGParentChildPanel1.loadInformation();
@@ -240,14 +237,10 @@ public class ORGRootPanel extends javax.swing.JPanel {
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
             case "Activity":
                 break;
-//            case "Parties":
-//                partiesPanel1.removeParty();
-//                partiesPanel1.loadParties();
-//                Global.root.getmEDHeaderPanel1().loadHeaderInformation();
-//                MEDCaseSearchData.updateCaseEntryFromParties(
-//                        Global.root.getmEDHeaderPanel1().getEmployerTextBox().getText().trim(),
-//                        Global.root.getmEDHeaderPanel1().getEmployeeOrgTextBox().getText().trim());
-//                break;
+            case "Parties":
+                partiesPanel1.removeParty();
+                partiesPanel1.loadORGParties();
+                break;
             case "Related Orgs":
                 String wording = "Are you sure you want to unlink " + oRGParentChildPanel1.getParentChildTable().getValueAt(oRGParentChildPanel1.getParentChildTable().getSelectedRow(), 1).toString() + " from " + Global.root.getoRGHeaderPanel2().getjComboBox2().getSelectedItem().toString();
                 new ORGRemoveLinkedOrgDialog(Global.root, true, wording, oRGParentChildPanel1.getParentChildTable().getValueAt(oRGParentChildPanel1.getParentChildTable().getSelectedRow(), 2).toString(), oRGParentChildPanel1.getParentChildTable().getValueAt(oRGParentChildPanel1.getParentChildTable().getSelectedRow(), 1).toString());
@@ -318,6 +311,8 @@ public class ORGRootPanel extends javax.swing.JPanel {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         activityPanel1 = new parker.serb.activity.ActivityPanel();
+        jPanel4 = new javax.swing.JPanel();
+        partiesPanel1 = new parker.serb.party.PartiesPanel();
         jPanel3 = new javax.swing.JPanel();
         oRGInformationPanel1 = new parker.serb.ORG.ORGInformationPanel();
         jPanel2 = new javax.swing.JPanel();
@@ -337,6 +332,19 @@ public class ORGRootPanel extends javax.swing.JPanel {
         );
 
         jTabbedPane1.addTab("Activity", jPanel1);
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(partiesPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1099, Short.MAX_VALUE)
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(partiesPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Parties", jPanel4);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -396,11 +404,13 @@ public class ORGRootPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JTabbedPane jTabbedPane1;
     private parker.serb.notes.NotesPanel notesPanel2;
     private parker.serb.ORG.ORGInformationPanel oRGInformationPanel1;
     private parker.serb.ORG.ORGParentChildPanel oRGParentChildPanel1;
+    private parker.serb.party.PartiesPanel partiesPanel1;
     private parker.serb.REP.REPCaseInformationPanel rEPCaseInformationPanel1;
     // End of variables declaration//GEN-END:variables
 }
