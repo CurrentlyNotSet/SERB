@@ -57,7 +57,7 @@ public class ORGCase {
     public String outsideCase;
 //    public String dueDate;
     public Timestamp dateFiled;
-//    public Timestamp certifiedDate;
+    public Timestamp certifiedDate;
     public Timestamp registrationLetterSent;
     public Timestamp extensionDate;
     
