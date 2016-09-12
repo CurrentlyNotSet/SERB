@@ -78,6 +78,15 @@ public class StringUtilities {
         return addressBlock.trim();
     }
     
+    public static String buildCasePartyAddressBlock(CaseParty item){
+        return (item.address1.equals("") ? "" : (item.address1))
+                + (item.address2.equals("") ? "" : (", " + item.address2))
+                + (item.address3.equals("") ? "" : (", " + item.address3))
+                + (item.city.equals("") ? "" : (", " + item.city))
+                + (item.stateCode.equals("") ? "" : (", " + item.stateCode))
+                + (item.zipcode.equals("") ? "" : (" " + item.zipcode));
+    }
+    
     public static String buildAddressBlock(Party item){
         return (item.address1.equals("") ? "" : (item.address1))
                 + (item.address2.equals("") ? "" : (", " + item.address2))
