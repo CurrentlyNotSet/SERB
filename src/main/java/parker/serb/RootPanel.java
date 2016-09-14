@@ -23,6 +23,7 @@ import parker.serb.MED.MEDBulkSendToBoardDialog;
 import parker.serb.MED.MEDBulkSettleCasesDialog;
 import parker.serb.MED.MEDHeaderPanel;
 import parker.serb.MED.MEDRootPanel;
+import parker.serb.ORG.ORGAllLettersPanel;
 import parker.serb.ORG.ORGHeaderPanel;
 import parker.serb.ORG.ORGRootPanel;
 import parker.serb.ULP.ULPHeaderPanel;
@@ -265,7 +266,6 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton8.setVisible(false);
                 break;
             case "ULP":
-                
                 jButton1.setSize(dim);
                 jButton1.setMinimumSize(dim);
                 jButton1.setMaximumSize(dim);
@@ -305,15 +305,17 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton2.setVisible(true);
                 jButton2.setText("Update");
                 jButton2.setEnabled(false);
-                jButton3.setVisible(false);
-                jButton3.setText("Letters");
+                jButton3.setVisible(true);
+                jButton3.setEnabled(true);
+                jButton3.setText("All Org Letters");
                 jButton4.setVisible(false);
-                jButton4.setText("Reports");
+                jButton4.setText("Single Letter");
                 jButton5.setVisible(false);
-                jButton5.setText("Queue");
+                jButton5.setText("Reports");
                 jButton6.setVisible(false);
-                jButton6.setText("Public Records");
+                jButton6.setText("Queue");
                 jButton7.setVisible(false);
+                jButton6.setText("Public Records");
                 jButton8.setVisible(false);
                 break;
         }
@@ -1070,6 +1072,8 @@ public class RootPanel extends javax.swing.JFrame {
                 new REPLetterDialog((JFrame) this.getRootPane().getParent(), true);
             case "ULP":
                 new ULPLetterDialog((JFrame) this.getRootPane().getParent(), true);
+            case "ORG":
+                new ORGAllLettersPanel((JFrame) this.getRootPane().getParent(), true);
             default:
                 break;
         }
