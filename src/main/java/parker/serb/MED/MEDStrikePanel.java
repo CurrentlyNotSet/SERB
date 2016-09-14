@@ -407,6 +407,11 @@ public class MEDStrikePanel extends javax.swing.JPanel {
         relatedCaseNumberTextBox.setBackground(new java.awt.Color(238, 238, 238));
         relatedCaseNumberTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         relatedCaseNumberTextBox.setEnabled(false);
+        relatedCaseNumberTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                relatedCaseNumberTextBoxMouseClicked(evt);
+            }
+        });
 
         jLabel8.setText("Notice of Intent to Picket Only:");
 
@@ -670,6 +675,22 @@ public class MEDStrikePanel extends javax.swing.JPanel {
     private void intendedDatePicketTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_intendedDatePicketTextBoxMouseClicked
         clearDate(intendedDatePicketTextBox, evt);
     }//GEN-LAST:event_intendedDatePicketTextBoxMouseClicked
+
+    private void relatedCaseNumberTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_relatedCaseNumberTextBoxMouseClicked
+        if(relatedCaseNumberTextBox.isEnabled()) {
+            if(evt.getButton() == MouseEvent.BUTTON3) {
+                MEDClearCaseDialog clear = new MEDClearCaseDialog((JFrame) Global.root.getRootPane().getParent(), true);
+                if(clear.reset) {
+                    relatedCaseNumberTextBox.setText("");
+                }
+                clear.dispose();
+            } else if(evt.getClickCount() == 2) {
+                MEDAddRelatedCaseDialog related = new MEDAddRelatedCaseDialog((JFrame) Global.root.getRootPane().getParent(), true);
+                relatedCaseNumberTextBox.setText(related.getRelatedCase());
+                related.dispose();
+            }
+        }
+    }//GEN-LAST:event_relatedCaseNumberTextBoxMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

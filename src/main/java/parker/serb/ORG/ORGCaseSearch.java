@@ -176,7 +176,7 @@ public class ORGCaseSearch extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("ULP Case Search");
+        jLabel1.setText("ORG Case Search");
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel2.setText("Search:");
