@@ -422,7 +422,121 @@ public class ORGCase {
         return org;
     }
     
+    public static List<ORGCase> getOrgCasesAllLettersDefault(){
+        List orgLettersList = new ArrayList<>();
+            
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
 
+            String sql = "SELECT * FROM ORGCase WHERE "
+                    + "registrationReport IS NULL AND "
+                    + "DATEADD(day, 60, registrationLetterSent ) <= getDATE()";
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            ResultSet rs = preparedStatement.executeQuery();
+            
+            while(rs.next()) {
+                ORGCase org = new ORGCase();
+                org.orgName = rs.getString("orgName");
+                org.alsoKnownAs = rs.getString("alsoKnownAs");
+                org.orgNumber = rs.getString("orgNumber");
+                org.orgType = rs.getString("orgType");
+                org.orgPhone1 = rs.getString("orgPhone1");
+                org.orgPhone2 = rs.getString("orgPhone2");
+                org.orgFax = rs.getString("orgFax");
+                org.employerID = rs.getString("employerID");
+                org.orgAddress1 = rs.getString("orgAddress1");
+                org.orgAddress2 = rs.getString("orgAddress2");
+                org.orgCity = rs.getString("orgCity");
+                org.orgState = rs.getString("orgState");
+                org.orgZip = rs.getString("orgZip");
+                org.orgCounty = rs.getString("orgCounty");
+                org.orgEmail = rs.getString("orgEmail");
+                org.fiscalYearEnding = rs.getString("fiscalYearEnding");
+                org.annualReport = rs.getTimestamp("annualReport");
+                org.financialReport = rs.getTimestamp("financialReport");
+                org.registrationReport = rs.getTimestamp("registrationReport");
+                org.constructionAndByLaws = rs.getTimestamp("constructionAndByLaws");
+                org.lastNotification = rs.getString("lastNotification");
+                org.deemedCertified = rs.getBoolean("deemedCertified");
+                org.boardCertified = rs.getBoolean("boardCertified");
+                org.filedByParent = rs.getBoolean("filedByParent");
+                org.valid = rs.getBoolean("valid");
+                org.parent1 = rs.getString("parent1");
+                org.parent2 = rs.getString("parent2");
+                org.outsideCase = rs.getString("outsideCase");
+                org.filingDueDate = rs.getString("filingDueDate");
+                org.dateFiled = rs.getTimestamp("dateFiled");
+//                org.certifiedDate = rs.getTimestamp("certifiedDate");
+                org.registrationLetterSent = rs.getTimestamp("registrationLetterSent");
+                org.extensionDate = rs.getTimestamp("extensionDate");
+                orgLettersList.add(org);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return orgLettersList;        
+    }
+    
+    public static List<ORGCase> getOrgCasesAllLetters(String month, String date){
+        List orgLettersList = new ArrayList<>();
+            
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT * FROM ORGCase WHERE "
+                    + "Active = 1 AND Valid = 1 AND FiledByParent = 0 AND fiscalYearEnding = ? "
+                    + "AND ( constructionAndByLaws = null OR registrationReport = null "
+                    + "OR annualReport = null OR annualReport < ? OR financialReport = null "
+                    + "OR financialReport < ?) Order By orgName ASC";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, month);
+            preparedStatement.setString(2, date);
+            preparedStatement.setString(3, date);
+            ResultSet rs = preparedStatement.executeQuery();
+            
+            while(rs.next()) {
+                ORGCase org = new ORGCase();
+                org.orgName = rs.getString("orgName");
+                org.alsoKnownAs = rs.getString("alsoKnownAs");
+                org.orgNumber = rs.getString("orgNumber");
+                org.orgType = rs.getString("orgType");
+                org.orgPhone1 = rs.getString("orgPhone1");
+                org.orgPhone2 = rs.getString("orgPhone2");
+                org.orgFax = rs.getString("orgFax");
+                org.employerID = rs.getString("employerID");
+                org.orgAddress1 = rs.getString("orgAddress1");
+                org.orgAddress2 = rs.getString("orgAddress2");
+                org.orgCity = rs.getString("orgCity");
+                org.orgState = rs.getString("orgState");
+                org.orgZip = rs.getString("orgZip");
+                org.orgCounty = rs.getString("orgCounty");
+                org.orgEmail = rs.getString("orgEmail");
+                org.fiscalYearEnding = rs.getString("fiscalYearEnding");
+                org.annualReport = rs.getTimestamp("annualReport");
+                org.financialReport = rs.getTimestamp("financialReport");
+                org.registrationReport = rs.getTimestamp("registrationReport");
+                org.constructionAndByLaws = rs.getTimestamp("constructionAndByLaws");
+                org.lastNotification = rs.getString("lastNotification");
+                org.deemedCertified = rs.getBoolean("deemedCertified");
+                org.boardCertified = rs.getBoolean("boardCertified");
+                org.filedByParent = rs.getBoolean("filedByParent");
+                org.valid = rs.getBoolean("valid");
+                org.parent1 = rs.getString("parent1");
+                org.parent2 = rs.getString("parent2");
+                org.outsideCase = rs.getString("outsideCase");
+                org.filingDueDate = rs.getString("filingDueDate");
+                org.dateFiled = rs.getTimestamp("dateFiled");
+//                org.certifiedDate = rs.getTimestamp("certifiedDate");
+                org.registrationLetterSent = rs.getTimestamp("registrationLetterSent");
+                org.extensionDate = rs.getTimestamp("extensionDate");
+                orgLettersList.add(org);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return orgLettersList;        
+    }
     
     public static void updateORGInformation(ORGCase newCaseInformation, ORGCase caseInformation) {
         ORGCase med = null;
