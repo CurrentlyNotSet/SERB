@@ -168,6 +168,11 @@ public class generateDocument {
             processBookmark.process("LtGovernorName" + (i == 0 ? "" : i), sysAdminInfo.LtGovernorName, Document);
             processBookmark.process("SerbAddress" + (i == 0 ? "" : i), serbAddress, Document);
             processBookmark.process("SerbCityStateZip" + (i == 0 ? "" : i), serbCityStateZip, Document);
+            processBookmark.process("SerbURL" + (i == 0 ? "" : i), sysAdminInfo.Url, Document);
+            
+            processBookmark.process("SerbPhone" + (i == 0 ? "" : i), sysAdminInfo.Phone, Document);
+            processBookmark.process("SerbFooter" + (i == 0 ? "" : i), sysAdminInfo.Footer, Document);
+            processBookmark.process("SerbFax" + (i == 0 ? "" : i), sysAdminInfo.Fax, Document);
             
             //Made up stuff
             processBookmark.process("TODAYSDATE" + (i == 0 ? "" : i), Global.MMMMddyyyy.format(new Date()), Document);
