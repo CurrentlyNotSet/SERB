@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import parker.serb.Global;
 import parker.serb.login.Password;
 import parker.serb.util.NumberFormatService;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -71,7 +72,7 @@ public class User {
             stmt.executeUpdate(sql);
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+        }
     }
     
     public static void createUser(User user) {
@@ -102,6 +103,7 @@ public class User {
             
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex.getMessage());
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
         } 
     }
