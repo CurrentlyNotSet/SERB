@@ -1070,10 +1070,13 @@ public class RootPanel extends javax.swing.JFrame {
         switch(Global.activeSection) {
             case "REP":
                 new REPLetterDialog((JFrame) this.getRootPane().getParent(), true);
+                break;
             case "ULP":
                 new ULPLetterDialog((JFrame) this.getRootPane().getParent(), true);
+                break;
             case "ORG":
                 new ORGAllLettersPanel((JFrame) this.getRootPane().getParent(), true);
+                break;
             default:
                 break;
         }
