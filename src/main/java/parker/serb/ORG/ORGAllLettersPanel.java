@@ -34,8 +34,8 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         setDefaults();
-        this.setLocationRelativeTo(parent);
-        this.setVisible(true);
+        setLocationRelativeTo(parent);
+        setVisible(true);
     }
     
     private void setDefaults(){
@@ -44,6 +44,7 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
         enableGenerateButton();
     }
     
+    //TODO: CLean this up so they all work for macOS
     private void setColumnSize() {        
         //ID
         jTable1.getColumnModel().getColumn(0).setMinWidth(0);
@@ -170,11 +171,11 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
             }
             
             model.addRow(new Object[]{
-                item.id,        //id
-                item.orgNumber, //org Number
-                item.orgName,   //org Name
-                orgVia,         //org via
-                repVia,         //rep via
+                item.id,                                    //id
+                item.orgNumber,                             //org Number
+                item.orgName,                               //org Name
+                orgVia,                                     //org via
+                repVia,                                     //rep via
                 Global.mmddyyyy.format(item.annualReport),  //AR Last
                 Global.mmddyyyy.format(item.financialReport)//FS Last
             });
@@ -182,8 +183,10 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
         
         NumberOfOrgsTextField.setText(letterComboBox.getSelectedItem().toString().equals("") 
                 ? "" : String.valueOf(orgCaseList.size()));
+        
         PostalMailTextField.setText(letterComboBox.getSelectedItem().toString().equals("") 
                 ? "" : String.valueOf(postalNumber));
+        
         EMailTextField.setText(letterComboBox.getSelectedItem().toString().equals("") 
                 ? "" : String.valueOf(EmailNumber));
     }
