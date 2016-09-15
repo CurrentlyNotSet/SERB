@@ -121,8 +121,8 @@ public class MEDCase {
     
     //strike informatin
     public Timestamp strikeFileDate;
-    public String strikeCaseNumber;
-    public String medCaseNumber;
+//    public String strikeCaseNumber;
+//    public String medCaseNumber;
     public String description;
     public String unitSize;
     public boolean unauthorizedStrike;
@@ -582,8 +582,8 @@ public class MEDCase {
             
             String sql = "Select"
                     + " strikeFileDate,"
-                    + " strikeCaseNumber,"
-                    + " medCaseNumber,"
+                    + " relatedCaseNumber,"
+//                    + " medCaseNumber,"
                     + " unitDescription,"
                     + " unitSize,"
                     + " unauthorizedStrike,"
@@ -617,8 +617,8 @@ public class MEDCase {
                 med = new MEDCase();
                 
                 med.strikeFileDate = caseInformation.getTimestamp("strikeFileDate");
-                med.strikeCaseNumber = caseInformation.getString("strikeCaseNumber");
-                med.medCaseNumber = caseInformation.getString("medCaseNumber");
+                med.relatedCaseNumber = caseInformation.getString("relatedCaseNumber");
+//                med.medCaseNumber = caseInformation.getString("medCaseNumber");
                 med.description = caseInformation.getString("unitDescription");
                 med.unitSize = caseInformation.getString("unitSize");
                 med.unauthorizedStrike = caseInformation.getBoolean("unauthorizedStrike");
@@ -649,8 +649,8 @@ public class MEDCase {
             
             String sql = "Update MEDCase Set"
                     + " strikeFileDate = ?,"
-                    + " strikeCaseNumber = ?,"
-                    + " medCaseNumber = ?,"
+                    + " relatedCaseNumber = ?,"
+//                    + " medCaseNumber = ?,"
                     + " unitDescription = ?,"
                     + " unitSize = ? ,"
                     + " unauthorizedStrike = ?,"
@@ -674,28 +674,28 @@ public class MEDCase {
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setTimestamp(1, newCaseInformation.strikeFileDate);
-            preparedStatement.setString(2, newCaseInformation.strikeCaseNumber);
-            preparedStatement.setString(3, newCaseInformation.medCaseNumber);
-            preparedStatement.setString(4, newCaseInformation.description);
-            preparedStatement.setString(5, newCaseInformation.unitSize);
-            preparedStatement.setBoolean(6, newCaseInformation.unauthorizedStrike);
-            preparedStatement.setBoolean(7, newCaseInformation.noticeOfIntentToStrikeOnly);
-            preparedStatement.setTimestamp(8, newCaseInformation.intendedDateStrike);
-            preparedStatement.setBoolean(9, newCaseInformation.noticeOfIntentToPicketOnly);
-            preparedStatement.setTimestamp(10, newCaseInformation.intendedDatePicket);
-            preparedStatement.setBoolean(11, newCaseInformation.informational);
-            preparedStatement.setBoolean(12, newCaseInformation.noticeOfIntentToStrikeAndPicket);
-            preparedStatement.setString(13, newCaseInformation.strikeOccured);
-            preparedStatement.setString(14, newCaseInformation.strikeStatus);
-            preparedStatement.setTimestamp(15, newCaseInformation.strikeBegan);
-            preparedStatement.setTimestamp(16, newCaseInformation.strikeEnded);
-            preparedStatement.setString(17, newCaseInformation.totalNumberOfDays);
-            preparedStatement.setString(18, newCaseInformation.strikeMediatorAppointedID);
-            preparedStatement.setString(19, newCaseInformation.strikeNotes);
-            preparedStatement.setString(20, Global.caseYear);
-            preparedStatement.setString(21, Global.caseType);
-            preparedStatement.setString(22, Global.caseMonth);
-            preparedStatement.setString(23, Global.caseNumber);
+            preparedStatement.setString(2, newCaseInformation.relatedCaseNumber);
+//            preparedStatement.setString(3, newCaseInformation.medCaseNumber);
+            preparedStatement.setString(3, newCaseInformation.description);
+            preparedStatement.setString(4, newCaseInformation.unitSize);
+            preparedStatement.setBoolean(5, newCaseInformation.unauthorizedStrike);
+            preparedStatement.setBoolean(6, newCaseInformation.noticeOfIntentToStrikeOnly);
+            preparedStatement.setTimestamp(7, newCaseInformation.intendedDateStrike);
+            preparedStatement.setBoolean(8, newCaseInformation.noticeOfIntentToPicketOnly);
+            preparedStatement.setTimestamp(9, newCaseInformation.intendedDatePicket);
+            preparedStatement.setBoolean(10, newCaseInformation.informational);
+            preparedStatement.setBoolean(11, newCaseInformation.noticeOfIntentToStrikeAndPicket);
+            preparedStatement.setString(12, newCaseInformation.strikeOccured);
+            preparedStatement.setString(13, newCaseInformation.strikeStatus);
+            preparedStatement.setTimestamp(14, newCaseInformation.strikeBegan);
+            preparedStatement.setTimestamp(15, newCaseInformation.strikeEnded);
+            preparedStatement.setString(16, newCaseInformation.totalNumberOfDays);
+            preparedStatement.setString(17, newCaseInformation.strikeMediatorAppointedID);
+            preparedStatement.setString(18, newCaseInformation.strikeNotes);
+            preparedStatement.setString(19, Global.caseYear);
+            preparedStatement.setString(20, Global.caseType);
+            preparedStatement.setString(21, Global.caseMonth);
+            preparedStatement.setString(22, Global.caseNumber);
 
             int success = preparedStatement.executeUpdate();
             
@@ -1798,15 +1798,15 @@ public class MEDCase {
                 Activity.addActivty("Changed Strike File Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.strikeFileDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.strikeFileDate.getTime())), null);
         }
         
-        //strike case number
-//        if(newCaseInformation.strikeCaseNumber == null && oldCaseInformation.strikeCaseNumber != null) {
-//            Activity.addActivty("Removed " + oldCaseInformation.strikeCaseNumber + " from Strike Case Number", null);
-//        } else if(newCaseInformation.strikeCaseNumber != null && oldCaseInformation.strikeCaseNumber == null) {
-//            Activity.addActivty("Set Strike Case Number to " + newCaseInformation.strikeCaseNumber, null);
-//        } else if(newCaseInformation.strikeCaseNumber != null && oldCaseInformation.strikeCaseNumber != null) {
-//            if(!newCaseInformation.strikeCaseNumber.equals(oldCaseInformation.strikeCaseNumber)) 
-//                Activity.addActivty("Changed Strike Case Number from " + oldCaseInformation.strikeCaseNumber + " to " + newCaseInformation.strikeCaseNumber, null);
-//        }
+        //related Case Number
+        if(newCaseInformation.relatedCaseNumber == null && oldCaseInformation.relatedCaseNumber != null) {
+            Activity.addActivty("Removed " + oldCaseInformation.relatedCaseNumber + " from Related Case Number", null);
+        } else if(newCaseInformation.relatedCaseNumber != null && oldCaseInformation.relatedCaseNumber == null) {
+            Activity.addActivty("Set Related Case Number to " + newCaseInformation.relatedCaseNumber, null);
+        } else if(newCaseInformation.relatedCaseNumber != null && oldCaseInformation.relatedCaseNumber != null) {
+            if(!newCaseInformation.relatedCaseNumber.equals(oldCaseInformation.relatedCaseNumber)) 
+                Activity.addActivty("Changed Related Case Number from " + oldCaseInformation.relatedCaseNumber + " to " + newCaseInformation.relatedCaseNumber, null);
+        }
         
         //med case number
 //        if(newCaseInformation.medCaseNumber == null && oldCaseInformation.medCaseNumber != null) {
@@ -2298,8 +2298,8 @@ public class MEDCase {
                 med.motion = rs.getBoolean("motion");
                 med.dismissed = rs.getBoolean("dismissed");
                 med.strikeFileDate = rs.getTimestamp("strikeFileDate");
-                med.strikeCaseNumber = rs.getString("strikeCaseNumber");
-                med.medCaseNumber = rs.getString("medCaseNumber");
+//                med.strikeCaseNumber = rs.getString("strikeCaseNumber");
+//                med.medCaseNumber = rs.getString("medCaseNumber");
                 med.description = rs.getString("description");
                 med.unitSize = rs.getString("unitSize");
                 med.unauthorizedStrike = rs.getBoolean("unauthorizedStrike");

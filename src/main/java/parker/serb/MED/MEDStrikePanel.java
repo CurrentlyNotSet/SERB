@@ -6,14 +6,12 @@
 package parker.serb.MED;
 
 import com.alee.extended.date.WebDateField;
-import com.alee.utils.swing.DocumentChangeListener;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -102,7 +100,8 @@ public class MEDStrikePanel extends javax.swing.JPanel {
         strikeFileDateTextBox.setEnabled(true);
         strikeFileDateTextBox.setBackground(Color.white);
         //skip med case number
-//        medCaseNumberTextBox.setEnabled(true); //remove ability to edit per Andrew
+        relatedCaseNumberTextBox.setEnabled(true);
+        relatedCaseNumberTextBox.setBackground(Color.white);
 //        medCaseNumberTextBox.setBackground(Color.white); //remove ability to edit per Andrew
         descriptionTextBox.setEnabled(true);
         descriptionTextBox.setBackground(Color.white);
@@ -138,7 +137,8 @@ public class MEDStrikePanel extends javax.swing.JPanel {
         strikeFileDateTextBox.setEnabled(false);
         strikeFileDateTextBox.setBackground(new Color(238,238,238));
         //skip med case number
-//        medCaseNumberTextBox.setEnabled(false); //remove ability to edit per Andrew
+        relatedCaseNumberTextBox.setEnabled(false); //remove ability to edit per Andrew
+        relatedCaseNumberTextBox.setBackground(new Color(238,238,238));
 //        medCaseNumberTextBox.setBackground(Color.white); //remove ability to edit per Andrew
         descriptionTextBox.setEnabled(false);
         descriptionTextBox.setBackground(new Color(238,238,238));
@@ -193,8 +193,8 @@ public class MEDStrikePanel extends javax.swing.JPanel {
         orginalInformation = MEDCase.loadStrikeInformation();
         
         strikeFileDateTextBox.setText(orginalInformation.strikeFileDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.strikeFileDate.getTime())) : "");
-        strikeCaseNumberTextBox.setText(orginalInformation.strikeCaseNumber != null ? orginalInformation.strikeCaseNumber : "");
-        medCaseNumberTextBox.setText(orginalInformation.medCaseNumber != null ? orginalInformation.medCaseNumber : "");
+        relatedCaseNumberTextBox.setText(orginalInformation.relatedCaseNumber != null ? orginalInformation.relatedCaseNumber : "");
+//        medCaseNumberTextBox.setText(orginalInformation.medCaseNumber != null ? orginalInformation.medCaseNumber : "");
         descriptionTextBox.setText(orginalInformation.description != null ? orginalInformation.description : "");
         unitSizeTextBox.setText(orginalInformation.unitSize != null ? orginalInformation.unitSize : "");
         unauthorizedStrikeCheckBox.setSelected(orginalInformation.unauthorizedStrike == true);
@@ -218,8 +218,8 @@ public class MEDStrikePanel extends javax.swing.JPanel {
         MEDCase newCaseInformation = new MEDCase();
         
         newCaseInformation.strikeFileDate = strikeFileDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(strikeFileDateTextBox.getText()));
-        newCaseInformation.strikeCaseNumber = strikeCaseNumberTextBox.getText().equals("") ? null : strikeCaseNumberTextBox.getText();
-        newCaseInformation.medCaseNumber = medCaseNumberTextBox.getText().equals("") ? null : medCaseNumberTextBox.getText();
+        newCaseInformation.relatedCaseNumber = relatedCaseNumberTextBox.getText().equals("") ? null : relatedCaseNumberTextBox.getText();
+//        newCaseInformation.medCaseNumber = medCaseNumberTextBox.getText().equals("") ? null : medCaseNumberTextBox.getText();
         newCaseInformation.description = descriptionTextBox.getText().equals("") ? null : descriptionTextBox.getText();
         newCaseInformation.unitSize = unitSizeTextBox.getText().equals("") ? null : unitSizeTextBox.getText();
         newCaseInformation.unauthorizedStrike = unauthorizedStrikeCheckBox.isSelected();
@@ -244,8 +244,8 @@ public class MEDStrikePanel extends javax.swing.JPanel {
     
     public void clearAll() {
         strikeFileDateTextBox.setText("");
-        strikeCaseNumberTextBox.setText("");
-        medCaseNumberTextBox.setText("");
+        relatedCaseNumberTextBox.setText("");
+//        relatedCaseNumberTextBox.setText("");
         descriptionTextBox.setText("");
         unitSizeTextBox.setText("");
         unauthorizedStrikeCheckBox.setSelected(false);
@@ -300,15 +300,13 @@ public class MEDStrikePanel extends javax.swing.JPanel {
         intendedDatePicketTextBox = new com.alee.extended.date.WebDateField();
         noticeOfIntentToStrikeAndPicketCheckBox = new javax.swing.JCheckBox();
         jLabel9 = new javax.swing.JLabel();
-        medCaseNumberTextBox = new javax.swing.JTextField();
         descriptionTextBox = new javax.swing.JTextField();
         intendedDateStrikeTextBox = new com.alee.extended.date.WebDateField();
         jLabel10 = new javax.swing.JLabel();
         noticeOfIntentToStrikeOnlyCheckBox = new javax.swing.JCheckBox();
-        jLabel3 = new javax.swing.JLabel();
         unitSizeTextBox = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        strikeCaseNumberTextBox = new javax.swing.JTextField();
+        relatedCaseNumberTextBox = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
@@ -329,7 +327,7 @@ public class MEDStrikePanel extends javax.swing.JPanel {
 
         jLabel5.setText("Unit Size:");
 
-        jLabel2.setText("Strike Case Number:");
+        jLabel2.setText("Related Case Number:");
 
         informationCheckBox.setEnabled(false);
 
@@ -380,10 +378,6 @@ public class MEDStrikePanel extends javax.swing.JPanel {
 
         jLabel9.setText("Informational:");
 
-        medCaseNumberTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        medCaseNumberTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        medCaseNumberTextBox.setEnabled(false);
-
         descriptionTextBox.setBackground(new java.awt.Color(238, 238, 238));
         descriptionTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         descriptionTextBox.setEnabled(false);
@@ -404,17 +398,20 @@ public class MEDStrikePanel extends javax.swing.JPanel {
 
         noticeOfIntentToStrikeOnlyCheckBox.setEnabled(false);
 
-        jLabel3.setText("MED Case Number:");
-
         unitSizeTextBox.setBackground(new java.awt.Color(238, 238, 238));
         unitSizeTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         unitSizeTextBox.setEnabled(false);
 
         jLabel7.setText("Notice of Intent to Strike Only:");
 
-        strikeCaseNumberTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        strikeCaseNumberTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        strikeCaseNumberTextBox.setEnabled(false);
+        relatedCaseNumberTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        relatedCaseNumberTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        relatedCaseNumberTextBox.setEnabled(false);
+        relatedCaseNumberTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                relatedCaseNumberTextBoxMouseClicked(evt);
+            }
+        });
 
         jLabel8.setText("Notice of Intent to Picket Only:");
 
@@ -432,7 +429,6 @@ public class MEDStrikePanel extends javax.swing.JPanel {
                     .addComponent(jLabel6)
                     .addComponent(jLabel5)
                     .addComponent(jLabel4)
-                    .addComponent(jLabel3)
                     .addComponent(jLabel2)
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -440,27 +436,31 @@ public class MEDStrikePanel extends javax.swing.JPanel {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(unauthorizedStrikeCheckBox)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(unitSizeTextBox, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(unitSizeTextBox)
+                            .addComponent(strikeFileDateTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(relatedCaseNumberTextBox, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(descriptionTextBox)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(noticeOfIntentToStrikeOnlyCheckBox)
+                                    .addComponent(noticeOfIntentToPicketOnlyCheckBox))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel12)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(intendedDatePicketTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel11)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(intendedDateStrikeTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE))))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(noticeOfIntentToStrikeOnlyCheckBox)
-                                    .addComponent(noticeOfIntentToPicketOnlyCheckBox)
-                                    .addComponent(informationCheckBox)
-                                    .addComponent(noticeOfIntentToStrikeAndPicketCheckBox))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel11)
-                                    .addComponent(jLabel12))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(intendedDateStrikeTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)
-                                    .addComponent(intendedDatePicketTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addComponent(strikeFileDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(strikeCaseNumberTextBox)
-                            .addComponent(medCaseNumberTextBox, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(descriptionTextBox, javax.swing.GroupLayout.Alignment.LEADING))
+                                    .addComponent(noticeOfIntentToStrikeAndPicketCheckBox)
+                                    .addComponent(informationCheckBox))
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addContainerGap())))
         );
         jPanel1Layout.setVerticalGroup(
@@ -473,46 +473,43 @@ public class MEDStrikePanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(strikeCaseNumberTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(relatedCaseNumberTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(medCaseNumberTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(descriptionTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(descriptionTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(unitSizeTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(unauthorizedStrikeCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(intendedDateStrikeTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(noticeOfIntentToStrikeOnlyCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(noticeOfIntentToPicketOnlyCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel12)
-                        .addComponent(intendedDatePicketTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(informationCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(unitSizeTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(noticeOfIntentToStrikeAndPicketCheckBox)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(unauthorizedStrikeCheckBox))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(intendedDateStrikeTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel11))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(noticeOfIntentToStrikeOnlyCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel12)
+                        .addComponent(intendedDatePicketTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(noticeOfIntentToPicketOnlyCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(informationCheckBox))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(noticeOfIntentToStrikeAndPicketCheckBox))
+                .addContainerGap(38, Short.MAX_VALUE))
         );
 
         jLabel13.setText("Strike Occured:");
@@ -679,6 +676,22 @@ public class MEDStrikePanel extends javax.swing.JPanel {
         clearDate(intendedDatePicketTextBox, evt);
     }//GEN-LAST:event_intendedDatePicketTextBoxMouseClicked
 
+    private void relatedCaseNumberTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_relatedCaseNumberTextBoxMouseClicked
+        if(relatedCaseNumberTextBox.isEnabled()) {
+            if(evt.getButton() == MouseEvent.BUTTON3) {
+                MEDClearCaseDialog clear = new MEDClearCaseDialog((JFrame) Global.root.getRootPane().getParent(), true);
+                if(clear.reset) {
+                    relatedCaseNumberTextBox.setText("");
+                }
+                clear.dispose();
+            } else if(evt.getClickCount() == 2) {
+                MEDAddRelatedCaseDialog related = new MEDAddRelatedCaseDialog((JFrame) Global.root.getRootPane().getParent(), true);
+                relatedCaseNumberTextBox.setText(related.getRelatedCase());
+                related.dispose();
+            }
+        }
+    }//GEN-LAST:event_relatedCaseNumberTextBoxMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField descriptionTextBox;
@@ -697,7 +710,6 @@ public class MEDStrikePanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -707,13 +719,12 @@ public class MEDStrikePanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField medCaseNumberTextBox;
     private javax.swing.JComboBox<String> mediatorAppointedComboBox;
     private javax.swing.JCheckBox noticeOfIntentToPicketOnlyCheckBox;
     private javax.swing.JCheckBox noticeOfIntentToStrikeAndPicketCheckBox;
     private javax.swing.JCheckBox noticeOfIntentToStrikeOnlyCheckBox;
+    private javax.swing.JTextField relatedCaseNumberTextBox;
     private com.alee.extended.date.WebDateField strikeBeganTextBox;
-    private javax.swing.JTextField strikeCaseNumberTextBox;
     private com.alee.extended.date.WebDateField strikeEndedTextBox;
     private com.alee.extended.date.WebDateField strikeFileDateTextBox;
     private javax.swing.JTextPane strikeNotesTextArea;

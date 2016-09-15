@@ -213,14 +213,17 @@ public class CreateNewCaseDialog extends javax.swing.JDialog {
                     yearComboBox.getSelectedItem().toString(),
                     typeComboBox.getSelectedItem().toString(),
                     monthComboBox.getSelectedItem().toString().substring(0, 2));
+                break;
             case "REP": firstCase =  REPCase.checkIfFristCaseOfMonth(
                     yearComboBox.getSelectedItem().toString(),
                     typeComboBox.getSelectedItem().toString(),
                     monthComboBox.getSelectedItem().toString().substring(0, 2));
+                break;
             case "MED": firstCase =  MEDCase.checkIfFristCaseOfMonth(
                     yearComboBox.getSelectedItem().toString(),
                     typeComboBox.getSelectedItem().toString(),
                     monthComboBox.getSelectedItem().toString().substring(0, 2));
+                break;
             
         }
         
@@ -364,7 +367,6 @@ public class CreateNewCaseDialog extends javax.swing.JDialog {
         if(firstCase) {
             firstCaseOfMonthDialog firstCaseDialog = new firstCaseOfMonthDialog(
                     (JFrame) Global.root.getParent(), true, buildCaseNumber());
-            
             if(firstCaseDialog.isConfirmed()) {
                 createCase();
                 if(!similarCaseComboBox.getSelectedItem().toString().trim().equals("")) {
