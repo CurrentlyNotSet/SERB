@@ -14,6 +14,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
 import parker.serb.boardmeetings.AddULPBoardMeeting;
@@ -31,6 +32,7 @@ import parker.serb.sql.ULPCase;
 import parker.serb.sql.ULPCaseSearchData;
 import parker.serb.sql.ULPRecommendation;
 import parker.serb.sql.User;
+import parker.serb.util.ClearDataDialog;
 import parker.serb.util.ClearDateDialog;
 import parker.serb.util.NumberFormatService;
 
@@ -147,7 +149,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         employerNumberTextBox.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if(e.getClickCount() == 2) {
+                if(e.getClickCount() == 2 && e.getButton() != MouseEvent.BUTTON3) {
                     if(employerNumberTextBox.isEnabled()) {
                         employerSearch search = new employerSearch((JFrame) Global.root.getRootPane().getParent(), true, employerNumberTextBox.getText().trim());
                         employerNumberTextBox.setText(search.getEmployerNumber());
@@ -155,7 +157,9 @@ public class ULPStatusPanel extends javax.swing.JPanel {
                     } else {
                         new employerDetail((JFrame) Global.root.getRootPane().getParent(), true, employerNumberTextBox.getText().trim());
                     }
-                } 
+                } else {
+                    clearData(employerNumberTextBox, e);
+                }
             }
 
             @Override
@@ -464,6 +468,16 @@ public class ULPStatusPanel extends javax.swing.JPanel {
     private void clearDate(WebDateField dateField, MouseEvent evt) {
         if(evt.getButton() == MouseEvent.BUTTON3 && dateField.isEnabled()) {
             ClearDateDialog dialog = new ClearDateDialog((JFrame) Global.root, true);
+            if(dialog.isReset()) {
+                dateField.setText("");
+            }
+            dialog.dispose();
+        }
+    }
+    
+    private void clearData(JTextField dateField, MouseEvent evt) {
+        if(evt.getButton() == MouseEvent.BUTTON3 && dateField.isEnabled()) {
+            ClearDataDialog dialog = new ClearDataDialog((JFrame) Global.root, true);
             if(dialog.isReset()) {
                 dateField.setText("");
             }
@@ -1001,10 +1015,12 @@ public class ULPStatusPanel extends javax.swing.JPanel {
 
                                     jLabel21.setText("BUN Number:");
 
+                                    employerNumberTextBox.setEditable(false);
                                     employerNumberTextBox.setBackground(new java.awt.Color(238, 238, 238));
                                     employerNumberTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
                                     employerNumberTextBox.setEnabled(false);
 
+                                    barginingUnitNoTextBox.setEditable(false);
                                     barginingUnitNoTextBox.setBackground(new java.awt.Color(238, 238, 238));
                                     barginingUnitNoTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
                                     barginingUnitNoTextBox.setEnabled(false);
@@ -1116,7 +1132,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_filedDateTextBoxMouseClicked
 
     private void barginingUnitNoTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_barginingUnitNoTextBoxMouseClicked
-        if(evt.getClickCount() == 2) {
+        if(evt.getClickCount() == 2 && evt.getButton() != MouseEvent.BUTTON3) {
             if(barginingUnitNoTextBox.isEnabled()) {
                 buNumberSearch search = new buNumberSearch((JFrame) Global.root.getRootPane().getParent(), true, employerNumberTextBox.getText().trim(), barginingUnitNoTextBox.getText().trim());
                 barginingUnitNoTextBox.setText(search.getBuNumber());
@@ -1129,6 +1145,8 @@ public class ULPStatusPanel extends javax.swing.JPanel {
             } else {
 //                new employerDetail((JFrame) Global.root.getRootPane().getParent(), true, employerIDNumberTextBox.getText().trim());
             }
+        } else {
+            clearData(barginingUnitNoTextBox, evt);
         }
     }//GEN-LAST:event_barginingUnitNoTextBoxMouseClicked
 

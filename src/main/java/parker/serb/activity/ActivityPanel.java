@@ -85,17 +85,12 @@ public class ActivityPanel extends javax.swing.JPanel {
                 if(e.getClickCount() == 2 && !filePath.equals("") && actvityTable.getSelectedColumn() == 3) {
                     FileService.openFile(filePath);
                 } else if(e.getClickCount() == 2 && actvityTable.getSelectedColumn() != 3) {
-                    if(!actvityTable.getValueAt(actvityTable.getSelectedRow(), 1).toString().startsWith("Removed") &&
-                            !actvityTable.getValueAt(actvityTable.getSelectedRow(), 1).toString().startsWith("Set") &&
-                            !actvityTable.getValueAt(actvityTable.getSelectedRow(), 1).toString().startsWith("Changed"))
-                    {
-                        Audit.addAuditEntry("Viewing Activty Detail for ID: " + actvityTable.getValueAt(actvityTable.getSelectedRow(), 4).toString());
-                        new DetailedActivityDialog((JFrame) Global.root.getRootPane().getParent(),
-                                true,
-                                actvityTable.getValueAt(actvityTable.getSelectedRow(), 4).toString());
-                        searchTextBox.setText("");
-                        loadAllActivity();
-                    }
+                    Audit.addAuditEntry("Viewing Activty Detail for ID: " + actvityTable.getValueAt(actvityTable.getSelectedRow(), 4).toString());
+                    new DetailedActivityDialog((JFrame) Global.root.getRootPane().getParent(),
+                            true,
+                            actvityTable.getValueAt(actvityTable.getSelectedRow(), 4).toString());
+                    searchTextBox.setText("");
+                    loadAllActivity();
                 }
             }
 

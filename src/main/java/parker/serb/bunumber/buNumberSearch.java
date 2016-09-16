@@ -5,21 +5,13 @@
  */
 package parker.serb.bunumber;
 
-import parker.serb.employer.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
-import javax.swing.JFrame;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
-import parker.serb.Global;
-import parker.serb.activity.DetailedActivityDialog;
-import parker.serb.sql.Activity;
-import parker.serb.sql.Audit;
 import parker.serb.sql.BargainingUnit;
-import parker.serb.sql.Employer;
-import parker.serb.util.FileService;
 
 /**
  *
@@ -39,7 +31,6 @@ public class buNumberSearch extends javax.swing.JDialog {
         initComponents();
         addListeners();
         loadInformation(passedBUNumber.equals("") ? empNumber : passedBUNumber);
-        
         setLocationRelativeTo(parent);
         setVisible(true);
     }
