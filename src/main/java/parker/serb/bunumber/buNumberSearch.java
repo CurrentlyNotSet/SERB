@@ -34,11 +34,12 @@ public class buNumberSearch extends javax.swing.JDialog {
     /**
      * Creates new form employerSearch
      */
-    public buNumberSearch(java.awt.Frame parent, boolean modal, String empNumber, String buNumber) {
+    public buNumberSearch(java.awt.Frame parent, boolean modal, String empNumber, String passedBUNumber) {
         super(parent, modal);
         initComponents();
         addListeners();
-        loadInformation(buNumber.equals("") ? empNumber : buNumber);
+        loadInformation(passedBUNumber.equals("") ? empNumber : passedBUNumber);
+        
         setLocationRelativeTo(parent);
         setVisible(true);
     }
