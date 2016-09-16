@@ -56,30 +56,6 @@ public class ULPStatusPanel extends javax.swing.JPanel {
     }
     
     private void addListeners() {
-        barginingUnitNoTextBox.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if(e.getClickCount() == 2) {
-                    if(barginingUnitNoTextBox.isEnabled()) {
-                        System.out.println("DISPLAY UNION SEARCH");
-                    } else {
-                        System.out.println("DISPLAY UNION DETAIL");
-                    }
-                } 
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {}
-
-            @Override
-            public void mouseReleased(MouseEvent e) {}
-
-            @Override
-            public void mouseEntered(MouseEvent e) {}
-
-            @Override
-            public void mouseExited(MouseEvent e) {}
-        });
         
         boardMeetingTable.addMouseListener(new MouseListener() {
             @Override
