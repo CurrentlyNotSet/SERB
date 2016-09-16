@@ -1099,21 +1099,20 @@ public class RootPanel extends javax.swing.JFrame {
                 caseLock = NewCaseLock.checkLock(Global.activeSection);
                 if(caseLock == null) {
                     caseLock.addLock(Global.activeSection);
-                    new CreateNewCaseDialog((JFrame) this.getRootPane().getParent(), true);
+                    new CreateNewCaseDialog(Global.root, true);
                     caseLock.removeLock(Global.activeSection);
                 } else {
-                    new NewCaseLockDialog((JFrame) this.getRootPane().getParent(), true, caseLock);
+                    new NewCaseLockDialog(Global.root, true, caseLock);
                 }
                 break;
             case "ORG":
                 caseLock = NewCaseLock.checkLock(Global.activeSection);
                 if(caseLock == null) {
                     caseLock.addLock(Global.activeSection);
-                    //create new org
-                    new CreateNewOrgDialog((JFrame) this.getRootPane().getParent(), true);
+                    new CreateNewOrgDialog(Global.root, true);
                     caseLock.removeLock(Global.activeSection);
                 } else {
-                    new NewCaseLockDialog((JFrame) this.getRootPane().getParent(), true, caseLock);
+                    new NewCaseLockDialog(Global.root, true, caseLock);
                 }
                 break;
             default:
