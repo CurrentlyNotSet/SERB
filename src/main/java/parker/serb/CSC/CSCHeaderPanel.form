@@ -40,7 +40,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="caseNumberComboBox" pref="234" max="32767" attributes="0"/>
-                      <Component id="employerTextBox" max="32767" attributes="0"/>
+                      <Component id="CSCNumberTextBox" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -59,7 +59,7 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="employerTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="CSCNumberTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="115" max="32767" attributes="0"/>
@@ -72,6 +72,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="CSC Name:"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jLabel11MouseClicked"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JComboBox" name="caseNumberComboBox">
           <Properties>
@@ -91,15 +94,16 @@
             <Property name="text" type="java.lang.String" value="CSC Number:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="employerTextBox">
+        <Component class="javax.swing.JTextField" name="CSCNumberTextBox">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ee" green="ee" red="ee" type="rgb"/>
             </Property>
+            <Property name="focusable" type="boolean" value="false"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="employerTextBoxActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CSCNumberTextBoxActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

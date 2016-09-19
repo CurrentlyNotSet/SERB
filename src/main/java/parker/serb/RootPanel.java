@@ -19,6 +19,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
+import parker.serb.CSC.CSCHeaderPanel;
+import parker.serb.CSC.CSCRootPanel;
 import parker.serb.MED.MEDBulkSendToBoardDialog;
 import parker.serb.MED.MEDBulkSettleCasesDialog;
 import parker.serb.MED.MEDHeaderPanel;
@@ -39,6 +41,7 @@ import parker.serb.login.ExitVerification;
 import parker.serb.publicRecords.fileSelector;
 import parker.serb.sql.DocketLock;
 import parker.serb.sql.NewCaseLock;
+import parker.serb.util.CreateNewCSCDialog;
 import parker.serb.util.CreateNewOrgDialog;
 import parker.serb.util.NewCaseLockDialog;
 import parker.serb.util.ReleaseNotesDialog;
@@ -148,7 +151,7 @@ public class RootPanel extends javax.swing.JFrame {
             case "Civil Service Commission":
                 card.show(jPanel9, "card8");
                 jLabel1.setIcon(new ImageIcon(getClass().getResource("/PBRLOGO.gif")));
-//                rEPHeaderPanel1.loadCases();
+                cSCHeaderPanel1.loadCases();
                 break;  
             case "CMDS":
                 card.show(jPanel9, "card9");
@@ -318,6 +321,31 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton6.setText("Public Records");
                 jButton8.setVisible(false);
                 break;
+            case "Civil Service Commission":
+                jButton1.setSize(dim);
+                jButton1.setMinimumSize(dim);
+                jButton1.setMaximumSize(dim);
+                jButton1.setText("New CSC");
+                jButton1.setEnabled(true);
+                jButton2.setSize(dim);
+                jButton2.setMinimumSize(dim);
+                jButton2.setMaximumSize(dim);
+                jButton2.setVisible(true);
+                jButton2.setText("Update");
+                jButton2.setEnabled(false);
+                jButton3.setSize(dim);
+                jButton3.setVisible(false);
+                jButton3.setText("All Org Letters");
+                jButton4.setVisible(false);
+                jButton4.setText("Single Letter");
+                jButton5.setVisible(false);
+                jButton5.setText("Reports");
+                jButton6.setVisible(false);
+                jButton6.setText("Queue");
+                jButton7.setVisible(false);
+                jButton6.setText("Public Records");
+                jButton8.setVisible(false);
+                break;
         }
     }
     
@@ -442,6 +470,16 @@ public class RootPanel extends javax.swing.JFrame {
     public ORGRootPanel getoRGRootPanel1() {
         return oRGRootPanel1;
     }
+
+    public CSCHeaderPanel getcSCHeaderPanel1() {
+        return cSCHeaderPanel1;
+    }
+
+    public CSCRootPanel getcSCRootPanel1() {
+        return cSCRootPanel1;
+    }
+    
+    
     
     
 
@@ -490,6 +528,7 @@ public class RootPanel extends javax.swing.JFrame {
         jPanel6 = new javax.swing.JPanel();
         mEDRootPanel1 = new parker.serb.MED.MEDRootPanel();
         jPanel10 = new javax.swing.JPanel();
+        cSCRootPanel1 = new parker.serb.CSC.CSCRootPanel();
         jPanel11 = new javax.swing.JPanel();
         jPanel12 = new javax.swing.JPanel();
         jPanel14 = new javax.swing.JPanel();
@@ -794,11 +833,11 @@ public class RootPanel extends javax.swing.JFrame {
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1120, Short.MAX_VALUE)
+            .addComponent(cSCRootPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 681, Short.MAX_VALUE)
+            .addComponent(cSCRootPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 681, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Civil Service Commission", jPanel10);
@@ -1061,6 +1100,9 @@ public class RootPanel extends javax.swing.JFrame {
                 break;
             case "Docketing":
                 docketRootPanel1.delete();
+                break;
+            case "Civil Service Commission":
+                cSCRootPanel1.cscDelete();
             default:
                 break;
         }
@@ -1115,6 +1157,16 @@ public class RootPanel extends javax.swing.JFrame {
                     new NewCaseLockDialog(Global.root, true, caseLock);
                 }
                 break;
+            case "Civil Service Commission":
+                caseLock = NewCaseLock.checkLock("CSC");
+                if(caseLock == null) {
+                    caseLock.addLock("CSC");
+                    new CreateNewCSCDialog(Global.root, true);
+                    caseLock.removeLock("CSC");
+                } else {
+                    new NewCaseLockDialog(Global.root, true, caseLock);
+                }
+                break;
             default:
                 break;
         }
@@ -1138,6 +1190,9 @@ public class RootPanel extends javax.swing.JFrame {
                 break;
             case "ORG":
                 oRGRootPanel1.orgUpdate(jButton2.getText());
+                break;
+            case "Civil Service Commission":
+                cSCRootPanel1.cscUpdate(jButton2.getText());
                 break;
             default:
                 break;
@@ -1211,6 +1266,7 @@ public class RootPanel extends javax.swing.JFrame {
     private javax.swing.JMenuItem adminPanelMenuItem;
     private parker.serb.CMDS.CMDSHeaderPanel cMDSHeaderPanel1;
     private parker.serb.CSC.CSCHeaderPanel cSCHeaderPanel1;
+    private parker.serb.CSC.CSCRootPanel cSCRootPanel1;
     private javax.swing.JMenu caseManagementMenu;
     private parker.serb.companySearch.companySearchPanel companySearchPanel1;
     private parker.serb.docket.DocketRootPanel docketRootPanel;

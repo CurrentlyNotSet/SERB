@@ -24,13 +24,16 @@ public class PartyType {
         List partyTypes = new ArrayList<>();
             
         try {
-
+            
             Statement stmt = Database.connectToDB().createStatement();
-
             String sql = "select type from PartyType where section = ? ORDER BY type ASC";
-
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, Global.activeSection);
+            
+            if(Global.activeSection.equals("Civil Service Commission")) {
+                preparedStatement.setString(1, "CSC");
+            } else {
+                preparedStatement.setString(1, Global.activeSection);
+            }
 
             ResultSet partyTypeRS = preparedStatement.executeQuery();
             
