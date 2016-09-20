@@ -368,10 +368,12 @@ public class CSCCase {
                 org.fiscalYearEnding = caseInformation.getString("fiscalYearEnding");
                 org.lastNotification = caseInformation.getString("lastNotification");
                 org.previousFileDate = caseInformation.getTimestamp("previousFileDate");
+                org.activityLastFiled = caseInformation.getTimestamp("activityLastFiled");
                 org.dueDate = caseInformation.getString("dueDate");
                 org.filed = caseInformation.getTimestamp("filed");
                 org.valid = caseInformation.getBoolean("valid");
                 org.county = caseInformation.getString("county");
+                org.statutory = caseInformation.getBoolean("statutory");
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex.getMessage());

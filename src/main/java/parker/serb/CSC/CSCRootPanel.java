@@ -148,7 +148,7 @@ public class CSCRootPanel extends javax.swing.JPanel {
                     Global.root.enableTabsAfterSave();
                     Global.root.enableButtonsAfterCancel();
                     cSCInformationPanel1.disableUpdate(true);
-                    Global.root.getoRGHeaderPanel2().loadUpdatedHeaderInformation();
+//                    Global.root.getoRGHeaderPanel2().loadUpdatedHeaderInformation();
                 }
                 break;
             case "Notes":

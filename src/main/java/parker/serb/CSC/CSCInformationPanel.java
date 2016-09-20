@@ -236,7 +236,7 @@ public class CSCInformationPanel extends javax.swing.JPanel {
         newInformation.cscEmployerID = employerIDTextBox.getText().trim().equals("") ? null : employerIDTextBox.getText().split("-")[0].trim();
         newInformation.address1 = cscAddress1TextBox.getText().trim().equals("") ? null : NumberFormatService.convertPhoneNumberToString(cscAddress1TextBox.getText());
         newInformation.address2 = cscAddress2TextBox.getText().trim().equals("") ? null : NumberFormatService.convertPhoneNumberToString(cscAddress2TextBox.getText());
-        newInformation.city = employerIDTextBox.getText().trim().equals("") ? null : employerIDTextBox.getText().split("-")[0].trim();
+        newInformation.city = cscCityTextBox.getText().trim().equals("") ? null : cscCityTextBox.getText().trim();
         newInformation.state = cscStateComboBox.getSelectedItem().toString().trim().equals("") ? null : cscStateComboBox.getSelectedItem().toString();
         newInformation.zipCode = cscZipTextBox.getText().trim().equals("") ? null : cscZipTextBox.getText().trim();
         newInformation.phone1 = cscPhone1TextBox.getText().trim().equals("") ? null : NumberFormatService.convertPhoneNumberToString(cscPhone1TextBox.getText());
@@ -287,7 +287,7 @@ public class CSCInformationPanel extends javax.swing.JPanel {
         activitiesLastFiledTextBox.setText(orginalInformation.activityLastFiled != null ? Global.mmddyyyy.format(new Date(orginalInformation.activityLastFiled.getTime())) : "");
         previousFileDateTextBox.setText(orginalInformation.previousFileDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.previousFileDate.getTime())) : "");
         charterComboBox.setSelectedItem(orginalInformation.charter != null ? orginalInformation.charter : "");
-        lastNotificationTextBox.setText(orginalInformation.previousFileDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.previousFileDate.getTime())) : "");
+        lastNotificationTextBox.setText(orginalInformation.lastNotification != null ? orginalInformation.lastNotification : "");
         statutoryCheckBox.setSelected(orginalInformation.statutory == true);
         validCheckBox.setSelected(orginalInformation.valid == true);
     }
@@ -667,7 +667,7 @@ public class CSCInformationPanel extends javax.swing.JPanel {
         previousFileDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
         previousFileDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         previousFileDateTextBox.setEnabled(false);
-        activitiesLastFiledTextBox.setDateFormat(Global.mmddyyyy);
+        previousFileDateTextBox.setDateFormat(Global.mmddyyyy);
         previousFileDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 previousFileDateTextBoxMouseClicked(evt);
@@ -852,7 +852,7 @@ public class CSCInformationPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_charterComboBoxActionPerformed
 
     private void previousFileDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_previousFileDateTextBoxMouseClicked
-        // TODO add your handling code here:
+       clearDate(activitiesLastFiledTextBox, evt);
     }//GEN-LAST:event_previousFileDateTextBoxMouseClicked
 
     private void previousFileDateTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_previousFileDateTextBoxActionPerformed
