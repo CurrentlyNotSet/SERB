@@ -26,8 +26,7 @@ public class CSCCase {
     public boolean active;
     public String name;
     public String type; 
-    public String cscNumber; 
-    public String cscEmployerID; 
+    public String cscNumber;  
     public String address1; 
     public String address2; 
     public String city; 
@@ -38,7 +37,7 @@ public class CSCCase {
     public String fax;
     public String email;
     public boolean statutory;
-    public String charter;
+    public boolean charter;
     public String fiscalYearEnding;
     public String lastNotification;
     public Timestamp activityLastFiled;
@@ -57,7 +56,7 @@ public class CSCCase {
             
             Statement stmt = Database.connectToDB().createStatement();
 
-            String sql = "Insert Into CSCCase (name, cscNumber, type) Values (?,?,'Local')";
+            String sql = "Insert Into CSCCase (name, cscNumber, type) Values (?,?,'Municipal')";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, name);
@@ -106,34 +105,6 @@ public class CSCCase {
         }
         return orgNameList;
     }
-    
-//    public static List loadORGNamesAndIDs() {
-//        
-//        List orgNameList = new ArrayList<>();
-//            
-//        try {
-//            Statement stmt = Database.connectToDB().createStatement();
-//
-//            String sql = "Select "
-//                    + " orgName, orgNumber" 
-//                    + " from ORGCase"
-//                    + " Order By orgName ASC";
-//
-//            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-//
-//            ResultSet caseNumberRS = preparedStatement.executeQuery();
-//            
-//            while(caseNumberRS.next()) {
-//                CSCCase org = new CSCCase();
-//                org.orgName = caseNumberRS.getString("orgName") != null ? caseNumberRS.getString("orgName") : "";
-//                org.orgNumber = caseNumberRS.getString("orgNumber") != null ? caseNumberRS.getString("orgNumber") : "";
-//                orgNameList.add(org);
-//            }
-//        } catch (SQLException ex) {
-//            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        return orgNameList;
-//    }
     
     public static List getCaseSearchData() {
         
@@ -244,45 +215,6 @@ public class CSCCase {
     }
     
     /**
-     * Creates a new REPCase entry
-     * @param caseNumber the case number to be created 
-     */
-//    public static void createCase(String caseYear, String caseType, String caseMonth, String caseNumber) {
-//        try {
-//            Statement stmt = Database.connectToDB().createStatement();
-//
-//            String sql = "Insert into MEDCase (CaseYear, CaseType, CaseMonth, CaseNumber, FileDate, caseStatus) Values (?,?,?,?,?,'Open')";
-//
-//            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-//            preparedStatement.setString(1, caseYear);
-//            preparedStatement.setString(2, caseType);
-//            preparedStatement.setString(3, caseMonth);
-//            preparedStatement.setString(4, caseNumber);
-//            preparedStatement.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
-//
-//            int success = preparedStatement.executeUpdate();
-//            
-//            if(success == 1) {
-//                String fullCaseNumber = caseYear
-//                        + "-"
-//                        + caseType
-//                        + "-"
-//                        + caseMonth
-//                        + "-"
-//                        + caseNumber;
-//                        
-//                CaseNumber.updateNextCaseNumber(caseYear, caseType, String.valueOf(Integer.valueOf(caseNumber) + 1));
-//                Audit.addAuditEntry("Created Case: " + fullCaseNumber);
-//                Activity.addNewCaseActivty(fullCaseNumber, "Case was Filed and Started");
-//                Global.root.getmEDHeaderPanel1().loadCases();
-//                Global.root.getmEDHeaderPanel1().getjComboBox2().setSelectedItem(fullCaseNumber); 
-//            }
-//        } catch (SQLException ex) {
-//            SlackNotification.sendNotification(ex.getMessage());
-//        }
-//    }
-    
-    /**
      * Load information that is to be displayed in the header.  Dates are
      * formatted before being returned
      * @return a REPCase instance with the needed values
@@ -321,7 +253,6 @@ public class CSCCase {
                     + " alsoKnownAs,"
                     + " type,"
                     + " cscNumber,"
-                    + " cscEmployerID,"
                     + " address1,"
                     + " address2,"
                     + " city,"
@@ -354,7 +285,6 @@ public class CSCCase {
                 org.alsoKnownAs = caseInformation.getString("alsoKnownAs");
                 org.type = caseInformation.getString("type");
                 org.cscNumber = caseInformation.getString("cscNumber");
-                org.cscEmployerID = caseInformation.getString("cscEmployerID");
                 org.address1 = caseInformation.getString("address1");
                 org.address2 = caseInformation.getString("address2");
                 org.city = caseInformation.getString("city");
@@ -364,7 +294,7 @@ public class CSCCase {
                 org.phone2 = caseInformation.getString("phone2");
                 org.fax = caseInformation.getString("fax");
                 org.email = caseInformation.getString("email");
-                org.charter = caseInformation.getString("charter");
+                org.charter = caseInformation.getBoolean("charter");
                 org.fiscalYearEnding = caseInformation.getString("fiscalYearEnding");
                 org.lastNotification = caseInformation.getString("lastNotification");
                 org.previousFileDate = caseInformation.getTimestamp("previousFileDate");
@@ -381,122 +311,6 @@ public class CSCCase {
         return org;
     }
     
-//    public static List<CSCCase> getOrgCasesAllLettersDefault(){
-//        List orgLettersList = new ArrayList<>();
-//            
-//        try {
-//            Statement stmt = Database.connectToDB().createStatement();
-//
-//            String sql = "SELECT * FROM ORGCase WHERE "
-//                    + "registrationReport IS NULL AND "
-//                    + "DATEADD(day, 60, registrationLetterSent ) <= getDATE()";
-//            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-//            ResultSet rs = preparedStatement.executeQuery();
-//            
-//            while(rs.next()) {
-//                CSCCase org = new CSCCase();
-//                org.orgName = rs.getString("orgName");
-//                org.alsoKnownAs = rs.getString("alsoKnownAs");
-//                org.orgNumber = rs.getString("orgNumber");
-//                org.orgType = rs.getString("orgType");
-//                org.orgPhone1 = rs.getString("orgPhone1");
-//                org.orgPhone2 = rs.getString("orgPhone2");
-//                org.orgFax = rs.getString("orgFax");
-//                org.employerID = rs.getString("employerID");
-//                org.orgAddress1 = rs.getString("orgAddress1");
-//                org.orgAddress2 = rs.getString("orgAddress2");
-//                org.orgCity = rs.getString("orgCity");
-//                org.orgState = rs.getString("orgState");
-//                org.orgZip = rs.getString("orgZip");
-//                org.orgCounty = rs.getString("orgCounty");
-//                org.orgEmail = rs.getString("orgEmail");
-//                org.fiscalYearEnding = rs.getString("fiscalYearEnding");
-//                org.annualReport = rs.getTimestamp("annualReport");
-//                org.financialReport = rs.getTimestamp("financialReport");
-//                org.registrationReport = rs.getTimestamp("registrationReport");
-//                org.constructionAndByLaws = rs.getTimestamp("constructionAndByLaws");
-//                org.lastNotification = rs.getString("lastNotification");
-//                org.deemedCertified = rs.getBoolean("deemedCertified");
-//                org.boardCertified = rs.getBoolean("boardCertified");
-//                org.filedByParent = rs.getBoolean("filedByParent");
-//                org.valid = rs.getBoolean("valid");
-//                org.parent1 = rs.getString("parent1");
-//                org.parent2 = rs.getString("parent2");
-//                org.outsideCase = rs.getString("outsideCase");
-//                org.filingDueDate = rs.getString("filingDueDate");
-//                org.dateFiled = rs.getTimestamp("dateFiled");
-////                org.certifiedDate = rs.getTimestamp("certifiedDate");
-//                org.registrationLetterSent = rs.getTimestamp("registrationLetterSent");
-//                org.extensionDate = rs.getTimestamp("extensionDate");
-//                orgLettersList.add(org);
-//            }
-//        } catch (SQLException ex) {
-//            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        return orgLettersList;        
-//    }
-    
-//    public static List<CSCCase> getOrgCasesAllLetters(String month, String date){
-//        List orgLettersList = new ArrayList<>();
-//            
-//        try {
-//            Statement stmt = Database.connectToDB().createStatement();
-//
-//            String sql = "SELECT * FROM ORGCase WHERE "
-//                    + "Active = 1 AND Valid = 1 AND FiledByParent = 0 AND fiscalYearEnding = ? "
-//                    + "AND ( constructionAndByLaws = null OR registrationReport = null "
-//                    + "OR annualReport = null OR annualReport < ? OR financialReport = null "
-//                    + "OR financialReport < ?) Order By orgName ASC";
-//
-//            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-//            preparedStatement.setString(1, month);
-//            preparedStatement.setString(2, date);
-//            preparedStatement.setString(3, date);
-//            ResultSet rs = preparedStatement.executeQuery();
-//            
-//            while(rs.next()) {
-//                CSCCase org = new CSCCase();
-//                org.orgName = rs.getString("orgName");
-//                org.alsoKnownAs = rs.getString("alsoKnownAs");
-//                org.orgNumber = rs.getString("orgNumber");
-//                org.orgType = rs.getString("orgType");
-//                org.orgPhone1 = rs.getString("orgPhone1");
-//                org.orgPhone2 = rs.getString("orgPhone2");
-//                org.orgFax = rs.getString("orgFax");
-//                org.employerID = rs.getString("employerID");
-//                org.orgAddress1 = rs.getString("orgAddress1");
-//                org.orgAddress2 = rs.getString("orgAddress2");
-//                org.orgCity = rs.getString("orgCity");
-//                org.orgState = rs.getString("orgState");
-//                org.orgZip = rs.getString("orgZip");
-//                org.orgCounty = rs.getString("orgCounty");
-//                org.orgEmail = rs.getString("orgEmail");
-//                org.fiscalYearEnding = rs.getString("fiscalYearEnding");
-//                org.annualReport = rs.getTimestamp("annualReport");
-//                org.financialReport = rs.getTimestamp("financialReport");
-//                org.registrationReport = rs.getTimestamp("registrationReport");
-//                org.constructionAndByLaws = rs.getTimestamp("constructionAndByLaws");
-//                org.lastNotification = rs.getString("lastNotification");
-//                org.deemedCertified = rs.getBoolean("deemedCertified");
-//                org.boardCertified = rs.getBoolean("boardCertified");
-//                org.filedByParent = rs.getBoolean("filedByParent");
-//                org.valid = rs.getBoolean("valid");
-//                org.parent1 = rs.getString("parent1");
-//                org.parent2 = rs.getString("parent2");
-//                org.outsideCase = rs.getString("outsideCase");
-//                org.filingDueDate = rs.getString("filingDueDate");
-//                org.dateFiled = rs.getTimestamp("dateFiled");
-////                org.certifiedDate = rs.getTimestamp("certifiedDate");
-//                org.registrationLetterSent = rs.getTimestamp("registrationLetterSent");
-//                org.extensionDate = rs.getTimestamp("extensionDate");
-//                orgLettersList.add(org);
-//            }
-//        } catch (SQLException ex) {
-//            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        return orgLettersList;        
-//    }
-//    
     public static void updateCSCInformation(CSCCase newCaseInformation, CSCCase caseInformation) {
         CSCCase med = null;
         try {
@@ -507,7 +321,6 @@ public class CSCCase {
                     + " alsoKnownAs = ?,"
                     + " type = ?,"
                     + " cscNumber = ?,"
-                    + " cscEmployerID = ?,"
                     + " address1 = ?,"
                     + " address2 = ?,"
                     + " city = ?,"
@@ -534,27 +347,26 @@ public class CSCCase {
             preparedStatement.setString(2, newCaseInformation.alsoKnownAs);
             preparedStatement.setString(3, newCaseInformation.type);
             preparedStatement.setString(4, newCaseInformation.cscNumber);
-            preparedStatement.setString(5, newCaseInformation.cscEmployerID);
-            preparedStatement.setString(6, newCaseInformation.address1);
-            preparedStatement.setString(7, newCaseInformation.address2);
-            preparedStatement.setString(8, newCaseInformation.city);
-            preparedStatement.setString(9, newCaseInformation.state);
-            preparedStatement.setString(10, newCaseInformation.zipCode);
-            preparedStatement.setString(11, newCaseInformation.phone1);
-            preparedStatement.setString(12, newCaseInformation.phone2);
-            preparedStatement.setString(13, newCaseInformation.fax);
-            preparedStatement.setString(14, newCaseInformation.email);
-            preparedStatement.setBoolean(15, newCaseInformation.statutory);
-            preparedStatement.setString(16, newCaseInformation.charter);
-            preparedStatement.setString(17, newCaseInformation.fiscalYearEnding);
-            preparedStatement.setString(18, newCaseInformation.lastNotification);
-            preparedStatement.setTimestamp(19, newCaseInformation.activityLastFiled);
-            preparedStatement.setTimestamp(20, newCaseInformation.previousFileDate);
-            preparedStatement.setString(21, newCaseInformation.dueDate);
-            preparedStatement.setTimestamp(22, newCaseInformation.filed);
-            preparedStatement.setBoolean(23, newCaseInformation.valid);
-            preparedStatement.setString(24, newCaseInformation.county);
-            preparedStatement.setString(25, Global.caseNumber);
+            preparedStatement.setString(5, newCaseInformation.address1);
+            preparedStatement.setString(6, newCaseInformation.address2);
+            preparedStatement.setString(7, newCaseInformation.city);
+            preparedStatement.setString(8, newCaseInformation.state);
+            preparedStatement.setString(9, newCaseInformation.zipCode);
+            preparedStatement.setString(10, newCaseInformation.phone1);
+            preparedStatement.setString(11, newCaseInformation.phone2);
+            preparedStatement.setString(12, newCaseInformation.fax);
+            preparedStatement.setString(13, newCaseInformation.email);
+            preparedStatement.setBoolean(14, newCaseInformation.statutory);
+            preparedStatement.setBoolean(15, newCaseInformation.charter);
+            preparedStatement.setString(16, newCaseInformation.fiscalYearEnding);
+            preparedStatement.setString(17, newCaseInformation.lastNotification);
+            preparedStatement.setTimestamp(18, newCaseInformation.activityLastFiled);
+            preparedStatement.setTimestamp(19, newCaseInformation.previousFileDate);
+            preparedStatement.setString(20, newCaseInformation.dueDate);
+            preparedStatement.setTimestamp(21, newCaseInformation.filed);
+            preparedStatement.setBoolean(22, newCaseInformation.valid);
+            preparedStatement.setString(23, newCaseInformation.county);
+            preparedStatement.setString(24, Global.caseNumber);
 
             int success = preparedStatement.executeUpdate();
             
@@ -636,16 +448,6 @@ public class CSCCase {
         } else if(newCaseInformation.fax != null && oldCaseInformation.fax != null) {
             if(!oldCaseInformation.fax.equals(newCaseInformation.fax))
                 Activity.addActivty("Changed CSC Fax from " + NumberFormatService.convertStringToPhoneNumber(oldCaseInformation.fax) + " to " + NumberFormatService.convertStringToPhoneNumber(newCaseInformation.fax), null);
-        }
-        
-        //employerID
-        if(newCaseInformation.cscEmployerID == null && oldCaseInformation.cscEmployerID != null) {
-            Activity.addActivty("Removed " + oldCaseInformation.cscEmployerID + " from Employer ID", null);
-        } else if(newCaseInformation.cscEmployerID != null && oldCaseInformation.cscEmployerID == null) {
-            Activity.addActivty("Set Employer ID to " + newCaseInformation.cscEmployerID, null);
-        } else if(newCaseInformation.cscEmployerID != null && oldCaseInformation.cscEmployerID != null) {
-            if(!oldCaseInformation.cscEmployerID.equals(newCaseInformation.cscEmployerID))
-                Activity.addActivty("Changed Employer ID from " + oldCaseInformation.cscEmployerID + " to " + newCaseInformation.cscEmployerID, null);
         }
         
         //address1
@@ -769,13 +571,10 @@ public class CSCCase {
         }
         
         //charter
-        if(newCaseInformation.charter == null && oldCaseInformation.charter != null) {
-            Activity.addActivty("Removed " + oldCaseInformation.charter + " from Charter", null);
-        } else if(newCaseInformation.charter != null && oldCaseInformation.charter == null) {
-            Activity.addActivty("Set Charter to " + newCaseInformation.charter, null);
-        } else if(newCaseInformation.charter != null && oldCaseInformation.charter != null) {
-            if(!oldCaseInformation.charter.equals(newCaseInformation.charter))
-                Activity.addActivty("Changed Charter from " + oldCaseInformation.charter + " to " + newCaseInformation.charter, null);
+        if(newCaseInformation.charter == false && oldCaseInformation.charter != false) {
+            Activity.addActivty("Unset Home Rule (Charter)", null);
+        } else if(newCaseInformation.charter != false && oldCaseInformation.charter == false) {
+            Activity.addActivty("Set Home Rule (Charter)", null);
         }
         
         //lastNotifiation
