@@ -7,6 +7,7 @@ package parker.serb.notes;
 
 import java.awt.Color;
 import parker.serb.Global;
+import parker.serb.sql.CSCCase;
 import parker.serb.sql.MEDCase;
 import parker.serb.sql.ORGCase;
 import parker.serb.sql.REPCase;
@@ -57,6 +58,8 @@ public class NotesPanel extends javax.swing.JPanel {
             jTextArea2.setText(MEDCase.loadNote());
         } else if(Global.activeSection.equals("ORG")) {
             jTextArea2.setText(ORGCase.loadNote());
+        } else if(Global.activeSection.equals("Civil Service Commission")) {
+            jTextArea2.setText(CSCCase.loadNote());
         }
         orginalNote = jTextArea2.getText();
     }
@@ -70,6 +73,8 @@ public class NotesPanel extends javax.swing.JPanel {
             MEDCase.updateNote(jTextArea2.getText());
         } else if(Global.activeSection.equals("ORG")) {
             ORGCase.updateNote(jTextArea2.getText());
+        } else if(Global.activeSection.equals("Civil Service Commission")) {
+            CSCCase.updateNote(jTextArea2.getText());
         }
         orginalNote = jTextArea2.getText();
     }

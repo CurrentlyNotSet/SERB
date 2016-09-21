@@ -5,6 +5,7 @@
  */
 package parker.serb.util;
 
+import parker.serb.sql.CSCCase;
 import parker.serb.sql.CaseNumber;
 import parker.serb.sql.ORGCase;
 
@@ -12,12 +13,12 @@ import parker.serb.sql.ORGCase;
  *
  * @author parker
  */
-public class CreateNewOrgDialog extends javax.swing.JDialog {
+public class CreateNewCSCDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form CreateNewCaseDialog
      */
-    public CreateNewOrgDialog(java.awt.Frame parent, boolean modal) {
+    public CreateNewCSCDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         getNextOrgNumber();
@@ -26,11 +27,11 @@ public class CreateNewOrgDialog extends javax.swing.JDialog {
     }
     
     private void getNextOrgNumber() {
-        caseNumberTextBox.setText(CaseNumber.getORGNumber());
+        caseNumberTextBox.setText(CaseNumber.getCSCNumber());
     } 
     
     private void createCase() {
-        ORGCase.createNewOrg(caseNumberTextBox.getText().trim(), jTextField1.getText().trim());
+        CSCCase.createNewCSC(caseNumberTextBox.getText().trim(), jTextField1.getText().trim());
     }
 
     /**
@@ -54,7 +55,7 @@ public class CreateNewOrgDialog extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Create New Organization");
+        jLabel1.setText("Create New Civil Service Commission");
 
         jLabel6.setText("Number:");
 

@@ -237,9 +237,11 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
 
         chargingPartyTextBox.setEditable(false);
         chargingPartyTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        chargingPartyTextBox.setFocusable(false);
 
         chargingPartyREPTextBox.setEditable(false);
         chargingPartyREPTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        chargingPartyREPTextBox.setFocusable(false);
 
         jLabel3.setText("Charged Party:");
 
@@ -247,9 +249,11 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
 
         chargedPartyTextBox.setEditable(false);
         chargedPartyTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        chargedPartyTextBox.setFocusable(false);
 
         chargedPartyREPTextBox.setEditable(false);
         chargedPartyREPTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        chargedPartyREPTextBox.setFocusable(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -304,6 +308,7 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
 
         filedDateTextBox.setEditable(false);
         filedDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        filedDateTextBox.setFocusable(false);
 
         jLabel5.setText("Current Status:");
 
@@ -313,12 +318,15 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
 
         currentStatusTextBox.setEditable(false);
         currentStatusTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        currentStatusTextBox.setFocusable(false);
 
         investigatorTextBox.setEditable(false);
         investigatorTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        investigatorTextBox.setFocusable(false);
 
         ALJTextBox.setEditable(false);
         ALJTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        ALJTextBox.setFocusable(false);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);

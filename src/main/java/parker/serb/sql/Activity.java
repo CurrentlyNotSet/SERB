@@ -212,7 +212,7 @@ public class Activity {
 
             stmt = Database.connectToDB().createStatement();
 
-            if(Global.caseType.equals("ORG")) {
+            if(Global.caseType.equals("ORG") || Global.caseType.equals("CSC")) {
                 String sql = "select Activity.id,"
                     + " caseYear,"
                     + " caseType,"

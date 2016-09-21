@@ -5,15 +5,21 @@
  */
 package parker.serb.CSC;
 
+import parker.serb.ORG.*;
 import parker.serb.REP.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 import parker.serb.Global;
+import parker.serb.ULP.ULPCaseSearch;
 import parker.serb.sql.Audit;
+import parker.serb.sql.CSCCase;
 import parker.serb.sql.CaseParty;
+import parker.serb.sql.ORGCase;
 import parker.serb.sql.Party;
 import parker.serb.sql.REPCase;
 
@@ -25,6 +31,8 @@ import parker.serb.sql.REPCase;
  */
 public class CSCHeaderPanel extends javax.swing.JPanel {
 
+    CSCCaseSearch search = null;
+    
     /**
      * Creates new form REPHeaderPanel
      */
@@ -34,123 +42,88 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
     }
     
     private void addListeners() {
-//        caseNumberComboBox.addActionListener((ActionEvent e) -> {
-//            if(caseNumberComboBox.getSelectedItem() != null) {
-//                Global.root.getrEPRootPanel1().getjTabbedPane1().setSelectedIndex(0);
-//                if(caseNumberComboBox.getSelectedItem().toString().trim().equals("")) {
-//                    if(Global.root != null) {
-//                        Global.root.getjButton2().setText("Update");
-//                        Global.root.getjButton2().setEnabled(false);
-//                        Global.caseNumber = null;
-//                        Global.root.getrEPRootPanel1().clearAll();
-//                    }
-//                } else {
-//                    loadInformation();
-//                    if(Global.root.getrEPRootPanel1().getjTabbedPane1().getSelectedIndex() == 0)
-//                        Global.root.getrEPRootPanel1().getActivityPanel1().loadAllActivity();
-//                    Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
-//                }
-//            }
-//        });
+        caseNumberComboBox.addActionListener((ActionEvent e) -> {
+            if(caseNumberComboBox.getSelectedItem() != null) {
+                Global.root.getcSCRootPanel1().getjTabbedPane1().setSelectedIndex(0);
+                if(caseNumberComboBox.getSelectedItem().toString().trim().equals("")) {
+                    if(Global.root != null) {
+                        Global.root.getjButton2().setText("Update");
+                        Global.root.getjButton2().setEnabled(false);
+                        Global.caseNumber = null;
+                        Global.caseMonth = null;
+                        Global.caseType = null;
+                        Global.caseYear = null;
+                        Global.root.getcSCRootPanel1().clearAll();
+                    }
+                } else {
+                    loadInformation();
+                    if(Global.root.getcSCRootPanel1().getjTabbedPane1().getSelectedIndex() == 0)
+                        Global.root.getcSCRootPanel1().getActivityPanel1().loadAllActivity();
+                    Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
+                }
+            }
+        });
     }
     
     private void loadInformation() {
-//        Global.caseNumber = caseNumberComboBox.getSelectedItem().toString().trim();
-//        loadHeaderInformation();
+        Global.caseYear = null;
+        Global.caseType = "CSC";
+        Global.caseMonth = null;
+        Global.caseNumber = caseNumberComboBox.getSelectedItem().toString().trim();
+        loadHeaderInformation();
     }
     
     public void loadHeaderInformation() {
-//        String employer = "";
-//        String employeeOrg = "";
-//        String incumbentEEO = "";
-//        String rivalEEO = "";
-//        
-//        
-//        if(Global.caseNumber != null) {
-//            REPCase rep = REPCase.loadHeaderInformation();
-//            if(rep == null) {
-//                new REPCaseNotFound((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
-//                caseNumberComboBox.setSelectedItem(Global.caseNumber);
-//            } else {
-//                filedDateTextBox.setText(rep.fileDate != null ? Global.mmddyyyy.format(new Date(rep.fileDate.getTime())) : "");
-//                closedDateTextBox.setText(rep.courtClosedDate != null ? Global.mmddyyyy.format(new Date(rep.courtClosedDate.getTime())) : "");
-//                currentStatusTextBox.setText(rep.status1 != null ? rep.status1 : "");
-//                caseTypeTextBox.setText(rep.caseType != null ? rep.caseType : "");
-//                bargainingUnitTextBox.setText(rep.bargainingUnitNumber != null ? rep.bargainingUnitNumber : "");
-//
-//                List caseParties = CaseParty.loadPartiesByCase();
-//
-//                for(Object caseParty: caseParties) {
-//                    CaseParty partyInformation = (CaseParty) caseParty;
-//
-//                    switch (partyInformation.type) {
-//                        case "Employer":
-//                            if(employer.equals("")) {
-//                                employer += partyInformation.name;
-//                            } else {
-//                                employer += ", " + partyInformation.name;
-//                            }
-//                            break;
-//                        case "Employee Organization":
-//                            if(employeeOrg.equals("")) {
-//                                employeeOrg += partyInformation.name;
-//                            } else {
-//                                employeeOrg += ", " + partyInformation.name;
-//                            }
-//                            break;
-//                        case "Incumbent Employee Organization":
-//                            if(incumbentEEO.equals("")) {
-//                                incumbentEEO += partyInformation.name;
-//                            } else {
-//                                incumbentEEO += ", " + partyInformation.name;
-//                            }
-//                            break;
-//                        case "Rival Employee Organization":
-//                            if(rivalEEO.equals("")) {
-//                                rivalEEO += partyInformation.name;
-//                            } else {
-//                                rivalEEO += ", " + partyInformation.name;
-//                            }
-//                            break;
-//                    }
-//                }
-//                employerTextBox.setText(employer);
-//                employeeOrgTextBox.setText(employeeOrg);
-//                incumbentEEOTextBox.setText(incumbentEEO);
-//                rivalEEOTextBox.setText(rivalEEO);
-//            }
-//        }
+        
+        if(Global.caseNumber != null) {
+            CSCCase csc = CSCCase.loadHeaderInformation();
+            if(csc == null) {
+//                new ORG((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
+                caseNumberComboBox.setSelectedItem(Global.caseNumber);
+            } else {
+                Global.caseNumber = csc.cscNumber != null ? csc.cscNumber : "";
+                Global.caseType = "CSC";
+                CSCNumberTextBox.setText(csc.cscNumber != null ? csc.cscNumber : "");
+            }
+        }
+    }
+    
+    public void loadUpdatedHeaderInformation() {
+        
+        if(Global.caseNumber != null) {
+            Global.caseNumber = CSCCase.getCSCName();
+            CSCCase org = CSCCase.loadHeaderInformation();
+            if(org == null) {
+//                new ORG((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
+                caseNumberComboBox.setSelectedItem(Global.caseNumber);
+            } else {
+                Global.caseNumber = org.cscNumber != null ? org.cscNumber : "";
+                Global.caseType = "CSC";
+                CSCNumberTextBox.setText(org.cscNumber != null ? org.cscNumber : "");
+            }
+        }
     }
     
     public void loadCases() {
         caseNumberComboBox.removeAllItems();
         caseNumberComboBox.addItem("");
 
-        List caseNumberList = REPCase.loadREPCaseNumbers();
+        List caseNumberList = CSCCase.loadCSCNames();
         
         caseNumberList.stream().forEach((caseNumber) -> {
-            caseNumberComboBox.addItem(caseNumber.toString());
+            caseNumberComboBox.addItem(caseNumber);
         });
     }
     
-    /**
-     * 
-     */
     void clearAll() {
-        employerTextBox.setText("");
-//        employeeOrgTextBox.setText("");
-//        incumbentEEOTextBox.setText("");
-//        rivalEEOTextBox.setText("");
-//        closedDateTextBox.setText("");
-//        currentStatusTextBox.setText("");
-//        caseTypeTextBox.setText("");
-//        bargainingUnitTextBox.setText("");
-//        filedDateTextBox.setText("");
+        CSCNumberTextBox.setText("");
     }
 
     public JComboBox getjComboBox2() {
         return caseNumberComboBox;
     }
+    
+    
     
     
     
@@ -168,7 +141,7 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
         jLabel11 = new javax.swing.JLabel();
         caseNumberComboBox = new javax.swing.JComboBox();
         jLabel1 = new javax.swing.JLabel();
-        employerTextBox = new javax.swing.JTextField();
+        CSCNumberTextBox = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
 
         jMenuItem1.setText("jMenuItem1");
@@ -176,17 +149,23 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
         setLayout(new java.awt.GridLayout(1, 0));
 
         jLabel11.setText("CSC Name:");
+        jLabel11.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel11MouseClicked(evt);
+            }
+        });
 
         caseNumberComboBox.setEditable(true);
         caseNumberComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel1.setText("CSC Number:");
 
-        employerTextBox.setEditable(false);
-        employerTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        employerTextBox.addActionListener(new java.awt.event.ActionListener() {
+        CSCNumberTextBox.setEditable(false);
+        CSCNumberTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        CSCNumberTextBox.setFocusable(false);
+        CSCNumberTextBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                employerTextBoxActionPerformed(evt);
+                CSCNumberTextBoxActionPerformed(evt);
             }
         });
 
@@ -202,7 +181,7 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(caseNumberComboBox, 0, 234, Short.MAX_VALUE)
-                    .addComponent(employerTextBox))
+                    .addComponent(CSCNumberTextBox))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -216,7 +195,7 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
                         .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(employerTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(CSCNumberTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
                 .addContainerGap(115, Short.MAX_VALUE))
         );
@@ -237,14 +216,24 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
         add(jPanel2);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void employerTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employerTextBoxActionPerformed
+    private void CSCNumberTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CSCNumberTextBoxActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_employerTextBoxActionPerformed
+    }//GEN-LAST:event_CSCNumberTextBoxActionPerformed
+
+    private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
+        if(SwingUtilities.isRightMouseButton(evt) || evt.getButton() == MouseEvent.BUTTON3) {
+            if(search == null) {
+                search = new CSCCaseSearch(Global.root, true);
+            } else {
+                search.setVisible(true);
+            }
+        }
+    }//GEN-LAST:event_jLabel11MouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField CSCNumberTextBox;
     private javax.swing.JComboBox caseNumberComboBox;
-    private javax.swing.JTextField employerTextBox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JMenuItem jMenuItem1;
