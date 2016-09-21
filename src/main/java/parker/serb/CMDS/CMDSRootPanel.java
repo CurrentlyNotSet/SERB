@@ -70,7 +70,7 @@ public class CMDSRootPanel extends javax.swing.JPanel {
                 partiesPanel1.loadCSCParties();
                 break;
             case "Notes":
-                notesPanel2.loadInformation();
+                cMDSNotesPanel1.loadInformation();
                 break;
         }
     }

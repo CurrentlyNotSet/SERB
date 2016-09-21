@@ -89,7 +89,6 @@ public class ActivityPanel extends javax.swing.JPanel {
                     new DetailedActivityDialog((JFrame) Global.root.getRootPane().getParent(),
                             true,
                             actvityTable.getValueAt(actvityTable.getSelectedRow(), 4).toString());
-                    searchTextBox.setText("");
                     loadAllActivity();
                 }
             }

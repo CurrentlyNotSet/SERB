@@ -20,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import parker.serb.CMDS.CMDSHeaderPanel;
+import parker.serb.CMDS.CMDSRootPanel;
 import parker.serb.CSC.CSCHeaderPanel;
 import parker.serb.CSC.CSCRootPanel;
 import parker.serb.MED.MEDBulkSendToBoardDialog;
@@ -483,6 +484,10 @@ public class RootPanel extends javax.swing.JFrame {
     public CMDSHeaderPanel getcMDSHeaderPanel1() {
         return cMDSHeaderPanel1;
     }
+
+    public CMDSRootPanel getcMDSRootPanel1() {
+        return cMDSRootPanel1;
+    }
     
     
     
@@ -537,6 +542,7 @@ public class RootPanel extends javax.swing.JFrame {
         jPanel10 = new javax.swing.JPanel();
         cSCRootPanel1 = new parker.serb.CSC.CSCRootPanel();
         jPanel11 = new javax.swing.JPanel();
+        cMDSRootPanel1 = new parker.serb.CMDS.CMDSRootPanel();
         jPanel12 = new javax.swing.JPanel();
         jPanel14 = new javax.swing.JPanel();
         companySearchPanel1 = new parker.serb.companySearch.companySearchPanel();
@@ -853,11 +859,11 @@ public class RootPanel extends javax.swing.JFrame {
         jPanel11.setLayout(jPanel11Layout);
         jPanel11Layout.setHorizontalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1120, Short.MAX_VALUE)
+            .addComponent(cMDSRootPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 681, Short.MAX_VALUE)
+            .addComponent(cMDSRootPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 681, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("CMDS", jPanel11);
@@ -1272,6 +1278,7 @@ public class RootPanel extends javax.swing.JFrame {
     private javax.swing.JPanel ULP;
     private javax.swing.JMenuItem adminPanelMenuItem;
     private parker.serb.CMDS.CMDSHeaderPanel cMDSHeaderPanel1;
+    private parker.serb.CMDS.CMDSRootPanel cMDSRootPanel1;
     private parker.serb.CSC.CSCHeaderPanel cSCHeaderPanel1;
     private parker.serb.CSC.CSCRootPanel cSCRootPanel1;
     private javax.swing.JMenu caseManagementMenu;
