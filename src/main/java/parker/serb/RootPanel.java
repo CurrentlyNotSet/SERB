@@ -19,6 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
+import parker.serb.CMDS.CMDSHeaderPanel;
 import parker.serb.CSC.CSCHeaderPanel;
 import parker.serb.CSC.CSCRootPanel;
 import parker.serb.MED.MEDBulkSendToBoardDialog;
@@ -478,6 +479,12 @@ public class RootPanel extends javax.swing.JFrame {
     public CSCRootPanel getcSCRootPanel1() {
         return cSCRootPanel1;
     }
+
+    public CMDSHeaderPanel getcMDSHeaderPanel1() {
+        return cMDSHeaderPanel1;
+    }
+    
+    
     
     
     
