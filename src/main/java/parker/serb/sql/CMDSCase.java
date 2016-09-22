@@ -1783,30 +1783,30 @@ public class CMDSCase {
 //        }
 //    }
 //    
-//    public static List<String> loadRelatedCases() {
-//        
-//        List<String> caseNumberList = new ArrayList<>();
-//            
-//        try {
-//            Statement stmt = Database.connectToDB().createStatement();
-//            
-//            String sql = "Select caseYear, caseType, caseMonth, caseNumber from REPCase  where fileDate between DateAdd(DD,-7,GETDATE()) and GETDATE() Order By caseYear DESC, caseNumber DESC";
-//
-//            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-//            
-//            ResultSet caseNumberRS = preparedStatement.executeQuery();
-//            
-//            while(caseNumberRS.next()) {
-//                caseNumberList.add(caseNumberRS.getString("caseYear") + "-"
-//                    + caseNumberRS.getString("caseType") + "-" 
-//                    + caseNumberRS.getString("caseMonth") + "-"
-//                    + caseNumberRS.getString("caseNumber"));
-//            }
-//        } catch (SQLException ex) {
-//            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        return caseNumberList;
-//    }
+    public static List<String> loadRelatedCases() {
+        
+        List<String> caseNumberList = new ArrayList<>();
+            
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+            
+            String sql = "Select caseYear, caseType, caseMonth, caseNumber from CMDSCase  where openDate between DateAdd(DD,-7,GETDATE()) and GETDATE() Order By caseYear DESC, caseNumber DESC";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            
+            ResultSet caseNumberRS = preparedStatement.executeQuery();
+            
+            while(caseNumberRS.next()) {
+                caseNumberList.add(caseNumberRS.getString("caseYear") + "-"
+                    + caseNumberRS.getString("caseType") + "-" 
+                    + caseNumberRS.getString("caseMonth") + "-"
+                    + caseNumberRS.getString("caseNumber"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return caseNumberList;
+    }
 //    
 //    public static boolean checkIfFristCaseOfMonth(String year, String type, String month) {
 //        boolean firstCase = false;
