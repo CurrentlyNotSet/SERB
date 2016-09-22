@@ -56,7 +56,7 @@ public class CreateNewCaseDialog extends javax.swing.JDialog {
                 relatedCases = MEDCase.loadRelatedCases();
                 break; 
             case "CMDS":
-                relatedCases = CMDSCase.loadRelatedCases();
+//                relatedCases = CMDSCase.loadRelatedCases();
                 break;     
             default:
                 break;
