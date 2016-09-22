@@ -19,6 +19,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
+import parker.serb.CMDS.CMDSHeaderPanel;
+import parker.serb.CMDS.CMDSRootPanel;
 import parker.serb.CSC.CSCHeaderPanel;
 import parker.serb.CSC.CSCRootPanel;
 import parker.serb.MED.MEDBulkSendToBoardDialog;
@@ -156,7 +158,7 @@ public class RootPanel extends javax.swing.JFrame {
             case "CMDS":
                 card.show(jPanel9, "card9");
                 jLabel1.setIcon(new ImageIcon(getClass().getResource("/PBRLOGO.gif")));
-//                rEPHeaderPanel1.loadCases();
+                cMDSHeaderPanel1.loadCases();
                 break;  
             case "Employer Search":
                 card.show(jPanel9, "card2");
@@ -346,6 +348,31 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton6.setText("Public Records");
                 jButton8.setVisible(false);
                 break;
+            case "CMDS":
+                jButton1.setSize(dim);
+                jButton1.setMinimumSize(dim);
+                jButton1.setMaximumSize(dim);
+                jButton1.setText("New Case");
+                jButton1.setEnabled(true);
+                jButton2.setSize(dim);
+                jButton2.setMinimumSize(dim);
+                jButton2.setMaximumSize(dim);
+                jButton2.setVisible(true);
+                jButton2.setText("Update");
+                jButton2.setEnabled(false);
+                jButton3.setSize(dim);
+                jButton3.setVisible(false);
+                jButton3.setText("All Org Letters");
+                jButton4.setVisible(false);
+                jButton4.setText("Single Letter");
+                jButton5.setVisible(false);
+                jButton5.setText("Reports");
+                jButton6.setVisible(false);
+                jButton6.setText("Queue");
+                jButton7.setVisible(false);
+                jButton6.setText("Public Records");
+                jButton8.setVisible(false);
+                break;
         }
     }
     
@@ -478,6 +505,16 @@ public class RootPanel extends javax.swing.JFrame {
     public CSCRootPanel getcSCRootPanel1() {
         return cSCRootPanel1;
     }
+
+    public CMDSHeaderPanel getcMDSHeaderPanel1() {
+        return cMDSHeaderPanel1;
+    }
+
+    public CMDSRootPanel getcMDSRootPanel1() {
+        return cMDSRootPanel1;
+    }
+    
+    
     
     
     
@@ -530,6 +567,7 @@ public class RootPanel extends javax.swing.JFrame {
         jPanel10 = new javax.swing.JPanel();
         cSCRootPanel1 = new parker.serb.CSC.CSCRootPanel();
         jPanel11 = new javax.swing.JPanel();
+        cMDSRootPanel1 = new parker.serb.CMDS.CMDSRootPanel();
         jPanel12 = new javax.swing.JPanel();
         jPanel14 = new javax.swing.JPanel();
         companySearchPanel1 = new parker.serb.companySearch.companySearchPanel();
@@ -846,11 +884,11 @@ public class RootPanel extends javax.swing.JFrame {
         jPanel11.setLayout(jPanel11Layout);
         jPanel11Layout.setHorizontalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1120, Short.MAX_VALUE)
+            .addComponent(cMDSRootPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 681, Short.MAX_VALUE)
+            .addComponent(cMDSRootPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 681, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("CMDS", jPanel11);
@@ -1167,6 +1205,16 @@ public class RootPanel extends javax.swing.JFrame {
                     new NewCaseLockDialog(Global.root, true, caseLock);
                 }
                 break;
+            case "CMDS":
+                caseLock = NewCaseLock.checkLock(Global.activeSection);
+                if(caseLock == null) {
+                    caseLock.addLock(Global.activeSection);
+                    new CreateNewCaseDialog(Global.root, true);
+                    caseLock.removeLock(Global.activeSection);
+                } else {
+                    new NewCaseLockDialog(Global.root, true, caseLock);
+                }
+                break;
             default:
                 break;
         }
@@ -1193,6 +1241,9 @@ public class RootPanel extends javax.swing.JFrame {
                 break;
             case "Civil Service Commission":
                 cSCRootPanel1.cscUpdate(jButton2.getText());
+                break;
+            case "CMDS":
+                cMDSRootPanel1.cmdsUpdate(jButton2.getText());
                 break;
             default:
                 break;
@@ -1265,6 +1316,7 @@ public class RootPanel extends javax.swing.JFrame {
     private javax.swing.JPanel ULP;
     private javax.swing.JMenuItem adminPanelMenuItem;
     private parker.serb.CMDS.CMDSHeaderPanel cMDSHeaderPanel1;
+    private parker.serb.CMDS.CMDSRootPanel cMDSRootPanel1;
     private parker.serb.CSC.CSCHeaderPanel cSCHeaderPanel1;
     private parker.serb.CSC.CSCRootPanel cSCRootPanel1;
     private javax.swing.JMenu caseManagementMenu;
