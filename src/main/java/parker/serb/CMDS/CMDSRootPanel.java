@@ -39,6 +39,7 @@ public class CMDSRootPanel extends javax.swing.JPanel {
         activityPanel1.clearAll();
         notesPanel1.clearAll();
 //        cSCInformationPanel1.clearAll();
+//        TODO: Hearings
         partiesPanel1.clearAll();
     }
     
@@ -170,7 +171,7 @@ public class CMDSRootPanel extends javax.swing.JPanel {
      * Determines if the delete button should be enabled, as well as the desired
      * functionality
      */
-    public void cscDelete() {
+    public void cmdsDelete() {
         CancelUpdate cancel;
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
             case "Activity":

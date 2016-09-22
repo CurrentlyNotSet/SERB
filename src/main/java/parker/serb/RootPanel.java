@@ -1141,6 +1141,10 @@ public class RootPanel extends javax.swing.JFrame {
                 break;
             case "Civil Service Commission":
                 cSCRootPanel1.cscDelete();
+                break;
+            case "CMDS":
+                cMDSRootPanel1.cmdsDelete();
+                break;
             default:
                 break;
         }
