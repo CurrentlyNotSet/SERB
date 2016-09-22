@@ -17,9 +17,6 @@ import javax.swing.SwingUtilities;
 import parker.serb.Global;
 import parker.serb.sql.Audit;
 import parker.serb.sql.CMDSCase;
-import parker.serb.sql.CaseParty;
-import parker.serb.sql.MEDCase;
-import parker.serb.sql.Mediator;
 import parker.serb.util.CaseNotFoundDialog;
 import parker.serb.util.NumberFormatService;
 
@@ -44,7 +41,7 @@ public class CMDSHeaderPanel extends javax.swing.JPanel {
     private void addListeners() {
         caseNumberComboBox.addActionListener((ActionEvent e) -> {
             if(caseNumberComboBox.getSelectedItem() != null) {
-                Global.root.getmEDRootPanel1().getjTabbedPane1().setSelectedIndex(0);
+                Global.root.getcMDSRootPanel1().getjTabbedPane1().setSelectedIndex(0);
                 if(caseNumberComboBox.getSelectedItem().toString().trim().equals("")) {
                     if(Global.root != null) {
                         Global.root.getjButton2().setText("Update");
@@ -57,8 +54,8 @@ public class CMDSHeaderPanel extends javax.swing.JPanel {
                     }
                 } else {
                     loadInformation();
-                    if(Global.root.getmEDRootPanel1().getjTabbedPane1().getSelectedIndex() == 0)
-                        Global.root.getmEDRootPanel1().getActivityPanel1().loadAllActivity();
+                    if(Global.root.getcMDSRootPanel1().getjTabbedPane1().getSelectedIndex() == 0)
+                        Global.root.getcMDSRootPanel1().getActivityPanel1().loadAllActivity();
                     Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
                 }
             }
@@ -81,19 +78,18 @@ public class CMDSHeaderPanel extends javax.swing.JPanel {
             if(cmds == null) {
                 //TODO: Case Not Found
             } else {
-                groupNumberTextBox.setText("");
-                aljTextBox.setText("");
-                openDateTExtBox.setText("");
-                closeDateTextBox.setText("");
-                appellantTextBox.setText("");
-                appelleeTextBox.setText("");
-                inventoryStatusDateTextBox.setText("");
-                inventoryStatusLineTextBox.setText("");
-                statusTextBox.setText("");
-                resultTextBox.setText("");
+                groupNumberTextBox.setText(cmds.groupNumber != null ? cmds.groupNumber : "");
+                aljTextBox.setText(""); //TODO: Convert ID to Name
+                openDateTExtBox.setText(cmds.openDate != null ? Global.mmddyyyy.format(new Date(cmds.openDate.getTime())) : "");
+                closeDateTextBox.setText(cmds.closeDate != null ? Global.mmddyyyy.format(new Date(cmds.closeDate.getTime())) : "");
+                appellantTextBox.setText(""); //TODO
+                appelleeTextBox.setText(""); //TODO
+                inventoryStatusDateTextBox.setText(cmds.inventoryStatusDate != null ? Global.mmddyyyy.format(new Date(cmds.inventoryStatusDate.getTime())) : "");
+                inventoryStatusLineTextBox.setText(cmds.inventroyStatusLine != null ? cmds.inventroyStatusLine : "");
+                statusTextBox.setText(cmds.caseStatus != null ? cmds.caseStatus : "");
+                resultTextBox.setText(cmds.result != null ? cmds.result : "");
                 
                 
-//                inventoryStatusDateTextBox.setText(med.fileDate != null ? Global.mmddyyyy.format(new Date(med.fileDate.getTime())) : "");
 //                if(med.FMCSMediatorAppointedID == null &&
 //                    med.stateMediatorAppointedID != null) {
 //                    appellantTextBox.setText(Mediator.getMediatorNameByID(med.stateMediatorAppointedID));

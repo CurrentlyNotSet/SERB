@@ -36,10 +36,10 @@ public class CMDSRootPanel extends javax.swing.JPanel {
      */
     void clearAll() {
         Global.root.getcMDSHeaderPanel1().clearAll();
-//        activityPanel1.clearAll();
+        activityPanel1.clearAll();
         notesPanel1.clearAll();
 //        cSCInformationPanel1.clearAll();
-//        partiesPanel1.clearAll();
+        partiesPanel1.clearAll();
     }
     
     private void addListeners() {
@@ -67,7 +67,7 @@ public class CMDSRootPanel extends javax.swing.JPanel {
                 cSCInformationPanel1.loadInformation();
                 break;
             case "Parties":
-                partiesPanel1.loadCSCParties();
+                partiesPanel1.loadParties();
                 break;
             case "Notes":
                 notesPanel1.loadInformation();
@@ -133,13 +133,13 @@ public class CMDSRootPanel extends javax.swing.JPanel {
      */
     public void cmdsUpdate(String buttonText) {
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
-//            case "Activity":
-//                activityPanel1.loadAllActivity();
-//                break;
-//            case "Parties":
-//                new PartySearchDialog((JFrame) this.getRootPane().getParent(), true);
-//                partiesPanel1.loadCSCParties();
-//                break;
+            case "Activity":
+                activityPanel1.loadAllActivity();
+                break;
+            case "Parties":
+                new PartySearchDialog((JFrame) this.getRootPane().getParent(), true);
+                partiesPanel1.loadParties();
+                break;
 //            case "CSC Information":
 //                if(buttonText.equals("Update")) {
 //                    disableTabs(jTabbedPane1.getSelectedIndex());
@@ -177,7 +177,7 @@ public class CMDSRootPanel extends javax.swing.JPanel {
                 break;
             case "Parties":
                 partiesPanel1.removeParty();
-                partiesPanel1.loadCSCParties();
+                partiesPanel1.loadParties();
                 break;
             case "CSC Information":
                 cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
@@ -228,6 +228,7 @@ public class CMDSRootPanel extends javax.swing.JPanel {
         partiesPanel1 = new parker.serb.party.PartiesPanel();
         jPanel3 = new javax.swing.JPanel();
         cSCInformationPanel1 = new parker.serb.CSC.CSCInformationPanel();
+        jPanel2 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
         notesPanel1 = new parker.serb.notes.NotesPanel();
 
@@ -270,6 +271,19 @@ public class CMDSRootPanel extends javax.swing.JPanel {
 
         jTabbedPane1.addTab("Case Information", jPanel3);
 
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1099, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 559, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Hearings", jPanel2);
+
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
@@ -301,6 +315,7 @@ public class CMDSRootPanel extends javax.swing.JPanel {
     private parker.serb.activity.ActivityPanel activityPanel1;
     private parker.serb.CSC.CSCInformationPanel cSCInformationPanel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel8;
