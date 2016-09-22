@@ -269,15 +269,13 @@ public class PartiesPanel extends javax.swing.JPanel {
                 if(partyInformation.caseRelation.contains("Appellant")) {
                     appellantParties.add(partyInformation);
                 }
-            
-                if(partyInformation.caseRelation.contains("Appellee")) {
-                    appelleeParties.add(partyInformation);
-                }
-
+                
                 if(partyInformation.caseRelation.contains("Appellee 2")) {
                     appellee2Parties.add(partyInformation);
+                } else if(partyInformation.caseRelation.contains("Appellee")) {
+                    appelleeParties.add(partyInformation);
                 }
-
+                
                 if(partyInformation.caseRelation.contains("Courtesy Copy")) {
                     courtesyCopyParties.add(partyInformation);
                 }
@@ -1086,12 +1084,10 @@ public class PartiesPanel extends javax.swing.JPanel {
                 appellantParties.add(partyInformation);
             }
             
-            if(partyInformation.caseRelation.contains("Appellee")) {
-                appelleeParties.add(partyInformation);
-            }
-            
             if(partyInformation.caseRelation.contains("Appellee 2")) {
                 appellee2Parties.add(partyInformation);
+            } else if(partyInformation.caseRelation.contains("Appellee")) {
+                appelleeParties.add(partyInformation);
             }
             
             if(partyInformation.caseRelation.contains("Courtesy Copy")) {
@@ -1607,9 +1603,6 @@ public class PartiesPanel extends javax.swing.JPanel {
         }
         validateParties();
     }
-    
-    
-    
     
     public void loadORGParties() {
         List<CaseParty> officerParties = new ArrayList<>();

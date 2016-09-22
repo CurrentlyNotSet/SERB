@@ -311,7 +311,7 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton2.setText("Update");
                 jButton2.setEnabled(false);
                 jButton3.setSize(dim);
-                jButton3.setVisible(true);
+                jButton3.setVisible(false);
                 jButton3.setText("All Org Letters");
                 jButton4.setVisible(false);
                 jButton4.setText("Single Letter");
