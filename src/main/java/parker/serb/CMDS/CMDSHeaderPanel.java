@@ -16,6 +16,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import parker.serb.Global;
 import parker.serb.sql.Audit;
+import parker.serb.sql.CMDSCase;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.MEDCase;
 import parker.serb.sql.Mediator;
@@ -52,7 +53,7 @@ public class CMDSHeaderPanel extends javax.swing.JPanel {
                         Global.caseType = null;
                         Global.caseMonth = null;
                         Global.caseNumber = null;
-//                        Global.root.getmEDRootPanel1().clearAll();
+                        Global.root.getcMDSRootPanel1().clearAll();
                     }
                 } else {
                     loadInformation();
@@ -74,94 +75,101 @@ public class CMDSHeaderPanel extends javax.swing.JPanel {
     }
     
     public void loadHeaderInformation() {
-        String employer = "";
-        String employerREP = "";
-        String employeeOrg = "";
-        String employeeOrgREP = "";
         
         if(Global.caseNumber != null) {
-            MEDCase med = MEDCase.loadHeaderInformation();
-            if(med == null) {
-//                new MEDCaseNotFound((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
-//                caseNumberComboBox.setSelectedItem(Global.caseNumber);
+            CMDSCase cmds = CMDSCase.loadHeaderInformation();
+            if(cmds == null) {
+                //TODO: Case Not Found
             } else {
-                inventoryStatusDateTextBox.setText(med.fileDate != null ? Global.mmddyyyy.format(new Date(med.fileDate.getTime())) : "");
-                if(med.FMCSMediatorAppointedID == null &&
-                    med.stateMediatorAppointedID != null) {
-                    appellantTextBox.setText(Mediator.getMediatorNameByID(med.stateMediatorAppointedID));
-                    appelleeTextBox.setText(NumberFormatService.convertStringToPhoneNumber(Mediator.getMediatorPhoneByID(med.stateMediatorAppointedID)));  
-                } else if(med.FMCSMediatorAppointedID != null &&
-                    med.stateMediatorAppointedID == null) {
-                    appellantTextBox.setText(Mediator.getMediatorNameByID(med.FMCSMediatorAppointedID));
-                    appelleeTextBox.setText(NumberFormatService.convertStringToPhoneNumber(Mediator.getMediatorPhoneByID(med.FMCSMediatorAppointedID)));  
-                } else {
-                    appellantTextBox.setText("");
-                    appelleeTextBox.setText("");  
-                }
-                inventoryStatusLineTextBox.setText(med.caseStatus != null ? med.caseStatus : "");
-
+                groupNumberTextBox.setText("");
+                aljTextBox.setText("");
+                openDateTExtBox.setText("");
+                closeDateTextBox.setText("");
+                appellantTextBox.setText("");
+                appelleeTextBox.setText("");
+                inventoryStatusDateTextBox.setText("");
+                inventoryStatusLineTextBox.setText("");
+                statusTextBox.setText("");
+                resultTextBox.setText("");
                 
                 
-                List caseParties = CaseParty.loadPartiesByCase();
-
-                for(Object caseParty: caseParties) {
-                    CaseParty partyInformation = (CaseParty) caseParty;
-                    
-                    String name;
-                    
-                    if(partyInformation.firstName.equals("") && partyInformation.lastName.equals("")) {
-                        name = partyInformation.companyName;
-                    } else {
-                        name = (partyInformation.prefix.equals("") ? "" : (partyInformation.prefix + " "))
-                        + (partyInformation.firstName.equals("") ? "" : (partyInformation.firstName + " "))
-                        + (partyInformation.middleInitial.equals("") ? "" : (partyInformation.middleInitial + ". "))
-                        + (partyInformation.lastName.equals("") ? "" : (partyInformation.lastName))
-                        + (partyInformation.suffix.equals("") ? "" : (" " + partyInformation.suffix))
-                        + (partyInformation.nameTitle.equals("") ? "" : (", " + partyInformation.nameTitle));
-                    }
-
-                    
-                            
-
-                    switch (partyInformation.caseRelation) {
-                        case "Employer":
-                            if(employer.equals("")) {
-                                employer += name;
-                            } else {
-                                employer += ", " + name;
-                            }
-                            break;
-                        case "Employer REP":
-                            if(employerREP.equals("")) {
-                                employerREP += name;
-                            } else {
-                                employerREP += ", " + name;
-                            }
-                            break;
-                        case "Employee Organization":
-                            if(employeeOrg.equals("")) {
-                                employeeOrg += name;
-                            } else {
-                                employeeOrg += ", " + name;
-                            }
-                            break;
-                        case "Employee Organization REP":
-                            if(employeeOrgREP.equals("")) {
-                                employeeOrgREP += name;
-                            } else {
-                                employeeOrgREP += ", " + name;
-                            }
-                            break;
-                    }
-                }
-                groupNumberTextBox.setText(employer);
-                groupNumberTextBox.setCaretPosition(0);
-                aljTextBox.setText(employerREP);
-                aljTextBox.setCaretPosition(0);
-                openDateTExtBox.setText(employeeOrg);
-                openDateTExtBox.setCaretPosition(0);
-                closeDateTextBox.setText(employeeOrgREP);
-                closeDateTextBox.setCaretPosition(0);
+//                inventoryStatusDateTextBox.setText(med.fileDate != null ? Global.mmddyyyy.format(new Date(med.fileDate.getTime())) : "");
+//                if(med.FMCSMediatorAppointedID == null &&
+//                    med.stateMediatorAppointedID != null) {
+//                    appellantTextBox.setText(Mediator.getMediatorNameByID(med.stateMediatorAppointedID));
+//                    appelleeTextBox.setText(NumberFormatService.convertStringToPhoneNumber(Mediator.getMediatorPhoneByID(med.stateMediatorAppointedID)));  
+//                } else if(med.FMCSMediatorAppointedID != null &&
+//                    med.stateMediatorAppointedID == null) {
+//                    appellantTextBox.setText(Mediator.getMediatorNameByID(med.FMCSMediatorAppointedID));
+//                    appelleeTextBox.setText(NumberFormatService.convertStringToPhoneNumber(Mediator.getMediatorPhoneByID(med.FMCSMediatorAppointedID)));  
+//                } else {
+//                    appellantTextBox.setText("");
+//                    appelleeTextBox.setText("");  
+//                }
+//                inventoryStatusLineTextBox.setText(med.caseStatus != null ? med.caseStatus : "");
+//
+//                
+//                
+//                List caseParties = CaseParty.loadPartiesByCase();
+//
+//                for(Object caseParty: caseParties) {
+//                    CaseParty partyInformation = (CaseParty) caseParty;
+//                    
+//                    String name;
+//                    
+//                    if(partyInformation.firstName.equals("") && partyInformation.lastName.equals("")) {
+//                        name = partyInformation.companyName;
+//                    } else {
+//                        name = (partyInformation.prefix.equals("") ? "" : (partyInformation.prefix + " "))
+//                        + (partyInformation.firstName.equals("") ? "" : (partyInformation.firstName + " "))
+//                        + (partyInformation.middleInitial.equals("") ? "" : (partyInformation.middleInitial + ". "))
+//                        + (partyInformation.lastName.equals("") ? "" : (partyInformation.lastName))
+//                        + (partyInformation.suffix.equals("") ? "" : (" " + partyInformation.suffix))
+//                        + (partyInformation.nameTitle.equals("") ? "" : (", " + partyInformation.nameTitle));
+//                    }
+//
+//                    
+//                            
+//
+//                    switch (partyInformation.caseRelation) {
+//                        case "Employer":
+//                            if(employer.equals("")) {
+//                                employer += name;
+//                            } else {
+//                                employer += ", " + name;
+//                            }
+//                            break;
+//                        case "Employer REP":
+//                            if(employerREP.equals("")) {
+//                                employerREP += name;
+//                            } else {
+//                                employerREP += ", " + name;
+//                            }
+//                            break;
+//                        case "Employee Organization":
+//                            if(employeeOrg.equals("")) {
+//                                employeeOrg += name;
+//                            } else {
+//                                employeeOrg += ", " + name;
+//                            }
+//                            break;
+//                        case "Employee Organization REP":
+//                            if(employeeOrgREP.equals("")) {
+//                                employeeOrgREP += name;
+//                            } else {
+//                                employeeOrgREP += ", " + name;
+//                            }
+//                            break;
+//                    }
+//                }
+//                groupNumberTextBox.setText(employer);
+//                groupNumberTextBox.setCaretPosition(0);
+//                aljTextBox.setText(employerREP);
+//                aljTextBox.setCaretPosition(0);
+//                openDateTExtBox.setText(employeeOrg);
+//                openDateTExtBox.setCaretPosition(0);
+//                closeDateTextBox.setText(employeeOrgREP);
+//                closeDateTextBox.setCaretPosition(0);
             }
         }
     }
@@ -170,7 +178,7 @@ public class CMDSHeaderPanel extends javax.swing.JPanel {
         caseNumberComboBox.removeAllItems();
         caseNumberComboBox.addItem("");
 
-        List caseNumberList = MEDCase.loadMEDCaseNumbers();
+        List caseNumberList = CMDSCase.loadCMDSCaseNumbers();
         
         caseNumberList.stream().forEach((caseNumber) -> {
             caseNumberComboBox.addItem(caseNumber.toString());

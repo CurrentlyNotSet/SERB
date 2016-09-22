@@ -127,17 +127,17 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="cMDSNotesPanel1" alignment="0" pref="1099" max="32767" attributes="0"/>
+                  <Component id="notesPanel1" alignment="0" pref="1099" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="cMDSNotesPanel1" alignment="0" pref="559" max="32767" attributes="0"/>
+                  <Component id="notesPanel1" alignment="0" pref="559" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="parker.serb.notes.CMDSNotesPanel" name="cMDSNotesPanel1">
+            <Component class="parker.serb.notes.NotesPanel" name="notesPanel1">
             </Component>
           </SubComponents>
         </Container>

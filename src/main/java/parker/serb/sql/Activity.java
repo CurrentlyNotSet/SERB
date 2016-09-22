@@ -272,36 +272,6 @@ public class Activity {
                 preparedStatement.setString(6, "%" + searchTerm + "%");
                 preparedStatement.setString(7, "%" + searchTerm + "%");
             }
-            
-//            String sql = "select Activity.id,"
-//                    + " caseYear,"
-//                    + " caseType,"
-//                    + " caseMonth,"
-//                    + " caseNumber,"
-//                    + " date,"
-//                    + " action,"
-//                    + " firstName,"
-//                    + " lastName,"
-//                    + " fileName"
-//                    + " from Activity"
-//                    + " LEFT JOIN Users"
-//                    + " ON Activity.userID = Users.id"
-//                    + " where caseYear = ? and"
-//                    + " caseType = ? and"
-//                    + " caseMonth = ? and"
-//                    + " caseNumber = ? and"
-//                    + " (firstName like ? or"
-//                    + " lastName like ? or"
-//                    + " action like ?) ORDER BY date DESC ";
-//
-//            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-//            preparedStatement.setObject(1, Global.caseYear);
-//            preparedStatement.setObject(2, Global.caseType);
-//            preparedStatement.setObject(3, Global.caseMonth);
-//            preparedStatement.setObject(4, Global.caseNumber);
-//            preparedStatement.setString(5, "%" + searchTerm + "%");
-//            preparedStatement.setString(6, "%" + searchTerm + "%");
-//            preparedStatement.setString(7, "%" + searchTerm + "%");
 
             ResultSet caseActivity = preparedStatement.executeQuery();
             
