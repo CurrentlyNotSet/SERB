@@ -38,7 +38,7 @@ public class CMDSRootPanel extends javax.swing.JPanel {
         Global.root.getcMDSHeaderPanel1().clearAll();
         activityPanel1.clearAll();
         notesPanel1.clearAll();
-//        cSCInformationPanel1.clearAll();
+        cMDSInformationPanel1.clearAll();
 //        TODO: Hearings
         partiesPanel1.clearAll();
     }
@@ -64,8 +64,8 @@ public class CMDSRootPanel extends javax.swing.JPanel {
             case "Activity":
                 activityPanel1.loadAllActivity();
                 break;
-            case "CSC Information":
-                cSCInformationPanel1.loadInformation();
+            case "Case Information":
+                cMDSInformationPanel1.loadInformation();
                 break;
             case "Parties":
                 partiesPanel1.loadParties();
@@ -94,7 +94,7 @@ public class CMDSRootPanel extends javax.swing.JPanel {
                 Global.root.getjButton2().setEnabled(true);
                 Global.root.getjButton9().setVisible(true);
                 break;
-            case "CSC Information":
+            case "Caase Information":
                 System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
                 Global.root.getjButton2().setText("Update");
                 Global.root.getjButton2().setEnabled(true);
@@ -110,7 +110,7 @@ public class CMDSRootPanel extends javax.swing.JPanel {
     }
     
     private void disableTabs(int activeTab) {
-        Global.root.getcSCHeaderPanel1().getjComboBox2().setEnabled(false);
+        Global.root.getcMDSHeaderPanel1().getjComboBox2().setEnabled(false);
         for(int i = jTabbedPane1.getTabCount()-1; i >= 0; i--) {
             if(i != activeTab) {
                 jTabbedPane1.setEnabledAt(i, false);
@@ -121,7 +121,7 @@ public class CMDSRootPanel extends javax.swing.JPanel {
     }
     
     private void enableTabs() {
-        Global.root.getcSCHeaderPanel1().getjComboBox2().setEnabled(true);
+        Global.root.getcMDSHeaderPanel1().getjComboBox2().setEnabled(true);
         for(int i = jTabbedPane1.getTabCount()-1; i >= 0; i--) {
             jTabbedPane1.setEnabledAt(i, true);
         }
@@ -141,18 +141,18 @@ public class CMDSRootPanel extends javax.swing.JPanel {
                 new PartySearchDialog((JFrame) this.getRootPane().getParent(), true);
                 partiesPanel1.loadParties();
                 break;
-//            case "CSC Information":
-//                if(buttonText.equals("Update")) {
-//                    disableTabs(jTabbedPane1.getSelectedIndex());
-//                    cSCInformationPanel1.enableUpdate();
-//                } else {
-//                    enableTabs();
-//                    Global.root.enableTabsAfterSave();
-//                    Global.root.enableButtonsAfterCancel();
-//                    cSCInformationPanel1.disableUpdate(true);
-////                    Global.root.getoRGHeaderPanel2().loadUpdatedHeaderInformation();
-//                }
-//                break;
+            case "Case Information":
+                if(buttonText.equals("Update")) {
+                    disableTabs(jTabbedPane1.getSelectedIndex());
+                    cMDSInformationPanel1.enableUpdate();
+                } else {
+                    enableTabs();
+                    Global.root.enableTabsAfterSave();
+                    Global.root.enableButtonsAfterCancel();
+                    cMDSInformationPanel1.disableUpdate(true);
+//                    Global.root.getoRGHeaderPanel2().loadUpdatedHeaderInformation();
+                }
+                break;
             case "Notes":
                 if(buttonText.equals("Update")) {
                     disableTabs(jTabbedPane1.getSelectedIndex());
@@ -180,14 +180,14 @@ public class CMDSRootPanel extends javax.swing.JPanel {
                 partiesPanel1.removeParty();
                 partiesPanel1.loadParties();
                 break;
-            case "CSC Information":
+            case "Case Information":
                 cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
                 if(!cancel.isReset()) {
                 } else {
                     Global.root.enableButtonsAfterCancel();
                     Global.root.enableTabsAfterSave();
                     enableTabs();
-                    cSCInformationPanel1.disableUpdate(false);
+                    cMDSInformationPanel1.disableUpdate(false);
                 }
                 break;
             case "Notes":
@@ -228,8 +228,9 @@ public class CMDSRootPanel extends javax.swing.JPanel {
         jPanel4 = new javax.swing.JPanel();
         partiesPanel1 = new parker.serb.party.PartiesPanel();
         jPanel3 = new javax.swing.JPanel();
-        cSCInformationPanel1 = new parker.serb.CSC.CSCInformationPanel();
+        cMDSInformationPanel1 = new parker.serb.CMDS.CMDSInformationPanel();
         jPanel2 = new javax.swing.JPanel();
+        cMDSHearingsPanel1 = new parker.serb.CMDS.CMDSHearingsPanel();
         jPanel8 = new javax.swing.JPanel();
         notesPanel1 = new parker.serb.notes.NotesPanel();
 
@@ -237,7 +238,7 @@ public class CMDSRootPanel extends javax.swing.JPanel {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(activityPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1010, Short.MAX_VALUE)
+            .addComponent(activityPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1134, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -250,7 +251,7 @@ public class CMDSRootPanel extends javax.swing.JPanel {
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(partiesPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1099, Short.MAX_VALUE)
+            .addComponent(partiesPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1134, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -263,11 +264,11 @@ public class CMDSRootPanel extends javax.swing.JPanel {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(cSCInformationPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1099, Short.MAX_VALUE)
+            .addComponent(cMDSInformationPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1134, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(cSCInformationPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
+            .addComponent(cMDSInformationPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Case Information", jPanel3);
@@ -276,11 +277,11 @@ public class CMDSRootPanel extends javax.swing.JPanel {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1099, Short.MAX_VALUE)
+            .addComponent(cMDSHearingsPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1134, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 559, Short.MAX_VALUE)
+            .addComponent(cMDSHearingsPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Hearings", jPanel2);
@@ -289,7 +290,7 @@ public class CMDSRootPanel extends javax.swing.JPanel {
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(notesPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1099, Short.MAX_VALUE)
+            .addComponent(notesPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1134, Short.MAX_VALUE)
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -314,7 +315,8 @@ public class CMDSRootPanel extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private parker.serb.activity.ActivityPanel activityPanel1;
-    private parker.serb.CSC.CSCInformationPanel cSCInformationPanel1;
+    private parker.serb.CMDS.CMDSHearingsPanel cMDSHearingsPanel1;
+    private parker.serb.CMDS.CMDSInformationPanel cMDSInformationPanel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

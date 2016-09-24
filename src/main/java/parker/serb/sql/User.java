@@ -1,5 +1,6 @@
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.PreparedStatement;
@@ -127,8 +128,6 @@ public class User {
             
             ResultSet foundUser = preparedStatement.executeQuery();
             
-//            foundUser.next();
-            
             if(foundUser.next()) {
             
                 user.id = foundUser.getInt("id");
@@ -149,8 +148,12 @@ public class User {
                 user.defaultSection = foundUser.getString("defaultSection");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            if(ex.getCause() instanceof SQLServerException) {
+                System.out.println("TESTING");
+            } else {
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } 
         return user;
     }
     

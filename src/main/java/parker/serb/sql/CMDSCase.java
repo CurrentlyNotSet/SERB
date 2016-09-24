@@ -28,7 +28,7 @@ public class CMDSCase {
     public String note;
     public Timestamp openDate;
     public String groupNumber;
-    public String aljID;
+    public int aljID;
     public Timestamp closeDate;
     public Timestamp inventoryStatusDate;
     public String inventroyStatusLine;
@@ -352,7 +352,7 @@ public class CMDSCase {
                 cmds = new CMDSCase();
                 cmds.openDate = caseHeader.getTimestamp("openDate");
                 cmds.groupNumber =  caseHeader.getString("groupNumber");
-                cmds.aljID = caseHeader.getString("aljID");
+                cmds.aljID = caseHeader.getInt("aljID");
                 cmds.closeDate = caseHeader.getTimestamp("closeDate");
                 cmds.inventroyStatusLine = caseHeader.getString("inventoryStatusLine");
                 cmds.inventoryStatusDate = caseHeader.getTimestamp("inventoryStatusDate");

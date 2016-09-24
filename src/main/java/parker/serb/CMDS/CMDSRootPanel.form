@@ -49,7 +49,7 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="activityPanel1" alignment="0" pref="1010" max="32767" attributes="0"/>
+                  <Component id="activityPanel1" alignment="0" pref="1134" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -75,7 +75,7 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="partiesPanel1" alignment="0" pref="1099" max="32767" attributes="0"/>
+                  <Component id="partiesPanel1" alignment="0" pref="1134" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -101,17 +101,17 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="cSCInformationPanel1" alignment="0" pref="1099" max="32767" attributes="0"/>
+                  <Component id="cMDSInformationPanel1" alignment="0" pref="1134" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="cSCInformationPanel1" alignment="0" pref="559" max="32767" attributes="0"/>
+                  <Component id="cMDSInformationPanel1" alignment="0" pref="559" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="parker.serb.CSC.CSCInformationPanel" name="cSCInformationPanel1">
+            <Component class="parker.serb.CMDS.CMDSInformationPanel" name="cMDSInformationPanel1">
             </Component>
           </SubComponents>
         </Container>
@@ -127,15 +127,19 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="1099" max="32767" attributes="0"/>
+                  <Component id="cMDSHearingsPanel1" alignment="0" pref="1134" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="559" max="32767" attributes="0"/>
+                  <Component id="cMDSHearingsPanel1" alignment="0" pref="559" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
+          <SubComponents>
+            <Component class="parker.serb.CMDS.CMDSHearingsPanel" name="cMDSHearingsPanel1">
+            </Component>
+          </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="jPanel8">
           <Constraints>
@@ -149,7 +153,7 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="notesPanel1" alignment="0" pref="1099" max="32767" attributes="0"/>
+                  <Component id="notesPanel1" alignment="0" pref="1134" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
