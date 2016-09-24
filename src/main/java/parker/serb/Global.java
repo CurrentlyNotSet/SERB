@@ -20,10 +20,6 @@ public class Global {
     //TODO: implement verbose logging at project end
     public static final boolean verboseLogging = true;
     
-    //Update this value with each release
-    //TODO: Convert this to build number intead of version nuber, will lead
-    //to better tracking of what users are using.  In aiddtion it would make this
-    //auto update removing dev error
     public static final String applicationVersion = "3.0";
 
     //All Date and Time formatters

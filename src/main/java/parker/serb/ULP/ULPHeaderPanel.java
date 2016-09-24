@@ -41,6 +41,7 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
                     if(Global.root != null) {
                         Global.root.getjButton2().setText("Update");
                         Global.root.getjButton2().setEnabled(false);
+                        Global.root.getjButton3().setEnabled(false);
                         Global.root.getjButton6().setEnabled(false);
                         Global.caseYear = null;
                         Global.caseType = null;
@@ -50,6 +51,7 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
                     }
                 } else {
                     Global.root.getjButton6().setEnabled(true);
+                    Global.root.getjButton3().setEnabled(true);
                     loadInformation();
                     if(Global.root.getuLPRootPanel1().getjTabbedPane1().getSelectedIndex() == 0)
                         Global.root.getuLPRootPanel1().getActivityPanel1().loadAllActivity();

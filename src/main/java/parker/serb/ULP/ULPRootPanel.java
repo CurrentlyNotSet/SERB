@@ -12,6 +12,7 @@ import parker.serb.activity.ActivityPanel;
 import parker.serb.Global;
 import parker.serb.party.PartiesPanel;
 import parker.serb.party.PartySearchDialog;
+import parker.serb.sql.Audit;
 import parker.serb.sql.ULPCaseSearchData;
 import parker.serb.util.CancelUpdate;
 
@@ -45,6 +46,7 @@ public class ULPRootPanel extends javax.swing.JPanel {
                 setButtons();
                 loadInformation();
                 currentTab = jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex());
+                Audit.addAuditEntry("Navigated to " + Global.activeSection + " - " + currentTab);
             }
         });
     }

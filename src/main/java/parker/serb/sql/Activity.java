@@ -328,10 +328,6 @@ public class Activity {
         return activityList;
     }
     
-    /**
-     * Loads all activities without a limited result
-     * @return list of all Activities per case
-     */
     public static List loadAllActivity() {
         List<Activity> activityList = new ArrayList<Activity>();
         
@@ -340,14 +336,8 @@ public class Activity {
         try {
 
             stmt = Database.connectToDB().createStatement();
-
-            if(Global.caseType.equals("ORG")) {
-                
-            } else {
-                
-            }
             
-            String sql = "select Activity.id,"
+            String sql = "select TOP 50 Activity.id,"
                     + " caseYear,"
                     + " caseType,"
                     + " caseMonth,"

@@ -27,6 +27,7 @@ import parker.serb.util.StringUtilities;
 public class generateDocument {
     
     public static String generateSMDSdocument(SMDSDocuments template, int senderID){
+
         //Setup Document
         File docPath = new File(Global.activityPath
                 + Global.activeSection + File.separator
@@ -35,8 +36,9 @@ public class generateDocument {
         docPath.mkdirs();
         String saveDocName = String.valueOf(new Date().getTime()) + "_" + template.historyFileName + ".docx";
         ActiveXComponent eolWord = null;
+        
         eolWord = JacobCOMBridge.setWordActive(true, false, eolWord);
-
+        
         Dispatch document = Dispatch.call(eolWord.getProperty("Documents").toDispatch(), "Open",
                 Global.templatePath + template.section + File.separator + template.fileName).toDispatch();
         ActiveXComponent.call(eolWord.getProperty("Selection").toDispatch(), "Find").toDispatch();

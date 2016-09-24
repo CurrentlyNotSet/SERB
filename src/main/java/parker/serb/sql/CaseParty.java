@@ -138,7 +138,7 @@ public class CaseParty {
                     + "?," //stateCode
                     + "?," //zipCode
                     + "?," //phone1
-                    + "?"  //email
+                    + "?,"  //email
                     + "?," //phone2
                     + "?"  //fax
                     + ")";
