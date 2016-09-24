@@ -26,7 +26,6 @@ import parker.serb.employer.employerSearch;
 import parker.serb.relatedcase.AddNewRelatedCase;
 import parker.serb.relatedcase.RemoveRelatedCaseDialog;
 import parker.serb.sql.BoardMeeting;
-import parker.serb.sql.DepartmentInState;
 import parker.serb.sql.RelatedCase;
 import parker.serb.sql.ULPCase;
 import parker.serb.sql.ULPCaseSearchData;
@@ -196,8 +195,6 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         serbCaseNumberTextBox.setBackground(Color.white);
         employerNumberTextBox.setEnabled(true);
         employerNumberTextBox.setBackground(Color.white);
-//        eoNumberTextBox.setEnabled(true);
-//        eoNumberTextBox.setBackground(Color.white);
         barginingUnitNoTextBox.setEnabled(true);
         barginingUnitNoTextBox.setBackground(Color.white);
         finalDispositionComboBox.setEnabled(true);
@@ -207,7 +204,6 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         filedDateTextBox.setEnabled(true);
         filedDateTextBox.setBackground(Color.white);
         probableCauseCheckBox.setEnabled(true);
-//        deptInStateComboBox.setEnabled(true);
         addCaseHearingButton.setVisible(true);
         addRelatedCaseButton.setVisible(true);
     }
@@ -219,7 +215,6 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         Global.root.getjButton9().setVisible(false);
         
         //Set text boxes and combo boxes
-//        deptInStateComboBox.setEnabled(false);
         allegationTextBox.setEnabled(false);
         allegationTextBox.setBackground(new Color(238,238,238));
         statusComboBox.setEnabled(false);
@@ -250,8 +245,6 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         filedDateTextBox.setBackground(new Color(238,238,238));
         employerNumberTextBox.setEnabled(false);
         employerNumberTextBox.setBackground(new Color(238,238,238));
-//        eoNumberTextBox.setEnabled(false);
-//        eoNumberTextBox.setBackground(new Color(238,238,238));
         barginingUnitNoTextBox.setEnabled(false);
         barginingUnitNoTextBox.setBackground(new Color(238,238,238));
         probableCauseCheckBox.setEnabled(false);
@@ -268,7 +261,6 @@ public class ULPStatusPanel extends javax.swing.JPanel {
     
     public void loadInformation() {
         
-//        loadDeptInStateComboBox();
         loadStatusComboBox();
         loadInvestigatorComobBox();
         loadALJComboBox();
@@ -277,21 +269,6 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         loadRelatedCasesTable();
         loadPanelInformation();
     }
-    
-//    public void loadDeptInStateComboBox() {
-//        deptInStateComboBox.removeAllItems();
-//        
-//        deptInStateComboBox.addItem("");
-//        
-//        List deptInStateList = DepartmentInState.loadAllDepartments();
-//        
-//        for (Object department : deptInStateList) {
-//            DepartmentInState dept = (DepartmentInState) department;
-//            deptInStateComboBox.addItem(dept.code);
-//        }
-//        
-//        deptInStateComboBox.setSelectedItem("");
-//    }
     
     public void loadStatusComboBox() {
         statusComboBox.removeAllItems();
@@ -386,9 +363,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         currentStatusInformation = ULPCase.loadStatus();
         
         employerNumberTextBox.setText(currentStatusInformation.employerIDNumber);
-//        deptInStateComboBox.setSelectedItem(currentStatusInformation.deptInState);
         barginingUnitNoTextBox.setText(currentStatusInformation.barginingUnitNo);
-//        eoNumberTextBox.setText(currentStatusInformation.EONumber);
         allegationTextBox.setText(currentStatusInformation.allegation);
         statusComboBox.setSelectedItem(currentStatusInformation.currentStatus);
         priorityComboBox.setSelectedItem(currentStatusInformation.priority == true ? "Yes" : "No");
@@ -414,9 +389,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         ULPCase newStatusInformation = new ULPCase();
         
         newStatusInformation.employerIDNumber = employerNumberTextBox.getText().trim().equals("") ? null : employerNumberTextBox.getText().trim();
-//        newStatusInformation.deptInState = (deptInStateComboBox.getSelectedItem() == null || deptInStateComboBox.getSelectedItem().equals("")) ? null : deptInStateComboBox.getSelectedItem().toString().trim();
         newStatusInformation.barginingUnitNo = barginingUnitNoTextBox.getText().trim().equals("") ? null : barginingUnitNoTextBox.getText().trim();
-//        newStatusInformation.EONumber = eoNumberTextBox.getText().trim().equals("") ? null : eoNumberTextBox.getText().trim();
         newStatusInformation.allegation = allegationTextBox.getText().trim().equals("") ? null : allegationTextBox.getText().trim();
         newStatusInformation.currentStatus = (statusComboBox.getSelectedItem() == null || statusComboBox.getSelectedItem().equals("")) ? null : statusComboBox.getSelectedItem().toString().trim();
         newStatusInformation.priority = priorityComboBox.getSelectedItem().toString().equals("Yes");
@@ -460,7 +433,6 @@ public class ULPStatusPanel extends javax.swing.JPanel {
             dialog.dispose();
         }
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.

@@ -138,9 +138,9 @@ public class CaseParty {
                     + "?," //stateCode
                     + "?," //zipCode
                     + "?," //phone1
-                    + "?" //email
+                    + "?"  //email
                     + "?," //phone2
-                    + "?," //fax
+                    + "?"  //fax
                     + ")";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
@@ -164,10 +164,10 @@ public class CaseParty {
             preparedStatement.setString(18, partyInformation.city);
             preparedStatement.setString(19, partyInformation.stateCode);
             preparedStatement.setString(20, partyInformation.zipCode);
-            preparedStatement.setString(21, partyInformation.phone1.equals("") ? "" : NumberFormatService.convertPhoneNumberToString(partyInformation.phone1));
+            preparedStatement.setString(21, partyInformation.phone1 == null ? null : NumberFormatService.convertPhoneNumberToString(partyInformation.phone1));
             preparedStatement.setString(22, partyInformation.emailAddress);
-            preparedStatement.setString(23, partyInformation.phone2.equals("") ? "" : NumberFormatService.convertPhoneNumberToString(partyInformation.phone2));
-            preparedStatement.setString(24, partyInformation.fax.equals("") ? "" : NumberFormatService.convertPhoneNumberToString(partyInformation.fax));
+            preparedStatement.setString(23, partyInformation.phone2 == null ? null : NumberFormatService.convertPhoneNumberToString(partyInformation.phone2));
+            preparedStatement.setString(24, partyInformation.fax == null ? null : NumberFormatService.convertPhoneNumberToString(partyInformation.fax));
             
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {

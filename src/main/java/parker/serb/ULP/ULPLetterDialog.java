@@ -22,11 +22,6 @@ import parker.serb.util.FileService;
  */
 public class ULPLetterDialog extends javax.swing.JDialog {
 
-    /**
-     * Creates new form REPReportDialog
-     * @param parent
-     * @param modal
-     */
     public ULPLetterDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();

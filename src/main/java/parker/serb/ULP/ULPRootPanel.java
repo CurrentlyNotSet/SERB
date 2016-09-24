@@ -31,9 +31,6 @@ public class ULPRootPanel extends javax.swing.JPanel {
         addListeners();
     }
     
-    /**
-     * Removes all content from previous stored cases
-     */
     void clearAll() {
         Global.root.getuLPHeaderPanel1().clearAll();
         activityPanel1.clearAll();
@@ -52,11 +49,6 @@ public class ULPRootPanel extends javax.swing.JPanel {
         });
     }
     
-    /**
-     * load information about the case that is based on the tab that is selected, 
-     * trying to cheat and "lazy" load.  This my be re-factored to allow for full
-     * case load while displaying a spinner.
-     */
     private void loadInformation() {
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
             case "Activity":
@@ -83,10 +75,6 @@ public class ULPRootPanel extends javax.swing.JPanel {
         }
     }
     
-    /**
-     * Set the buttons to display the proper information and button status 
-     * depending on the selected tab index
-     */
     private void setButtons() {
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
             case "Activity":
@@ -158,11 +146,6 @@ public class ULPRootPanel extends javax.swing.JPanel {
         }
     }
     
-    /**
-     * Used to update the information in the DB with information from a panel. 
-     * Uses the currently selected panel index
-     * @param buttonText the text of the current button
-     */
     public void ulpUpdate(String buttonText) {
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
             case "Activity":
@@ -235,10 +218,6 @@ public class ULPRootPanel extends javax.swing.JPanel {
         }
     }
     
-    /**
-     * Determines if the delete button should be enabled, as well as the desired
-     * functionality
-     */
     public void ulpDelete() {
         CancelUpdate cancel;
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
@@ -316,8 +295,6 @@ public class ULPRootPanel extends javax.swing.JPanel {
         return partiesPanel1;
     }
     
-    
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

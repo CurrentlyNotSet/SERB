@@ -34,177 +34,63 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
      */
     public CMDSInformationPanel() {
         initComponents();
-        loadOrgTypeComboBox();
-        loadStateComboBox();
-        loadFiscalYearEndingComboBox();
-        loadDueDateComboBox();
-    }
-    
-    private void loadOrgTypeComboBox() {
-//        cscTypeComboBox.removeAllItems();
-//        cscTypeComboBox.addItem("");
-//        cscTypeComboBox.addItem("Municipal");
-//        cscTypeComboBox.addItem("Township");
-    }
-    
-    private void loadStateComboBox() {
-//        cscStateComboBox.removeAllItems();
-//        cscStateComboBox.addItem("");
-//        
-//        for (String state : Global.states) {
-//            cscStateComboBox.addItem(state);
-//        }
-    }
-    
-    private void loadFiscalYearEndingComboBox() {
-//        fiscalYearEndingComboBox.removeAllItems();
-//        fiscalYearEndingComboBox.addItem("");
-//        fiscalYearEndingComboBox.addItem("January");
-//        fiscalYearEndingComboBox.addItem("Febuary");
-//        fiscalYearEndingComboBox.addItem("March");
-//        fiscalYearEndingComboBox.addItem("April");
-//        fiscalYearEndingComboBox.addItem("May");
-//        fiscalYearEndingComboBox.addItem("June");
-//        fiscalYearEndingComboBox.addItem("July");
-//        fiscalYearEndingComboBox.addItem("August");
-//        fiscalYearEndingComboBox.addItem("September");
-//        fiscalYearEndingComboBox.addItem("October");
-//        fiscalYearEndingComboBox.addItem("November");
-//        fiscalYearEndingComboBox.addItem("December");
-    }
-    
-    private void loadDueDateComboBox() {
-//        dueDateComboBox.removeAllItems();
-//        dueDateComboBox.addItem("");
-//        dueDateComboBox.addItem("January");
-//        dueDateComboBox.addItem("Febuary");
-//        dueDateComboBox.addItem("March");
-//        dueDateComboBox.addItem("April");
-//        dueDateComboBox.addItem("May");
-//        dueDateComboBox.addItem("June");
-//        dueDateComboBox.addItem("July");
-//        dueDateComboBox.addItem("August");
-//        dueDateComboBox.addItem("September");
-//        dueDateComboBox.addItem("October");
-//        dueDateComboBox.addItem("November");
-//        dueDateComboBox.addItem("December");
     }
     
     public void clearAll() {
-//        cscNameTextBox.setText("");
-//        alsoKnownAsTextBox.setText("");
-//        cscNumberTextBox.setText("");
-//        cscTypeComboBox.setSelectedItem("");
-//        cscPhone1TextBox.setText("");
-//        cscPhone2TextBox.setText("");
-//        cscFaxTextBox.setText("");
-//        cscAddress1TextBox.setText("");
-//        cscAddress2TextBox.setText("");
-//        cscCityTextBox.setText("");
-//        cscStateComboBox.setSelectedItem("");
-//        cscZipTextBox.setText("");
-//        cscCountyComboBox.setSelectedItem("");
-//        cscEmailTextBox.setText("");
-//        
-//        fiscalYearEndingComboBox.setSelectedItem("");
-//        activitiesLastFiledTextBox.setText("");
-//        lastNotificationTextBox.setText("");
-//        statutoryCheckBox.setSelected(false);
-//        validCheckBox.setSelected(false);
-//        dueDateComboBox.setSelectedItem("");
-//        dateFiledTextBox.setText("");
-//        previousFileDateTextBox.setText("");
-//        charterCheckBox.setSelected(false);
+//        aljComboBox.setEnabled(true);
+//        openDateTextBox.setEnabled(true);
+//        openDateTextBox.setBackground(Color.white);
+//        closeDateTextBox.setEnabled(true);
+//        closeDateTextBox.setBackground(Color.white);
+//        groupNumberTextBox.setEnabled(true);
+//        groupNumberTextBox.setBackground(Color.white);
+//        mediatorComboBox.setEnabled(true);
+//        pbrBoxTextBox.setEnabled(true);
+//        pbrBoxTextBox.setBackground(Color.white);
+//        groupTypeComboBox.setEnabled(true);
+//        statusComboBox.setEnabled(true);
+//        reclassCodeComboBox.setEnabled(true);
+//        resultComboBox.setEnabled(true);
     }
     
     public void enableUpdate() {
         Global.root.getjButton2().setText("Save");
         Global.root.getjButton9().setVisible(true);
         
-//        cscNameTextBox.setEnabled(true);
-//        cscNameTextBox.setBackground(Color.white);
-//        alsoKnownAsTextBox.setEnabled(true);
-//        alsoKnownAsTextBox.setBackground(Color.white);
-//        cscNumberTextBox.setEnabled(true);
-//        cscNumberTextBox.setBackground(Color.white);
-//        cscTypeComboBox.setEnabled(true);
-//        cscPhone1TextBox.setEnabled(true);
-//        cscPhone1TextBox.setBackground(Color.white);
-//        cscPhone2TextBox.setEnabled(true);
-//        cscPhone2TextBox.setBackground(Color.white);
-//        cscFaxTextBox.setEnabled(true);
-//        cscFaxTextBox.setBackground(Color.white);
-//        cscAddress1TextBox.setEnabled(true);
-//        cscAddress1TextBox.setBackground(Color.white);
-//        cscAddress2TextBox.setEnabled(true);
-//        cscAddress2TextBox.setBackground(Color.white);
-//        cscCityTextBox.setEnabled(true);
-//        cscCityTextBox.setBackground(Color.white);
-//        cscStateComboBox.setEnabled(true);
-//        cscZipTextBox.setEnabled(true);
-//        cscZipTextBox.setBackground(Color.white);
-//        cscCountyComboBox.setEnabled(true);
-//        cscEmailTextBox.setEnabled(true);
-//        cscEmailTextBox.setBackground(Color.white);
-//        
-//        fiscalYearEndingComboBox.setEnabled(true);
-//        dueDateComboBox.setEnabled(true);
-//        activitiesLastFiledTextBox.setEnabled(true);
-//        activitiesLastFiledTextBox.setBackground(Color.white);
-//        lastNotificationTextBox.setEnabled(true);
-//        lastNotificationTextBox.setBackground(Color.white);
-//        statutoryCheckBox.setEnabled(true);
-//        validCheckBox.setEnabled(true);
-//        dateFiledTextBox.setEnabled(true);
-//        dateFiledTextBox.setBackground(Color.white);
-//        previousFileDateTextBox.setBackground(Color.white);
-//        previousFileDateTextBox.setEnabled(true);
-//        charterCheckBox.setEnabled(true);
+        aljComboBox.setEnabled(true);
+        openDateTextBox.setEnabled(true);
+        openDateTextBox.setBackground(Color.white);
+        closeDateTextBox.setEnabled(true);
+        closeDateTextBox.setBackground(Color.white);
+        groupNumberTextBox.setEnabled(true);
+        groupNumberTextBox.setBackground(Color.white);
+        mediatorComboBox.setEnabled(true);
+        pbrBoxTextBox.setEnabled(true);
+        pbrBoxTextBox.setBackground(Color.white);
+        groupTypeComboBox.setEnabled(true);
+        statusComboBox.setEnabled(true);
+        reclassCodeComboBox.setEnabled(true);
+        resultComboBox.setEnabled(true);
     }
     
     public void disableUpdate(boolean save) {
         Global.root.getjButton2().setText("Update");
         Global.root.getjButton9().setVisible(false);
         
-//        cscNameTextBox.setEnabled(false);
-//        cscNameTextBox.setBackground(new Color(238,238,238));
-//        alsoKnownAsTextBox.setEnabled(false);
-//        alsoKnownAsTextBox.setBackground(new Color(238,238,238));
-//        cscNumberTextBox.setEnabled(false);
-//        cscNumberTextBox.setBackground(new Color(238,238,238));
-//        cscTypeComboBox.setEnabled(false);
-//        cscPhone1TextBox.setEnabled(false);
-//        cscPhone1TextBox.setBackground(new Color(238,238,238));
-//        cscPhone2TextBox.setEnabled(false);
-//        cscPhone2TextBox.setBackground(new Color(238,238,238));
-//        cscFaxTextBox.setEnabled(false);
-//        cscFaxTextBox.setBackground(new Color(238,238,238));
-//        cscAddress1TextBox.setEnabled(false);
-//        cscAddress1TextBox.setBackground(new Color(238,238,238));
-//        cscAddress2TextBox.setEnabled(false);
-//        cscAddress2TextBox.setBackground(new Color(238,238,238));
-//        cscCityTextBox.setEnabled(false);
-//        cscCityTextBox.setBackground(new Color(238,238,238));
-//        cscStateComboBox.setEnabled(false);
-//        cscZipTextBox.setEnabled(false);
-//        cscZipTextBox.setBackground(new Color(238,238,238));
-//        cscCountyComboBox.setEnabled(false);
-//        cscEmailTextBox.setEnabled(false);
-//        cscEmailTextBox.setBackground(new Color(238,238,238));
-//        
-//        fiscalYearEndingComboBox.setEnabled(false);
-//        dueDateComboBox.setEnabled(false);
-//        activitiesLastFiledTextBox.setEnabled(false);
-//        activitiesLastFiledTextBox.setBackground(new Color(238,238,238));
-//        lastNotificationTextBox.setEnabled(false);
-//        lastNotificationTextBox.setBackground(new Color(238,238,238));
-//        statutoryCheckBox.setEnabled(false);
-//        validCheckBox.setEnabled(false);
-//        dateFiledTextBox.setEnabled(false);
-//        dateFiledTextBox.setBackground(new Color(238,238,238));
-//        previousFileDateTextBox.setBackground(new Color(238,238,238));
-//        previousFileDateTextBox.setEnabled(false);
-//        charterCheckBox.setEnabled(false);
+        aljComboBox.setEnabled(false);
+        openDateTextBox.setEnabled(false);
+        openDateTextBox.setBackground(new Color(238,238,238));
+        closeDateTextBox.setEnabled(false);
+        closeDateTextBox.setBackground(new Color(238,238,238));
+        groupNumberTextBox.setEnabled(false);
+        groupNumberTextBox.setBackground(new Color(238,238,238));
+        mediatorComboBox.setEnabled(false);
+        pbrBoxTextBox.setEnabled(false);
+        pbrBoxTextBox.setBackground(new Color(238,238,238));
+        groupTypeComboBox.setEnabled(false);
+        statusComboBox.setEnabled(false);
+        reclassCodeComboBox.setEnabled(false);
+        resultComboBox.setEnabled(false);
 
         if(save) {
             saveInformation();
@@ -304,21 +190,21 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        activitiesLastFiledTextBox = new com.alee.extended.date.WebDateField();
-        activitiesLastFiledTextBox1 = new com.alee.extended.date.WebDateField();
+        openDateTextBox = new com.alee.extended.date.WebDateField();
+        closeDateTextBox = new com.alee.extended.date.WebDateField();
         aljComboBox = new javax.swing.JComboBox<>();
         caseNumberTextBox = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        groupNumberTextBox = new javax.swing.JTextField();
+        mediatorComboBox = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jComboBox3 = new javax.swing.JComboBox<>();
-        jComboBox4 = new javax.swing.JComboBox<>();
-        jComboBox5 = new javax.swing.JComboBox<>();
-        jComboBox6 = new javax.swing.JComboBox<>();
+        pbrBoxTextBox = new javax.swing.JTextField();
+        groupTypeComboBox = new javax.swing.JComboBox<>();
+        statusComboBox = new javax.swing.JComboBox<>();
+        reclassCodeComboBox = new javax.swing.JComboBox<>();
+        resultComboBox = new javax.swing.JComboBox<>();
         jLabel11 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
@@ -330,7 +216,7 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
         jLabel20 = new javax.swing.JLabel();
         jPanel9 = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        rrMailedTextBox = new javax.swing.JTextField();
         jTextField5 = new javax.swing.JTextField();
         jTextField6 = new javax.swing.JTextField();
         jTextField7 = new javax.swing.JTextField();
@@ -381,47 +267,53 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
 
         jLabel6.setText("Mediator:");
 
-        activitiesLastFiledTextBox.setEditable(false);
-        activitiesLastFiledTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        activitiesLastFiledTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
-        activitiesLastFiledTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        activitiesLastFiledTextBox.setEnabled(false);
-        activitiesLastFiledTextBox.setDateFormat(Global.mmddyyyy);
-        activitiesLastFiledTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+        openDateTextBox.setEditable(false);
+        openDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        openDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+        openDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        openDateTextBox.setEnabled(false);
+        openDateTextBox.setDateFormat(Global.mmddyyyy);
+        openDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                activitiesLastFiledTextBoxMouseClicked(evt);
+                openDateTextBoxMouseClicked(evt);
             }
         });
-        activitiesLastFiledTextBox.addActionListener(new java.awt.event.ActionListener() {
+        openDateTextBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                activitiesLastFiledTextBoxActionPerformed(evt);
+                openDateTextBoxActionPerformed(evt);
             }
         });
 
-        activitiesLastFiledTextBox1.setEditable(false);
-        activitiesLastFiledTextBox1.setBackground(new java.awt.Color(238, 238, 238));
-        activitiesLastFiledTextBox1.setCaretColor(new java.awt.Color(0, 0, 0));
-        activitiesLastFiledTextBox1.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        activitiesLastFiledTextBox1.setEnabled(false);
-        activitiesLastFiledTextBox.setDateFormat(Global.mmddyyyy);
-        activitiesLastFiledTextBox1.addMouseListener(new java.awt.event.MouseAdapter() {
+        closeDateTextBox.setEditable(false);
+        closeDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        closeDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+        closeDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        closeDateTextBox.setEnabled(false);
+        closeDateTextBox.setDateFormat(Global.mmddyyyy);
+        closeDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                activitiesLastFiledTextBox1MouseClicked(evt);
+                closeDateTextBoxMouseClicked(evt);
             }
         });
-        activitiesLastFiledTextBox1.addActionListener(new java.awt.event.ActionListener() {
+        closeDateTextBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                activitiesLastFiledTextBox1ActionPerformed(evt);
+                closeDateTextBoxActionPerformed(evt);
             }
         });
 
         aljComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        aljComboBox.setEnabled(false);
 
         caseNumberTextBox.setBackground(new java.awt.Color(238, 238, 238));
         caseNumberTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         caseNumberTextBox.setEnabled(false);
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        groupNumberTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        groupNumberTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        groupNumberTextBox.setEnabled(false);
+
+        mediatorComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        mediatorComboBox.setEnabled(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -438,12 +330,12 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
                     .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(activitiesLastFiledTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(activitiesLastFiledTextBox1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(openDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(closeDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(aljComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(caseNumberTextBox)
-                    .addComponent(jTextField2)
-                    .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(groupNumberTextBox)
+                    .addComponent(mediatorComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 0, 0))
         );
         jPanel1Layout.setVerticalGroup(
@@ -460,20 +352,20 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(activitiesLastFiledTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(openDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(activitiesLastFiledTextBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(closeDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(groupNumberTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jComboBox2)
+                    .addComponent(mediatorComboBox)
                     .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         jLabel7.setText("PBR Box:");
@@ -482,16 +374,24 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
 
         jLabel9.setText("Status:");
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        pbrBoxTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        pbrBoxTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        pbrBoxTextBox.setEnabled(false);
 
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        groupTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        groupTypeComboBox.setEnabled(false);
 
-        jComboBox5.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        statusComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        statusComboBox.setEnabled(false);
 
-        jComboBox6.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox6.addActionListener(new java.awt.event.ActionListener() {
+        reclassCodeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        reclassCodeComboBox.setEnabled(false);
+
+        resultComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        resultComboBox.setEnabled(false);
+        resultComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox6ActionPerformed(evt);
+                resultComboBoxActionPerformed(evt);
             }
         });
 
@@ -513,11 +413,11 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
                     .addComponent(jLabel10))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField3)
-                    .addComponent(jComboBox3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jComboBox4, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jComboBox5, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jComboBox6, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(pbrBoxTextBox)
+                    .addComponent(groupTypeComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(statusComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(reclassCodeComboBox, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(resultComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -526,24 +426,24 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(pbrBoxTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jComboBox3)
+                    .addComponent(groupTypeComboBox)
                     .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox4)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE))
+                    .addComponent(jLabel9)
+                    .addComponent(statusComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jComboBox5)
-                    .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(reclassCodeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jComboBox6)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(36, 36, 36))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(resultComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -610,6 +510,8 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel16.setText("R and R");
 
+        rrMailedTextBox.setEnabled(false);
+
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
         jPanel9Layout.setHorizontalGroup(
@@ -622,7 +524,7 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
                     .addComponent(jTextField5)
                     .addComponent(jTextField6)
                     .addComponent(jTextField7)
-                    .addComponent(jTextField4))
+                    .addComponent(rrMailedTextBox))
                 .addGap(0, 0, 0))
         );
         jPanel9Layout.setVerticalGroup(
@@ -631,7 +533,7 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel16)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(rrMailedTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -878,25 +780,25 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void activitiesLastFiledTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_activitiesLastFiledTextBoxMouseClicked
-        clearDate(activitiesLastFiledTextBox, evt);
-    }//GEN-LAST:event_activitiesLastFiledTextBoxMouseClicked
+    private void openDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_openDateTextBoxMouseClicked
+        clearDate(openDateTextBox, evt);
+    }//GEN-LAST:event_openDateTextBoxMouseClicked
 
-    private void activitiesLastFiledTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_activitiesLastFiledTextBoxActionPerformed
+    private void openDateTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openDateTextBoxActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_activitiesLastFiledTextBoxActionPerformed
+    }//GEN-LAST:event_openDateTextBoxActionPerformed
 
-    private void activitiesLastFiledTextBox1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_activitiesLastFiledTextBox1MouseClicked
+    private void closeDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closeDateTextBoxMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_activitiesLastFiledTextBox1MouseClicked
+    }//GEN-LAST:event_closeDateTextBoxMouseClicked
 
-    private void activitiesLastFiledTextBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_activitiesLastFiledTextBox1ActionPerformed
+    private void closeDateTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeDateTextBoxActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_activitiesLastFiledTextBox1ActionPerformed
+    }//GEN-LAST:event_closeDateTextBoxActionPerformed
 
-    private void jComboBox6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox6ActionPerformed
+    private void resultComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resultComboBoxActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox6ActionPerformed
+    }//GEN-LAST:event_resultComboBoxActionPerformed
 
     private void jTextField11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField11ActionPerformed
         // TODO add your handling code here:
@@ -904,15 +806,11 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.alee.extended.date.WebDateField activitiesLastFiledTextBox;
-    private com.alee.extended.date.WebDateField activitiesLastFiledTextBox1;
     private javax.swing.JComboBox<String> aljComboBox;
     private javax.swing.JTextField caseNumberTextBox;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
-    private javax.swing.JComboBox<String> jComboBox4;
-    private javax.swing.JComboBox<String> jComboBox5;
-    private javax.swing.JComboBox<String> jComboBox6;
+    private com.alee.extended.date.WebDateField closeDateTextBox;
+    private javax.swing.JTextField groupNumberTextBox;
+    private javax.swing.JComboBox<String> groupTypeComboBox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -958,7 +856,6 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
     private javax.swing.JTextField jTextField17;
     private javax.swing.JTextField jTextField18;
     private javax.swing.JTextField jTextField19;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField20;
     private javax.swing.JTextField jTextField21;
     private javax.swing.JTextField jTextField22;
@@ -969,12 +866,17 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
     private javax.swing.JTextField jTextField27;
     private javax.swing.JTextField jTextField28;
     private javax.swing.JTextField jTextField29;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
     private javax.swing.JTextField jTextField7;
     private javax.swing.JTextField jTextField8;
     private javax.swing.JTextField jTextField9;
+    private javax.swing.JComboBox<String> mediatorComboBox;
+    private com.alee.extended.date.WebDateField openDateTextBox;
+    private javax.swing.JTextField pbrBoxTextBox;
+    private javax.swing.JComboBox<String> reclassCodeComboBox;
+    private javax.swing.JComboBox<String> resultComboBox;
+    private javax.swing.JTextField rrMailedTextBox;
+    private javax.swing.JComboBox<String> statusComboBox;
     // End of variables declaration//GEN-END:variables
 }

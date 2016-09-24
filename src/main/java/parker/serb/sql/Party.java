@@ -73,12 +73,12 @@ public class Party {
                 party.address1 = partyRS.getString("address1") == null ? null : partyRS.getString("address1");
                 party.address2 = partyRS.getString("address2") == null ? null : partyRS.getString("address2");
                 party.address3 = partyRS.getString("address3") == null ? null : partyRS.getString("address3");
-                party.city = partyRS.getString("city") == null ? "" : partyRS.getString("city");
+                party.city = partyRS.getString("city") == null ? null : partyRS.getString("city");
                 party.stateCode = partyRS.getString("stateCode") == null ? null : partyRS.getString("stateCode");
                 party.zipCode = partyRS.getString("zipCode") == null ? null : partyRS.getString("zipCode");
                 party.phone1 = partyRS.getString("phone1") == null ? null : NumberFormatService.convertStringToPhoneNumber(partyRS.getString("phone1"));
                 party.phone2 = partyRS.getString("phone2") == null ? null : NumberFormatService.convertStringToPhoneNumber(partyRS.getString("phone2"));
-                party.emailAddress = partyRS.getString("emailAddress") == null ? "" : partyRS.getString("emailAddress");
+                party.emailAddress = partyRS.getString("emailAddress") == null ? null : partyRS.getString("emailAddress");
                 party.fax = partyRS.getString("fax") == null ? null : NumberFormatService.convertStringToPhoneNumber(partyRS.getString("fax"));
             }
         } catch (SQLException ex) {

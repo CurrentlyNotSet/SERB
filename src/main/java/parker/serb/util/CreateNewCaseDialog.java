@@ -139,21 +139,6 @@ public class CreateNewCaseDialog extends javax.swing.JDialog {
         return caseNumber;
     }
     
-//    public static void refreshHeader() {
-//        switch (Global.activeSection) {
-//            case "REP":
-////                Global.root.getrEPHeaderPanel1().loadCases();
-////                Global.root.getrEPHeaderPanel1().getjComboBox2().setSelectedItem(buildCaseNumber());
-//                break;
-//            case "MED":
-//                break;
-//            case "ULP":
-//                break;
-//            case "ORG":
-//                break;
-//        }
-//    }
-    
     private void createCase() {
         switch (Global.activeSection) {
             case "REP":

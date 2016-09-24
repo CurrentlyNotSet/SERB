@@ -41,10 +41,10 @@ public class ULPRecommendationPanel extends javax.swing.JPanel {
         jTextArea1.setBackground(Color.white);
         
         orginalRec = jTextArea1.getText();
-        
     }
     
     private void loadRecComboBox() {
+        
         recommendationComboBox.removeAllItems();
         
         recommendationComboBox.addItem("");
@@ -68,14 +68,11 @@ public class ULPRecommendationPanel extends javax.swing.JPanel {
         
         jTextArea1.setBackground(new Color(238,238,238));
         jTextArea1.setEnabled(false);
-        
         recommendationComboBox.setSelectedItem("");
-        
         recommendationComboBox.setVisible(false);
         addRecButton.setVisible(false);
         
         loadInformation();
-        
     }
     
     public void loadInformation() {

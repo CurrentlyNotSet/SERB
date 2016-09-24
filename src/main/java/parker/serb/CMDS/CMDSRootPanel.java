@@ -94,7 +94,7 @@ public class CMDSRootPanel extends javax.swing.JPanel {
                 Global.root.getjButton2().setEnabled(true);
                 Global.root.getjButton9().setVisible(true);
                 break;
-            case "Caase Information":
+            case "Case Information":
                 System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
                 Global.root.getjButton2().setText("Update");
                 Global.root.getjButton2().setEnabled(true);
@@ -140,6 +140,7 @@ public class CMDSRootPanel extends javax.swing.JPanel {
             case "Parties":
                 new PartySearchDialog((JFrame) this.getRootPane().getParent(), true);
                 partiesPanel1.loadParties();
+                Global.root.getcMDSHeaderPanel1().loadHeaderInformation();
                 break;
             case "Case Information":
                 if(buttonText.equals("Update")) {
@@ -150,7 +151,7 @@ public class CMDSRootPanel extends javax.swing.JPanel {
                     Global.root.enableTabsAfterSave();
                     Global.root.enableButtonsAfterCancel();
                     cMDSInformationPanel1.disableUpdate(true);
-//                    Global.root.getoRGHeaderPanel2().loadUpdatedHeaderInformation();
+                    Global.root.getcMDSHeaderPanel1().loadHeaderInformation();
                 }
                 break;
             case "Notes":

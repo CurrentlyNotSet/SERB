@@ -23,9 +23,7 @@ public class ULPCaseSearch extends javax.swing.JDialog {
     DefaultTableModel model;
     List caseList;
     Object[][] tableData;
-    /**
-     * Creates new form REPCaseSearch
-     */
+    
     public ULPCaseSearch(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -133,10 +131,7 @@ public class ULPCaseSearch extends javax.swing.JDialog {
             public void mouseClicked(MouseEvent e) {
                 if(e.getClickCount() == 2) {
                     setVisible(false);
-//                    Global.selectedFullCaseNumber = caseSearchTable.getValueAt(caseSearchTable.getSelectedRow(), 0).toString();
-//                    Global.caseNumber = caseSearchTable.getValueAt(caseSearchTable.getSelectedRow(), 0).toString();
                     Global.root.getuLPHeaderPanel1().getjComboBox2().setSelectedItem(caseSearchTable.getValueAt(caseSearchTable.getSelectedRow(), 0).toString());
-                    
                 }
             }
 
@@ -177,8 +172,6 @@ public class ULPCaseSearch extends javax.swing.JDialog {
     
     private void loadAllCases() {
         
-//        model = new DefaultTableModel();
-        
         model = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -202,8 +195,7 @@ public class ULPCaseSearch extends javax.swing.JDialog {
         }
         getTableData();
         caseSearchTable.setModel(model);
-        jLayeredPane1.moveToBack(jPanel1);
-        
+        jLayeredPane1.moveToBack(jPanel1);     
     }
     
     private void limitCaseList() {
@@ -343,11 +335,6 @@ public class ULPCaseSearch extends javax.swing.JDialog {
         jLabel3.setText("Case Search:");
 
         caseYearTextBox.setEnabled(false);
-        caseYearTextBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                caseYearTextBoxActionPerformed(evt);
-            }
-        });
 
         jLabel5.setText("-");
 
@@ -356,20 +343,10 @@ public class ULPCaseSearch extends javax.swing.JDialog {
         jLabel6.setText("-");
 
         caseMonthTextBox.setEnabled(false);
-        caseMonthTextBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                caseMonthTextBoxActionPerformed(evt);
-            }
-        });
 
         jLabel7.setText("-");
 
         caseNumberTextBox.setEnabled(false);
-        caseNumberTextBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                caseNumberTextBoxActionPerformed(evt);
-            }
-        });
 
         jButton2.setText("Refresh");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -443,18 +420,6 @@ public class ULPCaseSearch extends javax.swing.JDialog {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void caseYearTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_caseYearTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_caseYearTextBoxActionPerformed
-
-    private void caseMonthTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_caseMonthTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_caseMonthTextBoxActionPerformed
-
-    private void caseNumberTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_caseNumberTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_caseNumberTextBoxActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         jButton2.setEnabled(false);

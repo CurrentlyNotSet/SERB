@@ -41,20 +41,6 @@ public class Database {
         return connection;
     }
     
-    public static void createTables() {
-//        User.createTable();
-//        Audit.createTable(); 
-//        REPCase.createTable();
-//        Role.createTable();
-//        UserRole.createTable();
-//        Activity.createTable();
-    }
-    
-    public static void createDevData() {
-//        insertAdminUser();
-//        Role.insertDefulatData();
-    }
-    
     public static void createDBBackup(String location, String db) {
         try {
             Statement stmt = Database.connectToDB().createStatement();
