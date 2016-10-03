@@ -31,7 +31,7 @@ public class JacobCOMBridge {
                     eolWord.safeRelease();
                 }
                 eolWord = null;
-            }
+            } 
         }
         return eolWord;
     }
