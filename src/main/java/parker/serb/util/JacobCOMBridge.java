@@ -31,7 +31,7 @@ public class JacobCOMBridge {
                     eolWord.safeRelease();
                 }
                 eolWord = null;
-            }
+            } 
         }
         return eolWord;
     }
@@ -42,7 +42,7 @@ public class JacobCOMBridge {
             LibraryLoader.loadJacobLibrary();
             return true;
         } catch (UnsatisfiedLinkError e) {
-            e.printStackTrace();
+            System.err.println("Missing DLL: " + dllPath);
             SlackNotification.sendNotification(e.toString());
             return false;
         }

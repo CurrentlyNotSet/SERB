@@ -27,49 +27,59 @@ import parker.serb.util.StringUtilities;
 public class generateDocument {
     
     public static String generateSMDSdocument(SMDSDocuments template, int senderID){
-
-        //Setup Document
-        File docPath = new File(Global.activityPath
-                + Global.activeSection + File.separator
-                + Global.caseYear + File.separator
-                + NumberFormatService.generateFullCaseNumber());
-        docPath.mkdirs();
-        String saveDocName = String.valueOf(new Date().getTime()) + "_" + template.historyFileName + ".docx";
+        String saveDocName = null;
         ActiveXComponent eolWord = null;
-        
         eolWord = JacobCOMBridge.setWordActive(true, false, eolWord);
-        
-        Dispatch document = Dispatch.call(eolWord.getProperty("Documents").toDispatch(), "Open",
-                Global.templatePath + template.section + File.separator + template.fileName).toDispatch();
-        ActiveXComponent.call(eolWord.getProperty("Selection").toDispatch(), "Find").toDispatch();
-        
-        //section
-        if (null != Global.activeSection) { 
-            switch (Global.activeSection) {
-                case "ULP":
-                    document = defaultSMDSBookmarks(document, template.dueDate);
-                    document = processULPbookmarks.processDoAULPWordLetter(document);
-                    break;
-                case "REP":
-                    document = defaultSMDSBookmarks(document, template.dueDate);
-                    document = processREPbookmarks.processDoAREPWordLetter(document, senderID);
-                    break;
-                case "MED":
-                    document = defaultSMDSBookmarks(document, template.dueDate);
-//                    document = processMEDbookmarks.processDoAMEDWordLetter(document);
-                    break;
-                case "ORG":
-                    document = defaultSMDSBookmarks(document, template.dueDate);
-                    break;
-                default:
-                    break;
-            }
-        }
+        if (eolWord != null){
+            //Setup Document
+            File docPath = new File(Global.activityPath
+                    + Global.activeSection + File.separator
+                    + Global.caseYear + File.separator
+                    + NumberFormatService.generateFullCaseNumber());
+            docPath.mkdirs();
+            saveDocName = String.valueOf(new Date().getTime()) + "_" + template.historyFileName + ".docx";
 
-        Dispatch WordBasic = (Dispatch) Dispatch.call(eolWord, "WordBasic").getDispatch();
-        String newFilePath = docPath + File.separator + saveDocName;
-        Dispatch.call(WordBasic, "FileSaveAs", newFilePath, new Variant(16));
-        JacobCOMBridge.setWordActive(false, false, eolWord);
+            Dispatch document = Dispatch.call(eolWord.getProperty("Documents").toDispatch(), "Open",
+                    Global.templatePath + template.section + File.separator + template.fileName).toDispatch();
+            ActiveXComponent.call(eolWord.getProperty("Selection").toDispatch(), "Find").toDispatch();
+
+            //section
+            if (null != Global.activeSection) { 
+                switch (Global.activeSection) {
+                    case "ULP":
+                        document = defaultSMDSBookmarks(document, template.dueDate);
+                        document = processULPbookmarks.processDoAULPWordLetter(document);
+                        break;
+                    case "REP":
+                        document = defaultSMDSBookmarks(document, template.dueDate);
+                        document = processREPbookmarks.processDoAREPWordLetter(document, senderID);
+                        break;
+                    case "MED":
+                        document = defaultSMDSBookmarks(document, template.dueDate);
+                        document = processMEDbookmarks.processDoAMEDWordLetter(document);
+                        break;
+                    case "ORG":
+                        document = defaultSMDSBookmarks(document, template.dueDate);
+                        document = processORGbookmarks.processDoAORGWordLetter(document, true);
+                        break;
+                    case "CSC":
+                        document = defaultCMDSBookmarks(document, template.dueDate);
+                        document = processCSCbookmarks.processDoACSCWordLetter(document);
+                        break;
+                    case "CMDS":
+                        document = defaultCMDSBookmarks(document, template.dueDate);
+                        document = processCMDSbookmarks.processDoACMDSWordLetter(document);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            Dispatch WordBasic = (Dispatch) Dispatch.call(eolWord, "WordBasic").getDispatch();
+            String newFilePath = docPath + File.separator + saveDocName;
+            Dispatch.call(WordBasic, "FileSaveAs", newFilePath, new Variant(16));
+            JacobCOMBridge.setWordActive(false, false, eolWord);
+        }
 
         return saveDocName;
     }
@@ -191,4 +201,114 @@ public class generateDocument {
         return Document;
     }
     
+    private static Dispatch defaultCMDSBookmarks(Dispatch Document, int docDue){
+        //get basic information
+        List<SystemExecutive> execsList = SystemExecutive.loadExecs("SPBR");
+        AdministrationInformation sysAdminInfo = AdministrationInformation.loadAdminInfo("SPBR");
+                
+        String pbrAddress = "";
+        String pbrCityStateZip = "";
+        String chairmanFullName = "";
+        String viceChairmanFullName = "";
+        String boardMemberFullName = "";
+        String executiveDirectorFullName = "";
+        String chiefAdminLawJudgeFullName = "";
+        
+        for (SystemExecutive exec : execsList){
+            if (null != exec.position)switch (exec.position) {
+                case "Chairman":
+                    chairmanFullName = StringUtilities.buildFullName(exec.firstName, exec.middleName, exec.lastName);
+                    break;
+                case "ViceChairman":
+                    viceChairmanFullName = StringUtilities.buildFullName(exec.firstName, exec.middleName, exec.lastName);
+                    break;
+                case "BoardMember":
+                    boardMemberFullName = StringUtilities.buildFullName(exec.firstName, exec.middleName, exec.lastName);
+                    break;
+                case "ExecutiveDirector":
+                    executiveDirectorFullName = StringUtilities.buildFullName(exec.firstName, exec.middleName, exec.lastName);
+                    break;
+                case "ChiefAdministratorLawJudge":
+                    chiefAdminLawJudgeFullName = StringUtilities.buildFullName(exec.firstName, exec.middleName, exec.lastName);
+                    break;
+                default:
+                    break;
+            }
+        }
+        
+        if (!sysAdminInfo.Address1.equals("")) {
+            pbrAddress += sysAdminInfo.Address1.trim();
+        }
+        if (!sysAdminInfo.Address2.equals("")) {
+            pbrAddress += " " + sysAdminInfo.Address2.trim();
+        }
+        if (!sysAdminInfo.City.equals("")) {
+            pbrCityStateZip += sysAdminInfo.City.trim();
+        }
+        if (!sysAdminInfo.State.equals("")) {
+            pbrCityStateZip += ", " + sysAdminInfo.State.trim();
+        }
+        if (!sysAdminInfo.Zip.equals("")) {
+            pbrCityStateZip += " " + sysAdminInfo.Zip.trim();
+        }
+        
+        //DueDate Calculation
+        Date today = new Date();
+        Calendar c = Calendar.getInstance();
+        c.setTime(today); // Now use today date.
+        c.add(Calendar.DATE, docDue);
+        
+        if(c.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+            c.add(Calendar.DATE, 2);
+        } else if (c.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY){
+            c.add(Calendar.DATE, 1);
+        }
+        Date dueDate = c.getTime();
+        
+        //Date Calculations
+        c.setTime(today);
+        c.add(Calendar.DATE, 7);
+        Date sevenDayOut = c.getTime();
+        c.setTime(today);
+        c.add(Calendar.DATE, 14);
+        Date fourteenDayOut = c.getTime();
+        c.setTime(today);
+        c.add(Calendar.DATE, 21);
+        Date twentyOneDayOut = c.getTime();
+        
+               
+        //ProcessBookmarks
+        for (int i = 0; i < Global.bookmarkLimit; i++) {
+            //System Executives            
+            processBookmark.process("HeaderChairmanName" + (i == 0 ? "" : i), chairmanFullName, Document);
+            processBookmark.process("HeaderViceChairmanName" + (i == 0 ? "" : i), viceChairmanFullName, Document);
+            processBookmark.process("HeaderBoardMemberName" + (i == 0 ? "" : i), boardMemberFullName, Document);
+            processBookmark.process("HeaderExecutiveDirectorName" + (i == 0 ? "" : i), executiveDirectorFullName, Document);
+            processBookmark.process("ChiefAdminLawJudge" + (i == 0 ? "" : i), chiefAdminLawJudgeFullName, Document);
+            
+            //System Administration Information
+            processBookmark.process("GovernorName" + (i == 0 ? "" : i), sysAdminInfo.governorName, Document);
+            processBookmark.process("LtGovernorName" + (i == 0 ? "" : i), sysAdminInfo.LtGovernorName, Document);
+            processBookmark.process("SerbAddress" + (i == 0 ? "" : i), pbrAddress, Document);
+            processBookmark.process("SerbCityStateZip" + (i == 0 ? "" : i), pbrCityStateZip, Document);
+            processBookmark.process("SerbURL" + (i == 0 ? "" : i), sysAdminInfo.Url, Document);
+            
+            processBookmark.process("SerbPhone" + (i == 0 ? "" : i), sysAdminInfo.Phone, Document);
+            processBookmark.process("SerbFooter" + (i == 0 ? "" : i), sysAdminInfo.Footer, Document);
+            processBookmark.process("SerbFax" + (i == 0 ? "" : i), sysAdminInfo.Fax, Document);
+            
+            //Made up stuff
+            processBookmark.process("TODAYSDATE" + (i == 0 ? "" : i), Global.MMMMddyyyy.format(new Date()), Document);
+            processBookmark.process("DAY" + (i == 0 ? "" : i), Calendar.getInstance().get(Calendar.DAY_OF_MONTH) 
+                    + Global.daySuffixes[Calendar.getInstance().get(Calendar.DAY_OF_MONTH)], Document);
+            processBookmark.process("MONTH" + (i == 0 ? "" : i), Global.MMMMM.format(new Date()), Document);
+            processBookmark.process("YEAR" + (i == 0 ? "" : i), Global.yyyy.format(new Date()), Document);
+            processBookmark.process("DUEDATE" + (i == 0 ? "" : i), Global.MMMMddyyyy.format(dueDate), Document);
+            processBookmark.process("PLUS7" + (i == 0 ? "" : i), Global.MMMMddyyyy.format(sevenDayOut), Document);
+            processBookmark.process("PLUS14" + (i == 0 ? "" : i), Global.MMMMddyyyy.format(fourteenDayOut), Document);
+            processBookmark.process("PLUS21" + (i == 0 ? "" : i), Global.MMMMddyyyy.format(twentyOneDayOut), Document);
+        }
+        
+        return Document;
+    }
 }
