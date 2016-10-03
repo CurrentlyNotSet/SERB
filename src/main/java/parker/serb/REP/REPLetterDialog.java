@@ -170,8 +170,8 @@ public class REPLetterDialog extends javax.swing.JDialog {
                 FileService.openFile(docName);
             } else {
                 WebOptionPane.showMessageDialog(Global.root, 
-                    "<html><div style='text-align: center;'>Files required to generate documents are missing.<br>"
-                            + "Unable to generate the document.</html>",
+                    "<html><div style='text-align: center;'>Files required to generate documents are missing."
+                            + "<br><br>Unable to generate " + selection + "</html>",
                     "Required File Missing", WebOptionPane.ERROR_MESSAGE);
             }
         }
