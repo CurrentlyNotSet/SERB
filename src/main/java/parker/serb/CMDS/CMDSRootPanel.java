@@ -39,7 +39,7 @@ public class CMDSRootPanel extends javax.swing.JPanel {
         activityPanel1.clearAll();
         notesPanel1.clearAll();
         cMDSInformationPanel1.clearAll();
-//        TODO: Hearings
+        cMDSHearingsPanel1.clearTable();
         partiesPanel1.clearAll();
     }
     
@@ -73,6 +73,9 @@ public class CMDSRootPanel extends javax.swing.JPanel {
             case "Notes":
                 notesPanel1.loadInformation();
                 break;
+            case "Hearings":
+                cMDSHearingsPanel1.loadInformation();
+                break;    
         }
     }
     
@@ -106,6 +109,12 @@ public class CMDSRootPanel extends javax.swing.JPanel {
                 Global.root.getjButton2().setEnabled(true);
                 Global.root.getjButton9().setVisible(false);
                 break;
+            case "Hearings":
+                System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
+                Global.root.getjButton2().setText("Add Hearing");
+                Global.root.getjButton2().setEnabled(true);
+                Global.root.getjButton9().setVisible(false);
+                break;    
         }
     }
     
@@ -165,6 +174,10 @@ public class CMDSRootPanel extends javax.swing.JPanel {
                     notesPanel1.disableUpdate(true);
                 }
                 break;
+            case "Hearings":
+                new CMDSAddHearingDialog(Global.root, true);
+                cMDSHearingsPanel1.loadInformation();
+                break;    
         }
     }
     
@@ -201,6 +214,9 @@ public class CMDSRootPanel extends javax.swing.JPanel {
                     notesPanel1.disableUpdate(false);
                 }
                 break;
+            case "Hearings":
+                cMDSHearingsPanel1.removeHearing();
+                break;    
         }
     }
 

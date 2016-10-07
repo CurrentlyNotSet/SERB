@@ -174,7 +174,8 @@ public class RootPanel extends javax.swing.JFrame {
     
     private void addListeners() {
         jTabbedPane1.addChangeListener((ChangeEvent e) -> {
-            if(Global.activeSection != null) {    
+            if(Global.activeSection != null) { 
+                Audit.addAuditEntry("Navigated to " + Global.activeSection + " section");
                 Global.activeSection = jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex());
                 
                 System.out.println(Global.activeSection);
@@ -416,9 +417,7 @@ public class RootPanel extends javax.swing.JFrame {
         jButton8.setEnabled(false);
         jButton9.setEnabled(true);
         jButton9.setText("Cancel");
-        
     }
-    
     
     public void enableButtonsAfterCancel() {
         jButton1.setEnabled(true);
@@ -431,8 +430,6 @@ public class RootPanel extends javax.swing.JFrame {
         jButton9.setEnabled(false);
         jButton9.setText("Delete");
     }
-    
-    
 
     public JTabbedPane getjTabbedPane1() {
         return jTabbedPane1;

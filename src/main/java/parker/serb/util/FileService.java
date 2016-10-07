@@ -59,8 +59,14 @@ public class FileService {
                     Global.templatePath = "C:\\Users\\johnp10\\Desktop\\SERB\\Template\\";
                     Global.reportingPath = "C:\\Users\\johnp10\\Desktop\\SERB\\Reporting\\";
                     break;    
-                default:
-                    //SERB LOCATIONS
+                default: //SERB LOCATION
+                    Global.scanPath = "G:\\SERB\\Scan\\";
+                    Global.emailPath = "G:\\SERB\\Email\\";
+                    Global.activityPath = "G:\\SERB\\Activity\\";
+                    Global.mediaPath = "G:\\SERB\\Media\\";
+                    Global.templatePath = "G:\\SERB\\Template\\";
+                    Global.reportingPath = "G:\\SERB\\Reporting\\";
+                    break;    
             }
         } catch (UnknownHostException ex) {
             SlackNotification.sendNotification(ex.getMessage());

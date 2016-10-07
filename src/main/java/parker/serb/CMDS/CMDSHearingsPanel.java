@@ -5,6 +5,13 @@
  */
 package parker.serb.CMDS;
 
+import java.util.List;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.table.DefaultTableModel;
+import parker.serb.Global;
+import parker.serb.sql.Activity;
+import parker.serb.sql.CMDSHearing;
+
 /**
  *
  * @author parkerjohnston
@@ -16,6 +23,54 @@ public class CMDSHearingsPanel extends javax.swing.JPanel {
      */
     public CMDSHearingsPanel() {
         initComponents();
+        setTableColumnWidth();
+        addListeners();
+    }
+    
+    private void addListeners() {
+        hearingTable.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
+            if(hearingTable.getSelectionModel().isSelectionEmpty()) {
+                Global.root.getjButton9().setEnabled(false);
+                Global.root.getjButton9().setVisible(false);
+            } else {
+                Global.root.getjButton9().setEnabled(true);
+                Global.root.getjButton9().setVisible(true);
+            }
+        });
+    }
+    
+    public void removeHearing() {
+        String id = hearingTable.getValueAt(hearingTable.getSelectedRow(), 0).toString();
+        String hearingDate = hearingTable.getValueAt(hearingTable.getSelectedRow(), 1).toString();
+        String hearingType = hearingTable.getValueAt(hearingTable.getSelectedRow(), 2).toString();
+        String hearingRoom = hearingTable.getValueAt(hearingTable.getSelectedRow(), 3).toString();
+        
+        new CMDSRemoveHearingDialog(Global.root, true, id, hearingDate, hearingType, hearingRoom);
+        
+        loadInformation();
+    }
+    
+    private void setTableColumnWidth() {
+        hearingTable.getColumnModel().getColumn(0).setPreferredWidth(0);
+        hearingTable.getColumnModel().getColumn(0).setMinWidth(0);
+        hearingTable.getColumnModel().getColumn(0).setMaxWidth(0);
+    }
+    
+    public void clearTable() {
+        DefaultTableModel model = (DefaultTableModel) hearingTable.getModel();
+        model.setRowCount(0);
+    }
+    
+    public void loadInformation() {
+        DefaultTableModel model = (DefaultTableModel) hearingTable.getModel();
+        model.setRowCount(0);
+        
+         List hearing = CMDSHearing.loadHearingsByCaseNumber();
+        
+        for (Object hearing1 : hearing) {
+            CMDSHearing act = (CMDSHearing) hearing1;
+            model.addRow(new Object[] {act.id, act.hearingDateTime, act.hearingType, act.room});
+        }
     }
 
     /**
@@ -28,9 +83,9 @@ public class CMDSHearingsPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        hearingTable = new javax.swing.JTable();
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        hearingTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -38,10 +93,24 @@ public class CMDSHearingsPanel extends javax.swing.JPanel {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "id", "Hearing Date", "Hearing Type", "Hearing Room"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(hearingTable);
+        if (hearingTable.getColumnModel().getColumnCount() > 0) {
+            hearingTable.getColumnModel().getColumn(0).setResizable(false);
+            hearingTable.getColumnModel().getColumn(1).setResizable(false);
+            hearingTable.getColumnModel().getColumn(2).setResizable(false);
+            hearingTable.getColumnModel().getColumn(3).setResizable(false);
+        }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -57,7 +126,7 @@ public class CMDSHearingsPanel extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable hearingTable;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }

@@ -5,20 +5,15 @@
  */
 package parker.serb.CMDS;
 
-import parker.serb.CSC.*;
+import parker.serb.CMDS.*;
 import com.alee.extended.date.WebDateField;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
-import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 import javax.swing.JFrame;
 import parker.serb.Global;
-import parker.serb.employer.employerDetail;
-import parker.serb.employer.employerSearch;
-import parker.serb.sql.CSCCase;
-import parker.serb.sql.County;
-import parker.serb.sql.Employer;
+import parker.serb.sql.CMDSCase;
+import parker.serb.sql.User;
 import parker.serb.util.ClearDateDialog;
 import parker.serb.util.NumberFormatService;
 
@@ -28,7 +23,7 @@ import parker.serb.util.NumberFormatService;
  */
 public class CMDSInformationPanel extends javax.swing.JPanel {
 
-    CSCCase orginalInformation;
+    CMDSCase orginalInformation;
     /**
      * Creates new form ORGInformationPanel
      */
@@ -37,20 +32,31 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
     }
     
     public void clearAll() {
-//        aljComboBox.setEnabled(true);
-//        openDateTextBox.setEnabled(true);
-//        openDateTextBox.setBackground(Color.white);
-//        closeDateTextBox.setEnabled(true);
-//        closeDateTextBox.setBackground(Color.white);
-//        groupNumberTextBox.setEnabled(true);
-//        groupNumberTextBox.setBackground(Color.white);
-//        mediatorComboBox.setEnabled(true);
-//        pbrBoxTextBox.setEnabled(true);
-//        pbrBoxTextBox.setBackground(Color.white);
-//        groupTypeComboBox.setEnabled(true);
-//        statusComboBox.setEnabled(true);
-//        reclassCodeComboBox.setEnabled(true);
-//        resultComboBox.setEnabled(true);
+        caseNumberTextBox.setText("");
+        aljComboBox.setSelectedItem("");
+        openDateTextBox.setText("");
+        closeDateTextBox.setText("");
+        groupNumberTextBox.setText("");
+        mediatorComboBox.setSelectedItem("");
+        pbrBoxTextBox.setText("");
+        groupTypeComboBox.setSelectedItem("");
+        statusComboBox.setSelectedItem("");
+        reclassCodeComboBox.setSelectedItem("");
+        resultComboBox.setSelectedItem("");
+    }
+    
+    public void loadALJComboBox() {
+        aljComboBox.removeAllItems();
+        
+        aljComboBox.addItem("");
+        
+        List userList = User.loadULPComboBox();
+        
+        for (Object user : userList) {
+            aljComboBox.addItem((String) user);
+        }
+        
+        aljComboBox.setSelectedItem("");
     }
     
     public void enableUpdate() {
@@ -100,7 +106,7 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
     }
     
     private void saveInformation() {
-        CSCCase newInformation = new CSCCase();
+        CMDSCase newInformation = new CMDSCase();
         
 //        newInformation.name = cscNameTextBox.getText().trim().equals("") ? null : cscNameTextBox.getText().trim();
 //        newInformation.alsoKnownAs = alsoKnownAsTextBox.getText().trim().equals("") ? null : alsoKnownAsTextBox.getText().trim();
@@ -125,16 +131,20 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
 //        newInformation.filed = dateFiledTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(dateFiledTextBox.getText()));
 //        newInformation.valid = validCheckBox.isSelected();
 //        newInformation.county = cscCountyComboBox.getSelectedItem().toString().trim().equals("") ? null : cscCountyComboBox.getSelectedItem().toString();
-        CSCCase.updateCSCInformation(newInformation, orginalInformation);
+//        CMDSCase.updateCSCInformation(newInformation, orginalInformation);
         
-        if(!newInformation.name.equals(orginalInformation.name)) {
-            Global.root.getcSCHeaderPanel1().loadCases();
-            Global.root.getcSCHeaderPanel1().getjComboBox2().setSelectedItem(newInformation.name);
-        }
+//        if(!newInformation.name.equals(orginalInformation.name)) {
+//            Global.root.getcSCHeaderPanel1().loadCases();
+//            Global.root.getcSCHeaderPanel1().getjComboBox2().setSelectedItem(newInformation.name);
+//        }
     }
     
     public void loadInformation() {
-        orginalInformation = CSCCase.loadCSCInformation();
+        loadALJComboBox();
+        
+        orginalInformation = CMDSCase.loadCMDSCaseInformation();
+
+        caseNumberTextBox.setText(NumberFormatService.generateFullCaseNumber());
         
 //        cscNameTextBox.setText(orginalInformation.name != null ? orginalInformation.name : "");
 //        alsoKnownAsTextBox.setText(orginalInformation.alsoKnownAs != null ? orginalInformation.alsoKnownAs : "");
@@ -432,9 +442,11 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
                     .addComponent(groupTypeComboBox)
                     .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9)
-                    .addComponent(statusComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(statusComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(4, 4, 4)
+                        .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(reclassCodeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -443,7 +455,7 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(resultComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(42, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -510,7 +522,21 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel16.setText("R and R");
 
+        rrMailedTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        rrMailedTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         rrMailedTextBox.setEnabled(false);
+
+        jTextField5.setBackground(new java.awt.Color(238, 238, 238));
+        jTextField5.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        jTextField5.setEnabled(false);
+
+        jTextField6.setBackground(new java.awt.Color(238, 238, 238));
+        jTextField6.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        jTextField6.setEnabled(false);
+
+        jTextField7.setBackground(new java.awt.Color(238, 238, 238));
+        jTextField7.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        jTextField7.setEnabled(false);
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
@@ -520,7 +546,7 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE))
+                        .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE))
                     .addComponent(jTextField5)
                     .addComponent(jTextField6)
                     .addComponent(jTextField7)
@@ -545,6 +571,21 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
         jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel21.setText("B. O.");
 
+        jTextField8.setBackground(new java.awt.Color(238, 238, 238));
+        jTextField8.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        jTextField8.setEnabled(false);
+
+        jTextField9.setBackground(new java.awt.Color(238, 238, 238));
+        jTextField9.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        jTextField9.setEnabled(false);
+
+        jTextField10.setBackground(new java.awt.Color(238, 238, 238));
+        jTextField10.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        jTextField10.setEnabled(false);
+
+        jTextField11.setBackground(new java.awt.Color(238, 238, 238));
+        jTextField11.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        jTextField11.setEnabled(false);
         jTextField11.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField11ActionPerformed(evt);
@@ -561,7 +602,7 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
             .addComponent(jTextField11)
             .addGroup(jPanel10Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel21, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                .addComponent(jLabel21, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel10Layout.setVerticalGroup(
@@ -583,13 +624,29 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
         jLabel22.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel22.setText("P. O. #1");
 
+        jTextField12.setBackground(new java.awt.Color(238, 238, 238));
+        jTextField12.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        jTextField12.setEnabled(false);
+
+        jTextField13.setBackground(new java.awt.Color(238, 238, 238));
+        jTextField13.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        jTextField13.setEnabled(false);
+
+        jTextField14.setBackground(new java.awt.Color(238, 238, 238));
+        jTextField14.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        jTextField14.setEnabled(false);
+
+        jTextField15.setBackground(new java.awt.Color(238, 238, 238));
+        jTextField15.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        jTextField15.setEnabled(false);
+
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
         jPanel11.setLayout(jPanel11Layout);
         jPanel11Layout.setHorizontalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel11Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel22, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                .addComponent(jLabel22, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
                 .addContainerGap())
             .addComponent(jTextField12)
             .addComponent(jTextField13)
@@ -615,13 +672,34 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
         jLabel23.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel23.setText("P. O. #2");
 
+        jTextField16.setBackground(new java.awt.Color(238, 238, 238));
+        jTextField16.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        jTextField16.setEnabled(false);
+        jTextField16.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField16ActionPerformed(evt);
+            }
+        });
+
+        jTextField17.setBackground(new java.awt.Color(238, 238, 238));
+        jTextField17.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        jTextField17.setEnabled(false);
+
+        jTextField18.setBackground(new java.awt.Color(238, 238, 238));
+        jTextField18.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        jTextField18.setEnabled(false);
+
+        jTextField19.setBackground(new java.awt.Color(238, 238, 238));
+        jTextField19.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        jTextField19.setEnabled(false);
+
         javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
         jPanel12.setLayout(jPanel12Layout);
         jPanel12Layout.setHorizontalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel12Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel23, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                .addComponent(jLabel23, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
                 .addContainerGap())
             .addComponent(jTextField16)
             .addComponent(jTextField17)
@@ -646,13 +724,29 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
         jLabel24.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel24.setText("P. O. #3");
 
+        jTextField20.setBackground(new java.awt.Color(238, 238, 238));
+        jTextField20.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        jTextField20.setEnabled(false);
+
+        jTextField21.setBackground(new java.awt.Color(238, 238, 238));
+        jTextField21.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        jTextField21.setEnabled(false);
+
+        jTextField22.setBackground(new java.awt.Color(238, 238, 238));
+        jTextField22.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        jTextField22.setEnabled(false);
+
+        jTextField23.setBackground(new java.awt.Color(238, 238, 238));
+        jTextField23.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        jTextField23.setEnabled(false);
+
         javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
         jPanel13.setLayout(jPanel13Layout);
         jPanel13Layout.setHorizontalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel13Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel24, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                .addComponent(jLabel24, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
                 .addContainerGap())
             .addComponent(jTextField20)
             .addComponent(jTextField21)
@@ -678,13 +772,29 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
         jLabel25.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel25.setText("P. O. #4");
 
+        jTextField24.setBackground(new java.awt.Color(238, 238, 238));
+        jTextField24.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        jTextField24.setEnabled(false);
+
+        jTextField25.setBackground(new java.awt.Color(238, 238, 238));
+        jTextField25.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        jTextField25.setEnabled(false);
+
+        jTextField26.setBackground(new java.awt.Color(238, 238, 238));
+        jTextField26.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        jTextField26.setEnabled(false);
+
+        jTextField27.setBackground(new java.awt.Color(238, 238, 238));
+        jTextField27.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        jTextField27.setEnabled(false);
+
         javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
         jPanel14.setLayout(jPanel14Layout);
         jPanel14Layout.setHorizontalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel14Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel25, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                .addComponent(jLabel25, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
                 .addContainerGap())
             .addComponent(jTextField24)
             .addComponent(jTextField25)
@@ -711,6 +821,14 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
 
         jLabel15.setText("Post Hearing Briefs Due:");
 
+        jTextField28.setBackground(new java.awt.Color(238, 238, 238));
+        jTextField28.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        jTextField28.setEnabled(false);
+
+        jTextField29.setBackground(new java.awt.Color(238, 238, 238));
+        jTextField29.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        jTextField29.setEnabled(false);
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -726,6 +844,7 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
                         .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(0, 0, 0)
                         .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -739,7 +858,7 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTextField28, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTextField29, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 612, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -803,6 +922,10 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
     private void jTextField11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField11ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField11ActionPerformed
+
+    private void jTextField16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField16ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField16ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

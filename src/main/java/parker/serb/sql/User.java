@@ -484,7 +484,7 @@ public class User {
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                System.out.println("TESTING");
+                updateActiveLogIn();
                 SlackNotification.sendNotification(ex.getMessage());
             } else {
                 SlackNotification.sendNotification(ex.getMessage());

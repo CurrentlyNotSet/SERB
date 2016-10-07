@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,140 +33,37 @@ public class CMDSCase {
     public String inventroyStatusLine;
     public String caseStatus;
     public String result;
-//    public String status1;
-//    public String status2;
-//    public int currentOwnerID;
-//    public String county;
-//    public String employerIDNumber;
-//    public String deptInState;
-//    public String bargainingUnitNumber;
-//    public boolean boardCertified;
-//    public boolean deemedCertified;
-//    public boolean certificationRevoked;
-//    public String note;
-//    public Timestamp fileDate;
-//    public Timestamp amendedFiliingDate;
-//    public Timestamp alphaListDate;
-//    public Timestamp finalBoardDate;
-//    public Timestamp registrationLetterSent;
-//    public Timestamp dateOfAppeal;
-//    public Timestamp courtClosedDate;
-//    public Timestamp returnSOIDueDate;
-//    public Timestamp actualSOIReturnDate;
-//    public int SOIReturnInitials;
-//    public Timestamp REPClosedCaseDueDate;
-//    public Timestamp actualREPClosedDate;
-//    public int REPClosedUser;
-//    public Timestamp actualClerksClosedDate;
-//    public int clerksClosedUser;
-//    public String fileBy;
-//    public String bargainingUnitIncluded;
-//    public String bargainingUnitExcluded;
-//    public String optInIncluded;
-//    public boolean professionalNonProfessional;
-//    public String professionalIncluded;
-//    public String professionalExcluded;
-//    public String nonProfessionalIncluded;
-//    public String nonProfessionalExcluded;
-//    public String toReflect;
-//    public String typeFiledBy;
-//    public String typeFiledVia;
-//    public String positionStatementFiledBy;
-//    public String EEONameChangeFrom;
-//    public String EEONameChangeTo;
-//    public String ERNameChangeFrom;
-//    public String ERNameChangeTo;
-//    public String boardActionType;
-//    public Timestamp boardActionDate;
-//    public int hearingPersonID;
-//    public String boardStatusNote;
-//    public String boardStatusBlurb;
-    
-    //electionData
-//    public boolean multicaseElection;
-//    public String electionType1;
-//    public String electionType2;
-//    public String electionType3;
-//    public Timestamp eligibilityDate;
-//    public String ballotOne;
-//    public String ballotTwo;
-//    public String ballotThree;
-//    public String ballotFour;
-//    public Timestamp mailKitDate;
-//    public Timestamp pollingStartDate;
-//    public Timestamp pollingEndDate;
-//    public String ballotsCountDay;
-//    public Timestamp ballotsCountDate;
-//    public Timestamp ballotsCountTime;
-//    public Timestamp eligibilityListDate;
-//    public Timestamp preElectionConfDate;
-//    public String selfReleasing;
-    
-    //results
-//    public String resultApproxNumberEligibleVotes;
-//    public String resultVoidBallots;
-//    public String resultVotesCastForEEO;
-//    public String resultVotesCastForIncumbentEEO;
-//    public String resultVotesCastForRivalEEO1;
-//    public String resultVotesCastForRivalEEO2;
-//    public String resultVotesCastForRivalEEO3;
-//    public String resultVotesCastForNoRepresentative;
-//    public String resultValidVotesCounted;
-//    public String resultChallengedBallots;
-//    public String resultTotalBallotsCast;
-//    public String resultWHoPrevailed;
-    
-    //professional
-//    public String professionalApproxNumberEligible;
-//    public String professionalYES;
-//    public String professionalNO;
-//    public String professionalChallenged;
-//    public String professionalTotalVotes;
-//    public String professionalOutcome;
-//    public String professionalWhoPrevailed;
-//    public String professionalVoidBallots;
-//    public String professionalValidVotes;
-//    public String professionalVotesCastForNoRepresentative;
-//    public String professionalVotesCastForEEO;
-//    public String professionalVotesCastForIncumbentEEO;
-//    public String professionalVotesCastForRivalEEO1;
-//    public String professionalVotesCastForRivalEEO2;
-//    public String professionalVotesCastForRivalEEO3;
-    
-    //nonprofessional
-//    public String nonprofessionalApproxNumberEligible;
-//    public String nonprofessionalYES;
-//    public String nonprofessionalNO;
-//    public String nonprofessionalChallenged;
-//    public String nonprofessionalTotalVotes;
-//    public String nonprofessionalOutcome;
-//    public String nonprofessionalWhoPrevailed;
-//    public String nonprofessionalVoidBallots;
-//    public String nonprofessionalValidVotes;
-//    public String nonprofessionalVotesCastForNoRepresentative;
-//    public String nonprofessionalVotesCastForEEO;
-//    public String nonprofessionalVotesCastForIncumbentEEO;
-//    public String nonprofessionalVotesCastForRivalEEO1;
-//    public String nonprofessionalVotesCastForRivalEEO2;
-//    public String nonprofessionalVotesCastForRivalEEO3;
-    
-    //combined
-//    public String combinedApproxNumberEligible;
-//    public String combinedYES;
-//    public String combinedlNO;
-//    public String combinedChallenged;
-//    public String combinedTotalVotes;
-//    public String combinedOutcome;
-//    public String combinedWhoPrevailed;
-//    public String combinedVoidBallots;
-//    public String combinedValidVotes;
-//    public String combinedVotesCastForNoRepresentative;
-//    public String combinedVotesCastForEEO;
-//    public String combinedVotesCastForIncumbentEEO;
-//    public String combinedVotesCastForRivalEEO1;
-//    public String combinedVotesCastForRivalEEO2;
-//    public String combinedVotesCastForRivalEEO3;
-    
+
+    public int mediatorID;
+    public String PBRBox;
+    public String groupType;
+    public String reclassCode;
+    public Timestamp mailedRR;
+    public Timestamp mailedBO;
+    public Timestamp mailedPO1;
+    public Timestamp mailedPO2;
+    public Timestamp mailedPO3;
+    public Timestamp mailedPO4;
+    public Timestamp remailedRR;
+    public Timestamp remailedBO;
+    public Timestamp remailedPO1;
+    public Timestamp remailedPO2;
+    public Timestamp remailedPO3;
+    public Timestamp remailedPO4;
+    public Timestamp returnReceiptRR;
+    public Timestamp returnReceiptBO;
+    public Timestamp returnReceiptPO1;
+    public Timestamp returnReceiptPO2;
+    public Timestamp returnReceiptPO3;
+    public Timestamp returnReceiptPO4;
+    public Timestamp pullDateRR;
+    public Timestamp pullDateBO;
+    public Timestamp pullDatePO1;
+    public Timestamp pullDatePO2;
+    public Timestamp pullDatePO3;
+    public Timestamp pullDatePO4;
+    public Timestamp hearingCompletedDate;
+    public Timestamp postHearingBriefsDue;
     
     /**
      * Load a list of the most recent 250 REP case numbers
@@ -365,16 +261,16 @@ public class CMDSCase {
         return cmds;
     }
     
-//    public static CMDSCase loadCaseInformation() {
-//        CMDSCase rep = null;
-//        try {
-//            Statement stmt = Database.connectToDB().createStatement();
-//
-//            String sql = "Select"
-//                    + " [type],"
-//                    + " status1,"
-//                    + " status2,"
-//                    + " currentOwnerID,"
+    public static CMDSCase loadCMDSCaseInformation() {
+        CMDSCase cmds = null;
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select"
+                    + " caseYear,"
+                    + " caseType,"
+                    + " caseMonth,"
+                    + " caseNumber"
 //                    + " county,"
 //                    + " employerIDNumber,"
 //                    + " deptInState,"
@@ -398,21 +294,27 @@ public class CMDSCase {
 //                    + " clerksClosedUser,"
 //                    + " alphaListDate,"
 //                    + " note"
-//                    + " from REPCase where caseYear = ? "
-//                    + " AND caseType = ? "
-//                    + " AND caseMonth = ? "
-//                    + " AND caseNumber = ?";
-//
-//            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-//            preparedStatement.setString(1, Global.caseYear);
-//            preparedStatement.setString(2, Global.caseType);
-//            preparedStatement.setString(3, Global.caseMonth);
-//            preparedStatement.setString(4, Global.caseNumber);
-//
-//            ResultSet caseInformation = preparedStatement.executeQuery();
-//            
-//            if(caseInformation.next()) {
-//                rep = new CMDSCase();
+                    + " from CMDSCase where caseYear = ? "
+                    + " AND caseType = ? "
+                    + " AND caseMonth = ? "
+                    + " AND caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, Global.caseYear);
+            preparedStatement.setString(2, Global.caseType);
+            preparedStatement.setString(3, Global.caseMonth);
+            preparedStatement.setString(4, Global.caseNumber);
+
+            ResultSet caseInformation = preparedStatement.executeQuery();
+            
+            if(caseInformation.next()) {
+                cmds = new CMDSCase();
+                cmds.caseYear = caseInformation.getString("caseYear");
+                cmds.caseType = caseInformation.getString("caseType");
+                cmds.caseMonth = caseInformation.getString("caseMonth");
+                cmds.caseNumber = caseInformation.getString("caseNumber");
+                
+                
 //                rep.type = caseInformation.getString("type");
 //                rep.status1 = caseInformation.getString("status1");
 //                rep.status2 = caseInformation.getString("status2");
@@ -424,7 +326,7 @@ public class CMDSCase {
 //                rep.boardCertified = caseInformation.getBoolean("boardCertified");
 //                rep.deemedCertified = caseInformation.getBoolean("deemedCertified");
 //                rep.certificationRevoked = caseInformation.getBoolean("certificationRevoked");
-//                
+                
 //                rep.note = caseInformation.getString("note");
 //                
 //                rep.fileDate = caseInformation.getTimestamp("fileDate");
@@ -442,12 +344,12 @@ public class CMDSCase {
 //                rep.REPClosedUser = caseInformation.getInt("REPClosedUser");
 //                rep.actualClerksClosedDate= caseInformation.getTimestamp("actualClerksClosedDate");
 //                rep.clerksClosedUser = caseInformation.getInt("clerksClosedUser");
-//            }
-//        } catch (SQLException ex) {
-////            SlackNotification.sendNotification(ex.getMessage());
-//        }
-//        return rep;
-//    }
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex.getMessage());
+        }
+        return cmds;
+    }
     
 //    public static CMDSCase loadCaseDetails(String caseYear, String caseType, String caseMonth, String caseNumber) {
 //        CMDSCase rep = null;

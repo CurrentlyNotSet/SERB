@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package parker.serb.REP;
+package parker.serb.CMDS;
 
+import parker.serb.REP.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -15,6 +16,7 @@ import java.util.List;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import parker.serb.Global;
+import parker.serb.sql.CMDSHearing;
 import parker.serb.sql.REPMediation;
 import parker.serb.sql.User;
 
@@ -23,18 +25,39 @@ import parker.serb.sql.User;
  *
  * @author parkerjohnston
  */
-public class REPAddMediationDialog extends javax.swing.JDialog {
+public class CMDSAddHearingDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form REPAddMediationDialog
      */
-    public REPAddMediationDialog(java.awt.Frame parent, boolean modal) {
+    public CMDSAddHearingDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         addListeners();
-        loadToComboBox();
+        loadTypeComboBox();
+        loadRoomComboBox();
         setLocationRelativeTo(parent);
         setVisible(true);
+    }
+    
+    private void loadTypeComboBox() {
+        hearingTypeComboBox.removeAllItems();
+        hearingTypeComboBox.addItem("");
+        hearingTypeComboBox.addItem("PH");
+        hearingTypeComboBox.addItem("RH");
+        hearingTypeComboBox.addItem("SE");
+        hearingTypeComboBox.addItem("ST");
+        hearingTypeComboBox.addItem("TC");
+        hearingTypeComboBox.addItem("MC");
+    }
+    
+    private void loadRoomComboBox() {
+        hearingRoomComboBox.removeAllItems();
+        hearingRoomComboBox.addItem("");
+        hearingRoomComboBox.addItem("HR1");
+        hearingRoomComboBox.addItem("HR2");
+        hearingRoomComboBox.addItem("HR3");
+        hearingRoomComboBox.addItem("HR4");
     }
     
     private void addListeners() {
@@ -160,21 +183,14 @@ public class REPAddMediationDialog extends javax.swing.JDialog {
             }
         });
         
-        typeComboBox.addActionListener(new ActionListener() {
+        hearingTypeComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 enableSaveButton();
             }
         });
         
-        mediatorComboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                enableSaveButton();
-            }
-        });
-        
-        outcomeComboBox.addActionListener(new ActionListener() {
+        hearingRoomComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 enableSaveButton();
@@ -187,8 +203,8 @@ public class REPAddMediationDialog extends javax.swing.JDialog {
             hourTextBox.getText().trim().equals("") ||
             minuteTextBox.getText().trim().equals("") ||
             amPMComboBox.getSelectedItem().equals("") ||
-            typeComboBox.getSelectedItem().equals("") ||
-            mediatorComboBox.getSelectedItem().equals("")) 
+            hearingTypeComboBox.getSelectedItem().equals("") ||
+            hearingRoomComboBox.getSelectedItem().equals("")) 
         {
             saveButton.setEnabled(false);
         } else {
@@ -206,31 +222,17 @@ public class REPAddMediationDialog extends javax.swing.JDialog {
 
     private Date generateDate() {
         int hour = Integer.valueOf(hourTextBox.getText().trim());
-//        
+   
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, Integer.valueOf(dateTextBox.getText().split("/")[2]));
         cal.set(Calendar.MONTH, Integer.valueOf(dateTextBox.getText().split("/")[0]) - 1);
         cal.set(Calendar.DAY_OF_MONTH, Integer.valueOf(dateTextBox.getText().split("/")[1]));
-        cal.set(Calendar.HOUR_OF_DAY, amPMComboBox.getSelectedItem().toString().equalsIgnoreCase("AM") ? hour : hour + 12);
+        cal.set(Calendar.HOUR_OF_DAY, amPMComboBox.getSelectedItem().toString().equalsIgnoreCase("AM") || hour == 12 ? hour : hour + 12);
         cal.set(Calendar.MINUTE, Integer.valueOf(minuteTextBox.getText().trim()));
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
         
         return cal.getTime();
-    }
-    
-    private void loadToComboBox() {
-        List userList = null;
-        
-        userList = User.loadREPComboBox();
-        
-        mediatorComboBox.setMaximumRowCount(6);
-        mediatorComboBox.removeAllItems();
-        mediatorComboBox.addItem("");
-        
-        for(int i = 0; i < userList.size(); i++) {
-            mediatorComboBox.addItem(userList.get(i).toString());
-        }
     }
     
     /**
@@ -253,10 +255,8 @@ public class REPAddMediationDialog extends javax.swing.JDialog {
         amPMComboBox = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        typeComboBox = new javax.swing.JComboBox<>();
-        mediatorComboBox = new javax.swing.JComboBox<>();
-        outcomeComboBox = new javax.swing.JComboBox<>();
+        hearingTypeComboBox = new javax.swing.JComboBox<>();
+        hearingRoomComboBox = new javax.swing.JComboBox<>();
         saveButton = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
@@ -266,7 +266,7 @@ public class REPAddMediationDialog extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("New Mediation");
+        jLabel1.setText("New Hearing");
 
         jLabel2.setText("Date:");
 
@@ -296,17 +296,12 @@ public class REPAddMediationDialog extends javax.swing.JDialog {
 
         jLabel5.setText("Type:");
 
-        jLabel6.setText("Mediator:");
+        jLabel6.setText("Room:");
 
-        jLabel7.setText("Outcome:");
+        hearingTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Internal Mediation", "30 Day Mediation", "Post-Directive Mediation", " " }));
+        hearingTypeComboBox.setSelectedIndex(3);
 
-        typeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Internal Mediation", "30 Day Mediation", "Post-Directive Mediation", " " }));
-        typeComboBox.setSelectedIndex(3);
-
-        mediatorComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        outcomeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Settled", "Not Settled", "Rescheduled", " " }));
-        outcomeComboBox.setSelectedIndex(3);
+        hearingRoomComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         saveButton.setText("Save");
         saveButton.setEnabled(false);
@@ -331,18 +326,22 @@ public class REPAddMediationDialog extends javax.swing.JDialog {
                 .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
+                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(21, 21, 21)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel3)
                                     .addComponent(jLabel2)
                                     .addComponent(jLabel5)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel7))
+                                    .addComponent(jLabel6))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(mediatorComboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(hearingRoomComboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(0, 0, Short.MAX_VALUE)
                                         .addComponent(hourTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -352,13 +351,8 @@ public class REPAddMediationDialog extends javax.swing.JDialog {
                                         .addComponent(minuteTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(amPMComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(typeComboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(outcomeComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(dateTextBox, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(hearingTypeComboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(dateTextBox, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                         .addGap(10, 10, 10))))
         );
         layout.setVerticalGroup(
@@ -379,20 +373,16 @@ public class REPAddMediationDialog extends javax.swing.JDialog {
                     .addComponent(amPMComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(typeComboBox)
+                    .addComponent(hearingTypeComboBox)
                     .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(mediatorComboBox)
+                    .addComponent(hearingRoomComboBox)
                     .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(outcomeComboBox)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(saveButton)
-                    .addComponent(jButton2))
+                    .addComponent(jButton2)
+                    .addComponent(saveButton))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -400,10 +390,9 @@ public class REPAddMediationDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-        REPMediation.addMediation(generateDate(),
-                typeComboBox.getSelectedItem().toString(),
-                mediatorComboBox.getSelectedItem().toString(),
-                outcomeComboBox.getSelectedItem().toString());
+        CMDSHearing.addHearing(generateDate(),
+                hearingTypeComboBox.getSelectedItem().toString(),
+                hearingRoomComboBox.getSelectedItem().toString());
         dispose();
     }//GEN-LAST:event_saveButtonActionPerformed
 
@@ -419,51 +408,11 @@ public class REPAddMediationDialog extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_minuteTextBoxActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(REPAddMediationDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(REPAddMediationDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(REPAddMediationDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(REPAddMediationDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                REPAddMediationDialog dialog = new REPAddMediationDialog(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> amPMComboBox;
     private com.alee.extended.date.WebDateField dateTextBox;
+    private javax.swing.JComboBox<String> hearingRoomComboBox;
+    private javax.swing.JComboBox<String> hearingTypeComboBox;
     private javax.swing.JTextField hourTextBox;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
@@ -472,12 +421,8 @@ public class REPAddMediationDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JTextField jTextField3;
-    private javax.swing.JComboBox<String> mediatorComboBox;
     private javax.swing.JTextField minuteTextBox;
-    private javax.swing.JComboBox<String> outcomeComboBox;
     private javax.swing.JButton saveButton;
-    private javax.swing.JComboBox<String> typeComboBox;
     // End of variables declaration//GEN-END:variables
 }

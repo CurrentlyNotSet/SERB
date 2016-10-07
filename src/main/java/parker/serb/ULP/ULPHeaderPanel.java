@@ -67,6 +67,7 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
             loadHeaderInformation();
         } else {
             new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());  
+            Global.root.getuLPRootPanel1().clearAll();
         }
     }
     
