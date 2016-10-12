@@ -5,16 +5,22 @@
  */
 package parker.serb.report;
 
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 import parker.serb.Global;
 import parker.serb.sql.SMDSDocuments;
+import parker.serb.sql.User;
+import parker.serb.util.Item;
+import parker.serb.util.StringUtilities;
 
 /**
  *
  * @author User
  */
-public class RequestedInfoTwoDateLikeStringPanel extends javax.swing.JDialog {
+public class RequestedInfoDropdownPanel extends javax.swing.JDialog {
 
     SMDSDocuments report;
+    int comboBoxID = 0;
 
     /**
      * Creates new form RequestedReportInformationPanel
@@ -22,28 +28,53 @@ public class RequestedInfoTwoDateLikeStringPanel extends javax.swing.JDialog {
      * @param parent
      * @param modal
      * @param reportPassed
+     * @param Type
      */
-    public RequestedInfoTwoDateLikeStringPanel(java.awt.Frame parent, boolean modal, SMDSDocuments reportPassed) {
+    public RequestedInfoDropdownPanel(java.awt.Frame parent, boolean modal, SMDSDocuments reportPassed, String Type) {
         super(parent, modal);
         report = reportPassed;
         initComponents();
-        setActive(report.fileName);
+        setActive(report.fileName, Type);
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }
-    
-    private void setActive(String reportName) {
+
+    private void setActive(String reportName, String Type) {
         reportLabel.setText(reportName);
+        switch (Type) {
+            case "Month":
+                comboBoxLabel.setText("Month:");
+                break;
+            default:
+                break;
+        }
+        loadCombobox(Type);
         generateButton();
+    }
+
+    private void loadCombobox(String IDType) {
+        DefaultComboBoxModel dt = new DefaultComboBoxModel();
+        ComboBox.setModel(dt);
+        
+
+        switch (IDType) {
+            case "Month":
+                ComboBox.addItem("");
+                for (String month : Global.monthList) {
+                    ComboBox.addItem(month);
+                }
+                break;
+            default:
+                break;
+        }
+        ComboBox.setSelectedItem("");
     }
     
     private void generateButton() {
-        if (startDateField.getText().trim().equals("")
-                || endDateField.getText().trim().equals("")
-                || likeTextField.getText().trim().equals("")) {
-            GenerateReportButton.setEnabled(false);
-        } else {
+        if (ComboBox.getSelectedIndex() > 0) {
             GenerateReportButton.setEnabled(true);
+        } else {
+            GenerateReportButton.setEnabled(false);
         }
     }
 
@@ -57,15 +88,11 @@ public class RequestedInfoTwoDateLikeStringPanel extends javax.swing.JDialog {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        startDateField = new com.alee.extended.date.WebDateField();
-        jLabel7 = new javax.swing.JLabel();
-        endDateField = new com.alee.extended.date.WebDateField();
         comboBoxLabel = new javax.swing.JLabel();
         GenerateReportButton = new javax.swing.JButton();
         CancelButton = new javax.swing.JButton();
         reportLabel = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        likeTextField = new javax.swing.JTextField();
+        ComboBox = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Reqired Report Information");
@@ -75,25 +102,8 @@ public class RequestedInfoTwoDateLikeStringPanel extends javax.swing.JDialog {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Required Report Information");
 
-        startDateField.setDateFormat(Global.mmddyyyy);
-        startDateField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                startDateFieldActionPerformed(evt);
-            }
-        });
-
-        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel7.setText("Start Date:");
-
-        endDateField.setDateFormat(Global.mmddyyyy);
-        endDateField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                endDateFieldActionPerformed(evt);
-            }
-        });
-
         comboBoxLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        comboBoxLabel.setText("Contains:");
+        comboBoxLabel.setText("<<LABEL>>");
 
         GenerateReportButton.setText("Generate Report");
         GenerateReportButton.setEnabled(false);
@@ -113,12 +123,9 @@ public class RequestedInfoTwoDateLikeStringPanel extends javax.swing.JDialog {
         reportLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         reportLabel.setText("<<REPORTNAME>>");
 
-        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel9.setText("End Date:");
-
-        likeTextField.addCaretListener(new javax.swing.event.CaretListener() {
-            public void caretUpdate(javax.swing.event.CaretEvent evt) {
-                likeTextFieldCaretUpdate(evt);
+        ComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ComboBoxActionPerformed(evt);
             }
         });
 
@@ -129,28 +136,19 @@ public class RequestedInfoTwoDateLikeStringPanel extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 357, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
                     .addComponent(reportLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(CancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(GenerateReportButton, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(comboBoxLabel)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
-                            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(endDateField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(startDateField, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
-                            .addComponent(likeTextField))
+                        .addComponent(comboBoxLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
-
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {comboBoxLabel, jLabel7, jLabel9});
-
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
@@ -158,26 +156,18 @@ public class RequestedInfoTwoDateLikeStringPanel extends javax.swing.JDialog {
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addComponent(reportLabel)
-                .addGap(18, 18, 18)
+                .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(startDateField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7))
-                .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(endDateField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(comboBoxLabel)
-                    .addComponent(likeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
+                    .addComponent(ComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(comboBoxLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(CancelButton)
                     .addComponent(GenerateReportButton))
                 .addContainerGap())
         );
 
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {comboBoxLabel, endDateField, jLabel7, jLabel9, startDateField});
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {ComboBox, comboBoxLabel});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -187,31 +177,19 @@ public class RequestedInfoTwoDateLikeStringPanel extends javax.swing.JDialog {
     }//GEN-LAST:event_CancelButtonActionPerformed
 
     private void GenerateReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GenerateReportButtonActionPerformed
-        GenerateReport.generateTwoDatesIDReport(startDateField.getText(), endDateField.getText(), likeTextField.getText(), report);
+        GenerateReport.generateExactStringReport(ComboBox.getSelectedItem().toString(), report);
     }//GEN-LAST:event_GenerateReportButtonActionPerformed
 
-    private void startDateFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startDateFieldActionPerformed
+    private void ComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxActionPerformed
         generateButton();
-    }//GEN-LAST:event_startDateFieldActionPerformed
-
-    private void endDateFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endDateFieldActionPerformed
-        generateButton();
-    }//GEN-LAST:event_endDateFieldActionPerformed
-
-    private void likeTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_likeTextFieldCaretUpdate
-        generateButton();
-    }//GEN-LAST:event_likeTextFieldCaretUpdate
+    }//GEN-LAST:event_ComboBoxActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CancelButton;
+    private javax.swing.JComboBox ComboBox;
     private javax.swing.JButton GenerateReportButton;
     private javax.swing.JLabel comboBoxLabel;
-    private com.alee.extended.date.WebDateField endDateField;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JTextField likeTextField;
     private javax.swing.JLabel reportLabel;
-    private com.alee.extended.date.WebDateField startDateField;
     // End of variables declaration//GEN-END:variables
 }
