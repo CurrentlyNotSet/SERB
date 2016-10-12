@@ -50,7 +50,13 @@ public class GenerateReport {
                     new RequestedInfoTwoDateIDPanel(Global.root, true, report, "UserID");
                     break;
                 case "begin date, end date, LikeString":
-                    new RequestedInfoTwoDateLikeStringPanel(Global.root, true, report);
+                    new RequestedInfoTwoDateStringPanel(Global.root, true, report, "like");
+                    break;
+                case "begin date, end date, String":
+                    new RequestedInfoTwoDateStringPanel(Global.root, true, report, "exact");
+                    break;
+                case "String":
+                    new RequestedInfoTwoDateStringPanel(Global.root, true, report, "exact");
                     break;
                 default:
                     HashMap hash = new HashMap();
@@ -89,12 +95,18 @@ public class GenerateReport {
         hash.put("ID", ID);
         generateReport(report, hash);
     }
+        
+    public static void generateExactStringReport(String exact, SMDSDocuments report) {
+        HashMap hash = new HashMap();
+        hash.put("string", exact);
+        generateReport(report, hash);
+    }
     
-    public static void generateTwoDatesLikeStringReport(String Start, String End, String Like, SMDSDocuments report) {
+    public static void generateTwoDatesExactStringReport(String Start, String End, String exact, SMDSDocuments report) {
         HashMap hash = new HashMap();
         hash.put("begin date", Start);
         hash.put("end date", End);
-        hash.put("LikeString", Like);
+        hash.put("string", exact);
         generateReport(report, hash);
     }
     

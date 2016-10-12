@@ -9,6 +9,7 @@ import java.awt.Color;
 import parker.serb.sql.User;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -72,6 +73,11 @@ public class Global {
         "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "MP", "OH", "OK", "OR", 
         "PW", "PA", "PR", "RI", "SC", "SD", "TN", "TX", "UM", "UT", "VT", "VA", 
         "VI", "WA", "WV", "WI", "WY"};
+    
+    //List of Months
+    public static final String monthList[] = {"January", "Febuary", "March", "April", 
+        "May", "June", "July", "August", "September", "October", "November", "December"
+    };
     
     //Paths that are used to store locations of all files
     public static String scanPath;

@@ -28,7 +28,7 @@
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jLabel1" pref="415" max="32767" attributes="0"/>
+                  <Component id="jLabel1" pref="390" max="32767" attributes="0"/>
                   <Component id="reportLabel" alignment="0" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="CancelButton" min="-2" pref="133" max="-2" attributes="0"/>
@@ -36,17 +36,9 @@
                       <Component id="GenerateReportButton" min="-2" pref="133" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                          <Component id="jLabel9" alignment="0" max="32767" attributes="0"/>
-                          <Component id="comboBoxLabel" alignment="0" max="32767" attributes="0"/>
-                          <Component id="jLabel7" min="-2" pref="96" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="comboBoxLabel" min="-2" pref="96" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="ComboBox" max="32767" attributes="0"/>
-                          <Component id="endDateField" alignment="0" max="32767" attributes="0"/>
-                          <Component id="startDateField" alignment="0" min="-2" pref="217" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="ComboBox" min="-2" pref="217" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -61,22 +53,12 @@
               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="reportLabel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="startDateField" linkSize="1" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel7" linkSize="1" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="endDateField" linkSize="1" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel9" linkSize="1" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="ComboBox" linkSize="1" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="comboBoxLabel" linkSize="1" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="54" max="32767" attributes="0"/>
+              <EmptySpace pref="52" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="CancelButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="GenerateReportButton" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -95,28 +77,6 @@
         <Property name="horizontalAlignment" type="int" value="0"/>
         <Property name="text" type="java.lang.String" value="Required Report Information"/>
       </Properties>
-    </Component>
-    <Component class="com.alee.extended.date.WebDateField" name="startDateField">
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="startDateFieldActionPerformed"/>
-      </Events>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="startDateField.setDateFormat(Global.mmddyyyy);"/>
-      </AuxValues>
-    </Component>
-    <Component class="javax.swing.JLabel" name="jLabel7">
-      <Properties>
-        <Property name="horizontalAlignment" type="int" value="11"/>
-        <Property name="text" type="java.lang.String" value="Start Date:"/>
-      </Properties>
-    </Component>
-    <Component class="com.alee.extended.date.WebDateField" name="endDateField">
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="endDateFieldActionPerformed"/>
-      </Events>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="endDateField.setDateFormat(Global.mmddyyyy);"/>
-      </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="comboBoxLabel">
       <Properties>
@@ -159,12 +119,6 @@
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value=""/>
       </AuxValues>
-    </Component>
-    <Component class="javax.swing.JLabel" name="jLabel9">
-      <Properties>
-        <Property name="horizontalAlignment" type="int" value="11"/>
-        <Property name="text" type="java.lang.String" value="End Date:"/>
-      </Properties>
     </Component>
   </SubComponents>
 </Form>

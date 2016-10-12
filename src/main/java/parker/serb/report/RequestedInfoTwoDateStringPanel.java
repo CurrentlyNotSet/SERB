@@ -12,7 +12,7 @@ import parker.serb.sql.SMDSDocuments;
  *
  * @author User
  */
-public class RequestedInfoTwoDateLikeStringPanel extends javax.swing.JDialog {
+public class RequestedInfoTwoDateStringPanel extends javax.swing.JDialog {
 
     SMDSDocuments report;
 
@@ -22,17 +22,24 @@ public class RequestedInfoTwoDateLikeStringPanel extends javax.swing.JDialog {
      * @param parent
      * @param modal
      * @param reportPassed
+     * @param type
      */
-    public RequestedInfoTwoDateLikeStringPanel(java.awt.Frame parent, boolean modal, SMDSDocuments reportPassed) {
+    public RequestedInfoTwoDateStringPanel(java.awt.Frame parent, boolean modal, SMDSDocuments reportPassed, String type) {
         super(parent, modal);
         report = reportPassed;
         initComponents();
-        setActive(report.fileName);
+        setActive(report.fileName, type);
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }
     
-    private void setActive(String reportName) {
+    private void setActive(String reportName, String type) {
+        if (type.equals("exact")){
+            textBoxLabel.setText("Equals:");
+        } else if (type.equals("like")){
+            textBoxLabel.setText("Contains:");
+        }
+        
         reportLabel.setText(reportName);
         generateButton();
     }
@@ -60,7 +67,7 @@ public class RequestedInfoTwoDateLikeStringPanel extends javax.swing.JDialog {
         startDateField = new com.alee.extended.date.WebDateField();
         jLabel7 = new javax.swing.JLabel();
         endDateField = new com.alee.extended.date.WebDateField();
-        comboBoxLabel = new javax.swing.JLabel();
+        textBoxLabel = new javax.swing.JLabel();
         GenerateReportButton = new javax.swing.JButton();
         CancelButton = new javax.swing.JButton();
         reportLabel = new javax.swing.JLabel();
@@ -92,8 +99,8 @@ public class RequestedInfoTwoDateLikeStringPanel extends javax.swing.JDialog {
             }
         });
 
-        comboBoxLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        comboBoxLabel.setText("Contains:");
+        textBoxLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        textBoxLabel.setText("<<TYPE>>");
 
         GenerateReportButton.setText("Generate Report");
         GenerateReportButton.setEnabled(false);
@@ -137,7 +144,7 @@ public class RequestedInfoTwoDateLikeStringPanel extends javax.swing.JDialog {
                         .addComponent(GenerateReportButton, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(comboBoxLabel)
+                            .addComponent(textBoxLabel)
                             .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
                             .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -149,7 +156,7 @@ public class RequestedInfoTwoDateLikeStringPanel extends javax.swing.JDialog {
                 .addContainerGap())
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {comboBoxLabel, jLabel7, jLabel9});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel7, jLabel9, textBoxLabel});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -168,7 +175,7 @@ public class RequestedInfoTwoDateLikeStringPanel extends javax.swing.JDialog {
                     .addComponent(jLabel9))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(comboBoxLabel)
+                    .addComponent(textBoxLabel)
                     .addComponent(likeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -177,7 +184,7 @@ public class RequestedInfoTwoDateLikeStringPanel extends javax.swing.JDialog {
                 .addContainerGap())
         );
 
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {comboBoxLabel, endDateField, jLabel7, jLabel9, startDateField});
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {endDateField, jLabel7, jLabel9, startDateField, textBoxLabel});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -205,7 +212,6 @@ public class RequestedInfoTwoDateLikeStringPanel extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CancelButton;
     private javax.swing.JButton GenerateReportButton;
-    private javax.swing.JLabel comboBoxLabel;
     private com.alee.extended.date.WebDateField endDateField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel7;
@@ -213,5 +219,6 @@ public class RequestedInfoTwoDateLikeStringPanel extends javax.swing.JDialog {
     private javax.swing.JTextField likeTextField;
     private javax.swing.JLabel reportLabel;
     private com.alee.extended.date.WebDateField startDateField;
+    private javax.swing.JLabel textBoxLabel;
     // End of variables declaration//GEN-END:variables
 }
