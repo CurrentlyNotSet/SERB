@@ -27,9 +27,7 @@ import parker.serb.util.NumberFormatService;
 public class ULPHeaderPanel extends javax.swing.JPanel {
 
     ULPCaseSearch search = null;
-    /**
-     * Creates new form REPHeaderPanel
-     */
+    
     public ULPHeaderPanel() {
         initComponents();
         addListeners();
@@ -43,6 +41,7 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
                     if(Global.root != null) {
                         Global.root.getjButton2().setText("Update");
                         Global.root.getjButton2().setEnabled(false);
+                        Global.root.getjButton3().setEnabled(false);
                         Global.root.getjButton6().setEnabled(false);
                         Global.caseYear = null;
                         Global.caseType = null;
@@ -52,6 +51,7 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
                     }
                 } else {
                     Global.root.getjButton6().setEnabled(true);
+                    Global.root.getjButton3().setEnabled(true);
                     loadInformation();
                     if(Global.root.getuLPRootPanel1().getjTabbedPane1().getSelectedIndex() == 0)
                         Global.root.getuLPRootPanel1().getActivityPanel1().loadAllActivity();
@@ -67,6 +67,7 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
             loadHeaderInformation();
         } else {
             new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());  
+            Global.root.getuLPRootPanel1().clearAll();
         }
     }
     
@@ -78,72 +79,68 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
         
         ULPCase ulp = ULPCase.loadHeaderInformation();
         
-            if(ulp == null) {
-                new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());          
-            } else {
-                filedDateTextBox.setText(ulp.fileDate != null ? Global.mmddyyyy.format(new Date(ulp.fileDate.getTime())) : "");
-                currentStatusTextBox.setText(ulp.currentStatus != null ? ulp.currentStatus : "");
-                investigatorTextBox.setText(ulp.investigatorID != 0 ? User.getNameByID(ulp.investigatorID) : "");
-                ALJTextBox.setText(ulp.aljID != 0 ? User.getNameByID(ulp.aljID) : "");
+        if(ulp == null) {
+            new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());          
+        } else {
+            filedDateTextBox.setText(ulp.fileDate != null ? Global.mmddyyyy.format(new Date(ulp.fileDate.getTime())) : "");
+            currentStatusTextBox.setText(ulp.currentStatus != null ? ulp.currentStatus : "");
+            investigatorTextBox.setText(ulp.investigatorID != 0 ? User.getNameByID(ulp.investigatorID) : "");
+            ALJTextBox.setText(ulp.aljID != 0 ? User.getNameByID(ulp.aljID) : "");
 
-                List caseParties = CaseParty.loadPartiesByCase();
+            List caseParties = CaseParty.loadPartiesByCase();
 
-                for(Object caseParty: caseParties) {
-                    CaseParty partyInformation = (CaseParty) caseParty;
-                    
-                    String name;
-                    
-                    if(partyInformation.firstName.equals("") && partyInformation.lastName.equals("")) {
-                        name = partyInformation.companyName;
-                    } else {
-                        name = (partyInformation.prefix.equals("") ? "" : (partyInformation.prefix + " "))
-                        + (partyInformation.firstName.equals("") ? "" : (partyInformation.firstName + " "))
-                        + (partyInformation.middleInitial.equals("") ? "" : (partyInformation.middleInitial + ". "))
-                        + (partyInformation.lastName.equals("") ? "" : (partyInformation.lastName))
-                        + (partyInformation.suffix.equals("") ? "" : (" " + partyInformation.suffix))
-                        + (partyInformation.nameTitle.equals("") ? "" : (", " + partyInformation.nameTitle));
-                    }    
+            for(Object caseParty: caseParties) {
+                CaseParty partyInformation = (CaseParty) caseParty;
 
-                    switch (partyInformation.caseRelation) {
-                        case "Charging Party":
-                            if(chargingParty.equals("")) {
-                                chargingParty += name;
-                            } else {
-                                chargingParty += ", " + name;
-                            }
-                            break;
-                        case "Charging Party REP":
-                            if(chargingPartyREP.equals("")) {
-                                chargingPartyREP += name;
-                            } else {
-                                chargingPartyREP += ", " + name;
-                            }
-                            break;
-                        case "Charged Party":
-                            if(chargedParty.equals("")) {
-                                chargedParty += name;
-                            } else {
-                                chargedParty += ", " + name;
-                            }
-                            break;
-                        case "Charged Party REP":
-                            if(chargedPartyREP.equals("")) {
-                                chargedPartyREP += name;
-                            } else {
-                                chargedPartyREP += ", " + name;
-                            }
-                            break;
-                    }
+                String name;
+
+                if(partyInformation.firstName.equals("") && partyInformation.lastName.equals("")) {
+                    name = partyInformation.companyName;
+                } else {
+                    name = (partyInformation.prefix.equals("") ? "" : (partyInformation.prefix + " "))
+                    + (partyInformation.firstName.equals("") ? "" : (partyInformation.firstName + " "))
+                    + (partyInformation.middleInitial.equals("") ? "" : (partyInformation.middleInitial + ". "))
+                    + (partyInformation.lastName.equals("") ? "" : (partyInformation.lastName))
+                    + (partyInformation.suffix.equals("") ? "" : (" " + partyInformation.suffix))
+                    + (partyInformation.nameTitle.equals("") ? "" : (", " + partyInformation.nameTitle));
+                }    
+
+                switch (partyInformation.caseRelation) {
+                    case "Charging Party":
+                        if(chargingParty.equals("")) {
+                            chargingParty += name;
+                        } else {
+                            chargingParty += ", " + name;
+                        }
+                        break;
+                    case "Charging Party REP":
+                        if(chargingPartyREP.equals("")) {
+                            chargingPartyREP += name;
+                        } else {
+                            chargingPartyREP += ", " + name;
+                        }
+                        break;
+                    case "Charged Party":
+                        if(chargedParty.equals("")) {
+                            chargedParty += name;
+                        } else {
+                            chargedParty += ", " + name;
+                        }
+                        break;
+                    case "Charged Party REP":
+                        if(chargedPartyREP.equals("")) {
+                            chargedPartyREP += name;
+                        } else {
+                            chargedPartyREP += ", " + name;
+                        }
+                        break;
                 }
-                chargingPartyTextBox.setText(chargingParty);
-                chargingPartyREPTextBox.setText(chargingPartyREP);
-                chargedPartyTextBox.setText(chargedParty);
-                chargedPartyREPTextBox.setText(chargedPartyREP);
             }
-//        } else {
-//            caseNumberComboBox.setSelectedItem("");
-//            new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
-//        }
+            chargingPartyTextBox.setText(chargingParty);
+            chargingPartyREPTextBox.setText(chargingPartyREP);
+            chargedPartyTextBox.setText(chargedParty);
+            chargedPartyREPTextBox.setText(chargedPartyREP);
+        }
     }
     
     public void loadCases() {
@@ -157,9 +154,6 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
         });
     }
     
-    /**
-     * 
-     */
     void clearAll() {
         chargingPartyTextBox.setText("");
         chargingPartyREPTextBox.setText("");
@@ -168,7 +162,6 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
         currentStatusTextBox.setText("");
         investigatorTextBox.setText("");
         ALJTextBox.setText("");
-//        bargainingUnitTextBox.setText("");
         filedDateTextBox.setText("");
     }
 
@@ -183,8 +176,6 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
     public JTextField getChargingPartyTextBox() {
         return chargingPartyTextBox;
     }
-    
-    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -381,7 +372,6 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_jLabel11MouseClicked
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField ALJTextBox;

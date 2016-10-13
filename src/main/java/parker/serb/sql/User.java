@@ -1,5 +1,6 @@
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.PreparedStatement;
@@ -44,37 +45,6 @@ public class User {
     public String   initials;
     public boolean  investigator;
     
-    /**
-     * Create an empty User table
-     */
-    public static void createTable() {
-        try {
-            Statement stmt = Database.connectToDB().createStatement();
-            
-            String sql = "CREATE TABLE Users" +
-                    "(id int IDENTITY (1,1) NOT NULL, " +
-                    " active bit NOT NULL, " +
-                    " firstName varchar(25) NOT NULL, " + 
-                    " middleInitial varchar(1) NULL, " +
-                    " lastName varchar(50) NOT NULL, " +
-                    " workPhone varchar(10) NOT NULL, " +
-                    " emailAddress varchar(100) NOT NULL, " +
-                    " username varchar(100) NOT NULL, " +
-                    " passwordSalt bigint NOT NULL, " +
-                    " password varchar(100) NOT NULL, " +
-                    " lastLogInDateTime datetime NULL, " +
-                    " lastLogInPCName varchar(100) NULL, " +
-                    " activeLogIn bit NOT NULL, " +
-                    " passwordReset bit NOT NULL, " +
-                    " applicationVersion varchar(5) NULL, " +
-                    " PRIMARY KEY (id, username))"; 
-            
-            stmt.executeUpdate(sql);
-        } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
     public static void createUser(User user) {
         try {
             long passwordSalt = Password.generatePasswordSalt();
@@ -103,8 +73,13 @@ public class User {
             
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                System.out.println("TESTING");
+                SlackNotification.sendNotification(ex.getMessage());
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } 
     }
     
@@ -127,8 +102,6 @@ public class User {
             
             ResultSet foundUser = preparedStatement.executeQuery();
             
-//            foundUser.next();
-            
             if(foundUser.next()) {
             
                 user.id = foundUser.getInt("id");
@@ -149,8 +122,14 @@ public class User {
                 user.defaultSection = foundUser.getString("defaultSection");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            if(ex.getCause() instanceof SQLServerException) {
+                System.out.println("TESTING");
+                SlackNotification.sendNotification(ex.getMessage());
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } 
         return user;
     }
     
@@ -193,7 +172,13 @@ public class User {
                 activeUsers.add(user);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                System.out.println("TESTING");
+                SlackNotification.sendNotification(ex.getMessage());
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return activeUsers;
     }
@@ -239,7 +224,13 @@ public class User {
                 activeUsers.add(user);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                System.out.println("TESTING");
+                SlackNotification.sendNotification(ex.getMessage());
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return activeUsers;
     }
@@ -263,7 +254,13 @@ public class User {
                 activeUsers.add(users.getString("firstName") + " " + users.getString("lastName"));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                System.out.println("TESTING");
+                SlackNotification.sendNotification(ex.getMessage());
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return activeUsers;
     }
@@ -383,7 +380,13 @@ public class User {
                 activeUsers.add(users.getString("firstName") + " " + users.getString("lastName"));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                System.out.println("TESTING");
+                SlackNotification.sendNotification(ex.getMessage());
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return activeUsers;
     }
@@ -404,7 +407,13 @@ public class User {
             
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                System.out.println("TESTING");
+                SlackNotification.sendNotification(ex.getMessage());
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
@@ -424,7 +433,13 @@ public class User {
             
             preparedStatement.executeUpdate();
         } catch (SQLException | UnknownHostException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                System.out.println("TESTING");
+                SlackNotification.sendNotification(ex.getMessage());
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
@@ -443,7 +458,13 @@ public class User {
             
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                System.out.println("TESTING");
+                SlackNotification.sendNotification(ex.getMessage());
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
@@ -462,7 +483,13 @@ public class User {
             
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateActiveLogIn();
+                SlackNotification.sendNotification(ex.getMessage());
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
@@ -484,7 +511,13 @@ public class User {
             
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                System.out.println("TESTING");
+                SlackNotification.sendNotification(ex.getMessage());
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
@@ -503,7 +536,13 @@ public class User {
             
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                System.out.println("TESTING");
+                SlackNotification.sendNotification(ex.getMessage());
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
@@ -527,7 +566,13 @@ public class User {
                Global.activeUserRoles.add(foundUser.getString("Role"));
             } 
         } catch (SQLException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                System.out.println("TESTING");
+                SlackNotification.sendNotification(ex.getMessage());
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
@@ -567,7 +612,13 @@ public class User {
                 Global.activeUser = findUserByUsername(user.username);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                System.out.println("TESTING");
+                SlackNotification.sendNotification(ex.getMessage());
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     } 
     
@@ -588,7 +639,13 @@ public class User {
                 userName = success.getString("FirstName") + " " + success.getString("LastName");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                System.out.println("TESTING");
+                SlackNotification.sendNotification(ex.getMessage());
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return userName;    
     }
@@ -613,7 +670,13 @@ public class User {
                 userID = success.getInt("id");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                System.out.println("TESTING");
+                SlackNotification.sendNotification(ex.getMessage());
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return userID;    
     }
@@ -635,7 +698,13 @@ public class User {
                 userEmail = success.getString("emailAddress");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                System.out.println("TESTING");
+                SlackNotification.sendNotification(ex.getMessage());
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return userEmail;    
     }
@@ -664,7 +733,13 @@ public class User {
                 }
             }
         } catch (SQLException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                System.out.println("TESTING");
+                SlackNotification.sendNotification(ex.getMessage());
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return docketSections;
     }
@@ -688,7 +763,13 @@ public class User {
                 activeUsers.add(users.getString("firstName") + " " + users.getString("lastName"));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                System.out.println("TESTING");
+                SlackNotification.sendNotification(ex.getMessage());
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return activeUsers;
     }
@@ -712,7 +793,13 @@ public class User {
                 activeUsers.add(users.getString("firstName") + " " + users.getString("lastName"));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                System.out.println("TESTING");
+                SlackNotification.sendNotification(ex.getMessage());
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return activeUsers;
     }
@@ -742,7 +829,13 @@ public class User {
                 allUsers.add(user);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                System.out.println("TESTING");
+                SlackNotification.sendNotification(ex.getMessage());
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return allUsers;
     }
@@ -789,7 +882,13 @@ public class User {
                 list.add(item);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                System.out.println("TESTING");
+                SlackNotification.sendNotification(ex.getMessage());
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
         }
         return list;

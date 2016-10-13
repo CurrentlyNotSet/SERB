@@ -248,7 +248,7 @@ public class processMEDbookmarks {
             }
             processBookmark.process("FACTFINDERREPORTDUEDATE" + (i == 0 ? "" : i), (item.FFReportIssueDate == null ? "" : Global.MMMMddyyyy.format(item.FFReportIssueDate)), Document);
             processBookmark.process("FACTFINDERADDRESSBLOCK" + (i == 0 ? "" : i), ffAddress, Document);
-            processBookmark.process("CONCILIATIONSELECTIONDUEDATE" + (i == 0 ? "" : i), whoRejected, Document);
+            processBookmark.process("WHOREJECTED" + (i == 0 ? "" : i), whoRejected, Document);
             processBookmark.process("ACCEPTED" + (i == 0 ? "" : i), accepted, Document);
             processBookmark.process("DEEMED" + (i == 0 ? "" : i), deemed, Document);
             

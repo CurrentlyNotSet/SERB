@@ -9,6 +9,7 @@ import java.awt.Color;
 import parker.serb.sql.User;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -20,10 +21,6 @@ public class Global {
     //TODO: implement verbose logging at project end
     public static final boolean verboseLogging = true;
     
-    //Update this value with each release
-    //TODO: Convert this to build number intead of version nuber, will lead
-    //to better tracking of what users are using.  In aiddtion it would make this
-    //auto update removing dev error
     public static final String applicationVersion = "3.0";
 
     //All Date and Time formatters
@@ -76,6 +73,11 @@ public class Global {
         "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "MP", "OH", "OK", "OR", 
         "PW", "PA", "PR", "RI", "SC", "SD", "TN", "TX", "UM", "UT", "VT", "VA", 
         "VI", "WA", "WV", "WI", "WY"};
+    
+    //List of Months
+    public static final String monthList[] = {"January", "Febuary", "March", "April", 
+        "May", "June", "July", "August", "September", "October", "November", "December"
+    };
     
     //Paths that are used to store locations of all files
     public static String scanPath;

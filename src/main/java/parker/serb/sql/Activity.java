@@ -1,5 +1,6 @@
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.dbutils.DbUtils;
 import parker.serb.Global;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -69,7 +71,13 @@ public class Activity {
             preparedStatement.executeUpdate();
 
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                System.out.println("TESTING");
+                SlackNotification.sendNotification(ex.getMessage());
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -111,7 +119,13 @@ public class Activity {
             preparedStatement.executeUpdate();
 
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                System.out.println("TESTING");
+                SlackNotification.sendNotification(ex.getMessage());
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -153,7 +167,13 @@ public class Activity {
             preparedStatement.executeUpdate();
 
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                System.out.println("TESTING");
+                SlackNotification.sendNotification(ex.getMessage());
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -192,7 +212,13 @@ public class Activity {
             preparedStatement.executeUpdate();
 
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                System.out.println("TESTING");
+                SlackNotification.sendNotification(ex.getMessage());
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
@@ -272,36 +298,6 @@ public class Activity {
                 preparedStatement.setString(6, "%" + searchTerm + "%");
                 preparedStatement.setString(7, "%" + searchTerm + "%");
             }
-            
-//            String sql = "select Activity.id,"
-//                    + " caseYear,"
-//                    + " caseType,"
-//                    + " caseMonth,"
-//                    + " caseNumber,"
-//                    + " date,"
-//                    + " action,"
-//                    + " firstName,"
-//                    + " lastName,"
-//                    + " fileName"
-//                    + " from Activity"
-//                    + " LEFT JOIN Users"
-//                    + " ON Activity.userID = Users.id"
-//                    + " where caseYear = ? and"
-//                    + " caseType = ? and"
-//                    + " caseMonth = ? and"
-//                    + " caseNumber = ? and"
-//                    + " (firstName like ? or"
-//                    + " lastName like ? or"
-//                    + " action like ?) ORDER BY date DESC ";
-//
-//            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-//            preparedStatement.setObject(1, Global.caseYear);
-//            preparedStatement.setObject(2, Global.caseType);
-//            preparedStatement.setObject(3, Global.caseMonth);
-//            preparedStatement.setObject(4, Global.caseNumber);
-//            preparedStatement.setString(5, "%" + searchTerm + "%");
-//            preparedStatement.setString(6, "%" + searchTerm + "%");
-//            preparedStatement.setString(7, "%" + searchTerm + "%");
 
             ResultSet caseActivity = preparedStatement.executeQuery();
             
@@ -321,16 +317,17 @@ public class Activity {
                 activityList.add(act);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            if(ex.getCause() instanceof SQLServerException) {
+                System.out.println("TESTING");
+                SlackNotification.sendNotification(ex.getMessage());
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return activityList;
     }
     
-    /**
-     * Loads all activities without a limited result
-     * @return list of all Activities per case
-     */
     public static List loadAllActivity() {
         List<Activity> activityList = new ArrayList<Activity>();
         
@@ -339,14 +336,8 @@ public class Activity {
         try {
 
             stmt = Database.connectToDB().createStatement();
-
-            if(Global.caseType.equals("ORG")) {
-                
-            } else {
-                
-            }
             
-            String sql = "select Activity.id,"
+            String sql = "select TOP 50 Activity.id,"
                     + " caseYear,"
                     + " caseType,"
                     + " caseMonth,"
@@ -379,8 +370,13 @@ public class Activity {
                 activityList.add(act);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            if(ex.getCause() instanceof SQLServerException) {
+                System.out.println("TESTING");
+                SlackNotification.sendNotification(ex.getMessage());
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return activityList;
     }
@@ -435,8 +431,13 @@ public class Activity {
                 
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            if(ex.getCause() instanceof SQLServerException) {
+                System.out.println("TESTING");
+                SlackNotification.sendNotification(ex.getMessage());
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return activity;
     }
@@ -466,8 +467,13 @@ public class Activity {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            if(ex.getCause() instanceof SQLServerException) {
+                System.out.println("TESTING");
+                SlackNotification.sendNotification(ex.getMessage());
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 }

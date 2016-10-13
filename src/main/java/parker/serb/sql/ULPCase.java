@@ -52,13 +52,7 @@ public class ULPCase {
     public String investigationReveals;
     public String note;
     
-    /**
-     * Load a list of the most recent 250 REP case numbers
-     * @return list of rep case numbers
-     */
     public static List loadULPCaseNumbers() {
-        
-        //TODO: Limit the load to the last 6 months of filed dates
         
         List caseNumberList = new ArrayList<>();
             
@@ -143,47 +137,6 @@ public class ULPCase {
                     + caseNumberRS.getString("caseType") + "-" 
                     + caseNumberRS.getString("caseMonth") + "-"
                     + caseNumberRS.getString("caseNumber"));
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return caseNumberList;
-    }
-    
-    public static List loadULPCases(String caseYear,
-            String caseType,
-            String caseMonth,
-            String caseNumber,
-            String search) {
-        
-        List caseNumberList = new ArrayList<>();
-            
-        try {
-            Statement stmt = Database.connectToDB().createStatement();
-            
-            String sql = "Select *"
-                    + " from ULPCase"
-                    + " where caseYear like ?"
-                    + " and caseType like ?"
-                    + " and caseMonth like ?"
-                    + " and caseNumber like ?"
-                    + " Order By caseYear DESC,"
-                    + " caseNumber DESC";
-
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, caseYear);
-            preparedStatement.setString(2, caseType);
-            preparedStatement.setString(3, caseMonth);
-            preparedStatement.setString(4, caseNumber);
-            
-            ResultSet caseNumberRS = preparedStatement.executeQuery();
-            
-            while(caseNumberRS.next()) {
-                ULPCase ulpCase = new ULPCase();
-                ulpCase.caseNumber = caseNumberRS.getString("caseNumber");
-//                ulpCase.employerIDNumber = caseNumberRS.getString("employerIDNumber") == null ? "" : caseNumberRS.getString("employerIDNumber");
-//                ulpCase.barginingUnitNo = caseNumberRS.getString("barginingUnitNo") == null ? "" : caseNumberRS.getString("barginingUnitNo");
-                caseNumberList.add(ulpCase);
             }
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
@@ -553,7 +506,7 @@ public class ULPCase {
                     + " caseType,"
                     + " caseMonth,"
                     + " caseNumber,"
-                    + " FileDate)"
+                    + " fileDate)"
                     + " Values ("
                     + " ?,"
                     + " ?,"

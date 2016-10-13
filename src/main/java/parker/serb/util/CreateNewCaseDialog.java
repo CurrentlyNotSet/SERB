@@ -11,7 +11,7 @@ import java.util.Calendar;
 import java.util.List;
 import javax.swing.JFrame;
 import parker.serb.Global;
-import parker.serb.sql.Audit;
+import parker.serb.sql.CMDSCase;
 import parker.serb.sql.CaseNumber;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.CaseType;
@@ -55,6 +55,9 @@ public class CreateNewCaseDialog extends javax.swing.JDialog {
             case "MED":
                 relatedCases = MEDCase.loadRelatedCases();
                 break; 
+            case "CMDS":
+                relatedCases = CMDSCase.loadRelatedCases();
+                break;     
             default:
                 break;
         }
@@ -70,7 +73,11 @@ public class CreateNewCaseDialog extends javax.swing.JDialog {
     }
     
     private void getNextCaseNumber(String caseType, String year) {
-        caseNumberTextBox.setText(String.format("%04d", Integer.parseInt(CaseNumber.getCaseNumber(caseType, year))));
+        if(Global.activeSection.equals("CMDS")) {
+            caseNumberTextBox.setText(String.format("%04d", Integer.parseInt(CaseNumber.getCMDSCaseNumber(year))));
+        } else {
+            caseNumberTextBox.setText(String.format("%04d", Integer.parseInt(CaseNumber.getCaseNumber(caseType, year))));
+        }
     }
     
     private void addListeners() {
@@ -132,21 +139,6 @@ public class CreateNewCaseDialog extends javax.swing.JDialog {
         return caseNumber;
     }
     
-//    public static void refreshHeader() {
-//        switch (Global.activeSection) {
-//            case "REP":
-////                Global.root.getrEPHeaderPanel1().loadCases();
-////                Global.root.getrEPHeaderPanel1().getjComboBox2().setSelectedItem(buildCaseNumber());
-//                break;
-//            case "MED":
-//                break;
-//            case "ULP":
-//                break;
-//            case "ORG":
-//                break;
-//        }
-//    }
-    
     private void createCase() {
         switch (Global.activeSection) {
             case "REP":
@@ -180,8 +172,16 @@ public class CreateNewCaseDialog extends javax.swing.JDialog {
                         monthComboBox.getSelectedItem().toString().substring(0, 2),
                         caseNumberTextBox.getText().trim());
                 break;
-            case "ORG":
-                break;
+            case "CMDS":
+                CMDSCase.createCase(yearComboBox.getSelectedItem().toString(),
+                        typeComboBox.getSelectedItem().toString(),
+                        monthComboBox.getSelectedItem().toString().substring(0, 2),
+                        caseNumberTextBox.getText().trim());
+//                CMDSCaseSearchData.createNewCaseEntry(yearComboBox.getSelectedItem().toString(),
+//                        typeComboBox.getSelectedItem().toString(),
+//                        monthComboBox.getSelectedItem().toString().substring(0, 2),
+//                        caseNumberTextBox.getText().trim());
+                break; 
         }
         
         EmployerCaseSearchData.createNewCaseEntry(yearComboBox.getSelectedItem().toString(),
@@ -224,7 +224,10 @@ public class CreateNewCaseDialog extends javax.swing.JDialog {
                     typeComboBox.getSelectedItem().toString(),
                     monthComboBox.getSelectedItem().toString().substring(0, 2));
                 break;
-            
+//            case "CMDS": firstCase =  CMDSCase.checkIfFristCMDSCaseOfMonth(
+//                    yearComboBox.getSelectedItem().toString(),
+//                    monthComboBox.getSelectedItem().toString().substring(0, 2));
+//                break;
         }
         
         return firstCase;

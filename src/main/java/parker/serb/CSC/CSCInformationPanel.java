@@ -37,13 +37,11 @@ public class CSCInformationPanel extends javax.swing.JPanel {
         loadStateComboBox();
         loadFiscalYearEndingComboBox();
         loadDueDateComboBox();
-        loadCharterComboBox();
     }
     
     private void loadOrgTypeComboBox() {
         cscTypeComboBox.removeAllItems();
         cscTypeComboBox.addItem("");
-        cscTypeComboBox.addItem("Local");
         cscTypeComboBox.addItem("Municipal");
         cscTypeComboBox.addItem("Township");
     }
@@ -74,13 +72,6 @@ public class CSCInformationPanel extends javax.swing.JPanel {
         fiscalYearEndingComboBox.addItem("December");
     }
     
-    private void loadCharterComboBox() {
-        charterComboBox.removeAllItems();
-        charterComboBox.addItem("");
-        charterComboBox.addItem("Home Rule");
-        charterComboBox.addItem("Do Not Know");
-    }
-    
     private void loadDueDateComboBox() {
         dueDateComboBox.removeAllItems();
         dueDateComboBox.addItem("");
@@ -106,7 +97,6 @@ public class CSCInformationPanel extends javax.swing.JPanel {
         cscPhone1TextBox.setText("");
         cscPhone2TextBox.setText("");
         cscFaxTextBox.setText("");
-        employerIDTextBox.setText("");
         cscAddress1TextBox.setText("");
         cscAddress2TextBox.setText("");
         cscCityTextBox.setText("");
@@ -123,7 +113,7 @@ public class CSCInformationPanel extends javax.swing.JPanel {
         dueDateComboBox.setSelectedItem("");
         dateFiledTextBox.setText("");
         previousFileDateTextBox.setText("");
-        charterComboBox.setSelectedItem("");
+        charterCheckBox.setSelected(false);
     }
     
     public void enableUpdate() {
@@ -143,8 +133,6 @@ public class CSCInformationPanel extends javax.swing.JPanel {
         cscPhone2TextBox.setBackground(Color.white);
         cscFaxTextBox.setEnabled(true);
         cscFaxTextBox.setBackground(Color.white);
-        employerIDTextBox.setEnabled(true);
-        employerIDTextBox.setBackground(Color.white);
         cscAddress1TextBox.setEnabled(true);
         cscAddress1TextBox.setBackground(Color.white);
         cscAddress2TextBox.setEnabled(true);
@@ -170,7 +158,7 @@ public class CSCInformationPanel extends javax.swing.JPanel {
         dateFiledTextBox.setBackground(Color.white);
         previousFileDateTextBox.setBackground(Color.white);
         previousFileDateTextBox.setEnabled(true);
-        charterComboBox.setEnabled(true);
+        charterCheckBox.setEnabled(true);
     }
     
     public void disableUpdate(boolean save) {
@@ -190,8 +178,6 @@ public class CSCInformationPanel extends javax.swing.JPanel {
         cscPhone2TextBox.setBackground(new Color(238,238,238));
         cscFaxTextBox.setEnabled(false);
         cscFaxTextBox.setBackground(new Color(238,238,238));
-        employerIDTextBox.setEnabled(false);
-        employerIDTextBox.setBackground(new Color(238,238,238));
         cscAddress1TextBox.setEnabled(false);
         cscAddress1TextBox.setBackground(new Color(238,238,238));
         cscAddress2TextBox.setEnabled(false);
@@ -217,7 +203,7 @@ public class CSCInformationPanel extends javax.swing.JPanel {
         dateFiledTextBox.setBackground(new Color(238,238,238));
         previousFileDateTextBox.setBackground(new Color(238,238,238));
         previousFileDateTextBox.setEnabled(false);
-        charterComboBox.setEnabled(false);
+        charterCheckBox.setEnabled(false);
 
         if(save) {
             saveInformation();
@@ -233,7 +219,6 @@ public class CSCInformationPanel extends javax.swing.JPanel {
         newInformation.alsoKnownAs = alsoKnownAsTextBox.getText().trim().equals("") ? null : alsoKnownAsTextBox.getText().trim();
         newInformation.type = cscTypeComboBox.getSelectedItem().toString().trim().equals("") ? null : cscTypeComboBox.getSelectedItem().toString();
         newInformation.cscNumber = cscNumberTextBox.getText().trim().equals("") ? null : cscNumberTextBox.getText().trim();
-        newInformation.cscEmployerID = employerIDTextBox.getText().trim().equals("") ? null : employerIDTextBox.getText().split("-")[0].trim();
         newInformation.address1 = cscAddress1TextBox.getText().trim().equals("") ? null : NumberFormatService.convertPhoneNumberToString(cscAddress1TextBox.getText());
         newInformation.address2 = cscAddress2TextBox.getText().trim().equals("") ? null : NumberFormatService.convertPhoneNumberToString(cscAddress2TextBox.getText());
         newInformation.city = cscCityTextBox.getText().trim().equals("") ? null : cscCityTextBox.getText().trim();
@@ -244,7 +229,7 @@ public class CSCInformationPanel extends javax.swing.JPanel {
         newInformation.fax = cscFaxTextBox.getText().trim().equals("") ? null : NumberFormatService.convertPhoneNumberToString(cscFaxTextBox.getText());
         newInformation.email = cscEmailTextBox.getText().trim().equals("") ? null : cscEmailTextBox.getText().trim();
         newInformation.statutory = statutoryCheckBox.isSelected();
-        newInformation.charter = fiscalYearEndingComboBox.getSelectedItem().toString().trim().equals("") ? null : fiscalYearEndingComboBox.getSelectedItem().toString().trim();
+        newInformation.charter = charterCheckBox.isSelected();
         newInformation.fiscalYearEnding = fiscalYearEndingComboBox.getSelectedItem().toString().trim().equals("") ? null : fiscalYearEndingComboBox.getSelectedItem().toString();
         newInformation.lastNotification = lastNotificationTextBox.getText().equals("") ? null : lastNotificationTextBox.getText();
         newInformation.activityLastFiled = activitiesLastFiledTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(activitiesLastFiledTextBox.getText()));
@@ -271,7 +256,6 @@ public class CSCInformationPanel extends javax.swing.JPanel {
         cscPhone1TextBox.setText(orginalInformation.phone1 != null ? NumberFormatService.convertStringToPhoneNumber(orginalInformation.phone1) : "");
         cscPhone2TextBox.setText(orginalInformation.phone2 != null ? NumberFormatService.convertStringToPhoneNumber(orginalInformation.phone2) : "");
         cscFaxTextBox.setText(orginalInformation.fax != null ? NumberFormatService.convertStringToPhoneNumber(orginalInformation.fax) : "");
-        employerIDTextBox.setText(orginalInformation.cscEmployerID != null ? orginalInformation.cscEmployerID + " - " + Employer.getEmployerNameByID(orginalInformation.cscEmployerID) : "");
         cscAddress1TextBox.setText(orginalInformation.address1 != null ? orginalInformation.address1 : "");
         cscAddress2TextBox.setText(orginalInformation.address2 != null ? orginalInformation.address2 : "");
         cscCityTextBox.setText(orginalInformation.city != null ? orginalInformation.city : "");
@@ -286,7 +270,7 @@ public class CSCInformationPanel extends javax.swing.JPanel {
         dateFiledTextBox.setText(orginalInformation.filed != null ? Global.mmddyyyy.format(new Date(orginalInformation.filed.getTime())) : "");
         activitiesLastFiledTextBox.setText(orginalInformation.activityLastFiled != null ? Global.mmddyyyy.format(new Date(orginalInformation.activityLastFiled.getTime())) : "");
         previousFileDateTextBox.setText(orginalInformation.previousFileDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.previousFileDate.getTime())) : "");
-        charterComboBox.setSelectedItem(orginalInformation.charter != null ? orginalInformation.charter : "");
+        charterCheckBox.setSelected(orginalInformation.charter == true);
         lastNotificationTextBox.setText(orginalInformation.lastNotification != null ? orginalInformation.lastNotification : "");
         statutoryCheckBox.setSelected(orginalInformation.statutory == true);
         validCheckBox.setSelected(orginalInformation.valid == true);
@@ -324,8 +308,6 @@ public class CSCInformationPanel extends javax.swing.JPanel {
         cscPhone2TextBox = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         cscFaxTextBox = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        employerIDTextBox = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         cscAddress1TextBox = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
@@ -355,10 +337,9 @@ public class CSCInformationPanel extends javax.swing.JPanel {
         validCheckBox = new javax.swing.JCheckBox();
         lastNotificationTextBox = new javax.swing.JTextField();
         dueDateComboBox = new javax.swing.JComboBox<>();
-        jLabel23 = new javax.swing.JLabel();
-        charterComboBox = new javax.swing.JComboBox<>();
         jLabel18 = new javax.swing.JLabel();
         previousFileDateTextBox = new com.alee.extended.date.WebDateField();
+        charterCheckBox = new javax.swing.JCheckBox();
 
         jLabel1.setText("CSC Name:");
 
@@ -405,17 +386,6 @@ public class CSCInformationPanel extends javax.swing.JPanel {
         cscFaxTextBox.setBackground(new java.awt.Color(238, 238, 238));
         cscFaxTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         cscFaxTextBox.setEnabled(false);
-
-        jLabel7.setText("Employer ID:");
-
-        employerIDTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        employerIDTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        employerIDTextBox.setEnabled(false);
-        employerIDTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                employerIDTextBoxMouseClicked(evt);
-            }
-        });
 
         jLabel8.setText("CSC Address 1:");
 
@@ -479,39 +449,41 @@ public class CSCInformationPanel extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel15)
-                    .addComponent(jLabel14)
-                    .addComponent(jLabel13)
-                    .addComponent(jLabel12)
-                    .addComponent(jLabel11)
-                    .addComponent(jLabel10)
-                    .addComponent(jLabel9)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cscNameTextBox)
-                    .addComponent(cscNumberTextBox)
-                    .addComponent(cscTypeComboBox, 0, 422, Short.MAX_VALUE)
-                    .addComponent(cscPhone1TextBox, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(cscPhone2TextBox, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(cscFaxTextBox, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(employerIDTextBox, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(cscAddress1TextBox, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(cscAddress2TextBox)
-                    .addComponent(cscCityTextBox)
-                    .addComponent(cscStateComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(cscZipTextBox)
-                    .addComponent(cscEmailTextBox)
-                    .addComponent(alsoKnownAsTextBox)
-                    .addComponent(cscCountyComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel15)
+                            .addComponent(jLabel14)
+                            .addComponent(jLabel13)
+                            .addComponent(jLabel12)
+                            .addComponent(jLabel11)
+                            .addComponent(jLabel10)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cscNameTextBox)
+                            .addComponent(cscNumberTextBox)
+                            .addComponent(cscTypeComboBox, 0, 422, Short.MAX_VALUE)
+                            .addComponent(cscPhone1TextBox, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(cscPhone2TextBox, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(cscFaxTextBox, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(cscAddress1TextBox, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(cscCityTextBox)
+                            .addComponent(cscStateComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cscZipTextBox)
+                            .addComponent(cscEmailTextBox)
+                            .addComponent(alsoKnownAsTextBox)
+                            .addComponent(cscCountyComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel9)
+                        .addGap(8, 8, 8)
+                        .addComponent(cscAddress2TextBox)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -547,37 +519,33 @@ public class CSCInformationPanel extends javax.swing.JPanel {
                     .addComponent(cscFaxTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(employerIDTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(cscAddress1TextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cscAddress1TextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
                     .addComponent(cscAddress2TextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cscCityTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel10))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
-                    .addComponent(cscCityTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(cscStateComboBox)
+                    .addComponent(cscStateComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel12)
-                    .addComponent(cscZipTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(cscCountyComboBox)
-                    .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(cscZipTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel12))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel14)
-                    .addComponent(cscEmailTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(cscCountyComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cscEmailTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel14))
+                .addContainerGap(53, Short.MAX_VALUE))
         );
 
         jLabel16.setText("Fiscal Year Ending:");
@@ -650,16 +618,6 @@ public class CSCInformationPanel extends javax.swing.JPanel {
             }
         });
 
-        jLabel23.setText("Charter:");
-
-        charterComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        charterComboBox.setEnabled(false);
-        charterComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                charterComboBoxActionPerformed(evt);
-            }
-        });
-
         jLabel18.setText("Previous File Date:");
 
         previousFileDateTextBox.setEditable(false);
@@ -679,6 +637,14 @@ public class CSCInformationPanel extends javax.swing.JPanel {
             }
         });
 
+        charterCheckBox.setText("Home Rule (Charter)");
+        charterCheckBox.setEnabled(false);
+        charterCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                charterCheckBoxActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -687,7 +653,6 @@ public class CSCInformationPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel18)
-                    .addComponent(jLabel23)
                     .addComponent(jLabel28)
                     .addComponent(jLabel27)
                     .addComponent(jLabel21)
@@ -700,10 +665,10 @@ public class CSCInformationPanel extends javax.swing.JPanel {
                     .addComponent(fiscalYearEndingComboBox, 0, 397, Short.MAX_VALUE)
                     .addComponent(dateFiledTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(dueDateComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(charterComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(previousFileDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(charterCheckBox)
                             .addComponent(statutoryCheckBox)
                             .addComponent(validCheckBox))
                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -733,18 +698,16 @@ public class CSCInformationPanel extends javax.swing.JPanel {
                     .addComponent(jLabel18)
                     .addComponent(previousFileDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(charterComboBox)
-                    .addComponent(jLabel23, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel21)
-                    .addComponent(lastNotificationTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lastNotificationTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel21))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(charterCheckBox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(statutoryCheckBox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(validCheckBox)
-                .addGap(227, 227, 227))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -804,17 +767,6 @@ public class CSCInformationPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_cscCountyComboBoxActionPerformed
 
-    private void employerIDTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_employerIDTextBoxMouseClicked
-        if(evt.getClickCount() == 2) {
-            employerSearch search = new employerSearch((JFrame) Global.root.getRootPane().getParent(), true, employerIDTextBox.getText().trim());
-            employerIDTextBox.setText(search.getEmployerNumber() + " - " + Employer.getEmployerNameByID(search.getEmployerNumber()));
-            search.dispose();
-            if(employerIDTextBox.getText().equals("")) {
-                new employerDetail((JFrame) Global.root.getRootPane().getParent(), true, employerIDTextBox.getText().split("-")[0].trim());
-            }
-        }
-    }//GEN-LAST:event_employerIDTextBoxMouseClicked
-
     private void cscNameTextBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cscNameTextBoxKeyPressed
         if(cscNameTextBox.getText().trim().equals("")) {
             Global.root.getjButton2().setEnabled(false);
@@ -847,10 +799,6 @@ public class CSCInformationPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_dueDateComboBoxActionPerformed
 
-    private void charterComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_charterComboBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_charterComboBoxActionPerformed
-
     private void previousFileDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_previousFileDateTextBoxMouseClicked
        clearDate(activitiesLastFiledTextBox, evt);
     }//GEN-LAST:event_previousFileDateTextBoxMouseClicked
@@ -859,11 +807,15 @@ public class CSCInformationPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_previousFileDateTextBoxActionPerformed
 
+    private void charterCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_charterCheckBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_charterCheckBoxActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.alee.extended.date.WebDateField activitiesLastFiledTextBox;
     private javax.swing.JTextField alsoKnownAsTextBox;
-    private javax.swing.JComboBox<String> charterComboBox;
+    private javax.swing.JCheckBox charterCheckBox;
     private javax.swing.JTextField cscAddress1TextBox;
     private javax.swing.JTextField cscAddress2TextBox;
     private javax.swing.JTextField cscCityTextBox;
@@ -879,7 +831,6 @@ public class CSCInformationPanel extends javax.swing.JPanel {
     private javax.swing.JTextField cscZipTextBox;
     private com.alee.extended.date.WebDateField dateFiledTextBox;
     private javax.swing.JComboBox<String> dueDateComboBox;
-    private javax.swing.JTextField employerIDTextBox;
     private javax.swing.JComboBox<String> fiscalYearEndingComboBox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -893,14 +844,12 @@ public class CSCInformationPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;

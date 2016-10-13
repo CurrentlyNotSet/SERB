@@ -78,6 +78,29 @@ public class CaseNumber {
         return nextNumber;
     }
     
+    public static String getCMDSCaseNumber(String year) {
+        String nextNumber = "0001";
+            
+        try {
+
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select caseNumber from CaseNumber where year = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, year);
+
+            ResultSet caseNumber = preparedStatement.executeQuery();
+            
+            if(caseNumber.next()) {
+                nextNumber = caseNumber.getString("caseNumber");
+            } 
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return nextNumber;
+    }
+    
     public static String getORGNumber() {
         String nextNumber = null;
             
@@ -150,6 +173,28 @@ public class CaseNumber {
         }
     }
     
+    public static void updateNextCMDSCaseNumber(String caseYear, String caseNumber) {
+        try {
+
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Update CaseNumber set caseNumber = ? where"
+                    + " year = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, caseNumber);
+            preparedStatement.setString(2, caseYear);
+
+            int success = preparedStatement.executeUpdate();
+            
+            if(success == 0) {
+                createCaseNumber(caseYear);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public static void updateOrgCaseNumber(String orgNumber) {
         try {
 
@@ -207,6 +252,23 @@ public class CaseNumber {
         }
     }
     
+    private static void createCaseNumber(String year) {
+        try {
+
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Insert into CaseNumber Values (?,?)";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, year);
+            preparedStatement.setString(2, "2");
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public static String validateULPCaseNumber(String[] caseNumbers) {
         boolean valid = true;
         String caseNumber = "";
@@ -222,11 +284,4 @@ public class CaseNumber {
         }
         return caseNumber;
     }
-    
-//    public static boolean validateULPCaseNumber(String caseNumbers) {
-//        boolean validate = false;
-//        
-////        return ULPCase.
-//
-//    }
 }

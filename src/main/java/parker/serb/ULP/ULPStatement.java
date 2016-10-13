@@ -7,7 +7,6 @@ package parker.serb.ULP;
 
 import java.awt.Color;
 import parker.serb.Global;
-import parker.serb.sql.REPCase;
 import parker.serb.sql.ULPCase;
 
 /**
@@ -45,8 +44,6 @@ public class ULPStatement extends javax.swing.JPanel {
             saveInformation();
         
         loadInformation();
-        
-        
     }
     
     public void loadInformation() {
