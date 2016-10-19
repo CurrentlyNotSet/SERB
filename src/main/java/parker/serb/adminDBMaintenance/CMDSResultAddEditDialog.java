@@ -7,16 +7,16 @@ package parker.serb.adminDBMaintenance;
 
 import com.alee.laf.optionpane.WebOptionPane;
 import parker.serb.Global;
-import parker.serb.sql.HearingType;
+import parker.serb.sql.CMDSResult;
 
 /**
  *
  * @author Andrew
  */
-public class HearingTypeAddEditDialog extends javax.swing.JDialog {
+public class CMDSResultAddEditDialog extends javax.swing.JDialog {
 
     private int ID;
-    private HearingType item;
+    private CMDSResult item;
     
     /**
      * Creates new form AddCompanyContactPanel
@@ -24,7 +24,7 @@ public class HearingTypeAddEditDialog extends javax.swing.JDialog {
      * @param modal
      * @param itemIDpassed
      */
-    public HearingTypeAddEditDialog(java.awt.Frame parent, boolean modal, int itemIDpassed) {
+    public CMDSResultAddEditDialog(java.awt.Frame parent, boolean modal, int itemIDpassed) {
         super(parent, modal);
         initComponents();
         setDefaults(itemIDpassed);
@@ -32,57 +32,42 @@ public class HearingTypeAddEditDialog extends javax.swing.JDialog {
 
     private void setDefaults(int itemIDpassed) {
         ID = itemIDpassed;
-        loadSectionComboBox();
         if (ID > 0) {
-            titleLabel.setText("Edit Hearing Type");
+            titleLabel.setText("Edit Result");
             editButton.setText("Save");
             loadInformation();
         } else {
-            titleLabel.setText("Add Hearing Type");
+            titleLabel.setText("Add Result");
             editButton.setText("Add");
             editButton.setEnabled(false);
-            item = new HearingType();
+            item = new CMDSResult();
         }
         this.setLocationRelativeTo(Global.root);
         this.setVisible(true);
     }
         
-    private void loadSectionComboBox(){
-        sectionComboBox.addItem("");
-        sectionComboBox.addItem("CMDS");
-        sectionComboBox.addItem("CSC");
-        sectionComboBox.addItem("Hearings");
-        sectionComboBox.addItem("MED");
-        sectionComboBox.addItem("ORG");
-        sectionComboBox.addItem("REP");
-        sectionComboBox.addItem("ULP");
-    }
-    
     private void loadInformation() {
-        item = HearingType.getHearingTypeByID(ID);
+        item = CMDSResult.getResultByID(ID);
         
-        sectionComboBox.setSelectedItem(item.section);
-        typeTextField.setText(item.hearingType);
-        descriptionTextField.setText(item.hearingDescription);
+        resultTextField.setText(item.result);
+        DescriptionTextField.setText(item.description);
     }
     
     private void saveInformation() {
         item.id = ID;
-        item.section = sectionComboBox.getSelectedItem().toString().trim();
-        item.hearingType = typeTextField.getText().trim();
-        item.hearingDescription = descriptionTextField.getText().trim();
+        item.result = resultTextField.getText().trim();
+        item.description = DescriptionTextField.getText().trim();
                        
         if (ID > 0){
-            HearingType.updateHearingType(item);
+            CMDSResult.updateResultType(item);
         } else {
-            HearingType.createHearingType(item);
+            CMDSResult.createResultType(item);
         }
     }
 
     private void checkButton(){
-        if (sectionComboBox.getSelectedItem().toString().trim().equals("") || 
-                typeTextField.getText().trim().equals("") || 
-                descriptionTextField.getText().trim().equals("")){
+        if (resultTextField.getText().trim().equals("") || 
+                DescriptionTextField.getText().trim().equals("")){
             editButton.setEnabled(false);
         } else {
             editButton.setEnabled(true);
@@ -100,13 +85,11 @@ public class HearingTypeAddEditDialog extends javax.swing.JDialog {
 
         titleLabel = new javax.swing.JLabel();
         closeButton = new javax.swing.JButton();
+        resultTextField = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         editButton = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
-        typeTextField = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        descriptionTextField = new javax.swing.JTextField();
-        sectionComboBox = new javax.swing.JComboBox<>();
+        DescriptionTextField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -123,9 +106,17 @@ public class HearingTypeAddEditDialog extends javax.swing.JDialog {
             }
         });
 
+        resultTextField.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        resultTextField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        resultTextField.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                resultTextFieldCaretUpdate(evt);
+            }
+        });
+
         jLabel4.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel4.setText("Section:");
+        jLabel4.setText("Result:");
 
         editButton.setText("<<EDIT>>");
         editButton.addActionListener(new java.awt.event.ActionListener() {
@@ -136,31 +127,13 @@ public class HearingTypeAddEditDialog extends javax.swing.JDialog {
 
         jLabel6.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel6.setText("Type:");
+        jLabel6.setText("Description:");
 
-        typeTextField.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        typeTextField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        typeTextField.addCaretListener(new javax.swing.event.CaretListener() {
+        DescriptionTextField.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        DescriptionTextField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        DescriptionTextField.addCaretListener(new javax.swing.event.CaretListener() {
             public void caretUpdate(javax.swing.event.CaretEvent evt) {
-                typeTextFieldCaretUpdate(evt);
-            }
-        });
-
-        jLabel7.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel7.setText("Description:");
-
-        descriptionTextField.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        descriptionTextField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        descriptionTextField.addCaretListener(new javax.swing.event.CaretListener() {
-            public void caretUpdate(javax.swing.event.CaretEvent evt) {
-                descriptionTextFieldCaretUpdate(evt);
-            }
-        });
-
-        sectionComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sectionComboBoxActionPerformed(evt);
+                DescriptionTextFieldCaretUpdate(evt);
             }
         });
 
@@ -177,19 +150,15 @@ public class HearingTypeAddEditDialog extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 290, Short.MAX_VALUE)
                         .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(sectionComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(resultTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(typeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(descriptionTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(DescriptionTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -201,16 +170,12 @@ public class HearingTypeAddEditDialog extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(sectionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(resultTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(typeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(descriptionTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                    .addComponent(DescriptionTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(closeButton)
                     .addComponent(editButton))
@@ -232,27 +197,21 @@ public class HearingTypeAddEditDialog extends javax.swing.JDialog {
         this.dispose();
     }//GEN-LAST:event_editButtonActionPerformed
 
-    private void typeTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_typeTextFieldCaretUpdate
+    private void resultTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_resultTextFieldCaretUpdate
         checkButton();
-    }//GEN-LAST:event_typeTextFieldCaretUpdate
+    }//GEN-LAST:event_resultTextFieldCaretUpdate
 
-    private void descriptionTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_descriptionTextFieldCaretUpdate
+    private void DescriptionTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_DescriptionTextFieldCaretUpdate
         checkButton();
-    }//GEN-LAST:event_descriptionTextFieldCaretUpdate
-
-    private void sectionComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sectionComboBoxActionPerformed
-        checkButton();
-    }//GEN-LAST:event_sectionComboBoxActionPerformed
+    }//GEN-LAST:event_DescriptionTextFieldCaretUpdate
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField DescriptionTextField;
     private javax.swing.JButton closeButton;
-    private javax.swing.JTextField descriptionTextField;
     private javax.swing.JButton editButton;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JComboBox<String> sectionComboBox;
+    private javax.swing.JTextField resultTextField;
     private javax.swing.JLabel titleLabel;
-    private javax.swing.JTextField typeTextField;
     // End of variables declaration//GEN-END:variables
 }

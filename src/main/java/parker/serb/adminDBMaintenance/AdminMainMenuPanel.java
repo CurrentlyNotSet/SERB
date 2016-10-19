@@ -49,6 +49,7 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
         HearingRoomsButton = new javax.swing.JButton();
         HearingTypesButton = new javax.swing.JButton();
         CaseStatusTypeButton = new javax.swing.JButton();
+        CMDSResultsButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -210,6 +211,13 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
             }
         });
 
+        CMDSResultsButton.setText("Results");
+        CMDSResultsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CMDSResultsButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -276,7 +284,9 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
                         .addContainerGap()
                         .addComponent(HearingRoomsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(HearingTypesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(HearingTypesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(CMDSResultsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(24, Short.MAX_VALUE))
         );
 
@@ -331,7 +341,8 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(HearingRoomsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(HearingTypesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(HearingTypesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(CMDSResultsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 118, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addContainerGap())
@@ -414,8 +425,13 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_CaseStatusTypeButtonActionPerformed
 
+    private void CMDSResultsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CMDSResultsButtonActionPerformed
+        new CMDSResultSearchDialog(Global.root, true);
+    }//GEN-LAST:event_CMDSResultsButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BoardActionTypeButton;
+    private javax.swing.JButton CMDSResultsButton;
     private javax.swing.JButton CaseStatusTypeButton;
     private javax.swing.JButton FFConciliatorsButton;
     private javax.swing.JButton HearingRoomsButton;

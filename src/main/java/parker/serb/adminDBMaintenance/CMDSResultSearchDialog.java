@@ -8,20 +8,20 @@ package parker.serb.adminDBMaintenance;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.sql.ActiveStatus;
-import parker.serb.sql.HearingType;
+import parker.serb.sql.CMDSResult;
 
 /**
  *
  * @author User
  */
-public class HearingTypeSearchDialog extends javax.swing.JDialog {
+public class CMDSResultSearchDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form PreFixSearchDialog
      * @param parent
      * @param modal
      */
-    public HearingTypeSearchDialog(java.awt.Frame parent, boolean modal) {
+    public CMDSResultSearchDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         setColumnSize();
@@ -52,11 +52,6 @@ public class HearingTypeSearchDialog extends javax.swing.JDialog {
         SearchTable.getColumnModel().getColumn(1).setMinWidth(60);
         SearchTable.getColumnModel().getColumn(1).setWidth(60);
         SearchTable.getColumnModel().getColumn(1).setMaxWidth(60);
-        
-        //Abbreviation
-        SearchTable.getColumnModel().getColumn(2).setMinWidth(100);
-        SearchTable.getColumnModel().getColumn(2).setWidth(100);
-        SearchTable.getColumnModel().getColumn(2).setMaxWidth(100);
     }
 
     private void loadTable() {
@@ -65,15 +60,14 @@ public class HearingTypeSearchDialog extends javax.swing.JDialog {
 
         String[] param = searchTextBox.getText().trim().split(" ");
         
-        List<HearingType> databaseList = HearingType.loadAllHearingTypes(param);
+        List<CMDSResult> databaseList = CMDSResult.loadAllResultTypes(param);
 
-        for (HearingType item : databaseList) {
+        for (CMDSResult item : databaseList) {
             model.addRow(new Object[]{
                 item.id,
                 item.active,
-                item.section,
-                item.hearingType,
-                item.hearingDescription
+                item.result,
+                item.description
             });
         }
         EditButton.setEnabled(false);
@@ -95,7 +89,7 @@ public class HearingTypeSearchDialog extends javax.swing.JDialog {
             int id = (int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0);
             boolean active = (boolean) SearchTable.getValueAt(SearchTable.getSelectedRow(), 1);
             
-            ActiveStatus.updateActiveStatus("HearingType", active, id);
+            ActiveStatus.updateActiveStatus("CMDSResult", active, id);
         }
     }
     
@@ -130,7 +124,7 @@ public class HearingTypeSearchDialog extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Hearing Types");
+        jLabel1.setText("Results");
 
         AddNewButton.setText("Add New");
         AddNewButton.addActionListener(new java.awt.event.ActionListener() {
@@ -144,14 +138,14 @@ public class HearingTypeSearchDialog extends javax.swing.JDialog {
 
             },
             new String [] {
-                "ID", "Active", "Section", "Type", "Description"
+                "ID", "Active", "Result", "Description"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.Object.class, java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, false, false, false
+                false, true, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -174,7 +168,6 @@ public class HearingTypeSearchDialog extends javax.swing.JDialog {
             SearchTable.getColumnModel().getColumn(1).setResizable(false);
             SearchTable.getColumnModel().getColumn(2).setResizable(false);
             SearchTable.getColumnModel().getColumn(3).setResizable(false);
-            SearchTable.getColumnModel().getColumn(4).setResizable(false);
         }
 
         EditButton.setText("Edit");
@@ -236,13 +229,13 @@ public class HearingTypeSearchDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void AddNewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddNewButtonActionPerformed
-        new HearingTypeAddEditDialog(null, true, 0);
+        new CMDSResultAddEditDialog(null, true, 0);
         loadTable();
     }//GEN-LAST:event_AddNewButtonActionPerformed
 
     private void EditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditButtonActionPerformed
         if ((int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0) > 0){
-            new HearingTypeAddEditDialog(null, true, (int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0));
+            new CMDSResultAddEditDialog(null, true, (int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0));
             loadTable();
         }
     }//GEN-LAST:event_EditButtonActionPerformed

@@ -69,7 +69,7 @@ public class HearingRoom {
         return list;
     }
     
-    public static HearingRoom getREPReccomendationByID(int id) {
+    public static HearingRoom getHearingRoomByID(int id) {
         HearingRoom item = new HearingRoom();
 
         try {

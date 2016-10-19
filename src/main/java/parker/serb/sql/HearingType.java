@@ -26,7 +26,7 @@ public class HearingType {
     public String hearingType;
     public String hearingDescription;
     
-    public static List<HearingType> loadAllHearingRooms(String[] param) {
+    public static List<HearingType> loadAllHearingTypes(String[] param) {
         List<HearingType> list = new ArrayList<>();
 
         try {
@@ -69,7 +69,7 @@ public class HearingType {
         return list;
     }
     
-    public static HearingType getREPReccomendationByID(int id) {
+    public static HearingType getHearingTypeByID(int id) {
         HearingType item = new HearingType();
 
         try {
@@ -95,7 +95,7 @@ public class HearingType {
         return item;
     }
 
-    public static void createHearingRoom(HearingType item) {
+    public static void createHearingType(HearingType item) {
         try {
 
             Statement stmt = Database.connectToDB().createStatement();
@@ -115,7 +115,7 @@ public class HearingType {
         }
     }
 
-    public static void updateHearingRoom(HearingType item) {
+    public static void updateHearingType(HearingType item) {
         try {
             Statement stmt = Database.connectToDB().createStatement();
 

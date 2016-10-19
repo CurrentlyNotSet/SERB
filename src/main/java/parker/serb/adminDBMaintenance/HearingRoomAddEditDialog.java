@@ -47,7 +47,7 @@ public class HearingRoomAddEditDialog extends javax.swing.JDialog {
     }
         
     private void loadInformation() {
-        item = HearingRoom.getREPReccomendationByID(ID);
+        item = HearingRoom.getHearingRoomByID(ID);
         
         abbreviationTextField.setText(item.roomAbbreviation);
         nameTextField.setText(item.roomName);
