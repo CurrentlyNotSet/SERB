@@ -5,20 +5,18 @@
  */
 package parker.serb.CMDS;
 
-import parker.serb.REP.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import parker.serb.Global;
 import parker.serb.sql.CMDSHearing;
-import parker.serb.sql.REPMediation;
-import parker.serb.sql.User;
+import parker.serb.sql.HearingRoom;
+import parker.serb.sql.HearingType;
 
 
 /**
@@ -29,6 +27,8 @@ public class CMDSAddHearingDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form REPAddMediationDialog
+     * @param parent
+     * @param modal
      */
     public CMDSAddHearingDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -43,21 +43,19 @@ public class CMDSAddHearingDialog extends javax.swing.JDialog {
     private void loadTypeComboBox() {
         hearingTypeComboBox.removeAllItems();
         hearingTypeComboBox.addItem("");
-        hearingTypeComboBox.addItem("PH");
-        hearingTypeComboBox.addItem("RH");
-        hearingTypeComboBox.addItem("SE");
-        hearingTypeComboBox.addItem("ST");
-        hearingTypeComboBox.addItem("TC");
-        hearingTypeComboBox.addItem("MC");
+        
+        for (HearingType type : HearingType.loadActiveHearingTypesBySection("CMDS")){
+            hearingTypeComboBox.addItem(type.hearingType);
+        }
     }
     
     private void loadRoomComboBox() {
         hearingRoomComboBox.removeAllItems();
         hearingRoomComboBox.addItem("");
-        hearingRoomComboBox.addItem("HR1");
-        hearingRoomComboBox.addItem("HR2");
-        hearingRoomComboBox.addItem("HR3");
-        hearingRoomComboBox.addItem("HR4");
+        
+        for (HearingRoom room : HearingRoom.loadActiveHearingRooms()){
+            hearingRoomComboBox.addItem(room.roomAbbreviation);
+        }
     }
     
     private void addListeners() {

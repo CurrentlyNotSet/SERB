@@ -26,7 +26,7 @@ public class HearingRoom {
     public String roomName;
     public String roomEmail;
     
-    public static List loadAllHearingRooms(String[] param) {
+    public static List<HearingRoom> loadAllHearingRooms(String[] param) {
         List<HearingRoom> list = new ArrayList<>();
 
         try {
@@ -139,6 +139,29 @@ public class HearingRoom {
         }
     }
     
-    
+    public static List<HearingRoom> loadActiveHearingRooms() {
+        List<HearingRoom> list = new ArrayList<>();
+
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+            String sql = "SELECT * FROM hearingroom WHERE active = 1 ORDER BY roomAbbreviation";
+            PreparedStatement ps = stmt.getConnection().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                HearingRoom item = new HearingRoom();
+                item.id = rs.getInt("id");
+                item.active = rs.getBoolean("active");
+                item.roomAbbreviation = rs.getString("roomAbbreviation") == null ? "" : rs.getString("roomAbbreviation");
+                item.roomName = rs.getString("roomName") == null ? "" : rs.getString("roomName");
+                item.roomEmail = rs.getString("roomEmail") == null ? "" : rs.getString("roomEmail");
+                list.add(item);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
+        return list;
+    }
     
 }

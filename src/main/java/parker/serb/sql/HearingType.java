@@ -26,7 +26,7 @@ public class HearingType {
     public String hearingType;
     public String hearingDescription;
     
-    public static List loadAllHearingRooms(String[] param) {
+    public static List<HearingType> loadAllHearingRooms(String[] param) {
         List<HearingType> list = new ArrayList<>();
 
         try {
@@ -137,6 +137,36 @@ public class HearingType {
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public static List<HearingType> loadActiveHearingTypesBySection(String section) {
+        List<HearingType> list = new ArrayList<>();
+
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT * FROM HearingType WHERE Active = 1 AND Section = ? ORDER BY hearingType";
+
+            PreparedStatement ps = stmt.getConnection().prepareStatement(sql);
+
+                ps.setString(1, section);
+            
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                HearingType item = new HearingType();
+                item.id = rs.getInt("id");
+                item.active = rs.getBoolean("active");
+                item.section = rs.getString("section") == null ? "" : rs.getString("section");
+                item.hearingType = rs.getString("hearingType") == null ? "" : rs.getString("hearingType");
+                item.hearingDescription = rs.getString("hearingDescription") == null ? "" : rs.getString("hearingDescription");
+                list.add(item);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
+        return list;
     }
     
 }
