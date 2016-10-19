@@ -75,6 +75,8 @@
                               <Component id="PartyButton" linkSize="2" min="-2" pref="130" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="HistoryTypesButton" linkSize="2" min="-2" pref="130" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="CaseStatusTypeButton" min="-2" pref="130" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -97,6 +99,12 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jSeparator1" min="-2" pref="867" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="HearingRoomsButton" min="-2" pref="130" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="HearingTypesButton" min="-2" pref="130" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace pref="24" max="32767" attributes="0"/>
@@ -156,8 +164,14 @@
                   <Component id="BoardActionTypeButton" linkSize="4" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                   <Component id="PartyButton" linkSize="4" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                   <Component id="HistoryTypesButton" linkSize="4" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
+                  <Component id="CaseStatusTypeButton" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="55" max="32767" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="HearingRoomsButton" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
+                  <Component id="HearingTypesButton" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace pref="118" max="32767" attributes="0"/>
               <Component id="jButton1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -353,6 +367,30 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="PreFixesButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="HearingRoomsButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Hearing Rooms"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="HearingRoomsButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="HearingTypesButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Hearing Types"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="HearingTypesButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="CaseStatusTypeButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Case Status Types"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CaseStatusTypeButtonActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>
