@@ -17,7 +17,7 @@ import parker.serb.sql.REPRecommendation;
 public class REPRecsSearchDialog extends javax.swing.JDialog {
 
     /**
-     * Creates new form PreFixSearchDialog
+     * Creates new form REPRecsSearchDialog
      * @param parent
      * @param modal
      */

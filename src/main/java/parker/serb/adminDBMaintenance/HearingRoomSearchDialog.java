@@ -17,7 +17,7 @@ import parker.serb.sql.HearingRoom;
 public class HearingRoomSearchDialog extends javax.swing.JDialog {
 
     /**
-     * Creates new form PreFixSearchDialog
+     * Creates new form HearingRoomSearchDialog
      * @param parent
      * @param modal
      */

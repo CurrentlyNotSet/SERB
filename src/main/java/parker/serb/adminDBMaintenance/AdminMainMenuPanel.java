@@ -422,7 +422,7 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
     }//GEN-LAST:event_HearingTypesButtonActionPerformed
 
     private void CaseStatusTypeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CaseStatusTypeButtonActionPerformed
-        // TODO add your handling code here:
+        new CMDSStatusTypeSearchDialog(Global.root, true);
     }//GEN-LAST:event_CaseStatusTypeButtonActionPerformed
 
     private void CMDSResultsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CMDSResultsButtonActionPerformed

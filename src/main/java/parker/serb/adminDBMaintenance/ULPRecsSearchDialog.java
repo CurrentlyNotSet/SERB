@@ -17,7 +17,7 @@ import parker.serb.sql.ULPRecommendation;
 public class ULPRecsSearchDialog extends javax.swing.JDialog {
 
     /**
-     * Creates new form PreFixSearchDialog
+     * Creates new form ULPRecsSearchDialog
      * @param parent
      * @param modal
      */

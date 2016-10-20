@@ -17,7 +17,7 @@ import parker.serb.sql.HearingType;
 public class HearingTypeSearchDialog extends javax.swing.JDialog {
 
     /**
-     * Creates new form PreFixSearchDialog
+     * Creates new form HearingTypeSearchDialog
      * @param parent
      * @param modal
      */

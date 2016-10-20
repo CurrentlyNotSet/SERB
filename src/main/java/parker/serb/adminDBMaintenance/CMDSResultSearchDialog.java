@@ -17,7 +17,7 @@ import parker.serb.sql.CMDSResult;
 public class CMDSResultSearchDialog extends javax.swing.JDialog {
 
     /**
-     * Creates new form PreFixSearchDialog
+     * Creates new form CMDSResultSearchDialog
      * @param parent
      * @param modal
      */

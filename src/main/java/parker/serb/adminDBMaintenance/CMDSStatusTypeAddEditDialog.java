@@ -7,24 +7,24 @@ package parker.serb.adminDBMaintenance;
 
 import com.alee.laf.optionpane.WebOptionPane;
 import parker.serb.Global;
-import parker.serb.sql.REPBoardActionType;
+import parker.serb.sql.CMDSStatusType;
 
 /**
  *
  * @author Andrew
  */
-public class REPBoardActionTypeAddEditDialog extends javax.swing.JDialog {
+public class CMDSStatusTypeAddEditDialog extends javax.swing.JDialog {
 
     private int ID;
-    private REPBoardActionType item;
+    private CMDSStatusType item;
     
     /**
-     * Creates new form REPBoardActionTypeAddEditDialog
+     * Creates new form CMDSStatusTypeAddEditDialog
      * @param parent
      * @param modal
      * @param itemIDpassed
      */
-    public REPBoardActionTypeAddEditDialog(java.awt.Frame parent, boolean modal, int itemIDpassed) {
+    public CMDSStatusTypeAddEditDialog(java.awt.Frame parent, boolean modal, int itemIDpassed) {
         super(parent, modal);
         initComponents();
         setDefaults(itemIDpassed);
@@ -33,41 +33,41 @@ public class REPBoardActionTypeAddEditDialog extends javax.swing.JDialog {
     private void setDefaults(int itemIDpassed) {
         ID = itemIDpassed;
         if (ID > 0) {
-            titleLabel.setText("Edit REP Board Action Type");
+            titleLabel.setText("Edit Status Type");
             editButton.setText("Save");
             loadInformation();
         } else {
-            titleLabel.setText("Add REP Board Action Type");
+            titleLabel.setText("Add Status Type");
             editButton.setText("Add");
             editButton.setEnabled(false);
-            item = new REPBoardActionType();
+            item = new CMDSStatusType();
         }
         this.setLocationRelativeTo(Global.root);
         this.setVisible(true);
     }
         
     private void loadInformation() {
-        item = REPBoardActionType.getREPBoardActionTypeByID(ID);
+        item = CMDSStatusType.getResultByID(ID);
         
-        recCodeTextField.setText(item.shortDescription);
-        descriptionTextArea.setText(item.longDescription);
+        resultTextField.setText(item.statusCode);
+        DescriptionTextField.setText(item.description);
     }
     
     private void saveInformation() {
         item.id = ID;
-        item.shortDescription = recCodeTextField.getText().trim();
-        item.longDescription = descriptionTextArea.getText().trim();
+        item.statusCode = resultTextField.getText().trim();
+        item.description = DescriptionTextField.getText().trim();
                        
         if (ID > 0){
-            REPBoardActionType.updateREPBoardActionType(item);
+            CMDSStatusType.updateResultType(item);
         } else {
-            REPBoardActionType.createREPBoardActionType(item);
+            CMDSStatusType.createResultType(item);
         }
     }
 
     private void checkButton(){
-        if (recCodeTextField.getText().trim().equals("") || 
-                descriptionTextArea.getText().trim().equals("")){
+        if (resultTextField.getText().trim().equals("") || 
+                DescriptionTextField.getText().trim().equals("")){
             editButton.setEnabled(false);
         } else {
             editButton.setEnabled(true);
@@ -85,12 +85,11 @@ public class REPBoardActionTypeAddEditDialog extends javax.swing.JDialog {
 
         titleLabel = new javax.swing.JLabel();
         closeButton = new javax.swing.JButton();
-        recCodeTextField = new javax.swing.JTextField();
+        resultTextField = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         editButton = new javax.swing.JButton();
-        jLabel5 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        descriptionTextArea = new javax.swing.JTextArea();
+        jLabel6 = new javax.swing.JLabel();
+        DescriptionTextField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -107,17 +106,17 @@ public class REPBoardActionTypeAddEditDialog extends javax.swing.JDialog {
             }
         });
 
-        recCodeTextField.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        recCodeTextField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        recCodeTextField.addCaretListener(new javax.swing.event.CaretListener() {
+        resultTextField.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        resultTextField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        resultTextField.addCaretListener(new javax.swing.event.CaretListener() {
             public void caretUpdate(javax.swing.event.CaretEvent evt) {
-                recCodeTextFieldCaretUpdate(evt);
+                resultTextFieldCaretUpdate(evt);
             }
         });
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel4.setText("Short:");
+        jLabel4.setText("Status Type:");
 
         editButton.setText("<<EDIT>>");
         editButton.addActionListener(new java.awt.event.ActionListener() {
@@ -126,20 +125,17 @@ public class REPBoardActionTypeAddEditDialog extends javax.swing.JDialog {
             }
         });
 
-        jLabel5.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel5.setText("Description:");
+        jLabel6.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel6.setText("Description:");
 
-        descriptionTextArea.setColumns(20);
-        descriptionTextArea.setLineWrap(true);
-        descriptionTextArea.setRows(5);
-        descriptionTextArea.setWrapStyleWord(true);
-        descriptionTextArea.addCaretListener(new javax.swing.event.CaretListener() {
+        DescriptionTextField.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        DescriptionTextField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        DescriptionTextField.addCaretListener(new javax.swing.event.CaretListener() {
             public void caretUpdate(javax.swing.event.CaretEvent evt) {
-                descriptionTextAreaCaretUpdate(evt);
+                DescriptionTextFieldCaretUpdate(evt);
             }
         });
-        jScrollPane1.setViewportView(descriptionTextArea);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -150,14 +146,16 @@ public class REPBoardActionTypeAddEditDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(titleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(10, 10, 10)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE)
-                            .addComponent(recCodeTextField))
-                        .addGap(0, 65, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(resultTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(DescriptionTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 38, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -172,12 +170,12 @@ public class REPBoardActionTypeAddEditDialog extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(recCodeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(resultTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(DescriptionTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(editButton)
                     .addComponent(closeButton))
@@ -199,22 +197,21 @@ public class REPBoardActionTypeAddEditDialog extends javax.swing.JDialog {
         this.dispose();
     }//GEN-LAST:event_editButtonActionPerformed
 
-    private void recCodeTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_recCodeTextFieldCaretUpdate
+    private void resultTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_resultTextFieldCaretUpdate
         checkButton();
-    }//GEN-LAST:event_recCodeTextFieldCaretUpdate
+    }//GEN-LAST:event_resultTextFieldCaretUpdate
 
-    private void descriptionTextAreaCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_descriptionTextAreaCaretUpdate
+    private void DescriptionTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_DescriptionTextFieldCaretUpdate
         checkButton();
-    }//GEN-LAST:event_descriptionTextAreaCaretUpdate
+    }//GEN-LAST:event_DescriptionTextFieldCaretUpdate
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField DescriptionTextField;
     private javax.swing.JButton closeButton;
-    private javax.swing.JTextArea descriptionTextArea;
     private javax.swing.JButton editButton;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField recCodeTextField;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JTextField resultTextField;
     private javax.swing.JLabel titleLabel;
     // End of variables declaration//GEN-END:variables
 }
