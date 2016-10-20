@@ -25,7 +25,7 @@ public class CMDSStatusType {
     public String statusCode;
     public String description;
     
-    public static List<CMDSStatusType> loadAllResultTypes(String[] param) {
+    public static List<CMDSStatusType> loadAllStatusTypes(String[] param) {
         List<CMDSStatusType> list = new ArrayList<>();
 
         try {
@@ -67,7 +67,7 @@ public class CMDSStatusType {
         return list;
     }
     
-    public static CMDSStatusType getResultByID(int id) {
+    public static CMDSStatusType getStatusByID(int id) {
         CMDSStatusType item = new CMDSStatusType();
 
         try {
@@ -92,7 +92,7 @@ public class CMDSStatusType {
         return item;
     }
 
-    public static void createResultType(CMDSStatusType item) {
+    public static void createStatusType(CMDSStatusType item) {
         try {
 
             Statement stmt = Database.connectToDB().createStatement();
@@ -111,7 +111,7 @@ public class CMDSStatusType {
         }
     }
 
-    public static void updateResultType(CMDSStatusType item) {
+    public static void updateStatusType(CMDSStatusType item) {
         try {
             Statement stmt = Database.connectToDB().createStatement();
 

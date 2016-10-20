@@ -8,20 +8,20 @@ package parker.serb.adminDBMaintenance;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.sql.ActiveStatus;
-import parker.serb.sql.CMDSStatusType;
+import parker.serb.sql.CaseType;
 
 /**
  *
  * @author User
  */
-public class CMDSStatusTypeSearchDialog extends javax.swing.JDialog {
+public class CaseTypeSearchDialog extends javax.swing.JDialog {
 
     /**
-     * Creates new form CMDSStatusTypeAddEditDialog
+     * Creates new form CaseTypeSearchDialog
      * @param parent
      * @param modal
      */
-    public CMDSStatusTypeSearchDialog(java.awt.Frame parent, boolean modal) {
+    public CaseTypeSearchDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         setColumnSize();
@@ -53,10 +53,10 @@ public class CMDSStatusTypeSearchDialog extends javax.swing.JDialog {
         SearchTable.getColumnModel().getColumn(1).setWidth(60);
         SearchTable.getColumnModel().getColumn(1).setMaxWidth(60);
         
-        //Status Code
-        SearchTable.getColumnModel().getColumn(2).setMinWidth(100);
-        SearchTable.getColumnModel().getColumn(2).setWidth(100);
-        SearchTable.getColumnModel().getColumn(2).setMaxWidth(100);
+        //Abbreviation
+        SearchTable.getColumnModel().getColumn(2).setMinWidth(125);
+        SearchTable.getColumnModel().getColumn(2).setWidth(125);
+        SearchTable.getColumnModel().getColumn(2).setMaxWidth(125);
     }
 
     private void loadTable() {
@@ -65,13 +65,14 @@ public class CMDSStatusTypeSearchDialog extends javax.swing.JDialog {
 
         String[] param = searchTextBox.getText().trim().split(" ");
         
-        List<CMDSStatusType> databaseList = CMDSStatusType.loadAllStatusTypes(param);
+        List<CaseType> databaseList = CaseType.loadAllStatusTypes(param);
 
-        for (CMDSStatusType item : databaseList) {
+        for (CaseType item : databaseList) {
             model.addRow(new Object[]{
                 item.id,
                 item.active,
-                item.statusCode,
+                item.section,
+                item.caseType,
                 item.description
             });
         }
@@ -94,7 +95,7 @@ public class CMDSStatusTypeSearchDialog extends javax.swing.JDialog {
             int id = (int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0);
             boolean active = (boolean) SearchTable.getValueAt(SearchTable.getSelectedRow(), 1);
             
-            ActiveStatus.updateActiveStatus("CMDSStatusType", active, id);
+            ActiveStatus.updateActiveStatus("CaseType", active, id);
         }
     }
     
@@ -129,7 +130,7 @@ public class CMDSStatusTypeSearchDialog extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Status Type");
+        jLabel1.setText("Case Types");
 
         AddNewButton.setText("Add New");
         AddNewButton.addActionListener(new java.awt.event.ActionListener() {
@@ -143,14 +144,14 @@ public class CMDSStatusTypeSearchDialog extends javax.swing.JDialog {
 
             },
             new String [] {
-                "ID", "Active", "Status Type", "Description"
+                "ID", "Active", "Section", "Type", "Description"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.Object.class, java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, false, false
+                false, true, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -173,6 +174,7 @@ public class CMDSStatusTypeSearchDialog extends javax.swing.JDialog {
             SearchTable.getColumnModel().getColumn(1).setResizable(false);
             SearchTable.getColumnModel().getColumn(2).setResizable(false);
             SearchTable.getColumnModel().getColumn(3).setResizable(false);
+            SearchTable.getColumnModel().getColumn(4).setResizable(false);
         }
 
         EditButton.setText("Edit");
@@ -234,13 +236,13 @@ public class CMDSStatusTypeSearchDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void AddNewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddNewButtonActionPerformed
-        new CMDSStatusTypeAddEditDialog(null, true, 0);
+        new CaseTypeAddEditDialog(null, true, 0);
         loadTable();
     }//GEN-LAST:event_AddNewButtonActionPerformed
 
     private void EditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditButtonActionPerformed
         if ((int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0) > 0){
-            new CMDSStatusTypeAddEditDialog(null, true, (int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0));
+            new CaseTypeAddEditDialog(null, true, (int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0));
             loadTable();
         }
     }//GEN-LAST:event_EditButtonActionPerformed

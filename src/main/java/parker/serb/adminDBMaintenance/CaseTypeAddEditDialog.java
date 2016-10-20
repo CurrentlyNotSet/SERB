@@ -7,24 +7,24 @@ package parker.serb.adminDBMaintenance;
 
 import com.alee.laf.optionpane.WebOptionPane;
 import parker.serb.Global;
-import parker.serb.sql.CMDSStatusType;
+import parker.serb.sql.CaseType;
 
 /**
  *
  * @author Andrew
  */
-public class CMDSStatusTypeAddEditDialog extends javax.swing.JDialog {
+public class CaseTypeAddEditDialog extends javax.swing.JDialog {
 
     private int ID;
-    private CMDSStatusType item;
+    private CaseType item;
     
     /**
-     * Creates new form CMDSStatusTypeAddEditDialog
+     * Creates new form CaseTypeAddEditDialog
      * @param parent
      * @param modal
      * @param itemIDpassed
      */
-    public CMDSStatusTypeAddEditDialog(java.awt.Frame parent, boolean modal, int itemIDpassed) {
+    public CaseTypeAddEditDialog(java.awt.Frame parent, boolean modal, int itemIDpassed) {
         super(parent, modal);
         initComponents();
         setDefaults(itemIDpassed);
@@ -32,42 +32,57 @@ public class CMDSStatusTypeAddEditDialog extends javax.swing.JDialog {
 
     private void setDefaults(int itemIDpassed) {
         ID = itemIDpassed;
+        loadSectionComboBox();
         if (ID > 0) {
-            titleLabel.setText("Edit Status Type");
+            titleLabel.setText("Edit Case Type");
             editButton.setText("Save");
             loadInformation();
         } else {
-            titleLabel.setText("Add Status Type");
+            titleLabel.setText("Add Case Type");
             editButton.setText("Add");
             editButton.setEnabled(false);
-            item = new CMDSStatusType();
+            item = new CaseType();
         }
         this.setLocationRelativeTo(Global.root);
         this.setVisible(true);
     }
         
+    private void loadSectionComboBox(){
+        sectionComboBox.addItem("");
+        sectionComboBox.addItem("CMDS");
+        sectionComboBox.addItem("CSC");
+        sectionComboBox.addItem("Hearings");
+        sectionComboBox.addItem("MED");
+        sectionComboBox.addItem("ORG");
+        sectionComboBox.addItem("REP");
+        sectionComboBox.addItem("ULP");
+    }
+    
     private void loadInformation() {
-        item = CMDSStatusType.getStatusByID(ID);
+        item = CaseType.getTypeByID(ID);
         
-        resultTextField.setText(item.statusCode);
-        DescriptionTextField.setText(item.description);
+        sectionComboBox.setSelectedItem(item.section);
+        typeTextField.setText(item.caseType);
+        descriptionTextField.setText(item.description);
     }
     
     private void saveInformation() {
         item.id = ID;
-        item.statusCode = resultTextField.getText().trim();
-        item.description = DescriptionTextField.getText().trim();
+        item.section = sectionComboBox.getSelectedItem().toString().trim();
+        item.caseType = typeTextField.getText().trim();
+        item.description = descriptionTextField.getText().trim();
                        
         if (ID > 0){
-            CMDSStatusType.updateStatusType(item);
+            CaseType.updateCaseType(item);
         } else {
-            CMDSStatusType.createStatusType(item);
+            CaseType.createStatusType(item);
         }
     }
 
     private void checkButton(){
-        if (resultTextField.getText().trim().equals("") || 
-                DescriptionTextField.getText().trim().equals("")){
+        if (sectionComboBox.getSelectedItem().toString().trim().equals("") || 
+                typeTextField.getText().trim().equals("") || 
+                descriptionTextField.getText().trim().equals("")){
             editButton.setEnabled(false);
         } else {
             editButton.setEnabled(true);
@@ -85,11 +100,13 @@ public class CMDSStatusTypeAddEditDialog extends javax.swing.JDialog {
 
         titleLabel = new javax.swing.JLabel();
         closeButton = new javax.swing.JButton();
-        resultTextField = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         editButton = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
-        DescriptionTextField = new javax.swing.JTextField();
+        typeTextField = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        descriptionTextField = new javax.swing.JTextField();
+        sectionComboBox = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -106,17 +123,9 @@ public class CMDSStatusTypeAddEditDialog extends javax.swing.JDialog {
             }
         });
 
-        resultTextField.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        resultTextField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        resultTextField.addCaretListener(new javax.swing.event.CaretListener() {
-            public void caretUpdate(javax.swing.event.CaretEvent evt) {
-                resultTextFieldCaretUpdate(evt);
-            }
-        });
-
         jLabel4.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel4.setText("Status Type:");
+        jLabel4.setText("Section:");
 
         editButton.setText("<<EDIT>>");
         editButton.addActionListener(new java.awt.event.ActionListener() {
@@ -127,13 +136,31 @@ public class CMDSStatusTypeAddEditDialog extends javax.swing.JDialog {
 
         jLabel6.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel6.setText("Description:");
+        jLabel6.setText("Type:");
 
-        DescriptionTextField.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        DescriptionTextField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        DescriptionTextField.addCaretListener(new javax.swing.event.CaretListener() {
+        typeTextField.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        typeTextField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        typeTextField.addCaretListener(new javax.swing.event.CaretListener() {
             public void caretUpdate(javax.swing.event.CaretEvent evt) {
-                DescriptionTextFieldCaretUpdate(evt);
+                typeTextFieldCaretUpdate(evt);
+            }
+        });
+
+        jLabel7.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel7.setText("Description:");
+
+        descriptionTextField.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        descriptionTextField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        descriptionTextField.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                descriptionTextFieldCaretUpdate(evt);
+            }
+        });
+
+        sectionComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sectionComboBoxActionPerformed(evt);
             }
         });
 
@@ -146,15 +173,19 @@ public class CMDSStatusTypeAddEditDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(titleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(resultTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(sectionComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(DescriptionTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(typeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(descriptionTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 38, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -170,12 +201,16 @@ public class CMDSStatusTypeAddEditDialog extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(resultTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(sectionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(DescriptionTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                    .addComponent(typeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(descriptionTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(editButton)
                     .addComponent(closeButton))
@@ -193,25 +228,35 @@ public class CMDSStatusTypeAddEditDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_closeButtonActionPerformed
 
     private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
-        saveInformation();
-        this.dispose();
+        if (typeTextField.getText().trim().length() > 3){
+            WebOptionPane.showMessageDialog(this, "Type Must Not Exceed Three Characters", "Unable to Save", WebOptionPane.OK_OPTION);
+        } else {
+            saveInformation();
+            this.dispose();
+        }        
     }//GEN-LAST:event_editButtonActionPerformed
 
-    private void resultTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_resultTextFieldCaretUpdate
+    private void typeTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_typeTextFieldCaretUpdate
         checkButton();
-    }//GEN-LAST:event_resultTextFieldCaretUpdate
+    }//GEN-LAST:event_typeTextFieldCaretUpdate
 
-    private void DescriptionTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_DescriptionTextFieldCaretUpdate
+    private void descriptionTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_descriptionTextFieldCaretUpdate
         checkButton();
-    }//GEN-LAST:event_DescriptionTextFieldCaretUpdate
+    }//GEN-LAST:event_descriptionTextFieldCaretUpdate
+
+    private void sectionComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sectionComboBoxActionPerformed
+        checkButton();
+    }//GEN-LAST:event_sectionComboBoxActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField DescriptionTextField;
     private javax.swing.JButton closeButton;
+    private javax.swing.JTextField descriptionTextField;
     private javax.swing.JButton editButton;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JTextField resultTextField;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JComboBox<String> sectionComboBox;
     private javax.swing.JLabel titleLabel;
+    private javax.swing.JTextField typeTextField;
     // End of variables declaration//GEN-END:variables
 }

@@ -16,38 +16,11 @@ import parker.serb.Global;
  */
 public class CaseType {
     
-//    public int id;
-//    public String user;
-//    public String action;
-//    public String date;
-//    public String filePath;
-    
-    
-//    public static void createTable() {
-//        Statement stmt = null;
-//        try {
-//            
-//            stmt = Database.connectToDB().createStatement();
-//            
-//            String sql = "CREATE TABLE Activity" +
-//                    "(id int IDENTITY (1,1) NOT NULL, " +
-//                    " caseNumber varchar(16) NOT NULL, " + 
-//                    " userID varchar(1), " +
-//                    " date datetime NOT NULL, " +
-//                    " action text NOT NULL, " +
-//                    " PRIMARY KEY (id))"; 
-//            
-//            stmt.executeUpdate(sql);
-//        } catch (SQLException ex) {
-//            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-//        } finally {
-//            try {
-//                stmt.close();
-//            } catch (SQLException ex) {
-//                Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        }
-//    }
+    public int id;
+    public boolean active;
+    public String section;
+    public String caseType;
+    public String description;
     
     /**
      * Return a list of all case types that are possible for a section.  The
@@ -78,4 +51,145 @@ public class CaseType {
         }
         return activityList;
     }
+    
+    public static List<CaseType> loadAllStatusTypes(String[] param) {
+        List<CaseType> list = new ArrayList<>();
+
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT * FROM CaseType";
+            if (param.length > 0) {
+                sql += " WHERE";
+                for (int i = 0; i < param.length; i++) {
+                    if (i > 0) {
+                        sql += " AND";
+                    }
+                    sql += " CONCAT(section, caseType, description) "
+                            + "LIKE ?";
+                }
+            }
+            sql += " ORDER BY section, caseType";
+
+            PreparedStatement ps = stmt.getConnection().prepareStatement(sql);
+
+            for (int i = 0; i < param.length; i++) {
+                ps.setString((i + 1), "%" + param[i].trim() + "%");
+            }
+            
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                CaseType item = new CaseType();
+                item.id = rs.getInt("id");
+                item.active = rs.getBoolean("active");
+                item.section = rs.getString("section") == null ? "" : rs.getString("section");
+                item.caseType = rs.getString("caseType") == null ? "" : rs.getString("caseType");
+                item.description = rs.getString("description") == null ? "" : rs.getString("description");
+                list.add(item);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
+        return list;
+    }
+    
+    public static CaseType getTypeByID(int id) {
+        CaseType item = new CaseType();
+
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT * FROM CaseType WHERE id = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                item.id = rs.getInt("id");
+                item.active = rs.getBoolean("active");
+                item.section = rs.getString("section") == null ? "" : rs.getString("section");
+                item.caseType = rs.getString("caseType") == null ? "" : rs.getString("caseType");
+                item.description = rs.getString("description") == null ? "" : rs.getString("description");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return item;
+    }
+
+    public static void createStatusType(CaseType item) {
+        try {
+
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Insert INTO CaseType "
+                    + "(active, section, caseType, description)"
+                    + " VALUES "
+                    + "(1, ?, ?, ?)";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, item.section.equals("") ? null : item.section.trim());
+            preparedStatement.setString(2, item.caseType.equals("") ? null : item.caseType.trim());
+            preparedStatement.setString(3, item.description.equals("") ? null : item.description.trim());
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static void updateCaseType(CaseType item) {
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "UPDATE CaseType SET "
+                    + "active = ?, "
+                    + "section = ?, "
+                    + "caseType = ?, "
+                    + "description = ? "
+                    + "where id = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setBoolean(1, item.active);
+            preparedStatement.setString (2, item.section.equals("") ? null : item.section.trim());
+            preparedStatement.setString (3, item.caseType.equals("") ? null : item.caseType.trim());
+            preparedStatement.setString (4, item.description.equals("") ? null : item.description.trim());
+            preparedStatement.setInt    (5, item.id);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }
