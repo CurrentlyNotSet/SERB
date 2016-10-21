@@ -102,15 +102,19 @@
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="HearingRoomsButton" min="-2" pref="130" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="HearingRoomsButton" min="-2" pref="130" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="HearingTypesButton" min="-2" pref="130" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="CaseTypesButton" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="HearingTypesButton" min="-2" pref="130" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="CMDSResultsButton" min="-2" pref="130" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="CaseTypesButton" min="-2" pref="130" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="DirectorsButton" min="-2" pref="130" max="-2" attributes="0"/>
+                          <Component id="CMDSResultsButton" min="-2" pref="130" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
               </Group>
               <EmptySpace pref="24" max="32767" attributes="0"/>
@@ -179,7 +183,10 @@
                   <Component id="CMDSResultsButton" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="CaseTypesButton" min="-2" pref="40" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="CaseTypesButton" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
+                  <Component id="DirectorsButton" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace pref="67" max="32767" attributes="0"/>
               <Component id="jButton1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
@@ -416,6 +423,14 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CaseTypesButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="DirectorsButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Directors"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="DirectorsButtonActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>
