@@ -42,7 +42,7 @@ public class CMDSHistoryDescription {
                             + "LIKE ?";
                 }
             }
-            sql += " ORDER BY statusCode";
+            sql += " ORDER BY category";
 
             PreparedStatement ps = stmt.getConnection().prepareStatement(sql);
 

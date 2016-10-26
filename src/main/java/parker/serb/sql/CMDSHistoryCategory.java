@@ -42,7 +42,7 @@ public class CMDSHistoryCategory {
                             + "LIKE ?";
                 }
             }
-            sql += " ORDER BY statusCode";
+            sql += " ORDER BY entryType";
 
             PreparedStatement ps = stmt.getConnection().prepareStatement(sql);
 
@@ -73,7 +73,7 @@ public class CMDSHistoryCategory {
         try {
             Statement stmt = Database.connectToDB().createStatement();
 
-            String sql = "SELECT * FROM CMDSHistoryCategory WHERE active = 1";
+            String sql = "SELECT * FROM CMDSHistoryCategory WHERE active = 1 ORDER BY entryType";
 
             PreparedStatement ps = stmt.getConnection().prepareStatement(sql);
             
