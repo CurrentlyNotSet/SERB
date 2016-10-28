@@ -12,6 +12,7 @@ import java.awt.event.ItemEvent;
 import java.util.List;
 import parker.serb.Global;
 import parker.serb.bookmarkProcessing.generateDocument;
+import parker.serb.letterGeneration.LetterGeneration;
 import parker.serb.sql.Activity;
 import parker.serb.sql.SMDSDocuments;
 import parker.serb.util.FileService;
@@ -114,17 +115,23 @@ public class ULPLetterDialog extends javax.swing.JDialog {
 
         if (!"".equals(selection)) {
             SMDSDocuments template = SMDSDocuments.findDocumentByDescription(selection);
-            String docName = generateDocument.generateSMDSdocument(template, 0);
-            if (docName != null){
-                Activity.addActivty("Created " + template.historyDescription, docName);
-                Global.root.getuLPRootPanel1().getActivityPanel1().loadAllActivity();
-                FileService.openFile(docName);
-            } else {
-                WebOptionPane.showMessageDialog(Global.root, 
-                    "<html><div style='text-align: center;'>Files required to generate documents are missing."
-                            + "<br><br>Unable to generate " + selection + "</html>",
-                    "Required File Missing", WebOptionPane.ERROR_MESSAGE);
-            }
+            
+            
+            new LetterGeneration(Global.root, true, template);
+            
+//    THIS WAS FROM GENERATING DIRECTLY... NEED TO MERGE ELSEWHERE
+//
+//            String docName = generateDocument.generateSMDSdocument(template, 0);
+//            if (docName != null){
+//                Activity.addActivty("Created " + template.historyDescription, docName);
+//                Global.root.getuLPRootPanel1().getActivityPanel1().loadAllActivity();
+//                FileService.openFile(docName);
+//            } else {
+//                WebOptionPane.showMessageDialog(Global.root, 
+//                    "<html><div style='text-align: center;'>Files required to generate documents are missing."
+//                            + "<br><br>Unable to generate " + selection + "</html>",
+//                    "Required File Missing", WebOptionPane.ERROR_MESSAGE);
+//            }
         }
     }
 

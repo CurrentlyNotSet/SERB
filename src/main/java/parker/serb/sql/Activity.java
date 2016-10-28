@@ -476,4 +476,55 @@ public class Activity {
             }
         }
     }
+    
+    public static List<Activity> loadActivityDocumentsCyGlobalCase() {
+        List<Activity> activityList = new ArrayList<Activity>();
+        
+        Statement stmt = null;
+            
+        try {
+
+            stmt = Database.connectToDB().createStatement();
+            
+            String sql = "SELECT * FROM Activity WHERE "
+                    + "awaitingTimestamp = 0 AND "
+                    + "fileName IS NOT NULL AND "
+                    + "caseYear = ? AND "
+                    + "caseType = ? AND "
+                    + "caseMonth = ? AND "
+                    + "caseNumber = ? ";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+
+            preparedStatement.setString(1, Global.caseYear);
+            preparedStatement.setString(2, Global.caseType);
+            preparedStatement.setString(3, Global.caseMonth);
+            preparedStatement.setString(4, Global.caseNumber);
+            
+            ResultSet caseActivity = preparedStatement.executeQuery();
+            
+            while(caseActivity.next()) {
+                Activity act = new Activity();
+                act.id = caseActivity.getInt("id");
+                act.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
+                act.action = caseActivity.getString("action");
+                act.caseYear = caseActivity.getString("caseYear");
+                act.caseType = caseActivity.getString("caseType");
+                act.caseMonth = caseActivity.getString("caseMonth");
+                act.caseNumber = caseActivity.getString("caseNumber");
+                act.fileName = caseActivity.getString("fileName");
+                activityList.add(act);
+            }
+        } catch (SQLException ex) {
+            if(ex.getCause() instanceof SQLServerException) {
+                System.out.println("TESTING");
+                SlackNotification.sendNotification(ex.getMessage());
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return activityList;
+    }
+    
 }
