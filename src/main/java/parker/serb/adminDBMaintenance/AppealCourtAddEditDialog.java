@@ -34,11 +34,11 @@ public class AppealCourtAddEditDialog extends javax.swing.JDialog {
         ID = itemIDpassed;
         loadCategories();
         if (ID > 0) {
-            titleLabel.setText("Edit History Description");
+            titleLabel.setText("Edit Appeal Court");
             editButton.setText("Save");
             loadInformation();
         } else {
-            titleLabel.setText("Add History Description");
+            titleLabel.setText("Add Appeal Court");
             editButton.setText("Add");
             editButton.setEnabled(false);
             item = new AppealCourt();
@@ -119,7 +119,7 @@ public class AppealCourtAddEditDialog extends javax.swing.JDialog {
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel4.setText("Category:");
+        jLabel4.setText("Type:");
 
         editButton.setText("<<EDIT>>");
         editButton.addActionListener(new java.awt.event.ActionListener() {
@@ -130,7 +130,7 @@ public class AppealCourtAddEditDialog extends javax.swing.JDialog {
 
         jLabel6.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel6.setText("Description:");
+        jLabel6.setText("Court Name:");
 
         DescriptionTextField.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         DescriptionTextField.setDisabledTextColor(new java.awt.Color(0, 0, 0));

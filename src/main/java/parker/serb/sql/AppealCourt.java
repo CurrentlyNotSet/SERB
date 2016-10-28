@@ -42,7 +42,7 @@ public class AppealCourt {
                             + "LIKE ?";
                 }
             }
-            sql += " ORDER BY type";
+            sql += " ORDER BY type, courtName";
 
             PreparedStatement ps = stmt.getConnection().prepareStatement(sql);
 

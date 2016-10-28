@@ -88,7 +88,7 @@
           <Font name="Tahoma" size="16" style="1"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="0"/>
-        <Property name="text" type="java.lang.String" value="CMDS History Descriptions"/>
+        <Property name="text" type="java.lang.String" value="Appeal Court"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="AddNewButton">
@@ -112,8 +112,8 @@
               <Table columnCount="4" rowCount="0">
                 <Column editable="false" title="ID" type="java.lang.Object"/>
                 <Column editable="true" title="Active" type="java.lang.Boolean"/>
-                <Column editable="false" title="Category" type="java.lang.Object"/>
-                <Column editable="false" title="Description" type="java.lang.Object"/>
+                <Column editable="false" title="Type" type="java.lang.Object"/>
+                <Column editable="false" title="Court Name" type="java.lang.Object"/>
               </Table>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">

@@ -129,7 +129,7 @@ public class AppealCourtSearchDialog extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("CMDS History Descriptions");
+        jLabel1.setText("Appeal Court");
 
         AddNewButton.setText("Add New");
         AddNewButton.addActionListener(new java.awt.event.ActionListener() {
@@ -143,7 +143,7 @@ public class AppealCourtSearchDialog extends javax.swing.JDialog {
 
             },
             new String [] {
-                "ID", "Active", "Category", "Description"
+                "ID", "Active", "Type", "Court Name"
             }
         ) {
             Class[] types = new Class [] {
