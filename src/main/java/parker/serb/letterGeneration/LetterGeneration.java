@@ -8,8 +8,11 @@ package parker.serb.letterGeneration;
 import com.alee.extended.date.WebDateField;
 import java.awt.event.MouseEvent;
 import java.util.List;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import parker.serb.Global;
 import parker.serb.sql.Activity;
 import parker.serb.sql.CaseParty;
@@ -26,6 +29,7 @@ public class LetterGeneration extends javax.swing.JDialog {
 
     SMDSDocuments docToGenerate;
     
+    
     public LetterGeneration(java.awt.Frame parent, boolean modal, SMDSDocuments documentToGeneratePassed) {
         super(parent, modal);
         initComponents();
@@ -36,15 +40,66 @@ public class LetterGeneration extends javax.swing.JDialog {
     
     private void loadPanel(SMDSDocuments documentToGeneratePassed) {
         docToGenerate = documentToGeneratePassed;
-        documentLabel.setText(documentToGeneratePassed.description);
+        documentLabel.setText("Document: " + documentToGeneratePassed.description);
+        setColumnWidth();
         loadPartyTable();
         loadActivityDocumentsTable();
         loadExtraAttachmentTable();        
     }
     
+    private void setColumnWidth() {
+        personTable.getColumnModel().getColumn(0).setMinWidth(0);
+        personTable.getColumnModel().getColumn(0).setPreferredWidth(0);
+        personTable.getColumnModel().getColumn(0).setMaxWidth(0);
+        personTable.getColumnModel().getColumn(1).setMinWidth(80);
+        personTable.getColumnModel().getColumn(1).setPreferredWidth(80);
+        personTable.getColumnModel().getColumn(1).setMaxWidth(80);
+        personTable.getColumnModel().getColumn(2).setMinWidth(90);
+        personTable.getColumnModel().getColumn(2).setPreferredWidth(90);
+        personTable.getColumnModel().getColumn(2).setMaxWidth(90);
+                
+        activityTable.getColumnModel().getColumn(0).setMinWidth(0);
+        activityTable.getColumnModel().getColumn(0).setPreferredWidth(0);
+        activityTable.getColumnModel().getColumn(0).setMaxWidth(0);
+        activityTable.getColumnModel().getColumn(1).setMinWidth(60);
+        activityTable.getColumnModel().getColumn(1).setPreferredWidth(60);
+        activityTable.getColumnModel().getColumn(1).setMaxWidth(60);
+        
+        additionalDocsTable.getColumnModel().getColumn(0).setMinWidth(0);
+        additionalDocsTable.getColumnModel().getColumn(0).setPreferredWidth(0);
+        additionalDocsTable.getColumnModel().getColumn(0).setMaxWidth(0);
+        additionalDocsTable.getColumnModel().getColumn(1).setMinWidth(60);
+        additionalDocsTable.getColumnModel().getColumn(1).setPreferredWidth(60);
+        additionalDocsTable.getColumnModel().getColumn(1).setMaxWidth(60);
+    }
+    
+    private JComboBox loadLocationComboBox() {
+        JComboBox locationCombo = new JComboBox();
+        locationCombo.removeAllItems();
+        locationCombo.addItem("");
+        locationCombo.addItem("Email");
+        locationCombo.addItem("Postal");        
+        return locationCombo;
+    }
+    
+    private JComboBox loadToCCComboBox() {
+        JComboBox ToCCCombo = new JComboBox();
+        ToCCCombo.removeAllItems();
+        ToCCCombo.addItem("");
+        ToCCCombo.addItem("TO:");
+        ToCCCombo.addItem("CC:");        
+        return ToCCCombo;
+    }
+    
     private void loadPartyTable(){
         DefaultTableModel model = (DefaultTableModel) personTable.getModel();
         model.setRowCount(0);
+        
+        TableColumn rowTwoCombo = personTable.getColumnModel().getColumn(2);
+        rowTwoCombo.setCellEditor(new DefaultCellEditor(loadLocationComboBox()));
+        
+        TableColumn rowOneCombo = personTable.getColumnModel().getColumn(1);
+        rowOneCombo.setCellEditor(new DefaultCellEditor(loadToCCComboBox()));
         
         List<CaseParty> partyList = CaseParty.loadPartiesByCase();
         
@@ -234,10 +289,8 @@ public class LetterGeneration extends javax.swing.JDialog {
         documentLabel.setText("Document: <<DOCUMENT NAME>>");
 
         appointmentDateTextBox.setEditable(false);
-        appointmentDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
         appointmentDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
         appointmentDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        appointmentDateTextBox.setEnabled(false);
         appointmentDateTextBox.setDateFormat(Global.mmddyyyy);
         appointmentDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -263,9 +316,12 @@ public class LetterGeneration extends javax.swing.JDialog {
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel5))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 432, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(77, 77, 77)))
                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(2, 2, 2))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -289,24 +345,24 @@ public class LetterGeneration extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(documentLabel)
                     .addComponent(appointmentDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
-                .addGap(22, 22, 22)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(52, 52, 52)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel6))
+                .addGap(20, 20, 20)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(70, 70, 70)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(generateButton)
                     .addComponent(cancelButton))
@@ -336,8 +392,6 @@ public class LetterGeneration extends javax.swing.JDialog {
     private com.alee.extended.date.WebDateField appointmentDateTextBox;
     private javax.swing.JButton cancelButton;
     private javax.swing.JLabel documentLabel;
-    private com.alee.extended.date.WebDateField filedDateTextBox;
-    private com.alee.extended.date.WebDateField filedDateTextBox1;
     private javax.swing.JButton generateButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -347,7 +401,6 @@ public class LetterGeneration extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private com.alee.extended.date.WebDateField originalFFDateTextBox;
     private javax.swing.JTable personTable;
     // End of variables declaration//GEN-END:variables
 }
