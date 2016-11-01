@@ -12,7 +12,7 @@ import java.awt.event.ItemEvent;
 import java.util.List;
 import parker.serb.Global;
 import parker.serb.bookmarkProcessing.generateDocument;
-import parker.serb.letterGeneration.LetterGeneration;
+import parker.serb.letterGeneration.LetterGenerationPanel;
 import parker.serb.sql.Activity;
 import parker.serb.sql.SMDSDocuments;
 import parker.serb.util.FileService;
@@ -117,7 +117,7 @@ public class ULPLetterDialog extends javax.swing.JDialog {
             SMDSDocuments template = SMDSDocuments.findDocumentByDescription(selection);
             
             
-            new LetterGeneration(Global.root, true, template);
+            new LetterGenerationPanel(Global.root, true, template);
             
 //    THIS WAS FROM GENERATING DIRECTLY... NEED TO MERGE ELSEWHERE
 //

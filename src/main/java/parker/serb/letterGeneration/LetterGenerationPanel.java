@@ -25,12 +25,12 @@ import parker.serb.util.StringUtilities;
  *
  * @author parker
  */
-public class LetterGeneration extends javax.swing.JDialog {
+public class LetterGenerationPanel extends javax.swing.JDialog {
 
     SMDSDocuments docToGenerate;
     
     
-    public LetterGeneration(java.awt.Frame parent, boolean modal, SMDSDocuments documentToGeneratePassed) {
+    public LetterGenerationPanel(java.awt.Frame parent, boolean modal, SMDSDocuments documentToGeneratePassed) {
         super(parent, modal);
         initComponents();
         loadPanel(documentToGeneratePassed);
@@ -221,7 +221,15 @@ public class LetterGeneration extends javax.swing.JDialog {
             new String [] {
                 "ID", "To/CC", "Destination", "Party Type", "Name", "Email"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                true, true, true, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(personTable);
 
         activityTable.setModel(new javax.swing.table.DefaultTableModel(

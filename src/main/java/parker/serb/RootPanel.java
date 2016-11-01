@@ -36,6 +36,7 @@ import parker.serb.ULP.ULPReportDialog;
 import parker.serb.ULP.ULPRootPanel;
 import parker.serb.adminDBMaintenance.AdminMainMenuPanel;
 import parker.serb.admin.SystemMontiorDialog;
+import parker.serb.letterQueue.LetterQueuePanel;
 import parker.serb.sql.Audit;
 import parker.serb.user.Preferences;
 import parker.serb.util.CreateNewCaseDialog;
@@ -515,14 +516,6 @@ public class RootPanel extends javax.swing.JFrame {
         return jButton3;
     }
     
-    
-    
-    
-    
-    
-    
-    
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -954,6 +947,11 @@ public class RootPanel extends javax.swing.JFrame {
         });
 
         jButton5.setText("BUTTON 5");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jButton6.setText("BUTTON 6");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
@@ -1170,7 +1168,16 @@ public class RootPanel extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-       new fileSelector((JFrame) this.getRootPane().getParent(), true);
+       switch(Global.activeSection) {
+            case "ORG":
+            case "CMDS":
+            case "Civil Service Commission":   
+                new LetterQueuePanel((JFrame) this.getRootPane().getParent(), true);
+                break;
+            default:
+                new fileSelector((JFrame) this.getRootPane().getParent(), true);
+                break;
+        }       
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -1309,6 +1316,18 @@ public class RootPanel extends javax.swing.JFrame {
     private void MEDSettleCasesMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MEDSettleCasesMenuItemActionPerformed
         new MEDBulkSettleCasesDialog((JFrame) getRootPane().getParent(), true);
     }//GEN-LAST:event_MEDSettleCasesMenuItemActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        switch(Global.activeSection) {
+            case "REP":
+            case "ULP":
+            case "MED":    
+                new LetterQueuePanel((JFrame) this.getRootPane().getParent(), true);
+                break;
+            default:
+                break;
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel CMDS;
