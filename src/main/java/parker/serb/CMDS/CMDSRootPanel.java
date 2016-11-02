@@ -13,6 +13,7 @@ import javax.swing.event.ChangeEvent;
 import parker.serb.activity.ActivityPanel;
 import parker.serb.Global;
 import parker.serb.party.PartySearchDialog;
+import parker.serb.sql.CMDSCaseSearchData;
 import parker.serb.util.CancelUpdate;
 
 /**
@@ -150,6 +151,9 @@ public class CMDSRootPanel extends javax.swing.JPanel {
                 new PartySearchDialog((JFrame) this.getRootPane().getParent(), true);
                 partiesPanel1.loadParties();
                 Global.root.getcMDSHeaderPanel1().loadHeaderInformation();
+                CMDSCaseSearchData.updateCaseEntryFromParties(
+                        Global.root.getcMDSHeaderPanel1().getAppellantTextBox().getText(),
+                        Global.root.getcMDSHeaderPanel1().getAppelleeTextBox().getText());
                 break;
             case "Case Information":
                 if(buttonText.equals("Update")) {
@@ -193,6 +197,10 @@ public class CMDSRootPanel extends javax.swing.JPanel {
             case "Parties":
                 partiesPanel1.removeParty();
                 partiesPanel1.loadParties();
+                Global.root.getcMDSHeaderPanel1().loadHeaderInformation();
+                CMDSCaseSearchData.updateCaseEntryFromParties(
+                        Global.root.getcMDSHeaderPanel1().getAppellantTextBox().getText(),
+                        Global.root.getcMDSHeaderPanel1().getAppelleeTextBox().getText());
                 break;
             case "Case Information":
                 cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);

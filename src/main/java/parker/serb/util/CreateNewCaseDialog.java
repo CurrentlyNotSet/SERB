@@ -12,6 +12,7 @@ import java.util.List;
 import javax.swing.JFrame;
 import parker.serb.Global;
 import parker.serb.sql.CMDSCase;
+import parker.serb.sql.CMDSCaseSearchData;
 import parker.serb.sql.CaseNumber;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.CaseType;
@@ -150,6 +151,10 @@ public class CreateNewCaseDialog extends javax.swing.JDialog {
                         typeComboBox.getSelectedItem().toString(),
                         monthComboBox.getSelectedItem().toString().substring(0, 2),
                         caseNumberTextBox.getText().trim());
+                EmployerCaseSearchData.createNewCaseEntry(yearComboBox.getSelectedItem().toString(),
+                        typeComboBox.getSelectedItem().toString(),
+                        monthComboBox.getSelectedItem().toString().substring(0, 2),
+                        caseNumberTextBox.getText().trim());
                 break;
             case "MED":
                 MEDCase.createCase(yearComboBox.getSelectedItem().toString(),
@@ -160,7 +165,10 @@ public class CreateNewCaseDialog extends javax.swing.JDialog {
                         typeComboBox.getSelectedItem().toString(),
                         monthComboBox.getSelectedItem().toString().substring(0, 2),
                         caseNumberTextBox.getText().trim());
-                
+                EmployerCaseSearchData.createNewCaseEntry(yearComboBox.getSelectedItem().toString(),
+                        typeComboBox.getSelectedItem().toString(),
+                        monthComboBox.getSelectedItem().toString().substring(0, 2),
+                        caseNumberTextBox.getText().trim());
                 break;
             case "ULP":
                 ULPCase.createCase(yearComboBox.getSelectedItem().toString(),
@@ -171,24 +179,22 @@ public class CreateNewCaseDialog extends javax.swing.JDialog {
                         typeComboBox.getSelectedItem().toString(),
                         monthComboBox.getSelectedItem().toString().substring(0, 2),
                         caseNumberTextBox.getText().trim());
+                EmployerCaseSearchData.createNewCaseEntry(yearComboBox.getSelectedItem().toString(),
+                        typeComboBox.getSelectedItem().toString(),
+                        monthComboBox.getSelectedItem().toString().substring(0, 2),
+                        caseNumberTextBox.getText().trim());
                 break;
             case "CMDS":
+                CMDSCaseSearchData.createNewCaseEntry(yearComboBox.getSelectedItem().toString(),
+                        typeComboBox.getSelectedItem().toString(),
+                        monthComboBox.getSelectedItem().toString().substring(0, 2),
+                        caseNumberTextBox.getText().trim());
                 CMDSCase.createCase(yearComboBox.getSelectedItem().toString(),
                         typeComboBox.getSelectedItem().toString(),
                         monthComboBox.getSelectedItem().toString().substring(0, 2),
                         caseNumberTextBox.getText().trim());
-//                CMDSCaseSearchData.createNewCaseEntry(yearComboBox.getSelectedItem().toString(),
-//                        typeComboBox.getSelectedItem().toString(),
-//                        monthComboBox.getSelectedItem().toString().substring(0, 2),
-//                        caseNumberTextBox.getText().trim());
                 break; 
         }
-        
-        EmployerCaseSearchData.createNewCaseEntry(yearComboBox.getSelectedItem().toString(),
-                        typeComboBox.getSelectedItem().toString(),
-                        monthComboBox.getSelectedItem().toString().substring(0, 2),
-                        caseNumberTextBox.getText().trim());
-        
         dispose();
     }
     
@@ -224,10 +230,10 @@ public class CreateNewCaseDialog extends javax.swing.JDialog {
                     typeComboBox.getSelectedItem().toString(),
                     monthComboBox.getSelectedItem().toString().substring(0, 2));
                 break;
-//            case "CMDS": firstCase =  CMDSCase.checkIfFristCMDSCaseOfMonth(
-//                    yearComboBox.getSelectedItem().toString(),
-//                    monthComboBox.getSelectedItem().toString().substring(0, 2));
-//                break;
+            case "CMDS": firstCase =  CMDSCase.checkIfFristCMDSCaseOfMonth(
+                    yearComboBox.getSelectedItem().toString(),
+                    monthComboBox.getSelectedItem().toString().substring(0, 2));
+                break;
         }
         
         return firstCase;
