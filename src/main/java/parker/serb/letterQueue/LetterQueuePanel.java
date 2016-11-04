@@ -27,7 +27,7 @@ public class LetterQueuePanel extends javax.swing.JDialog {
     private void loadPanel() {
         headerLabel.setText(Global.activeSection + " Letter Queue");
         setColumnWidth();
-        loadPartyTable();       
+        loadLetterQueue();       
     }
     
     private void setColumnWidth() {
@@ -52,31 +52,37 @@ public class LetterQueuePanel extends javax.swing.JDialog {
         jTable1.getColumnModel().getColumn(5).setMaxWidth(100);
     }
 
-    private void loadPartyTable(){
+    private void loadLetterQueue(){
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
         
         List<EmailOut> emailList = EmailOut.getEmailOutBySection(Global.activeSection);
         
         for (EmailOut eml : emailList){
+            String fullCaseNumber = eml.caseYear + "-" + eml.caseType + "-" + eml.caseMonth + "-" + eml.caseNumber;
+            String sendDate = "";
+            
+            if (eml.suggestedSendDate != null) {
+                sendDate = Global.mmddyyyy.format(eml.suggestedSendDate);
+            }
+            
             model.addRow(new Object[]{
-                eml.id,                 // ID
-                eml.caseYear + "-" + eml.caseType + "-" + eml.caseMonth + "-" + eml.caseNumber,     // CaseNumber
-                eml.to,                 // To:
-                eml.subject,            // Subject
-                eml.attachementCount,   // Attachments
-                Global.mmddyyyy.format(eml.suggestedSendDate)   // Suggest Send Date
+                eml.id,               // ID
+                fullCaseNumber,       // CaseNumber
+                eml.to,               // To:
+                eml.subject,          // Subject
+                eml.attachementCount, // Attachments
+                sendDate              // Suggest Send Date
             });
         }   
     }
-
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         headerLabel = new javax.swing.JLabel();
-        generateButton = new javax.swing.JButton();
+        sendButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -87,11 +93,11 @@ public class LetterQueuePanel extends javax.swing.JDialog {
         headerLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         headerLabel.setText("<<Letter Queue>>");
 
-        generateButton.setText("Send");
-        generateButton.setEnabled(false);
-        generateButton.addActionListener(new java.awt.event.ActionListener() {
+        sendButton.setText("Send");
+        sendButton.setEnabled(false);
+        sendButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                generateButtonActionPerformed(evt);
+                sendButtonActionPerformed(evt);
             }
         });
 
@@ -118,6 +124,11 @@ public class LetterQueuePanel extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -132,11 +143,11 @@ public class LetterQueuePanel extends javax.swing.JDialog {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(cancelButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(generateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(sendButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cancelButton, generateButton});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cancelButton, sendButton});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -147,7 +158,7 @@ public class LetterQueuePanel extends javax.swing.JDialog {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 493, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(generateButton)
+                    .addComponent(sendButton)
                     .addComponent(cancelButton))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -155,19 +166,30 @@ public class LetterQueuePanel extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
-        
-    }//GEN-LAST:event_generateButtonActionPerformed
+    private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
+        EmailOut.markEmailReadyToSend((int) jTable1.getValueAt(jTable1.getSelectedRow(), 0));
+        loadLetterQueue();
+    }//GEN-LAST:event_sendButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         dispose();
     }//GEN-LAST:event_cancelButtonActionPerformed
 
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        if(evt.getClickCount() == 1) {
+            sendButton.setEnabled(true);
+        } else if(evt.getClickCount() >= 2) {
+            sendButton.setEnabled(false);
+            new DetailedEmailOutPanel(Global.root, true, (int) jTable1.getValueAt(jTable1.getSelectedRow(), 0));
+            loadLetterQueue();
+        }
+    }//GEN-LAST:event_jTable1MouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;
-    private javax.swing.JButton generateButton;
     private javax.swing.JLabel headerLabel;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JButton sendButton;
     // End of variables declaration//GEN-END:variables
 }

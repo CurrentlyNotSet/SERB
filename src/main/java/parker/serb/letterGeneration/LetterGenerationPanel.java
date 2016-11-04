@@ -6,8 +6,12 @@
 package parker.serb.letterGeneration;
 
 import com.alee.extended.date.WebDateField;
+import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
 import java.awt.event.MouseEvent;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -78,7 +82,8 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         locationCombo.removeAllItems();
         locationCombo.addItem("");
         locationCombo.addItem("Email");
-        locationCombo.addItem("Postal");        
+        locationCombo.addItem("Postal");
+        locationCombo.addItem("Both");
         return locationCombo;
     }
     
@@ -94,12 +99,58 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
     private void loadPartyTable(){
         DefaultTableModel model = (DefaultTableModel) personTable.getModel();
         model.setRowCount(0);
-        
-        TableColumn rowTwoCombo = personTable.getColumnModel().getColumn(2);
-        rowTwoCombo.setCellEditor(new DefaultCellEditor(loadLocationComboBox()));
-        
+                
+        JComboBox toCCComboBox = loadToCCComboBox();
         TableColumn rowOneCombo = personTable.getColumnModel().getColumn(1);
-        rowOneCombo.setCellEditor(new DefaultCellEditor(loadToCCComboBox()));
+        rowOneCombo.setCellEditor(new DefaultCellEditor(toCCComboBox));
+   
+        toCCComboBox.addActionListener((ActionEvent e) -> {
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            Runnable task = () -> {
+                if (personTable.getSelectedRow() >= 0 && personTable.getSelectedColumn() == 1) {
+                    if (!personTable.getValueAt(personTable.getSelectedRow(), 1).toString().equals("") 
+                            && !personTable.getValueAt(personTable.getSelectedRow(), 5).toString().equals("")
+                            && personTable.getValueAt(personTable.getSelectedRow(), 2).toString().equals("")) {
+                        personTable.setValueAt("Email", personTable.getSelectedRow(), 2);
+                    } else if (!personTable.getValueAt(personTable.getSelectedRow(), 1).toString().equals("") 
+                            && personTable.getValueAt(personTable.getSelectedRow(), 5).toString().equals("")
+                            && personTable.getValueAt(personTable.getSelectedRow(), 2).toString().equals("")) {
+                        personTable.setValueAt("Postal", personTable.getSelectedRow(), 2);
+                    } else if (personTable.getValueAt(personTable.getSelectedRow(), 1).toString().equals("")) {
+                        personTable.setValueAt("", personTable.getSelectedRow(), 2);
+                    }
+                }
+            };
+            executor.submit(task);
+        });
+
+
+        JComboBox destinationComboBox = loadLocationComboBox();
+        TableColumn rowTwoCombo = personTable.getColumnModel().getColumn(2);
+        rowTwoCombo.setCellEditor(new DefaultCellEditor(destinationComboBox));
+        
+        // SET TO/CC Listener
+
+
+
+        
+        destinationComboBox.addItemListener((ItemEvent e) -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                
+                System.out.println(e.getID());
+                
+                if (e.getItem().equals("") && personTable.getSelectedColumn() == 2) {
+                    personTable.setValueAt("", personTable.getSelectedRow(), 1);
+                } 
+                if (personTable.getValueAt(personTable.getSelectedRow(), 1).equals("")){
+                    personTable.setValueAt("", personTable.getSelectedRow(), 2);
+                }
+            }
+        });
+                
+        
+        
+        
         
         List<CaseParty> partyList = CaseParty.loadPartiesByCase();
         
@@ -188,7 +239,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         additionalDocsTable = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         documentLabel = new javax.swing.JLabel();
-        appointmentDateTextBox = new com.alee.extended.date.WebDateField();
+        suggestedSendDatePicker = new com.alee.extended.date.WebDateField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -230,7 +281,10 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
+        personTable.setCellSelectionEnabled(true);
+        personTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(personTable);
+        personTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         activityTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -296,13 +350,13 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
 
         documentLabel.setText("Document: <<DOCUMENT NAME>>");
 
-        appointmentDateTextBox.setEditable(false);
-        appointmentDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
-        appointmentDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        appointmentDateTextBox.setDateFormat(Global.mmddyyyy);
-        appointmentDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+        suggestedSendDatePicker.setEditable(false);
+        suggestedSendDatePicker.setCaretColor(new java.awt.Color(0, 0, 0));
+        suggestedSendDatePicker.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        suggestedSendDatePicker.setDateFormat(Global.mmddyyyy);
+        suggestedSendDatePicker.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                appointmentDateTextBoxMouseClicked(evt);
+                suggestedSendDatePickerMouseClicked(evt);
             }
         });
 
@@ -337,7 +391,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                         .addGap(45, 45, 45)
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(appointmentDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE))
+                        .addComponent(suggestedSendDatePicker, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 398, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -356,7 +410,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(documentLabel)
-                    .addComponent(appointmentDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(suggestedSendDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2)
@@ -377,7 +431,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {appointmentDateTextBox, documentLabel, jLabel4});
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {documentLabel, jLabel4, suggestedSendDatePicker});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -390,14 +444,13 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         dispose();
     }//GEN-LAST:event_cancelButtonActionPerformed
 
-    private void appointmentDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_appointmentDateTextBoxMouseClicked
-        clearDate(appointmentDateTextBox, evt);
-    }//GEN-LAST:event_appointmentDateTextBoxMouseClicked
+    private void suggestedSendDatePickerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_suggestedSendDatePickerMouseClicked
+        clearDate(suggestedSendDatePicker, evt);
+    }//GEN-LAST:event_suggestedSendDatePickerMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable activityTable;
     private javax.swing.JTable additionalDocsTable;
-    private com.alee.extended.date.WebDateField appointmentDateTextBox;
     private javax.swing.JButton cancelButton;
     private javax.swing.JLabel documentLabel;
     private javax.swing.JButton generateButton;
@@ -410,5 +463,6 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable personTable;
+    private com.alee.extended.date.WebDateField suggestedSendDatePicker;
     // End of variables declaration//GEN-END:variables
 }
