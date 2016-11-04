@@ -73,6 +73,23 @@ public class FileService {
         }
     }
     
+    public static void openFileWithCaseNumber(String activeSection, String caseYear, String caseType, String caseMonth, String caseNumber, String fileName) {
+        try {
+            Desktop.getDesktop().open(new File(Global.activityPath
+                    + File.separatorChar
+                    + activeSection
+                    + File.separatorChar
+                    + caseYear
+                    + File.separatorChar
+                    + (caseYear + "-" + caseType + "-" + caseMonth + "-" + caseNumber)
+                    + File.separatorChar
+                    + fileName));
+        } catch (IOException | NullPointerException | IllegalArgumentException ex) {
+            new FileNotFoundDialog((JFrame) Global.root.getRootPane().getParent(), true, fileName);
+            SlackNotification.sendNotification(ex.getMessage());
+        }
+    }
+    
     public static void openFile(String fileName) {
         try {
             Desktop.getDesktop().open(new File(Global.activityPath
