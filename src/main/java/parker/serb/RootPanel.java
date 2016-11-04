@@ -26,6 +26,7 @@ import parker.serb.CSC.CSCRootPanel;
 import parker.serb.MED.MEDBulkSendToBoardDialog;
 import parker.serb.MED.MEDBulkSettleCasesDialog;
 import parker.serb.MED.MEDHeaderPanel;
+import parker.serb.MED.MEDLetterDialog;
 import parker.serb.MED.MEDRootPanel;
 import parker.serb.ORG.ORGAllLettersPanel;
 import parker.serb.ORG.ORGHeaderPanel;
@@ -261,8 +262,9 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton2.setVisible(true);
                 jButton2.setText("Update");
                 jButton2.setEnabled(false);
-                jButton3.setVisible(false);
+                jButton3.setVisible(true);
                 jButton3.setText("Letters");
+                jButton3.setEnabled(false);
                 jButton4.setVisible(false);
                 jButton4.setText("Reports");
                 jButton5.setVisible(false);
@@ -1158,6 +1160,9 @@ public class RootPanel extends javax.swing.JFrame {
                 break;
             case "ULP":
                 new ULPLetterDialog((JFrame) this.getRootPane().getParent(), true);
+                break;
+            case "MED":
+                new MEDLetterDialog((JFrame) this.getRootPane().getParent(), true);
                 break;
             case "ORG":
                 new ORGAllLettersPanel((JFrame) this.getRootPane().getParent(), true);

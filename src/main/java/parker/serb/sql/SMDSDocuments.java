@@ -31,8 +31,10 @@ public class SMDSDocuments {
     public String historyDescription;
     public String CHDCHG;
     public String questionsFileName;
-    public String historyQuestionsDescription;
+    public String emailSubject;
     public String parameters;
+    public String emailBody;
+    public double sortOrder;
     
     public static List loadDocumentNamesByTypeAndSection(String section, String type) {
         List<SMDSDocuments> documentList = new ArrayList<>();
@@ -65,7 +67,12 @@ public class SMDSDocuments {
                 doc.group = docList.getString("group");
                 doc.historyFileName = docList.getString("historyFileName");
                 doc.historyDescription = docList.getString("historyDescription");
+                doc.CHDCHG = docList.getString("CHDCHG");
+                doc.questionsFileName = docList.getString("questionsFileName");
+                doc.emailSubject = docList.getString("emailSubject");
                 doc.parameters = docList.getString("parameters");
+                doc.emailBody = docList.getString("emailBody");
+                doc.sortOrder = docList.getDouble("sortOrder");
                 documentList.add(doc);
             }
         } catch (SQLException ex) {
@@ -99,7 +106,12 @@ public class SMDSDocuments {
                 doc.group = foundDoc.getString("group");
                 doc.historyFileName = foundDoc.getString("historyFileName");
                 doc.historyDescription = foundDoc.getString("historyDescription");
+                doc.CHDCHG = foundDoc.getString("CHDCHG");
+                doc.questionsFileName = foundDoc.getString("questionsFileName");
+                doc.emailSubject = foundDoc.getString("emailSubject");
                 doc.parameters = foundDoc.getString("parameters");
+                doc.emailBody = foundDoc.getString("emailBody");
+                doc.sortOrder = foundDoc.getDouble("sortOrder");
             }
         } catch (SQLException ex) {
             Logger.getLogger(SMDSDocuments.class.getName()).log(Level.SEVERE, null, ex);
@@ -132,7 +144,12 @@ public class SMDSDocuments {
                 doc.group = foundDoc.getString("group");
                 doc.historyFileName = foundDoc.getString("historyFileName");
                 doc.historyDescription = foundDoc.getString("historyDescription");
+                doc.CHDCHG = foundDoc.getString("CHDCHG");
+                doc.questionsFileName = foundDoc.getString("questionsFileName");
+                doc.emailSubject = foundDoc.getString("emailSubject");
                 doc.parameters = foundDoc.getString("parameters");
+                doc.emailBody = foundDoc.getString("emailBody");
+                doc.sortOrder = foundDoc.getDouble("sortOrder");
             }
         } catch (SQLException ex) {
             Logger.getLogger(SMDSDocuments.class.getName()).log(Level.SEVERE, null, ex);
@@ -165,7 +182,12 @@ public class SMDSDocuments {
                 doc.group = foundDoc.getString("group");
                 doc.historyFileName = foundDoc.getString("historyFileName");
                 doc.historyDescription = foundDoc.getString("historyDescription");
+                doc.CHDCHG = foundDoc.getString("CHDCHG");
+                doc.questionsFileName = foundDoc.getString("questionsFileName");
+                doc.emailSubject = foundDoc.getString("emailSubject");
                 doc.parameters = foundDoc.getString("parameters");
+                doc.emailBody = foundDoc.getString("emailBody");
+                doc.sortOrder = foundDoc.getDouble("sortOrder");
             }
         } catch (SQLException ex) {
             Logger.getLogger(SMDSDocuments.class.getName()).log(Level.SEVERE, null, ex);

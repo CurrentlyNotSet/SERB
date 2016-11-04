@@ -20,6 +20,7 @@ import javax.swing.table.TableColumn;
 import parker.serb.Global;
 import parker.serb.sql.Activity;
 import parker.serb.sql.CaseParty;
+import parker.serb.sql.FactFinder;
 import parker.serb.sql.SMDSDocuments;
 import parker.serb.util.ClearDateDialog;
 import parker.serb.util.StringUtilities;
@@ -32,8 +33,7 @@ import parker.serb.util.StringUtilities;
 public class LetterGenerationPanel extends javax.swing.JDialog {
 
     SMDSDocuments docToGenerate;
-    
-    
+        
     public LetterGenerationPanel(java.awt.Frame parent, boolean modal, SMDSDocuments documentToGeneratePassed) {
         super(parent, modal);
         initComponents();
@@ -124,21 +124,13 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
             executor.submit(task);
         });
 
-
         JComboBox destinationComboBox = loadLocationComboBox();
         TableColumn rowTwoCombo = personTable.getColumnModel().getColumn(2);
         rowTwoCombo.setCellEditor(new DefaultCellEditor(destinationComboBox));
         
         // SET TO/CC Listener
-
-
-
-        
         destinationComboBox.addItemListener((ItemEvent e) -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                
-                System.out.println(e.getID());
-                
                 if (e.getItem().equals("") && personTable.getSelectedColumn() == 2) {
                     personTable.setValueAt("", personTable.getSelectedRow(), 1);
                 } 
@@ -147,18 +139,27 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                 }
             }
         });
-                
-        
-        
-        
-        
+             
         List<CaseParty> partyList = CaseParty.loadPartiesByCase();
         
         for (CaseParty party : partyList){
+            String toCC = "";
+            String emailPostal = "";
+            
+            if (Global.activeSection.equals("MED") 
+                    && (party.caseRelation.equals("Employer REP") || party.caseRelation.equals("Employee Organization REP"))){
+                if (!party.emailAddress.trim().equals("")){
+                    emailPostal = "Email";
+                } else {
+                    emailPostal = "Postal";
+                }
+                toCC = "TO:";
+            }
+                        
             model.addRow(new Object[]{
                 party.id,           // ID
-                "",                 // TO/CC
-                "",                 // Email/Postal
+                toCC,               // TO/CC
+                emailPostal,        // Email/Postal
                 party.caseRelation,
                 StringUtilities.buildCasePartyName(party),  // NAME
                 party.emailAddress
@@ -185,9 +186,11 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         DefaultTableModel model = (DefaultTableModel) additionalDocsTable.getModel();
         model.setRowCount(0); 
         List<SMDSDocuments> documentList = null;
+        List<FactFinder> ffList = null;
                 
         switch (Global.activeSection) {
             case "REP":
+                documentList = SMDSDocuments.loadDocumentNamesByTypeAndSection(Global.caseType, "");
                 break;
             case "ULP":
                 documentList = SMDSDocuments.loadDocumentNamesByTypeAndSection(Global.caseType, "Quest");
@@ -195,6 +198,9 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
             case "ORG":
                 break;
             case "MED":
+                additionalDocumentsLabel.setText("Fact Finder / Conciliator Bios:");
+                additionalDocsTable.getColumnModel().getColumn(2).setHeaderValue("Person");
+                ffList = FactFinder.loadActiveFF();
                 break;
             case "Hearings":
                 break;
@@ -203,12 +209,22 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
             case "CMDS":
                 break;
         }
-        if (documentList != null) {
+        if (documentList != null && !Global.activeSection.equals("MED")) {
             for (SMDSDocuments doc : documentList) {
                 model.addRow(new Object[]{
                     doc.id,
                     false,
                     doc.description
+                });
+            }
+        }
+        
+        if (ffList != null && Global.activeSection.equals("MED")) {
+            for (FactFinder ff : ffList) {
+                model.addRow(new Object[]{
+                    ff.id,
+                    false,
+                    StringUtilities.buildFullName(ff.firstName, ff.middleName, ff.lastName)
                 });
             }
         }
@@ -242,7 +258,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         suggestedSendDatePicker = new com.alee.extended.date.WebDateField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
+        additionalDocumentsLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -365,7 +381,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
 
         jLabel5.setText("Case Documents:");
 
-        jLabel6.setText("Additional Documents:");
+        additionalDocumentsLabel.setText("Additional Documents:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -384,7 +400,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGap(77, 77, 77)))
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(additionalDocumentsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(2, 2, 2))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(documentLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 544, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -418,7 +434,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(additionalDocumentsLabel, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -451,6 +467,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable activityTable;
     private javax.swing.JTable additionalDocsTable;
+    private javax.swing.JLabel additionalDocumentsLabel;
     private javax.swing.JButton cancelButton;
     private javax.swing.JLabel documentLabel;
     private javax.swing.JButton generateButton;
@@ -458,7 +475,6 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;

@@ -22,6 +22,7 @@ public class EmailOutAttachment {
     public int id;
     public int emailOutID;
     public String fileName;
+    public boolean primaryAttachment;
     
     public static List<EmailOutAttachment> getEmailAttachments(int id) {
         List<EmailOutAttachment> emailList = new ArrayList<>();
@@ -42,6 +43,7 @@ public class EmailOutAttachment {
                 eml.id = emailListRS.getInt("id");
                 eml.emailOutID = emailListRS.getInt("emailOutID");
                 eml.fileName = emailListRS.getString("fileName");
+                eml.primaryAttachment = emailListRS.getBoolean("primaryAttachment");
                 emailList.add(eml);
             }
         } catch (SQLException ex) {

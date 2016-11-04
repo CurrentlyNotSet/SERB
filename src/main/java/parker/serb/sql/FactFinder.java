@@ -30,6 +30,7 @@ public class FactFinder {
     public String zip;
     public String email;
     public String phone;
+    public String bioFileName;
         
     /**
      * Loads all activities without a limited result
@@ -100,6 +101,50 @@ public class FactFinder {
         return factFinderList;
     }
         
+    public static List loadActiveFF() {
+        List<FactFinder> factFinderList = new ArrayList<>();
+        
+        Statement stmt = null;
+            
+        try {
+
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "select * from FactFinder"
+                    + " where status != 'O'"
+                    + " and active = 1"
+                    + " order by lastName asc";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+
+            ResultSet rs = preparedStatement.executeQuery();
+            
+            while(rs.next()) {
+                FactFinder item = new FactFinder();
+                item.id = rs.getInt("id");
+                item.active = rs.getBoolean("active");
+                item.status = rs.getString("status") == null ? "" : rs.getString("status");
+                item.firstName = rs.getString("firstName") == null ? "" : rs.getString("firstName");
+                item.middleName = rs.getString("middleName") == null ? "" : rs.getString("middleName");
+                item.lastName = rs.getString("lastName") == null ? "" : rs.getString("lastName");
+                item.address1 = rs.getString("address1") == null ? "" : rs.getString("address1");
+                item.address2 = rs.getString("address2") == null ? "" : rs.getString("address2");
+                item.address3 = rs.getString("address3") == null ? "" : rs.getString("address3");
+                item.city = rs.getString("city") == null ? "" : rs.getString("city");
+                item.state = rs.getString("state") == null ? "" : rs.getString("state");
+                item.zip = rs.getString("zip") == null ? "" : rs.getString("zip");
+                item.email = rs.getString("email") == null ? "" : rs.getString("email");
+                item.phone = rs.getString("phone") == null ? "" : NumberFormatService.convertStringToPhoneNumber(rs.getString("phone"));
+                item.bioFileName = rs.getString("bioFileName") == null ? "" : rs.getString("bioFileName");
+                factFinderList.add(item);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return factFinderList;
+    }
+    
+    
     public static List searchFactFinder(String[] param) {
         List<FactFinder> recommendationList = new ArrayList<>();
 
@@ -145,6 +190,7 @@ public class FactFinder {
                 item.zip = rs.getString("zip") == null ? "" : rs.getString("zip");
                 item.email = rs.getString("email") == null ? "" : rs.getString("email");
                 item.phone = rs.getString("phone") == null ? "" : NumberFormatService.convertStringToPhoneNumber(rs.getString("phone"));
+                item.bioFileName = rs.getString("bioFileName") == null ? "" : rs.getString("bioFileName");
                 recommendationList.add(item);
             }
         } catch (SQLException ex) {
@@ -182,6 +228,7 @@ public class FactFinder {
                 item.zip = rs.getString("zip") == null ? "" : rs.getString("zip");
                 item.email = rs.getString("email") == null ? "" : rs.getString("email");
                 item.phone = rs.getString("phone") == null ? "" : NumberFormatService.convertStringToPhoneNumber(rs.getString("phone"));
+                item.bioFileName = rs.getString("bioFileName") == null ? "" : rs.getString("bioFileName");
             }
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
@@ -219,6 +266,7 @@ public class FactFinder {
                 item.zip = rs.getString("zip") == null ? "" : rs.getString("zip");
                 item.email = rs.getString("email") == null ? "" : rs.getString("email");
                 item.phone = rs.getString("phone") == null ? "" : NumberFormatService.convertStringToPhoneNumber(rs.getString("phone"));
+                item.bioFileName = rs.getString("bioFileName") == null ? "" : rs.getString("bioFileName");
             }
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
@@ -244,12 +292,13 @@ public class FactFinder {
                     + "state, "
                     + "zip, "
                     + "email, "
-                    + "phone "
+                    + "phone, "
+                    + "bioFileName "
                     + ") VALUES (";
-                    for(int i=0; i<12; i++){
-                        sql += "?, ";   //01-12
+                    for(int i=0; i<13; i++){
+                        sql += "?, ";   //01-13
                     }
-                     sql += "?)";   //13
+                     sql += "?)";   //14
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setBoolean(1, true);
@@ -265,6 +314,7 @@ public class FactFinder {
             preparedStatement.setString(11, item.zip.equals("") ? null : item.zip);
             preparedStatement.setString(12, item.email.equals("") ? null : item.email);
             preparedStatement.setString(13, item.phone.equals("") ? null : NumberFormatService.convertPhoneNumberToString(item.phone));
+            preparedStatement.setString(14, item.bioFileName.equals("") ? null : item.bioFileName);
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
@@ -288,7 +338,8 @@ public class FactFinder {
                     + "state = ?, "
                     + "zip = ?, "
                     + "email = ?, "
-                    + "phone = ? "
+                    + "phone = ?, "
+                    + "bioFileName = ? "
                     + "where id = ?";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
@@ -305,7 +356,8 @@ public class FactFinder {
             preparedStatement.setString(11, item.zip.equals("") ? null : item.zip);
             preparedStatement.setString(12, item.email.equals("") ? null : item.email);
             preparedStatement.setString(13, item.phone.equals("") ? null : NumberFormatService.convertPhoneNumberToString(item.phone));
-            preparedStatement.setInt(14, item.id);
+            preparedStatement.setString(14, item.bioFileName.equals("") ? null : item.bioFileName);
+            preparedStatement.setInt(15, item.id);
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
