@@ -5,7 +5,6 @@
  */
 package parker.serb.CMDS;
 
-import parker.serb.MED.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.util.Date;
@@ -30,7 +29,7 @@ import parker.serb.util.NumberFormatService;
  */
 public class CMDSHeaderPanel extends javax.swing.JPanel {
 
-    MEDCaseSearch search = null;
+    CMDSCaseSearch search = null;
     
     /**
      * Creates new form REPHeaderPanel
@@ -168,6 +167,17 @@ public class CMDSHeaderPanel extends javax.swing.JPanel {
     public JTextField getEmployerTextBox() {
         return groupNumberTextBox;
     }
+
+    public JTextField getAppellantTextBox() {
+        return appellantTextBox;
+    }
+
+    public JTextField getAppelleeTextBox() {
+        return appelleeTextBox;
+    }
+    
+    
+    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -402,7 +412,7 @@ public class CMDSHeaderPanel extends javax.swing.JPanel {
     private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
         if(SwingUtilities.isRightMouseButton(evt) || evt.getButton() == MouseEvent.BUTTON3) {
             if(search == null) {
-                search = new MEDCaseSearch((JFrame) getRootPane().getParent(), true);
+                search = new CMDSCaseSearch((JFrame) getRootPane().getParent(), true);
             } else {
                 search.setVisible(true);
             }

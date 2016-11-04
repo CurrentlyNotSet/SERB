@@ -133,4 +133,30 @@ public class CMDSResult {
         }
     }
     
+    public static List loadAll() {
+        List caseStatusList = new ArrayList<>();
+            
+        try {
+
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "select * from CMDSResult where active = 1";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+
+            ResultSet caseStatusRS = preparedStatement.executeQuery();
+            
+            while(caseStatusRS.next()) {
+//                CMDSStatusType rep = new CMDSStatusType();
+//                rep.id = caseStatusRS.getInt("id");
+//                rep.statusCode = caseStatusRS.getString("statusCode");
+//                rep.description = caseStatusRS.getString("description");
+                caseStatusList.add(caseStatusRS.getString("result"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
+        return caseStatusList;
+    }
 }

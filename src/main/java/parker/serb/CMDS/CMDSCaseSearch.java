@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package parker.serb.MED;
+package parker.serb.CMDS;
 
+import parker.serb.MED.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
@@ -12,13 +13,14 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
+import parker.serb.sql.CMDSCaseSearchData;
 import parker.serb.sql.MEDCaseSearchData;
 
 /**
  *
  * @author parkerjohnston
  */
-public class MEDCaseSearch extends javax.swing.JDialog {
+public class CMDSCaseSearch extends javax.swing.JDialog {
 
     DefaultTableModel model;
     List caseList;
@@ -26,7 +28,7 @@ public class MEDCaseSearch extends javax.swing.JDialog {
     /**
      * Creates new form REPCaseSearch
      */
-    public MEDCaseSearch(java.awt.Frame parent, boolean modal) {
+    public CMDSCaseSearch(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         jLayeredPane1.moveToFront(jPanel1);
@@ -133,7 +135,7 @@ public class MEDCaseSearch extends javax.swing.JDialog {
             public void mouseClicked(MouseEvent e) {
                 if(e.getClickCount() == 2) {
                     setVisible(false);
-                    Global.root.getmEDHeaderPanel1().getjComboBox2().setSelectedItem(caseSearchTable.getValueAt(caseSearchTable.getSelectedRow(), 0).toString());
+                    Global.root.getcMDSHeaderPanel1().getjComboBox2().setSelectedItem(caseSearchTable.getValueAt(caseSearchTable.getSelectedRow(), 0).toString());
                 }
             }
 
@@ -181,24 +183,22 @@ public class MEDCaseSearch extends javax.swing.JDialog {
         };
        
         model.addColumn("Case Number");
-        model.addColumn("Employer Name");
-        model.addColumn("Union Name");
-        model.addColumn("County");
-        model.addColumn("Employer ID");
-        model.addColumn("BUN Number");
+        model.addColumn("Open Date");
+        model.addColumn("Appellant");
+        model.addColumn("Appellee");
+        model.addColumn("ALJ");
         
-        caseList = MEDCaseSearchData.loadMEDCaseList();
+        caseList = CMDSCaseSearchData.loadCMDSCaseList();
         
         for (Object caseItem : caseList) {
-            MEDCaseSearchData act = (MEDCaseSearchData) caseItem;
+            CMDSCaseSearchData act = (CMDSCaseSearchData) caseItem;
             
             model.addRow(new Object[] {
                 (act.caseYear + "-" + act.caseType + "-" + act.caseMonth + "-" + act.caseNumber),
-                act.employerName, //employer name
-                act.unionName, //union name
-                act.county, //county
-                act.employerID, //employerID
-                act.bunNumber //BUN Number
+                act.dateOpen, //employer name
+                act.appellant, //union name
+                act.appellee, //county
+                act.alj //employerID
             }); 
         }
         getTableData();
@@ -221,10 +221,9 @@ public class MEDCaseSearch extends javax.swing.JDialog {
                 || (tableData[i][2].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals(""))
                 || (tableData[i][3].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals(""))
                 || (tableData[i][4].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals(""))
-                || (tableData[i][5].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals(""))
                     )) {
                 model.addRow(new Object[] {tableData[i][0]
-                , tableData[i][1], tableData[i][2], tableData[i][3], tableData[i][4], tableData[i][5]}); 
+                , tableData[i][1], tableData[i][2], tableData[i][3], tableData[i][4]}); 
             }
         }
         caseSearchTable.setModel(model);
@@ -273,7 +272,7 @@ public class MEDCaseSearch extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("MED Case Search");
+        jLabel1.setText("CMDS Case Search");
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel2.setText("Search:");
@@ -286,14 +285,14 @@ public class MEDCaseSearch extends javax.swing.JDialog {
 
             },
             new String [] {
-                "Case Number", "Employer Name", "Union Name", "County", "Employer ID", "BUN Number"
+                "Case Number", "Open Date", "Appellant", "Appellee", "ALJ"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {

@@ -51,14 +51,14 @@ public class FileService {
                     Global.templatePath = "C:\\SERB\\Template\\";
                     Global.reportingPath = "C:\\SERB\\Reporting\\";
                     break;
-                case "NW103087":
-                    Global.scanPath = "C:\\Users\\johnp10\\Desktop\\SERB\\Scan\\";
-                    Global.emailPath = "C:\\Users\\johnp10\\Desktop\\SERB\\Email\\";
-                    Global.activityPath = "C:\\Users\\johnp10\\Desktop\\SERB\\Activity\\";
-                    Global.mediaPath = "C:\\Users\\johnp10\\Desktop\\SERB\\Media\\";
-                    Global.templatePath = "C:\\Users\\johnp10\\Desktop\\SERB\\Template\\";
-                    Global.reportingPath = "C:\\Users\\johnp10\\Desktop\\SERB\\Reporting\\";
-                    break;    
+//                case "NW103087":  //NW Laptop no longer owned
+//                    Global.scanPath = "C:\\Users\\johnp10\\Desktop\\SERB\\Scan\\";
+//                    Global.emailPath = "C:\\Users\\johnp10\\Desktop\\SERB\\Email\\";
+//                    Global.activityPath = "C:\\Users\\johnp10\\Desktop\\SERB\\Activity\\";
+//                    Global.mediaPath = "C:\\Users\\johnp10\\Desktop\\SERB\\Media\\";
+//                    Global.templatePath = "C:\\Users\\johnp10\\Desktop\\SERB\\Template\\";
+//                    Global.reportingPath = "C:\\Users\\johnp10\\Desktop\\SERB\\Reporting\\";
+//                    break;    
                 default: //SERB LOCATION
                     Global.scanPath = "G:\\SERB\\Scan\\";
                     Global.emailPath = "G:\\SERB\\Email\\";

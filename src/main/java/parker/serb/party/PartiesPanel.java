@@ -17,6 +17,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
+import parker.serb.sql.CMDSCaseSearchData;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.MEDCaseSearchData;
 import parker.serb.sql.REPCaseSearchData;
@@ -175,9 +176,9 @@ public class PartiesPanel extends javax.swing.JPanel {
                 break;
             case "CMDS":
                 Global.root.getcMDSHeaderPanel1().loadHeaderInformation();
-//                MEDCaseSearchData.updateCaseEntryFromParties(
-//                        Global.root.getmEDHeaderPanel1().getEmployerTextBox().getText().trim(),
-//                        Global.root.getmEDHeaderPanel1().getEmployeeOrgTextBox().getText().trim());
+                CMDSCaseSearchData.updateCaseEntryFromParties(
+                        Global.root.getcMDSHeaderPanel1().getAppellantTextBox().getText(),
+                        Global.root.getcMDSHeaderPanel1().getAppelleeTextBox().getText());
                 break;    
         }
     }
@@ -1674,7 +1675,7 @@ public class PartiesPanel extends javax.swing.JPanel {
                         + (charginingPartyInformation.nameTitle.equals("") ? "" : (", " + charginingPartyInformation.nameTitle));
                 }
                 
-                model.addRow(new Object[] {charginingPartyInformation.id,
+               model.addRow(new Object[] {charginingPartyInformation.id,
                     name,
                     charginingPartyInformation.jobTitle, 
                     charginingPartyInformation.address1
