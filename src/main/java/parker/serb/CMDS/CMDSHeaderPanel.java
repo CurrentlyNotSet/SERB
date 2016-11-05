@@ -55,8 +55,11 @@ public class CMDSHeaderPanel extends javax.swing.JPanel {
                     }
                 } else {
                     loadInformation();
-                    if(Global.root.getcMDSRootPanel1().getjTabbedPane1().getSelectedIndex() == 0)
+                    if(Global.root.getcMDSRootPanel1().getjTabbedPane1().getSelectedIndex() == 0) {
                         Global.root.getcMDSRootPanel1().getActivityPanel1().loadAllActivity();
+                        Global.root.getjButton2().setText("Add Entry");
+                        Global.root.getjButton2().setEnabled(true);
+                    }
                     Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
                 }
             }
