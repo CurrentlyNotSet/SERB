@@ -6,6 +6,7 @@
 package parker.serb.letterGeneration;
 
 import com.alee.extended.date.WebDateField;
+import com.alee.laf.optionpane.WebOptionPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.MouseEvent;
@@ -18,11 +19,14 @@ import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import parker.serb.Global;
+import parker.serb.bookmarkProcessing.generateDocument;
 import parker.serb.sql.Activity;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.FactFinder;
+import parker.serb.sql.MEDCase;
 import parker.serb.sql.SMDSDocuments;
 import parker.serb.util.ClearDateDialog;
+import parker.serb.util.FileService;
 import parker.serb.util.StringUtilities;
 
 
@@ -33,6 +37,7 @@ import parker.serb.util.StringUtilities;
 public class LetterGenerationPanel extends javax.swing.JDialog {
 
     SMDSDocuments docToGenerate;
+    MEDCase medCaseData;
         
     public LetterGenerationPanel(java.awt.Frame parent, boolean modal, SMDSDocuments documentToGeneratePassed) {
         super(parent, modal);
@@ -220,11 +225,23 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         }
         
         if (ffList != null && Global.activeSection.equals("MED")) {
+            medCaseData = MEDCase.loadEntireCaseInformation();
+            
             for (FactFinder ff : ffList) {
+                //Format Name
+                String person = StringUtilities.buildFullName(ff.firstName, ff.middleName, ff.lastName);
+                
+                //check for checkmark
+                boolean selected = false;
+                if (docToGenerate.description.contains("Panel") && medCaseData != null){
+                        selected = setMEDFFConcCheckMark(person);
+                }
+                
+                //load table
                 model.addRow(new Object[]{
                     ff.id,
-                    false,
-                    StringUtilities.buildFullName(ff.firstName, ff.middleName, ff.lastName)
+                    selected,
+                    person
                 });
             }
         }
@@ -239,6 +256,78 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
             dialog.dispose();
         }
     }
+    
+    private boolean setMEDFFConcCheckMark(String Name){        
+        if (!medCaseData.FFList2Name1.equals("") || !medCaseData.concilList2Name1.equals("")){
+            if (medCaseData.FFList2Name1.equals(Name) || 
+                    medCaseData.FFList2Name2.equals(Name) || 
+                    medCaseData.FFList2Name3.equals(Name) || 
+                    medCaseData.FFList2Name4.equals(Name) || 
+                    medCaseData.FFList2Name5.equals(Name) ||
+                    medCaseData.concilList2Name1.equals(Name) ||
+                    medCaseData.concilList2Name2.equals(Name) ||
+                    medCaseData.concilList2Name3.equals(Name) ||
+                    medCaseData.concilList2Name4.equals(Name) ||
+                    medCaseData.concilList2Name5.equals(Name)){
+                return true;
+            }
+        } else {
+            if (medCaseData.FFList1Name1.equals(Name) || 
+                    medCaseData.FFList1Name2.equals(Name) || 
+                    medCaseData.FFList1Name3.equals(Name) || 
+                    medCaseData.FFList1Name4.equals(Name) || 
+                    medCaseData.FFList1Name5.equals(Name) ||
+                    medCaseData.concilList1Name1.equals(Name) ||
+                    medCaseData.concilList1Name2.equals(Name) ||
+                    medCaseData.concilList1Name3.equals(Name) ||
+                    medCaseData.concilList1Name4.equals(Name) ||
+                    medCaseData.concilList1Name5.equals(Name)){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private void generateLetter() {
+        String docName = generateDocument.generateSMDSdocument(docToGenerate, 0);
+        if (docName != null) {
+            Activity.addActivty("Created " + docToGenerate.historyDescription, docName);
+            reloadActivity();
+            FileService.openFile(docName);
+        } else {
+            WebOptionPane.showMessageDialog(Global.root,
+                    "<html><div style='text-align: center;'>Files required to generate documents are missing."
+                    + "<br><br>Unable to generate " + docToGenerate.description + "</html>",
+                    "Required File Missing", WebOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void reloadActivity(){
+        
+        switch (Global.activeSection) {
+            case "REP":
+                Global.root.getrEPRootPanel1().getActivityPanel1().loadAllActivity();
+                break;
+            case "ULP":
+                Global.root.getuLPRootPanel1().getActivityPanel1().loadAllActivity();
+                break;
+            case "ORG":
+                Global.root.getoRGRootPanel1().getActivityPanel1().loadAllActivity();
+                break;
+            case "MED":
+                Global.root.getmEDRootPanel1().getActivityPanel1().loadAllActivity();
+                break;
+            case "Hearings":
+                break;
+            case "Civil Service Commission":
+                Global.root.getcSCRootPanel1().getActivityPanel1().loadAllActivity();
+                break;
+            case "CMDS":
+                Global.root.getcMDSRootPanel1().getActivityPanel1().loadAllActivity();
+                break;
+        }
+    }
+    
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -453,7 +542,8 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
-        
+        generateLetter();
+        dispose();
     }//GEN-LAST:event_generateButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
