@@ -37,7 +37,9 @@ public class generateDocument {
                     + Global.caseYear + File.separator
                     + NumberFormatService.generateFullCaseNumber());
             docPath.mkdirs();
-            saveDocName = String.valueOf(new Date().getTime()) + "_" + template.historyFileName + ".docx";
+            saveDocName = String.valueOf(new Date().getTime()) + "_" 
+                    + (template.historyFileName == null ? template.description : template.historyFileName)
+                    + ".docx";
 
             Dispatch document = Dispatch.call(eolWord.getProperty("Documents").toDispatch(), "Open",
                     Global.templatePath + template.section + File.separator + template.fileName).toDispatch();

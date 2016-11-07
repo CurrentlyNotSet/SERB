@@ -10,6 +10,8 @@ import com.alee.laf.optionpane.WebOptionPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.MouseEvent;
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -22,11 +24,14 @@ import parker.serb.Global;
 import parker.serb.bookmarkProcessing.generateDocument;
 import parker.serb.sql.Activity;
 import parker.serb.sql.CaseParty;
+import parker.serb.sql.EmailOut;
+import parker.serb.sql.EmailOutAttachment;
 import parker.serb.sql.FactFinder;
 import parker.serb.sql.MEDCase;
 import parker.serb.sql.SMDSDocuments;
 import parker.serb.util.ClearDateDialog;
 import parker.serb.util.FileService;
+import parker.serb.util.NumberFormatService;
 import parker.serb.util.StringUtilities;
 
 
@@ -73,6 +78,9 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         activityTable.getColumnModel().getColumn(1).setMinWidth(60);
         activityTable.getColumnModel().getColumn(1).setPreferredWidth(60);
         activityTable.getColumnModel().getColumn(1).setMaxWidth(60);
+        activityTable.getColumnModel().getColumn(3).setMinWidth(0);
+        activityTable.getColumnModel().getColumn(3).setPreferredWidth(0);
+        activityTable.getColumnModel().getColumn(3).setMaxWidth(0);
         
         additionalDocsTable.getColumnModel().getColumn(0).setMinWidth(0);
         additionalDocsTable.getColumnModel().getColumn(0).setPreferredWidth(0);
@@ -80,6 +88,9 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         additionalDocsTable.getColumnModel().getColumn(1).setMinWidth(60);
         additionalDocsTable.getColumnModel().getColumn(1).setPreferredWidth(60);
         additionalDocsTable.getColumnModel().getColumn(1).setMaxWidth(60);
+        additionalDocsTable.getColumnModel().getColumn(3).setMinWidth(0);
+        additionalDocsTable.getColumnModel().getColumn(3).setPreferredWidth(0);
+        additionalDocsTable.getColumnModel().getColumn(3).setMaxWidth(0);
     }
     
     private JComboBox loadLocationComboBox() {
@@ -182,7 +193,8 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
             model.addRow(new Object[]{
                 doc.id,
                 false,
-                doc.action
+                doc.action,
+                doc.fileName
             });
         }  
     }
@@ -219,7 +231,8 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                 model.addRow(new Object[]{
                     doc.id,
                     false,
-                    doc.description
+                    doc.description,
+                    doc.fileName
                 });
             }
         }
@@ -241,7 +254,8 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                 model.addRow(new Object[]{
                     ff.id,
                     selected,
-                    person
+                    person,
+                    ff.bioFileName
                 });
             }
         }
@@ -292,8 +306,17 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         String docName = generateDocument.generateSMDSdocument(docToGenerate, 0);
         if (docName != null) {
             Activity.addActivty("Created " + docToGenerate.historyDescription, docName);
-            reloadActivity();
+            
+            
+            int emailID = insertEmail();
+            
+            insertGeneratedAttachement(emailID, docName);
+            insertExtraAttachments(emailID);
+            
+            insertPostal();
+            
             FileService.openFile(docName);
+            reloadActivity();
         } else {
             WebOptionPane.showMessageDialog(Global.root,
                     "<html><div style='text-align: center;'>Files required to generate documents are missing."
@@ -303,7 +326,6 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
     }
 
     private void reloadActivity(){
-        
         switch (Global.activeSection) {
             case "REP":
                 Global.root.getrEPRootPanel1().getActivityPanel1().loadAllActivity();
@@ -327,7 +349,94 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                 break;
         }
     }
+        
+    private int insertEmail() {
+        String toEmail = "";
+        String ccEmail = "";
+        String emailBody = docToGenerate.emailBody;
+
+        for (int i = 0; i < personTable.getRowCount(); i++) {
+            if (personTable.getValueAt(i, 1).equals("TO:") && personTable.getValueAt(i, 2).equals("Email") && !personTable.getValueAt(i, 5).equals("")) {
+                if (!toEmail.trim().equals("")){
+                    toEmail += "; ";
+                }
+                toEmail += personTable.getValueAt(i, 5);
+            } else if (personTable.getValueAt(i, 1).equals("CC:") && personTable.getValueAt(i, 2).equals("Email") && !personTable.getValueAt(i, 5).equals("")) {
+                if (!ccEmail.trim().equals("")){
+                    ccEmail += "; ";
+                }
+                ccEmail += personTable.getValueAt(i, 5);
+            }
+        }
+        
+        emailBody += System.lineSeparator() + System.lineSeparator() 
+                + StringUtilities.buildFullName(Global.activeUser.firstName, Global.activeUser.middleInitial, Global.activeUser.lastName);
+        
+        
+        EmailOut eml = new EmailOut();
+        
+        eml.section = Global.activeSection;
+        eml.caseYear = Global.caseYear;
+        eml.caseType = Global.caseType;
+        eml.caseMonth = Global.caseMonth;
+        eml.caseNumber = Global.caseNumber;
+        eml.to = toEmail.trim().equals("") ? null : toEmail.trim();
+        eml.from = Global.activeUser.emailAddress;
+        eml.cc = ccEmail.trim().equals("") ? null : ccEmail.trim();
+        eml.bcc = null;
+        eml.subject = docToGenerate.emailSubject;
+        eml.body = emailBody;
+        eml.userID = Global.activeUser.id;
+        eml.suggestedSendDate = suggestedSendDatePicker.getText().equals("") ? null : new Date(NumberFormatService.convertMMDDYYYY(suggestedSendDatePicker.getText()));
+        eml.okToSend = false;
+        
+        return EmailOut.insertEmail(eml);
+    }
     
+    private void insertGeneratedAttachement(int emailID, String docName){
+        EmailOutAttachment attach = new EmailOutAttachment();
+        
+        attach.emailOutID = emailID;
+        attach.fileName = docName;
+        attach.primaryAttachment = true;
+        EmailOutAttachment.insertAttachment(attach);
+    }
+    
+    private void insertExtraAttachments(int emailID) {
+
+        for (int i = 0; i < activityTable.getRowCount(); i++) {
+            if (activityTable.getValueAt(i, 1).equals(true)) {
+                EmailOutAttachment attach = new EmailOutAttachment();
+
+                attach.emailOutID = emailID;
+                attach.fileName = activityTable.getValueAt(i, 3).toString();
+                attach.primaryAttachment = false;
+                EmailOutAttachment.insertAttachment(attach);
+            }
+        }
+
+        for (int i = 0; i < additionalDocsTable.getRowCount(); i++) {
+            if (additionalDocsTable.getValueAt(i, 1).equals(true)) {
+                
+                SMDSDocuments additionalDoc = SMDSDocuments.findDocumentByID(Integer.valueOf(additionalDocsTable.getValueAt(i, 0).toString()));
+                
+                String docName = generateDocument.generateSMDSdocument(additionalDoc, 0);
+                Activity.addActivty("Created " + docToGenerate.historyDescription, docName);
+                
+                EmailOutAttachment attach = new EmailOutAttachment();
+
+                attach.emailOutID = emailID;
+                attach.fileName = docName;
+                attach.primaryAttachment = false;
+                EmailOutAttachment.insertAttachment(attach);
+            }
+        }
+        
+    }
+        
+    private void insertPostal() {
+        
+    }
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -356,7 +465,6 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         jLabel1.setText("Generate Letter");
 
         generateButton.setText("Generate");
-        generateButton.setEnabled(false);
         generateButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 generateButtonActionPerformed(evt);
@@ -396,14 +504,14 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
 
             },
             new String [] {
-                "ID", "Attach", "Document"
+                "ID", "Attach", "Document", "fileName"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Boolean.class, java.lang.Object.class
+                java.lang.Object.class, java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, false
+                false, true, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -419,6 +527,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
             activityTable.getColumnModel().getColumn(0).setResizable(false);
             activityTable.getColumnModel().getColumn(1).setResizable(false);
             activityTable.getColumnModel().getColumn(2).setResizable(false);
+            activityTable.getColumnModel().getColumn(3).setResizable(false);
         }
 
         additionalDocsTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -426,14 +535,14 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
 
             },
             new String [] {
-                "ID", "Attach", "Document"
+                "ID", "Attach", "Document", "fileName"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Boolean.class, java.lang.Object.class
+                java.lang.Object.class, java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, false
+                false, true, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -449,6 +558,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
             additionalDocsTable.getColumnModel().getColumn(0).setResizable(false);
             additionalDocsTable.getColumnModel().getColumn(1).setResizable(false);
             additionalDocsTable.getColumnModel().getColumn(2).setResizable(false);
+            additionalDocsTable.getColumnModel().getColumn(3).setResizable(false);
         }
 
         jLabel2.setText("Send To:");

@@ -52,5 +52,28 @@ public class EmailOutAttachment {
         return emailList;
     }
     
-    
+    public static void insertAttachment(EmailOutAttachment item) {
+        try {
+
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Insert INTO EmailOutAttachment ("
+                    + "emailOutID, "
+                    + "fileName, "
+                    + "primaryAttachment "
+                    + ") VALUES (";
+                    for(int i=0; i<2; i++){
+                        sql += "?, ";   //01-02
+                    }
+                     sql += "?)";   //03
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setInt(1, item.emailOutID);
+            preparedStatement.setString(2, item.fileName);
+            preparedStatement.setBoolean(3, item.primaryAttachment);
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

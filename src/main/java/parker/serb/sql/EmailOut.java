@@ -159,4 +159,57 @@ public class EmailOut {
         }
     }
     
+    public static int insertEmail(EmailOut item) {
+        try {
+
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Insert INTO EmailOut ("
+                    + "section, "       //01
+                    + "caseYear, "      //02
+                    + "caseType, "      //03
+                    + "caseMonth, "     //04
+                    + "caseNumber, "    //05
+                    + "[to], "          //06
+                    + "[from], "        //07
+                    + "cc, "            //08
+                    + "bcc, "           //09
+                    + "subject, "       //10
+                    + "body, "          //11
+                    + "userID, "        //12
+                    + "suggestedSendDate, " //13
+                    + "okToSend "           //14
+                    + ") VALUES (";
+                    for(int i=0; i<13; i++){
+                        sql += "?, ";   //01-13
+                    }
+                     sql += "?)";   //14
+                     
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString ( 1, item.section);
+            preparedStatement.setString ( 2, item.caseYear);
+            preparedStatement.setString ( 3, item.caseType);
+            preparedStatement.setString ( 4, item.caseMonth);
+            preparedStatement.setString ( 5, item.caseNumber);
+            preparedStatement.setString ( 6, item.to);
+            preparedStatement.setString ( 7, item.from);
+            preparedStatement.setString ( 8, item.cc);
+            preparedStatement.setString ( 9, item.bcc);
+            preparedStatement.setString (10, item.subject);
+            preparedStatement.setString (11, item.body);
+            preparedStatement.setInt    (12, item.userID);
+            preparedStatement.setDate   (13, item.suggestedSendDate);
+            preparedStatement.setBoolean(14, item.okToSend);
+            preparedStatement.executeUpdate();
+            
+            ResultSet newRow = preparedStatement.getGeneratedKeys();
+            if (newRow.next()){
+                return newRow.getInt(1);
+            }            
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+    
 }
