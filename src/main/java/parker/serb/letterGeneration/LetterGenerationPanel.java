@@ -11,7 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.MouseEvent;
 import java.sql.Date;
-import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -23,6 +23,7 @@ import javax.swing.table.TableColumn;
 import parker.serb.Global;
 import parker.serb.bookmarkProcessing.generateDocument;
 import parker.serb.sql.Activity;
+import parker.serb.sql.AdministrationInformation;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.EmailOut;
 import parker.serb.sql.EmailOutAttachment;
@@ -43,6 +44,8 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
 
     SMDSDocuments docToGenerate;
     MEDCase medCaseData;
+    List<Integer> toParties = new ArrayList<>();
+    List<Integer> ccParties = new ArrayList<>();
         
     public LetterGenerationPanel(java.awt.Frame parent, boolean modal, SMDSDocuments documentToGeneratePassed) {
         super(parent, modal);
@@ -303,10 +306,11 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
     }
     
     private void generateLetter() {
-        String docName = generateDocument.generateSMDSdocument(docToGenerate, 0);
+        getPartyList();
+        
+        String docName = generateDocument.generateSMDSdocument(docToGenerate, 0, toParties, ccParties);
         if (docName != null) {
             Activity.addActivty("Created " + docToGenerate.historyDescription, docName);
-            
             
             int emailID = insertEmail();
             
@@ -325,6 +329,16 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         }
     }
 
+    private void getPartyList(){
+        for (int i = 0; i < personTable.getRowCount(); i++) {
+            if (personTable.getValueAt(i, 1).equals("TO:")) {
+                toParties.add(Integer.valueOf(personTable.getValueAt(i, 0).toString()));
+            } else if (personTable.getValueAt(i, 1).equals("CC:")) {
+                ccParties.add(Integer.valueOf(personTable.getValueAt(i, 0).toString()));
+            }
+        }
+    }
+    
     private void reloadActivity(){
         switch (Global.activeSection) {
             case "REP":
@@ -370,7 +384,10 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         }
         
         emailBody += System.lineSeparator() + System.lineSeparator() 
-                + StringUtilities.buildFullName(Global.activeUser.firstName, Global.activeUser.middleInitial, Global.activeUser.lastName);
+                + StringUtilities.buildFullName(Global.activeUser.firstName, Global.activeUser.middleInitial, Global.activeUser.lastName)
+                + System.lineSeparator() + (Global.activeUser.jobTitle == null ? "" : Global.activeUser.jobTitle + System.lineSeparator())
+                + generateDepartmentAddressBlock() + System.lineSeparator() 
+                + (Global.activeUser.workPhone == null ? "" :  "Telephone: " + NumberFormatService.convertStringToPhoneNumber(Global.activeUser.workPhone));
         
         
         EmailOut eml = new EmailOut();
@@ -384,7 +401,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         eml.from = Global.activeUser.emailAddress;
         eml.cc = ccEmail.trim().equals("") ? null : ccEmail.trim();
         eml.bcc = null;
-        eml.subject = docToGenerate.emailSubject;
+        eml.subject = NumberFormatService.generateFullCaseNumber() + (docToGenerate.emailSubject == null ? "" : " " + docToGenerate.emailSubject);
         eml.body = emailBody;
         eml.userID = Global.activeUser.id;
         eml.suggestedSendDate = suggestedSendDatePicker.getText().equals("") ? null : new Date(NumberFormatService.convertMMDDYYYY(suggestedSendDatePicker.getText()));
@@ -420,7 +437,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                 
                 SMDSDocuments additionalDoc = SMDSDocuments.findDocumentByID(Integer.valueOf(additionalDocsTable.getValueAt(i, 0).toString()));
                 
-                String docName = generateDocument.generateSMDSdocument(additionalDoc, 0);
+                String docName = generateDocument.generateSMDSdocument(additionalDoc, 0, toParties, ccParties);
                 Activity.addActivty("Created " + docToGenerate.historyDescription, docName);
                 
                 EmailOutAttachment attach = new EmailOutAttachment();
@@ -436,6 +453,45 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         
     private void insertPostal() {
         
+    }
+    
+    private String generateDepartmentAddressBlock(){
+        String address = "";
+        String dept = "";
+        
+        switch (Global.activeSection) {
+            case "REP":
+            case "ULP":
+            case "ORG":
+            case "MED":
+            case "Hearings":
+                dept = "SERB";
+                break;
+            case "Civil Service Commission":
+            case "CMDS":
+                dept = "SPBR";
+                break;
+        }
+                
+        AdministrationInformation sysAdminInfo = AdministrationInformation.loadAdminInfo(dept);
+                
+        if (!sysAdminInfo.Address1.equals("")) {
+            address += sysAdminInfo.Address1.trim();
+        }
+        if (!sysAdminInfo.Address2.equals("")) {
+            address += " " + sysAdminInfo.Address2.trim();
+        }
+        address += System.lineSeparator();
+        if (!sysAdminInfo.City.equals("")) {
+            address += sysAdminInfo.City.trim();
+        }
+        if (!sysAdminInfo.State.equals("")) {
+            address += ", " + sysAdminInfo.State.trim();
+        }
+        if (!sysAdminInfo.Zip.equals("")) {
+            address += " " + sysAdminInfo.Zip.trim();
+        }
+        return address;
     }
     
     @SuppressWarnings("unchecked")

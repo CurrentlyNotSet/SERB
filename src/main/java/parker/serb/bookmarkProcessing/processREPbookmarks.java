@@ -26,7 +26,7 @@ import parker.serb.util.StringUtilities;
  */
 public class processREPbookmarks {
     
-    public static Dispatch processDoAREPWordLetter(Dispatch Document, int senderID) {
+    public static Dispatch processDoAREPWordLetter(Dispatch Document, int senderID, List<Integer> toParties, List<Integer> ccParties) {
         //get basic information
         User user = null; //Need to get user by ID
         REPCase caseInfo = REPCase.loadCaseDetails(Global.caseYear, Global.caseType, Global.caseMonth, Global.caseNumber);
@@ -58,9 +58,29 @@ public class processREPbookmarks {
         String mediationDate = null;
         String mediationTime = null;
         String mediationCC = "";
+        String toAddressBlock = "";
+        String ccNameBlock = "";
         
-        //Build party Lists
-        for (CaseParty party : partyList) {
+        for (CaseParty party : partyList){
+            
+            for (int person : toParties){
+                if (person == party.id) {
+                     if (!"".equals(toAddressBlock.trim())){
+                        toAddressBlock += "\n\n";
+                    }
+                     toAddressBlock += StringUtilities.buildCasePartyAddressBlock(party);
+                }
+            }
+            
+            for (int person : toParties){
+                if (person == party.id) {
+                     if (!"".equals(ccNameBlock.trim())){
+                        ccNameBlock += ", ";
+                    }
+                     ccNameBlock += StringUtilities.buildCasePartyName(party);
+                }
+            }
+            
             if (null != party.caseRelation) {
                 switch (party.caseRelation) {
                     case "Incumbent Employee Organization":

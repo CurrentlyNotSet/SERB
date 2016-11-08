@@ -26,7 +26,7 @@ import parker.serb.util.StringUtilities;
  */
 public class generateDocument {
     
-    public static String generateSMDSdocument(SMDSDocuments template, int senderID){
+    public static String generateSMDSdocument(SMDSDocuments template, int senderID, List<Integer> toParties, List<Integer> ccParties){
         String saveDocName = null;
         ActiveXComponent eolWord = null;
         eolWord = JacobCOMBridge.setWordActive(true, false, eolWord);
@@ -50,27 +50,27 @@ public class generateDocument {
                 switch (Global.activeSection) {
                     case "ULP":
                         document = defaultSMDSBookmarks(document, template.dueDate);
-                        document = processULPbookmarks.processDoAULPWordLetter(document);
+                        document = processULPbookmarks.processDoAULPWordLetter(document, toParties, ccParties);
                         break;
                     case "REP":
                         document = defaultSMDSBookmarks(document, template.dueDate);
-                        document = processREPbookmarks.processDoAREPWordLetter(document, senderID);
+                        document = processREPbookmarks.processDoAREPWordLetter(document, senderID, toParties, ccParties);
                         break;
                     case "MED":
                         document = defaultSMDSBookmarks(document, template.dueDate);
-                        document = processMEDbookmarks.processDoAMEDWordLetter(document);
+                        document = processMEDbookmarks.processDoAMEDWordLetter(document, toParties, ccParties);
                         break;
                     case "ORG":
                         document = defaultSMDSBookmarks(document, template.dueDate);
-                        document = processORGbookmarks.processDoAORGWordLetter(document, true);
+                        document = processORGbookmarks.processDoAORGWordLetter(document, true, toParties, ccParties);
                         break;
                     case "CSC":
                         document = defaultCMDSBookmarks(document, template.dueDate);
-                        document = processCSCbookmarks.processDoACSCWordLetter(document);
+                        document = processCSCbookmarks.processDoACSCWordLetter(document, toParties, ccParties);
                         break;
                     case "CMDS":
                         document = defaultCMDSBookmarks(document, template.dueDate);
-                        document = processCMDSbookmarks.processDoACMDSWordLetter(document);
+                        document = processCMDSbookmarks.processDoACMDSWordLetter(document, toParties, ccParties);
                         break;
                     default:
                         break;
