@@ -81,9 +81,7 @@ public class DetailedEmailOutPanel extends javax.swing.JDialog {
             eml.suggestedSendDate = null;
         } else {
             eml.suggestedSendDate = new java.sql.Date(suggestedSendDatePicker.getDate().getTime());
-        }
-            
-           
+        }  
         EmailOut.updateEmailOut(eml);
     }
     

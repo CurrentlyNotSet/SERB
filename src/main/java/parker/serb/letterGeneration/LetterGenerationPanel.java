@@ -29,6 +29,8 @@ import parker.serb.sql.EmailOut;
 import parker.serb.sql.EmailOutAttachment;
 import parker.serb.sql.FactFinder;
 import parker.serb.sql.MEDCase;
+import parker.serb.sql.PostalOut;
+import parker.serb.sql.PostalOutAttachment;
 import parker.serb.sql.SMDSDocuments;
 import parker.serb.util.ClearDateDialog;
 import parker.serb.util.FileService;
@@ -46,6 +48,10 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
     MEDCase medCaseData;
     List<Integer> toParties = new ArrayList<>();
     List<Integer> ccParties = new ArrayList<>();
+    boolean sendToEmail = false;
+    boolean sendToPostal = false;
+    String toEmail = "";
+    String ccEmail = "";    
         
     public LetterGenerationPanel(java.awt.Frame parent, boolean modal, SMDSDocuments documentToGeneratePassed) {
         super(parent, modal);
@@ -306,18 +312,35 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
     }
     
     private void generateLetter() {
+        List<Integer> postalIDList = new ArrayList<>();
+        
         getPartyList();
         
         String docName = generateDocument.generateSMDSdocument(docToGenerate, 0, toParties, ccParties);
         if (docName != null) {
             Activity.addActivty("Created " + docToGenerate.historyDescription, docName);
             
-            int emailID = insertEmail();
+            int emailID = 0;
+            int postalID = 0;
             
-            insertGeneratedAttachement(emailID, docName);
-            insertExtraAttachments(emailID);
+            if (sendToEmail){
+                emailID = insertEmail();
+                insertGeneratedAttachementEmail(emailID, docName);
+            }
             
-            insertPostal();
+            if (sendToPostal){
+                for (int i = 0; i < personTable.getRowCount(); i++) {
+                    if (!personTable.getValueAt(i, 1).equals("") && 
+                            (personTable.getValueAt(i, 2).equals("Postal") || personTable.getValueAt(i, 2).equals("Both"))) {
+                        postalID = insertPostal(personTable.getValueAt(i, 0).toString());
+                        insertGeneratedAttachementPostal(postalID, docName);
+                        
+                        postalIDList.add(postalID);
+                    }
+                }
+            }
+            
+            insertExtraAttachmentsEmail(emailID, postalIDList);
             
             FileService.openFile(docName);
             reloadActivity();
@@ -331,10 +354,40 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
 
     private void getPartyList(){
         for (int i = 0; i < personTable.getRowCount(); i++) {
+            
+            //get Party List
             if (personTable.getValueAt(i, 1).equals("TO:")) {
                 toParties.add(Integer.valueOf(personTable.getValueAt(i, 0).toString()));
+                
+                //Add TO: Email Addresses
+                if ((personTable.getValueAt(i, 2).equals("Email") || personTable.getValueAt(i, 2).equals("Both"))
+                        && !personTable.getValueAt(i, 5).equals("")) {
+                    if (!toEmail.trim().equals("")){
+                        toEmail += "; ";
+                    }
+                    toEmail += personTable.getValueAt(i, 5);
+                }
             } else if (personTable.getValueAt(i, 1).equals("CC:")) {
                 ccParties.add(Integer.valueOf(personTable.getValueAt(i, 0).toString()));
+                
+                //Add CC: Email Addresses
+                if ((personTable.getValueAt(i, 2).equals("Email") || personTable.getValueAt(i, 2).equals("Both"))
+                        && !personTable.getValueAt(i, 5).equals("")) {
+                    if (!ccEmail.trim().equals("")) {
+                        ccEmail += "; ";
+                    }
+                    ccEmail += personTable.getValueAt(i, 5);
+                }
+            }
+            
+            //Get Destinations
+            if (personTable.getValueAt(i, 2).equals("Email")) {
+                sendToEmail = true;
+            } else if (personTable.getValueAt(i, 2).equals("Postal")) {
+                sendToPostal = true;
+            } else if (personTable.getValueAt(i, 2).equals("Both")) {
+                sendToEmail = true;
+                sendToPostal = true;
             }
         }
     }
@@ -364,32 +417,15 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         }
     }
         
-    private int insertEmail() {
-        String toEmail = "";
-        String ccEmail = "";
+    private int insertEmail() { 
         String emailBody = docToGenerate.emailBody;
-
-        for (int i = 0; i < personTable.getRowCount(); i++) {
-            if (personTable.getValueAt(i, 1).equals("TO:") && personTable.getValueAt(i, 2).equals("Email") && !personTable.getValueAt(i, 5).equals("")) {
-                if (!toEmail.trim().equals("")){
-                    toEmail += "; ";
-                }
-                toEmail += personTable.getValueAt(i, 5);
-            } else if (personTable.getValueAt(i, 1).equals("CC:") && personTable.getValueAt(i, 2).equals("Email") && !personTable.getValueAt(i, 5).equals("")) {
-                if (!ccEmail.trim().equals("")){
-                    ccEmail += "; ";
-                }
-                ccEmail += personTable.getValueAt(i, 5);
-            }
-        }
         
         emailBody += System.lineSeparator() + System.lineSeparator() 
                 + StringUtilities.buildFullName(Global.activeUser.firstName, Global.activeUser.middleInitial, Global.activeUser.lastName)
                 + System.lineSeparator() + (Global.activeUser.jobTitle == null ? "" : Global.activeUser.jobTitle + System.lineSeparator())
                 + generateDepartmentAddressBlock() + System.lineSeparator() 
                 + (Global.activeUser.workPhone == null ? "" :  "Telephone: " + NumberFormatService.convertStringToPhoneNumber(Global.activeUser.workPhone));
-        
-        
+                
         EmailOut eml = new EmailOut();
         
         eml.section = Global.activeSection;
@@ -410,49 +446,96 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         return EmailOut.insertEmail(eml);
     }
     
-    private void insertGeneratedAttachement(int emailID, String docName){
-        EmailOutAttachment attach = new EmailOutAttachment();
+    private int insertPostal(String partyID) {                 
+        CaseParty party = CaseParty.getCasePartyByID(partyID);
         
-        attach.emailOutID = emailID;
-        attach.fileName = docName;
-        attach.primaryAttachment = true;
-        EmailOutAttachment.insertAttachment(attach);
+        PostalOut post = new PostalOut();
+        
+        post.section = Global.activeSection;
+        post.caseYear = Global.caseYear;
+        post.caseType = Global.caseType;
+        post.caseMonth = Global.caseMonth;
+        post.caseNumber = Global.caseNumber;
+        post.person = StringUtilities.buildCasePartyName(party);
+        post.addressBlock = StringUtilities.buildCasePartyAddressBlock(party);
+        post.userID = Global.activeUser.id;
+        post.suggestedSendDate = suggestedSendDatePicker.getText().equals("") ? null : new Date(NumberFormatService.convertMMDDYYYY(suggestedSendDatePicker.getText()));
+        post.okToSend = false;
+        
+        return PostalOut.insertPostalOut(post);
     }
     
-    private void insertExtraAttachments(int emailID) {
+    private void insertGeneratedAttachementEmail(int emailID, String docName){
+        if (emailID > 0){
+            EmailOutAttachment attach = new EmailOutAttachment();
+        
+            attach.emailOutID = emailID;
+            attach.fileName = docName;
+            attach.primaryAttachment = true;
+            EmailOutAttachment.insertAttachment(attach);
+        }
+    }
+    
+    private void insertGeneratedAttachementPostal(int postalID, String docName){        
+        if (postalID > 0){
+            PostalOutAttachment attach = new PostalOutAttachment();
+        
+            attach.PostalOutID = postalID;
+            attach.fileName = docName;
+            attach.primaryAttachment = true;
+            PostalOutAttachment.insertAttachment(attach);
+        }
+    }
+    
+    private void insertExtraAttachmentsEmail(int emailID, List<Integer> postalIDList) {
 
         for (int i = 0; i < activityTable.getRowCount(); i++) {
             if (activityTable.getValueAt(i, 1).equals(true)) {
-                EmailOutAttachment attach = new EmailOutAttachment();
-
-                attach.emailOutID = emailID;
-                attach.fileName = activityTable.getValueAt(i, 3).toString();
-                attach.primaryAttachment = false;
-                EmailOutAttachment.insertAttachment(attach);
+                
+                if (emailID > 0){
+                    EmailOutAttachment attach = new EmailOutAttachment();
+                    attach.emailOutID = emailID;
+                    attach.fileName = activityTable.getValueAt(i, 3).toString();
+                    attach.primaryAttachment = false;
+                    EmailOutAttachment.insertAttachment(attach);
+                }
+                
+                for (int postalID : postalIDList){
+                    PostalOutAttachment attach = new PostalOutAttachment();
+                    attach.PostalOutID = postalID;
+                    attach.fileName = activityTable.getValueAt(i, 3).toString();
+                    attach.primaryAttachment = false;
+                    PostalOutAttachment.insertAttachment(attach);
+                }
             }
         }
 
         for (int i = 0; i < additionalDocsTable.getRowCount(); i++) {
             if (additionalDocsTable.getValueAt(i, 1).equals(true)) {
-                
+
                 SMDSDocuments additionalDoc = SMDSDocuments.findDocumentByID(Integer.valueOf(additionalDocsTable.getValueAt(i, 0).toString()));
-                
+
                 String docName = generateDocument.generateSMDSdocument(additionalDoc, 0, toParties, ccParties);
                 Activity.addActivty("Created " + docToGenerate.historyDescription, docName);
-                
-                EmailOutAttachment attach = new EmailOutAttachment();
 
-                attach.emailOutID = emailID;
-                attach.fileName = docName;
-                attach.primaryAttachment = false;
-                EmailOutAttachment.insertAttachment(attach);
+                if (emailID > 0) {
+                    EmailOutAttachment attach = new EmailOutAttachment();
+                    attach.emailOutID = emailID;
+                    attach.fileName = docName;
+                    attach.primaryAttachment = false;
+                    EmailOutAttachment.insertAttachment(attach);
+                }
+
+                for (int postalID : postalIDList){
+                    PostalOutAttachment attach = new PostalOutAttachment();
+                    attach.PostalOutID = postalID;
+                    attach.fileName = docName;
+                    attach.primaryAttachment = false;
+                    PostalOutAttachment.insertAttachment(attach);
+                }
             }
         }
-        
-    }
-        
-    private void insertPostal() {
-        
+
     }
     
     private String generateDepartmentAddressBlock(){
