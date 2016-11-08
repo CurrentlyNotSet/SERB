@@ -9,6 +9,7 @@ import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
 import parker.serb.sql.EmailOut;
+import parker.serb.sql.PostalOut;
 
 /**
  *
@@ -36,20 +37,25 @@ public class LetterQueuePanel extends javax.swing.JDialog {
         jTable1.getColumnModel().getColumn(0).setPreferredWidth(0);
         jTable1.getColumnModel().getColumn(0).setMaxWidth(0);
         
+        // Type
+        jTable1.getColumnModel().getColumn(1).setMinWidth(60);
+        jTable1.getColumnModel().getColumn(1).setPreferredWidth(60);
+        jTable1.getColumnModel().getColumn(1).setMaxWidth(60);
+        
         // Case Number
-        jTable1.getColumnModel().getColumn(1).setMinWidth(125);
-        jTable1.getColumnModel().getColumn(1).setPreferredWidth(125);
-        jTable1.getColumnModel().getColumn(1).setMaxWidth(125);
+        jTable1.getColumnModel().getColumn(2).setMinWidth(125);
+        jTable1.getColumnModel().getColumn(2).setPreferredWidth(125);
+        jTable1.getColumnModel().getColumn(2).setMaxWidth(125);
         
         // Attachment Number
-        jTable1.getColumnModel().getColumn(4).setMinWidth(100);
-        jTable1.getColumnModel().getColumn(4).setPreferredWidth(100);
-        jTable1.getColumnModel().getColumn(4).setMaxWidth(100);
-        
-        // Date
         jTable1.getColumnModel().getColumn(5).setMinWidth(100);
         jTable1.getColumnModel().getColumn(5).setPreferredWidth(100);
         jTable1.getColumnModel().getColumn(5).setMaxWidth(100);
+        
+        // Date
+        jTable1.getColumnModel().getColumn(6).setMinWidth(100);
+        jTable1.getColumnModel().getColumn(6).setPreferredWidth(100);
+        jTable1.getColumnModel().getColumn(6).setMaxWidth(100);
     }
 
     private void loadLetterQueue(){
@@ -57,6 +63,7 @@ public class LetterQueuePanel extends javax.swing.JDialog {
         model.setRowCount(0);
         
         List<EmailOut> emailList = EmailOut.getEmailOutBySection(Global.activeSection);
+        List<PostalOut> postalList = PostalOut.getPostalOutBySection(Global.activeSection);
         
         for (EmailOut eml : emailList){
             String fullCaseNumber = eml.caseYear + "-" + eml.caseType + "-" + eml.caseMonth + "-" + eml.caseNumber;
@@ -67,11 +74,31 @@ public class LetterQueuePanel extends javax.swing.JDialog {
             }
             
             model.addRow(new Object[]{
-                eml.id,               // ID
+                eml.id,              // ID
+                "Email",             // Type
+                fullCaseNumber,      // CaseNumber
+                eml.to,              // To:
+                eml.subject,         // Subject
+                eml.attachementCount,// Attachments
+                sendDate             // Suggest Send Date
+            });
+        }   
+        
+        for (PostalOut post : postalList){
+            String fullCaseNumber = post.caseYear + "-" + post.caseType + "-" + post.caseMonth + "-" + post.caseNumber;
+            String sendDate = "";
+            
+            if (post.suggestedSendDate != null) {
+                sendDate = Global.mmddyyyy.format(post.suggestedSendDate);
+            }
+            
+            model.addRow(new Object[]{
+                post.id,              // ID
+                "Postal",             // Type
                 fullCaseNumber,       // CaseNumber
-                eml.to,               // To:
-                eml.subject,          // Subject
-                eml.attachementCount, // Attachments
+                post.person,          // To:
+                post.addressBlock,    // Subject
+                post.attachementCount,// Attachments
                 sendDate              // Suggest Send Date
             });
         }   
@@ -113,11 +140,11 @@ public class LetterQueuePanel extends javax.swing.JDialog {
 
             },
             new String [] {
-                "ID", "Case Number", "To", "Subject", "Attachments", "Send Date"
+                "ID", "Type", "Case Number", "To", "Subject", "Attachments", "Send Date"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -180,7 +207,11 @@ public class LetterQueuePanel extends javax.swing.JDialog {
             sendButton.setEnabled(true);
         } else if(evt.getClickCount() >= 2) {
             sendButton.setEnabled(false);
-            new DetailedEmailOutPanel(Global.root, true, (int) jTable1.getValueAt(jTable1.getSelectedRow(), 0));
+            if (jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().equals("Email")){
+                new DetailedEmailOutPanel(Global.root, true, (int) jTable1.getValueAt(jTable1.getSelectedRow(), 0));
+            } else if (jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().equals("Postal")) {
+                new DetailedPostalOutPanel(Global.root, true, (int) jTable1.getValueAt(jTable1.getSelectedRow(), 0));
+            }
             loadLetterQueue();
         }
     }//GEN-LAST:event_jTable1MouseClicked

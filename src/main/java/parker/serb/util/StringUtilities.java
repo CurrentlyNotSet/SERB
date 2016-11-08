@@ -78,6 +78,24 @@ public class StringUtilities {
         return addressBlock.trim();
     }
     
+    public static String buildAddressBlockWithLineBreaks(CaseParty item) {
+        String addressBlock = "";
+
+        addressBlock += buildCasePartyName(item);
+        if (item.address1 != null) {
+            addressBlock += System.lineSeparator() + item.address1;
+        }
+        if (item.address2 != null) {
+            addressBlock += System.lineSeparator() + item.address2;
+        }
+        if (item.address3 != null) {
+            addressBlock += System.lineSeparator() + item.address3;
+        }
+        addressBlock += System.lineSeparator() + item.city + ", " + item.stateCode + " " + item.zipcode;
+
+        return addressBlock.trim();
+    }
+    
     public static String buildCasePartyAddressBlock(CaseParty item){
         return (item.address1.equals("") ? "" : (item.address1))
                 + (item.address2.equals("") ? "" : (", " + item.address2))
