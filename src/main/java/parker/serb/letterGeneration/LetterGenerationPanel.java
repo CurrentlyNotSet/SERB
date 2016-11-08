@@ -458,7 +458,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         post.caseMonth = Global.caseMonth;
         post.caseNumber = Global.caseNumber;
         post.person = StringUtilities.buildCasePartyName(party);
-        post.addressBlock = StringUtilities.buildCasePartyAddressBlock(party);
+        post.addressBlock = StringUtilities.buildAddressBlockWithLineBreaks(party);
         post.userID = Global.activeUser.id;
         post.suggestedSendDate = suggestedSendDatePicker.getText().equals("") ? null : new Date(NumberFormatService.convertMMDDYYYY(suggestedSendDatePicker.getText()));
         post.okToSend = false;
@@ -862,6 +862,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
 
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
         loadingPanel.setVisible(true);
+        jLayeredPane.moveToFront(loadingPanel);
         generateLetter();
         dispose();
     }//GEN-LAST:event_generateButtonActionPerformed
