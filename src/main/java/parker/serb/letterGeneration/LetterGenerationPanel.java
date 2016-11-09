@@ -10,6 +10,11 @@ import com.alee.laf.optionpane.WebOptionPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +40,7 @@ import parker.serb.sql.SMDSDocuments;
 import parker.serb.util.ClearDateDialog;
 import parker.serb.util.FileService;
 import parker.serb.util.NumberFormatService;
+import parker.serb.util.SlackNotification;
 import parker.serb.util.StringUtilities;
 
 
@@ -461,7 +467,6 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         post.addressBlock = StringUtilities.buildAddressBlockWithLineBreaks(party);
         post.userID = Global.activeUser.id;
         post.suggestedSendDate = suggestedSendDatePicker.getText().equals("") ? null : new Date(NumberFormatService.convertMMDDYYYY(suggestedSendDatePicker.getText()));
-        post.okToSend = false;
         
         return PostalOut.insertPostalOut(post);
     }
@@ -490,6 +495,24 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
     
     private void insertExtraAttachmentsEmail(int emailID, List<Integer> postalIDList) {
 
+        activityTableAttachmentProcess(emailID, postalIDList);
+
+        switch (Global.activeSection) {
+            case "REP":
+            case "ULP":
+            case "ORG":
+            case "Hearings":
+            case "Civil Service Commission":
+            case "CMDS":
+                additionalDocsTableAttachmentProcess(emailID, postalIDList);
+                break;
+            case "MED":
+                additionalDocsTableMEDAttachmentProcess(emailID, postalIDList);
+                break;
+        }
+    }
+    
+    private void activityTableAttachmentProcess(int emailID, List<Integer> postalIDList) {
         for (int i = 0; i < activityTable.getRowCount(); i++) {
             if (activityTable.getValueAt(i, 1).equals(true)) {
                 
@@ -510,7 +533,9 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                 }
             }
         }
-
+    }
+    
+    private void additionalDocsTableAttachmentProcess(int emailID, List<Integer> postalIDList) {
         for (int i = 0; i < additionalDocsTable.getRowCount(); i++) {
             if (additionalDocsTable.getValueAt(i, 1).equals(true)) {
 
@@ -536,26 +561,55 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                 }
             }
         }
-
     }
     
+    private void additionalDocsTableMEDAttachmentProcess(int emailID, List<Integer> postalIDList) {
+        for (int i = 0; i < additionalDocsTable.getRowCount(); i++) {
+            if (additionalDocsTable.getValueAt(i, 1).equals(true)) {
+
+                String destFileName = copyMEDBioToCaseFolder(additionalDocsTable.getValueAt(i, 3).toString());
+
+                if (emailID > 0) {
+                    EmailOutAttachment attach = new EmailOutAttachment();
+                    attach.emailOutID = emailID;
+                    attach.fileName = destFileName;
+                    attach.primaryAttachment = false;
+                    EmailOutAttachment.insertAttachment(attach);
+                }
+
+                for (int postalID : postalIDList){
+                    PostalOutAttachment attach = new PostalOutAttachment();
+                    attach.PostalOutID = postalID;
+                    attach.fileName = destFileName;
+                    attach.primaryAttachment = false;
+                    PostalOutAttachment.insertAttachment(attach);
+                }
+            }
+        }
+    }
+    
+    private String copyMEDBioToCaseFolder(String fileName) {
+
+        String docSourcePath = Global.templatePath + File.separator + Global.activeSection + fileName;
+
+        String docDestPath = Global.activityPath + Global.activeSection
+                + File.separatorChar + Global.caseYear + File.separatorChar 
+                + NumberFormatService.generateFullCaseNumber() + File.separatorChar;
+
+        String destFileName = String.valueOf(new java.util.Date().getTime()) + fileName;
+
+        try {
+            Files.copy(Paths.get(docSourcePath), Paths.get(docDestPath + destFileName), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ex) {
+            SlackNotification.sendNotification(ex.getMessage());
+            return "";
+        }
+        return destFileName;
+    }
+
     private String generateDepartmentAddressBlock(){
         String address = "";
-        String dept = "";
-        
-        switch (Global.activeSection) {
-            case "REP":
-            case "ULP":
-            case "ORG":
-            case "MED":
-            case "Hearings":
-                dept = "SERB";
-                break;
-            case "Civil Service Commission":
-            case "CMDS":
-                dept = "SPBR";
-                break;
-        }
+        String dept = StringUtilities.getDepartment();
                 
         AdministrationInformation sysAdminInfo = AdministrationInformation.loadAdminInfo(dept);
                 
@@ -576,6 +630,14 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
             address += " " + sysAdminInfo.Zip.trim();
         }
         return address;
+    }
+    
+    private void processThread() {
+        Thread temp = new Thread(() -> {
+                generateLetter();
+                dispose();
+        });
+        temp.start();
     }
     
     @SuppressWarnings("unchecked")
@@ -861,10 +923,9 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
+        processThread();
         loadingPanel.setVisible(true);
         jLayeredPane.moveToFront(loadingPanel);
-        generateLetter();
-        dispose();
     }//GEN-LAST:event_generateButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
@@ -881,8 +942,6 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
     private javax.swing.JTable additionalDocsTable;
     private javax.swing.JLabel additionalDocumentsLabel;
     private javax.swing.JButton cancelButton;
-    private javax.swing.JTable caseSearchTable;
-    private javax.swing.JTable caseSearchTable1;
     private javax.swing.JLabel documentLabel;
     private javax.swing.JButton generateButton;
     private javax.swing.JLabel jLabel1;
@@ -890,20 +949,12 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLayeredPane jLayeredPane;
-    private javax.swing.JLayeredPane jLayeredPane1;
-    private javax.swing.JLayeredPane jLayeredPane2;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JPanel loadingPanel;
     private javax.swing.JTable personTable;
     private com.alee.extended.date.WebDateField suggestedSendDatePicker;

@@ -31,7 +31,7 @@ public class PostalOutAttachment {
 
             Statement stmt = Database.connectToDB().createStatement();
 
-            String sql = "SELECT * FROM PostalOutAttachment WHERE postalOutID = ?";
+            String sql = "SELECT * FROM PostalOutAttachment WHERE postalOutID = ? ORDER BY primaryAttachment DESC";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setInt(1, id);
@@ -71,6 +71,21 @@ public class PostalOutAttachment {
             preparedStatement.setInt(1, item.PostalOutID);
             preparedStatement.setString(2, item.fileName);
             preparedStatement.setBoolean(3, item.primaryAttachment);
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public static void removeEntry(int id){
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "DELETE FROM PostalOutAttachment WHERE postalOutID = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);

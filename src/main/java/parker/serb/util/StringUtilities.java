@@ -5,6 +5,7 @@
  */
 package parker.serb.util;
 
+import parker.serb.Global;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.Party;
 
@@ -83,13 +84,19 @@ public class StringUtilities {
 
         addressBlock += buildCasePartyName(item);
         if (item.address1 != null) {
-            addressBlock += System.lineSeparator() + item.address1;
+            if (!item.address1.equals("")) {
+                addressBlock += System.lineSeparator() + item.address1;
+            }
         }
         if (item.address2 != null) {
-            addressBlock += System.lineSeparator() + item.address2;
+            if (!item.address2.equals("")) {
+                addressBlock += System.lineSeparator() + item.address2;
+            }
         }
         if (item.address3 != null) {
-            addressBlock += System.lineSeparator() + item.address3;
+            if (!item.address3.equals("")) {
+                addressBlock += System.lineSeparator() + item.address3;
+            }
         }
         addressBlock += System.lineSeparator() + item.city + ", " + item.stateCode + " " + item.zipcode;
 
@@ -122,5 +129,20 @@ public class StringUtilities {
                 + (item.suffix.equals("") ? "" : (" " + item.suffix))
                 + (item.nameTitle.equals("") ? "" : (", " + item.nameTitle)
                 + (item.jobTitle.equals("") ? "" : (", " + item.jobTitle)));
+    }
+    
+    public static String getDepartment(){
+        switch (Global.activeSection) {
+            case "REP":
+            case "ULP":
+            case "ORG":
+            case "MED":
+            case "Hearings":
+                return "SERB";
+            case "Civil Service Commission":
+            case "CMDS":
+                return "SPBR";
+        }
+        return "";
     }
 }

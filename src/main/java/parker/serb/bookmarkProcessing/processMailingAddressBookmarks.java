@@ -10,8 +10,11 @@ import com.jacob.com.Dispatch;
 import com.jacob.com.Variant;
 import java.io.File;
 import java.util.Date;
+import parker.serb.Global;
+import parker.serb.sql.PostalOut;
 import parker.serb.sql.AdministrationInformation;
 import parker.serb.util.JacobCOMBridge;
+import parker.serb.util.NumberFormatService;
 
 /**
  *
@@ -19,20 +22,17 @@ import parker.serb.util.JacobCOMBridge;
  */
 public class processMailingAddressBookmarks {
     
-    public static String name;
-    public static String address1;
-    public static String address2;
-    public static String city;
-    public static String state;
-    public static String zip;
-    
-    public static void processDoAULPWordLetter(String templatePath, String templateName) {
+    public static String processDoAEnvelopeInser(String templatePath, String templateName, String Department, PostalOut item) {
         
-        AdministrationInformation sysAdminInfo = AdministrationInformation.loadAdminInfo("SERB");
+        AdministrationInformation sysAdminInfo = AdministrationInformation.loadAdminInfo(Department);
                         
         //Setup Document
-        String docPath = "C:\\Users\\User\\Desktop\\";
-        String docName = String.valueOf(new Date().getTime()) + ".docx";
+        File docPath = new File(Global.activityPath
+                    + item.section + File.separator
+                    + item.caseYear + File.separator
+                    + NumberFormatService.generateFullCaseNumberNonGlobal(item.caseYear, item.caseType, item.caseMonth, item.caseNumber));
+            docPath.mkdirs();
+        String saveDocName = String.valueOf(new Date().getTime()) + "_Envelope" + ".docx";
         ActiveXComponent eolWord = null;
         eolWord = JacobCOMBridge.setWordActive(true, false, eolWord);
 
@@ -46,6 +46,9 @@ public class processMailingAddressBookmarks {
         if (!sysAdminInfo.Address2.equals("")) {
             serbAddress += " " + sysAdminInfo.Address2.trim();
         }
+        
+        serbAddress += System.lineSeparator();
+        
         String serbCityStateZip = "";
         if (!sysAdminInfo.City.equals("")) {
             serbAddress += sysAdminInfo.City.trim();
@@ -57,22 +60,21 @@ public class processMailingAddressBookmarks {
             serbAddress += " " + sysAdminInfo.Zip.trim();
         }
         
-        processBookmark.process("REPNAME", name, Document);
-        processBookmark.process("REPADDRESS1", address1, Document);
-        processBookmark.process("REPADDRESS2", address2, Document);
-        processBookmark.process("REPCITY", city, Document); 
-        processBookmark.process("REPSTATE", state, Document);
-        processBookmark.process("REPZIP", zip, Document);
+        String name = "";
+        if (!item.addressBlock.equals("")) {
+            name += item.addressBlock.trim();
+        }
+        
         processBookmark.process("SerbAddress", serbAddress, Document);
         processBookmark.process("SerbCityStateZip", serbCityStateZip, Document);
+        processBookmark.process("Address", name, Document);
                     
         Dispatch WordBasic = (Dispatch) Dispatch.call(eolWord, "WordBasic").getDispatch();
-        if (!new File(docPath).exists()) {
-            //create folder location
-        }
-        String newFilePath = docPath + docName;
+        String newFilePath = docPath + File.separator + saveDocName;
         Dispatch.call(WordBasic, "FileSaveAs", newFilePath, new Variant(16));
         JacobCOMBridge.setWordActive(false, false, eolWord);
+        
+        return saveDocName;
     }
     
 }

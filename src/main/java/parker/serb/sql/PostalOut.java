@@ -32,7 +32,7 @@ public class PostalOut {
     public int userID;
     public Date suggestedSendDate;
     public int attachementCount;
-    public boolean okToSend;
+    public String historyDescription;
     
     public static List<PostalOut> getPostalOutBySection(String section) {
         List<PostalOut> emailList = new ArrayList<>();
@@ -43,12 +43,12 @@ public class PostalOut {
 
             String sql = "SELECT C.id, C.section, C.caseYear, C.caseType, "
                     + "C.caseMonth, C.caseNumber, C.person, C.addressBlock, C.userID, C.suggestedSendDate, "
-                    + "C.okToSend, COUNT(S.id) AS attachments "
+                    + "C.historyDescription, COUNT(S.id) AS attachments "
                     + "FROM PostalOut C "
                     + "LEFT JOIN PostalOutAttachment S ON C.id = S.postaloutid "
-                    + "WHERE Section = ? AND C.okToSend = 0 "
+                    + "WHERE Section = ? "
                     + "GROUP BY C.id, C.section, C.caseYear, C.caseType, C.caseMonth, "
-                    + "C.caseNumber, C.person, C.addressBlock, C.userID, C.suggestedSendDate, C.okToSend";
+                    + "C.caseNumber, C.person, C.addressBlock, C.userID, C.suggestedSendDate, C.historyDescription";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, section);
@@ -68,7 +68,7 @@ public class PostalOut {
                 eml.userID = emailListRS.getInt("userID");
                 eml.suggestedSendDate = emailListRS.getDate("suggestedSendDate");
                 eml.attachementCount = emailListRS.getInt("attachments");
-                eml.okToSend = emailListRS.getBoolean("okToSend");
+                eml.historyDescription = emailListRS.getString("historyDescription");
                 emailList.add(eml);
             }
         } catch (SQLException ex) {
@@ -102,7 +102,7 @@ public class PostalOut {
                 eml.addressBlock = emailListRS.getString("addressBlock") == null ? "" : emailListRS.getString("addressBlock");
                 eml.userID = emailListRS.getInt("userID");
                 eml.suggestedSendDate = emailListRS.getDate("suggestedSendDate");
-                eml.okToSend = emailListRS.getBoolean("okToSend");
+                eml.historyDescription = emailListRS.getString("historyDescription");
             }
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
@@ -140,7 +140,7 @@ public class PostalOut {
                     + "addressBlock, "  //07
                     + "userID, "        //08
                     + "suggestedSendDate, " //09
-                    + "okToSend "           //10
+                    + "historyDescription " //10
                     + ") VALUES (";
                     for(int i=0; i<9; i++){
                         sql += "?, ";   //01-09
@@ -157,7 +157,7 @@ public class PostalOut {
             preparedStatement.setString ( 7, item.addressBlock);
             preparedStatement.setInt    ( 8, item.userID);
             preparedStatement.setDate   ( 9, item.suggestedSendDate);
-            preparedStatement.setBoolean(10, item.okToSend);
+            preparedStatement.setString (10, item.historyDescription);
             preparedStatement.executeUpdate();
             
             ResultSet newRow = preparedStatement.getGeneratedKeys();
@@ -182,6 +182,21 @@ public class PostalOut {
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setDate  (1, item.suggestedSendDate);
             preparedStatement.setInt   (2, item.id);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public static void removeEntry(int id){
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "DELETE FROM PostalOut WHERE id = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setInt(1, id);
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
