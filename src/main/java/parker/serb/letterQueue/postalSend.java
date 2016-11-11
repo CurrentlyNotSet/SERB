@@ -79,6 +79,14 @@ public class postalSend {
                 } catch (FileNotFoundException ex) {
                     Logger.getLogger(postalSend.class.getName()).log(Level.SEVERE, null, ex);
                 }
+            } else if (FilenameUtils.getExtension(attach.fileName).equals(".pdf")) {
+            
+                //Add Attachment To PDF Merge
+                try {
+                    ut.addSource(casePath + attach.fileName);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(postalSend.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
 
@@ -115,6 +123,34 @@ public class postalSend {
         PostalOut.removeEntry(sendID);
         PostalOutAttachment.removeEntry(sendID);
         
+        //Update Activity List if Available
+        if (postalEntry.caseYear.equals(Global.caseYear) && 
+                postalEntry.caseType.equals(Global.caseType) &&
+                postalEntry.caseMonth.equals(Global.caseMonth) && 
+                postalEntry.caseNumber.equals(Global.caseNumber)){
+            switch (Global.activeSection) {
+            case "REP":
+                Global.root.getrEPRootPanel1().getActivityPanel1().loadAllActivity();
+                break;
+            case "ULP":
+                Global.root.getuLPRootPanel1().getActivityPanel1().loadAllActivity();
+                break;
+            case "ORG":
+                Global.root.getoRGRootPanel1().getActivityPanel1().loadAllActivity();
+                break;
+            case "MED":
+                Global.root.getmEDRootPanel1().getActivityPanel1().loadAllActivity();
+                break;
+            case "Hearings":
+                break;
+            case "Civil Service Commission":
+                Global.root.getcSCRootPanel1().getActivityPanel1().loadAllActivity();
+                break;
+            case "CMDS":
+                Global.root.getcMDSRootPanel1().getActivityPanel1().loadAllActivity();
+                break;
+        }
+        }
     }
 
 }

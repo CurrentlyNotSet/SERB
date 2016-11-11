@@ -69,12 +69,12 @@ public class EmailOut {
                 eml.caseType = emailListRS.getString("caseType");
                 eml.caseMonth = emailListRS.getString("caseMonth");
                 eml.caseNumber = emailListRS.getString("caseNumber");
-                eml.to = emailListRS.getString("to");
-                eml.from = emailListRS.getString("from");
-                eml.cc = emailListRS.getString("cc");
-                eml.bcc = emailListRS.getString("bcc");
-                eml.subject = emailListRS.getString("subject");
-                eml.body = emailListRS.getString("body");
+                eml.to = emailListRS.getString("to") == null ? "" : emailListRS.getString("to");
+                eml.from = emailListRS.getString("from") == null ? "" : emailListRS.getString("from");
+                eml.cc = emailListRS.getString("cc") == null ? "" : emailListRS.getString("cc");
+                eml.bcc = emailListRS.getString("bcc") == null ? "" : emailListRS.getString("bcc");
+                eml.subject = emailListRS.getString("subject") == null ? "" : emailListRS.getString("subject");
+                eml.body = emailListRS.getString("body") == null ? "" : emailListRS.getString("body");
                 eml.userID = emailListRS.getInt("userID");
                 eml.suggestedSendDate = emailListRS.getDate("suggestedSendDate");
                 eml.attachementCount = emailListRS.getInt("attachments");

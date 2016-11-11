@@ -467,6 +467,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         post.addressBlock = StringUtilities.buildAddressBlockWithLineBreaks(party);
         post.userID = Global.activeUser.id;
         post.suggestedSendDate = suggestedSendDatePicker.getText().equals("") ? null : new Date(NumberFormatService.convertMMDDYYYY(suggestedSendDatePicker.getText()));
+        post.historyDescription = docToGenerate.historyDescription == null ? docToGenerate.description : docToGenerate.historyDescription;
         
         return PostalOut.insertPostalOut(post);
     }
@@ -494,7 +495,6 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
     }
     
     private void insertExtraAttachmentsEmail(int emailID, List<Integer> postalIDList) {
-
         activityTableAttachmentProcess(emailID, postalIDList);
 
         switch (Global.activeSection) {
@@ -589,7 +589,6 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
     }
     
     private String copyMEDBioToCaseFolder(String fileName) {
-
         String docSourcePath = Global.templatePath + File.separator + Global.activeSection + fileName;
 
         String docDestPath = Global.activityPath + Global.activeSection
@@ -617,7 +616,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
             address += sysAdminInfo.Address1.trim();
         }
         if (!sysAdminInfo.Address2.equals("")) {
-            address += " " + sysAdminInfo.Address2.trim();
+            address += System.lineSeparator() + sysAdminInfo.Address2.trim();
         }
         address += System.lineSeparator();
         if (!sysAdminInfo.City.equals("")) {

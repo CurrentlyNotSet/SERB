@@ -5,6 +5,8 @@
  */
 package parker.serb.letterQueue;
 
+import parker.serb.sql.EmailOut;
+
 /**
  *
  * @author parker
@@ -16,7 +18,6 @@ public class ConfirmationDialog extends javax.swing.JDialog {
     
     public ConfirmationDialog(java.awt.Frame parent, boolean modal, String typePassed, int letterIDPassed) {
         super(parent, modal);
-        this.setUndecorated(true);
         initComponents();
         loadPanel(typePassed, letterIDPassed);
         setLocationRelativeTo(parent);
@@ -31,12 +32,12 @@ public class ConfirmationDialog extends javax.swing.JDialog {
 
     private void sendLetter() {
         if (type.equals("Email")) {
-//                EmailOut.markEmailReadyToSend(letterID);
+            EmailOut.markEmailReadyToSend(letterID);
         } else if (type.equals("Postal")) {
             postalSend.sendPostal(letterID);
         }
     }
-        
+
     private void processThread() {
         Thread temp = new Thread(() -> {
                 sendLetter();
@@ -61,10 +62,9 @@ public class ConfirmationDialog extends javax.swing.JDialog {
         jLabel3 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(340, 300));
         setMinimumSize(new java.awt.Dimension(340, 300));
-        setPreferredSize(new java.awt.Dimension(340, 300));
         setResizable(false);
 
         jLayeredPane.setLayout(new javax.swing.OverlayLayout(jLayeredPane));

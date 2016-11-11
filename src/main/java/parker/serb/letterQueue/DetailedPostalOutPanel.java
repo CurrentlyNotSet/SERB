@@ -43,7 +43,9 @@ public class DetailedPostalOutPanel extends javax.swing.JDialog {
     private void loadInfo() {
         post = PostalOut.getPostalOutByID(postalID);
         
-        addressBlockTextArea.setText(post.person + System.lineSeparator() + post.addressBlock);
+        addressBlockTextArea.setText(
+                (post.addressBlock.startsWith(post.person) ? "" : post.person + System.lineSeparator())
+                + post.addressBlock);
         
         if (post.suggestedSendDate != null) {
             suggestedSendDatePicker.setText(Global.mmddyyyy.format(post.suggestedSendDate));
