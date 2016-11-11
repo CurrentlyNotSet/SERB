@@ -18,6 +18,8 @@ import org.apache.pdfbox.io.MemoryUsageSetting;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
 import parker.serb.Global;
 import parker.serb.bookmarkProcessing.processMailingAddressBookmarks;
+import parker.serb.fileOperations.ImageToPDF;
+import parker.serb.fileOperations.TXTtoPDF;
 import parker.serb.fileOperations.WordToPDF;
 import parker.serb.sql.Activity;
 import parker.serb.sql.PostalOut;
@@ -69,25 +71,57 @@ public class postalSend {
 
         //Convert Attachments
         for (PostalOutAttachment attach : attachmentList) {
-            if (!FilenameUtils.getExtension(attach.fileName).equals(".pdf")) {
-                String attachment = WordToPDF.createPDF(casePath, attach.fileName);
+            String fileName = attach.fileName;
+                String extension = FilenameUtils.getExtension(attach.fileName);
 
-                //Add Attachment To PDF Merge
-                try {
-                    ut.addSource(casePath + attachment);
-                    tempPDFList.add(casePath + attachment);
-                } catch (FileNotFoundException ex) {
-                    Logger.getLogger(postalSend.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            } else if (FilenameUtils.getExtension(attach.fileName).equals(".pdf")) {
-            
-                //Add Attachment To PDF Merge
-                try {
-                    ut.addSource(casePath + attach.fileName);
-                } catch (FileNotFoundException ex) {
-                    Logger.getLogger(postalSend.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+                //Convert attachments to PDF
+                    
+                    //If Image
+                    if (FileService.isImageFormat(fileName)) {
+                        fileName = ImageToPDF.createPDFFromImage(casePath, fileName);
+
+                        //Add Attachment To PDF Merge
+                        try {
+                            ut.addSource(casePath + fileName);
+                            tempPDFList.add(casePath + fileName);
+                        } catch (FileNotFoundException ex) {
+                            Logger.getLogger(postalSend.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
+                    //If Word Doc
+                    } else if (extension.equals("docx") || extension.equals("doc")) {
+                        fileName = WordToPDF.createPDF(casePath, fileName);
+
+                        //Add Attachment To PDF Merge
+                        try {
+                            ut.addSource(casePath + fileName);
+                            tempPDFList.add(casePath + fileName);
+                        } catch (FileNotFoundException ex) {
+                            Logger.getLogger(postalSend.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        
+                    //If Text File
+                    } else if ("txt".equals(extension)) {
+                        fileName = TXTtoPDF.createPDF(casePath, fileName);
+
+                        //Add Attachment To PDF Merge
+                        try {
+                            ut.addSource(casePath + fileName);
+                            tempPDFList.add(casePath + fileName);
+                        } catch (FileNotFoundException ex) {
+                            Logger.getLogger(postalSend.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
+                    //If PDF
+                    } else if (FilenameUtils.getExtension(fileName).equals(".pdf")) {
+
+                        //Add Attachment To PDF Merge
+                        try {
+                            ut.addSource(casePath + fileName);
+                        } catch (FileNotFoundException ex) {
+                            Logger.getLogger(postalSend.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
         }
 
         //DocumentFileName
