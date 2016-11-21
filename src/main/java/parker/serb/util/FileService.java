@@ -5,7 +5,6 @@
  */
 package parker.serb.util;
 
-import com.alee.laf.optionpane.WebOptionPane;
 import com.alee.utils.FileUtils;
 import java.awt.Desktop;
 import java.io.File;
@@ -342,6 +341,13 @@ public class FileService {
             new FileNotFoundDialog((JFrame) Global.root.getRootPane().getParent(), true, filePathName.toString());
             SlackNotification.sendNotification(ex.getMessage());
         }
+    }
+    
+    public static boolean isImageFormat(String image) {
+        return image.toLowerCase().endsWith(".jpg")
+                || image.toLowerCase().endsWith(".gif")
+                || image.toLowerCase().endsWith(".bmp")
+                || image.toLowerCase().endsWith(".png");
     }
 
 }

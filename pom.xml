@@ -82,6 +82,16 @@
             <artifactId>jasperreports</artifactId>
             <version>6.3.0</version>
         </dependency>
+        <dependency> <!-- Converting files to PDF -->
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>2.0.3</version>
+        </dependency>
+        <dependency> <!-- file tools in conjunction with Extensions -->
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.5</version>
+        </dependency>
     </dependencies>
         
         

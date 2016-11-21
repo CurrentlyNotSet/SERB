@@ -9,7 +9,6 @@ import java.awt.Color;
 import parker.serb.sql.User;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -21,6 +20,7 @@ public class Global {
     //TODO: implement verbose logging at project end
     public static final boolean verboseLogging = true;
     
+    //Application Version
     public static final String applicationVersion = "3.0";
 
     //All Date and Time formatters

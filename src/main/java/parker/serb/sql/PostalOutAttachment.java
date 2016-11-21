@@ -18,20 +18,20 @@ import java.util.logging.Logger;
  *
  * @author User
  */
-public class EmailOutAttachment {
+public class PostalOutAttachment {
     public int id;
-    public int emailOutID;
+    public int PostalOutID;
     public String fileName;
     public boolean primaryAttachment;
     
-    public static List<EmailOutAttachment> getEmailAttachments(int id) {
-        List<EmailOutAttachment> emailList = new ArrayList<>();
+    public static List<PostalOutAttachment> getPostalOutAttachments(int id) {
+        List<PostalOutAttachment> emailList = new ArrayList<>();
         
         try {
 
             Statement stmt = Database.connectToDB().createStatement();
 
-            String sql = "SELECT * FROM EmailOutAttachment WHERE emailOutID = ?";
+            String sql = "SELECT * FROM PostalOutAttachment WHERE postalOutID = ? ORDER BY primaryAttachment DESC";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setInt(1, id);
@@ -39,9 +39,9 @@ public class EmailOutAttachment {
             ResultSet emailListRS = preparedStatement.executeQuery();
             
             while(emailListRS.next()) {
-                EmailOutAttachment eml = new EmailOutAttachment();
+                PostalOutAttachment eml = new PostalOutAttachment();
                 eml.id = emailListRS.getInt("id");
-                eml.emailOutID = emailListRS.getInt("emailOutID");
+                eml.PostalOutID = emailListRS.getInt("postalOutID");
                 eml.fileName = emailListRS.getString("fileName");
                 eml.primaryAttachment = emailListRS.getBoolean("primaryAttachment");
                 emailList.add(eml);
@@ -52,13 +52,13 @@ public class EmailOutAttachment {
         return emailList;
     }
     
-    public static void insertAttachment(EmailOutAttachment item) {
+    public static void insertAttachment(PostalOutAttachment item) {
         try {
 
             Statement stmt = Database.connectToDB().createStatement();
 
-            String sql = "Insert INTO EmailOutAttachment ("
-                    + "emailOutID, "
+            String sql = "Insert INTO PostalOutAttachment ("
+                    + "postalOutID, "
                     + "fileName, "
                     + "primaryAttachment "
                     + ") VALUES (";
@@ -68,9 +68,24 @@ public class EmailOutAttachment {
                      sql += "?)";   //03
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setInt(1, item.emailOutID);
+            preparedStatement.setInt(1, item.PostalOutID);
             preparedStatement.setString(2, item.fileName);
             preparedStatement.setBoolean(3, item.primaryAttachment);
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public static void removeEntry(int id){
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "DELETE FROM PostalOutAttachment WHERE postalOutID = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);

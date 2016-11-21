@@ -18,7 +18,7 @@ import parker.serb.sql.ORGCase;
  */
 public class processORGbookmarks {
 
-    public static Dispatch processDoAORGWordLetter(Dispatch Document, boolean toRep) {
+    public static Dispatch processDoAORGWordLetter(Dispatch Document, boolean toRep, List<Integer> toParties, List<Integer> ccParties) {
         //get basic information  
         ORGCase item = ORGCase.loadORGInformation();
         List<CaseParty> partyList = CaseParty.loadPartiesByCase(Global.caseYear, Global.caseType, Global.caseMonth, Global.caseNumber);
@@ -27,8 +27,29 @@ public class processORGbookmarks {
         String officerNames = "";
         String repAddressBlock = "";
         String officerAddressBlock = "";
+        String toAddressBlock = "";
+        String ccNameBlock = "";
         
         for (CaseParty party : partyList){
+            
+            for (int person : toParties){
+                if (person == party.id) {
+                     if (!"".equals(toAddressBlock.trim())){
+                        toAddressBlock += "\n\n";
+                    }
+                     toAddressBlock += StringUtilities.buildCasePartyAddressBlock(party);
+                }
+            }
+            
+            for (int person : toParties){
+                if (person == party.id) {
+                     if (!"".equals(ccNameBlock.trim())){
+                        ccNameBlock += ", ";
+                    }
+                     ccNameBlock += StringUtilities.buildCasePartyName(party);
+                }
+            }
+            
             if (null != party.caseRelation)switch (party.caseRelation) {
                 case "Representative":
                     if (!"".equals(repNames.trim())){
