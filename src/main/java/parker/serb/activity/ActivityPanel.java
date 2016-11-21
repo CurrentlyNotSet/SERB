@@ -20,6 +20,7 @@ import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
 import parker.serb.sql.Activity;
 import parker.serb.sql.Audit;
+import parker.serb.sql.HearingCase;
 import parker.serb.util.FileService;
 
 //TODO: Investigate File Icon in Table
@@ -179,6 +180,29 @@ public class ActivityPanel extends javax.swing.JPanel {
                 actvityTable.getColumnModel().getColumn(3).setCellRenderer(new ImageRenderer());
                 model.addRow(new Object[] {act.date, act.action, act.user, act.fileName.trim(), act.id});
             }      
+        }
+    }
+    
+    public void loadAllHearingActivity() {
+        
+        searchTextBox.setText("");
+        
+        DefaultTableModel model = (DefaultTableModel) actvityTable.getModel();
+        model.setRowCount(0);
+        
+        if(HearingCase.getBoardActionPCDate() != null) {
+            activty = Activity.loadHearingActivity();
+        
+            for (Object activty1 : activty) {
+                Activity act = (Activity) activty1;
+
+                if(act.fileName == null) {
+                    model.addRow(new Object[] {act.date, act.action, act.user, "", act.id});
+                } else {
+                    actvityTable.getColumnModel().getColumn(3).setCellRenderer(new ImageRenderer());
+                    model.addRow(new Object[] {act.date, act.action, act.user, act.fileName.trim(), act.id});
+                }      
+            }
         }
     }
     

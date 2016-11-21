@@ -1,6 +1,11 @@
 package parker.serb.sql;
 
+import com.alee.utils.FileUtils;
+import static java.nio.file.StandardCopyOption.*;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -78,6 +83,53 @@ public class Activity {
                 SlackNotification.sendNotification(ex.getMessage());
                 Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
             }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+    }
+    
+    public static void addCMDSActivty(String action, String fileName, String caseNumber) {
+        Statement stmt = null;
+            
+        try {
+
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, caseNumber.split("-")[0]);
+            preparedStatement.setString(2, caseNumber.split("-")[1]);
+            preparedStatement.setString(3, caseNumber.split("-")[2]);
+            preparedStatement.setString(4, caseNumber.split("-")[3]);
+            preparedStatement.setInt(5, Global.activeUser.id);
+            preparedStatement.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
+            preparedStatement.setString(7, action.equals("") ? null : action);
+            preparedStatement.setString(8, fileName == null || fileName.equals("") ? null : fileName.substring(fileName.lastIndexOf(File.separator)));
+            preparedStatement.setString(9, "");
+            preparedStatement.setString(10, "");
+            preparedStatement.setString(11, "");
+            preparedStatement.setString(12, "");
+            preparedStatement.setBoolean(13, false);
+            preparedStatement.setBoolean(14, false);
+
+            preparedStatement.executeUpdate();
+            
+            if(fileName != null && !fileName.equals("")) {
+                File src = new File(fileName);
+                File dst = new File(Global.activityPath + File.separator + "CMDS" + File.separator + caseNumber.split("-")[0] + File.separator + caseNumber + fileName.substring(fileName.lastIndexOf(File.separator)));
+                dst.mkdirs();
+                Files.copy(src.toPath(), dst.toPath(), REPLACE_EXISTING);
+            }
+        } catch (SQLException ex) {
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.getMessage());
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(Activity.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -353,6 +405,61 @@ public class Activity {
                     + " ORDER BY date DESC ";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+
+            ResultSet caseActivity = preparedStatement.executeQuery();
+            
+            while(caseActivity.next()) {
+                Activity act = new Activity();
+                act.id = caseActivity.getInt("id");
+                act.user = caseActivity.getString("firstName") + " " + caseActivity.getString("lastName");
+                act.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
+                act.action = caseActivity.getString("action");
+                act.caseYear = caseActivity.getString("caseYear");
+                act.caseType = caseActivity.getString("caseType");
+                act.caseMonth = caseActivity.getString("caseMonth");
+                act.caseNumber = caseActivity.getString("caseNumber");
+                act.fileName = caseActivity.getString("fileName");
+                activityList.add(act);
+            }
+        } catch (SQLException ex) {
+            if(ex.getCause() instanceof SQLServerException) {
+                System.out.println("TESTING");
+                SlackNotification.sendNotification(ex.getMessage());
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return activityList;
+    }
+    
+    public static List loadHearingActivity() {
+        List<Activity> activityList = new ArrayList<Activity>();
+        
+        Statement stmt = null;
+            
+        try {
+
+            stmt = Database.connectToDB().createStatement();
+            
+            String sql = "select Activity.id,"
+                    + " caseYear,"
+                    + " caseType,"
+                    + " caseMonth,"
+                    + " caseNumber,"
+                    + " date,"
+                    + " action,"
+                    + " firstName,"
+                    + " lastName,"
+                    + " fileName"
+                    + " from Activity"
+                    + " INNER JOIN Users"
+                    + " ON Activity.userID = Users.id"
+                    + " WHERE date >= ?"
+                    + " ORDER BY date DESC ";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setTimestamp(1, HearingCase.getBoardActionPCDate());
 
             ResultSet caseActivity = preparedStatement.executeQuery();
             

@@ -67,6 +67,34 @@ public class CMDSHistoryDescription {
         return list;
     }
     
+    public static List<CMDSHistoryDescription> loadAllStatusTypes(String category) {
+        List<CMDSHistoryDescription> list = new ArrayList<>();
+
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT * FROM CMDSHistoryDescription where category = ? order by description";
+
+            PreparedStatement ps = stmt.getConnection().prepareStatement(sql);
+            ps.setString(1, category);
+            
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                CMDSHistoryDescription item = new CMDSHistoryDescription();
+                item.id = rs.getInt("id");
+                item.active = rs.getBoolean("active");
+                item.category = rs.getString("category") == null ? "" : rs.getString("category");
+                item.description = rs.getString("description") == null ? "" : rs.getString("description");
+                list.add(item);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
+        return list;
+    }
+    
     public static CMDSHistoryDescription getStatusByID(int id) {
         CMDSHistoryDescription item = new CMDSHistoryDescription();
 
@@ -91,7 +119,7 @@ public class CMDSHistoryDescription {
         }
         return item;
     }
-
+    
     public static void createStatusType(CMDSHistoryDescription item) {
         try {
 

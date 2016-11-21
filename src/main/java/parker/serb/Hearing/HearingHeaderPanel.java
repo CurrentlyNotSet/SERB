@@ -16,8 +16,11 @@ import javax.swing.JFrame;
 import parker.serb.Global;
 import parker.serb.sql.Audit;
 import parker.serb.sql.CaseParty;
+import parker.serb.sql.HearingCase;
 import parker.serb.sql.Party;
 import parker.serb.sql.REPCase;
+import parker.serb.util.CaseNotFoundDialog;
+import parker.serb.util.NumberFormatService;
 
 //
 
@@ -36,29 +39,36 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
     }
     
     private void addListeners() {
-//        caseNumberComboBox.addActionListener((ActionEvent e) -> {
-//            if(caseNumberComboBox.getSelectedItem() != null) {
-//                Global.root.getrEPRootPanel1().getjTabbedPane1().setSelectedIndex(0);
-//                if(caseNumberComboBox.getSelectedItem().toString().trim().equals("")) {
-//                    if(Global.root != null) {
-//                        Global.root.getjButton2().setText("Update");
-//                        Global.root.getjButton2().setEnabled(false);
-//                        Global.caseNumber = null;
-//                        Global.root.getrEPRootPanel1().clearAll();
-//                    }
-//                } else {
-//                    loadInformation();
-//                    if(Global.root.getrEPRootPanel1().getjTabbedPane1().getSelectedIndex() == 0)
-//                        Global.root.getrEPRootPanel1().getActivityPanel1().loadAllActivity();
-//                    Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
-//                }
-//            }
-//        });
+        caseNumberComboBox.addActionListener((ActionEvent e) -> {
+            if(caseNumberComboBox.getSelectedItem() != null) {
+                Global.root.getHearingRootPanel1().getjTabbedPane1().setSelectedIndex(0);
+                if(caseNumberComboBox.getSelectedItem().toString().trim().equals("")) {
+                    if(Global.root != null) {
+                        Global.root.getjButton2().setText("Update");
+                        Global.root.getjButton2().setEnabled(false);
+                        Global.caseNumber = null;
+                        Global.caseMonth = null;
+                        Global.caseType = null;
+                        Global.caseYear = null;
+                        Global.root.getHearingRootPanel1().clearAll();
+                    }
+                } else {
+                    loadInformation();
+//                    if(Global.root.getHearingRootPanel1().getjTabbedPane1().getSelectedIndex() == 0)
+//                        Global.root.getHearingRootPanel1().getActivityPanel1().loadAllActivity();
+                    Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
+                }
+            }
+        });
     }
     
     private void loadInformation() {
-//        Global.caseNumber = caseNumberComboBox.getSelectedItem().toString().trim();
-//        loadHeaderInformation();
+        if(caseNumberComboBox.getSelectedItem().toString().trim().length() == 16) {
+            NumberFormatService.parseFullCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim());
+//            loadHeaderInformation();
+        } else {
+//            new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());  
+        }
     }
     
     public void loadHeaderInformation() {
@@ -128,7 +138,7 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
         caseNumberComboBox.removeAllItems();
         caseNumberComboBox.addItem("");
 
-        List caseNumberList = REPCase.loadREPCaseNumbers();
+        List caseNumberList = HearingCase.loadHearingCaseNumbers();
         
         caseNumberList.stream().forEach((caseNumber) -> {
             caseNumberComboBox.addItem(caseNumber.toString());
@@ -143,11 +153,11 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
 //        employeeOrgTextBox.setText("");
 //        incumbentEEOTextBox.setText("");
 //        rivalEEOTextBox.setText("");
-        closedDateTextBox.setText("");
+//        closedDateTextBox.setText("");
 //        currentStatusTextBox.setText("");
-        caseTypeTextBox.setText("");
+//        caseTypeTextBox.setText("");
 //        bargainingUnitTextBox.setText("");
-        filedDateTextBox.setText("");
+//        filedDateTextBox.setText("");
     }
 
     public JComboBox getjComboBox2() {

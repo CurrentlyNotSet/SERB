@@ -23,6 +23,8 @@ import parker.serb.CMDS.CMDSHeaderPanel;
 import parker.serb.CMDS.CMDSRootPanel;
 import parker.serb.CSC.CSCHeaderPanel;
 import parker.serb.CSC.CSCRootPanel;
+import parker.serb.Hearing.HearingHeaderPanel;
+import parker.serb.Hearing.HearingRootPanel;
 import parker.serb.MED.MEDBulkSendToBoardDialog;
 import parker.serb.MED.MEDBulkSettleCasesDialog;
 import parker.serb.MED.MEDHeaderPanel;
@@ -46,6 +48,7 @@ import parker.serb.publicRecords.fileSelector;
 import parker.serb.sql.DocketLock;
 import parker.serb.sql.NewCaseLock;
 import parker.serb.util.CreateNewCSCDialog;
+import parker.serb.util.CreateNewHearingDialog;
 import parker.serb.util.CreateNewOrgDialog;
 import parker.serb.util.NewCaseLockDialog;
 import parker.serb.util.ReleaseNotesDialog;
@@ -150,7 +153,7 @@ public class RootPanel extends javax.swing.JFrame {
             case "Hearings":
                 card.show(jPanel9, "card7");
                 jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
-//                rEPHeaderPanel1.loadCases();
+                hearingHeaderPanel1.loadCases();
                 break; 
             case "Civil Service Commission":
                 card.show(jPanel9, "card8");
@@ -517,6 +520,18 @@ public class RootPanel extends javax.swing.JFrame {
     public JButton getjButton3() {
         return jButton3;
     }
+
+    public HearingHeaderPanel getHearingHeaderPanel1() {
+        return hearingHeaderPanel1;
+    }
+
+    public HearingRootPanel getHearingRootPanel1() {
+        return hearingRootPanel1;
+    }
+    
+    
+    
+    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -567,6 +582,7 @@ public class RootPanel extends javax.swing.JFrame {
         jPanel11 = new javax.swing.JPanel();
         cMDSRootPanel1 = new parker.serb.CMDS.CMDSRootPanel();
         jPanel12 = new javax.swing.JPanel();
+        hearingRootPanel1 = new parker.serb.Hearing.HearingRootPanel();
         jPanel14 = new javax.swing.JPanel();
         companySearchPanel1 = new parker.serb.companySearch.companySearchPanel();
         jPanel7 = new javax.swing.JPanel();
@@ -895,11 +911,11 @@ public class RootPanel extends javax.swing.JFrame {
         jPanel12.setLayout(jPanel12Layout);
         jPanel12Layout.setHorizontalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1120, Short.MAX_VALUE)
+            .addComponent(hearingRootPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel12Layout.setVerticalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 681, Short.MAX_VALUE)
+            .addComponent(hearingRootPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 681, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Hearings", jPanel12);
@@ -1103,7 +1119,7 @@ public class RootPanel extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1261, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1296, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1147,6 +1163,9 @@ public class RootPanel extends javax.swing.JFrame {
                 break;
             case "CMDS":
                 cMDSRootPanel1.cmdsDelete();
+                break;
+            case "Hearings":
+                hearingRootPanel1.hearingDelete();
                 break;
             default:
                 break;
@@ -1234,6 +1253,16 @@ public class RootPanel extends javax.swing.JFrame {
                     new NewCaseLockDialog(Global.root, true, caseLock);
                 }
                 break;
+            case "Hearings":
+//                caseLock = NewCaseLock.checkLock(Global.activeSection);
+//                if(caseLock == null) {
+//                    caseLock.addLock(Global.activeSection);
+                    new CreateNewHearingDialog(Global.root, true);
+//                    caseLock.removeLock(Global.activeSection);
+//                } else {
+//                    new NewCaseLockDialog(Global.root, true, caseLock);
+//                }
+                break;    
             default:
                 break;
         }
@@ -1263,6 +1292,9 @@ public class RootPanel extends javax.swing.JFrame {
                 break;
             case "CMDS":
                 cMDSRootPanel1.cmdsUpdate(jButton2.getText());
+                break;
+            case "Hearings":
+                hearingRootPanel1.hearingUpdate(jButton2.getText());
                 break;
             default:
                 break;
@@ -1356,6 +1388,7 @@ public class RootPanel extends javax.swing.JFrame {
     private parker.serb.docket.DocketRootPanel docketRootPanel1;
     private javax.swing.JLabel docketingSectionLabel;
     private parker.serb.Hearing.HearingHeaderPanel hearingHeaderPanel1;
+    private parker.serb.Hearing.HearingRootPanel hearingRootPanel1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;

@@ -1605,6 +1605,601 @@ public class PartiesPanel extends javax.swing.JPanel {
         validateParties();
     }
     
+    public void loadHearingParties() {
+        List<CaseParty> chargingParties = new ArrayList<>();
+        List<CaseParty> chargedParties = new ArrayList<>();
+        List<CaseParty> employerParties = new ArrayList<>();
+        List<CaseParty> employeeOrgParties = new ArrayList<>();
+        List<CaseParty> rivalEmployeeOrgParties = new ArrayList<>();
+        List<CaseParty> rivalEmployeeOrg2Parties = new ArrayList<>();
+        List<CaseParty> rivalEmployeeOrg3Parties = new ArrayList<>();
+        List<CaseParty> incumbentEmployeeParties = new ArrayList<>();
+        List<CaseParty> intervenerParties = new ArrayList<>();
+        List<CaseParty> petitionerParties = new ArrayList<>();
+        List<CaseParty> conversionParties = new ArrayList<>();
+        List<CaseParty> appellantParties = new ArrayList<>();
+        List<CaseParty> appelleeParties = new ArrayList<>();
+        List<CaseParty> appellee2Parties = new ArrayList<>();
+        List<CaseParty> courtesyCopyParties = new ArrayList<>();
+        List<CaseParty> otherInterestedParties = new ArrayList<>();
+        
+        jTextField1.setText("");
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0);
+        
+        caseParties = CaseParty.loadPartiesByCase();
+        
+        for(Object caseParty: caseParties) {
+            CaseParty partyInformation = (CaseParty) caseParty;
+            
+            if(partyInformation.caseRelation.contains("Charging")) {
+                chargingParties.add(partyInformation);
+            }
+            
+            if(partyInformation.caseRelation.contains("Charged")) {
+                chargedParties.add(partyInformation);
+            }
+            
+            if(partyInformation.caseRelation.startsWith("Employer")) {
+                employerParties.add(partyInformation);
+            } 
+
+            if(partyInformation.caseRelation.startsWith("Employee Organization")) {
+                employeeOrgParties.add(partyInformation);
+            } 
+
+            if(partyInformation.caseRelation.startsWith("Rival Employee Organization")) {
+                rivalEmployeeOrgParties.add(partyInformation);
+            } 
+
+            if(partyInformation.caseRelation.startsWith("Incumbent Employee Organization")) {
+                incumbentEmployeeParties.add(partyInformation);
+            } 
+
+            if(partyInformation.caseRelation.contains("Intervener")) {
+                intervenerParties.add(partyInformation);
+            } 
+
+            if(partyInformation.caseRelation.contains("Petitioner")) {
+                petitionerParties.add(partyInformation);
+            } 
+
+            if(partyInformation.caseRelation.contains("Conversion School")) {
+                conversionParties.add(partyInformation);
+            } 
+
+            if(partyInformation.caseRelation.contains("Rival Employee Organization 2")) {
+                rivalEmployeeOrg2Parties.add(partyInformation);
+            } 
+
+            if(partyInformation.caseRelation.contains("Rival Employee Organization 3")) {
+                rivalEmployeeOrg3Parties.add(partyInformation);
+            }
+            
+            if(partyInformation.caseRelation.contains("Appellant")) {
+                appellantParties.add(partyInformation);
+            }
+            
+            if(partyInformation.caseRelation.contains("Appellee 2")) {
+                appellee2Parties.add(partyInformation);
+            } else if(partyInformation.caseRelation.contains("Appellee")) {
+                appelleeParties.add(partyInformation);
+            }
+            
+            if(partyInformation.caseRelation.contains("Courtesy Copy")) {
+                courtesyCopyParties.add(partyInformation);
+            }
+            
+            if(partyInformation.caseRelation.contains("Other Interested Party")) {
+                otherInterestedParties.add(partyInformation);
+            }
+        }
+        
+        if(chargingParties.size() > 0) {
+            model.addRow(new Object[] {"", "<html><b>Intervenor Party</b></html>", "", "", "", ""});
+            for(int i = 0; i < chargingParties.size(); i++) {
+                CaseParty charginingPartyInformation = chargingParties.get(i);
+                
+                if(charginingPartyInformation.firstName.equals("") 
+                        && charginingPartyInformation.lastName.equals("")) {
+                    name = charginingPartyInformation.companyName;
+                } else {
+                    name = (charginingPartyInformation.prefix.equals("") ? "" : (charginingPartyInformation.prefix + " "))
+                        + (charginingPartyInformation.firstName.equals("") ? "" : (charginingPartyInformation.firstName + " "))
+                        + (charginingPartyInformation.middleInitial.equals("") ? "" : (charginingPartyInformation.middleInitial + ". "))
+                        + (charginingPartyInformation.lastName.equals("") ? "" : (charginingPartyInformation.lastName))
+                        + (charginingPartyInformation.suffix.equals("") ? "" : (" " + charginingPartyInformation.suffix))
+                        + (charginingPartyInformation.nameTitle.equals("") ? "" : (", " + charginingPartyInformation.nameTitle));
+                }
+                
+                model.addRow(new Object[] {charginingPartyInformation.id,
+                    name,
+                    charginingPartyInformation.caseRelation.replace("Charging", "Intervenor"), 
+                    charginingPartyInformation.address1
+                    + (charginingPartyInformation.address2.equals("") ? "" : (", " + charginingPartyInformation.address2))
+                    + (charginingPartyInformation.address3.equals("") ? "" : (", " + charginingPartyInformation.address3))
+                    + (charginingPartyInformation.city.equals("") ? "" : (", " + charginingPartyInformation.city))
+                    + (charginingPartyInformation.stateCode.equals("") ? "" : (", " + charginingPartyInformation.stateCode))
+                    + (charginingPartyInformation.zipcode.equals("") ? "" : (", " + charginingPartyInformation.zipcode)),
+                    charginingPartyInformation.phone1, charginingPartyInformation.emailAddress});
+            }
+            model.addRow(new Object[] {"", "", "", "", "", ""});
+        }
+
+        if(chargedParties.size() > 0) {
+            model.addRow(new Object[] {"", "<html><b>Respondent Party</b></html>", "", "", "", ""});
+            for(int i = 0; i < chargedParties.size(); i++) {
+                CaseParty chargedPartyInformation = chargedParties.get(i);
+                
+                if(chargedPartyInformation.firstName.equals("") 
+                        && chargedPartyInformation.lastName.equals("")) {
+                    name = chargedPartyInformation.companyName;
+                } else {
+                    name = (chargedPartyInformation.prefix.equals("") ? "" : (chargedPartyInformation.prefix + " "))
+                        + (chargedPartyInformation.firstName.equals("") ? "" : (chargedPartyInformation.firstName + " "))
+                        + (chargedPartyInformation.middleInitial.equals("") ? "" : (chargedPartyInformation.middleInitial + ". "))
+                        + (chargedPartyInformation.lastName.equals("") ? "" : (chargedPartyInformation.lastName))
+                        + (chargedPartyInformation.suffix.equals("") ? "" : (" " + chargedPartyInformation.suffix))
+                        + (chargedPartyInformation.nameTitle.equals("") ? "" : (", " + chargedPartyInformation.nameTitle));
+                }
+                
+                model.addRow(new Object[] {chargedPartyInformation.id,
+                    name,
+                    chargedPartyInformation.caseRelation.replace("Charged", "Respondent"), 
+                    chargedPartyInformation.address1
+                    + (chargedPartyInformation.address2.equals("") ? "" : (", " + chargedPartyInformation.address2))
+                    + (chargedPartyInformation.address3.equals("") ? "" : (", " + chargedPartyInformation.address3))
+                    + (chargedPartyInformation.city.equals("") ? "" : (", " + chargedPartyInformation.city))
+                    + (chargedPartyInformation.stateCode.equals("") ? "" : (", " + chargedPartyInformation.stateCode))
+                    + (chargedPartyInformation.zipcode.equals("") ? "" : (", " + chargedPartyInformation.zipcode)),
+                    chargedPartyInformation.phone1, chargedPartyInformation.emailAddress});
+            }
+            model.addRow(new Object[] {"", "", "", "", "", ""});
+        }
+        
+        if(employerParties.size() > 0) {
+            model.addRow(new Object[] {"", "<html><b>Employer</b></html>", "", "", "", ""});
+            for(int i = 0; i < employerParties.size(); i++) {
+                CaseParty employerInformation = employerParties.get(i);
+                
+                if(employerInformation.firstName.equals("") 
+                        && employerInformation.lastName.equals("")) {
+                    name = employerInformation.companyName;
+                } else {
+                    name = (employerInformation.prefix.equals("") ? "" : (employerInformation.prefix + " "))
+                        + (employerInformation.firstName.equals("") ? "" : (employerInformation.firstName + " "))
+                        + (employerInformation.middleInitial.equals("") ? "" : (employerInformation.middleInitial + ". "))
+                        + (employerInformation.lastName.equals("") ? "" : (employerInformation.lastName))
+                        + (employerInformation.suffix.equals("") ? "" : (" " + employerInformation.suffix))
+                        + (employerInformation.nameTitle.equals("") ? "" : (", " + employerInformation.nameTitle));
+                }
+                
+                model.addRow(new Object[] {employerInformation.id,
+                    name,
+                    employerInformation.caseRelation, 
+                    employerInformation.address1
+                    + (employerInformation.address2.equals("") ? "" : (", " + employerInformation.address2))
+                    + (employerInformation.address3.equals("") ? "" : (", " + employerInformation.address3))
+                    + (employerInformation.city.equals("") ? "" : (", " + employerInformation.city))
+                    + (employerInformation.stateCode.equals("") ? "" : (", " + employerInformation.stateCode))
+                    + (employerInformation.zipcode.equals("") ? "" : (", " + employerInformation.zipcode)),
+                    employerInformation.phone1, employerInformation.emailAddress});
+                }
+            model.addRow(new Object[] {"", "", "", "", "", ""});
+        }
+        
+        if(employeeOrgParties.size() > 0) {
+            model.addRow(new Object[] {"", "<html><b>Employee Organization</b></html>", "", "", "", ""});
+            for(int i = 0; i < employeeOrgParties.size(); i++) {
+                CaseParty chargedPartyInformation = employeeOrgParties.get(i);
+                
+                if(chargedPartyInformation.firstName.equals("") 
+                        && chargedPartyInformation.lastName.equals("")) {
+                    name = chargedPartyInformation.companyName;
+                } else {
+                    name = (chargedPartyInformation.prefix.equals("") ? "" : (chargedPartyInformation.prefix + " "))
+                        + (chargedPartyInformation.firstName.equals("") ? "" : (chargedPartyInformation.firstName + " "))
+                        + (chargedPartyInformation.middleInitial.equals("") ? "" : (chargedPartyInformation.middleInitial + ". "))
+                        + (chargedPartyInformation.lastName.equals("") ? "" : (chargedPartyInformation.lastName))
+                        + (chargedPartyInformation.suffix.equals("") ? "" : (" " + chargedPartyInformation.suffix))
+                        + (chargedPartyInformation.nameTitle.equals("") ? "" : (", " + chargedPartyInformation.nameTitle));
+                }
+                
+                model.addRow(new Object[] {chargedPartyInformation.id,
+                    name,
+                    chargedPartyInformation.caseRelation, 
+                    chargedPartyInformation.address1
+                    + (chargedPartyInformation.address2.equals("") ? "" : (", " + chargedPartyInformation.address2))
+                    + (chargedPartyInformation.address3.equals("") ? "" : (", " + chargedPartyInformation.address3))
+                    + (chargedPartyInformation.city.equals("") ? "" : (", " + chargedPartyInformation.city))
+                    + (chargedPartyInformation.stateCode.equals("") ? "" : (", " + chargedPartyInformation.stateCode))
+                    + (chargedPartyInformation.zipcode.equals("") ? "" : (", " + chargedPartyInformation.zipcode)),
+                    chargedPartyInformation.phone1, chargedPartyInformation.emailAddress});
+            }
+            model.addRow(new Object[] {"", "", "", "", "", ""});
+        }
+        
+        if(rivalEmployeeOrgParties.size() > 0) {
+            model.addRow(new Object[] {"", "<html><b>Rival Employee Organization</b></html>", "", "", "", ""});
+            for(int i = 0; i < rivalEmployeeOrgParties.size(); i++) {
+                CaseParty employerInformation = rivalEmployeeOrgParties.get(i);
+                
+                if(employerInformation.firstName.equals("") 
+                        && employerInformation.lastName.equals("")) {
+                    name = employerInformation.companyName;
+                } else {
+                    name = (employerInformation.prefix.equals("") ? "" : (employerInformation.prefix + " "))
+                        + (employerInformation.firstName.equals("") ? "" : (employerInformation.firstName + " "))
+                        + (employerInformation.middleInitial.equals("") ? "" : (employerInformation.middleInitial + ". "))
+                        + (employerInformation.lastName.equals("") ? "" : (employerInformation.lastName))
+                        + (employerInformation.suffix.equals("") ? "" : (" " + employerInformation.suffix))
+                        + (employerInformation.nameTitle.equals("") ? "" : (", " + employerInformation.nameTitle));
+                }
+                
+                model.addRow(new Object[] {employerInformation.id,
+                    name,
+                    employerInformation.caseRelation, 
+                    employerInformation.address1
+                    + (employerInformation.address2.equals("") ? "" : (", " + employerInformation.address2))
+                    + (employerInformation.address3.equals("") ? "" : (", " + employerInformation.address3))
+                    + (employerInformation.city.equals("") ? "" : (", " + employerInformation.city))
+                    + (employerInformation.stateCode.equals("") ? "" : (", " + employerInformation.stateCode))
+                    + (employerInformation.zipcode.equals("") ? "" : (", " + employerInformation.zipcode)),
+                    employerInformation.phone1, employerInformation.emailAddress});
+            }
+            model.addRow(new Object[] {"", "", "", "", "", ""});
+        }
+        
+        if(rivalEmployeeOrg2Parties.size() > 0) {
+            model.addRow(new Object[] {"", "<html><b>Rival Employee Organization 2</b></html>", "", "", "", ""});
+            for(int i = 0; i < rivalEmployeeOrg2Parties.size(); i++) {
+                CaseParty chargedPartyInformation = rivalEmployeeOrg2Parties.get(i);
+                
+                if(chargedPartyInformation.firstName.equals("") 
+                        && chargedPartyInformation.lastName.equals("")) {
+                    name = chargedPartyInformation.companyName;
+                } else {
+                    name = (chargedPartyInformation.prefix.equals("") ? "" : (chargedPartyInformation.prefix + " "))
+                        + (chargedPartyInformation.firstName.equals("") ? "" : (chargedPartyInformation.firstName + " "))
+                        + (chargedPartyInformation.middleInitial.equals("") ? "" : (chargedPartyInformation.middleInitial + ". "))
+                        + (chargedPartyInformation.lastName.equals("") ? "" : (chargedPartyInformation.lastName))
+                        + (chargedPartyInformation.suffix.equals("") ? "" : (" " + chargedPartyInformation.suffix))
+                        + (chargedPartyInformation.nameTitle.equals("") ? "" : (", " + chargedPartyInformation.nameTitle));
+                }
+                
+                model.addRow(new Object[] {chargedPartyInformation.id,
+                    name,
+                    chargedPartyInformation.caseRelation, 
+                    chargedPartyInformation.address1
+                    + (chargedPartyInformation.address2.equals("") ? "" : (", " + chargedPartyInformation.address2))
+                    + (chargedPartyInformation.address3.equals("") ? "" : (", " + chargedPartyInformation.address3))
+                    + (chargedPartyInformation.city.equals("") ? "" : (", " + chargedPartyInformation.city))
+                    + (chargedPartyInformation.stateCode.equals("") ? "" : (", " + chargedPartyInformation.stateCode))
+                    + (chargedPartyInformation.zipcode.equals("") ? "" : (", " + chargedPartyInformation.zipcode)),
+                    chargedPartyInformation.phone1, chargedPartyInformation.emailAddress});
+            }
+            model.addRow(new Object[] {"", "", "", "", "", ""});
+        }
+        
+        if(rivalEmployeeOrg3Parties.size() > 0) {
+            model.addRow(new Object[] {"", "<html><b>Rival Employee Organization 3</b></html>", "", "", "", ""});
+            for(int i = 0; i < rivalEmployeeOrg3Parties.size(); i++) {
+                CaseParty chargedPartyInformation = rivalEmployeeOrg3Parties.get(i);
+                
+                if(chargedPartyInformation.firstName.equals("") 
+                        && chargedPartyInformation.lastName.equals("")) {
+                    name = chargedPartyInformation.companyName;
+                } else {
+                    name = (chargedPartyInformation.prefix.equals("") ? "" : (chargedPartyInformation.prefix + " "))
+                        + (chargedPartyInformation.firstName.equals("") ? "" : (chargedPartyInformation.firstName + " "))
+                        + (chargedPartyInformation.middleInitial.equals("") ? "" : (chargedPartyInformation.middleInitial + ". "))
+                        + (chargedPartyInformation.lastName.equals("") ? "" : (chargedPartyInformation.lastName))
+                        + (chargedPartyInformation.suffix.equals("") ? "" : (" " + chargedPartyInformation.suffix))
+                        + (chargedPartyInformation.nameTitle.equals("") ? "" : (", " + chargedPartyInformation.nameTitle));
+                }
+                
+                model.addRow(new Object[] {chargedPartyInformation.id,
+                    name,
+                    chargedPartyInformation.caseRelation, 
+                    chargedPartyInformation.address1
+                    + (chargedPartyInformation.address2.equals("") ? "" : (", " + chargedPartyInformation.address2))
+                    + (chargedPartyInformation.address3.equals("") ? "" : (", " + chargedPartyInformation.address3))
+                    + (chargedPartyInformation.city.equals("") ? "" : (", " + chargedPartyInformation.city))
+                    + (chargedPartyInformation.stateCode.equals("") ? "" : (", " + chargedPartyInformation.stateCode))
+                    + (chargedPartyInformation.zipcode.equals("") ? "" : (", " + chargedPartyInformation.zipcode)),
+                    chargedPartyInformation.phone1, chargedPartyInformation.emailAddress});
+            }
+            model.addRow(new Object[] {"", "", "", "", "", ""});
+        }
+        
+        if(incumbentEmployeeParties.size() > 0) {
+            model.addRow(new Object[] {"", "<html><b>Incumbent Employee Organization</b></html>", "", "", "", ""});
+            for(int i = 0; i < incumbentEmployeeParties.size(); i++) {
+                CaseParty chargedPartyInformation = incumbentEmployeeParties.get(i);
+                
+                if(chargedPartyInformation.firstName.equals("") 
+                        && chargedPartyInformation.lastName.equals("")) {
+                    name = chargedPartyInformation.companyName;
+                } else {
+                    name = (chargedPartyInformation.prefix.equals("") ? "" : (chargedPartyInformation.prefix + " "))
+                        + (chargedPartyInformation.firstName.equals("") ? "" : (chargedPartyInformation.firstName + " "))
+                        + (chargedPartyInformation.middleInitial.equals("") ? "" : (chargedPartyInformation.middleInitial + ". "))
+                        + (chargedPartyInformation.lastName.equals("") ? "" : (chargedPartyInformation.lastName))
+                        + (chargedPartyInformation.suffix.equals("") ? "" : (" " + chargedPartyInformation.suffix))
+                        + (chargedPartyInformation.nameTitle.equals("") ? "" : (", " + chargedPartyInformation.nameTitle));
+                }
+                
+                model.addRow(new Object[] {chargedPartyInformation.id,
+                    name,
+                    chargedPartyInformation.caseRelation, 
+                    chargedPartyInformation.address1
+                    + (chargedPartyInformation.address2.equals("") ? "" : (", " + chargedPartyInformation.address2))
+                    + (chargedPartyInformation.address3.equals("") ? "" : (", " + chargedPartyInformation.address3))
+                    + (chargedPartyInformation.city.equals("") ? "" : (", " + chargedPartyInformation.city))
+                    + (chargedPartyInformation.stateCode.equals("") ? "" : (", " + chargedPartyInformation.stateCode))
+                    + (chargedPartyInformation.zipcode.equals("") ? "" : (", " + chargedPartyInformation.zipcode)),
+                    chargedPartyInformation.phone1, chargedPartyInformation.emailAddress});
+            }
+            model.addRow(new Object[] {"", "", "", "", "", ""});
+        }
+        
+        if(intervenerParties.size() > 0) {
+            model.addRow(new Object[] {"", "<html><b>Intervener</b></html>", "", "", "", ""});
+            for(int i = 0; i < intervenerParties.size(); i++) {
+                CaseParty chargedPartyInformation = intervenerParties.get(i);
+                
+                if(chargedPartyInformation.firstName.equals("") 
+                        && chargedPartyInformation.lastName.equals("")) {
+                    name = chargedPartyInformation.companyName;
+                } else {
+                    name = (chargedPartyInformation.prefix.equals("") ? "" : (chargedPartyInformation.prefix + " "))
+                        + (chargedPartyInformation.firstName.equals("") ? "" : (chargedPartyInformation.firstName + " "))
+                        + (chargedPartyInformation.middleInitial.equals("") ? "" : (chargedPartyInformation.middleInitial + ". "))
+                        + (chargedPartyInformation.lastName.equals("") ? "" : (chargedPartyInformation.lastName))
+                        + (chargedPartyInformation.suffix.equals("") ? "" : (" " + chargedPartyInformation.suffix))
+                        + (chargedPartyInformation.nameTitle.equals("") ? "" : (", " + chargedPartyInformation.nameTitle));
+                }
+                
+                model.addRow(new Object[] {chargedPartyInformation.id,
+                    name,
+                    chargedPartyInformation.caseRelation, 
+                    chargedPartyInformation.address1
+                    + (chargedPartyInformation.address2.equals("") ? "" : (", " + chargedPartyInformation.address2))
+                    + (chargedPartyInformation.address3.equals("") ? "" : (", " + chargedPartyInformation.address3))
+                    + (chargedPartyInformation.city.equals("") ? "" : (", " + chargedPartyInformation.city))
+                    + (chargedPartyInformation.stateCode.equals("") ? "" : (", " + chargedPartyInformation.stateCode))
+                    + (chargedPartyInformation.zipcode.equals("") ? "" : (", " + chargedPartyInformation.zipcode)),
+                    chargedPartyInformation.phone1, chargedPartyInformation.emailAddress});
+            }
+            model.addRow(new Object[] {"", "", "", "", "", ""});
+        }
+        
+        if(petitionerParties.size() > 0) {
+            model.addRow(new Object[] {"", "<html><b>Petitioner</b></html>", "", "", "", ""});
+            for(int i = 0; i < petitionerParties.size(); i++) {
+                CaseParty chargedPartyInformation = petitionerParties.get(i);
+                
+                if(chargedPartyInformation.firstName.equals("") 
+                        && chargedPartyInformation.lastName.equals("")) {
+                    name = chargedPartyInformation.companyName;
+                } else {
+                    name = (chargedPartyInformation.prefix.equals("") ? "" : (chargedPartyInformation.prefix + " "))
+                        + (chargedPartyInformation.firstName.equals("") ? "" : (chargedPartyInformation.firstName + " "))
+                        + (chargedPartyInformation.middleInitial.equals("") ? "" : (chargedPartyInformation.middleInitial + ". "))
+                        + (chargedPartyInformation.lastName.equals("") ? "" : (chargedPartyInformation.lastName))
+                        + (chargedPartyInformation.suffix.equals("") ? "" : (" " + chargedPartyInformation.suffix))
+                        + (chargedPartyInformation.nameTitle.equals("") ? "" : (", " + chargedPartyInformation.nameTitle));
+                }
+                
+                model.addRow(new Object[] {chargedPartyInformation.id,
+                    name,
+                    chargedPartyInformation.caseRelation, 
+                    chargedPartyInformation.address1
+                    + (chargedPartyInformation.address2.equals("") ? "" : (", " + chargedPartyInformation.address2))
+                    + (chargedPartyInformation.address3.equals("") ? "" : (", " + chargedPartyInformation.address3))
+                    + (chargedPartyInformation.city.equals("") ? "" : (", " + chargedPartyInformation.city))
+                    + (chargedPartyInformation.stateCode.equals("") ? "" : (", " + chargedPartyInformation.stateCode))
+                    + (chargedPartyInformation.zipcode.equals("") ? "" : (", " + chargedPartyInformation.zipcode)),
+                    chargedPartyInformation.phone1, chargedPartyInformation.emailAddress});
+            }
+            model.addRow(new Object[] {"", "", "", "", "", ""});
+        }
+        
+        if(conversionParties.size() > 0) {
+            model.addRow(new Object[] {"", "<html><b>Conversion School</b></html>", "", "", "", ""});
+            for(int i = 0; i < conversionParties.size(); i++) {
+                CaseParty chargedPartyInformation = conversionParties.get(i);
+                
+                if(chargedPartyInformation.firstName.equals("") 
+                        && chargedPartyInformation.lastName.equals("")) {
+                    name = chargedPartyInformation.companyName;
+                } else {
+                    name = (chargedPartyInformation.prefix.equals("") ? "" : (chargedPartyInformation.prefix + " "))
+                        + (chargedPartyInformation.firstName.equals("") ? "" : (chargedPartyInformation.firstName + " "))
+                        + (chargedPartyInformation.middleInitial.equals("") ? "" : (chargedPartyInformation.middleInitial + ". "))
+                        + (chargedPartyInformation.lastName.equals("") ? "" : (chargedPartyInformation.lastName))
+                        + (chargedPartyInformation.suffix.equals("") ? "" : (" " + chargedPartyInformation.suffix))
+                        + (chargedPartyInformation.nameTitle.equals("") ? "" : (", " + chargedPartyInformation.nameTitle));
+                }
+                
+                model.addRow(new Object[] {chargedPartyInformation.id,
+                    name,
+                    chargedPartyInformation.caseRelation, 
+                    chargedPartyInformation.address1
+                    + (chargedPartyInformation.address2.equals("") ? "" : (", " + chargedPartyInformation.address2))
+                    + (chargedPartyInformation.address3.equals("") ? "" : (", " + chargedPartyInformation.address3))
+                    + (chargedPartyInformation.city.equals("") ? "" : (", " + chargedPartyInformation.city))
+                    + (chargedPartyInformation.stateCode.equals("") ? "" : (", " + chargedPartyInformation.stateCode))
+                    + (chargedPartyInformation.zipcode.equals("") ? "" : (", " + chargedPartyInformation.zipcode)),
+                    chargedPartyInformation.phone1, chargedPartyInformation.emailAddress});
+            }
+            model.addRow(new Object[] {"", "", "", "", "", ""});
+        }
+        
+        if(appellantParties.size() > 0) {
+            model.addRow(new Object[] {"", "<html><b>Appellant</b></html>", "", "", "", ""});
+            for(int i = 0; i < appellantParties.size(); i++) {
+                CaseParty chargedPartyInformation = appellantParties.get(i);
+                
+                if(chargedPartyInformation.firstName.equals("") 
+                        && chargedPartyInformation.lastName.equals("")) {
+                    name = chargedPartyInformation.companyName;
+                } else {
+                    name = (chargedPartyInformation.prefix.equals("") ? "" : (chargedPartyInformation.prefix + " "))
+                        + (chargedPartyInformation.firstName.equals("") ? "" : (chargedPartyInformation.firstName + " "))
+                        + (chargedPartyInformation.middleInitial.equals("") ? "" : (chargedPartyInformation.middleInitial + ". "))
+                        + (chargedPartyInformation.lastName.equals("") ? "" : (chargedPartyInformation.lastName))
+                        + (chargedPartyInformation.suffix.equals("") ? "" : (" " + chargedPartyInformation.suffix))
+                        + (chargedPartyInformation.nameTitle.equals("") ? "" : (", " + chargedPartyInformation.nameTitle));
+                }
+                
+                model.addRow(new Object[] {chargedPartyInformation.id,
+                    name,
+                    chargedPartyInformation.caseRelation, 
+                    chargedPartyInformation.address1
+                    + (chargedPartyInformation.address2.equals("") ? "" : (", " + chargedPartyInformation.address2))
+                    + (chargedPartyInformation.address3.equals("") ? "" : (", " + chargedPartyInformation.address3))
+                    + (chargedPartyInformation.city.equals("") ? "" : (", " + chargedPartyInformation.city))
+                    + (chargedPartyInformation.stateCode.equals("") ? "" : (", " + chargedPartyInformation.stateCode))
+                    + (chargedPartyInformation.zipcode.equals("") ? "" : (", " + chargedPartyInformation.zipcode)),
+                    chargedPartyInformation.phone1, chargedPartyInformation.emailAddress});
+            }
+            model.addRow(new Object[] {"", "", "", "", "", ""});
+        }
+        
+        if(appelleeParties.size() > 0) {
+            model.addRow(new Object[] {"", "<html><b>Appellee</b></html>", "", "", "", ""});
+            for(int i = 0; i < appelleeParties.size(); i++) {
+                CaseParty chargedPartyInformation = appelleeParties.get(i);
+                
+                if(chargedPartyInformation.firstName.equals("") 
+                        && chargedPartyInformation.lastName.equals("")) {
+                    name = chargedPartyInformation.companyName;
+                } else {
+                    name = (chargedPartyInformation.prefix.equals("") ? "" : (chargedPartyInformation.prefix + " "))
+                        + (chargedPartyInformation.firstName.equals("") ? "" : (chargedPartyInformation.firstName + " "))
+                        + (chargedPartyInformation.middleInitial.equals("") ? "" : (chargedPartyInformation.middleInitial + ". "))
+                        + (chargedPartyInformation.lastName.equals("") ? "" : (chargedPartyInformation.lastName))
+                        + (chargedPartyInformation.suffix.equals("") ? "" : (" " + chargedPartyInformation.suffix))
+                        + (chargedPartyInformation.nameTitle.equals("") ? "" : (", " + chargedPartyInformation.nameTitle));
+                }
+                
+                model.addRow(new Object[] {chargedPartyInformation.id,
+                    name,
+                    chargedPartyInformation.caseRelation, 
+                    chargedPartyInformation.address1
+                    + (chargedPartyInformation.address2.equals("") ? "" : (", " + chargedPartyInformation.address2))
+                    + (chargedPartyInformation.address3.equals("") ? "" : (", " + chargedPartyInformation.address3))
+                    + (chargedPartyInformation.city.equals("") ? "" : (", " + chargedPartyInformation.city))
+                    + (chargedPartyInformation.stateCode.equals("") ? "" : (", " + chargedPartyInformation.stateCode))
+                    + (chargedPartyInformation.zipcode.equals("") ? "" : (", " + chargedPartyInformation.zipcode)),
+                    chargedPartyInformation.phone1, chargedPartyInformation.emailAddress});
+            }
+            model.addRow(new Object[] {"", "", "", "", "", ""});
+        }
+        
+        if(appellee2Parties.size() > 0) {
+            model.addRow(new Object[] {"", "<html><b>Appellee 2</b></html>", "", "", "", ""});
+            for(int i = 0; i < appellee2Parties.size(); i++) {
+                CaseParty chargedPartyInformation = appellee2Parties.get(i);
+                
+                if(chargedPartyInformation.firstName.equals("") 
+                        && chargedPartyInformation.lastName.equals("")) {
+                    name = chargedPartyInformation.companyName;
+                } else {
+                    name = (chargedPartyInformation.prefix.equals("") ? "" : (chargedPartyInformation.prefix + " "))
+                        + (chargedPartyInformation.firstName.equals("") ? "" : (chargedPartyInformation.firstName + " "))
+                        + (chargedPartyInformation.middleInitial.equals("") ? "" : (chargedPartyInformation.middleInitial + ". "))
+                        + (chargedPartyInformation.lastName.equals("") ? "" : (chargedPartyInformation.lastName))
+                        + (chargedPartyInformation.suffix.equals("") ? "" : (" " + chargedPartyInformation.suffix))
+                        + (chargedPartyInformation.nameTitle.equals("") ? "" : (", " + chargedPartyInformation.nameTitle));
+                }
+                
+                model.addRow(new Object[] {chargedPartyInformation.id,
+                    name,
+                    chargedPartyInformation.caseRelation, 
+                    chargedPartyInformation.address1
+                    + (chargedPartyInformation.address2.equals("") ? "" : (", " + chargedPartyInformation.address2))
+                    + (chargedPartyInformation.address3.equals("") ? "" : (", " + chargedPartyInformation.address3))
+                    + (chargedPartyInformation.city.equals("") ? "" : (", " + chargedPartyInformation.city))
+                    + (chargedPartyInformation.stateCode.equals("") ? "" : (", " + chargedPartyInformation.stateCode))
+                    + (chargedPartyInformation.zipcode.equals("") ? "" : (", " + chargedPartyInformation.zipcode)),
+                    chargedPartyInformation.phone1, chargedPartyInformation.emailAddress});
+            }
+            model.addRow(new Object[] {"", "", "", "", "", ""});
+        }
+        
+        if(courtesyCopyParties.size() > 0) {
+            model.addRow(new Object[] {"", "<html><b>Courtesy Copy</b></html>", "", "", "", ""});
+            for(int i = 0; i < courtesyCopyParties.size(); i++) {
+                CaseParty chargedPartyInformation = courtesyCopyParties.get(i);
+                
+                if(chargedPartyInformation.firstName.equals("") 
+                        && chargedPartyInformation.lastName.equals("")) {
+                    name = chargedPartyInformation.companyName;
+                } else {
+                    name = (chargedPartyInformation.prefix.equals("") ? "" : (chargedPartyInformation.prefix + " "))
+                        + (chargedPartyInformation.firstName.equals("") ? "" : (chargedPartyInformation.firstName + " "))
+                        + (chargedPartyInformation.middleInitial.equals("") ? "" : (chargedPartyInformation.middleInitial + ". "))
+                        + (chargedPartyInformation.lastName.equals("") ? "" : (chargedPartyInformation.lastName))
+                        + (chargedPartyInformation.suffix.equals("") ? "" : (" " + chargedPartyInformation.suffix))
+                        + (chargedPartyInformation.nameTitle.equals("") ? "" : (", " + chargedPartyInformation.nameTitle));
+                }
+                
+                model.addRow(new Object[] {chargedPartyInformation.id,
+                    name,
+                    chargedPartyInformation.caseRelation, 
+                    chargedPartyInformation.address1
+                    + (chargedPartyInformation.address2.equals("") ? "" : (", " + chargedPartyInformation.address2))
+                    + (chargedPartyInformation.address3.equals("") ? "" : (", " + chargedPartyInformation.address3))
+                    + (chargedPartyInformation.city.equals("") ? "" : (", " + chargedPartyInformation.city))
+                    + (chargedPartyInformation.stateCode.equals("") ? "" : (", " + chargedPartyInformation.stateCode))
+                    + (chargedPartyInformation.zipcode.equals("") ? "" : (", " + chargedPartyInformation.zipcode)),
+                    chargedPartyInformation.phone1, chargedPartyInformation.emailAddress});
+            }
+            model.addRow(new Object[] {"", "", "", "", "", ""});
+        }
+        
+        if(otherInterestedParties.size() > 0) {
+            model.addRow(new Object[] {"", "<html><b>Other Interested Parties</b></html>", "", "", "", ""});
+            for(int i = 0; i < otherInterestedParties.size(); i++) {
+                CaseParty chargedPartyInformation = otherInterestedParties.get(i);
+                
+                if(chargedPartyInformation.firstName.equals("") 
+                        && chargedPartyInformation.lastName.equals("")) {
+                    name = chargedPartyInformation.companyName;
+                } else {
+                    name = (chargedPartyInformation.prefix.equals("") ? "" : (chargedPartyInformation.prefix + " "))
+                        + (chargedPartyInformation.firstName.equals("") ? "" : (chargedPartyInformation.firstName + " "))
+                        + (chargedPartyInformation.middleInitial.equals("") ? "" : (chargedPartyInformation.middleInitial + ". "))
+                        + (chargedPartyInformation.lastName.equals("") ? "" : (chargedPartyInformation.lastName))
+                        + (chargedPartyInformation.suffix.equals("") ? "" : (" " + chargedPartyInformation.suffix))
+                        + (chargedPartyInformation.nameTitle.equals("") ? "" : (", " + chargedPartyInformation.nameTitle));
+                }
+                
+                model.addRow(new Object[] {chargedPartyInformation.id,
+                    name,
+                    chargedPartyInformation.caseRelation, 
+                    chargedPartyInformation.address1
+                    + (chargedPartyInformation.address2.equals("") ? "" : (", " + chargedPartyInformation.address2))
+                    + (chargedPartyInformation.address3.equals("") ? "" : (", " + chargedPartyInformation.address3))
+                    + (chargedPartyInformation.city.equals("") ? "" : (", " + chargedPartyInformation.city))
+                    + (chargedPartyInformation.stateCode.equals("") ? "" : (", " + chargedPartyInformation.stateCode))
+                    + (chargedPartyInformation.zipcode.equals("") ? "" : (", " + chargedPartyInformation.zipcode)),
+                    chargedPartyInformation.phone1, chargedPartyInformation.emailAddress});
+            }
+            model.addRow(new Object[] {"", "", "", "", "", ""});
+        }
+        
+        //remove blank row
+        if(model.getRowCount() > 0) {
+            if(model.getValueAt(model.getRowCount()-1, 0).toString().equals("")) {
+                model.removeRow(model.getRowCount()-1);
+            }
+        }
+        missingParties.setText("");
+    }
+    
     public void loadORGParties() {
         List<CaseParty> officerParties = new ArrayList<>();
         List<CaseParty> representativeParties = new ArrayList<>();

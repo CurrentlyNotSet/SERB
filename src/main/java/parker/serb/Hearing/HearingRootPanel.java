@@ -3,10 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package parker.serb.CMDS;
+package parker.serb.Hearing;
 
-import parker.serb.CSC.*;
-import parker.serb.ORG.*;
+import parker.serb.CMDS.*;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
@@ -20,14 +19,14 @@ import parker.serb.util.CancelUpdate;
  *
  * @author parker
  */
-public class CMDSRootPanel extends javax.swing.JPanel {
+public class HearingRootPanel extends javax.swing.JPanel {
 
     String currentTab = "Activity";
     boolean singleFire = true;
     /**
      * Creates new form REPRootPanel
      */
-    public CMDSRootPanel() {
+    public HearingRootPanel() {
         initComponents();
         addListeners();
     }
@@ -36,11 +35,11 @@ public class CMDSRootPanel extends javax.swing.JPanel {
      * Removes all content from previous stored cases
      */
     void clearAll() {
-        Global.root.getcMDSHeaderPanel1().clearAll();
+        Global.root.getHearingHeaderPanel1().clearAll();
         activityPanel1.clearAll();
         notesPanel1.clearAll();
-        cMDSInformationPanel1.clearAll();
-        cMDSHearingsPanel1.clearTable();
+//        cMDSInformationPanel1.clearAll();
+//        cMDSHearingsPanel1.clearTable();
         partiesPanel1.clearAll();
     }
     
@@ -63,20 +62,17 @@ public class CMDSRootPanel extends javax.swing.JPanel {
     private void loadInformation() {
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
             case "Activity":
-                activityPanel1.loadAllActivity();
+                activityPanel1.loadAllHearingActivity();
                 break;
             case "Case Information":
                 cMDSInformationPanel1.loadInformation();
                 break;
             case "Parties":
-                partiesPanel1.loadParties();
+                partiesPanel1.loadHearingParties();
                 break;
             case "Notes":
                 notesPanel1.loadInformation();
                 break;
-            case "Hearings":
-                cMDSHearingsPanel1.loadInformation();
-                break;    
         }
     }
     
@@ -120,7 +116,7 @@ public class CMDSRootPanel extends javax.swing.JPanel {
     }
     
     private void disableTabs(int activeTab) {
-        Global.root.getcMDSHeaderPanel1().getjComboBox2().setEnabled(false);
+        Global.root.getHearingHeaderPanel1().getjComboBox2().setEnabled(false);
         for(int i = jTabbedPane1.getTabCount()-1; i >= 0; i--) {
             if(i != activeTab) {
                 jTabbedPane1.setEnabledAt(i, false);
@@ -131,7 +127,7 @@ public class CMDSRootPanel extends javax.swing.JPanel {
     }
     
     private void enableTabs() {
-        Global.root.getcMDSHeaderPanel1().getjComboBox2().setEnabled(true);
+        Global.root.getHearingHeaderPanel1().getjComboBox2().setEnabled(true);
         for(int i = jTabbedPane1.getTabCount()-1; i >= 0; i--) {
             jTabbedPane1.setEnabledAt(i, true);
         }
@@ -142,20 +138,20 @@ public class CMDSRootPanel extends javax.swing.JPanel {
      * Uses the currently selected panel index
      * @param buttonText the text of the current button
      */
-    public void cmdsUpdate(String buttonText) {
+    public void hearingUpdate(String buttonText) {
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
             case "Activity":
-                new CMDSAddHistoryEntryDialog((JFrame) this.getRootPane().getParent(), true);
-                activityPanel1.loadAllActivity();
-                Global.root.getcMDSHeaderPanel1().loadHeaderInformation();
+//                new CMDSAddHistoryEntryDialog((JFrame) this.getRootPane().getParent(), true);
+//                activityPanel1.loadHearingActivity();
+                Global.root.getHearingHeaderPanel1().loadHeaderInformation();
                 break;
             case "Parties":
                 new PartySearchDialog((JFrame) this.getRootPane().getParent(), true);
                 partiesPanel1.loadParties();
-                Global.root.getcMDSHeaderPanel1().loadHeaderInformation();
-                CMDSCaseSearchData.updateCaseEntryFromParties(
-                        Global.root.getcMDSHeaderPanel1().getAppellantTextBox().getText(),
-                        Global.root.getcMDSHeaderPanel1().getAppelleeTextBox().getText());
+                Global.root.getHearingHeaderPanel1().loadHeaderInformation();
+//                CMDSCaseSearchData.updateCaseEntryFromParties(
+//                        Global.root.getcMDSHeaderPanel1().getAppellantTextBox().getText(),
+//                        Global.root.getcMDSHeaderPanel1().getAppelleeTextBox().getText());
                 break;
             case "Case Information":
                 if(buttonText.equals("Update")) {
@@ -166,7 +162,7 @@ public class CMDSRootPanel extends javax.swing.JPanel {
                     Global.root.enableTabsAfterSave();
                     Global.root.enableButtonsAfterCancel();
                     cMDSInformationPanel1.disableUpdate(true);
-                    Global.root.getcMDSHeaderPanel1().loadHeaderInformation();
+                    Global.root.getHearingHeaderPanel1().loadHeaderInformation();
                 }
                 break;
             case "Notes":
@@ -179,11 +175,7 @@ public class CMDSRootPanel extends javax.swing.JPanel {
                     Global.root.enableButtonsAfterCancel();
                     notesPanel1.disableUpdate(true);
                 }
-                break;
-            case "Hearings":
-                new CMDSAddHearingDialog(Global.root, true);
-                cMDSHearingsPanel1.loadInformation();
-                break;    
+                break; 
         }
     }
     
@@ -191,7 +183,7 @@ public class CMDSRootPanel extends javax.swing.JPanel {
      * Determines if the delete button should be enabled, as well as the desired
      * functionality
      */
-    public void cmdsDelete() {
+    public void hearingDelete() {
         CancelUpdate cancel;
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
             case "Activity":
@@ -223,10 +215,7 @@ public class CMDSRootPanel extends javax.swing.JPanel {
                     enableTabs();
                     notesPanel1.disableUpdate(false);
                 }
-                break;
-            case "Hearings":
-                cMDSHearingsPanel1.removeHearing();
-                break;    
+                break; 
         }
     }
 
@@ -256,8 +245,6 @@ public class CMDSRootPanel extends javax.swing.JPanel {
         partiesPanel1 = new parker.serb.party.PartiesPanel();
         jPanel3 = new javax.swing.JPanel();
         cMDSInformationPanel1 = new parker.serb.CMDS.CMDSInformationPanel();
-        jPanel2 = new javax.swing.JPanel();
-        cMDSHearingsPanel1 = new parker.serb.CMDS.CMDSHearingsPanel();
         jPanel8 = new javax.swing.JPanel();
         notesPanel1 = new parker.serb.notes.NotesPanel();
 
@@ -300,19 +287,6 @@ public class CMDSRootPanel extends javax.swing.JPanel {
 
         jTabbedPane1.addTab("Case Information", jPanel3);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(cMDSHearingsPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1134, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(cMDSHearingsPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
-        );
-
-        jTabbedPane1.addTab("Hearings", jPanel2);
-
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
@@ -342,10 +316,8 @@ public class CMDSRootPanel extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private parker.serb.activity.ActivityPanel activityPanel1;
-    private parker.serb.CMDS.CMDSHearingsPanel cMDSHearingsPanel1;
     private parker.serb.CMDS.CMDSInformationPanel cMDSInformationPanel1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel8;
