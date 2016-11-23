@@ -643,6 +643,12 @@ public class ULPCase {
             
             if(success == 1) {
                 detailedCaseInformationSaveInformation(newCaseInformation, caseInformation);
+                EmployerCaseSearchData.updateFileDate(
+                        newCaseInformation.fileDate);
+                EmployerCaseSearchData.updateCaseStatus(
+                        newCaseInformation.currentStatus);
+                EmployerCaseSearchData.updateEmployer(
+                        newCaseInformation.employerIDNumber);
             } 
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex.getMessage());

@@ -47,9 +47,6 @@ public class companySearchPanel extends javax.swing.JPanel {
                 limitCaseList();
             }
         });
-        
-        
-        
     }
     
     public void loadPastData() {
@@ -87,6 +84,7 @@ public class companySearchPanel extends javax.swing.JPanel {
         model.addColumn("Status");
         model.addColumn("Filed Date");
         model.addColumn("Employer");
+        model.addColumn("Employer ID");
         
         caseList = EmployerCaseSearchData.loadEmployerCaseList();
         
@@ -97,7 +95,8 @@ public class companySearchPanel extends javax.swing.JPanel {
                 (act.caseYear + "-" + act.caseType + "-" + act.caseMonth + "-" + act.caseNumber),
                 act.status == null ? "" : act.status, //employer name
                 act.fileDate, //file date
-                act.employer == null ? "" : act.employer //employer
+                act.employer == null ? "" : act.employer, //employer
+                act.employerID == null ? "" : act.employerID //employerID
             }); 
         }
         getTableData();
@@ -121,20 +120,21 @@ public class companySearchPanel extends javax.swing.JPanel {
         
         for (int i = 0; i<tableData.length; i++)
         {
-            if(tableData[i][3].toString().toLowerCase().contains(employerSearchTerm.getText().toLowerCase()) && !employerSearchTerm.equals(""))
+            if(tableData[i][3].toString().toLowerCase().contains(employerSearchTerm.getText().toLowerCase()) && !employerSearchTerm.equals("")
+                    || tableData[i][4].toString().toLowerCase().contains(employerSearchTerm.getText().toLowerCase()) && !employerSearchTerm.equals(""))
             {
                 if(statusComboBox.getSelectedItem().toString().equals("All")) {
                     model.addRow(new Object[] {tableData[i][0]
-                    , tableData[i][1], tableData[i][2], tableData[i][3]}); 
+                    , tableData[i][1], tableData[i][2], tableData[i][3], tableData[i][4]}); 
                 } else if(statusComboBox.getSelectedItem().toString().equals("Open")) {
                     if(tableData[i][1].toString().toLowerCase().equals("open")) {
                         model.addRow(new Object[] {tableData[i][0]
-                    , tableData[i][1], tableData[i][2], tableData[i][3]}); 
+                    , tableData[i][1], tableData[i][2], tableData[i][3], tableData[i][4]}); 
                     }
                 } else if(statusComboBox.getSelectedItem().toString().equals("Closed")) {
                     if(tableData[i][1].toString().toLowerCase().equals("closed")) {
                         model.addRow(new Object[] {tableData[i][0]
-                    , tableData[i][1], tableData[i][2], tableData[i][3]}); 
+                    , tableData[i][1], tableData[i][2], tableData[i][3], tableData[i][4]}); 
                     }
                 }
             }
@@ -210,14 +210,14 @@ public class companySearchPanel extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Case Number", "Status", "File Date", "Employer"
+                "Case Number", "Status", "File Date", "Employer", "Employer ID"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {

@@ -212,6 +212,7 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton1.setMaximumSize(dim);
                 jButton1.setText("File");
                 jButton1.setEnabled(false);
+                jButton1.setVisible(true);
                 jButton2.setVisible(false);
                 jButton2.setEnabled(false);
                 jButton3.setVisible(false);
@@ -231,6 +232,7 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton1.setMaximumSize(dim);
                 jButton1.setText("New Case");
                 jButton1.setEnabled(true);
+                jButton1.setVisible(true);
                 jButton2.setSize(dim);
                 jButton2.setMinimumSize(dim);
                 jButton2.setMaximumSize(dim);
@@ -259,6 +261,7 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton1.setMaximumSize(dim);
                 jButton1.setText("New Case");
                 jButton1.setEnabled(true);
+                jButton1.setVisible(true);
                 jButton2.setSize(dim);
                 jButton2.setMinimumSize(dim);
                 jButton2.setMaximumSize(dim);
@@ -283,6 +286,7 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton1.setMaximumSize(dim);
                 jButton1.setText("New Case");
                 jButton1.setEnabled(true);
+                jButton1.setVisible(true);
                 jButton2.setSize(dim);
                 jButton2.setMinimumSize(dim);
                 jButton2.setMaximumSize(dim);
@@ -311,6 +315,7 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton1.setMaximumSize(dim);
                 jButton1.setText("New Org");
                 jButton1.setEnabled(true);
+                jButton1.setVisible(true);
                 jButton2.setSize(dim);
                 jButton2.setMinimumSize(dim);
                 jButton2.setMaximumSize(dim);
@@ -336,6 +341,7 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton1.setMaximumSize(dim);
                 jButton1.setText("New CSC");
                 jButton1.setEnabled(true);
+                jButton1.setVisible(true);
                 jButton2.setSize(dim);
                 jButton2.setMinimumSize(dim);
                 jButton2.setMaximumSize(dim);
@@ -361,6 +367,7 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton1.setMaximumSize(dim);
                 jButton1.setText("New Case");
                 jButton1.setEnabled(true);
+                jButton1.setVisible(true);
                 jButton2.setSize(dim);
                 jButton2.setMinimumSize(dim);
                 jButton2.setMaximumSize(dim);
@@ -380,6 +387,30 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton6.setText("Public Records");
                 jButton8.setVisible(false);
                 break;
+            case "Employer Search":
+                jButton1.setSize(dim);
+                jButton1.setMaximumSize(dim);
+                jButton1.setText("");
+                jButton1.setVisible(false);
+                jButton2.setSize(dim);
+                jButton2.setMaximumSize(dim);
+                jButton2.setVisible(false);
+                jButton2.setText("Update");
+                jButton2.setEnabled(false);
+                jButton3.setSize(dim);
+                jButton3.setVisible(false);
+                jButton3.setText("All Org Letters");
+                jButton4.setVisible(false);
+                jButton4.setText("Single Letter");
+                jButton5.setVisible(false);
+                jButton5.setText("Reports");
+                jButton6.setVisible(false);
+                jButton6.setText("Queue");
+                jButton7.setVisible(false);
+                jButton6.setText("Public Records");
+                jButton8.setVisible(false);
+                jButton9.setVisible(false);
+                break;    
         }
     }
     

@@ -1158,6 +1158,12 @@ public class MEDCase {
             if(success == 1) {
                 MEDCaseSearchData.updateCaseEntryFromCaseStatus(newCaseInformation.employerIDNumber, newCaseInformation.bargainingUnitNumber);
                 detailedStatusSaveInformation(newCaseInformation, caseInformation);
+                EmployerCaseSearchData.updateFileDate(
+                        newCaseInformation.fileDate);
+                EmployerCaseSearchData.updateCaseStatus(
+                        newCaseInformation.caseStatus);
+                EmployerCaseSearchData.updateEmployer(
+                        newCaseInformation.employerIDNumber);
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex.getMessage());
