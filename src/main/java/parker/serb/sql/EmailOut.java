@@ -37,6 +37,7 @@ public class EmailOut {
     public Date suggestedSendDate;
     public int attachementCount;
     public boolean okToSend;
+    public String internalNote;
     
     public static List<EmailOut> getEmailOutBySection(String section) {
         List<EmailOut> emailList = new ArrayList<>();
@@ -48,13 +49,13 @@ public class EmailOut {
             String sql = "SELECT C.id, C.section, C.caseYear, C.caseType, "
                     + "C.caseMonth, C.caseNumber, C.[to], C.[from], C.cc, "
                     + "C.bcc, C.subject, C.body, C.userID, C.suggestedSendDate, "
-                    + "C.okToSend, COUNT(S.id) AS attachments "
+                    + "C.okToSend, c.internalNote, COUNT(S.id) AS attachments "
                     + "FROM EmailOut C "
                     + "LEFT JOIN EmailOutAttachment S ON C.id = S.emailoutid "
                     + "WHERE Section = ? AND C.okToSend = 0 "
                     + "GROUP BY C.id, C.section, C.caseYear, C.caseType, C.caseMonth, "
                     + "C.caseNumber, C.[to], C.[from], C.cc, C.bcc, C.subject, "
-                    + "C.body, C.userID, C.suggestedSendDate, C.okToSend";
+                    + "C.body, C.userID, C.suggestedSendDate, C.okToSend, c.internalNote";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, section);
@@ -79,6 +80,7 @@ public class EmailOut {
                 eml.suggestedSendDate = emailListRS.getDate("suggestedSendDate");
                 eml.attachementCount = emailListRS.getInt("attachments");
                 eml.okToSend = emailListRS.getBoolean("okToSend");
+                eml.internalNote = emailListRS.getString("internalNote");
                 emailList.add(eml);
             }
         } catch (SQLException ex) {
@@ -117,6 +119,7 @@ public class EmailOut {
                 eml.userID = emailListRS.getInt("userID");
                 eml.suggestedSendDate = emailListRS.getDate("suggestedSendDate");
                 eml.okToSend = emailListRS.getBoolean("okToSend");
+                eml.internalNote = emailListRS.getString("internalNote");
             }
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
@@ -178,12 +181,13 @@ public class EmailOut {
                     + "body, "          //11
                     + "userID, "        //12
                     + "suggestedSendDate, " //13
-                    + "okToSend "           //14
+                    + "okToSend, "          //14
+                    + "internalNote "       //15
                     + ") VALUES (";
-                    for(int i=0; i<13; i++){
-                        sql += "?, ";   //01-13
+                    for(int i=0; i<14; i++){
+                        sql += "?, ";   //01-14
                     }
-                     sql += "?)";   //14
+                     sql += "?)";   //15
                      
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString ( 1, item.section);
@@ -200,6 +204,7 @@ public class EmailOut {
             preparedStatement.setInt    (12, item.userID);
             preparedStatement.setDate   (13, item.suggestedSendDate);
             preparedStatement.setBoolean(14, item.okToSend);
+            preparedStatement.setString (15, item.internalNote);
             preparedStatement.executeUpdate();
             
             ResultSet newRow = preparedStatement.getGeneratedKeys();

@@ -203,7 +203,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         DefaultTableModel model = (DefaultTableModel) activityTable.getModel();
         model.setRowCount(0);
         
-        List<Activity> activtyList = Activity.loadActivityDocumentsCyGlobalCase();
+        List<Activity> activtyList = Activity.loadActivityDocumentsByGlobalCase();
         
         for (Activity doc : activtyList){
             model.addRow(new Object[]{
@@ -430,7 +430,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         emailBody += System.lineSeparator() + System.lineSeparator() 
                 + StringUtilities.buildFullName(Global.activeUser.firstName, Global.activeUser.middleInitial, Global.activeUser.lastName)
                 + System.lineSeparator() + (Global.activeUser.jobTitle == null ? "" : Global.activeUser.jobTitle + System.lineSeparator())
-                + generateDepartmentAddressBlock() + System.lineSeparator() 
+                + StringUtilities.generateDepartmentAddressBlock() + System.lineSeparator() 
                 + (Global.activeUser.workPhone == null ? "" :  "Telephone: " + NumberFormatService.convertStringToPhoneNumber(Global.activeUser.workPhone));
                 
         EmailOut eml = new EmailOut();
@@ -606,31 +606,6 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         return destFileName;
     }
 
-    private String generateDepartmentAddressBlock(){
-        String address = "";
-        String dept = StringUtilities.getDepartment();
-                
-        AdministrationInformation sysAdminInfo = AdministrationInformation.loadAdminInfo(dept);
-                
-        if (!sysAdminInfo.Address1.equals("")) {
-            address += sysAdminInfo.Address1.trim();
-        }
-        if (!sysAdminInfo.Address2.equals("")) {
-            address += System.lineSeparator() + sysAdminInfo.Address2.trim();
-        }
-        address += System.lineSeparator();
-        if (!sysAdminInfo.City.equals("")) {
-            address += sysAdminInfo.City.trim();
-        }
-        if (!sysAdminInfo.State.equals("")) {
-            address += ", " + sysAdminInfo.State.trim();
-        }
-        if (!sysAdminInfo.Zip.equals("")) {
-            address += " " + sysAdminInfo.Zip.trim();
-        }
-        return address;
-    }
-    
     private void processThread() {
         Thread temp = new Thread(() -> {
                 generateLetter();

@@ -45,7 +45,7 @@ import parker.serb.user.Preferences;
 import parker.serb.util.CreateNewCaseDialog;
 import parker.serb.login.ExitVerification;
 import parker.serb.mailLogViewer.MailLogViewerPanel;
-import parker.serb.publicRecords.fileSelector;
+import parker.serb.publicRecords.PublicRecordsMainPanel;
 import parker.serb.sql.DocketLock;
 import parker.serb.sql.NewCaseLock;
 import parker.serb.util.CreateNewCSCDialog;
@@ -299,6 +299,7 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton5.setVisible(true);
                 jButton5.setText("Queue");
                 jButton6.setVisible(true);
+                jButton6.setEnabled(true);
                 jButton6.setText("Public Records");
                 jButton7.setVisible(true);
                 jButton7.setText("Mail Log");
@@ -1216,7 +1217,7 @@ public class RootPanel extends javax.swing.JFrame {
                 new LetterQueuePanel((JFrame) this.getRootPane().getParent(), true);
                 break;
             default:
-                new fileSelector((JFrame) this.getRootPane().getParent(), true);
+                new PublicRecordsMainPanel((JFrame) this.getRootPane().getParent(), true);
                 break;
         }       
     }//GEN-LAST:event_jButton6ActionPerformed

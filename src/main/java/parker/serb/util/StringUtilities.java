@@ -6,6 +6,7 @@
 package parker.serb.util;
 
 import parker.serb.Global;
+import parker.serb.sql.AdministrationInformation;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.Party;
 
@@ -144,5 +145,30 @@ public class StringUtilities {
                 return "SPBR";
         }
         return "";
+    }
+    
+    public static String generateDepartmentAddressBlock(){
+        String address = "";
+        String dept = StringUtilities.getDepartment();
+                
+        AdministrationInformation sysAdminInfo = AdministrationInformation.loadAdminInfo(dept);
+                
+        if (!sysAdminInfo.Address1.equals("")) {
+            address += sysAdminInfo.Address1.trim();
+        }
+        if (!sysAdminInfo.Address2.equals("")) {
+            address += System.lineSeparator() + sysAdminInfo.Address2.trim();
+        }
+        address += System.lineSeparator();
+        if (!sysAdminInfo.City.equals("")) {
+            address += sysAdminInfo.City.trim();
+        }
+        if (!sysAdminInfo.State.equals("")) {
+            address += ", " + sysAdminInfo.State.trim();
+        }
+        if (!sysAdminInfo.Zip.equals("")) {
+            address += " " + sysAdminInfo.Zip.trim();
+        }
+        return address;
     }
 }

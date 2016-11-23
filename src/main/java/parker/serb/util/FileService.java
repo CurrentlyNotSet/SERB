@@ -348,6 +348,29 @@ public class FileService {
                 + File.separator + fileName).delete();
     }
 
+    public static boolean renamePublicRecordsFile(String fileName) {
+        String[] file = fileName.split("_", 2);
+        String newFileName = "";
+        if (file.length > 1){
+            newFileName = file[0] + "_REDACTED-" + file[1];
+        } else {
+            newFileName = "REDACTED-" + fileName;
+        }
+        
+        File oldFile = new File(Global.activityPath + Global.activeSection
+                + File.separator + Global.caseYear
+                + File.separator + Global.caseYear + "-" + Global.caseType + "-" + Global.caseMonth + "-" + Global.caseNumber
+                + File.separator + fileName);
+
+        File redactedFile = new File(Global.activityPath + Global.activeSection
+                + File.separator + Global.caseYear
+                + File.separator + Global.caseYear + "-" + Global.caseType + "-" + Global.caseMonth + "-" + Global.caseNumber
+                + File.separator + newFileName);
+
+        //Create Redacted Version
+        return FileUtils.copyFile(oldFile, redactedFile);
+    }
+
     public static void openFileFullPath(File filePathName) {
         try {
             Desktop desktop = Desktop.getDesktop();
