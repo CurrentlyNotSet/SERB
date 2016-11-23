@@ -44,6 +44,7 @@ import parker.serb.sql.Audit;
 import parker.serb.user.Preferences;
 import parker.serb.util.CreateNewCaseDialog;
 import parker.serb.login.ExitVerification;
+import parker.serb.mailLogViewer.MailLogViewerPanel;
 import parker.serb.publicRecords.fileSelector;
 import parker.serb.sql.DocketLock;
 import parker.serb.sql.NewCaseLock;
@@ -247,7 +248,8 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton5.setText("Queue");
                 jButton6.setVisible(false);
                 jButton6.setText("Public Records");
-                jButton7.setVisible(false);
+                jButton7.setVisible(true);
+                jButton7.setText("Mail Log");
                 jButton8.setVisible(false);
                 jButton9.setSize(dim);
                 jButton9.setMinimumSize(dim);
@@ -277,7 +279,8 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton5.setText("Queue");
                 jButton6.setVisible(false);
                 jButton6.setText("Public Records");
-                jButton7.setVisible(false);
+                jButton7.setVisible(true);
+                jButton7.setText("Mail Log");
                 jButton8.setVisible(false);
                 break;
             case "ULP":
@@ -301,7 +304,8 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton5.setText("Queue");
                 jButton6.setVisible(true);
                 jButton6.setText("Public Records");
-                jButton7.setVisible(false);
+                jButton7.setVisible(true);
+                jButton7.setText("Mail Log");
                 jButton8.setVisible(false);
                 jButton9.setSize(dim);
                 jButton9.setMinimumSize(dim);
@@ -328,12 +332,13 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton4.setVisible(false);
                 jButton4.setText("Single Letter");
                 jButton5.setVisible(false);
-                jButton5.setText("Reports");
+                jButton5.setText("Reports");                
                 jButton6.setVisible(false);
-                jButton6.setText("Queue");
+                jButton6.setText("Queue");                
                 jButton7.setVisible(false);
-                jButton6.setText("Public Records");
-                jButton8.setVisible(false);
+                jButton7.setText("Public Records");                
+                jButton8.setVisible(true);
+                jButton8.setText("Mail Log");
                 break;
             case "Civil Service Commission":
                 jButton1.setSize(dim);
@@ -359,7 +364,8 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton6.setText("Queue");
                 jButton7.setVisible(false);
                 jButton6.setText("Public Records");
-                jButton8.setVisible(false);
+                jButton8.setVisible(true);
+                jButton8.setText("Mail Log");
                 break;
             case "CMDS":
                 jButton1.setSize(dim);
@@ -385,7 +391,8 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton6.setText("Queue");
                 jButton7.setVisible(false);
                 jButton6.setText("Public Records");
-                jButton8.setVisible(false);
+                jButton8.setVisible(true);
+                jButton8.setText("Mail Log");
                 break;
             case "Employer Search":
                 jButton1.setSize(dim);
@@ -1010,8 +1017,18 @@ public class RootPanel extends javax.swing.JFrame {
         });
 
         jButton7.setText("BUTTON 7");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
 
         jButton8.setText("BUTTON 8");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
 
         jButton9.setText("Delete");
         jButton9.setEnabled(false);
@@ -1396,6 +1413,30 @@ public class RootPanel extends javax.swing.JFrame {
                 break;
         }
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        switch(Global.activeSection) {
+            case "REP":
+            case "ULP":
+            case "MED":    
+                new MailLogViewerPanel((JFrame) this.getRootPane().getParent(), true);
+                break;
+            default:
+                break;
+        }
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        switch(Global.activeSection) {
+            case "ORG":
+            case "Civil Service Commission":
+            case "CMDS":    
+                new MailLogViewerPanel((JFrame) this.getRootPane().getParent(), true);
+                break;
+            default:
+                break;
+        }
+    }//GEN-LAST:event_jButton8ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel CMDS;

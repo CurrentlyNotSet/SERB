@@ -634,4 +634,73 @@ public class Activity {
         return activityList;
     }
     
+    public static List<Activity> loadMailLogBySection(String startDate, String endDate) {
+        List casetypes = CaseType.getCaseType();
+
+        List<Activity> activityList = new ArrayList<>();
+        
+        Statement stmt = null;
+            
+        try {
+
+            stmt = Database.connectToDB().createStatement();
+            
+            String sql = "SELECT * FROM Activity WHERE Activity.date >= ?  AND Activity.date <= ? "
+                    + "AND Activity.fileName IS NOT NULL AND Activity.fileName != '' " 
+                    + "AND (Activity.action LIKE 'IN -%' OR Activity.action LIKE 'OUT -%') ";
+            
+            if (!casetypes.isEmpty()) {
+                sql += "AND (";
+                
+                for (Object casetype : casetypes) {
+                    
+                    sql += " Activity.caseType = ? OR";
+                }
+                
+                sql = sql.substring(0, (sql.length() - 2)) + ")";
+            }
+            
+            sql += " ORDER BY Activity.CaseYear DESC, Activity.caseMonth DESC, Activity.caseNumber DESC, activity.id DESC";
+            
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+
+            preparedStatement.setString(1, startDate + " 00:00:00.000");
+            preparedStatement.setString(2, endDate + " 23:59:59.999");
+            int count = 2;
+            for (Object casetype : casetypes) {
+                preparedStatement.setString((count + 1), casetype.toString());
+                count = count + 1;
+            }
+            
+            ResultSet caseActivity = preparedStatement.executeQuery();
+            
+            while(caseActivity.next()) {
+                Activity activity = new Activity();
+                activity.id = caseActivity.getInt("id");
+                activity.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
+                activity.action = caseActivity.getString("action");
+                activity.caseYear = caseActivity.getString("caseYear");
+                activity.caseType = caseActivity.getString("caseType");
+                activity.caseMonth = caseActivity.getString("caseMonth");
+                activity.caseNumber = caseActivity.getString("caseNumber");
+                activity.fileName = caseActivity.getString("fileName");
+                activity.to = caseActivity.getString("to");
+                activity.type = caseActivity.getString("type");
+                activity.comment = caseActivity.getString("comment");
+                activity.from = caseActivity.getString("from");
+                activityList.add(activity);
+            }
+        } catch (SQLException ex) {
+            if(ex.getCause() instanceof SQLServerException) {
+                System.out.println("TESTING");
+                SlackNotification.sendNotification(ex.getMessage());
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return activityList;
+    }
+    
 }
