@@ -26,6 +26,7 @@ public class EmployerCaseSearchData {
     public String status;
     public String fileDate;
     public String employer;
+    public String employerID;
     
     public static List loadEmployerCaseList() {
         List<EmployerCaseSearchData> ulpCaseList = new ArrayList<>();
@@ -50,6 +51,7 @@ public class EmployerCaseSearchData {
                 repCase.status = caseActivity.getString("caseStatus");
                 repCase.fileDate = caseActivity.getTimestamp("filedate") == null ? "" : Global.mmddyyyy.format(new Date(caseActivity.getTimestamp("filedate").getTime()));
                 repCase.employer = caseActivity.getString("employer");
+                repCase.employerID = caseActivity.getString("employerID");
                 ulpCaseList.add(repCase);
             }
         } catch (SQLException ex) {
@@ -141,7 +143,8 @@ public class EmployerCaseSearchData {
             Statement stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE EmployerCaseSearchData SET"
-                    + " employer = ?"
+                    + " employer = ?,"
+                    + " employerID = ?"
                     + " WHERE caseYear = ? AND"
                     + " caseType = ? AND"
                     + " caseMonth = ? AND"
@@ -149,10 +152,11 @@ public class EmployerCaseSearchData {
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, Employer.loadEmployerByID(employerID).employerName);
-            preparedStatement.setString(2, Global.caseYear);
-            preparedStatement.setString(3, Global.caseType);
-            preparedStatement.setString(4, Global.caseMonth);
-            preparedStatement.setString(5, Global.caseNumber);
+            preparedStatement.setString(2, employerID);
+            preparedStatement.setString(3, Global.caseYear);
+            preparedStatement.setString(4, Global.caseType);
+            preparedStatement.setString(5, Global.caseMonth);
+            preparedStatement.setString(6, Global.caseNumber);
 
             preparedStatement.executeUpdate();
             
