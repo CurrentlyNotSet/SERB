@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import parker.serb.Global;
+import parker.serb.bookmarkProcessing.processMailingAddressBookmarks;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.NamePrefix;
 import parker.serb.sql.Party;
@@ -37,6 +38,8 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
 
     String id;
     public int updateStatus;
+    Party partyInformation;
+    
     /**
      * Creates new form ViewUpdatePartyPanel
      * @param parent
@@ -125,7 +128,7 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
     
     
     private void loadInformation(String id) {
-        Party partyInformation = Party.getPartyByID(String.valueOf(id));
+        partyInformation = Party.getPartyByID(String.valueOf(id));
         
         prefixComboBox.setSelectedItem(partyInformation.prefix);
         firstNameTextBox.setText(partyInformation.firstName);
@@ -294,6 +297,7 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
         jLabel14 = new javax.swing.JLabel();
         faxNumberTextBox = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -401,6 +405,13 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
 
         jLabel15.setText("Fax:");
 
+        jButton3.setText("Print Envelope");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -411,6 +422,8 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(updateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
@@ -525,7 +538,8 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(closeButton)
-                    .addComponent(updateButton))
+                    .addComponent(updateButton)
+                    .addComponent(jButton3))
                 .addContainerGap())
         );
 
@@ -558,6 +572,10 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_updateButtonActionPerformed
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        processMailingAddressBookmarks.processSingleEnvelopeInsert(Global.templatePath, "EnvelopeInsert.docx", CaseParty.convertPartyToCasePartyModel(partyInformation));
+    }//GEN-LAST:event_jButton3ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField address1TextBox;
     private javax.swing.JTextField address2TextBox;
@@ -568,6 +586,7 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
     private javax.swing.JTextField emailAddressTextBox;
     private javax.swing.JTextField faxNumberTextBox;
     private javax.swing.JTextField firstNameTextBox;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

@@ -776,4 +776,34 @@ public class CaseParty {
             Logger.getLogger(CaseParty.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public static CaseParty convertPartyToCasePartyModel(Party old){
+        CaseParty caseParty = new CaseParty();
+        caseParty.id = 0;
+        caseParty.caseYear = null;
+        caseParty.caseType = null;
+        caseParty.caseMonth = null;
+        caseParty.caseNumber = null;
+        caseParty.partyID = old.id;
+        caseParty.caseRelation = null;
+        caseParty.prefix = old.prefix;
+        caseParty.firstName = old.firstName;
+        caseParty.middleInitial = old.middleInitial;
+        caseParty.lastName = old.lastName;
+        caseParty.suffix = old.suffix;
+        caseParty.nameTitle = old.nameTitle;
+        caseParty.jobTitle = old.jobTitle;
+        caseParty.companyName = old.companyName;
+        caseParty.address1 = old.address1;
+        caseParty.address2 = old.address2;
+        caseParty.address3 = old.address3;
+        caseParty.city = old.city;
+        caseParty.stateCode = old.stateCode;
+        caseParty.zipcode = old.zipCode;
+        caseParty.phone1 = old.phone1;
+        caseParty.phone2 = old.phone2;
+        caseParty.fax = old.fax;
+        caseParty.emailAddress = old.emailAddress;
+        return caseParty;
+    }
 }

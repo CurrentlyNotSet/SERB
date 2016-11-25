@@ -26,7 +26,6 @@ import parker.serb.sql.PostalOut;
 import parker.serb.sql.PostalOutAttachment;
 import parker.serb.util.FileService;
 import parker.serb.util.NumberFormatService;
-import parker.serb.util.StringUtilities;
 
 /**
  *
@@ -54,8 +53,7 @@ public class postalSend {
                         postalEntry.caseYear, postalEntry.caseType, postalEntry.caseMonth, postalEntry.caseNumber) + File.separator;
 
         //Generate Envelope Insert
-        String dept = StringUtilities.getDepartment();
-        String envelopeFileName = processMailingAddressBookmarks.processDoAEnvelopeInser(Global.templatePath, "EnvelopeInsert.docx", dept, postalEntry);
+        String envelopeFileName = processMailingAddressBookmarks.processDoAEnvelopeInsert(Global.templatePath, "EnvelopeInsert.docx", postalEntry);
 
         //Convert Envelope
         String envelopeFilePDF = WordToPDF.createPDF(casePath, envelopeFileName);
@@ -72,56 +70,55 @@ public class postalSend {
         //Convert Attachments
         for (PostalOutAttachment attach : attachmentList) {
             String fileName = attach.fileName;
-                String extension = FilenameUtils.getExtension(attach.fileName);
+            String extension = FilenameUtils.getExtension(attach.fileName);
 
-                //Convert attachments to PDF
-                    
-                    //If Image
-                    if (FileService.isImageFormat(fileName)) {
-                        fileName = ImageToPDF.createPDFFromImage(casePath, fileName);
+            //Convert attachments to PDF
+            //If Image
+            if (FileService.isImageFormat(fileName)) {
+                fileName = ImageToPDF.createPDFFromImage(casePath, fileName);
 
-                        //Add Attachment To PDF Merge
-                        try {
-                            ut.addSource(casePath + fileName);
-                            tempPDFList.add(casePath + fileName);
-                        } catch (FileNotFoundException ex) {
-                            Logger.getLogger(postalSend.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                //Add Attachment To PDF Merge
+                try {
+                    ut.addSource(casePath + fileName);
+                    tempPDFList.add(casePath + fileName);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(postalSend.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
-                    //If Word Doc
-                    } else if (extension.equals("docx") || extension.equals("doc")) {
-                        fileName = WordToPDF.createPDF(casePath, fileName);
+                //If Word Doc
+            } else if (extension.equals("docx") || extension.equals("doc")) {
+                fileName = WordToPDF.createPDF(casePath, fileName);
 
-                        //Add Attachment To PDF Merge
-                        try {
-                            ut.addSource(casePath + fileName);
-                            tempPDFList.add(casePath + fileName);
-                        } catch (FileNotFoundException ex) {
-                            Logger.getLogger(postalSend.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                        
-                    //If Text File
-                    } else if ("txt".equals(extension)) {
-                        fileName = TXTtoPDF.createPDF(casePath, fileName);
+                //Add Attachment To PDF Merge
+                try {
+                    ut.addSource(casePath + fileName);
+                    tempPDFList.add(casePath + fileName);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(postalSend.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
-                        //Add Attachment To PDF Merge
-                        try {
-                            ut.addSource(casePath + fileName);
-                            tempPDFList.add(casePath + fileName);
-                        } catch (FileNotFoundException ex) {
-                            Logger.getLogger(postalSend.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                //If Text File
+            } else if ("txt".equals(extension)) {
+                fileName = TXTtoPDF.createPDF(casePath, fileName);
 
-                    //If PDF
-                    } else if (FilenameUtils.getExtension(fileName).equals(".pdf")) {
+                //Add Attachment To PDF Merge
+                try {
+                    ut.addSource(casePath + fileName);
+                    tempPDFList.add(casePath + fileName);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(postalSend.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
-                        //Add Attachment To PDF Merge
-                        try {
-                            ut.addSource(casePath + fileName);
-                        } catch (FileNotFoundException ex) {
-                            Logger.getLogger(postalSend.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
+                //If PDF
+            } else if (FilenameUtils.getExtension(fileName).equals(".pdf")) {
+
+                //Add Attachment To PDF Merge
+                try {
+                    ut.addSource(casePath + fileName);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(postalSend.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
 
         //DocumentFileName
@@ -152,38 +149,38 @@ public class postalSend {
                 NumberFormatService.generateFullCaseNumberNonGlobal(
                         postalEntry.caseYear, postalEntry.caseType, postalEntry.caseMonth, postalEntry.caseNumber).split("-"),
                 "", "", "", "", false, false);
-        
+
         //Remove SQL Entries for Postal
         PostalOut.removeEntry(sendID);
         PostalOutAttachment.removeEntry(sendID);
-        
+
         //Update Activity List if Available
-        if (postalEntry.caseYear.equals(Global.caseYear) && 
-                postalEntry.caseType.equals(Global.caseType) &&
-                postalEntry.caseMonth.equals(Global.caseMonth) && 
-                postalEntry.caseNumber.equals(Global.caseNumber)){
+        if (postalEntry.caseYear.equals(Global.caseYear)
+                && postalEntry.caseType.equals(Global.caseType)
+                && postalEntry.caseMonth.equals(Global.caseMonth)
+                && postalEntry.caseNumber.equals(Global.caseNumber)) {
             switch (Global.activeSection) {
-            case "REP":
-                Global.root.getrEPRootPanel1().getActivityPanel1().loadAllActivity();
-                break;
-            case "ULP":
-                Global.root.getuLPRootPanel1().getActivityPanel1().loadAllActivity();
-                break;
-            case "ORG":
-                Global.root.getoRGRootPanel1().getActivityPanel1().loadAllActivity();
-                break;
-            case "MED":
-                Global.root.getmEDRootPanel1().getActivityPanel1().loadAllActivity();
-                break;
-            case "Hearings":
-                break;
-            case "Civil Service Commission":
-                Global.root.getcSCRootPanel1().getActivityPanel1().loadAllActivity();
-                break;
-            case "CMDS":
-                Global.root.getcMDSRootPanel1().getActivityPanel1().loadAllActivity();
-                break;
-        }
+                case "REP":
+                    Global.root.getrEPRootPanel1().getActivityPanel1().loadAllActivity();
+                    break;
+                case "ULP":
+                    Global.root.getuLPRootPanel1().getActivityPanel1().loadAllActivity();
+                    break;
+                case "ORG":
+                    Global.root.getoRGRootPanel1().getActivityPanel1().loadAllActivity();
+                    break;
+                case "MED":
+                    Global.root.getmEDRootPanel1().getActivityPanel1().loadAllActivity();
+                    break;
+                case "Hearings":
+                    break;
+                case "Civil Service Commission":
+                    Global.root.getcSCRootPanel1().getActivityPanel1().loadAllActivity();
+                    break;
+                case "CMDS":
+                    Global.root.getcMDSRootPanel1().getActivityPanel1().loadAllActivity();
+                    break;
+            }
         }
     }
 
