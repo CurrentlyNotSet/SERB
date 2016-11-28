@@ -691,18 +691,7 @@ public class Activity {
         Statement stmt = null;
         List casetypes = CaseType.getCaseType();
         List<Activity> activityList = new ArrayList<>();
-        
-        switch(Global.activeSection) {
-            case "ORG":
-                casetypes.add("ORG");
-                break;
-            case "Civil Service Commission":
-                casetypes.add("CSC");
-                break;
-            default:
-                break;
-        }        
-            
+                    
         try {
 
             stmt = Database.connectToDB().createStatement();

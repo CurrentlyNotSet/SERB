@@ -46,6 +46,18 @@ public class CaseType {
             while(caseType.next()) {
                 activityList.add(caseType.getString("caseType"));
             }
+            
+            switch(Global.activeSection) {
+            case "ORG":
+                activityList.add("ORG");
+                break;
+            case "Civil Service Commission":
+                activityList.add("CSC");
+                break;
+            default:
+                break;
+        }   
+            
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
         }
