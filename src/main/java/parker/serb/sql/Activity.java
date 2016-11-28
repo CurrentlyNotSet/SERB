@@ -688,10 +688,20 @@ public class Activity {
     }
     
     public static List<Activity> loadDocumentsBySectionAwaitingRedaction() {
+        Statement stmt = null;
         List casetypes = CaseType.getCaseType();
         List<Activity> activityList = new ArrayList<>();
         
-        Statement stmt = null;
+        switch(Global.activeSection) {
+            case "ORG":
+                casetypes.add("ORG");
+                break;
+            case "Civil Service Commission":
+                casetypes.add("CSC");
+                break;
+            default:
+                break;
+        }        
             
         try {
 
@@ -747,8 +757,7 @@ public class Activity {
             }
         }
         return activityList;
-    }
-    
+    }    
     
     public static List<Activity> loadMailLogBySection(String startDate, String endDate) {
         List casetypes = CaseType.getCaseType();

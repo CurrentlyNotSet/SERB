@@ -217,4 +217,27 @@ public class EmailOut {
         return 0;
     }
     
+    public static int getEmailCount(String section) {
+        int count = 0;
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT COUNT(*) AS [count] FROM emailout WHERE section = ? "
+                    + "UNION ALL SELECT COUNT(*) AS [count] FROM postalOut WHERE section = ?";
+            
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, section);
+            preparedStatement.setString(2, section);
+            
+            ResultSet emailListRS = preparedStatement.executeQuery();
+            
+            while(emailListRS.next()) {
+                count += emailListRS.getInt("count");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return count;
+    }
+    
 }

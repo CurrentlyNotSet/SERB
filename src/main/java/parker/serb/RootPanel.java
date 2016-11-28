@@ -47,6 +47,7 @@ import parker.serb.login.ExitVerification;
 import parker.serb.mailLogViewer.MailLogViewerPanel;
 import parker.serb.publicRecords.PublicRecordsMainPanel;
 import parker.serb.sql.DocketLock;
+import parker.serb.sql.EmailOut;
 import parker.serb.sql.NewCaseLock;
 import parker.serb.util.CreateNewCSCDialog;
 import parker.serb.util.CreateNewHearingDialog;
@@ -75,6 +76,7 @@ public class RootPanel extends javax.swing.JFrame {
         Global.activeSection = jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex());
         setHeaderCard();
         enableButtons();
+        letterQueueThread();
         
         //TODO: Move this to a single call to speed up time
         User.updateLastLogInTime();
@@ -244,9 +246,9 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton3.setText("Letters");
                 jButton4.setVisible(false);
                 jButton4.setText("Reports");
-                jButton5.setVisible(false);
+                jButton5.setVisible(true);
                 jButton5.setText("Queue");
-                jButton6.setVisible(false);
+                jButton6.setVisible(true);
                 jButton6.setText("Public Records");
                 jButton7.setVisible(true);
                 jButton7.setText("Mail Log");
@@ -275,9 +277,9 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton3.setEnabled(false);
                 jButton4.setVisible(false);
                 jButton4.setText("Reports");
-                jButton5.setVisible(false);
+                jButton5.setVisible(true);
                 jButton5.setText("Queue");
-                jButton6.setVisible(false);
+                jButton6.setVisible(true);
                 jButton6.setText("Public Records");
                 jButton7.setVisible(true);
                 jButton7.setText("Mail Log");
@@ -334,9 +336,9 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton4.setText("Single Letter");
                 jButton5.setVisible(false);
                 jButton5.setText("Reports");                
-                jButton6.setVisible(false);
+                jButton6.setVisible(true);
                 jButton6.setText("Queue");                
-                jButton7.setVisible(false);
+                jButton7.setVisible(true);
                 jButton7.setText("Public Records");                
                 jButton8.setVisible(true);
                 jButton8.setText("Mail Log");
@@ -361,10 +363,10 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton4.setText("Single Letter");
                 jButton5.setVisible(false);
                 jButton5.setText("Reports");
-                jButton6.setVisible(false);
+                jButton6.setVisible(true);
                 jButton6.setText("Queue");
-                jButton7.setVisible(false);
-                jButton6.setText("Public Records");
+                jButton7.setVisible(true);
+                jButton7.setText("Public Records");
                 jButton8.setVisible(true);
                 jButton8.setText("Mail Log");
                 break;
@@ -388,10 +390,10 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton4.setText("Single Letter");
                 jButton5.setVisible(false);
                 jButton5.setText("Reports");
-                jButton6.setVisible(false);
+                jButton6.setVisible(true);
                 jButton6.setText("Queue");
-                jButton7.setVisible(false);
-                jButton6.setText("Public Records");
+                jButton7.setVisible(true);
+                jButton7.setText("Public Records");
                 jButton8.setVisible(true);
                 jButton8.setText("Mail Log");
                 break;
@@ -421,6 +423,63 @@ public class RootPanel extends javax.swing.JFrame {
                 break;    
         }
     }
+    
+    /**
+     * Thread for letter queue count
+     */
+    private void letterQueueThread(){
+        Thread cmdsThread = new Thread() {
+            @Override
+            public void run() {
+                updateLetterQueueButton();
+            }
+        };
+        cmdsThread.start(); 
+    }
+
+    private void updateLetterQueueButton() {
+        try {
+            Thread.sleep(1000);
+            while (true) {
+                try {
+                    updateQueueButtonText();
+                    Thread.sleep(30000); //milliseconds  (30 sec)
+
+                } catch (InterruptedException ex) {
+                    System.err.println("Thread Interrupted");
+                }
+            }
+        } catch (InterruptedException ex) {
+            System.err.println("Thread Interrupted");
+        }
+    }
+
+    private void updateQueueButtonText(){
+        int count = EmailOut.getEmailCount(Global.activeSection);
+        
+        String amount = "";
+//        if (count > 0){
+            amount = " (" + String.valueOf(count) + ")";
+//        }
+        
+        switch(Global.activeSection) {
+            case "REP":
+            case "ULP":
+            case "MED":
+                jButton5.setText("Queue" + amount);
+                break;
+            case "ORG":
+            case "Civil Service Commission":
+            case "CMDS":
+                jButton6.setText("Queue" + amount);
+                break;
+            case "Hearings":
+                break;    
+            default:
+                break;
+        }
+    }
+    
     
     /**
      * This will disable all tabs that are not of the active section, this
@@ -567,11 +626,7 @@ public class RootPanel extends javax.swing.JFrame {
     public HearingRootPanel getHearingRootPanel1() {
         return hearingRootPanel1;
     }
-    
-    
-    
-    
-    
+        
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -1421,6 +1476,11 @@ public class RootPanel extends javax.swing.JFrame {
             case "ULP":
             case "MED":    
                 new MailLogViewerPanel((JFrame) this.getRootPane().getParent(), true);
+                break;
+            case "ORG":
+            case "Civil Service Commission":
+            case "CMDS":    
+                new PublicRecordsMainPanel((JFrame) this.getRootPane().getParent(), true);
                 break;
             default:
                 break;
