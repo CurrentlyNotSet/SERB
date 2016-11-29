@@ -132,6 +132,9 @@ public class CMDSHeaderPanel extends javax.swing.JPanel {
                     appellantTextBox.setText(appellant);
                 }
             }
+            appellantTextBox.setCaretPosition(0);
+            appelleeTextBox.setCaretPosition(0);
+            inventoryStatusLineTextBox.setCaretPosition(0);
         }
     }
     
