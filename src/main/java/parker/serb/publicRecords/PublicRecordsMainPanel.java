@@ -16,6 +16,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import parker.serb.Global;
 import parker.serb.sql.Activity;
+import parker.serb.sql.CSCCase;
+import parker.serb.sql.ORGCase;
 import parker.serb.util.FileService;
 import parker.serb.util.NumberFormatService;
 
@@ -41,8 +43,18 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
 
     private void setDefaults() {
         headerLabel.setText(Global.activeSection + " Public Records");
-        if (Global.caseYear != null) {
-            caseDocsLabel.setText("Documents for " + NumberFormatService.generateFullCaseNumber());
+        if (Global.caseNumber != null) {
+            switch (Global.activeSection) {
+                case "ORG":
+                    caseDocsLabel.setText("Documents for " + ORGCase.getORGName());
+                    break;
+                case "Civil Service Commission":
+                    caseDocsLabel.setText("Documents for " + CSCCase.getCSCName());
+                    break;
+                default:
+                    caseDocsLabel.setText("Documents for " + NumberFormatService.generateFullCaseNumber());
+                    break;
+            }
         } else {
             jTabbedPane1.remove(caseDocsPanel);
         }
@@ -107,6 +119,18 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
         awaitingTable.getColumnModel().getColumn(4).setMinWidth(0);
         awaitingTable.getColumnModel().getColumn(4).setPreferredWidth(0);
         awaitingTable.getColumnModel().getColumn(4).setMaxWidth(0);
+
+        switch (Global.activeSection) {
+            case "Civil Service Commission":
+            case "ORG":
+                awaitingTable.getColumnModel().getColumn(2).setHeaderValue("Org Number");
+                awaitingTable.getColumnModel().getColumn(2).setMinWidth(90);
+                awaitingTable.getColumnModel().getColumn(2).setPreferredWidth(90);
+                awaitingTable.getColumnModel().getColumn(2).setMaxWidth(90);
+                break;
+            default:
+                break;
+        }
     }
 
     private void setActiveTab() {
@@ -135,8 +159,21 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
     private void loadCaseDocsTable() {
         DefaultTableModel model = (DefaultTableModel) caseDocsTable.getModel();
         model.setRowCount(0);
+        List<Activity> activtyList = null;
 
-        List<Activity> activtyList = Activity.loadActivityDocumentsByGlobalCasePublicRectords();
+        switch (Global.activeSection) {
+            case "REP":
+            case "ULP":
+            case "MED":
+            case "CMDS":
+            case "Hearings":
+                activtyList = Activity.loadActivityDocumentsByGlobalCasePublicRectords();
+                break;
+            case "Civil Service Commission":
+            case "ORG":
+                activtyList = Activity.loadActivityDocumentsByGlobalCaseORGCSCPublicRectords();
+                break;
+        }
 
         for (Activity doc : activtyList) {
             model.addRow(new Object[]{
@@ -169,7 +206,7 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
 
     private void sendDocs() {
         List<Activity> docsList = new ArrayList<>();
-        
+
         for (int i = 0; i < caseDocsTable.getRowCount(); i++) {
             if (caseDocsTable.getValueAt(i, 1).equals(true)) {
                 Activity act = new Activity();
@@ -179,8 +216,8 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
                 docsList.add(act);
             }
         }
-        
-        if (docsList.size() > 0){
+
+        if (docsList.size() > 0) {
             //SEND panel
             new PublicRecordsEmailPanel(Global.root, true, docsList);
             loadCaseDocsTable();
@@ -199,8 +236,8 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
 
                 //Copy File
                 boolean copySuccess = FileService.renamePublicRecordsFile(caseDocsTable.getValueAt(i, 4).toString());
-                
-                if (copySuccess){
+
+                if (copySuccess) {
                     //Get Full Activity
                     Activity doup = Activity.getFULLActivityByID(id);
 
@@ -226,7 +263,7 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
         loadRedactionTable();
     }
 
-    private void reloadActivity(){
+    private void reloadActivity() {
         switch (Global.activeSection) {
             case "REP":
                 Global.root.getrEPRootPanel1().getActivityPanel1().loadAllActivity();
@@ -250,7 +287,7 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
                 break;
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -473,7 +510,7 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void CloseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CloseButtonActionPerformed
-        reloadActivity();        
+        reloadActivity();
         this.dispose();
     }//GEN-LAST:event_CloseButtonActionPerformed
 
