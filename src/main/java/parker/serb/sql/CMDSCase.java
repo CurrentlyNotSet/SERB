@@ -86,8 +86,7 @@ public class CMDSCase {
                     + " caseMonth,"
                     + " caseNumber"
                     + " from CMDSCase"
-                    + " Order By openDate DESC,"
-                    + " CaseNumber DESC";
+                    + " Order By openDate DESC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 

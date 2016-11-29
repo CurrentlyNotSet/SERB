@@ -160,8 +160,7 @@ public class MEDCase {
                     + " caseMonth,"
                     + " caseNumber"
                     + " from MEDCase"
-                    + " Order By CaseYear DESC,"
-                    + " CaseNumber DESC";
+                    + " Order By FileDate DESC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 

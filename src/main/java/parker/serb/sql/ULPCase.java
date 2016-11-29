@@ -65,8 +65,7 @@ public class ULPCase {
                     + " caseMonth,"
                     + " caseNumber"
                     + " from ULPCase"
-                    + " Order By CaseYear DESC,"
-                    + " CaseNumber DESC";
+                    + " Order By fileDate DESC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
