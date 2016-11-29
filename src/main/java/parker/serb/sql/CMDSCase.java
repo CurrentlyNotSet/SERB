@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -271,11 +272,11 @@ public class CMDSCase {
                     + " caseStatus"
                     + " from CMDSCase"
                     + " where caseYear = ? "
-                    + " and caseMonth = ?";
+                    + " and caseNumber = ?";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, Global.caseYear);
-            preparedStatement.setString(2, Global.caseMonth);
+            preparedStatement.setString(2, Global.caseNumber);
 
             ResultSet caseNumberRS = preparedStatement.executeQuery();
            
@@ -287,6 +288,103 @@ public class CMDSCase {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
         }
         return caseStatus;
+    }
+    
+    public static CMDSCase getRRPOPullDates() {
+        
+        CMDSCase cmds = new CMDSCase();
+        
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select"
+                    + " pullDateRR,"
+                    + " pullDatePO1,"
+                    + " pullDatePO2,"
+                    + " pullDatePO3,"
+                    + " pullDatePO4"
+                    + " from CMDSCase"
+                    + " where caseYear = ? "
+                    + " and caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, Global.caseYear);
+            preparedStatement.setString(2, Global.caseNumber);
+
+            ResultSet caseNumberRS = preparedStatement.executeQuery();
+           
+            if(caseNumberRS.next()) {
+                cmds.pullDateRR = caseNumberRS.getTimestamp("pullDateRR");
+                cmds.pullDatePO1 = caseNumberRS.getTimestamp("pullDatePO1");
+                cmds.pullDatePO2 = caseNumberRS.getTimestamp("pullDatePO2");
+                cmds.pullDatePO3 = caseNumberRS.getTimestamp("pullDatePO3");
+                cmds.pullDatePO4 = caseNumberRS.getTimestamp("pullDatePO4");
+            }
+            stmt.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return cmds;
+    }
+    
+    public static CMDSCase getmailedPODates() {
+        
+        CMDSCase cmds = new CMDSCase();
+        
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select"
+                    + " mailedPO1, mailedPO2, mailedPO3, mailedPO4"
+                    + " from CMDSCase"
+                    + " where caseYear = ? "
+                    + " and caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, Global.caseYear);
+            preparedStatement.setString(2, Global.caseNumber);
+
+            ResultSet caseNumberRS = preparedStatement.executeQuery();
+           
+            if(caseNumberRS.next()) {
+                cmds.mailedPO1 = caseNumberRS.getTimestamp("mailedPO1");
+                cmds.mailedPO2 = caseNumberRS.getTimestamp("mailedPO2");
+                cmds.mailedPO3 = caseNumberRS.getTimestamp("mailedPO3");
+                cmds.mailedPO4 = caseNumberRS.getTimestamp("mailedPO4");
+            }
+            stmt.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return cmds;
+    }
+    
+    public static String getALJemail() {
+        String email = "";
+        
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select emailAddress "
+                    + "from Users"
+                    + " INNER JOIN CMDSCase"
+                    + " ON CMDSCase.aljID = Users.id"
+                    + " where caseYear = ? and caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, Global.caseYear);
+            preparedStatement.setString(2, Global.caseNumber);
+
+            ResultSet caseNumberRS = preparedStatement.executeQuery();
+           
+            if(caseNumberRS.next()) {
+                email = caseNumberRS.getString("emailAddress");
+            }
+            stmt.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return email;
     }
     
     public static void updateCaseInventoryStatusLines(String activty, Date date) {
@@ -337,6 +435,197 @@ public class CMDSCase {
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public static void updateCaseByTypeEEntry(CMDSCase poDate, String caseStatus, String caseNumber) {
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Update CMDSCase"
+                    + " set mailedPO1 = ?,"
+                    + " mailedPO2 = ?,"
+                    + " mailedPO3 = ?,"
+                    + " mailedPO4 = ?,"
+                    + " caseStatus = ?"
+                    + " where caseYear = ?"
+                    + " and caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setTimestamp(1, poDate.mailedPO1);
+            preparedStatement.setTimestamp(2, poDate.mailedPO2);
+            preparedStatement.setTimestamp(3, poDate.mailedPO3);
+            preparedStatement.setTimestamp(4, poDate.mailedPO4);
+            preparedStatement.setString(5, caseStatus);
+            preparedStatement.setString(6, caseNumber.split("-")[0]);
+            preparedStatement.setString(7, caseNumber.split("-")[3]);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public static void updateCaseByTypeFEntry(CMDSCase pullDates, String caseNumber) {
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Update CMDSCase"
+                    + " set pullDateRR = ?,"
+                    + " pullDatePO1 = ?,"
+                    + " pullDatePO2 = ?,"
+                    + " pullDatePO3 = ?,"
+                    + " pullDatePO4 = ?"
+                    + " where caseYear = ?"
+                    + " and caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setTimestamp(1, pullDates.pullDateRR);
+            preparedStatement.setTimestamp(2, pullDates.pullDatePO1);
+            preparedStatement.setTimestamp(3, pullDates.pullDatePO2);
+            preparedStatement.setTimestamp(4, pullDates.pullDatePO3);
+            preparedStatement.setTimestamp(5, pullDates.pullDatePO4);
+            preparedStatement.setString(6, caseNumber.split("-")[0]);
+            preparedStatement.setString(7, caseNumber.split("-")[3]);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public static void updateCaseByTypeMEntry(String caseNumber) {
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Update CMDSCase"
+                    + " set caseStatus = 'A'"
+                    + " where caseYear = ?"
+                    + " and caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, caseNumber.split("-")[0]);
+            preparedStatement.setString(2, caseNumber.split("-")[3]);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public static void updateCaseByTypeNEntry(String whichDate, String caseNumber) {
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Update CMDSCase"
+                    + " set " + whichDate + " = ?"
+                    + " where caseYear = ?"
+                    + " and caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setTimestamp(1, null);
+            preparedStatement.setString(2, caseNumber.split("-")[0]);
+            preparedStatement.setString(3, caseNumber.split("-")[3]);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public static void updateCaseByTypeQEntry(String whichGreenCardDate,
+            String whichPullDate,
+            Timestamp signedDate,
+            Timestamp pullDate,
+            String caseNumber) {
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Update CMDSCase"
+                    + " set " + whichGreenCardDate + " = ?,"
+                    + " " + whichPullDate + " = ?"
+                    + " where caseYear = ?"
+                    + " and caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setTimestamp(1, signedDate);
+            preparedStatement.setTimestamp(2, pullDate);
+            preparedStatement.setString(3, caseNumber.split("-")[0]);
+            preparedStatement.setString(4, caseNumber.split("-")[3]);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public static void updateCaseByTypeREntry(String closeDate,
+            String caseNumber) {
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Update CMDSCase"
+                    + " set closeDate = ?,"
+                    + " caseStatus = 'C'"
+                    + " where caseYear = ?"
+                    + " and caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setTimestamp(1, new Timestamp(Global.mmddyyyy.parse(closeDate).getTime()));
+            preparedStatement.setString(2, caseNumber.split("-")[0]);
+            preparedStatement.setString(3, caseNumber.split("-")[3]);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(CMDSCase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public static void updateCaseByTypeUEntry(String pbrBox,
+            String caseNumber) {
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Update CMDSCase"
+                    + " set pbrBox = ?"
+                    + " where caseYear = ?"
+                    + " and caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, pbrBox);
+            preparedStatement.setString(2, caseNumber.split("-")[0]);
+            preparedStatement.setString(3, caseNumber.split("-")[3]);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+    }
+    
+    public static void updateCaseByTypeVEntry(String whichRemail,
+            Timestamp remailedDate,
+            Timestamp pullDate,
+            String caseNumber) {
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Update CMDSCase"
+                    + " set " + whichRemail + " = ?,"
+                    + " pullDateRR = ?"
+                    + " where caseYear = ?"
+                    + " and caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setTimestamp(1, remailedDate);
+            preparedStatement.setTimestamp(2, pullDate);
+            preparedStatement.setString(3, caseNumber.split("-")[0]);
+            preparedStatement.setString(4, caseNumber.split("-")[3]);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        } 
     }
     
     /**

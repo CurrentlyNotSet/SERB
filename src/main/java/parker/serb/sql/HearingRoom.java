@@ -164,4 +164,28 @@ public class HearingRoom {
         return list;
     }
     
+    public static String getHearingRoomEmailByName(String roomAbbv) {
+        String hearingEmail = "";
+
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+            String sql = "SELECT roomEmail FROM hearingroom WHERE roomAbbreviation = ?";
+            
+            PreparedStatement ps = stmt.getConnection().prepareStatement(sql);
+            ps.setString(1, roomAbbv);
+            
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                hearingEmail = rs.getString("roomEmail") == null ? "" : rs.getString("roomEmail");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
+        return hearingEmail;
+    }
+    
+    
+    
 }

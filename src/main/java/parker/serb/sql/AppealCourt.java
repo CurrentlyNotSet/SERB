@@ -67,6 +67,29 @@ public class AppealCourt {
         return list;
     }
     
+    public static List<String> loadAllAppealCourt() {
+        List<String> list = new ArrayList<>();
+
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT * FROM AppealCourt where active = 1"
+                +" ORDER BY courtName";
+
+            PreparedStatement ps = stmt.getConnection().prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                list.add(rs.getString("courtName"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
+        return list;
+    }
+    
     public static AppealCourt getAppealCourtByID(int id) {
         AppealCourt item = new AppealCourt();
 
