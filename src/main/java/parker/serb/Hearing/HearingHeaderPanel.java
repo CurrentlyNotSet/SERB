@@ -54,8 +54,8 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
                     }
                 } else {
                     loadInformation();
-//                    if(Global.root.getHearingRootPanel1().getjTabbedPane1().getSelectedIndex() == 0)
-//                        Global.root.getHearingRootPanel1().getActivityPanel1().loadAllActivity();
+                    if(Global.root.getHearingRootPanel1().getjTabbedPane1().getSelectedIndex() == 0)
+                        Global.root.getHearingRootPanel1().getActivityPanel1().loadAllHearingActivity();
                     Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
                 }
             }
