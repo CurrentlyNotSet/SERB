@@ -7,12 +7,12 @@ package parker.serb.mailLogViewer;
 
 import java.util.Date;
 import java.util.List;
-import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
-import parker.serb.activity.DetailedActivityDialog;
+import parker.serb.report.GenerateReport;
 import parker.serb.sql.Activity;
-import parker.serb.sql.Audit;
+import parker.serb.sql.CaseType;
+import parker.serb.sql.SMDSDocuments;
 import parker.serb.util.FileService;
 import parker.serb.util.NumberFormatService;
 
@@ -44,8 +44,6 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
         } else if (Global.activeSection.equals("CMDS")){
             jTable1.getColumnModel().getColumn(3).setHeaderValue("ALJ");
         }
-        
-        
         
         jTable1.getTableHeader().repaint();
         startDateField.setDate(new Date());
@@ -110,8 +108,7 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
             } else {
                 number = NumberFormatService.generateFullCaseNumberNonGlobal(item.caseYear, item.caseType, item.caseMonth, item.caseNumber);
             }
-            
-            
+                        
             model.addRow(new Object[]{
                 item.id,
                 item.date,
@@ -121,7 +118,35 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
                 item.action,
                 item.fileName
             });
-        }
+        }        
+        PrintButton.setEnabled(jTable1.getRowCount() > 0);
+    }
+
+    private void generateReport() {
+        SMDSDocuments doc = new SMDSDocuments();
+        doc.section = "ALL";
+        doc.fileName = "MailLog.jasper";
+        
+        List casetypes = CaseType.getCaseType();
+        
+        String sqlWHERE = " Activity.date >= '" + startDateField.getText() + " 00:00:00.000'  AND Activity.date <= '" + endDateField.getText() + " 23:59:59.999' "
+                    + "AND Activity.fileName IS NOT NULL AND Activity.fileName != '' " 
+                    + "AND (Activity.action LIKE 'IN -%' OR Activity.action LIKE 'OUT -%') ";
+            
+            if (!casetypes.isEmpty()) {
+                sqlWHERE += "AND (";
+                
+                for (Object casetype : casetypes) {
+                    
+                    sqlWHERE += " Activity.caseType = '" + casetype.toString() + "' OR";
+                }
+                
+                sqlWHERE = sqlWHERE.substring(0, (sqlWHERE.length() - 2)) + ")";
+            }
+            
+            sqlWHERE += " ORDER BY Activity.CaseYear DESC, Activity.caseMonth DESC, Activity.caseNumber DESC, activity.id DESC";
+        
+        GenerateReport.generateExactStringReport(sqlWHERE, doc);
     }
 
     /**
@@ -169,7 +194,6 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
         });
 
         PrintButton.setText("Print");
-        PrintButton.setEnabled(false);
         PrintButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 PrintButtonActionPerformed(evt);
@@ -262,7 +286,7 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
     }//GEN-LAST:event_CancelButtonActionPerformed
 
     private void PrintButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PrintButtonActionPerformed
-        // TODO add your handling code here:
+        generateReport();
     }//GEN-LAST:event_PrintButtonActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
