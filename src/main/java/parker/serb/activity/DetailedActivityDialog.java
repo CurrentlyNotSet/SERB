@@ -59,6 +59,7 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
             case "ORG":  userList = User.loadORGComboBox(); break;
             case "Civil Service Commission":  userList = User.loadORGComboBox(); break;
             case "CMDS":  userList = User.loadORGComboBox(); break;
+            case "Hearings":  userList = User.loadORGComboBox(); break;
             default: break;
         }
         

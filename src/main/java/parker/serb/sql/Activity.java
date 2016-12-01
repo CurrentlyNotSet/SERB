@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.dbutils.DbUtils;
+import org.apache.commons.io.FilenameUtils;
 import parker.serb.Global;
 import parker.serb.util.SlackNotification;
 
@@ -105,7 +106,7 @@ public class Activity {
             preparedStatement.setInt(5, Global.activeUser.id);
             preparedStatement.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
             preparedStatement.setString(7, action.equals("") ? null : action);
-            preparedStatement.setString(8, fileName == null || fileName.equals("") ? null : fileName.substring(fileName.lastIndexOf(File.separator)));
+            preparedStatement.setString(8, fileName == null || fileName.equals("") ? null : FilenameUtils.getName(fileName));
             preparedStatement.setString(9, "");
             preparedStatement.setString(10, "");
             preparedStatement.setString(11, "");

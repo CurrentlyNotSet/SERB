@@ -9,6 +9,8 @@ import java.io.File;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JFileChooser;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import parker.serb.Global;
 import parker.serb.sql.CMDSHistoryCategory;
 import parker.serb.sql.CMDSHistoryDescription;
@@ -25,11 +27,48 @@ public class CMDSAddHistoryEntryDialog extends javax.swing.JDialog {
     public CMDSAddHistoryEntryDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        addListeners();
         entryDateTextBox.setText(Global.mmddyyyy.format(new Date()));
         loadMailTypeComboBox();
         loadEntryTypeComboBox();
         setLocationRelativeTo(parent);
         setVisible(true);
+    }
+    
+    private void addListeners() {
+        entryDateTextBox.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                enableSaveButton();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                enableSaveButton();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                enableSaveButton();
+            }
+        });
+        
+        
+    }
+    
+    private void enableSaveButton() {
+        if(entryDateTextBox.getText().equals("")
+                || mailTypeComboBox.getSelectedItem().toString().equals("")
+                || entryTypeComboBox.getSelectedItem().toString().equals("")
+                || entryDescriptionComboBox.getSelectedItem() == null) {
+            saveButton.setEnabled(false);
+        } else {
+            if(entryDescriptionComboBox.getSelectedItem().toString().equals("")) {
+                saveButton.setEnabled(false);
+            } else {
+                saveButton.setEnabled(true);
+            }
+        }
     }
     
     private void loadMailTypeComboBox() {
@@ -184,6 +223,7 @@ public class CMDSAddHistoryEntryDialog extends javax.swing.JDialog {
 
         jLabel7.setText("Document Link:");
 
+        documnetLinkTextBox.setEditable(false);
         documnetLinkTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 documnetLinkTextBoxMouseClicked(evt);
@@ -191,6 +231,7 @@ public class CMDSAddHistoryEntryDialog extends javax.swing.JDialog {
         });
 
         saveButton.setText("Save");
+        saveButton.setEnabled(false);
         saveButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 saveButtonActionPerformed(evt);
@@ -259,11 +300,12 @@ public class CMDSAddHistoryEntryDialog extends javax.swing.JDialog {
                     .addComponent(jLabel2)
                     .addComponent(entryDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(mailTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(originalButton)
-                    .addComponent(faxedButton)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(mailTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(originalButton)
+                        .addComponent(faxedButton)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(entryTypeComboBox)
@@ -312,11 +354,10 @@ public class CMDSAddHistoryEntryDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void mailTypeComboBoxPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_mailTypeComboBoxPropertyChange
-
+        enableSaveButton();
     }//GEN-LAST:event_mailTypeComboBoxPropertyChange
 
     private void entryTypeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_entryTypeComboBoxActionPerformed
-        
         if(entryTypeComboBox.getSelectedItem() != null) {
             if(entryTypeComboBox.getSelectedItem().toString().equals("")) {
                 entryDescriptionComboBox.removeAllItems();
@@ -325,11 +366,15 @@ public class CMDSAddHistoryEntryDialog extends javax.swing.JDialog {
                 loadEntryDescriptionComboBox();
                 entryDescriptionComboBox.setEnabled(true);
             }
+            enableSaveButton();
         }
+        
     }//GEN-LAST:event_entryTypeComboBoxActionPerformed
 
     private void entryDescriptionComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_entryDescriptionComboBoxActionPerformed
-
+        if(entryDescriptionComboBox.getSelectedItem() != null) {
+            enableSaveButton();
+        }
     }//GEN-LAST:event_entryDescriptionComboBoxActionPerformed
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed

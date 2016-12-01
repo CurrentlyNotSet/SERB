@@ -92,11 +92,13 @@
                   <Component id="entryDateTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="mailTypeComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="originalButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="faxedButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel3" alignment="0" pref="27" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jLabel3" alignment="0" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="mailTypeComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="originalButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="faxedButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -291,6 +293,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="documnetLinkTextBox">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+      </Properties>
       <Events>
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="documnetLinkTextBoxMouseClicked"/>
       </Events>
@@ -298,6 +303,7 @@
     <Component class="javax.swing.JButton" name="saveButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Save"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="saveButtonActionPerformed"/>
