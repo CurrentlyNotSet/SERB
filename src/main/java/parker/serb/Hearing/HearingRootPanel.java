@@ -29,6 +29,7 @@ public class HearingRootPanel extends javax.swing.JPanel {
     public HearingRootPanel() {
         initComponents();
         addListeners();
+        jTabbedPane1.remove(2);
     }
     
     /**
