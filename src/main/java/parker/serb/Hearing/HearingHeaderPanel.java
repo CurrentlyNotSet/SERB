@@ -132,7 +132,7 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
 //                employeeOrgTextBox.setText(employeeOrg);
 //                incumbentEEOTextBox.setText(incumbentEEO);
 //                rivalEEOTextBox.setText(rivalEEO);
-//            }
+            }
         }
     }
     
