@@ -54,6 +54,7 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
                         Global.root.getmEDRootPanel1().clearAll();
                     }
                 } else {
+                    Global.root.getjButton3().setEnabled(true);
                     loadInformation();
                     if(Global.root.getmEDRootPanel1().getjTabbedPane1().getSelectedIndex() == 0)
                         Global.root.getmEDRootPanel1().getActivityPanel1().loadAllActivity();

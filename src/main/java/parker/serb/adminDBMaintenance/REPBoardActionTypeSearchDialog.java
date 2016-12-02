@@ -17,7 +17,7 @@ import parker.serb.sql.REPBoardActionType;
 public class REPBoardActionTypeSearchDialog extends javax.swing.JDialog {
 
     /**
-     * Creates new form PreFixSearchDialog
+     * Creates new form REPBoardActionTypeSearchDialog
      * @param parent
      * @param modal
      */

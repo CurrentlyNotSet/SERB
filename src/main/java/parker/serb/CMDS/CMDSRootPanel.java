@@ -13,6 +13,7 @@ import javax.swing.event.ChangeEvent;
 import parker.serb.activity.ActivityPanel;
 import parker.serb.Global;
 import parker.serb.party.PartySearchDialog;
+import parker.serb.sql.CMDSCaseSearchData;
 import parker.serb.util.CancelUpdate;
 
 /**
@@ -87,8 +88,8 @@ public class CMDSRootPanel extends javax.swing.JPanel {
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
             case "Activity":
                 System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
-                Global.root.getjButton2().setText("Update");
-                Global.root.getjButton2().setEnabled(false);
+                Global.root.getjButton2().setText("Add Entry");
+                Global.root.getjButton2().setEnabled(true);
                 Global.root.getjButton9().setVisible(false);
                 break;
             case "Parties":
@@ -144,12 +145,17 @@ public class CMDSRootPanel extends javax.swing.JPanel {
     public void cmdsUpdate(String buttonText) {
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
             case "Activity":
+                new CMDSAddHistoryEntryDialog((JFrame) this.getRootPane().getParent(), true);
                 activityPanel1.loadAllActivity();
+                Global.root.getcMDSHeaderPanel1().loadHeaderInformation();
                 break;
             case "Parties":
                 new PartySearchDialog((JFrame) this.getRootPane().getParent(), true);
                 partiesPanel1.loadParties();
                 Global.root.getcMDSHeaderPanel1().loadHeaderInformation();
+                CMDSCaseSearchData.updateCaseEntryFromParties(
+                        Global.root.getcMDSHeaderPanel1().getAppellantTextBox().getText(),
+                        Global.root.getcMDSHeaderPanel1().getAppelleeTextBox().getText());
                 break;
             case "Case Information":
                 if(buttonText.equals("Update")) {
@@ -193,6 +199,10 @@ public class CMDSRootPanel extends javax.swing.JPanel {
             case "Parties":
                 partiesPanel1.removeParty();
                 partiesPanel1.loadParties();
+                Global.root.getcMDSHeaderPanel1().loadHeaderInformation();
+                CMDSCaseSearchData.updateCaseEntryFromParties(
+                        Global.root.getcMDSHeaderPanel1().getAppellantTextBox().getText(),
+                        Global.root.getcMDSHeaderPanel1().getAppelleeTextBox().getText());
                 break;
             case "Case Information":
                 cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);

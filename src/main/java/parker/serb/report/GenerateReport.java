@@ -43,7 +43,7 @@ public class GenerateReport {
                 case "begin date, end date":
                     new RequestedInfoTwoDatePanel(Global.root, true, report);
                     break;
-                case "begin date, end date, investigatorID":
+                case "begin date, end date, InvestigatorID":
                     new RequestedInfoTwoDateIDPanel(Global.root, true, report, "InvestigatorID");
                     break;
                 case "begin date, end date, UserID":

@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.dbutils.DbUtils;
 import parker.serb.Global;
+import parker.serb.util.NumberFormatService;
 import parker.serb.util.SlackNotification;
 
 /**
@@ -59,6 +60,15 @@ public class CMDSHearing {
             int process = preparedStatement.executeUpdate();
             
             if(process == 1) {
+                EmailOutInvites.addNewHearing("CMDS",
+                        CMDSCase.getALJemail(),
+                        HearingRoom.getHearingRoomEmailByName(hearingRoom),
+                        "An upcoming " + hearingType + " is booked in " + hearingRoom + " at " + Global.mmddyyyyhhmma.format(hearingTime),
+                        NumberFormatService.generateFullCaseNumber(),
+                        hearingType,
+                        hearingRoom,
+                        hearingType,
+                        new Timestamp(hearingTime.getTime()));
                 Activity.addActivty("Created a " + hearingType + " on " + Global.mmddyyyyhhmma.format(hearingTime) + " in " + hearingRoom, null);
             }
 

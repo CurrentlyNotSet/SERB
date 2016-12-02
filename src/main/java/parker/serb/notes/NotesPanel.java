@@ -63,6 +63,24 @@ public class NotesPanel extends javax.swing.JPanel {
             jTextArea2.setText(CSCCase.loadNote());
         } else if(Global.activeSection.equals("CMDS")) {
             jTextArea2.setText(CMDSCase.loadNote());
+        } else if(Global.activeSection.equals("Hearings")) {
+            switch(Global.caseType) {
+                case "REP":
+                case "RBT":
+                    jTextArea2.setText(REPCase.loadNote());
+                    break;
+                case "ULP":
+                case "ERC":
+                case "JWD":
+                    jTextArea2.setText(ULPCase.loadNote());
+                    break;
+                case "MED":
+                case "STK":
+                case "NCN":
+                case "CON":
+                    jTextArea2.setText(MEDCase.loadNote());
+                    break;
+            }
         }
         orginalNote = jTextArea2.getText();
     }
@@ -80,7 +98,25 @@ public class NotesPanel extends javax.swing.JPanel {
             CSCCase.updateNote(jTextArea2.getText());
         } else if(Global.activeSection.equals("CMDS")) {
             CMDSCase.updateNote(jTextArea2.getText());
-        } 
+        } else if(Global.activeSection.equals("Hearings")) {
+            switch(Global.caseType) {
+                case "REP":
+                case "RBT":
+                    REPCase.updateNote(jTextArea2.getText());
+                    break;
+                case "ULP":
+                case "ERC":
+                case "JWD":
+                    ULPCase.updateNote(jTextArea2.getText());
+                    break;
+                case "MED":
+                case "STK":
+                case "NCN":
+                case "CON":
+                    MEDCase.updateNote(jTextArea2.getText());
+                    break;
+            }
+        }
         orginalNote = jTextArea2.getText();
     }
 

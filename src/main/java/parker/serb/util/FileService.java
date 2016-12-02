@@ -5,7 +5,6 @@
  */
 package parker.serb.util;
 
-import com.alee.laf.optionpane.WebOptionPane;
 import com.alee.utils.FileUtils;
 import java.awt.Desktop;
 import java.io.File;
@@ -51,14 +50,14 @@ public class FileService {
                     Global.templatePath = "C:\\SERB\\Template\\";
                     Global.reportingPath = "C:\\SERB\\Reporting\\";
                     break;
-                case "NW103087":
-                    Global.scanPath = "C:\\Users\\johnp10\\Desktop\\SERB\\Scan\\";
-                    Global.emailPath = "C:\\Users\\johnp10\\Desktop\\SERB\\Email\\";
-                    Global.activityPath = "C:\\Users\\johnp10\\Desktop\\SERB\\Activity\\";
-                    Global.mediaPath = "C:\\Users\\johnp10\\Desktop\\SERB\\Media\\";
-                    Global.templatePath = "C:\\Users\\johnp10\\Desktop\\SERB\\Template\\";
-                    Global.reportingPath = "C:\\Users\\johnp10\\Desktop\\SERB\\Reporting\\";
-                    break;    
+//                case "NW103087":  //NW Laptop no longer owned
+//                    Global.scanPath = "C:\\Users\\johnp10\\Desktop\\SERB\\Scan\\";
+//                    Global.emailPath = "C:\\Users\\johnp10\\Desktop\\SERB\\Email\\";
+//                    Global.activityPath = "C:\\Users\\johnp10\\Desktop\\SERB\\Activity\\";
+//                    Global.mediaPath = "C:\\Users\\johnp10\\Desktop\\SERB\\Media\\";
+//                    Global.templatePath = "C:\\Users\\johnp10\\Desktop\\SERB\\Template\\";
+//                    Global.reportingPath = "C:\\Users\\johnp10\\Desktop\\SERB\\Reporting\\";
+//                    break;    
                 default: //SERB LOCATION
                     Global.scanPath = "G:\\SERB\\Scan\\";
                     Global.emailPath = "G:\\SERB\\Email\\";
@@ -69,6 +68,38 @@ public class FileService {
                     break;    
             }
         } catch (UnknownHostException ex) {
+            SlackNotification.sendNotification(ex.getMessage());
+        }
+    }
+    
+    public static void openFileWithCaseNumber(String activeSection, String caseYear, String caseType, String caseMonth, String caseNumber, String fileName) {
+        try {
+            Desktop.getDesktop().open(new File(Global.activityPath
+                    + File.separatorChar
+                    + activeSection
+                    + File.separatorChar
+                    + caseYear
+                    + File.separatorChar
+                    + (caseYear + "-" + caseType + "-" + caseMonth + "-" + caseNumber)
+                    + File.separatorChar
+                    + fileName));
+        } catch (IOException | NullPointerException | IllegalArgumentException ex) {
+            new FileNotFoundDialog((JFrame) Global.root.getRootPane().getParent(), true, fileName);
+            SlackNotification.sendNotification(ex.getMessage());
+        }
+    }
+    
+    public static void openFileWithORGNumber(String activeSection, String orgNumber, String fileName) {
+        try {
+            Desktop.getDesktop().open(new File(Global.activityPath
+                    + File.separatorChar
+                    + activeSection
+                    + File.separatorChar
+                    + orgNumber
+                    + File.separatorChar
+                    + fileName));
+        } catch (IOException | NullPointerException | IllegalArgumentException ex) {
+            new FileNotFoundDialog((JFrame) Global.root.getRootPane().getParent(), true, fileName);
             SlackNotification.sendNotification(ex.getMessage());
         }
     }
@@ -317,6 +348,29 @@ public class FileService {
                 + File.separator + fileName).delete();
     }
 
+    public static boolean renamePublicRecordsFile(String fileName) {
+        String[] file = fileName.split("_", 2);
+        String newFileName = "";
+        if (file.length > 1){
+            newFileName = file[0] + "_REDACTED-" + file[1];
+        } else {
+            newFileName = "REDACTED-" + fileName;
+        }
+        
+        File oldFile = new File(Global.activityPath + Global.activeSection
+                + File.separator + Global.caseYear
+                + File.separator + Global.caseYear + "-" + Global.caseType + "-" + Global.caseMonth + "-" + Global.caseNumber
+                + File.separator + fileName);
+
+        File redactedFile = new File(Global.activityPath + Global.activeSection
+                + File.separator + Global.caseYear
+                + File.separator + Global.caseYear + "-" + Global.caseType + "-" + Global.caseMonth + "-" + Global.caseNumber
+                + File.separator + newFileName);
+
+        //Create Redacted Version
+        return FileUtils.copyFile(oldFile, redactedFile);
+    }
+
     public static void openFileFullPath(File filePathName) {
         try {
             Desktop desktop = Desktop.getDesktop();
@@ -325,6 +379,13 @@ public class FileService {
             new FileNotFoundDialog((JFrame) Global.root.getRootPane().getParent(), true, filePathName.toString());
             SlackNotification.sendNotification(ex.getMessage());
         }
+    }
+    
+    public static boolean isImageFormat(String image) {
+        return image.toLowerCase().endsWith(".jpg")
+                || image.toLowerCase().endsWith(".gif")
+                || image.toLowerCase().endsWith(".bmp")
+                || image.toLowerCase().endsWith(".png");
     }
 
 }

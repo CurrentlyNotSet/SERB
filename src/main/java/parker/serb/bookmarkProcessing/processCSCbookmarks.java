@@ -18,7 +18,7 @@ import parker.serb.sql.CSCCase;
  */
 public class processCSCbookmarks {
 
-    public static Dispatch processDoACSCWordLetter(Dispatch Document) {
+    public static Dispatch processDoACSCWordLetter(Dispatch Document, List<Integer> toParties, List<Integer> ccParties) {
         //get basic information  
         CSCCase item = CSCCase.loadCSCInformation();
         List<CaseParty> partyList = CaseParty.loadPartiesByCase(Global.caseYear, Global.caseType, Global.caseMonth, Global.caseNumber);

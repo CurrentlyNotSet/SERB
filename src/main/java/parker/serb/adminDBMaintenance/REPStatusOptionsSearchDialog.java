@@ -18,7 +18,7 @@ import parker.serb.sql.REPCaseStatus;
 public class REPStatusOptionsSearchDialog extends javax.swing.JDialog {
 
     /**
-     * Creates new form PreFixSearchDialog
+     * Creates new form REPStatusOptionsSearchDialog
      * @param parent
      * @param modal
      */

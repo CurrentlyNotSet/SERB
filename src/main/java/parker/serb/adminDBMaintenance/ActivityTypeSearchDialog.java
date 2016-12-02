@@ -17,7 +17,7 @@ import parker.serb.sql.ActivityType;
 public class ActivityTypeSearchDialog extends javax.swing.JDialog {
 
     /**
-     * Creates new form PreFixSearchDialog
+     * Creates new form ActivityTypeSearchDialog
      * @param parent
      * @param modal
      */

@@ -18,7 +18,7 @@ import parker.serb.sql.FactFinder;
 public class FactFinderConciliatorSearchDialog extends javax.swing.JDialog {
 
     /**
-     * Creates new form PreFixSearchDialog
+     * Creates new form FactFinderConciliatorSearchDialog
      * @param parent
      * @param modal
      */

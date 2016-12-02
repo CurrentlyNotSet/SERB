@@ -44,6 +44,7 @@ public class User {
     public boolean  REPDocketing;
     public String   initials;
     public boolean  investigator;
+    public String   jobTitle;
     
     public static void createUser(User user) {
         try {
@@ -53,7 +54,7 @@ public class User {
             Statement stmt = Database.connectToDB().createStatement();
             
             String sql = "INSERT INTO Users VALUES"
-                    + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setBoolean(1, true);
@@ -70,6 +71,7 @@ public class User {
             preparedStatement.setBoolean(12, false);
             preparedStatement.setBoolean(13, true);
             preparedStatement.setString(14, null);
+            preparedStatement.setString(15, null);
             
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
@@ -120,6 +122,7 @@ public class User {
                 user.middleInitial = foundUser.getString("middleInitial");
                 user.applicationVersion = foundUser.getString("applicationVersion");
                 user.defaultSection = foundUser.getString("defaultSection");
+                user.jobTitle = foundUser.getString("jobTitle");
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
@@ -169,6 +172,7 @@ public class User {
                 user.lastLogInDateTime = users.getTimestamp("lastLogInDateTime");
                 user.workPhone = users.getString("workPhone");
                 user.middleInitial = users.getString("middleInitial");
+                user.jobTitle = users.getString("jobTitle");
                 activeUsers.add(user);
             }
         } catch (SQLException ex) {
@@ -221,6 +225,7 @@ public class User {
                 user.REPDocketing = users.getBoolean("REPDocketing");
                 user.initials = users.getString("initials");
                 user.investigator = users.getBoolean("investigator");
+                user.jobTitle = users.getString("jobTitle");
                 activeUsers.add(user);
             }
         } catch (SQLException ex) {

@@ -160,8 +160,7 @@ public class MEDCase {
                     + " caseMonth,"
                     + " caseNumber"
                     + " from MEDCase"
-                    + " Order By CaseYear DESC,"
-                    + " CaseNumber DESC";
+                    + " Order By FileDate DESC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
@@ -182,6 +181,43 @@ public class MEDCase {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
         }
         return caseNumberList;
+    }
+    
+    public static boolean validateCaseNumber(String fullCaseNumber) {
+        String[] caseNumberParts = fullCaseNumber.split("-");
+        boolean valid = false;
+        
+        if(caseNumberParts.length != 4) {
+            return false;
+        }
+        
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select Count(*) As results"
+                    + " from MEDCase"
+                    + " where caseYear = ?"
+                    + " and caseType = ?"
+                    + " and caseMonth = ?"
+                    + " and caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, caseNumberParts[0]);
+            preparedStatement.setString(2, caseNumberParts[1]);
+            preparedStatement.setString(3, caseNumberParts[2]);
+            preparedStatement.setString(4, caseNumberParts[3]);
+            
+            ResultSet validRS = preparedStatement.executeQuery();
+            
+            validRS.next();
+            
+            valid = validRS.getInt("results") > 0;
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return valid;
     }
     
     /**
@@ -1121,6 +1157,12 @@ public class MEDCase {
             if(success == 1) {
                 MEDCaseSearchData.updateCaseEntryFromCaseStatus(newCaseInformation.employerIDNumber, newCaseInformation.bargainingUnitNumber);
                 detailedStatusSaveInformation(newCaseInformation, caseInformation);
+                EmployerCaseSearchData.updateFileDate(
+                        newCaseInformation.fileDate);
+                EmployerCaseSearchData.updateCaseStatus(
+                        newCaseInformation.caseStatus);
+                EmployerCaseSearchData.updateEmployer(
+                        newCaseInformation.employerIDNumber);
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex.getMessage());
@@ -2222,11 +2264,11 @@ public class MEDCase {
                 med.fileDate = rs.getTimestamp("fileDate");
                 med.concilList1OrderDate = rs.getTimestamp("concilList1OrderDate");
                 med.concilList1SelectionDueDate = rs.getTimestamp("concilList1SelectionDueDate");
-                med.concilList1Name1 = rs.getString("concilList1Name1");
-                med.concilList1Name2 = rs.getString("concilList1Name2");
-                med.concilList1Name3 = rs.getString("concilList1Name3");
-                med.concilList1Name4 = rs.getString("concilList1Name4");
-                med.concilList1Name5 = rs.getString("concilList1Name5");
+                med.concilList1Name1 = rs.getString("concilList1Name1") == null ? "" : rs.getString("concilList1Name1");
+                med.concilList1Name2 = rs.getString("concilList1Name2") == null ? "" : rs.getString("concilList1Name2");
+                med.concilList1Name3 = rs.getString("concilList1Name3") == null ? "" : rs.getString("concilList1Name3");
+                med.concilList1Name4 = rs.getString("concilList1Name4") == null ? "" : rs.getString("concilList1Name4");
+                med.concilList1Name5 = rs.getString("concilList1Name5") == null ? "" : rs.getString("concilList1Name5");
                 med.concilAppointmentDate = rs.getTimestamp("concilAppointmentDate");
                 med.concilType = rs.getString("concilType");
                 med.concilSelection = rs.getString("concilSelection");
@@ -2235,18 +2277,18 @@ public class MEDCase {
                 med.concilOriginalConcilDate = rs.getTimestamp("concilOriginalConcilDate");
                 med.concilList2OrderDate = rs.getTimestamp("concilList2OrderDate");
                 med.concilList2SelectionDueDate = rs.getTimestamp("concilList2SelectionDueDate");
-                med.concilList2Name1 = rs.getString("concilList2Name1");
-                med.concilList2Name2 = rs.getString("concilList2Name2");
-                med.concilList2Name3 = rs.getString("concilList2Name3");
-                med.concilList2Name4 = rs.getString("concilList2Name4");
-                med.concilList2Name5 = rs.getString("concilList2Name5");
+                med.concilList2Name1 = rs.getString("concilList2Name1") == null ? "" : rs.getString("concilList2Name1");
+                med.concilList2Name2 = rs.getString("concilList2Name2") == null ? "" : rs.getString("concilList2Name2");
+                med.concilList2Name3 = rs.getString("concilList2Name3") == null ? "" : rs.getString("concilList2Name3");
+                med.concilList2Name4 = rs.getString("concilList2Name4") == null ? "" : rs.getString("concilList2Name4");
+                med.concilList2Name5 = rs.getString("concilList2Name5") == null ? "" : rs.getString("concilList2Name5");
                 med.FFList1OrderDate = rs.getTimestamp("FFList1OrderDate");
                 med.FFList1SelectionDueDate = rs.getTimestamp("FFList1SelectionDueDate");
-                med.FFList1Name1 = rs.getString("FFList1Name1");
-                med.FFList1Name2 = rs.getString("FFList1Name2");
-                med.FFList1Name3 = rs.getString("FFList1Name3");
-                med.FFList1Name4 = rs.getString("FFList1Name4");
-                med.FFList1Name5 = rs.getString("FFList1Name5");
+                med.FFList1Name1 = rs.getString("FFList1Name1") == null ? "" : rs.getString("FFList1Name1");
+                med.FFList1Name2 = rs.getString("FFList1Name2") == null ? "" : rs.getString("FFList1Name2");
+                med.FFList1Name3 = rs.getString("FFList1Name3") == null ? "" : rs.getString("FFList1Name3");
+                med.FFList1Name4 = rs.getString("FFList1Name4") == null ? "" : rs.getString("FFList1Name4");
+                med.FFList1Name5 = rs.getString("FFList1Name5") == null ? "" : rs.getString("FFList1Name5");
                 med.FFAppointmentDate = rs.getTimestamp("FFAppointmentDate");
                 med.FFType = rs.getString("FFType");
                 med.FFSelection = rs.getString("FFSelection");
@@ -2256,11 +2298,11 @@ public class MEDCase {
                 med.asAgreedToByParties = rs.getBoolean("asAgreedToByParties");
                 med.FFList2OrderDate = rs.getTimestamp("FFList2OrderDate");
                 med.FFList2SelectionDueDate = rs.getTimestamp("FFList2SelectionDueDate");
-                med.FFList2Name1 = rs.getString("FFList2Name1");
-                med.FFList2Name2 = rs.getString("FFList2Name2");
-                med.FFList2Name3 = rs.getString("FFList2Name3");
-                med.FFList2Name4 = rs.getString("FFList2Name4");
-                med.FFList2Name5 = rs.getString("FFList2Name5");
+                med.FFList2Name1 = rs.getString("FFList2Name1") == null ? "" : rs.getString("FFList2Name1");
+                med.FFList2Name2 = rs.getString("FFList2Name2") == null ? "" : rs.getString("FFList2Name2");
+                med.FFList2Name3 = rs.getString("FFList2Name3") == null ? "" : rs.getString("FFList2Name3");
+                med.FFList2Name4 = rs.getString("FFList2Name4") == null ? "" : rs.getString("FFList2Name4");
+                med.FFList2Name5 = rs.getString("FFList2Name5") == null ? "" : rs.getString("FFList2Name5");
                 med.FFEmployerType = rs.getString("FFEmployerType");
                 med.FFEmployeeType = rs.getString("FFEmployeeType");
                 med.FFReportIssueDate = rs.getTimestamp("FFReportIssueDate");
@@ -2298,8 +2340,6 @@ public class MEDCase {
                 med.motion = rs.getBoolean("motion");
                 med.dismissed = rs.getBoolean("dismissed");
                 med.strikeFileDate = rs.getTimestamp("strikeFileDate");
-//                med.strikeCaseNumber = rs.getString("strikeCaseNumber");
-//                med.medCaseNumber = rs.getString("medCaseNumber");
                 med.description = rs.getString("description");
                 med.unitSize = rs.getString("unitSize");
                 med.unauthorizedStrike = rs.getBoolean("unauthorizedStrike");
@@ -2315,7 +2355,7 @@ public class MEDCase {
                 med.strikeEnded = rs.getTimestamp("strikeEnded");
                 med.totalNumberOfDays = rs.getString("totalNumberOfDays");
                 med.strikeMediatorAppointedID = rs.getString("strikeMediatorAppointedID");
-                med.strikeNotes = rs.getString("strikeNotes");
+                med.strikeNotes = rs.getString("strikeNote");
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex.getMessage());

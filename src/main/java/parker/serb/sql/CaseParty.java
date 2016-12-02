@@ -646,20 +646,20 @@ public class CaseParty {
                 party.caseNumber = casePartyRS.getString("caseNumber");
                 party.partyID = casePartyRS.getInt("partyID");
                 party.caseRelation = casePartyRS.getString("caseRelation");
-                party.prefix = casePartyRS.getString("prefix");
-                party.firstName = casePartyRS.getString("firstName");
-                party.middleInitial = casePartyRS.getString("middleInitial");
-                party.lastName = casePartyRS.getString("lastName");
-                party.suffix = casePartyRS.getString("suffix");
-                party.nameTitle = casePartyRS.getString("nameTitle");
-                party.jobTitle = casePartyRS.getString("jobTitle");
-                party.companyName = casePartyRS.getString("companyName");
-                party.address1 = casePartyRS.getString("address1");
-                party.address2 = casePartyRS.getString("address2");
-                party.address3 = casePartyRS.getString("address3");
-                party.city = casePartyRS.getString("city");
-                party.stateCode = casePartyRS.getString("stateCode");
-                party.zipcode = casePartyRS.getString("zipcode");
+                party.prefix = casePartyRS.getString("prefix") == null ? "" : casePartyRS.getString("prefix");
+                party.firstName = casePartyRS.getString("firstName") == null ? "" : casePartyRS.getString("firstName");
+                party.middleInitial = casePartyRS.getString("middleInitial") == null ? "" : casePartyRS.getString("middleInitial");
+                party.lastName = casePartyRS.getString("lastName") == null ? "" : casePartyRS.getString("lastName");
+                party.suffix = casePartyRS.getString("suffix") == null ? "" : casePartyRS.getString("suffix");
+                party.nameTitle = casePartyRS.getString("nameTitle") == null ? "" : casePartyRS.getString("nameTitle");
+                party.jobTitle = casePartyRS.getString("jobTitle") == null ? "" : casePartyRS.getString("jobTitle");
+                party.companyName = casePartyRS.getString("companyName") == null ? "" : casePartyRS.getString("companyName");
+                party.address1 = casePartyRS.getString("address1") == null ? "" : casePartyRS.getString("address1");
+                party.address2 = casePartyRS.getString("address2") == null ? "" : casePartyRS.getString("address2");
+                party.address3 = casePartyRS.getString("address3") == null ? "" : casePartyRS.getString("address3");
+                party.city = casePartyRS.getString("city") == null ? "" : casePartyRS.getString("city");
+                party.stateCode = casePartyRS.getString("stateCode") == null ? "" : casePartyRS.getString("stateCode");
+                party.zipcode = casePartyRS.getString("zipcode") == null ? "" : casePartyRS.getString("zipcode");
                 party.phone1 = casePartyRS.getString("phone1") == null ? "" : NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("phone1"));
                 party.phone2 = casePartyRS.getString("phone2") == null ? "" : NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("phone2"));
                 party.fax = casePartyRS.getString("fax") == null ? "" : NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("fax"));
@@ -775,5 +775,35 @@ public class CaseParty {
         } catch (SQLException ex) {
             Logger.getLogger(CaseParty.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public static CaseParty convertPartyToCasePartyModel(Party old){
+        CaseParty caseParty = new CaseParty();
+        caseParty.id = 0;
+        caseParty.caseYear = null;
+        caseParty.caseType = null;
+        caseParty.caseMonth = null;
+        caseParty.caseNumber = null;
+        caseParty.partyID = old.id;
+        caseParty.caseRelation = null;
+        caseParty.prefix = old.prefix;
+        caseParty.firstName = old.firstName;
+        caseParty.middleInitial = old.middleInitial;
+        caseParty.lastName = old.lastName;
+        caseParty.suffix = old.suffix;
+        caseParty.nameTitle = old.nameTitle;
+        caseParty.jobTitle = old.jobTitle;
+        caseParty.companyName = old.companyName;
+        caseParty.address1 = old.address1;
+        caseParty.address2 = old.address2;
+        caseParty.address3 = old.address3;
+        caseParty.city = old.city;
+        caseParty.stateCode = old.stateCode;
+        caseParty.zipcode = old.zipCode;
+        caseParty.phone1 = old.phone1;
+        caseParty.phone2 = old.phone2;
+        caseParty.fax = old.fax;
+        caseParty.emailAddress = old.emailAddress;
+        return caseParty;
     }
 }

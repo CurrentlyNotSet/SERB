@@ -18,7 +18,7 @@ import parker.serb.sql.CMDSCase;
  */
 public class processCMDSbookmarks {
 
-    public static Dispatch processDoACMDSWordLetter(Dispatch Document) {
+    public static Dispatch processDoACMDSWordLetter(Dispatch Document, List<Integer> toParties, List<Integer> ccParties) {
 //        //get basic information  
 //        CMDSCase item = CMDSCase.
 //        List<CaseParty> partyList = CaseParty.loadPartiesByCase(Global.caseYear, Global.caseType, Global.caseMonth, Global.caseNumber);

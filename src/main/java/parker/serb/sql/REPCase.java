@@ -180,8 +180,7 @@ public class REPCase {
                     + " caseMonth,"
                     + " caseNumber"
                     + " from REPCase"
-                    + " Order By CaseYear DESC,"
-                    + " CaseNumber DESC";
+                    + " Order By FileDate DESC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
@@ -202,6 +201,43 @@ public class REPCase {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
         }
         return caseNumberList;
+    }
+    
+    public static boolean validateCaseNumber(String fullCaseNumber) {
+        String[] caseNumberParts = fullCaseNumber.split("-");
+        boolean valid = false;
+        
+        if(caseNumberParts.length != 4) {
+            return false;
+        }
+        
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select Count(*) As results"
+                    + " from REPCase"
+                    + " where caseYear = ?"
+                    + " and caseType = ?"
+                    + " and caseMonth = ?"
+                    + " and caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, caseNumberParts[0]);
+            preparedStatement.setString(2, caseNumberParts[1]);
+            preparedStatement.setString(3, caseNumberParts[2]);
+            preparedStatement.setString(4, caseNumberParts[3]);
+            
+            ResultSet validRS = preparedStatement.executeQuery();
+            
+            validRS.next();
+            
+            valid = validRS.getInt("results") > 0;
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return valid;
     }
     
     /**

@@ -22,7 +22,7 @@ import parker.serb.util.NumberFormatService;
  */
 public class processULPbookmarks {
 
-    public static Dispatch processDoAULPWordLetter(Dispatch Document) {
+    public static Dispatch processDoAULPWordLetter(Dispatch Document, List<Integer> toParties, List<Integer> ccParties) {
         //get basic information
         List<User> userList = User.loadAllUsers();   
         ULPCase item = ULPCase.loadULPCaseDetails(Global.caseYear, Global.caseType, Global.caseMonth, Global.caseNumber);
@@ -44,8 +44,29 @@ public class processULPbookmarks {
         String chargingPartyREPAddressBlock = "";
         String chargedPartyAddressBlock = "";
         String chargedPartyREPAddressBlock = "";
+        String toAddressBlock = "";
+        String ccNameBlock = "";
         
         for (CaseParty party : partyList){
+            
+            for (int person : toParties){
+                if (person == party.id) {
+                     if (!"".equals(toAddressBlock.trim())){
+                        toAddressBlock += "\n\n";
+                    }
+                     toAddressBlock += StringUtilities.buildCasePartyAddressBlock(party);
+                }
+            }
+            
+            for (int person : toParties){
+                if (person == party.id) {
+                     if (!"".equals(ccNameBlock.trim())){
+                        ccNameBlock += ", ";
+                    }
+                     ccNameBlock += StringUtilities.buildCasePartyName(party);
+                }
+            }
+                        
             if (null != party.caseRelation)switch (party.caseRelation) {
                 case "Charging Party":
                     if (!"".equals(chargingPartyNames.trim())){

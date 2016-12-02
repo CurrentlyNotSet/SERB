@@ -65,8 +65,7 @@ public class ULPCase {
                     + " caseMonth,"
                     + " caseNumber"
                     + " from ULPCase"
-                    + " Order By CaseYear DESC,"
-                    + " CaseNumber DESC";
+                    + " Order By fileDate DESC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
@@ -643,6 +642,12 @@ public class ULPCase {
             
             if(success == 1) {
                 detailedCaseInformationSaveInformation(newCaseInformation, caseInformation);
+                EmployerCaseSearchData.updateFileDate(
+                        newCaseInformation.fileDate);
+                EmployerCaseSearchData.updateCaseStatus(
+                        newCaseInformation.currentStatus);
+                EmployerCaseSearchData.updateEmployer(
+                        newCaseInformation.employerIDNumber);
             } 
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex.getMessage());

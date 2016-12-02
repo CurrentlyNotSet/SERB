@@ -22,7 +22,7 @@ import parker.serb.util.StringUtilities;
  */
 public class processMEDbookmarks {
     
-    public static Dispatch processDoAMEDWordLetter(Dispatch Document) {
+    public static Dispatch processDoAMEDWordLetter(Dispatch Document, List<Integer> toParties, List<Integer> ccParties) {
         Mediator stateMediator = null;
         Mediator fmcsMediator = null;
         MEDCase item = MEDCase.loadEntireCaseInformation();
@@ -62,6 +62,8 @@ public class processMEDbookmarks {
         String employeeOrgRepLastName = "";
         String employeeOrgRepEmail = "";
         String employeeOrgRepPhone = "";
+        String toAddressBlock = "";
+        String ccNameBlock = "";
         
                         
         for (String related: relatedCasesList){
@@ -72,6 +74,25 @@ public class processMEDbookmarks {
         }
         
         for (CaseParty party : partyList){
+            
+            for (int person : toParties){
+                if (person == party.id) {
+                     if (!"".equals(toAddressBlock.trim())){
+                        toAddressBlock += "\n\n";
+                    }
+                     toAddressBlock += StringUtilities.buildCasePartyAddressBlock(party);
+                }
+            }
+            
+            for (int person : toParties){
+                if (person == party.id) {
+                     if (!"".equals(ccNameBlock.trim())){
+                        ccNameBlock += ", ";
+                    }
+                     ccNameBlock += StringUtilities.buildCasePartyName(party);
+                }
+            }
+            
             if (null != party.caseRelation)switch (party.caseRelation) {
                 case "Employer":
                     if (!"".equals(employerNames.trim())){

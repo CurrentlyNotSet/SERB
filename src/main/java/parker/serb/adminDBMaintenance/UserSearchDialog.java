@@ -18,7 +18,7 @@ import parker.serb.sql.User;
 public class UserSearchDialog extends javax.swing.JDialog {
 
     /**
-     * Creates new form PreFixSearchDialog
+     * Creates new form UserSearchDialog
      * @param parent
      * @param modal
      */

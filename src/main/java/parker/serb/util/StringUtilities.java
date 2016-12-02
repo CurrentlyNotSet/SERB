@@ -5,6 +5,8 @@
  */
 package parker.serb.util;
 
+import parker.serb.Global;
+import parker.serb.sql.AdministrationInformation;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.Party;
 
@@ -78,6 +80,30 @@ public class StringUtilities {
         return addressBlock.trim();
     }
     
+    public static String buildAddressBlockWithLineBreaks(CaseParty item) {
+        String addressBlock = "";
+
+        addressBlock += buildCasePartyName(item);
+        if (item.address1 != null) {
+            if (!item.address1.equals("")) {
+                addressBlock += System.lineSeparator() + item.address1;
+            }
+        }
+        if (item.address2 != null) {
+            if (!item.address2.equals("")) {
+                addressBlock += System.lineSeparator() + item.address2;
+            }
+        }
+        if (item.address3 != null) {
+            if (!item.address3.equals("")) {
+                addressBlock += System.lineSeparator() + item.address3;
+            }
+        }
+        addressBlock += System.lineSeparator() + item.city + ", " + item.stateCode + " " + item.zipcode;
+
+        return addressBlock.trim();
+    }
+    
     public static String buildCasePartyAddressBlock(CaseParty item){
         return (item.address1.equals("") ? "" : (item.address1))
                 + (item.address2.equals("") ? "" : (", " + item.address2))
@@ -104,5 +130,45 @@ public class StringUtilities {
                 + (item.suffix.equals("") ? "" : (" " + item.suffix))
                 + (item.nameTitle.equals("") ? "" : (", " + item.nameTitle)
                 + (item.jobTitle.equals("") ? "" : (", " + item.jobTitle)));
+    }
+    
+    public static String getDepartment(){
+        switch (Global.activeSection) {
+            case "REP":
+            case "ULP":
+            case "ORG":
+            case "MED":
+            case "Hearings":
+                return "SERB";
+            case "Civil Service Commission":
+            case "CMDS":
+                return "SPBR";
+        }
+        return "";
+    }
+    
+    public static String generateDepartmentAddressBlock(){
+        String address = "";
+        String dept = StringUtilities.getDepartment();
+                
+        AdministrationInformation sysAdminInfo = AdministrationInformation.loadAdminInfo(dept);
+                
+        if (!sysAdminInfo.Address1.equals("")) {
+            address += sysAdminInfo.Address1.trim();
+        }
+        if (!sysAdminInfo.Address2.equals("")) {
+            address += System.lineSeparator() + sysAdminInfo.Address2.trim();
+        }
+        address += System.lineSeparator();
+        if (!sysAdminInfo.City.equals("")) {
+            address += sysAdminInfo.City.trim();
+        }
+        if (!sysAdminInfo.State.equals("")) {
+            address += ", " + sysAdminInfo.State.trim();
+        }
+        if (!sysAdminInfo.Zip.equals("")) {
+            address += " " + sysAdminInfo.Zip.trim();
+        }
+        return address;
     }
 }
