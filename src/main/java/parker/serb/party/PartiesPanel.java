@@ -58,7 +58,9 @@ public class PartiesPanel extends javax.swing.JPanel {
                     !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Officer") &&
                     !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Representative") &&
                     !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Charging Party") &&
+                    !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Intervenor Party") &&
                     !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Charged Party") &&
+                    !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Respondent Party") &&
                     !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Employer") &&
                     !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Employee Organization") &&
                     !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Rival Employee Organization") &&
@@ -72,7 +74,7 @@ public class PartiesPanel extends javax.swing.JPanel {
                     !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Appellee") &&
                     !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Appellee 2") &&
                     !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Courtesy Copy") &&
-                    !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Other Interested Parties")    ) {
+                    !jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("Other Interested Parties")) {
                     Global.root.getjButton9().setEnabled(true);
                 } else {
                     Global.root.getjButton9().setEnabled(false);
