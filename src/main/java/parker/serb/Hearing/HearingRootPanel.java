@@ -29,7 +29,7 @@ public class HearingRootPanel extends javax.swing.JPanel {
     public HearingRootPanel() {
         initComponents();
         addListeners();
-        jTabbedPane1.remove(2);
+//        jTabbedPane1.remove(2);
     }
     
     /**
@@ -66,7 +66,7 @@ public class HearingRootPanel extends javax.swing.JPanel {
                 activityPanel1.loadAllHearingActivity();
                 break;
             case "Case Information":
-                cMDSInformationPanel1.loadInformation();
+//                hearingInformationPanel1.loadInformation();
                 break;
             case "Parties":
                 partiesPanel1.loadHearingParties();
@@ -157,12 +157,12 @@ public class HearingRootPanel extends javax.swing.JPanel {
             case "Case Information":
                 if(buttonText.equals("Update")) {
                     disableTabs(jTabbedPane1.getSelectedIndex());
-                    cMDSInformationPanel1.enableUpdate();
+                    hearingInformationPanel1.enableUpdate();
                 } else {
                     enableTabs();
                     Global.root.enableTabsAfterSave();
                     Global.root.enableButtonsAfterCancel();
-                    cMDSInformationPanel1.disableUpdate(true);
+                    hearingInformationPanel1.disableUpdate(true);
                     Global.root.getHearingHeaderPanel1().loadHeaderInformation();
                 }
                 break;
@@ -204,7 +204,7 @@ public class HearingRootPanel extends javax.swing.JPanel {
                     Global.root.enableButtonsAfterCancel();
                     Global.root.enableTabsAfterSave();
                     enableTabs();
-                    cMDSInformationPanel1.disableUpdate(false);
+                    hearingInformationPanel1.disableUpdate(false);
                 }
                 break;
             case "Notes":
@@ -245,7 +245,9 @@ public class HearingRootPanel extends javax.swing.JPanel {
         jPanel4 = new javax.swing.JPanel();
         partiesPanel1 = new parker.serb.party.PartiesPanel();
         jPanel3 = new javax.swing.JPanel();
-        cMDSInformationPanel1 = new parker.serb.CMDS.CMDSInformationPanel();
+        hearingInformationPanel1 = new parker.serb.Hearing.HearingInformationPanel();
+        jPanel2 = new javax.swing.JPanel();
+        hearingHearingsPanel1 = new parker.serb.Hearing.HearingHearingsPanel();
         jPanel8 = new javax.swing.JPanel();
         notesPanel1 = new parker.serb.notes.NotesPanel();
 
@@ -279,14 +281,27 @@ public class HearingRootPanel extends javax.swing.JPanel {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(cMDSInformationPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1134, Short.MAX_VALUE)
+            .addComponent(hearingInformationPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1134, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(cMDSInformationPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
+            .addComponent(hearingInformationPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Case Information", jPanel3);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(hearingHearingsPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1134, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(hearingHearingsPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Hearings", jPanel2);
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -317,8 +332,10 @@ public class HearingRootPanel extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private parker.serb.activity.ActivityPanel activityPanel1;
-    private parker.serb.CMDS.CMDSInformationPanel cMDSInformationPanel1;
+    private parker.serb.Hearing.HearingHearingsPanel hearingHearingsPanel1;
+    private parker.serb.Hearing.HearingInformationPanel hearingInformationPanel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel8;
