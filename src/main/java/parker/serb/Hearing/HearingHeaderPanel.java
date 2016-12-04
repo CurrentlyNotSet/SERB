@@ -92,46 +92,91 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
 //                caseTypeTextBox.setText(rep.caseType != null ? rep.caseType : "");
 //                bargainingUnitTextBox.setText(rep.bargainingUnitNumber != null ? rep.bargainingUnitNumber : "");
 //
+
+
                 List caseParties = CaseParty.loadPartiesByCase();
+                
+                
 //
                 for(Object caseParty: caseParties) {
                     CaseParty partyInformation = (CaseParty) caseParty;
-//
-                    switch (partyInformation.type) {
+                    
+                    String name = "";
+                    
+                    if(partyInformation.firstName.equals("") && partyInformation.lastName.equals("")) {
+                        name = partyInformation.companyName;
+                    } else {
+                        name = (partyInformation.prefix.equals("") ? "" : (partyInformation.prefix + " "))
+                        + (partyInformation.firstName.equals("") ? "" : (partyInformation.firstName + " "))
+                        + (partyInformation.middleInitial.equals("") ? "" : (partyInformation.middleInitial + ". "))
+                        + (partyInformation.lastName.equals("") ? "" : (partyInformation.lastName))
+                        + (partyInformation.suffix.equals("") ? "" : (" " + partyInformation.suffix))
+                        + (partyInformation.nameTitle.equals("") ? "" : (", " + partyInformation.nameTitle));
+                    }
+
+                    switch (partyInformation.caseRelation) {
                         case "Employer":
-                            if(employer.equals("")) {
-                                employer += partyInformation.name;
+                            if(party1.equals("")) {
+                                party1 += name;
                             } else {
-                                employer += ", " + partyInformation.name;
+                                party1 += ", " + name;
+                            }
+                            break;
+                        case "Employer REP":
+                            if(party2.equals("")) {
+                                party2 += name;
+                            } else {
+                                party2 += ", " + name;
                             }
                             break;
                         case "Employee Organization":
-                            if(employeeOrg.equals("")) {
-                                employeeOrg += partyInformation.name;
+                            if(party3.equals("")) {
+                                party3 += name;
                             } else {
-                                employeeOrg += ", " + partyInformation.name;
+                                party3 += ", " + name;
                             }
                             break;
-                        case "Incumbent Employee Organization":
-                            if(incumbentEEO.equals("")) {
-                                incumbentEEO += partyInformation.name;
+                        case "Employee Organization REP":
+                            if(party4.equals("")) {
+                                party4 += name;
                             } else {
-                                incumbentEEO += ", " + partyInformation.name;
+                                party4 += ", " + name;
                             }
                             break;
-                        case "Rival Employee Organization":
-                            if(rivalEEO.equals("")) {
-                                rivalEEO += partyInformation.name;
+                        case "Charging Party":
+                            if(party1.equals("")) {
+                                party1 += name;
                             } else {
-                                rivalEEO += ", " + partyInformation.name;
+                                party1 += ", " + name;
                             }
                             break;
+                        case "Charging Party REP":
+                            if(party2.equals("")) {
+                                party2 += name;
+                            } else {
+                                party2 += ", " + name;
+                            }
+                            break;
+                        case "Charged Party":
+                            if(party3.equals("")) {
+                                party3 += name;
+                            } else {
+                                party3 += ", " + name;
+                            }
+                            break;       
+                        case "Charged Party REP":
+                            if(party4.equals("")) {
+                                party4 += name;
+                            } else {
+                                party4 += ", " + name;
+                            }
+                            break;      
                     }
                 }
-//                employerTextBox.setText(employer);
-//                employeeOrgTextBox.setText(employeeOrg);
-//                incumbentEEOTextBox.setText(incumbentEEO);
-//                rivalEEOTextBox.setText(rivalEEO);
+                party1TextBox.setText(party1);
+                party2TextBox.setText(party2);
+                party3TextBox.setText(party3);
+                party4TextBox.setText(party4);
             }
         }
     }
