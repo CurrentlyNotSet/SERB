@@ -83,8 +83,8 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
         if(Global.caseNumber != null) {
             HearingCase hearings = HearingCase.loadHeaderInformation();
             if(hearings == null) {
-//                new REPCaseNotFound((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
-//                caseNumberComboBox.setSelectedItem(Global.caseNumber);
+//                new HearingCaseNotFound((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
+                caseNumberComboBox.setSelectedItem("");
             } else {
 //                filedDateTextBox.setText(rep.fileDate != null ? Global.mmddyyyy.format(new Date(rep.fileDate.getTime())) : "");
 //                closedDateTextBox.setText(rep.courtClosedDate != null ? Global.mmddyyyy.format(new Date(rep.courtClosedDate.getTime())) : "");
@@ -92,46 +92,91 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
 //                caseTypeTextBox.setText(rep.caseType != null ? rep.caseType : "");
 //                bargainingUnitTextBox.setText(rep.bargainingUnitNumber != null ? rep.bargainingUnitNumber : "");
 //
-//                List caseParties = CaseParty.loadPartiesByCase();
+
+
+                List caseParties = CaseParty.loadPartiesByCase();
+                
+                
 //
-//                for(Object caseParty: caseParties) {
-//                    CaseParty partyInformation = (CaseParty) caseParty;
-//
-//                    switch (partyInformation.type) {
-//                        case "Employer":
-//                            if(employer.equals("")) {
-//                                employer += partyInformation.name;
-//                            } else {
-//                                employer += ", " + partyInformation.name;
-//                            }
-//                            break;
-//                        case "Employee Organization":
-//                            if(employeeOrg.equals("")) {
-//                                employeeOrg += partyInformation.name;
-//                            } else {
-//                                employeeOrg += ", " + partyInformation.name;
-//                            }
-//                            break;
-//                        case "Incumbent Employee Organization":
-//                            if(incumbentEEO.equals("")) {
-//                                incumbentEEO += partyInformation.name;
-//                            } else {
-//                                incumbentEEO += ", " + partyInformation.name;
-//                            }
-//                            break;
-//                        case "Rival Employee Organization":
-//                            if(rivalEEO.equals("")) {
-//                                rivalEEO += partyInformation.name;
-//                            } else {
-//                                rivalEEO += ", " + partyInformation.name;
-//                            }
-//                            break;
-//                    }
-//                }
-//                employerTextBox.setText(employer);
-//                employeeOrgTextBox.setText(employeeOrg);
-//                incumbentEEOTextBox.setText(incumbentEEO);
-//                rivalEEOTextBox.setText(rivalEEO);
+                for(Object caseParty: caseParties) {
+                    CaseParty partyInformation = (CaseParty) caseParty;
+                    
+                    String name = "";
+                    
+                    if(partyInformation.firstName.equals("") && partyInformation.lastName.equals("")) {
+                        name = partyInformation.companyName;
+                    } else {
+                        name = (partyInformation.prefix.equals("") ? "" : (partyInformation.prefix + " "))
+                        + (partyInformation.firstName.equals("") ? "" : (partyInformation.firstName + " "))
+                        + (partyInformation.middleInitial.equals("") ? "" : (partyInformation.middleInitial + ". "))
+                        + (partyInformation.lastName.equals("") ? "" : (partyInformation.lastName))
+                        + (partyInformation.suffix.equals("") ? "" : (" " + partyInformation.suffix))
+                        + (partyInformation.nameTitle.equals("") ? "" : (", " + partyInformation.nameTitle));
+                    }
+
+                    switch (partyInformation.caseRelation) {
+                        case "Employer":
+                            if(party1.equals("")) {
+                                party1 += name;
+                            } else {
+                                party1 += ", " + name;
+                            }
+                            break;
+                        case "Employer REP":
+                            if(party2.equals("")) {
+                                party2 += name;
+                            } else {
+                                party2 += ", " + name;
+                            }
+                            break;
+                        case "Employee Organization":
+                            if(party3.equals("")) {
+                                party3 += name;
+                            } else {
+                                party3 += ", " + name;
+                            }
+                            break;
+                        case "Employee Organization REP":
+                            if(party4.equals("")) {
+                                party4 += name;
+                            } else {
+                                party4 += ", " + name;
+                            }
+                            break;
+                        case "Charging Party":
+                            if(party1.equals("")) {
+                                party1 += name;
+                            } else {
+                                party1 += ", " + name;
+                            }
+                            break;
+                        case "Charging Party REP":
+                            if(party2.equals("")) {
+                                party2 += name;
+                            } else {
+                                party2 += ", " + name;
+                            }
+                            break;
+                        case "Charged Party":
+                            if(party3.equals("")) {
+                                party3 += name;
+                            } else {
+                                party3 += ", " + name;
+                            }
+                            break;       
+                        case "Charged Party REP":
+                            if(party4.equals("")) {
+                                party4 += name;
+                            } else {
+                                party4 += ", " + name;
+                            }
+                            break;      
+                    }
+                }
+                party1TextBox.setText(party1);
+                party2TextBox.setText(party2);
+                party3TextBox.setText(party3);
+                party4TextBox.setText(party4);
             }
         }
     }
@@ -181,15 +226,15 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
      * 
      */
     void clearAll() {
-//        employerTextBox.setText("");
-//        employeeOrgTextBox.setText("");
-//        incumbentEEOTextBox.setText("");
-//        rivalEEOTextBox.setText("");
-//        closedDateTextBox.setText("");
-//        currentStatusTextBox.setText("");
-//        caseTypeTextBox.setText("");
-//        bargainingUnitTextBox.setText("");
-//        filedDateTextBox.setText("");
+        aljTextBox.setText("");
+        pcDateTextBox.setText("");
+        statusTextBox.setText("");
+        finalResultTextBox.setText("");
+        mediatorTextBox.setText("");
+        party1TextBox.setText("");
+        party2TextBox.setText("");
+        party3TextBox.setText("");
+        party4TextBox.setText("");
     }
 
     public JComboBox getjComboBox2() {
@@ -222,15 +267,15 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
         finalResultTextBox = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
-        filedDateTextBox = new javax.swing.JTextField();
+        mediatorTextBox = new javax.swing.JTextField();
         party1Label = new javax.swing.JLabel();
         party2Label = new javax.swing.JLabel();
-        closedDateTextBox = new javax.swing.JTextField();
-        caseTypeTextBox = new javax.swing.JTextField();
+        party1TextBox = new javax.swing.JTextField();
+        party2TextBox = new javax.swing.JTextField();
         party3Label = new javax.swing.JLabel();
-        rivalEEOTextBox2 = new javax.swing.JTextField();
+        party3TextBox = new javax.swing.JTextField();
         party4Label = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        party4TextBox = new javax.swing.JTextField();
 
         jMenuItem1.setText("jMenuItem1");
 
@@ -317,28 +362,28 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
 
         jLabel12.setText("Mediator:");
 
-        filedDateTextBox.setEditable(false);
-        filedDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        mediatorTextBox.setEditable(false);
+        mediatorTextBox.setBackground(new java.awt.Color(238, 238, 238));
 
         party1Label.setText("Employer:");
 
         party2Label.setText("Employer Rep:");
 
-        closedDateTextBox.setEditable(false);
-        closedDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        party1TextBox.setEditable(false);
+        party1TextBox.setBackground(new java.awt.Color(238, 238, 238));
 
-        caseTypeTextBox.setEditable(false);
-        caseTypeTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        party2TextBox.setEditable(false);
+        party2TextBox.setBackground(new java.awt.Color(238, 238, 238));
 
         party3Label.setText("Employee Org:");
 
-        rivalEEOTextBox2.setEditable(false);
-        rivalEEOTextBox2.setBackground(new java.awt.Color(238, 238, 238));
+        party3TextBox.setEditable(false);
+        party3TextBox.setBackground(new java.awt.Color(238, 238, 238));
 
         party4Label.setText("Employee Org Rep:");
 
-        jTextField1.setEditable(false);
-        jTextField1.setBackground(new java.awt.Color(238, 238, 238));
+        party4TextBox.setEditable(false);
+        party4TextBox.setBackground(new java.awt.Color(238, 238, 238));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -354,11 +399,11 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
                     .addComponent(party3Label))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(filedDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
-                    .addComponent(closedDateTextBox)
-                    .addComponent(caseTypeTextBox)
-                    .addComponent(rivalEEOTextBox2)
-                    .addComponent(jTextField1))
+                    .addComponent(mediatorTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
+                    .addComponent(party1TextBox)
+                    .addComponent(party2TextBox)
+                    .addComponent(party3TextBox)
+                    .addComponent(party4TextBox))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -367,23 +412,23 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel12)
-                    .addComponent(filedDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(mediatorTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(closedDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(party1TextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(party1Label))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(caseTypeTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(party2TextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(party2Label))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(rivalEEOTextBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(party3TextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(party3Label))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(party4Label)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(party4TextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
 
@@ -394,9 +439,6 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField aljTextBox;
     private javax.swing.JComboBox caseNumberComboBox;
-    private javax.swing.JTextField caseTypeTextBox;
-    private javax.swing.JTextField closedDateTextBox;
-    private javax.swing.JTextField filedDateTextBox;
     private javax.swing.JTextField finalResultTextBox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
@@ -407,14 +449,17 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField mediatorTextBox;
     private javax.swing.JLabel party1Label;
+    private javax.swing.JTextField party1TextBox;
     private javax.swing.JLabel party2Label;
+    private javax.swing.JTextField party2TextBox;
     private javax.swing.JLabel party3Label;
+    private javax.swing.JTextField party3TextBox;
     private javax.swing.JLabel party4Label;
+    private javax.swing.JTextField party4TextBox;
     private javax.swing.JTextField pcDateTextBox;
     private javax.swing.JTextField rivalEEOTextBox1;
-    private javax.swing.JTextField rivalEEOTextBox2;
     private javax.swing.JTextField statusTextBox;
     // End of variables declaration//GEN-END:variables
 }

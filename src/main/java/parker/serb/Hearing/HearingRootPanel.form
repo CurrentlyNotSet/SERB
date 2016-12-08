@@ -101,17 +101,43 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="cMDSInformationPanel1" alignment="0" pref="1134" max="32767" attributes="0"/>
+                  <Component id="hearingInformationPanel1" alignment="0" pref="1134" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="cMDSInformationPanel1" alignment="0" pref="559" max="32767" attributes="0"/>
+                  <Component id="hearingInformationPanel1" alignment="0" pref="559" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="parker.serb.CMDS.CMDSInformationPanel" name="cMDSInformationPanel1">
+            <Component class="parker.serb.Hearing.HearingInformationPanel" name="hearingInformationPanel1">
+            </Component>
+          </SubComponents>
+        </Container>
+        <Container class="javax.swing.JPanel" name="jPanel2">
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+              <JTabbedPaneConstraints tabName="Hearings">
+                <Property name="tabTitle" type="java.lang.String" value="Hearings"/>
+              </JTabbedPaneConstraints>
+            </Constraint>
+          </Constraints>
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="hearingHearingsPanel1" alignment="0" pref="1134" max="32767" attributes="0"/>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="hearingHearingsPanel1" alignment="0" pref="559" max="32767" attributes="0"/>
+              </Group>
+            </DimensionLayout>
+          </Layout>
+          <SubComponents>
+            <Component class="parker.serb.Hearing.HearingHearingsPanel" name="hearingHearingsPanel1">
             </Component>
           </SubComponents>
         </Container>

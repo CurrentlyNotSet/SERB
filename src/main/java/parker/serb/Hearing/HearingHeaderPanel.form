@@ -185,11 +185,11 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="filedDateTextBox" pref="183" max="32767" attributes="0"/>
-                      <Component id="closedDateTextBox" max="32767" attributes="0"/>
-                      <Component id="caseTypeTextBox" alignment="0" max="32767" attributes="0"/>
-                      <Component id="rivalEEOTextBox2" alignment="0" max="32767" attributes="0"/>
-                      <Component id="jTextField1" alignment="0" max="32767" attributes="0"/>
+                      <Component id="mediatorTextBox" pref="183" max="32767" attributes="0"/>
+                      <Component id="party1TextBox" max="32767" attributes="0"/>
+                      <Component id="party2TextBox" alignment="0" max="32767" attributes="0"/>
+                      <Component id="party3TextBox" alignment="0" max="32767" attributes="0"/>
+                      <Component id="party4TextBox" alignment="0" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -201,27 +201,27 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel12" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="filedDateTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="mediatorTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="closedDateTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="party1TextBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="party1Label" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="caseTypeTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="party2TextBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="party2Label" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="rivalEEOTextBox2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="party3TextBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="party3Label" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="party4Label" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jTextField1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="party4TextBox" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="22" max="32767" attributes="0"/>
               </Group>
@@ -234,7 +234,7 @@
             <Property name="text" type="java.lang.String" value="Mediator:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="filedDateTextBox">
+        <Component class="javax.swing.JTextField" name="mediatorTextBox">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -252,7 +252,7 @@
             <Property name="text" type="java.lang.String" value="Employer Rep:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="closedDateTextBox">
+        <Component class="javax.swing.JTextField" name="party1TextBox">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -260,7 +260,7 @@
             </Property>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="caseTypeTextBox">
+        <Component class="javax.swing.JTextField" name="party2TextBox">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -273,7 +273,7 @@
             <Property name="text" type="java.lang.String" value="Employee Org:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="rivalEEOTextBox2">
+        <Component class="javax.swing.JTextField" name="party3TextBox">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -286,7 +286,7 @@
             <Property name="text" type="java.lang.String" value="Employee Org Rep:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="jTextField1">
+        <Component class="javax.swing.JTextField" name="party4TextBox">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
