@@ -79,58 +79,6 @@ public class HearingInformationPanel extends javax.swing.JPanel {
         mediatorComboBox.setSelectedItem("");
     }
     
-    public void loadCaseStatusComboBox() {
-        statusComboBox.removeAllItems();
-        
-        statusComboBox.addItem("");
-        
-        List userList = CMDSStatusType.loadAll();
-        
-        for (Object user : userList) {
-            statusComboBox.addItem((String) user);
-        }
-        
-        statusComboBox.setSelectedItem("");
-    }
-    
-    public void loadReclassComboBox() {
-        reclassCodeComboBox.removeAllItems();
-        
-        reclassCodeComboBox.addItem("");
-        
-        List userList = ReClassCode.loadAll();
-        
-        for (Object user : userList) {
-            reclassCodeComboBox.addItem((String) user);
-        }
-        
-        reclassCodeComboBox.setSelectedItem("");
-    }
-    
-    public void loadResultComboBox() {
-        resultComboBox.removeAllItems();
-        
-        resultComboBox.addItem("");
-        
-        List userList = CMDSResult.loadAll();
-        
-        for (Object user : userList) {
-            resultComboBox.addItem((String) user);
-        }
-        
-        resultComboBox.setSelectedItem("");
-    }
-    
-    public void loadGroupTypeComboBox() {
-        groupTypeComboBox.removeAllItems();
-        
-        groupTypeComboBox.addItem("");
-        groupTypeComboBox.addItem("S");
-        groupTypeComboBox.addItem("M");
-        
-        groupTypeComboBox.setSelectedItem("");
-    }
-    
     public void enableUpdate() {
         Global.root.getjButton2().setText("Save");
         Global.root.getjButton9().setVisible(true);
@@ -230,10 +178,10 @@ public class HearingInformationPanel extends javax.swing.JPanel {
     public void loadInformation() {
         loadALJComboBox();
         loadMediatorComboBox();
-        loadGroupTypeComboBox();
-        loadCaseStatusComboBox();
-        loadReclassComboBox();
-        loadResultComboBox();
+//        loadGroupTypeComboBox();
+//        loadCaseStatusComboBox();
+//        loadReclassComboBox();
+//        loadResultComboBox();
         
         orginalInformation = CMDSCase.loadCMDSCaseInformation();
 

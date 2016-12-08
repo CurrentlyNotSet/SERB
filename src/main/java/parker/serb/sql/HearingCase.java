@@ -91,35 +91,35 @@ public class HearingCase {
         return caseNumberList;
     }
     
-    public static List loadULPCases() {
-        
-        List caseNumberList = new ArrayList<>();
-            
-        try {
-            Statement stmt = Database.connectToDB().createStatement();
-            
-            String sql = "Select TOP 50 caseYear, caseType, caseMonth, caseNumber, employerIDNumber, barginingUnitNo from ULPCase Order By caseYear DESC, caseNumber DESC";
-
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            
-            ResultSet caseNumberRS = preparedStatement.executeQuery();
-            
-            while(caseNumberRS.next()) {
-                HearingCase ulpCase = new HearingCase();
-                ulpCase.caseYear = caseNumberRS.getString("caseYear");
-                ulpCase.caseType = caseNumberRS.getString("caseType");
-                ulpCase.caseMonth = caseNumberRS.getString("caseMonth");
-                ulpCase.caseNumber = caseNumberRS.getString("caseNumber");
-//                ulpCase.employerIDNumber = caseNumberRS.getString("employerIDNumber") == null ? "" : caseNumberRS.getString("employerIDNumber");
-//                ulpCase.barginingUnitNo = caseNumberRS.getString("barginingUnitNo") == null ? "" : caseNumberRS.getString("barginingUnitNo");
-
-                caseNumberList.add(ulpCase);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return caseNumberList;
-    }
+//    public static List loadULPCases() {
+//        
+//        List caseNumberList = new ArrayList<>();
+//            
+//        try {
+//            Statement stmt = Database.connectToDB().createStatement();
+//            
+//            String sql = "Select TOP 50 caseYear, caseType, caseMonth, caseNumber, employerIDNumber, barginingUnitNo from ULPCase Order By caseYear DESC, caseNumber DESC";
+//
+//            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+//            
+//            ResultSet caseNumberRS = preparedStatement.executeQuery();
+//            
+//            while(caseNumberRS.next()) {
+//                HearingCase ulpCase = new HearingCase();
+//                ulpCase.caseYear = caseNumberRS.getString("caseYear");
+//                ulpCase.caseType = caseNumberRS.getString("caseType");
+//                ulpCase.caseMonth = caseNumberRS.getString("caseMonth");
+//                ulpCase.caseNumber = caseNumberRS.getString("caseNumber");
+////                ulpCase.employerIDNumber = caseNumberRS.getString("employerIDNumber") == null ? "" : caseNumberRS.getString("employerIDNumber");
+////                ulpCase.barginingUnitNo = caseNumberRS.getString("barginingUnitNo") == null ? "" : caseNumberRS.getString("barginingUnitNo");
+//
+//                caseNumberList.add(ulpCase);
+//            }
+//        } catch (SQLException ex) {
+//            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return caseNumberList;
+//    }
     
     public static Timestamp getBoardActionPCDate() {
         
