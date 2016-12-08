@@ -15,6 +15,7 @@ import java.util.List;
 import parker.serb.Global;
 import parker.serb.sql.AdministrationInformation;
 import parker.serb.sql.SMDSDocuments;
+import parker.serb.sql.CMDSDocuments;
 import parker.serb.sql.SystemExecutive;
 import parker.serb.util.JacobCOMBridge;
 import parker.serb.util.NumberFormatService;
@@ -65,12 +66,8 @@ public class generateDocument {
                         document = processORGbookmarks.processDoAORGWordLetter(document, true, toParties, ccParties);
                         break;
                     case "CSC":
-                        document = defaultCMDSBookmarks(document, template.dueDate);
+                        document = defaultCMDSBookmarks(document);
                         document = processCSCbookmarks.processDoACSCWordLetter(document, toParties, ccParties);
-                        break;
-                    case "CMDS":
-                        document = defaultCMDSBookmarks(document, template.dueDate);
-                        document = processCMDSbookmarks.processDoACMDSWordLetter(document, toParties, ccParties);
                         break;
                     default:
                         break;
@@ -86,6 +83,44 @@ public class generateDocument {
         return saveDocName;
     }
 
+    public static String generateCMDSdocument(CMDSDocuments template, questionsCMDSModel answers, int senderID, List<Integer> toParties, List<Integer> ccParties){
+        String saveDocName = null;
+        ActiveXComponent eolWord = null;
+        eolWord = JacobCOMBridge.setWordActive(true, false, eolWord);
+        if (eolWord != null){
+            //Setup Document
+            File docPath = new File(Global.activityPath
+                    + Global.activeSection + File.separator
+                    + Global.caseYear + File.separator
+                    + NumberFormatService.generateFullCaseNumber());
+            docPath.mkdirs();
+            saveDocName = String.valueOf(new Date().getTime()) + "_" + template.LetterName + ".docx";
+
+            Dispatch document = Dispatch.call(eolWord.getProperty("Documents").toDispatch(), "Open",
+                    Global.templatePath + "CMDS" + File.separator + template.LetterName).toDispatch();
+            ActiveXComponent.call(eolWord.getProperty("Selection").toDispatch(), "Find").toDispatch();
+
+            //section
+            if (null != Global.activeSection) { 
+                switch (Global.activeSection) {
+                    case "CMDS":
+                        document = defaultCMDSBookmarks(document);
+                        document = processCMDSbookmarks.processDoACMDSWordLetter(document, template, toParties, ccParties);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            Dispatch WordBasic = (Dispatch) Dispatch.call(eolWord, "WordBasic").getDispatch();
+            String newFilePath = docPath + File.separator + saveDocName;
+            Dispatch.call(WordBasic, "FileSaveAs", newFilePath, new Variant(16));
+            JacobCOMBridge.setWordActive(false, false, eolWord);
+        }
+
+        return saveDocName;
+    }
+    
     private static Dispatch defaultSMDSBookmarks(Dispatch Document, int docDue){
         //get basic information
         List<SystemExecutive> execsList = SystemExecutive.loadExecs("SERB");
@@ -203,7 +238,7 @@ public class generateDocument {
         return Document;
     }
     
-    private static Dispatch defaultCMDSBookmarks(Dispatch Document, int docDue){
+    private static Dispatch defaultCMDSBookmarks(Dispatch Document){
         //get basic information
         List<SystemExecutive> execsList = SystemExecutive.loadExecs("SPBR");
         AdministrationInformation sysAdminInfo = AdministrationInformation.loadAdminInfo("SPBR");
@@ -253,32 +288,7 @@ public class generateDocument {
         if (!sysAdminInfo.Zip.equals("")) {
             pbrCityStateZip += " " + sysAdminInfo.Zip.trim();
         }
-        
-        //DueDate Calculation
-        Date today = new Date();
-        Calendar c = Calendar.getInstance();
-        c.setTime(today); // Now use today date.
-        c.add(Calendar.DATE, docDue);
-        
-        if(c.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
-            c.add(Calendar.DATE, 2);
-        } else if (c.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY){
-            c.add(Calendar.DATE, 1);
-        }
-        Date dueDate = c.getTime();
-        
-        //Date Calculations
-        c.setTime(today);
-        c.add(Calendar.DATE, 7);
-        Date sevenDayOut = c.getTime();
-        c.setTime(today);
-        c.add(Calendar.DATE, 14);
-        Date fourteenDayOut = c.getTime();
-        c.setTime(today);
-        c.add(Calendar.DATE, 21);
-        Date twentyOneDayOut = c.getTime();
-        
-               
+                       
         //ProcessBookmarks
         for (int i = 0; i < Global.bookmarkLimit; i++) {
             //System Executives            
@@ -305,10 +315,6 @@ public class generateDocument {
                     + Global.daySuffixes[Calendar.getInstance().get(Calendar.DAY_OF_MONTH)], Document);
             processBookmark.process("MONTH" + (i == 0 ? "" : i), Global.MMMMM.format(new Date()), Document);
             processBookmark.process("YEAR" + (i == 0 ? "" : i), Global.yyyy.format(new Date()), Document);
-            processBookmark.process("DUEDATE" + (i == 0 ? "" : i), Global.MMMMddyyyy.format(dueDate), Document);
-            processBookmark.process("PLUS7" + (i == 0 ? "" : i), Global.MMMMddyyyy.format(sevenDayOut), Document);
-            processBookmark.process("PLUS14" + (i == 0 ? "" : i), Global.MMMMddyyyy.format(fourteenDayOut), Document);
-            processBookmark.process("PLUS21" + (i == 0 ? "" : i), Global.MMMMddyyyy.format(twentyOneDayOut), Document);
         }
         
         return Document;

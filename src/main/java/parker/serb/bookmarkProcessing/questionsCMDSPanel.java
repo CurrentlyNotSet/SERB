@@ -1,0 +1,1847 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package parker.serb.bookmarkProcessing;
+
+import com.alee.extended.date.WebDateField;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.util.List;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import parker.serb.Global;
+import parker.serb.sql.CMDSDocuments;
+import parker.serb.sql.CaseParty;
+import parker.serb.sql.County;
+
+/**
+ *
+ * @author User
+ */
+public class questionsCMDSPanel extends JFrame {
+    
+    private JTextField hearingLengthTextField, actionAppealedTextField, classificationTitleTextField, 
+            barganingUnitTextField, classificationNumberTextField, probationaryPeriodTextField, 
+            hearingTimeTextField, casePendingResolutionTextField, codeSectionFillInTextField, 
+            documentNameTextField, infoRedactedTextField, whoRedactedTextField, redactedTitleTextField,
+            purposeOfExtensionTextField, filingPartyTextField, addressBlock1TextField, 
+            addressBlock2TextField, addressBlock3TextField, addressBlock4TextField;
+    
+    private WebDateField responseDueWebDateField, appellantAppointedWebDateField, hearingDateWebDateField, 
+            hearingDateServedWebDateField, firstLetterSentWebDateField, stayDateWebDateField, 
+            lastUpdateWebDateField, matterContinuedWebDateField, settleMentDueWebDateField, dateFiledWebDateField, 
+            datePOSentWebDateField, dateRequestedWebDateField, dateRequestedExtensionWebDateField;
+    
+    private JComboBox genderAppellantComboBox, memorandumContraComboBox, codeSelectionComboBox, countyComboBox,
+            respondingPartyComboBox, requestingPartyComboBox, depositionComboBox, genderRepresentativeComboBox,
+            appealTypeComboBox, appealType2ComboBox, appealTypeUFComboBox, appealTypeLSComboBox, 
+            RequestingPartyContinuanceComboBox, RequestingPartyTimeExtensionComboBox, 
+            RequestingPartyConsolidationComboBox, purposeOfExtensionComboBox, filingPartyComboBox, addressBlockComboBox;
+    
+    public questionsCMDSModel answers = new questionsCMDSModel();
+    
+    int panelWidth = 325;
+    int panelHeight = 100;
+    
+    public questionsCMDSPanel(java.awt.Frame parent, boolean modal, CMDSDocuments template, int count) {
+        
+
+        //Set Padding for Button/Labels
+        Border border = null;
+        Border margin = null;
+        if (template.AddressBlock){
+            panelHeight = 175;
+        }        
+
+        //Set Top Panel
+        final JPanel topPanel = new JPanel();
+        JLabel titleLabel = new JLabel("Questions");
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 14));
+        border = titleLabel.getBorder();
+        margin = new EmptyBorder(10,10,10,10);
+        titleLabel.setBorder(new CompoundBorder(border, margin));
+        topPanel.add(titleLabel);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel buttonPanel = new JPanel(); //Creating the orderList JPanel
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        final JButton addButton = new JButton("Submit");
+        addButton.setPreferredSize(new Dimension(100, 25));
+        addButton.setMargin(new Insets(1, 1, 1, 1));
+        buttonPanel.add(addButton);
+        
+        //Set QuestionPanel
+        final JPanel questionsPanel = new JPanel(); //Creating the orderList JPanel
+        questionsPanel.setLayout(new GridLayout((int) Math.ceil((Math.sqrt(count))), (int) Math.ceil((Math.sqrt(count)))));
+        if (template.LetterName != null) {
+            if (template.LetterName.equals("Appeal Notice")) {
+                questionsPanel.add(HearingLengthPanel());        //01 
+            }
+        }
+        if (template.ResponseDue) {
+            questionsPanel.add(ResponseDuePanel());          //02 
+        }
+        if (template.Gender) {
+            questionsPanel.add(GenderAppellantPanel());      //03 
+        }
+        if (template.ActionAppealed) {
+            questionsPanel.add(ActionAppealedPanel());       //04 
+        }
+        if (template.MemorandumContra) {
+            questionsPanel.add(MemorandumContraPanel());     //05 
+        }
+        if (template.ClassificationTitle) {
+            questionsPanel.add(ClassificationTitlePanel());  //06 
+        }
+        if (template.BarginingUnit) {
+            questionsPanel.add(BargainingUnitPanel());       //07 
+        }
+        if (template.ClassificationNumber) {
+            questionsPanel.add(ClassificationNumberPanel()); //08 
+        }
+        if (template.AppelantAppointed) {
+            questionsPanel.add(AppellantAppointedPanel());   //09 
+        }
+        if (template.ProbitionaryPeriod) {
+            questionsPanel.add(ProbationaryPeriodPanel());   //10 
+        }
+        if (template.HearingDate) {
+            questionsPanel.add(HearingDatePanel());          //11 
+        }
+        if (template.HearingTime) {
+            questionsPanel.add(HearingTimePanel());          //12 
+        }
+        if (template.HearingTime) {
+            questionsPanel.add(HearingServedPanel());        //13 
+        }
+        if (template.AddressBlock) {
+            questionsPanel.add(AddressBlockPanel());         //14
+        }
+        if (template.FirstLetterSent) {
+            questionsPanel.add(FirstLetterSentPanel());      //15 
+        }
+        if (template.CodeSection) {
+            questionsPanel.add(CodeSelectionPanel());        //16 
+        }
+        if (template.CountyName) {
+            questionsPanel.add(CountyNamePanel());           //17 
+        }
+        if (template.StayDate) {
+            questionsPanel.add(StayDatePanel());             //18 
+        }
+        if (template.CasePendingResolution) {
+            questionsPanel.add(CasePendingResolutionPanel());//19 
+        }
+        if (template.LastUpdate) {
+            questionsPanel.add(LastUpdatePanel());           //20 
+        }
+        if (template.MatterContinued) {
+            questionsPanel.add(MatterContinuedPanel());      //21 
+        }
+        if (template.SettlementDue) {
+            questionsPanel.add(SettlementDuePanel());        //22 
+        }
+        if (template.FilingParty) {
+            questionsPanel.add(FilingPartyPanel());          //23
+        }
+        if (template.RespondingParty) {
+            questionsPanel.add(RespondingPartyPanel());      //24 
+        }
+        if (template.RequestingParty) {
+            questionsPanel.add(RequestingPartyPanel());      //25 
+        }
+        if (template.Deposition) {
+            questionsPanel.add(DepositionPanel());           //26 
+        }
+        if (template.RepHimOrHer) {
+            questionsPanel.add(GenderRepresentativePanel()); //27 
+        }
+        if (template.CodeSectionFillIn) {
+            questionsPanel.add(CodeSectionFillinPanel());    //28 
+        }
+        if (template.DocumentName) {
+            questionsPanel.add(DocumentNamePanel());         //29 
+        }
+        if (template.DateFiled) {
+            questionsPanel.add(DateFiledPanel());            //30 
+        }
+        if (template.InfoRedacted) {
+            questionsPanel.add(InfoRedactedPanel());         //31 
+        }
+        if (template.RedactorName) {
+            questionsPanel.add(RedactorNamePanel());         //32 
+        }
+        if (template.RedactorTitle) {
+            questionsPanel.add(RedactorTitlePanel());        //33 
+        }
+        if (template.DatePOSent) {
+            questionsPanel.add(DatePOSentPanel());           //34 
+        }
+        if (template.AppealType) {
+            questionsPanel.add(AppealTypePanel());           //35 
+        }
+        if (template.AppealType2) {
+            questionsPanel.add(AppealType2Panel());          //36
+        }
+        if (template.AppealTypeUF) {
+            questionsPanel.add(AppealTypeUFPanel());         //37
+        }
+        if (template.AppealTypeLS) {
+            questionsPanel.add(AppealTypeLSPanel());         //38
+        }
+        if (template.RequestingPartyC && template.HearingTime) {
+            questionsPanel.add(RequestingPartyContinuancePanel());   //39
+        }
+        if (template.DateRequested && template.HearingTime) {
+            questionsPanel.add(DateRequestedPanel());                //40
+        }
+        if (template.RequestingPartyC && template.PurposeOfExtension) {
+            questionsPanel.add(RequestingPartyCTimeExtensionPanel());//41
+        }
+        if (template.DateRequested && template.PurposeOfExtension) {
+            questionsPanel.add(DateRequestedTimeExtensionPanel());   //42
+        }
+        if (template.PurposeOfExtension) {
+            questionsPanel.add(PurposeOfExtension());                //43
+        }
+        if (template.RequestingPartyC && !template.PurposeOfExtension && !template.HearingTime) {
+            questionsPanel.add(RequestingPartyCConsolidationPanel());//44
+        }
+        
+        
+        this.setLayout(new BorderLayout());
+        this.add(topPanel, BorderLayout.NORTH);
+        this.add(questionsPanel, BorderLayout.CENTER);
+        this.add(buttonPanel, BorderLayout.SOUTH);
+        
+        addButton.addActionListener((java.awt.event.ActionEvent evt) -> {
+            SubmitButton();
+        });
+        
+        this.pack();
+        this.setVisible(true);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+    
+    private void SubmitButton() {         
+        answers.setHearingLength(hearingLengthTextField.getText());
+        answers.setResponseDueDate(responseDueWebDateField.getText());
+        answers.setGenderAppellant(genderAppellantComboBox.getSelectedItem().toString());
+        answers.setActionAppealed(actionAppealedTextField.getText());
+        answers.setMemorandumContra(memorandumContraComboBox.getSelectedItem().toString());
+        answers.setClassificationTitle(classificationTitleTextField.getText());
+        answers.setBargainingUnit(barganingUnitTextField.getText());
+        answers.setClassificationNumber(classificationNumberTextField.getText());
+        answers.setAppellantAppointed(appellantAppointedWebDateField.getText());
+        answers.setProbationaryPeriod(probationaryPeriodTextField.getText());
+        answers.setHearingDate(hearingDateWebDateField.getText());
+        answers.setHearingTime(hearingTimeTextField.getText());
+        answers.setHearingServed(hearingDateServedWebDateField.getText());
+        answers.setAddressBlock(addressBlockComboBox.getSelectedItem().toString().equals("Other") 
+                ? (addressBlock1TextField.getText().equals("") ? "" : addressBlock1TextField.getText() + System.lineSeparator())
+                + (addressBlock2TextField.getText().equals("") ? "" : addressBlock2TextField.getText() + System.lineSeparator())
+                + (addressBlock3TextField.getText().equals("") ? "" : addressBlock3TextField.getText() + System.lineSeparator())
+                + addressBlock4TextField.getText() : filingPartyComboBox.getSelectedItem().toString());
+        answers.setFirstLetterSent(firstLetterSentWebDateField.getText());
+        answers.setCodeSelection(codeSelectionComboBox.getSelectedItem().toString());
+        answers.setCountyName(countyComboBox.getSelectedItem().toString());
+        answers.setStayDate(stayDateWebDateField.getText());
+        answers.setCasePendingResolution(casePendingResolutionTextField.getText());
+        answers.setLastUpdate(lastUpdateWebDateField.getText());
+        answers.setMatterContinued(matterContinuedWebDateField.getText());
+        answers.setSettlementDue(settleMentDueWebDateField.getText());
+        answers.setFilingParty(filingPartyComboBox.getSelectedItem().toString().equals("Other") 
+                ? filingPartyTextField.getText() : filingPartyComboBox.getSelectedItem().toString());
+        answers.setRespondingParty(respondingPartyComboBox.getSelectedItem().toString());
+        answers.setRequestingParty(requestingPartyComboBox.getSelectedItem().toString());
+        answers.setDeposition(depositionComboBox.getSelectedItem().toString());
+        answers.setGenderRep(genderRepresentativeComboBox.getSelectedItem().toString());
+        answers.setCodeSectionFillIn(codeSectionFillInTextField.getText());
+        answers.setDocumentName(documentNameTextField.getText());
+        answers.setDateFiled(dateFiledWebDateField.getText());
+        answers.setInfoRedacted(infoRedactedTextField.getText());
+        answers.setRedactorName(whoRedactedTextField.getText());
+        answers.setRedactorTitle(redactedTitleTextField.getText());
+        answers.setDatePOSent(datePOSentWebDateField.getText());
+        answers.setAppealType(appealTypeComboBox.getSelectedItem().toString());
+        answers.setAppealType2(appealType2ComboBox.getSelectedItem().toString());
+        answers.setAppealTypeUF(appealTypeUFComboBox.getSelectedItem().toString());
+        answers.setAppealTypeLS(appealTypeLSComboBox.getSelectedItem().toString());
+        answers.setRequestingPartyContinuance(RequestingPartyContinuanceComboBox.getSelectedItem().toString());
+        answers.setDateRequestedContinuance(dateRequestedWebDateField.getText());
+        answers.setRequestingPartyExtension(RequestingPartyTimeExtensionComboBox.getSelectedItem().toString());
+        answers.setDateRequestedExtension(dateRequestedExtensionWebDateField.getText());
+        answers.setPurposeofExtension(purposeOfExtensionComboBox.getSelectedItem().toString().equals("Other") 
+                ? purposeOfExtensionTextField.getText() : purposeOfExtensionComboBox.getSelectedItem().toString());
+        answers.setRequestingPartyConsolidation(RequestingPartyConsolidationComboBox.getSelectedItem().toString());
+    }
+    
+    private JPanel HearingLengthPanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel actionLabel = new JLabel();
+        hearingLengthTextField = new JTextField();
+        hearingLengthTextField.setPreferredSize(new Dimension(150, 25));
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setText("Please Enter the Length of the Hearing");
+        headerPanel.add(titleLabel);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Length (minutes): ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(hearingLengthTextField);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel ResponseDuePanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel actionLabel = new JLabel();
+        responseDueWebDateField = new WebDateField();
+        responseDueWebDateField.setPreferredSize(new Dimension(150, 25));
+        responseDueWebDateField.setDateFormat(Global.mmddyyyy);
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setText("Please Enter the Response Due Date");
+        headerPanel.add(titleLabel);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Response Due: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(responseDueWebDateField);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel GenderAppellantPanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel actionLabel = new JLabel();
+        genderAppellantComboBox = new JComboBox();
+        genderAppellantComboBox.setPreferredSize(new Dimension(100, 25));
+        genderAppellantComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "Male", "Female" }));
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setText("Please Select Appellent's Gender");
+        headerPanel.add(titleLabel);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Gender: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(genderAppellantComboBox);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+        
+    private JPanel ActionAppealedPanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel actionLabel = new JLabel();
+        actionAppealedTextField = new JTextField();
+        actionAppealedTextField.setPreferredSize(new Dimension(150, 25));
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setText("What Type of Action Was Appealed?");
+        headerPanel.add(titleLabel);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Type: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(actionAppealedTextField);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+        
+    private JPanel MemorandumContraPanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel actionLabel = new JLabel();
+        memorandumContraComboBox = new JComboBox();
+        memorandumContraComboBox.setPreferredSize(new Dimension(100, 25));
+        memorandumContraComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "Filed", "Reduction" }));
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setText("Did Appellant File a Memorandum Contra?");
+        headerPanel.add(titleLabel);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Memorandum: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(memorandumContraComboBox);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel ClassificationTitlePanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel actionLabel = new JLabel();
+        classificationTitleTextField = new JTextField();
+        classificationTitleTextField.setPreferredSize(new Dimension(150, 25));
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setText("What Was Appellant's Classificationt Title?");
+        headerPanel.add(titleLabel);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Title: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(classificationTitleTextField);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel BargainingUnitPanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel actionLabel = new JLabel();
+        barganingUnitTextField = new JTextField();
+        barganingUnitTextField.setPreferredSize(new Dimension(150, 25));
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setText("What Bargaining Unit Represented Appellant?");
+        headerPanel.add(titleLabel);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Bargaining Unit: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(barganingUnitTextField);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel ClassificationNumberPanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel actionLabel = new JLabel();
+        classificationNumberTextField = new JTextField();
+        classificationNumberTextField.setPreferredSize(new Dimension(150, 25));
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setText("What is Appellant's Classification Number?");
+        headerPanel.add(titleLabel);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Classification Number: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(classificationNumberTextField);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel AppellantAppointedPanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel title2Label = new JLabel();
+        JLabel actionLabel = new JLabel();
+        appellantAppointedWebDateField = new WebDateField();
+        appellantAppointedWebDateField.setPreferredSize(new Dimension(150, 25));
+        appellantAppointedWebDateField.setDateFormat(Global.mmddyyyy);
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.Y_AXIS));
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        titleLabel.setText("What Date was Appellant Appointed");
+        title2Label.setFont(new java.awt.Font("Tahoma", 1, 12));
+        title2Label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        title2Label.setText("to Their Classification?");
+        headerPanel.add(titleLabel);
+        headerPanel.add(title2Label);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Classification Date: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(appellantAppointedWebDateField);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel ProbationaryPeriodPanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel title2Label = new JLabel();
+        JLabel actionLabel = new JLabel();
+        probationaryPeriodTextField = new JTextField();
+        probationaryPeriodTextField.setPreferredSize(new Dimension(150, 25));
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.Y_AXIS));
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        titleLabel.setText("What Was The Length of");
+        title2Label.setFont(new java.awt.Font("Tahoma", 1, 12));
+        title2Label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        title2Label.setText("Appellant's Probationary Period?");
+        headerPanel.add(titleLabel);
+        headerPanel.add(title2Label);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Probationary Period: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(probationaryPeriodTextField);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel HearingDatePanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel actionLabel = new JLabel();
+        hearingDateWebDateField = new WebDateField();
+        hearingDateWebDateField.setPreferredSize(new Dimension(150, 25));
+        hearingDateWebDateField.setDateFormat(Global.mmddyyyy);
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setText("What Date was the Hearing Scheduled?");
+        headerPanel.add(titleLabel);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Hearing Date: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(hearingDateWebDateField);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel HearingTimePanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel actionLabel = new JLabel();
+        hearingTimeTextField = new JTextField();
+        hearingTimeTextField.setPreferredSize(new Dimension(150, 25));
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setText("When Does the Hearing Start?");
+        headerPanel.add(titleLabel);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Hearing Time: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(hearingTimeTextField);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel HearingServedPanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel actionLabel = new JLabel();
+        hearingDateServedWebDateField = new WebDateField();
+        hearingDateServedWebDateField.setPreferredSize(new Dimension(150, 25));
+        hearingDateServedWebDateField.setDateFormat(Global.mmddyyyy);
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setText("What Date was the Hearing Served?");
+        headerPanel.add(titleLabel);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Hearing Date: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(hearingDateServedWebDateField);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel AddressBlockPanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel(), actionLabel = new JLabel(), action2Label = new JLabel(), 
+                action3Label = new JLabel(), action4Label = new JLabel(), action5Label = new JLabel();
+        actionLabel.setPreferredSize(new Dimension(90, 25));
+        actionLabel.setHorizontalAlignment(SwingConstants.TRAILING);
+        
+        action2Label.setPreferredSize(new Dimension(90, 25));
+        action2Label.setHorizontalAlignment(SwingConstants.TRAILING);
+        addressBlock1TextField = new JTextField();
+        addressBlock1TextField.setPreferredSize(new Dimension(175, 25));
+        
+        action3Label.setPreferredSize(new Dimension(90, 25));
+        action3Label.setHorizontalAlignment(SwingConstants.TRAILING);
+        addressBlock2TextField = new JTextField();
+        addressBlock2TextField.setPreferredSize(new Dimension(175, 25));
+        
+        action4Label.setPreferredSize(new Dimension(90, 25));
+        action4Label.setHorizontalAlignment(SwingConstants.TRAILING);
+        addressBlock3TextField = new JTextField();
+        addressBlock3TextField.setPreferredSize(new Dimension(175, 25));
+        
+        action5Label.setPreferredSize(new Dimension(90, 25));
+        action5Label.setHorizontalAlignment(SwingConstants.TRAILING);
+        addressBlock4TextField = new JTextField();
+        addressBlock4TextField.setPreferredSize(new Dimension(175, 25));
+        addressBlockComboBox = new JComboBox();
+        addressBlockComboBox.setPreferredSize(new Dimension(175, 25));
+        List partyType = CaseParty.loadPartiesByCase();
+        addressBlockComboBox.addItem("");
+        for (int i = 0; i < partyType.size(); i++) {
+            CaseParty party = (CaseParty) partyType.get(i);
+            addressBlockComboBox.addItem(party.caseRelation);
+        }
+        addressBlockComboBox.addItem("Other");
+        
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setText("To Whom is the Letter Being Sent?");
+        headerPanel.add(titleLabel);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel();
+        final JPanel mainSub1Panel = new JPanel();
+        final JPanel mainSub2Panel = new JPanel();
+        final JPanel mainSub3Panel = new JPanel();
+        final JPanel mainSub4Panel = new JPanel();
+        final JPanel mainSub5Panel = new JPanel();
+            
+        FlowLayout flow = new FlowLayout(FlowLayout.CENTER);
+        flow.setVgap(0);
+        
+        mainSub1Panel.setLayout(flow);
+        mainSub1Panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
+        actionLabel.setText("Send To: ");
+        mainSub1Panel.add(actionLabel);
+        mainSub1Panel.add(addressBlockComboBox);
+        
+        mainSub2Panel.setLayout(flow);
+        mainSub2Panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
+        action2Label.setText("Name: ");
+        mainSub2Panel.add(action2Label);
+        mainSub2Panel.add(addressBlock1TextField);
+        
+        mainSub3Panel.setLayout(flow);
+        mainSub3Panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
+        action3Label.setText("Address 1: ");
+        mainSub3Panel.add(action3Label);
+        mainSub3Panel.add(addressBlock2TextField);
+        
+        mainSub4Panel.setLayout(flow);
+        mainSub4Panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
+        action4Label.setText("Address 2: ");
+        mainSub4Panel.add(action4Label);
+        mainSub4Panel.add(addressBlock3TextField);
+        
+        mainSub5Panel.setLayout(flow);
+        mainSub5Panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
+        action5Label.setText("City/State/Zip: ");
+        mainSub5Panel.add(action5Label);
+        mainSub5Panel.add(addressBlock4TextField);
+        
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.add(mainSub1Panel);
+        mainPanel.add(mainSub2Panel);
+        mainPanel.add(mainSub3Panel);
+        mainPanel.add(mainSub4Panel);
+        mainPanel.add(mainSub5Panel);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel FirstLetterSentPanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel title2Label = new JLabel();
+        JLabel actionLabel = new JLabel();
+        firstLetterSentWebDateField = new WebDateField();
+        firstLetterSentWebDateField.setPreferredSize(new Dimension(150, 25));
+        firstLetterSentWebDateField.setDateFormat(Global.mmddyyyy);
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+                
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.Y_AXIS));
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        titleLabel.setText("What Date was the First Letter");
+        title2Label.setFont(new java.awt.Font("Tahoma", 1, 12));
+        title2Label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        title2Label.setText("to the Appelle Sent?");
+        headerPanel.add(titleLabel);
+        headerPanel.add(title2Label);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Date Sent: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(firstLetterSentWebDateField);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel CodeSelectionPanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel title2Label = new JLabel();
+        JLabel actionLabel = new JLabel();
+        codeSelectionComboBox = new JComboBox();
+        codeSelectionComboBox.setPreferredSize(new Dimension(100, 25));
+        codeSelectionComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "124.40", "124.56" }));
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.Y_AXIS));
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        titleLabel.setText("Which Code Section Provides Jurisdiction");
+        title2Label.setFont(new java.awt.Font("Tahoma", 1, 12));
+        title2Label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        title2Label.setText("Over This Request for Investigation?");
+        headerPanel.add(titleLabel);
+        headerPanel.add(title2Label);
+                
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Section: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(codeSelectionComboBox);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel CountyNamePanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel actionLabel = new JLabel();
+        countyComboBox = new JComboBox();
+        countyComboBox.setPreferredSize(new Dimension(150, 25));
+        countyComboBox.setModel(new javax.swing.DefaultComboBoxModel());
+
+        List counties = County.loadCountyListByState("OH");
+        countyComboBox.addItem("");
+        for (int i = 0; i < counties.size(); i++) {
+            County county = (County) counties.get(i);
+            countyComboBox.addItem(county.countyName);
+        }
+
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setText("What County is the Appelle Located In?");
+        headerPanel.add(titleLabel);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("County: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(countyComboBox);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel StayDatePanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel actionLabel = new JLabel();
+        stayDateWebDateField = new WebDateField();
+        stayDateWebDateField.setPreferredSize(new Dimension(150, 25));
+        stayDateWebDateField.setDateFormat(Global.mmddyyyy);
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setText("Enter Date of Stay");
+        headerPanel.add(titleLabel);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Date of Stay: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(stayDateWebDateField);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel CasePendingResolutionPanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel title2Label = new JLabel();
+        JLabel actionLabel = new JLabel();
+        casePendingResolutionTextField = new JTextField();
+        casePendingResolutionTextField.setPreferredSize(new Dimension(150, 25));
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+                
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.Y_AXIS));
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        titleLabel.setText("Description of Reason for Stay");
+        title2Label.setFont(new java.awt.Font("Tahoma", 0, 11));
+        title2Label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        title2Label.setText("i.e. Pending resolution of WHAT");
+        headerPanel.add(titleLabel);
+        headerPanel.add(title2Label);        
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Description: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(casePendingResolutionTextField);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel LastUpdatePanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel actionLabel = new JLabel();
+        lastUpdateWebDateField = new WebDateField();
+        lastUpdateWebDateField.setPreferredSize(new Dimension(150, 25));
+        lastUpdateWebDateField.setDateFormat(Global.mmddyyyy);
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setText("Please Enter the Date of the Last Update");
+        headerPanel.add(titleLabel);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Date of Last Update: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(lastUpdateWebDateField);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel MatterContinuedPanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel actionLabel = new JLabel();
+        matterContinuedWebDateField = new WebDateField();
+        matterContinuedWebDateField.setPreferredSize(new Dimension(150, 25));
+        matterContinuedWebDateField.setDateFormat(Global.mmddyyyy);
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setText("On What Date was the Matter Continued?");
+        headerPanel.add(titleLabel);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Date: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(matterContinuedWebDateField);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel SettlementDuePanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel actionLabel = new JLabel();
+        settleMentDueWebDateField = new WebDateField();
+        settleMentDueWebDateField.setPreferredSize(new Dimension(150, 25));
+        settleMentDueWebDateField.setDateFormat(Global.mmddyyyy);
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setText("Enter the Date of the Last Update");
+        headerPanel.add(titleLabel);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Date: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(settleMentDueWebDateField);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel FilingPartyPanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel(), actionLabel = new JLabel(), action2Label = new JLabel();
+        filingPartyTextField = new JTextField();
+        filingPartyTextField.setPreferredSize(new Dimension(225, 25));
+        filingPartyComboBox = new JComboBox();
+        filingPartyComboBox.setPreferredSize(new Dimension(225, 25));
+        List partyType = CaseParty.loadPartiesByCase();
+        filingPartyComboBox.addItem("");
+        for (int i = 0; i < partyType.size(); i++) {
+            CaseParty party = (CaseParty) partyType.get(i);
+            filingPartyComboBox.addItem(party.caseRelation);
+        }
+        filingPartyComboBox.addItem("Other");
+        
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setText("Which Party Filed The Document?");
+        headerPanel.add(titleLabel);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel();
+        final JPanel mainSub1Panel = new JPanel();
+        final JPanel mainSub2Panel = new JPanel();
+            
+        mainSub1Panel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        mainSub1Panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
+        actionLabel.setText("Party: ");
+        mainSub1Panel.add(actionLabel);
+        mainSub1Panel.add(filingPartyComboBox);
+        
+        mainSub2Panel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        mainSub2Panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
+        action2Label.setText("Name: ");
+        mainSub2Panel.add(action2Label);
+        mainSub2Panel.add(filingPartyTextField);
+        
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.add(mainSub1Panel);
+        mainPanel.add(mainSub2Panel);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel RespondingPartyPanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel actionLabel = new JLabel();
+        respondingPartyComboBox = new JComboBox();
+        respondingPartyComboBox.setPreferredSize(new Dimension(100, 25));
+        respondingPartyComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "Appellant", "Appellee" }));
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setText("Which Party is Ordered to Respond?");
+        headerPanel.add(titleLabel);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Party: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(respondingPartyComboBox);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel RequestingPartyPanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel actionLabel = new JLabel();
+        requestingPartyComboBox = new JComboBox();
+        requestingPartyComboBox.setPreferredSize(new Dimension(100, 25));
+        requestingPartyComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "Appellant's", "Appellee's"}));
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setText("Which Party is Requesting the Extension?");
+        headerPanel.add(titleLabel);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Party: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(requestingPartyComboBox);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel DepositionPanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel actionLabel = new JLabel();
+        depositionComboBox = new JComboBox();
+        depositionComboBox.setPreferredSize(new Dimension(100, 25));
+        depositionComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "Deposition", "Depositions"}));
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setText("Is a Single Deposition Requested, or Multiple?");
+        headerPanel.add(titleLabel);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Request: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(depositionComboBox);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel GenderRepresentativePanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel actionLabel = new JLabel();
+        genderRepresentativeComboBox = new JComboBox();
+        genderRepresentativeComboBox.setPreferredSize(new Dimension(100, 25));
+        genderRepresentativeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "Male", "Female" }));
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setText("Please Select Representative's Gender");
+        headerPanel.add(titleLabel);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Gender: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(genderRepresentativeComboBox);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel CodeSectionFillinPanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel title2Label = new JLabel();
+        JLabel actionLabel = new JLabel();
+        codeSectionFillInTextField = new JTextField();
+        codeSectionFillInTextField.setPreferredSize(new Dimension(150, 25));
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.Y_AXIS));
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        titleLabel.setText("Pursuant to what section does Appellee assert");
+        title2Label.setFont(new java.awt.Font("Tahoma", 1, 12));
+        title2Label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        title2Label.setText("Appellant is exempled from the classified service?");
+        headerPanel.add(titleLabel);
+        headerPanel.add(title2Label);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Title: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(codeSectionFillInTextField);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel DocumentNamePanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel title2Label = new JLabel();
+        JLabel actionLabel = new JLabel();
+        documentNameTextField = new JTextField();
+        documentNameTextField.setPreferredSize(new Dimension(150, 25));
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+                
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.Y_AXIS));
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        titleLabel.setText("Please Enter the Title or Description");
+        title2Label.setFont(new java.awt.Font("Tahoma", 1, 12));
+        title2Label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        title2Label.setText("of the Document Being Redacted");
+        headerPanel.add(titleLabel);
+        headerPanel.add(title2Label);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Title: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(documentNameTextField);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel DateFiledPanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel actionLabel = new JLabel();
+        dateFiledWebDateField = new WebDateField();
+        dateFiledWebDateField.setPreferredSize(new Dimension(150, 25));
+        dateFiledWebDateField.setDateFormat(Global.mmddyyyy);
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setText("On What Date was the Document Filed?");
+        headerPanel.add(titleLabel);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Date: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(dateFiledWebDateField);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel InfoRedactedPanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel actionLabel = new JLabel();
+        infoRedactedTextField = new JTextField();
+        infoRedactedTextField.setPreferredSize(new Dimension(150, 25));
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setText("What Information was Redacted?");
+        headerPanel.add(titleLabel);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Info: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(infoRedactedTextField);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel RedactorNamePanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel actionLabel = new JLabel();
+        whoRedactedTextField = new JTextField();
+        whoRedactedTextField.setPreferredSize(new Dimension(150, 25));
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setText("Who Redacted the Document?");
+        headerPanel.add(titleLabel);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Name: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(whoRedactedTextField);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel RedactorTitlePanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel actionLabel = new JLabel();
+        redactedTitleTextField = new JTextField();
+        redactedTitleTextField.setPreferredSize(new Dimension(150, 25));
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setText("What is the Redactor's Job title?");
+        headerPanel.add(titleLabel);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Title: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(redactedTitleTextField);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel DatePOSentPanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel title2Label = new JLabel();
+        JLabel actionLabel = new JLabel();
+        datePOSentWebDateField = new WebDateField();
+        datePOSentWebDateField.setPreferredSize(new Dimension(150, 25));
+        datePOSentWebDateField.setDateFormat(Global.mmddyyyy);
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.Y_AXIS));
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        titleLabel.setText("On What Date Was the First Procedural Order");
+        title2Label.setFont(new java.awt.Font("Tahoma", 1, 12));
+        title2Label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        title2Label.setText("and Questionnaire Sent");
+        headerPanel.add(titleLabel);
+        headerPanel.add(title2Label);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Date: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(datePOSentWebDateField);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel AppealTypePanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel actionLabel = new JLabel();
+        appealTypeComboBox = new JComboBox();
+        appealTypeComboBox.setPreferredSize(new Dimension(225, 25));
+        appealTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "No Order Reduction", "Job Abolishment/Displacement/Layoff" }));
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setText("What Type of Action was Appealed?");
+        headerPanel.add(titleLabel);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Type: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(appealTypeComboBox);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel AppealType2Panel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel actionLabel = new JLabel();
+        appealType2ComboBox = new JComboBox();
+        appealType2ComboBox.setPreferredSize(new Dimension(225, 25));
+        appealType2ComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] {
+            "", "Suspension of Three Days or Less", "Fine of Three Days or Less",
+            "Written Reprimand","Annual Performance Evaluation"}));
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setText("What Type of Action was Appealed?");
+        headerPanel.add(titleLabel);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Type: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(appealType2ComboBox);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel AppealTypeUFPanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel actionLabel = new JLabel();
+        appealTypeUFComboBox = new JComboBox();
+        appealTypeUFComboBox.setPreferredSize(new Dimension(225, 25));
+        appealTypeUFComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] {
+            "", "Abolishment", "Alleged Reduction", "Denial of Reinstatement", "Disciplinary Reduction",
+            "Displacement", "IDS", "Investigation", "Layoff", "Non-Disciplinary Reduction",
+            "OSHA", "Reclassification", "Removal", "Suspension", "Transfer", "Whistleblower"}));
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setText("What Type of Action was Appealed?");
+        headerPanel.add(titleLabel);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Type: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(appealTypeUFComboBox);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel AppealTypeLSPanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel actionLabel = new JLabel();
+        appealTypeLSComboBox = new JComboBox();
+        appealTypeLSComboBox.setPreferredSize(new Dimension(225, 25));
+        appealTypeLSComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] {
+            "", "Involuntary Disability Separation", "Fine", "Reduction", "Removal", "Suspension"}));
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setText("What Type of Action was Appealed?");
+        headerPanel.add(titleLabel);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Type: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(appealTypeLSComboBox);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel RequestingPartyContinuancePanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel actionLabel = new JLabel();
+        RequestingPartyContinuanceComboBox = new JComboBox();
+        RequestingPartyContinuanceComboBox.setPreferredSize(new Dimension(150, 25));
+        RequestingPartyContinuanceComboBox.setModel(new javax.swing.DefaultComboBoxModel());
+
+        List partyType = CaseParty.loadPartiesByCase();
+        RequestingPartyContinuanceComboBox.addItem("");
+        for (int i = 0; i < partyType.size(); i++) {
+            CaseParty party = (CaseParty) partyType.get(i);
+            RequestingPartyContinuanceComboBox.addItem(party.caseRelation);
+        }
+
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setText("Which Party Requested a Continuance?");
+        headerPanel.add(titleLabel);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Party: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(RequestingPartyContinuanceComboBox);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel DateRequestedPanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel actionLabel = new JLabel();
+        dateRequestedWebDateField = new WebDateField();
+        dateRequestedWebDateField.setDateFormat(Global.mmddyyyy);
+        dateRequestedWebDateField.setPreferredSize(new Dimension(150, 25));
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setText("On What Date was the Continuance Requested?");
+        headerPanel.add(titleLabel);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Date: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(dateRequestedWebDateField);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel RequestingPartyCTimeExtensionPanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel actionLabel = new JLabel();
+        RequestingPartyTimeExtensionComboBox = new JComboBox();
+        RequestingPartyTimeExtensionComboBox.setPreferredSize(new Dimension(150, 25));
+        RequestingPartyTimeExtensionComboBox.setModel(new javax.swing.DefaultComboBoxModel());
+
+        List partyType = CaseParty.loadPartiesByCase();
+        RequestingPartyTimeExtensionComboBox.addItem("");
+        for (int i = 0; i < partyType.size(); i++) {
+            CaseParty party = (CaseParty) partyType.get(i);
+            RequestingPartyTimeExtensionComboBox.addItem(party.caseRelation);
+        }
+
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setText("Which Party Requested the Extension of Time?");
+        headerPanel.add(titleLabel);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Party: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(RequestingPartyTimeExtensionComboBox);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel DateRequestedTimeExtensionPanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel title2Label = new JLabel();
+        JLabel actionLabel = new JLabel();
+        dateRequestedExtensionWebDateField = new WebDateField();
+        dateRequestedExtensionWebDateField.setPreferredSize(new Dimension(150, 25));
+        dateRequestedExtensionWebDateField.setDateFormat(Global.mmddyyyy);
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.Y_AXIS));
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        titleLabel.setText("On What Date was the Extension");
+        title2Label.setFont(new java.awt.Font("Tahoma", 1, 12));
+        title2Label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        title2Label.setText("of Time Requested?");
+        headerPanel.add(titleLabel);
+        headerPanel.add(title2Label);
+                
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Date: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(dateRequestedExtensionWebDateField);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel PurposeOfExtension() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel(), actionLabel = new JLabel(), action2Label = new JLabel();
+        purposeOfExtensionTextField = new JTextField();
+        purposeOfExtensionTextField.setPreferredSize(new Dimension(225, 25));
+        purposeOfExtensionComboBox = new JComboBox();
+        purposeOfExtensionComboBox.setPreferredSize(new Dimension(225, 25));
+        purposeOfExtensionComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] {
+            "", "File Objections to an R&R", "File a Response to Objections to the R&R",
+            "Respond to a Procedural Order", "Respond to a Letter", "File a Memorandum Contra", "Other"}));
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setText("What is the purpose of the Extension?");
+        headerPanel.add(titleLabel);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        final JPanel mainSub1Panel = new JPanel(); //Creating the orderList JPanel
+        final JPanel mainSub2Panel = new JPanel(); //Creating the orderList JPanel
+            
+        mainSub1Panel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        mainSub1Panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
+        actionLabel.setText("Type: ");
+        mainSub1Panel.add(actionLabel);
+        mainSub1Panel.add(purposeOfExtensionComboBox);
+        
+        mainSub2Panel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        mainSub2Panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
+        action2Label.setText("Other: ");
+        mainSub2Panel.add(action2Label);
+        mainSub2Panel.add(purposeOfExtensionTextField);
+        
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.add(mainSub1Panel);
+        mainPanel.add(mainSub2Panel);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+    private JPanel RequestingPartyCConsolidationPanel() {
+        JPanel panel = new JPanel();
+        JLabel titleLabel = new JLabel();
+        JLabel actionLabel = new JLabel();
+        RequestingPartyConsolidationComboBox = new JComboBox();
+        RequestingPartyConsolidationComboBox.setPreferredSize(new Dimension(150, 25));
+        RequestingPartyConsolidationComboBox.setModel(new javax.swing.DefaultComboBoxModel());
+
+        List partyType = CaseParty.loadPartiesByCase();
+        RequestingPartyConsolidationComboBox.addItem("");
+        for (int i = 0; i < partyType.size(); i++) {
+            CaseParty party = (CaseParty) partyType.get(i);
+            RequestingPartyConsolidationComboBox.addItem(party.caseRelation);
+        }
+
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        
+        //Set Top Panel
+        final JPanel headerPanel = new JPanel();
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setText("Which Party Requested Consolidation?");
+        headerPanel.add(titleLabel);
+        
+        //Set Bottom Panel (Button Bar)
+        final JPanel mainPanel = new JPanel(); //Creating the orderList JPanel
+        mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionLabel.setText("Party: ");
+        mainPanel.add(actionLabel);
+        mainPanel.add(RequestingPartyConsolidationComboBox);
+        
+        panel.setLayout(new BorderLayout());
+        panel.add(headerPanel, BorderLayout.NORTH);    
+        panel.add(mainPanel, BorderLayout.CENTER);        
+
+        return panel;
+    }
+    
+}
