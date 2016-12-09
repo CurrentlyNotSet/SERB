@@ -45,4 +45,42 @@ public class PartyType {
         }
         return partyTypes;
     }
+    
+    public static List loadAllPartyTypesForHearings() {
+        List partyTypes = new ArrayList<>();
+            
+        try {
+            
+            Statement stmt = Database.connectToDB().createStatement();
+            String sql = "select type from PartyType where section = ? ORDER BY type ASC";
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            
+            switch(Global.caseType) {
+                case "ULP":
+                case "ERC":
+                case "JWD":
+                    preparedStatement.setString(1, "ULP");
+                    break;
+                case "REP":
+                case "RBT":
+                    preparedStatement.setString(1, "REP");
+                    break;
+                case "MED":
+                case "STK":
+                case "NCN":
+                case "CON":
+                    preparedStatement.setString(1, "MED");
+                    break;
+            }
+
+            ResultSet partyTypeRS = preparedStatement.executeQuery();
+            
+            while(partyTypeRS.next()) {
+                partyTypes.add(partyTypeRS.getString("type"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return partyTypes;
+    }
 }
