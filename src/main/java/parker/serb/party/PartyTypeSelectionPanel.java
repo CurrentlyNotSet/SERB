@@ -42,8 +42,15 @@ public class PartyTypeSelectionPanel extends javax.swing.JDialog {
     
     private void loadPartyTypes() {
         jComboBox1.removeAllItems();
+        List types = null;
         
-        List types = PartyType.loadAllPartyTypesBySection();
+        if(Global.activeSection.equals("Hearings")) {
+            types = PartyType.loadAllPartyTypesForHearings();
+        } else {
+            types = PartyType.loadAllPartyTypesBySection();
+        }
+        
+        
         
         for(Object type: types) {
             jComboBox1.addItem(type.toString());
@@ -136,7 +143,8 @@ public class PartyTypeSelectionPanel extends javax.swing.JDialog {
         CaseParty.createParty(id, jComboBox1.getSelectedItem().toString().trim());
         Activity.addActivty("Added " + name + " (" + jComboBox1.getSelectedItem().toString().trim() + ")", null);
         if((Global.activeSection.contains("ULP"))
-                && !jComboBox1.getSelectedItem().toString().trim().contains("REP")) {
+                && !jComboBox1.getSelectedItem().toString().trim().contains("REP")
+                && !jComboBox1.getSelectedItem().toString().trim().contains("Complainant")) {
             setVisible(false);
             new ProSeSelectionPanel((JFrame) Global.root.getParent(), rootPaneCheckingEnabled, jComboBox1.getSelectedItem().toString().trim(), id, name);
         }

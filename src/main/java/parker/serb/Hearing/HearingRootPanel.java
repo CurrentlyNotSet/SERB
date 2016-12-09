@@ -142,18 +142,16 @@ public class HearingRootPanel extends javax.swing.JPanel {
     public void hearingUpdate(String buttonText) {
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
             case "Activity":
-//                new CMDSAddHistoryEntryDialog((JFrame) this.getRootPane().getParent(), true);
-//                activityPanel1.loadHearingActivity();
                 Global.root.getHearingHeaderPanel1().loadHeaderInformation();
                 break;
             case "Parties":
                 new PartySearchDialog((JFrame) this.getRootPane().getParent(), true);
-                partiesPanel1.loadParties();
+                partiesPanel1.loadHearingParties();
                 Global.root.getHearingHeaderPanel1().loadHeaderInformation();
 //                CMDSCaseSearchData.updateCaseEntryFromParties(
 //                        Global.root.getcMDSHeaderPanel1().getAppellantTextBox().getText(),
 //                        Global.root.getcMDSHeaderPanel1().getAppelleeTextBox().getText());
-                break;
+                break; 
             case "Case Information":
                 if(buttonText.equals("Update")) {
                     disableTabs(jTabbedPane1.getSelectedIndex());
@@ -177,6 +175,10 @@ public class HearingRootPanel extends javax.swing.JPanel {
                     notesPanel1.disableUpdate(true);
                 }
                 break; 
+            case "Hearings":
+               new HearingAddHearingDialog(Global.root, true);
+               hearingHearingsPanel1.loadInformation();
+               break;  
         }
     }
     
@@ -191,11 +193,11 @@ public class HearingRootPanel extends javax.swing.JPanel {
                 break;
             case "Parties":
                 partiesPanel1.removeParty();
-                partiesPanel1.loadParties();
-                Global.root.getcMDSHeaderPanel1().loadHeaderInformation();
-                CMDSCaseSearchData.updateCaseEntryFromParties(
-                        Global.root.getcMDSHeaderPanel1().getAppellantTextBox().getText(),
-                        Global.root.getcMDSHeaderPanel1().getAppelleeTextBox().getText());
+                partiesPanel1.loadHearingParties();
+//                Global.root.getcMDSHeaderPanel1().loadHeaderInformation();
+//                CMDSCaseSearchData.updateCaseEntryFromParties(
+//                        Global.root.getcMDSHeaderPanel1().getAppellantTextBox().getText(),
+//                        Global.root.getcMDSHeaderPanel1().getAppelleeTextBox().getText());
                 break;
             case "Case Information":
                 cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
