@@ -151,7 +151,7 @@ public class HearingRootPanel extends javax.swing.JPanel {
 //                CMDSCaseSearchData.updateCaseEntryFromParties(
 //                        Global.root.getcMDSHeaderPanel1().getAppellantTextBox().getText(),
 //                        Global.root.getcMDSHeaderPanel1().getAppelleeTextBox().getText());
-                break;
+                break; 
             case "Case Information":
                 if(buttonText.equals("Update")) {
                     disableTabs(jTabbedPane1.getSelectedIndex());
@@ -175,6 +175,10 @@ public class HearingRootPanel extends javax.swing.JPanel {
                     notesPanel1.disableUpdate(true);
                 }
                 break; 
+            case "Hearings":
+               new HearingAddHearingDialog(Global.root, true);
+               hearingHearingsPanel1.loadInformation();
+               break;  
         }
     }
     
