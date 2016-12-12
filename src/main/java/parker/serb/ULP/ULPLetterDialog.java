@@ -112,7 +112,7 @@ public class ULPLetterDialog extends javax.swing.JDialog {
         if (!"".equals(selection)) {
             SMDSDocuments template = SMDSDocuments.findDocumentByDescription(selection);
                         
-            new LetterGenerationPanel(Global.root, true, template);
+            new LetterGenerationPanel(Global.root, true, template, null);
         }
     }
 
