@@ -24,7 +24,8 @@ public class questionsCMDSModel {
     private String HearingDate;
     private String HearingTime;
     private String HearingServed;
-    private String AddressBlock;
+    private String AddressBlockName;
+    private String AddressBlockBlock;
     private String FirstLetterSent;
     private String CodeSelection;
     private String CountyName;
@@ -46,8 +47,8 @@ public class questionsCMDSModel {
     private String RedactorTitle;
     private String DatePOSent;
     private String AppealType;
-    private String AppealType2;
-    private String AppealTypeUF;
+    private String[] AppealType2;
+    private String[] AppealTypeUF;
     private String AppealTypeLS;
     private String RequestingPartyContinuance;
     private String DateRequestedContinuance;
@@ -160,14 +161,22 @@ public class questionsCMDSModel {
         this.HearingServed = HearingServed;
     }
 
-    public String getAddressBlock() {
-        return AddressBlock;
+    public String getAddressBlockName() {
+        return AddressBlockName;
     }
 
-    public void setAddressBlock(String AddressBlock) {
-        this.AddressBlock = AddressBlock;
+    public void setAddressBlockName(String AddressBlockName) {
+        this.AddressBlockName = AddressBlockName;
     }
 
+    public String getAddressBlockBlock() {
+        return AddressBlockBlock;
+    }
+
+    public void setAddressBlockBlock(String AddressBlockBlock) {
+        this.AddressBlockBlock = AddressBlockBlock;
+    }
+    
     public String getFirstLetterSent() {
         return FirstLetterSent;
     }
@@ -336,19 +345,19 @@ public class questionsCMDSModel {
         this.AppealType = AppealType;
     }
 
-    public String getAppealType2() {
+    public String[] getAppealType2() {
         return AppealType2;
     }
 
-    public void setAppealType2(String AppealType2) {
+    public void setAppealType2(String[] AppealType2) {
         this.AppealType2 = AppealType2;
     }
 
-    public String getAppealTypeUF() {
+    public String[] getAppealTypeUF() {
         return AppealTypeUF;
     }
 
-    public void setAppealTypeUF(String AppealTypeUF) {
+    public void setAppealTypeUF(String[] AppealTypeUF) {
         this.AppealTypeUF = AppealTypeUF;
     }
 

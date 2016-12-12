@@ -12,6 +12,10 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -61,7 +65,6 @@ public class questionsCMDSPanel extends JFrame {
     
     public questionsCMDSPanel(java.awt.Frame parent, boolean modal, CMDSDocuments template, int count) {
         
-
         //Set Padding for Button/Labels
         Border border = null;
         Border margin = null;
@@ -91,7 +94,7 @@ public class questionsCMDSPanel extends JFrame {
         questionsPanel.setLayout(new GridLayout((int) Math.ceil((Math.sqrt(count))), (int) Math.ceil((Math.sqrt(count)))));
         if (template.LetterName != null) {
             if (template.LetterName.equals("Appeal Notice")) {
-                questionsPanel.add(HearingLengthPanel());        //01 
+                questionsPanel.add(HearingLengthPanel());    //01 
             }
         }
         if (template.ResponseDue) {
@@ -223,8 +226,7 @@ public class questionsCMDSPanel extends JFrame {
         if (template.RequestingPartyC && !template.PurposeOfExtension && !template.HearingTime) {
             questionsPanel.add(RequestingPartyCConsolidationPanel());//44
         }
-        
-        
+                
         this.setLayout(new BorderLayout());
         this.add(topPanel, BorderLayout.NORTH);
         this.add(questionsPanel, BorderLayout.CENTER);
@@ -239,12 +241,14 @@ public class questionsCMDSPanel extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
     
-    private void SubmitButton() {         
+    private void SubmitButton() {
+        this.setVisible(false);
+        
         answers.setHearingLength(hearingLengthTextField.getText());
         answers.setResponseDueDate(responseDueWebDateField.getText());
-        answers.setGenderAppellant(genderAppellantComboBox.getSelectedItem().toString());
+        answers.setGenderAppellant(genderAppellantComboBox.getSelectedItem().toString().toLowerCase());
         answers.setActionAppealed(actionAppealedTextField.getText());
-        answers.setMemorandumContra(memorandumContraComboBox.getSelectedItem().toString());
+        answers.setMemorandumContra(memorandumContraComboBox.getSelectedItem().toString().equals("Did Not file") ? "reduction" : memorandumContraComboBox.getSelectedItem().toString().toLowerCase());
         answers.setClassificationTitle(classificationTitleTextField.getText());
         answers.setBargainingUnit(barganingUnitTextField.getText());
         answers.setClassificationNumber(classificationNumberTextField.getText());
@@ -253,13 +257,13 @@ public class questionsCMDSPanel extends JFrame {
         answers.setHearingDate(hearingDateWebDateField.getText());
         answers.setHearingTime(hearingTimeTextField.getText());
         answers.setHearingServed(hearingDateServedWebDateField.getText());
-        answers.setAddressBlock(addressBlockComboBox.getSelectedItem().toString().equals("Other") 
-                ? (addressBlock1TextField.getText().equals("") ? "" : addressBlock1TextField.getText() + System.lineSeparator())
-                + (addressBlock2TextField.getText().equals("") ? "" : addressBlock2TextField.getText() + System.lineSeparator())
+        answers.setAddressBlockName(addressBlockComboBox.getSelectedItem().toString().equals("Other") ? addressBlock1TextField.getText() : filingPartyComboBox.getSelectedItem().toString());
+        answers.setAddressBlockBlock(addressBlockComboBox.getSelectedItem().toString().equals("Other") 
+                ? (addressBlock2TextField.getText().equals("") ? "" : addressBlock2TextField.getText() + System.lineSeparator())
                 + (addressBlock3TextField.getText().equals("") ? "" : addressBlock3TextField.getText() + System.lineSeparator())
-                + addressBlock4TextField.getText() : filingPartyComboBox.getSelectedItem().toString());
+                + addressBlock4TextField.getText() : "");
         answers.setFirstLetterSent(firstLetterSentWebDateField.getText());
-        answers.setCodeSelection(codeSelectionComboBox.getSelectedItem().toString());
+        answers.setCodeSelection(codeSelectionComboBox.getSelectedItem().toString().toLowerCase());
         answers.setCountyName(countyComboBox.getSelectedItem().toString());
         answers.setStayDate(stayDateWebDateField.getText());
         answers.setCasePendingResolution(casePendingResolutionTextField.getText());
@@ -267,11 +271,11 @@ public class questionsCMDSPanel extends JFrame {
         answers.setMatterContinued(matterContinuedWebDateField.getText());
         answers.setSettlementDue(settleMentDueWebDateField.getText());
         answers.setFilingParty(filingPartyComboBox.getSelectedItem().toString().equals("Other") 
-                ? filingPartyTextField.getText() : filingPartyComboBox.getSelectedItem().toString());
-        answers.setRespondingParty(respondingPartyComboBox.getSelectedItem().toString());
-        answers.setRequestingParty(requestingPartyComboBox.getSelectedItem().toString());
+                ? filingPartyTextField.getText() : filingPartyComboBox.getSelectedItem().toString().toLowerCase());
+        answers.setRespondingParty(respondingPartyComboBox.getSelectedItem().toString().toLowerCase());
+        answers.setRequestingParty(requestingPartyComboBox.getSelectedItem().toString().toLowerCase());
         answers.setDeposition(depositionComboBox.getSelectedItem().toString());
-        answers.setGenderRep(genderRepresentativeComboBox.getSelectedItem().toString());
+        answers.setGenderRep(genderRepresentativeComboBox.getSelectedItem().toString().toLowerCase());
         answers.setCodeSectionFillIn(codeSectionFillInTextField.getText());
         answers.setDocumentName(documentNameTextField.getText());
         answers.setDateFiled(dateFiledWebDateField.getText());
@@ -279,17 +283,135 @@ public class questionsCMDSPanel extends JFrame {
         answers.setRedactorName(whoRedactedTextField.getText());
         answers.setRedactorTitle(redactedTitleTextField.getText());
         answers.setDatePOSent(datePOSentWebDateField.getText());
-        answers.setAppealType(appealTypeComboBox.getSelectedItem().toString());
-        answers.setAppealType2(appealType2ComboBox.getSelectedItem().toString());
-        answers.setAppealTypeUF(appealTypeUFComboBox.getSelectedItem().toString());
-        answers.setAppealTypeLS(appealTypeLSComboBox.getSelectedItem().toString());
-        answers.setRequestingPartyContinuance(RequestingPartyContinuanceComboBox.getSelectedItem().toString());
+        answers.setAppealTypeLS(appealTypeLSComboBox.getSelectedItem().toString().toLowerCase());
+        answers.setRequestingPartyContinuance(RequestingPartyContinuanceComboBox.getSelectedItem().toString().toLowerCase());
         answers.setDateRequestedContinuance(dateRequestedWebDateField.getText());
-        answers.setRequestingPartyExtension(RequestingPartyTimeExtensionComboBox.getSelectedItem().toString());
+        answers.setRequestingPartyExtension(RequestingPartyTimeExtensionComboBox.getSelectedItem().toString().toLowerCase());
         answers.setDateRequestedExtension(dateRequestedExtensionWebDateField.getText());
-        answers.setPurposeofExtension(purposeOfExtensionComboBox.getSelectedItem().toString().equals("Other") 
-                ? purposeOfExtensionTextField.getText() : purposeOfExtensionComboBox.getSelectedItem().toString());
-        answers.setRequestingPartyConsolidation(RequestingPartyConsolidationComboBox.getSelectedItem().toString());
+        answers.setRequestingPartyConsolidation(RequestingPartyConsolidationComboBox.getSelectedItem().toString().toLowerCase());
+                
+        switch (appealTypeComboBox.getSelectedItem().toString().trim().toLowerCase()) {
+            case "no order reduction":
+                answers.setAppealType(readFile("PO-MIS-DisparateTreatmentDenied-P1"));
+                break;
+            default:
+                answers.setAppealType(readFile("PO-MIS-DisparateTreatmentDenied-P2"));
+                break;
+        }
+        
+        switch (purposeOfExtensionComboBox.getSelectedItem().toString().trim()) {
+            case "Other":
+                answers.setPurposeofExtension(purposeOfExtensionTextField.getText().trim());
+                break;
+            case "File Objections to an R&R":
+                answers.setPurposeofExtension("file objections to a Report and Recommendation issued");
+                break;
+            case "File a Response to Objections to the R&R":
+                answers.setPurposeofExtension("file a response to objections to a Report and Recommendation issued");
+                break;
+            case "Respond to a Procedural Order":
+                answers.setPurposeofExtension("respond to a Procedural Order issued");
+                break;
+            case "Respond to a Letter":
+                answers.setPurposeofExtension("respond to a letter issued");
+                break;
+            case "File a Memorandum Contra":
+                answers.setPurposeofExtension("file a memorandum contra");
+                break;
+            default:
+                break;
+        }
+        
+        String[] AppealType2 = new String[1];
+        switch (appealType2ComboBox.getSelectedItem().toString().trim().toLowerCase()) {
+            case "suspension of three days or less":
+                AppealType2[0] = "suspension of three days or less";
+                AppealType2[1] = readFile("RR-LOJ-NonappealableAction-P1");
+                break;
+            case "fine of three days or less":
+                AppealType2[0] = "fine of three days or less";
+                AppealType2[1] = readFile("RR-LOJ-NonappealableAction-P2");
+                break;
+            case "written reprimand":
+                AppealType2[0] = "written reprimand";
+                AppealType2[1] = readFile("RR-LOJ-NonappealableAction-P3");
+                break;
+            case "annual performance evaluation":
+                AppealType2[0] = "annual performance evaluation";
+                AppealType2[1] = readFile("RR-LOJ-NonappealableAction-P4");
+                break;
+            default:
+                break;
+        }      
+        answers.setAppealType2(AppealType2);
+        
+        
+        String AppealTypeUF[] = new String[1];
+        switch (appealTypeUFComboBox.getSelectedItem().toString().trim().toLowerCase()) {
+            case "abolishment":
+                AppealTypeUF[0] = "abolishment";
+                AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P1");
+                break;
+            case "alleged reduction":
+                AppealTypeUF[0] = "alleged reduction";
+                AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P2");
+                break;
+            case "denial of reinstatement":
+                AppealTypeUF[0] = "denial of reinstatement";
+                AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P3");
+                break;
+            case "disciplinary reduction":
+                AppealTypeUF[0] = "disciplinary reduction";
+                AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P4");
+                break;
+            case "displacement":
+                AppealTypeUF[0] = "displacement";
+                AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P5");
+                break;
+            case "ids":
+                AppealTypeUF[0] = "IDS";
+                AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P6");
+                break;
+            case "investigation":
+                AppealTypeUF[0] = "investigation";
+                AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P7");
+                break;
+            case "layoff":
+                AppealTypeUF[0] = "layoff";
+                AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P8");
+                break;
+            case "non-disciplinary reduction":
+                AppealTypeUF[0] = "non-disciplinary reduction";
+                AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P9");
+                break;
+            case "osha":
+                AppealTypeUF[0] = "OSHA";
+                AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P10");
+                break;
+            case "reclassification":
+                AppealTypeUF[0] = "reclassification";
+                AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P11");
+                break;
+            case "removal":
+                AppealTypeUF[0] = "removal";
+                AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P12");
+                break;
+            case "suspension":
+                AppealTypeUF[0] = "suspension";
+                AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P13");
+                break;
+            case "transfer":
+                AppealTypeUF[0] = "transfer";
+                AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P14");
+                break;
+            case "whistleblower":
+                AppealTypeUF[0] = "whistleblower";
+                AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P15");
+                break;
+            default:
+                break;
+        }
+        answers.setAppealTypeUF(AppealTypeUF);
     }
     
     private JPanel HearingLengthPanel() {
@@ -1843,5 +1965,27 @@ public class questionsCMDSPanel extends JFrame {
 
         return panel;
     }
-    
+
+    private String readFile(String name) {
+        String sourcePath = Global.templatePath + "CMDS" + File.separator + "Forms" + File.separator;
+        String printout = "";
+        try {
+            FileReader f = new FileReader(sourcePath + name + ".txt");
+            try (
+                    BufferedReader br = new BufferedReader(f)) {
+                    StringBuilder sb = new StringBuilder();
+                    String line = br.readLine();
+
+                    while (line != null) {
+                        sb.append(line);
+                        line = br.readLine();
+                    }
+                printout = sb.toString();
+            }
+        } catch (IOException err) {
+            err.printStackTrace();
+        }
+        return printout;
+    }
+
 }

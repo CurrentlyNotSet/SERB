@@ -160,12 +160,12 @@ public class RootPanel extends javax.swing.JFrame {
                 break; 
             case "Civil Service Commission":
                 card.show(jPanel9, "card8");
-                jLabel1.setIcon(new ImageIcon(getClass().getResource("/PBRLOGO.gif")));
+                jLabel1.setIcon(new ImageIcon(getClass().getResource("/SPBRSeal.png")));
                 cSCHeaderPanel1.loadCases();
                 break;  
             case "CMDS":
                 card.show(jPanel9, "card9");
-                jLabel1.setIcon(new ImageIcon(getClass().getResource("/PBRLOGO.gif")));
+                jLabel1.setIcon(new ImageIcon(getClass().getResource("/SPBRSeal.png")));
                 cMDSHeaderPanel1.loadCases();
                 break;  
             case "Employer Search":

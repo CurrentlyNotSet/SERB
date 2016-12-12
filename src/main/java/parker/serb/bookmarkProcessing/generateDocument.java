@@ -105,7 +105,7 @@ public class generateDocument {
                 switch (Global.activeSection) {
                     case "CMDS":
                         document = defaultCMDSBookmarks(document);
-                        document = processCMDSbookmarks.processDoACMDSWordLetter(document, template, toParties, ccParties);
+                        document = processCMDSbookmarks.processDoACMDSWordLetter(document, template, answers, toParties, ccParties);
                         break;
                     default:
                         break;
@@ -197,8 +197,7 @@ public class generateDocument {
         c.setTime(today);
         c.add(Calendar.DATE, 21);
         Date twentyOneDayOut = c.getTime();
-        
-               
+                       
         //ProcessBookmarks
         for (int i = 0; i < Global.bookmarkLimit; i++) {
             //System Executives
@@ -246,27 +245,37 @@ public class generateDocument {
         String pbrAddress = "";
         String pbrCityStateZip = "";
         String chairmanFullName = "";
+        String chairmanLastName = "";
         String viceChairmanFullName = "";
+        String viceChairmanLastName = "";
         String boardMemberFullName = "";
+        String boardMemberLastName = "";
         String executiveDirectorFullName = "";
+        String executiveDirectorLastName = "";
         String chiefAdminLawJudgeFullName = "";
+        String chiefAdminLawJudgeLastName = "";
         
         for (SystemExecutive exec : execsList){
             if (null != exec.position)switch (exec.position) {
                 case "Chairman":
                     chairmanFullName = StringUtilities.buildFullName(exec.firstName, exec.middleName, exec.lastName);
+                    chairmanLastName = exec.lastName;
                     break;
                 case "ViceChairman":
                     viceChairmanFullName = StringUtilities.buildFullName(exec.firstName, exec.middleName, exec.lastName);
+                    viceChairmanLastName = exec.lastName;
                     break;
                 case "BoardMember":
                     boardMemberFullName = StringUtilities.buildFullName(exec.firstName, exec.middleName, exec.lastName);
+                    boardMemberLastName = exec.lastName;
                     break;
                 case "ExecutiveDirector":
                     executiveDirectorFullName = StringUtilities.buildFullName(exec.firstName, exec.middleName, exec.lastName);
+                    executiveDirectorLastName = exec.lastName;
                     break;
                 case "ChiefAdministratorLawJudge":
                     chiefAdminLawJudgeFullName = StringUtilities.buildFullName(exec.firstName, exec.middleName, exec.lastName);
+                    chiefAdminLawJudgeLastName = exec.lastName;
                     break;
                 default:
                     break;
@@ -288,33 +297,62 @@ public class generateDocument {
         if (!sysAdminInfo.Zip.equals("")) {
             pbrCityStateZip += " " + sysAdminInfo.Zip.trim();
         }
-                       
+                
+        //Date Calculation
+        Date today = new Date();
+        Calendar c = Calendar.getInstance();
+        
+        c.setTime(today);
+        c.add(Calendar.DATE, 7);
+        Date sevenDayOut = c.getTime();
+        c.setTime(today);
+        c.add(Calendar.DATE, 15);
+        Date Date2WeeksFromNow = c.getTime();
+        c.setTime(today);
+        c.add(Calendar.DATE, 15);
+        Date fifteenDayOut = c.getTime();
+        c.setTime(today);
+        c.add(Calendar.DATE, 21);
+        Date twentyOneDayOut = c.getTime();
+        
         //ProcessBookmarks
         for (int i = 0; i < Global.bookmarkLimit; i++) {
             //System Executives            
-            processBookmark.process("HeaderChairmanName" + (i == 0 ? "" : i), chairmanFullName, Document);
-            processBookmark.process("HeaderViceChairmanName" + (i == 0 ? "" : i), viceChairmanFullName, Document);
-            processBookmark.process("HeaderBoardMemberName" + (i == 0 ? "" : i), boardMemberFullName, Document);
-            processBookmark.process("HeaderExecutiveDirectorName" + (i == 0 ? "" : i), executiveDirectorFullName, Document);
-            processBookmark.process("ChiefAdminLawJudge" + (i == 0 ? "" : i), chiefAdminLawJudgeFullName, Document);
+            processBookmark.process("ChairmanName" + (i == 0 ? "" : i), chairmanFullName, Document);
+            processBookmark.process("ChairmanLastName" + (i == 0 ? "" : i), chairmanLastName, Document);
+            processBookmark.process("ViceChairmanName" + (i == 0 ? "" : i), viceChairmanFullName, Document);
+            processBookmark.process("ViceChairmanLastName" + (i == 0 ? "" : i), viceChairmanLastName, Document);
+            processBookmark.process("BoardmanName" + (i == 0 ? "" : i), boardMemberFullName, Document);
+            processBookmark.process("BoardmanLastName" + (i == 0 ? "" : i), boardMemberLastName, Document);
+            processBookmark.process("ExecutativeDirectorName" + (i == 0 ? "" : i), executiveDirectorFullName, Document);
+            processBookmark.process("ExecutativeDirectorLastName" + (i == 0 ? "" : i), executiveDirectorLastName, Document);
+            processBookmark.process("ChiefAdminLawJudgeName" + (i == 0 ? "" : i), chiefAdminLawJudgeFullName, Document);
+            processBookmark.process("ChiefAdminLawJudgeLastName" + (i == 0 ? "" : i), chiefAdminLawJudgeLastName, Document);
             
             //System Administration Information
             processBookmark.process("GovernorName" + (i == 0 ? "" : i), sysAdminInfo.governorName, Document);
             processBookmark.process("LtGovernorName" + (i == 0 ? "" : i), sysAdminInfo.LtGovernorName, Document);
-            processBookmark.process("SerbAddress" + (i == 0 ? "" : i), pbrAddress, Document);
-            processBookmark.process("SerbCityStateZip" + (i == 0 ? "" : i), pbrCityStateZip, Document);
-            processBookmark.process("SerbURL" + (i == 0 ? "" : i), sysAdminInfo.Url, Document);
+            processBookmark.process("PBRAddress" + (i == 0 ? "" : i), pbrAddress, Document);
+            processBookmark.process("PBRCityStateZip" + (i == 0 ? "" : i), pbrCityStateZip, Document);
+            processBookmark.process("PBRURL" + (i == 0 ? "" : i), sysAdminInfo.Url, Document);
             
-            processBookmark.process("SerbPhone" + (i == 0 ? "" : i), sysAdminInfo.Phone, Document);
-            processBookmark.process("SerbFooter" + (i == 0 ? "" : i), sysAdminInfo.Footer, Document);
-            processBookmark.process("SerbFax" + (i == 0 ? "" : i), sysAdminInfo.Fax, Document);
+            processBookmark.process("PBRPhone" + (i == 0 ? "" : i), sysAdminInfo.Phone, Document);
+            processBookmark.process("PBRFooter" + (i == 0 ? "" : i), sysAdminInfo.Footer, Document);
+            processBookmark.process("PBRFax" + (i == 0 ? "" : i), sysAdminInfo.Fax, Document);
             
             //Made up stuff
             processBookmark.process("TODAYSDATE" + (i == 0 ? "" : i), Global.MMMMddyyyy.format(new Date()), Document);
+            processBookmark.process("Maileddate" + (i == 0 ? "" : i), Global.MMMMddyyyy.format(new Date()), Document);
+            processBookmark.process("CurrentDate" + (i == 0 ? "" : i), Global.MMMMddyyyy.format(new Date()), Document);
+            processBookmark.process("DateMatterCameOn" + (i == 0 ? "" : i), Global.MMMMddyyyy.format(new Date()), Document);            
             processBookmark.process("DAY" + (i == 0 ? "" : i), Calendar.getInstance().get(Calendar.DAY_OF_MONTH) 
                     + Global.daySuffixes[Calendar.getInstance().get(Calendar.DAY_OF_MONTH)], Document);
             processBookmark.process("MONTH" + (i == 0 ? "" : i), Global.MMMMM.format(new Date()), Document);
-            processBookmark.process("YEAR" + (i == 0 ? "" : i), Global.yyyy.format(new Date()), Document);
+            processBookmark.process("Year" + (i == 0 ? "" : i), Global.yyyy.format(new Date()), Document);
+            processBookmark.process("PLUS7" + (i == 0 ? "" : i), Global.MMMMddyyyy.format(sevenDayOut), Document);
+            processBookmark.process("Date2WeeksFromNow" + (i == 0 ? "" : i), Global.MMMMddyyyy.format(Date2WeeksFromNow), Document);
+            processBookmark.process("PLUS15" + (i == 0 ? "" : i), Global.MMMMddyyyy.format(fifteenDayOut), Document);
+            processBookmark.process("PLUS21" + (i == 0 ? "" : i), Global.MMMMddyyyy.format(twentyOneDayOut), Document);
         }
         
         return Document;
