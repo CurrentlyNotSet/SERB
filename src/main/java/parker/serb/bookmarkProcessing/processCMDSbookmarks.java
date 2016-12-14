@@ -6,7 +6,6 @@
 package parker.serb.bookmarkProcessing;
 
 import com.jacob.com.Dispatch;
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.List;
@@ -99,7 +98,6 @@ public class processCMDSbookmarks {
                         ccAddressBlock += "\n\n";
                     }
                     ccAddressBlock += StringUtilities.buildCasePartyAddressBlock(party);
-
                 }
             }
 
@@ -280,7 +278,6 @@ public class processCMDSbookmarks {
             } catch (ParseException ex) {
                 Logger.getLogger(processCMDSbookmarks.class.getName()).log(Level.SEVERE, null, ex);
             }
-
         }
 
         if (!answers.getDateFiled().equals("")) {
@@ -456,7 +453,7 @@ public class processCMDSbookmarks {
             processBookmark.process("AppelleeName" + (i == 0 ? "" : i), appelleeNames, Document);
             processBookmark.process("AppelleeAddresseeName" + (i == 0 ? "" : i), appelleeNames, Document);
             processBookmark.process("Appellee2Name" + (i == 0 ? "" : i), appellee2Names, Document);
-            processBookmark.process("NameOfAppelleeRep" + (i == 0 ? "" : i), appelleeRep1Names, Document);
+            processBookmark.process("NameOfAppelleeRep1" + (i == 0 ? "" : i), appelleeRep1Names, Document);
             processBookmark.process("NameOfAppelleeRep2" + (i == 0 ? "" : i), appelleeRep2Names, Document);
             processBookmark.process("AddresseeName" + (i == 0 ? "" : i), addresseeName, Document);
             processBookmark.process("AppellantAddressBlock" + (i == 0 ? "" : i), appellantAddressBlock, Document);
