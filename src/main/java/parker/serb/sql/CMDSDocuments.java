@@ -9,6 +9,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -81,6 +83,78 @@ public class CMDSDocuments {
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setInt(1, id);
+            
+            ResultSet foundDoc = preparedStatement.executeQuery();
+            
+            if(foundDoc.next()) {
+                doc.ID = foundDoc.getInt("ID");
+                doc.Active = foundDoc.getBoolean("Active");
+                doc.MainCategory = foundDoc.getString("MainCategory");
+                doc.SubCategory = foundDoc.getString("SubCategory");
+                doc.LetterName = foundDoc.getString("LetterName");
+                doc.Location = foundDoc.getString("Location");
+                doc.MultiplePrint = foundDoc.getBoolean("MultiplePrint");
+                doc.ResponseDue = foundDoc.getBoolean("ResponseDue");
+                doc.ActionAppealed = foundDoc.getBoolean("ActionAppealed");
+                doc.ClassificationTitle = foundDoc.getBoolean("ClassificationTitle");
+                doc.ClassificationNumber = foundDoc.getBoolean("ClassificationNumber");
+                doc.BarginingUnit = foundDoc.getBoolean("BarginingUnit");
+                doc.AppelantAppointed = foundDoc.getBoolean("AppelantAppointed");
+                doc.ProbitionaryPeriod = foundDoc.getBoolean("AppelantAppointed");
+                doc.HearingDate = foundDoc.getBoolean("HearingDate");
+                doc.HearingTime = foundDoc.getBoolean("HearingTime");
+                doc.HearingServed = foundDoc.getBoolean("HearingServed");
+                doc.MemorandumContra = foundDoc.getBoolean("MemorandumContra");
+                doc.Gender = foundDoc.getBoolean("Gender");
+                doc.AddressBlock = foundDoc.getBoolean("AddressBlock");
+                doc.FirstLetterSent = foundDoc.getBoolean("FirstLetterSent");
+                doc.CodeSection = foundDoc.getBoolean("CodeSection");
+                doc.CountyName = foundDoc.getBoolean("CountyName");
+                doc.StayDate = foundDoc.getBoolean("StayDate");
+                doc.CasePendingResolution = foundDoc.getBoolean("CasePendingResolution");
+                doc.LastUpdate = foundDoc.getBoolean("LastUpdate");
+                doc.DateGranted = foundDoc.getBoolean("DateGranted");
+                doc.MatterContinued = foundDoc.getBoolean("MatterContinued");
+                doc.SettlementDue = foundDoc.getBoolean("SettlementDue");
+                doc.FilingParty = foundDoc.getBoolean("FilingParty");
+                doc.RespondingParty = foundDoc.getBoolean("RespondingParty");
+                doc.RequestingParty = foundDoc.getBoolean("RequestingParty");
+                doc.Deposition = foundDoc.getBoolean("Deposition");
+                doc.RepHimOrHer = foundDoc.getBoolean("RepHimOrHer");
+                doc.TypeOfAction = foundDoc.getBoolean("TypeOfAction");
+                doc.CodeSectionFillIn = foundDoc.getBoolean("CodeSectionFillIn");
+                doc.DocumentName = foundDoc.getBoolean("DocumentName");
+                doc.DateFiled = foundDoc.getBoolean("DateFiled");
+                doc.InfoRedacted = foundDoc.getBoolean("InfoRedacted");
+                doc.RedactorName = foundDoc.getBoolean("RedactorName");
+                doc.RedactorTitle = foundDoc.getBoolean("RedactorTitle");
+                doc.DatePOSent = foundDoc.getBoolean("DatePOSent");
+                doc.AppealType = foundDoc.getBoolean("AppealType");
+                doc.AppealType2 = foundDoc.getBoolean("AppealType2");
+                doc.AppealTypeUF = foundDoc.getBoolean("AppealTypeUF");
+                doc.AppealTypeLS = foundDoc.getBoolean("AppealTypeLS");
+                doc.RequestingPartyC = foundDoc.getBoolean("RequestingPartyC");
+                doc.DateRequested = foundDoc.getBoolean("DateRequested");
+                doc.PurposeOfExtension = foundDoc.getBoolean("PurposeOfExtension");
+
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SMDSDocuments.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return doc;
+    }
+    
+    public static CMDSDocuments findDocumentByName(String name) {
+        CMDSDocuments doc = new CMDSDocuments();
+        
+        try {
+            
+            Statement stmt = Database.connectToDB().createStatement();
+            
+            String sql = "Select * from CMDSDocuments where LetterName = ?";
+            
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, name);
             
             ResultSet foundDoc = preparedStatement.executeQuery();
             
@@ -281,6 +355,58 @@ public class CMDSDocuments {
         }
         
         return count;
+    }
+        
+    public static List<String> findSubCategoriesByMainCategory(String mainCat)  {
+        List<String> subTypesList = new ArrayList<>();
+            
+        try {
+
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT DISTINCT subCategory FROM CMDSDocuments WHERE active = 1 "
+                    + "AND mainCategory = ? ORDER BY subCategory";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            
+            preparedStatement.setString(1, mainCat);
+            
+            ResultSet caseStatusRS = preparedStatement.executeQuery();
+            
+            while(caseStatusRS.next()) {
+                subTypesList.add(caseStatusRS.getString("subCategory"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
+        return subTypesList;
+    }
+    
+    public static List<String> findDocumentsBySubCategories(String subCat)  {
+        List<String> subTypesList = new ArrayList<>();
+            
+        try {
+
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT LetterName FROM CMDSDocuments WHERE active = 1 "
+                    + "AND subCategory = ? ORDER BY LetterName";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            
+            preparedStatement.setString(1, subCat);
+            
+            ResultSet caseStatusRS = preparedStatement.executeQuery();
+            
+            while(caseStatusRS.next()) {
+                subTypesList.add(caseStatusRS.getString("LetterName"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
+        return subTypesList;
     }
     
 }

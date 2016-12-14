@@ -21,7 +21,7 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -38,7 +38,7 @@ import parker.serb.sql.County;
  *
  * @author User
  */
-public class questionsCMDSPanel extends JFrame {
+public class questionsCMDSPanel extends JDialog {
     
     private JTextField hearingLengthTextField, actionAppealedTextField, classificationTitleTextField, 
             barganingUnitTextField, classificationNumberTextField, probationaryPeriodTextField, 
@@ -64,7 +64,8 @@ public class questionsCMDSPanel extends JFrame {
     int panelHeight = 100;
     
     public questionsCMDSPanel(java.awt.Frame parent, boolean modal, CMDSDocuments template, int count) {
-        
+        super(parent, modal);
+                
         //Set Padding for Button/Labels
         Border border = null;
         Border margin = null;
@@ -236,180 +237,215 @@ public class questionsCMDSPanel extends JFrame {
             SubmitButton();
         });
         
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         this.pack();
+        this.setLocationRelativeTo(parent);
         this.setVisible(true);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
-    
+
     private void SubmitButton() {
         this.setVisible(false);
-        
-        answers.setHearingLength(hearingLengthTextField.getText());
-        answers.setResponseDueDate(responseDueWebDateField.getText());
-        answers.setGenderAppellant(genderAppellantComboBox.getSelectedItem().toString().toLowerCase());
-        answers.setActionAppealed(actionAppealedTextField.getText());
-        answers.setMemorandumContra(memorandumContraComboBox.getSelectedItem().toString().equals("Did Not file") ? "reduction" : memorandumContraComboBox.getSelectedItem().toString().toLowerCase());
-        answers.setClassificationTitle(classificationTitleTextField.getText());
-        answers.setBargainingUnit(barganingUnitTextField.getText());
-        answers.setClassificationNumber(classificationNumberTextField.getText());
-        answers.setAppellantAppointed(appellantAppointedWebDateField.getText());
-        answers.setProbationaryPeriod(probationaryPeriodTextField.getText());
-        answers.setHearingDate(hearingDateWebDateField.getText());
-        answers.setHearingTime(hearingTimeTextField.getText());
-        answers.setHearingServed(hearingDateServedWebDateField.getText());
-        answers.setAddressBlockName(addressBlockComboBox.getSelectedItem().toString().equals("Other") ? addressBlock1TextField.getText() : filingPartyComboBox.getSelectedItem().toString());
-        answers.setAddressBlockBlock(addressBlockComboBox.getSelectedItem().toString().equals("Other") 
-                ? (addressBlock2TextField.getText().equals("") ? "" : addressBlock2TextField.getText() + System.lineSeparator())
-                + (addressBlock3TextField.getText().equals("") ? "" : addressBlock3TextField.getText() + System.lineSeparator())
-                + addressBlock4TextField.getText() : "");
-        answers.setFirstLetterSent(firstLetterSentWebDateField.getText());
-        answers.setCodeSelection(codeSelectionComboBox.getSelectedItem().toString().toLowerCase());
-        answers.setCountyName(countyComboBox.getSelectedItem().toString());
-        answers.setStayDate(stayDateWebDateField.getText());
-        answers.setCasePendingResolution(casePendingResolutionTextField.getText());
-        answers.setLastUpdate(lastUpdateWebDateField.getText());
-        answers.setMatterContinued(matterContinuedWebDateField.getText());
-        answers.setSettlementDue(settleMentDueWebDateField.getText());
-        answers.setFilingParty(filingPartyComboBox.getSelectedItem().toString().equals("Other") 
-                ? filingPartyTextField.getText() : filingPartyComboBox.getSelectedItem().toString().toLowerCase());
-        answers.setRespondingParty(respondingPartyComboBox.getSelectedItem().toString().toLowerCase());
-        answers.setRequestingParty(requestingPartyComboBox.getSelectedItem().toString().toLowerCase());
-        answers.setDeposition(depositionComboBox.getSelectedItem().toString());
-        answers.setGenderRep(genderRepresentativeComboBox.getSelectedItem().toString().toLowerCase());
-        answers.setCodeSectionFillIn(codeSectionFillInTextField.getText());
-        answers.setDocumentName(documentNameTextField.getText());
-        answers.setDateFiled(dateFiledWebDateField.getText());
-        answers.setInfoRedacted(infoRedactedTextField.getText());
-        answers.setRedactorName(whoRedactedTextField.getText());
-        answers.setRedactorTitle(redactedTitleTextField.getText());
-        answers.setDatePOSent(datePOSentWebDateField.getText());
-        answers.setAppealTypeLS(appealTypeLSComboBox.getSelectedItem().toString().toLowerCase());
-        answers.setRequestingPartyContinuance(RequestingPartyContinuanceComboBox.getSelectedItem().toString().toLowerCase());
-        answers.setDateRequestedContinuance(dateRequestedWebDateField.getText());
-        answers.setRequestingPartyExtension(RequestingPartyTimeExtensionComboBox.getSelectedItem().toString().toLowerCase());
-        answers.setDateRequestedExtension(dateRequestedExtensionWebDateField.getText());
-        answers.setRequestingPartyConsolidation(RequestingPartyConsolidationComboBox.getSelectedItem().toString().toLowerCase());
-                
-        switch (appealTypeComboBox.getSelectedItem().toString().trim().toLowerCase()) {
-            case "no order reduction":
-                answers.setAppealType(readFile("PO-MIS-DisparateTreatmentDenied-P1"));
-                break;
-            default:
-                answers.setAppealType(readFile("PO-MIS-DisparateTreatmentDenied-P2"));
-                break;
+
+        answers.setHearingLength(hearingLengthTextField == null ? "" : hearingLengthTextField.getText());
+        answers.setResponseDueDate(responseDueWebDateField == null ? "" : responseDueWebDateField.getText());
+        answers.setGenderAppellant(genderAppellantComboBox == null ? "" : genderAppellantComboBox.getSelectedItem().toString().toLowerCase());
+        answers.setActionAppealed(actionAppealedTextField == null ? "" : actionAppealedTextField.getText());
+        answers.setMemorandumContra(
+                actionAppealedTextField == null ? "" : (memorandumContraComboBox.getSelectedItem().toString().equals("Did Not file")
+                        ? "reduction" : memorandumContraComboBox.getSelectedItem().toString().toLowerCase()));
+        answers.setClassificationTitle(classificationTitleTextField == null ? "" : classificationTitleTextField.getText());
+        answers.setBargainingUnit(barganingUnitTextField == null ? "" : barganingUnitTextField.getText());
+        answers.setClassificationNumber(classificationNumberTextField == null ? "" : classificationNumberTextField.getText());
+        answers.setAppellantAppointed(appellantAppointedWebDateField == null ? "" : appellantAppointedWebDateField.getText());
+        answers.setProbationaryPeriod(probationaryPeriodTextField == null ? "" : probationaryPeriodTextField.getText());
+        answers.setHearingDate(hearingDateWebDateField == null ? "" : hearingDateWebDateField.getText());
+        answers.setHearingTime(hearingTimeTextField == null ? "" : hearingTimeTextField.getText());
+        answers.setHearingServed(hearingDateServedWebDateField == null ? "" : hearingDateServedWebDateField.getText());
+        answers.setFirstLetterSent(firstLetterSentWebDateField == null ? "" : firstLetterSentWebDateField.getText());
+        answers.setCodeSelection(codeSelectionComboBox == null ? "" : codeSelectionComboBox.getSelectedItem().toString().toLowerCase());
+        answers.setCountyName(countyComboBox == null ? "" : countyComboBox.getSelectedItem().toString());
+        answers.setStayDate(stayDateWebDateField == null ? "" : stayDateWebDateField.getText());
+        answers.setCasePendingResolution(casePendingResolutionTextField == null ? "" : casePendingResolutionTextField.getText());
+        answers.setLastUpdate(lastUpdateWebDateField == null ? "" : lastUpdateWebDateField.getText());
+        answers.setMatterContinued(matterContinuedWebDateField == null ? "" : matterContinuedWebDateField.getText());
+        answers.setSettlementDue(settleMentDueWebDateField == null ? "" : settleMentDueWebDateField.getText());
+        answers.setCodeSectionFillIn(codeSectionFillInTextField == null ? "" : codeSectionFillInTextField.getText());
+        answers.setDocumentName(documentNameTextField == null ? "" : documentNameTextField.getText());
+        answers.setDateFiled(dateFiledWebDateField == null ? "" : dateFiledWebDateField.getText());
+        answers.setInfoRedacted(infoRedactedTextField == null ? "" : infoRedactedTextField.getText());
+        answers.setRedactorName(whoRedactedTextField == null ? "" : whoRedactedTextField.getText());
+        answers.setRedactorTitle(redactedTitleTextField == null ? "" : redactedTitleTextField.getText());
+        answers.setDatePOSent(datePOSentWebDateField == null ? "" : datePOSentWebDateField.getText());
+        answers.setRespondingParty(respondingPartyComboBox == null ? "" : respondingPartyComboBox.getSelectedItem().toString().toLowerCase());
+        answers.setRequestingParty(requestingPartyComboBox == null ? "" : requestingPartyComboBox.getSelectedItem().toString().toLowerCase());
+        answers.setDeposition(depositionComboBox == null ? "" : depositionComboBox.getSelectedItem().toString());
+        answers.setGenderRep(genderRepresentativeComboBox == null ? "" : genderRepresentativeComboBox.getSelectedItem().toString().toLowerCase());
+        answers.setAppealTypeLS(appealTypeLSComboBox == null ? "" : appealTypeLSComboBox.getSelectedItem().toString().toLowerCase());
+        answers.setRequestingPartyContinuance(RequestingPartyContinuanceComboBox == null ? "" : RequestingPartyContinuanceComboBox.getSelectedItem().toString().toLowerCase());
+        answers.setDateRequestedContinuance(dateRequestedWebDateField == null ? "" : dateRequestedWebDateField.getText());
+        answers.setRequestingPartyExtension(RequestingPartyTimeExtensionComboBox == null ? "" : RequestingPartyTimeExtensionComboBox.getSelectedItem().toString().toLowerCase());
+        answers.setDateRequestedExtension(dateRequestedExtensionWebDateField == null ? "" : dateRequestedExtensionWebDateField.getText());
+        answers.setRequestingPartyConsolidation(RequestingPartyConsolidationComboBox == null ? "" : RequestingPartyConsolidationComboBox.getSelectedItem().toString().toLowerCase());
+
+        if (addressBlockComboBox != null) {
+            answers.setAddressBlockName(addressBlockComboBox.getSelectedItem().toString().equals("Other") ? addressBlock1TextField.getText() : filingPartyComboBox.getSelectedItem().toString());
+        } else {
+            answers.setAddressBlockName("");
         }
-        
-        switch (purposeOfExtensionComboBox.getSelectedItem().toString().trim()) {
-            case "Other":
-                answers.setPurposeofExtension(purposeOfExtensionTextField.getText().trim());
-                break;
-            case "File Objections to an R&R":
-                answers.setPurposeofExtension("file objections to a Report and Recommendation issued");
-                break;
-            case "File a Response to Objections to the R&R":
-                answers.setPurposeofExtension("file a response to objections to a Report and Recommendation issued");
-                break;
-            case "Respond to a Procedural Order":
-                answers.setPurposeofExtension("respond to a Procedural Order issued");
-                break;
-            case "Respond to a Letter":
-                answers.setPurposeofExtension("respond to a letter issued");
-                break;
-            case "File a Memorandum Contra":
-                answers.setPurposeofExtension("file a memorandum contra");
-                break;
-            default:
-                break;
+
+        if (addressBlockComboBox != null) {
+            answers.setAddressBlockBlock(addressBlockComboBox.getSelectedItem().toString().equals("Other")
+                    ? (addressBlock2TextField.getText().equals("") ? "" : addressBlock2TextField.getText() + System.lineSeparator())
+                    + (addressBlock3TextField.getText().equals("") ? "" : addressBlock3TextField.getText() + System.lineSeparator())
+                    + addressBlock4TextField.getText() : "");
+        } else {
+            answers.setAddressBlockBlock("");
         }
-        
-        String[] AppealType2 = new String[1];
-        switch (appealType2ComboBox.getSelectedItem().toString().trim().toLowerCase()) {
-            case "suspension of three days or less":
-                AppealType2[0] = "suspension of three days or less";
-                AppealType2[1] = readFile("RR-LOJ-NonappealableAction-P1");
-                break;
-            case "fine of three days or less":
-                AppealType2[0] = "fine of three days or less";
-                AppealType2[1] = readFile("RR-LOJ-NonappealableAction-P2");
-                break;
-            case "written reprimand":
-                AppealType2[0] = "written reprimand";
-                AppealType2[1] = readFile("RR-LOJ-NonappealableAction-P3");
-                break;
-            case "annual performance evaluation":
-                AppealType2[0] = "annual performance evaluation";
-                AppealType2[1] = readFile("RR-LOJ-NonappealableAction-P4");
-                break;
-            default:
-                break;
-        }      
+
+        if (filingPartyComboBox != null) {
+            answers.setFilingParty(filingPartyComboBox.getSelectedItem().toString().equals("Other")
+                    ? filingPartyTextField.getText() : filingPartyComboBox.getSelectedItem().toString().toLowerCase());
+        } else {
+            answers.setFilingParty("");
+        }
+
+        if (appealTypeComboBox != null) {
+            switch (appealTypeComboBox.getSelectedItem().toString().trim().toLowerCase()) {
+                case "no order reduction":
+                    answers.setAppealType(readFile("PO-MIS-DisparateTreatmentDenied-P1"));
+                    break;
+                default:
+                    answers.setAppealType(readFile("PO-MIS-DisparateTreatmentDenied-P2"));
+                    break;
+            }
+        } else {
+            answers.setAppealType("");
+        }
+
+        if (purposeOfExtensionComboBox != null) {
+            switch (purposeOfExtensionComboBox.getSelectedItem().toString().trim()) {
+                case "Other":
+                    answers.setPurposeofExtension(purposeOfExtensionTextField.getText().trim());
+                    break;
+                case "File Objections to an R&R":
+                    answers.setPurposeofExtension("file objections to a Report and Recommendation issued");
+                    break;
+                case "File a Response to Objections to the R&R":
+                    answers.setPurposeofExtension("file a response to objections to a Report and Recommendation issued");
+                    break;
+                case "Respond to a Procedural Order":
+                    answers.setPurposeofExtension("respond to a Procedural Order issued");
+                    break;
+                case "Respond to a Letter":
+                    answers.setPurposeofExtension("respond to a letter issued");
+                    break;
+                case "File a Memorandum Contra":
+                    answers.setPurposeofExtension("file a memorandum contra");
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            answers.setPurposeofExtension("");
+        }
+
+        String[] AppealType2 = new String[2];
+        if (appealType2ComboBox != null) {
+            switch (appealType2ComboBox.getSelectedItem().toString().trim().toLowerCase()) {
+                case "suspension of three days or less":
+                    AppealType2[0] = "suspension of three days or less";
+                    AppealType2[1] = readFile("RR-LOJ-NonappealableAction-P1");
+                    break;
+                case "fine of three days or less":
+                    AppealType2[0] = "fine of three days or less";
+                    AppealType2[1] = readFile("RR-LOJ-NonappealableAction-P2");
+                    break;
+                case "written reprimand":
+                    AppealType2[0] = "written reprimand";
+                    AppealType2[1] = readFile("RR-LOJ-NonappealableAction-P3");
+                    break;
+                case "annual performance evaluation":
+                    AppealType2[0] = "annual performance evaluation";
+                    AppealType2[1] = readFile("RR-LOJ-NonappealableAction-P4");
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            AppealType2[0] = "";
+            AppealType2[1] = "";
+        }
         answers.setAppealType2(AppealType2);
-        
-        
-        String AppealTypeUF[] = new String[1];
-        switch (appealTypeUFComboBox.getSelectedItem().toString().trim().toLowerCase()) {
-            case "abolishment":
-                AppealTypeUF[0] = "abolishment";
-                AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P1");
-                break;
-            case "alleged reduction":
-                AppealTypeUF[0] = "alleged reduction";
-                AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P2");
-                break;
-            case "denial of reinstatement":
-                AppealTypeUF[0] = "denial of reinstatement";
-                AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P3");
-                break;
-            case "disciplinary reduction":
-                AppealTypeUF[0] = "disciplinary reduction";
-                AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P4");
-                break;
-            case "displacement":
-                AppealTypeUF[0] = "displacement";
-                AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P5");
-                break;
-            case "ids":
-                AppealTypeUF[0] = "IDS";
-                AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P6");
-                break;
-            case "investigation":
-                AppealTypeUF[0] = "investigation";
-                AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P7");
-                break;
-            case "layoff":
-                AppealTypeUF[0] = "layoff";
-                AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P8");
-                break;
-            case "non-disciplinary reduction":
-                AppealTypeUF[0] = "non-disciplinary reduction";
-                AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P9");
-                break;
-            case "osha":
-                AppealTypeUF[0] = "OSHA";
-                AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P10");
-                break;
-            case "reclassification":
-                AppealTypeUF[0] = "reclassification";
-                AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P11");
-                break;
-            case "removal":
-                AppealTypeUF[0] = "removal";
-                AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P12");
-                break;
-            case "suspension":
-                AppealTypeUF[0] = "suspension";
-                AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P13");
-                break;
-            case "transfer":
-                AppealTypeUF[0] = "transfer";
-                AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P14");
-                break;
-            case "whistleblower":
-                AppealTypeUF[0] = "whistleblower";
-                AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P15");
-                break;
-            default:
-                break;
+
+        String AppealTypeUF[] = new String[2];
+        if (appealTypeUFComboBox != null) {
+            switch (appealTypeUFComboBox.getSelectedItem().toString().trim().toLowerCase()) {
+                case "abolishment":
+                    AppealTypeUF[0] = "abolishment";
+                    AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P1");
+                    break;
+                case "alleged reduction":
+                    AppealTypeUF[0] = "alleged reduction";
+                    AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P2");
+                    break;
+                case "denial of reinstatement":
+                    AppealTypeUF[0] = "denial of reinstatement";
+                    AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P3");
+                    break;
+                case "disciplinary reduction":
+                    AppealTypeUF[0] = "disciplinary reduction";
+                    AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P4");
+                    break;
+                case "displacement":
+                    AppealTypeUF[0] = "displacement";
+                    AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P5");
+                    break;
+                case "ids":
+                    AppealTypeUF[0] = "IDS";
+                    AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P6");
+                    break;
+                case "investigation":
+                    AppealTypeUF[0] = "investigation";
+                    AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P7");
+                    break;
+                case "layoff":
+                    AppealTypeUF[0] = "layoff";
+                    AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P8");
+                    break;
+                case "non-disciplinary reduction":
+                    AppealTypeUF[0] = "non-disciplinary reduction";
+                    AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P9");
+                    break;
+                case "osha":
+                    AppealTypeUF[0] = "OSHA";
+                    AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P10");
+                    break;
+                case "reclassification":
+                    AppealTypeUF[0] = "reclassification";
+                    AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P11");
+                    break;
+                case "removal":
+                    AppealTypeUF[0] = "removal";
+                    AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P12");
+                    break;
+                case "suspension":
+                    AppealTypeUF[0] = "suspension";
+                    AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P13");
+                    break;
+                case "transfer":
+                    AppealTypeUF[0] = "transfer";
+                    AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P14");
+                    break;
+                case "whistleblower":
+                    AppealTypeUF[0] = "whistleblower";
+                    AppealTypeUF[1] = readFile("RR-LOJ-UntimelyFiling-P15");
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            AppealTypeUF[0] = "";
+            AppealTypeUF[1] = "";
         }
         answers.setAppealTypeUF(AppealTypeUF);
     }

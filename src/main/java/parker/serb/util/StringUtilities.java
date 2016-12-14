@@ -19,13 +19,13 @@ public class StringUtilities {
     public static String buildFullName(String first, String middle, String last) {
         String fullName = "";
         if (!first.equals("")) {
-            fullName += first.trim();
+            fullName = fullName.trim() + first.trim();
         }
         if (!middle.equals("")) {
-            fullName += " " + (middle.trim().length() == 1 ? middle.trim() + "." : middle.trim());
+            fullName = fullName.trim() + " " + (middle.trim().length() == 1 ? middle.trim() + "." : middle.trim());
         }
         if (!last.equals("")) {
-            fullName += " " + last.trim();
+            fullName = fullName.trim() + " "  + last.trim();
         }
         return fullName.trim();
     }
@@ -33,22 +33,22 @@ public class StringUtilities {
     public static String buildCasePartyName(CaseParty item) {
         String fullName = "";
         if (item.prefix != null) {
-            fullName += item.prefix.trim();
+            fullName = fullName.trim() + (item.prefix.equals("") ? "" : item.prefix.trim());
         }
         if (item.firstName != null) {
-            fullName += item.firstName.trim();
+            fullName = fullName.trim() + (item.firstName.equals("") ? "" : item.firstName.trim());
         }
         if (item.middleInitial != null) {
-            fullName += " " + (item.middleInitial.trim().length() == 1 ? item.middleInitial.trim() + "." : item.middleInitial.trim());
+            fullName = fullName.trim() + " " + (item.middleInitial.equals("") ? "" : (item.middleInitial.trim().length() == 1 ? item.middleInitial.trim() + "." : item.middleInitial.trim()));
         }
         if (item.lastName != null) {
-            fullName += " " + item.lastName.trim();
+            fullName = fullName.trim() + " " + item.lastName.trim();
         }
         if (item.suffix != null) {
-            fullName += " " + item.suffix.trim();
+            fullName = fullName.trim() + " " + item.suffix.trim();
         }
         if ("".equals(fullName.trim())){
-            fullName += item.companyName.trim();
+            fullName = fullName.trim() + item.companyName.trim();
         }
         
         return fullName.trim();
@@ -67,7 +67,9 @@ public class StringUtilities {
         if (item.address3 != null) {
             addressBlock += "\n" + item.address3;
         }
-        addressBlock += "\n" + item.city + ", " + item.stateCode + " " + item.zipcode;
+        addressBlock += "\n" + (item.city == null ? "" : item.city) 
+                + ", " + (item.stateCode == null ? "" : item.stateCode) 
+                + " " + (item.zipcode == null ? "" : item.zipcode);
         if (item.phone1 != null){
             addressBlock += "\n" + NumberFormatService.convertStringToPhoneNumber(item.phone1);
         }
@@ -99,7 +101,9 @@ public class StringUtilities {
                 addressBlock += System.lineSeparator() + item.address3;
             }
         }
-        addressBlock += System.lineSeparator() + item.city + ", " + item.stateCode + " " + item.zipcode;
+        addressBlock += System.lineSeparator() + (item.city == null ? "" : item.city) 
+                + ", " + (item.stateCode == null ? "" : item.stateCode) 
+                + " " + (item.zipcode == null ? "" : item.zipcode);
 
         return addressBlock.trim();
     }

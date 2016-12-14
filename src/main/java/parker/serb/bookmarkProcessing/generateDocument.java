@@ -97,7 +97,7 @@ public class generateDocument {
             saveDocName = String.valueOf(new Date().getTime()) + "_" + template.LetterName + ".docx";
 
             Dispatch document = Dispatch.call(eolWord.getProperty("Documents").toDispatch(), "Open",
-                    Global.templatePath + "CMDS" + File.separator + template.LetterName).toDispatch();
+                    Global.templatePath + Global.activeSection + File.separator + template.Location).toDispatch();
             ActiveXComponent.call(eolWord.getProperty("Selection").toDispatch(), "Find").toDispatch();
 
             //section

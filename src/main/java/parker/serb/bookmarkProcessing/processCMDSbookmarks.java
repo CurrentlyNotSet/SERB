@@ -36,7 +36,7 @@ public class processCMDSbookmarks {
 
         String ccNameBlock = "";
         String ccAddressBlock = "";
-        
+
         String appellantNames = "";
         String appellantRep1Names = "";
         String appellantRep2Names = "";
@@ -80,7 +80,7 @@ public class processCMDSbookmarks {
         String cost = "N/A";
         String total = "$25.00";
         String ALJname = "";
-        
+
         String HearingDatesSE = "N/A";
         String HearingDatesST = "N/A";
         String HearingDatesRH = "N/A";
@@ -99,7 +99,7 @@ public class processCMDSbookmarks {
                         ccAddressBlock += "\n\n";
                     }
                     ccAddressBlock += StringUtilities.buildCasePartyAddressBlock(party);
-                    
+
                 }
             }
 
@@ -249,11 +249,11 @@ public class processCMDSbookmarks {
                 }
             }
         }
-        
-        if (item.mediatorID > 0){
+
+        if (item.mediatorID > 0) {
             ALJname = User.getNameByID(item.mediatorID);
         }
-        
+
         if (!answers.getGenderAppellant().equals("")) {
             if (answers.getGenderAppellant().equalsIgnoreCase("male")) {
                 hisHerString = "his";
@@ -266,22 +266,29 @@ public class processCMDSbookmarks {
             }
         }
 
-        try {
-            dateHearingServed = Global.MMMMMdyyyy.format(Global.mmddyyyy.parse(answers.getHearingServed()));
-        } catch (ParseException ex) {
-            Logger.getLogger(processCMDSbookmarks.class.getName()).log(Level.SEVERE, null, ex);
+        if (!answers.getHearingServed().equals("")) {
+            try {
+                dateHearingServed = Global.MMMMMdyyyy.format(Global.mmddyyyy.parse(answers.getHearingServed()));
+            } catch (ParseException ex) {
+                Logger.getLogger(processCMDSbookmarks.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
-        try {
-            hearingDateString = Global.MMMMMdyyyy.format(Global.mmddyyyy.parse(answers.getHearingDate()));
-        } catch (ParseException ex) {
-            Logger.getLogger(processCMDSbookmarks.class.getName()).log(Level.SEVERE, null, ex);
+        if (!answers.getHearingDate().equals("")) {
+            try {
+                hearingDateString = Global.MMMMMdyyyy.format(Global.mmddyyyy.parse(answers.getHearingDate()));
+            } catch (ParseException ex) {
+                Logger.getLogger(processCMDSbookmarks.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
         }
 
-        try {
-            dateFiledString = Global.MMMMMdyyyy.format(Global.mmddyyyy.parse(answers.getDateFiled()));
-        } catch (ParseException ex) {
-            Logger.getLogger(processCMDSbookmarks.class.getName()).log(Level.SEVERE, null, ex);
+        if (!answers.getDateFiled().equals("")) {
+            try {
+                dateFiledString = Global.MMMMMdyyyy.format(Global.mmddyyyy.parse(answers.getDateFiled()));
+            } catch (ParseException ex) {
+                Logger.getLogger(processCMDSbookmarks.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
         if (answers.getAppealTypeLS() != null) {
@@ -305,7 +312,7 @@ public class processCMDSbookmarks {
             }
         }
 
-        if (!dateRequestedString.equals("")){
+        if (!dateRequestedString.equals("")) {
             try {
                 dateRequestedString = Global.MMMMMdyyyy.format(Global.mmddyyyy.parse(dateRequestedString));
             } catch (ParseException ex) {
@@ -377,65 +384,66 @@ public class processCMDSbookmarks {
                     break;
             }
         }
-        
+
         if (answers.getStayDate() != null) {
             if (!answers.getStayDate().equals("")) {
                 double precost = Double.parseDouble(answers.getStayDate()) * 1.5;
                 cost = "$" + String.format("%.2f", precost);
-                
+
                 double pretotal = precost + 25;
                 total = "$" + String.format("%.2f", pretotal);
             }
         }
 
-        
         CMDSHearing SEhearing = CMDSHearing.loadTopHearingByCaseNumberAndType("SE");
         CMDSHearing SThearing = CMDSHearing.loadTopHearingByCaseNumberAndType("ST");
         CMDSHearing RHhearing = CMDSHearing.loadTopHearingByCaseNumberAndType("RH");
         CMDSHearing PHhearing = CMDSHearing.loadTopHearingByCaseNumberAndType("PH");
-        
-        if (SEhearing != null){
+
+        if (SEhearing != null) {
             HearingDatesSE = SEhearing.hearingDate + " at " + SEhearing.hearingTime;
         }
-        if (SThearing != null){
+        if (SThearing != null) {
             HearingDatesST = SThearing.hearingDate + " at " + SThearing.hearingTime;
         }
-        if (RHhearing != null){
+        if (RHhearing != null) {
             HearingDatesRH = RHhearing.hearingDate + " at " + RHhearing.hearingTime;
         }
-        if (PHhearing != null){
+        if (PHhearing != null) {
             PreHearingDates = PHhearing.hearingDate + " at " + PHhearing.hearingTime;
         }
-        
-        if (answers.getResponseDueDate() != null){            
+
+        if (answers.getResponseDueDate() != null) {
             Timestamp parsedDate = null;
-            try {
-                parsedDate = (Timestamp) Global.mmddyyyy.parse(dateRequestedString);
-            } catch (ParseException ex) {
-                Logger.getLogger(processCMDSbookmarks.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            if (parsedDate != null){
-                dateResponseDueString = Global.MMMMMdyyyy.format(parsedDate);
-                EmailOutInvites.addNewHearing("CMDS",
-                        CMDSCase.getALJemail(),
-                        null,
-                        "Response due for " + NumberFormatService.generateFullCaseNumber(),
-                        NumberFormatService.generateFullCaseNumber(),
-                        null,
-                        null,
-                        null,
-                        DateConversion.generateReminderStartDate(parsedDate)
+            if (!answers.getResponseDueDate().equals("")) {
+                try {
+                    parsedDate = new Timestamp(Global.mmddyyyy.parse(answers.getResponseDueDate()).getTime());
+                } catch (ParseException ex) {
+                    Logger.getLogger(processCMDSbookmarks.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                if (parsedDate != null) {
+                    dateResponseDueString = Global.MMMMMdyyyy.format(parsedDate);
+                    EmailOutInvites.addNewHearing("CMDS",
+                            CMDSCase.getALJemail(),
+                            null,
+                            "Response due for " + NumberFormatService.generateFullCaseNumber(),
+                            NumberFormatService.generateFullCaseNumber(),
+                            null,
+                            null,
+                            null,
+                            DateConversion.generateReminderStartDate(parsedDate)
                     );
+                }
             }
-        }        
-        
+        }
+
         //ProcessBookmarks
         for (int i = 0; i < Global.bookmarkLimit; i++) {
             //Case Data
             processBookmark.process("CaseNumber" + (i == 0 ? "" : i), NumberFormatService.generateFullCaseNumberNonGlobal(
                     item.caseYear, item.caseType, item.caseMonth, item.caseNumber), Document);
             processBookmark.process("TypeofCase" + (i == 0 ? "" : i), item.caseType, Document);
-            processBookmark.process("ALJName" + (i == 0 ? "" : i), ALJname, Document);           
+            processBookmark.process("ALJName" + (i == 0 ? "" : i), ALJname, Document);
             processBookmark.process("HearingDatesSE" + (i == 0 ? "" : i), HearingDatesSE, Document);
             processBookmark.process("HearingDatesST" + (i == 0 ? "" : i), HearingDatesST, Document);
             processBookmark.process("HearingDatesRH" + (i == 0 ? "" : i), HearingDatesRH, Document);
@@ -499,9 +507,9 @@ public class processCMDSbookmarks {
             processBookmark.process("DateFiled" + (i == 0 ? "" : i), dateFiledString, Document);
             processBookmark.process("Date1stLetterSent" + (i == 0 ? "" : i), answers.getFirstLetterSent(), Document);
             processBookmark.process("AppealType" + (i == 0 ? "" : i), answers.getAppealType(), Document);
-            processBookmark.process("AppealTypeONE" + (i == 0 ? "" : i), answers.getAppealType2()[0], Document);
-            processBookmark.process("AppealTypeTWO" + (i == 0 ? "" : i), answers.getAppealType2()[1], Document);
-            processBookmark.process("AppealTypeUF" + (i == 0 ? "" : i), answers.getAppealTypeUF()[1], Document);
+            processBookmark.process("AppealTypeONE" + (i == 0 ? "" : i), answers.getAppealType2() == null ? "" : answers.getAppealType2()[0], Document);
+            processBookmark.process("AppealTypeTWO" + (i == 0 ? "" : i), answers.getAppealType2() == null ? "" : answers.getAppealType2()[1], Document);
+            processBookmark.process("AppealTypeUF" + (i == 0 ? "" : i), answers.getAppealTypeUF() == null ? "" : answers.getAppealTypeUF()[1], Document);
             processBookmark.process("AppealTypeLS" + (i == 0 ? "" : i), answers.getAppealTypeLS(), Document);
             processBookmark.process("RequestingPartyC" + (i == 0 ? "" : i), answers.getAppealTypeLS(), Document);
             processBookmark.process("RequestingPartyE" + (i == 0 ? "" : i), answers.getRequestingPartyExtension(), Document);

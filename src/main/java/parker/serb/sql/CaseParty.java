@@ -679,9 +679,7 @@ public class CaseParty {
 
             Statement stmt = Database.connectToDB().createStatement();
             
-            String sql = "Select partyID, caseRelation, prefix, "
-                    + " firstName, middleInitial, lastName, suffix,"
-                    + " nameTitle, companyName from caseParty"
+            String sql = "Select * from caseParty"
                     + " where caseYear = ?"
                     + " AND caseType = ?"
                     + " AND caseMonth = ?"
@@ -698,15 +696,31 @@ public class CaseParty {
             
             while(casePartyRS.next()) {
                 CaseParty party = new CaseParty();
+                party.id = casePartyRS.getInt("id");
+                party.caseYear = casePartyRS.getString("caseYear");
+                party.caseType = casePartyRS.getString("caseType");
+                party.caseMonth = casePartyRS.getString("caseMonth");
+                party.caseNumber = casePartyRS.getString("caseNumber");
                 party.partyID = casePartyRS.getInt("partyID");
                 party.caseRelation = casePartyRS.getString("caseRelation");
-                party.prefix = casePartyRS.getString("prefix");
-                party.firstName = casePartyRS.getString("firstName");
-                party.middleInitial = casePartyRS.getString("middleInitial");
-                party.lastName = casePartyRS.getString("lastName");
-                party.suffix = casePartyRS.getString("suffix");
-                party.nameTitle = casePartyRS.getString("nameTitle");
-                party.companyName = casePartyRS.getString("companyName");
+                party.prefix = casePartyRS.getString("prefix") == null ? "" : casePartyRS.getString("prefix");
+                party.firstName = casePartyRS.getString("firstName") == null ? "" : casePartyRS.getString("firstName");
+                party.middleInitial = casePartyRS.getString("middleInitial") == null ? "" : casePartyRS.getString("middleInitial");
+                party.lastName = casePartyRS.getString("lastName") == null ? "" : casePartyRS.getString("lastName");
+                party.suffix = casePartyRS.getString("suffix") == null ? "" : casePartyRS.getString("suffix");
+                party.nameTitle = casePartyRS.getString("nameTitle") == null ? "" : casePartyRS.getString("nameTitle");
+                party.jobTitle = casePartyRS.getString("jobTitle") == null ? "" : casePartyRS.getString("jobTitle");
+                party.companyName = casePartyRS.getString("companyName") == null ? "" : casePartyRS.getString("companyName");
+                party.address1 = casePartyRS.getString("address1") == null ? "" : casePartyRS.getString("address1");
+                party.address2 = casePartyRS.getString("address2") == null ? "" : casePartyRS.getString("address2");
+                party.address3 = casePartyRS.getString("address3") == null ? "" : casePartyRS.getString("address3");
+                party.city = casePartyRS.getString("city") == null ? "" : casePartyRS.getString("city");
+                party.stateCode = casePartyRS.getString("stateCode") == null ? "" : casePartyRS.getString("stateCode");
+                party.zipcode = casePartyRS.getString("zipcode") == null ? "" : casePartyRS.getString("zipcode");
+                party.phone1 = casePartyRS.getString("phone1") == null ? "" : NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("phone1"));
+                party.phone2 = casePartyRS.getString("phone2") == null ? "" : NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("phone2"));
+                party.fax = casePartyRS.getString("fax") == null ? "" : NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("fax"));
+                party.emailAddress = casePartyRS.getString("email");
                 parties.add(party);
             }
         } catch (SQLException ex) {
