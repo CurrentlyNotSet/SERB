@@ -27,8 +27,10 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import parker.serb.Global;
 import parker.serb.bookmarkProcessing.generateDocument;
+import parker.serb.bookmarkProcessing.questionsCMDSModel;
+import parker.serb.bookmarkProcessing.questionsCMDSPanel;
 import parker.serb.sql.Activity;
-import parker.serb.sql.AdministrationInformation;
+import parker.serb.sql.CMDSDocuments;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.EmailOut;
 import parker.serb.sql.EmailOutAttachment;
@@ -43,40 +45,45 @@ import parker.serb.util.NumberFormatService;
 import parker.serb.util.SlackNotification;
 import parker.serb.util.StringUtilities;
 
-
 /**
  *
  * @author parker
  */
 public class LetterGenerationPanel extends javax.swing.JDialog {
 
-    SMDSDocuments docToGenerate;
+    SMDSDocuments SMDSdocToGenerate;
+    CMDSDocuments CMDSdocToGenerate;
     MEDCase medCaseData;
     List<Integer> toParties = new ArrayList<>();
     List<Integer> ccParties = new ArrayList<>();
     boolean sendToEmail = false;
     boolean sendToPostal = false;
     String toEmail = "";
-    String ccEmail = "";    
-        
-    public LetterGenerationPanel(java.awt.Frame parent, boolean modal, SMDSDocuments documentToGeneratePassed) {
+    String ccEmail = "";
+
+    public LetterGenerationPanel(java.awt.Frame parent, boolean modal, SMDSDocuments SMDSdocumentToGeneratePassed, CMDSDocuments CMDSdocumentToGeneratePassed) {
         super(parent, modal);
         initComponents();
-        loadPanel(documentToGeneratePassed);
+        loadPanel(SMDSdocumentToGeneratePassed, CMDSdocumentToGeneratePassed);
         setLocationRelativeTo(parent);
-        setVisible(true);   
+        setVisible(true);
     }
-    
-    private void loadPanel(SMDSDocuments documentToGeneratePassed) {
-        docToGenerate = documentToGeneratePassed;
-        documentLabel.setText("Document: " + documentToGeneratePassed.description);
+
+    private void loadPanel(SMDSDocuments SMDSdocumentToGeneratePassed, CMDSDocuments CMDSdocumentToGeneratePassed) {
+        SMDSdocToGenerate = SMDSdocumentToGeneratePassed;
+        CMDSdocToGenerate = CMDSdocumentToGeneratePassed;
+        if (SMDSdocToGenerate != null) {
+            documentLabel.setText("Document: " + SMDSdocToGenerate.description);
+        } else if (CMDSdocToGenerate != null) {
+            documentLabel.setText("Document: " + CMDSdocToGenerate.LetterName);
+        }
         setColumnWidth();
         loadPartyTable();
         loadActivityDocumentsTable();
         loadExtraAttachmentTable();
         loadingPanel.setVisible(false);
     }
-    
+
     private void setColumnWidth() {
         personTable.getColumnModel().getColumn(0).setMinWidth(0);
         personTable.getColumnModel().getColumn(0).setPreferredWidth(0);
@@ -87,7 +94,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         personTable.getColumnModel().getColumn(2).setMinWidth(90);
         personTable.getColumnModel().getColumn(2).setPreferredWidth(90);
         personTable.getColumnModel().getColumn(2).setMaxWidth(90);
-                
+
         activityTable.getColumnModel().getColumn(0).setMinWidth(0);
         activityTable.getColumnModel().getColumn(0).setPreferredWidth(0);
         activityTable.getColumnModel().getColumn(0).setMaxWidth(0);
@@ -97,7 +104,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         activityTable.getColumnModel().getColumn(3).setMinWidth(0);
         activityTable.getColumnModel().getColumn(3).setPreferredWidth(0);
         activityTable.getColumnModel().getColumn(3).setMaxWidth(0);
-        
+
         additionalDocsTable.getColumnModel().getColumn(0).setMinWidth(0);
         additionalDocsTable.getColumnModel().getColumn(0).setPreferredWidth(0);
         additionalDocsTable.getColumnModel().getColumn(0).setMaxWidth(0);
@@ -108,7 +115,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         additionalDocsTable.getColumnModel().getColumn(3).setPreferredWidth(0);
         additionalDocsTable.getColumnModel().getColumn(3).setMaxWidth(0);
     }
-    
+
     private JComboBox loadLocationComboBox() {
         JComboBox locationCombo = new JComboBox();
         locationCombo.removeAllItems();
@@ -118,33 +125,33 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         locationCombo.addItem("Both");
         return locationCombo;
     }
-    
+
     private JComboBox loadToCCComboBox() {
         JComboBox ToCCCombo = new JComboBox();
         ToCCCombo.removeAllItems();
         ToCCCombo.addItem("");
         ToCCCombo.addItem("TO:");
-        ToCCCombo.addItem("CC:");        
+        ToCCCombo.addItem("CC:");
         return ToCCCombo;
     }
-    
-    private void loadPartyTable(){
+
+    private void loadPartyTable() {
         DefaultTableModel model = (DefaultTableModel) personTable.getModel();
         model.setRowCount(0);
-                
+
         JComboBox toCCComboBox = loadToCCComboBox();
         TableColumn rowOneCombo = personTable.getColumnModel().getColumn(1);
         rowOneCombo.setCellEditor(new DefaultCellEditor(toCCComboBox));
-   
+
         toCCComboBox.addActionListener((ActionEvent e) -> {
             ExecutorService executor = Executors.newSingleThreadExecutor();
             Runnable task = () -> {
                 if (personTable.getSelectedRow() >= 0 && personTable.getSelectedColumn() == 1) {
-                    if (!personTable.getValueAt(personTable.getSelectedRow(), 1).toString().equals("") 
+                    if (!personTable.getValueAt(personTable.getSelectedRow(), 1).toString().equals("")
                             && !personTable.getValueAt(personTable.getSelectedRow(), 5).toString().equals("")
                             && personTable.getValueAt(personTable.getSelectedRow(), 2).toString().equals("")) {
                         personTable.setValueAt("Email", personTable.getSelectedRow(), 2);
-                    } else if (!personTable.getValueAt(personTable.getSelectedRow(), 1).toString().equals("") 
+                    } else if (!personTable.getValueAt(personTable.getSelectedRow(), 1).toString().equals("")
                             && personTable.getValueAt(personTable.getSelectedRow(), 5).toString().equals("")
                             && personTable.getValueAt(personTable.getSelectedRow(), 2).toString().equals("")) {
                         personTable.setValueAt("Postal", personTable.getSelectedRow(), 2);
@@ -159,68 +166,68 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         JComboBox destinationComboBox = loadLocationComboBox();
         TableColumn rowTwoCombo = personTable.getColumnModel().getColumn(2);
         rowTwoCombo.setCellEditor(new DefaultCellEditor(destinationComboBox));
-        
+
         // SET TO/CC Listener
         destinationComboBox.addItemListener((ItemEvent e) -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 if (e.getItem().equals("") && personTable.getSelectedColumn() == 2) {
                     personTable.setValueAt("", personTable.getSelectedRow(), 1);
-                } 
-                if (personTable.getValueAt(personTable.getSelectedRow(), 1).equals("")){
+                }
+                if (personTable.getValueAt(personTable.getSelectedRow(), 1).equals("")) {
                     personTable.setValueAt("", personTable.getSelectedRow(), 2);
                 }
             }
         });
-             
+
         List<CaseParty> partyList = CaseParty.loadPartiesByCase();
-        
-        for (CaseParty party : partyList){
+
+        for (CaseParty party : partyList) {
             String toCC = "";
             String emailPostal = "";
-            
-            if (Global.activeSection.equals("MED") 
-                    && (party.caseRelation.equals("Employer REP") || party.caseRelation.equals("Employee Organization REP"))){
-                if (!party.emailAddress.trim().equals("")){
+
+            if (Global.activeSection.equals("MED")
+                    && (party.caseRelation.equals("Employer REP") || party.caseRelation.equals("Employee Organization REP"))) {
+                if (!party.emailAddress.trim().equals("")) {
                     emailPostal = "Email";
                 } else {
                     emailPostal = "Postal";
                 }
                 toCC = "TO:";
             }
-                        
+
             model.addRow(new Object[]{
-                party.id,           // ID
-                toCC,               // TO/CC
-                emailPostal,        // Email/Postal
+                party.id, // ID
+                toCC, // TO/CC
+                emailPostal, // Email/Postal
                 party.caseRelation,
-                StringUtilities.buildCasePartyName(party),  // NAME
+                StringUtilities.buildCasePartyName(party), // NAME
                 party.emailAddress
             });
-        }   
+        }
     }
-    
-    private void loadActivityDocumentsTable(){
+
+    private void loadActivityDocumentsTable() {
         DefaultTableModel model = (DefaultTableModel) activityTable.getModel();
         model.setRowCount(0);
-        
+
         List<Activity> activtyList = Activity.loadActivityDocumentsByGlobalCase();
-        
-        for (Activity doc : activtyList){
+
+        for (Activity doc : activtyList) {
             model.addRow(new Object[]{
                 doc.id,
                 false,
                 doc.action,
                 doc.fileName
             });
-        }  
+        }
     }
-    
-    private void loadExtraAttachmentTable(){
+
+    private void loadExtraAttachmentTable() {
         DefaultTableModel model = (DefaultTableModel) additionalDocsTable.getModel();
-        model.setRowCount(0); 
+        model.setRowCount(0);
         List<SMDSDocuments> documentList = null;
         List<FactFinder> ffList = null;
-                
+
         switch (Global.activeSection) {
             case "REP":
                 documentList = SMDSDocuments.loadDocumentNamesByTypeAndSection(Global.caseType, "");
@@ -252,20 +259,20 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                 });
             }
         }
-        
+
         if (ffList != null && Global.activeSection.equals("MED")) {
             medCaseData = MEDCase.loadEntireCaseInformation();
-            
+
             for (FactFinder ff : ffList) {
                 //Format Name
                 String person = StringUtilities.buildFullName(ff.firstName, ff.middleName, ff.lastName);
-                
+
                 //check for checkmark
                 boolean selected = false;
-                if (docToGenerate.description.contains("Panel") && medCaseData != null){
-                        selected = setMEDFFConcCheckMark(person);
+                if (SMDSdocToGenerate.description.contains("Panel") && medCaseData != null) {
+                    selected = setMEDFFConcCheckMark(person);
                 }
-                
+
                 //load table
                 model.addRow(new Object[]{
                     ff.id,
@@ -276,107 +283,120 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
             }
         }
     }
-    
+
     private void clearDate(WebDateField dateField, MouseEvent evt) {
-        if(evt.getButton() == MouseEvent.BUTTON3 && dateField.isEnabled()) {
+        if (evt.getButton() == MouseEvent.BUTTON3 && dateField.isEnabled()) {
             ClearDateDialog dialog = new ClearDateDialog((JFrame) Global.root, true);
-            if(dialog.isReset()) {
+            if (dialog.isReset()) {
                 dateField.setText("");
             }
             dialog.dispose();
         }
     }
-    
-    private boolean setMEDFFConcCheckMark(String Name){        
-        if (!medCaseData.FFList2Name1.equals("") || !medCaseData.concilList2Name1.equals("")){
-            if (medCaseData.FFList2Name1.equals(Name) || 
-                    medCaseData.FFList2Name2.equals(Name) || 
-                    medCaseData.FFList2Name3.equals(Name) || 
-                    medCaseData.FFList2Name4.equals(Name) || 
-                    medCaseData.FFList2Name5.equals(Name) ||
-                    medCaseData.concilList2Name1.equals(Name) ||
-                    medCaseData.concilList2Name2.equals(Name) ||
-                    medCaseData.concilList2Name3.equals(Name) ||
-                    medCaseData.concilList2Name4.equals(Name) ||
-                    medCaseData.concilList2Name5.equals(Name)){
+
+    private boolean setMEDFFConcCheckMark(String Name) {
+        if (!medCaseData.FFList2Name1.equals("") || !medCaseData.concilList2Name1.equals("")) {
+            if (medCaseData.FFList2Name1.equals(Name)
+                    || medCaseData.FFList2Name2.equals(Name)
+                    || medCaseData.FFList2Name3.equals(Name)
+                    || medCaseData.FFList2Name4.equals(Name)
+                    || medCaseData.FFList2Name5.equals(Name)
+                    || medCaseData.concilList2Name1.equals(Name)
+                    || medCaseData.concilList2Name2.equals(Name)
+                    || medCaseData.concilList2Name3.equals(Name)
+                    || medCaseData.concilList2Name4.equals(Name)
+                    || medCaseData.concilList2Name5.equals(Name)) {
                 return true;
             }
         } else {
-            if (medCaseData.FFList1Name1.equals(Name) || 
-                    medCaseData.FFList1Name2.equals(Name) || 
-                    medCaseData.FFList1Name3.equals(Name) || 
-                    medCaseData.FFList1Name4.equals(Name) || 
-                    medCaseData.FFList1Name5.equals(Name) ||
-                    medCaseData.concilList1Name1.equals(Name) ||
-                    medCaseData.concilList1Name2.equals(Name) ||
-                    medCaseData.concilList1Name3.equals(Name) ||
-                    medCaseData.concilList1Name4.equals(Name) ||
-                    medCaseData.concilList1Name5.equals(Name)){
+            if (medCaseData.FFList1Name1.equals(Name)
+                    || medCaseData.FFList1Name2.equals(Name)
+                    || medCaseData.FFList1Name3.equals(Name)
+                    || medCaseData.FFList1Name4.equals(Name)
+                    || medCaseData.FFList1Name5.equals(Name)
+                    || medCaseData.concilList1Name1.equals(Name)
+                    || medCaseData.concilList1Name2.equals(Name)
+                    || medCaseData.concilList1Name3.equals(Name)
+                    || medCaseData.concilList1Name4.equals(Name)
+                    || medCaseData.concilList1Name5.equals(Name)) {
                 return true;
             }
         }
         return false;
     }
-    
+
     private void generateLetter() {
         List<Integer> postalIDList = new ArrayList<>();
-        
         getPartyList();
-        
-        String docName = generateDocument.generateSMDSdocument(docToGenerate, 0, toParties, ccParties);
+
+        String docName;
+        questionsCMDSModel answers = null;
+
+        if (Global.activeSection.equals("CMDS")) {
+            int count = CMDSDocuments.CMDSQuestionCount(CMDSdocToGenerate);
+            if (count > 0) {
+                questionsCMDSPanel returnInfo = new questionsCMDSPanel(Global.root, true, CMDSdocToGenerate, count);
+                answers = returnInfo.answers;
+                returnInfo.dispose();
+            }
+            docName = generateDocument.generateCMDSdocument(CMDSdocToGenerate, answers, 0, toParties, ccParties);
+        } else {
+            docName = generateDocument.generateSMDSdocument(SMDSdocToGenerate, 0, toParties, ccParties);
+        }
+
         if (docName != null) {
-            Activity.addActivty("Created " + docToGenerate.historyDescription, docName);
-            
+            Activity.addActivty("Created " + (Global.activeSection.equals("CMDS") ? CMDSdocToGenerate.LetterName : SMDSdocToGenerate.historyDescription), docName);
+
             int emailID = 0;
             int postalID = 0;
-            
-            if (sendToEmail){
+
+            if (sendToEmail) {
                 emailID = insertEmail();
                 insertGeneratedAttachementEmail(emailID, docName);
             }
-            
-            if (sendToPostal){
+
+            if (sendToPostal) {
                 for (int i = 0; i < personTable.getRowCount(); i++) {
-                    if (!personTable.getValueAt(i, 1).equals("") && 
-                            (personTable.getValueAt(i, 2).equals("Postal") || personTable.getValueAt(i, 2).equals("Both"))) {
+                    if (!personTable.getValueAt(i, 1).equals("")
+                            && (personTable.getValueAt(i, 2).equals("Postal") || personTable.getValueAt(i, 2).equals("Both"))) {
                         postalID = insertPostal(personTable.getValueAt(i, 0).toString());
                         insertGeneratedAttachementPostal(postalID, docName);
-                        
+
                         postalIDList.add(postalID);
                     }
                 }
             }
-            
+
             insertExtraAttachmentsEmail(emailID, postalIDList);
-            
+
             FileService.openFile(docName);
             reloadActivity();
         } else {
             WebOptionPane.showMessageDialog(Global.root,
                     "<html><div style='text-align: center;'>Files required to generate documents are missing."
-                    + "<br><br>Unable to generate " + docToGenerate.description + "</html>",
-                    "Required File Missing", WebOptionPane.ERROR_MESSAGE);
+                    + "<br><br>Unable to generate " + (Global.activeSection.equals("CMDS") ? CMDSdocToGenerate.LetterName
+                    : SMDSdocToGenerate.historyDescription) + "</html>", "Required File Missing", WebOptionPane.ERROR_MESSAGE);
         }
     }
 
-    private void getPartyList(){
+    private void getPartyList() {
         for (int i = 0; i < personTable.getRowCount(); i++) {
-            
+
             //get Party List
             if (personTable.getValueAt(i, 1).equals("TO:")) {
                 toParties.add(Integer.valueOf(personTable.getValueAt(i, 0).toString()));
-                
+
                 //Add TO: Email Addresses
                 if ((personTable.getValueAt(i, 2).equals("Email") || personTable.getValueAt(i, 2).equals("Both"))
                         && !personTable.getValueAt(i, 5).equals("")) {
-                    if (!toEmail.trim().equals("")){
+                    if (!toEmail.trim().equals("")) {
                         toEmail += "; ";
                     }
                     toEmail += personTable.getValueAt(i, 5);
                 }
             } else if (personTable.getValueAt(i, 1).equals("CC:")) {
                 ccParties.add(Integer.valueOf(personTable.getValueAt(i, 0).toString()));
-                
+
                 //Add CC: Email Addresses
                 if ((personTable.getValueAt(i, 2).equals("Email") || personTable.getValueAt(i, 2).equals("Both"))
                         && !personTable.getValueAt(i, 5).equals("")) {
@@ -386,7 +406,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                     ccEmail += personTable.getValueAt(i, 5);
                 }
             }
-            
+
             //Get Destinations
             if (personTable.getValueAt(i, 2).equals("Email")) {
                 sendToEmail = true;
@@ -398,8 +418,8 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
             }
         }
     }
-    
-    private void reloadActivity(){
+
+    private void reloadActivity() {
         switch (Global.activeSection) {
             case "REP":
                 Global.root.getrEPRootPanel1().getActivityPanel1().loadAllActivity();
@@ -423,18 +443,24 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                 break;
         }
     }
+
+    private int insertEmail() {
         
-    private int insertEmail() { 
-        String emailBody = docToGenerate.emailBody;
-        
-        emailBody += System.lineSeparator() + System.lineSeparator() 
+        String emailBody = "";
+        if (Global.activeSection.equals("CMDS")){
+            emailBody = CMDSdocToGenerate.emailBody;
+        } else {
+            emailBody = SMDSdocToGenerate.emailBody;
+        }
+
+        emailBody += System.lineSeparator() + System.lineSeparator()
                 + StringUtilities.buildFullName(Global.activeUser.firstName, Global.activeUser.middleInitial, Global.activeUser.lastName)
                 + System.lineSeparator() + (Global.activeUser.jobTitle == null ? "" : Global.activeUser.jobTitle + System.lineSeparator())
-                + StringUtilities.generateDepartmentAddressBlock() + System.lineSeparator() 
-                + (Global.activeUser.workPhone == null ? "" :  "Telephone: " + NumberFormatService.convertStringToPhoneNumber(Global.activeUser.workPhone));
-                
+                + StringUtilities.generateDepartmentAddressBlock() + System.lineSeparator()
+                + (Global.activeUser.workPhone == null ? "" : "Telephone: " + NumberFormatService.convertStringToPhoneNumber(Global.activeUser.workPhone));
+
         EmailOut eml = new EmailOut();
-        
+
         eml.section = Global.activeSection;
         eml.caseYear = Global.caseYear;
         eml.caseType = Global.caseType;
@@ -444,20 +470,24 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         eml.from = Global.activeUser.emailAddress;
         eml.cc = ccEmail.trim().equals("") ? null : ccEmail.trim();
         eml.bcc = null;
-        eml.subject = NumberFormatService.generateFullCaseNumber() + (docToGenerate.emailSubject == null ? "" : " " + docToGenerate.emailSubject);
+        if (Global.activeSection.equals("CMDS")){
+            eml.subject = NumberFormatService.generateFullCaseNumber() + (CMDSdocToGenerate.emailSubject == null ? "" : " " + CMDSdocToGenerate.emailSubject);
+        } else {        
+            eml.subject = NumberFormatService.generateFullCaseNumber() + (SMDSdocToGenerate.emailSubject == null ? "" : " " + SMDSdocToGenerate.emailSubject);
+        }
         eml.body = emailBody;
         eml.userID = Global.activeUser.id;
         eml.suggestedSendDate = suggestedSendDatePicker.getText().equals("") ? null : new Date(NumberFormatService.convertMMDDYYYY(suggestedSendDatePicker.getText()));
         eml.okToSend = false;
-        
+
         return EmailOut.insertEmail(eml);
     }
-    
-    private int insertPostal(String partyID) {                 
+
+    private int insertPostal(String partyID) {
         CaseParty party = CaseParty.getCasePartyByID(partyID);
-        
+
         PostalOut post = new PostalOut();
-        
+
         post.section = Global.activeSection;
         post.caseYear = Global.caseYear;
         post.caseType = Global.caseType;
@@ -467,33 +497,39 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         post.addressBlock = StringUtilities.buildAddressBlockWithLineBreaks(party);
         post.userID = Global.activeUser.id;
         post.suggestedSendDate = suggestedSendDatePicker.getText().equals("") ? null : new Date(NumberFormatService.convertMMDDYYYY(suggestedSendDatePicker.getText()));
-        post.historyDescription = docToGenerate.historyDescription == null ? docToGenerate.description : docToGenerate.historyDescription;
         
+        if (Global.activeSection.equals("CMDS")){
+            post.historyDescription = CMDSdocToGenerate.LetterName == null ? "" : CMDSdocToGenerate.LetterName;
+        } else {
+            post.historyDescription = SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription;
+        }
+        
+
         return PostalOut.insertPostalOut(post);
     }
-    
-    private void insertGeneratedAttachementEmail(int emailID, String docName){
-        if (emailID > 0){
+
+    private void insertGeneratedAttachementEmail(int emailID, String docName) {
+        if (emailID > 0) {
             EmailOutAttachment attach = new EmailOutAttachment();
-        
+
             attach.emailOutID = emailID;
             attach.fileName = docName;
             attach.primaryAttachment = true;
             EmailOutAttachment.insertAttachment(attach);
         }
     }
-    
-    private void insertGeneratedAttachementPostal(int postalID, String docName){        
-        if (postalID > 0){
+
+    private void insertGeneratedAttachementPostal(int postalID, String docName) {
+        if (postalID > 0) {
             PostalOutAttachment attach = new PostalOutAttachment();
-        
+
             attach.PostalOutID = postalID;
             attach.fileName = docName;
             attach.primaryAttachment = true;
             PostalOutAttachment.insertAttachment(attach);
         }
     }
-    
+
     private void insertExtraAttachmentsEmail(int emailID, List<Integer> postalIDList) {
         activityTableAttachmentProcess(emailID, postalIDList);
 
@@ -511,20 +547,20 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                 break;
         }
     }
-    
+
     private void activityTableAttachmentProcess(int emailID, List<Integer> postalIDList) {
         for (int i = 0; i < activityTable.getRowCount(); i++) {
             if (activityTable.getValueAt(i, 1).equals(true)) {
-                
-                if (emailID > 0){
+
+                if (emailID > 0) {
                     EmailOutAttachment attach = new EmailOutAttachment();
                     attach.emailOutID = emailID;
                     attach.fileName = activityTable.getValueAt(i, 3).toString();
                     attach.primaryAttachment = false;
                     EmailOutAttachment.insertAttachment(attach);
                 }
-                
-                for (int postalID : postalIDList){
+
+                for (int postalID : postalIDList) {
                     PostalOutAttachment attach = new PostalOutAttachment();
                     attach.PostalOutID = postalID;
                     attach.fileName = activityTable.getValueAt(i, 3).toString();
@@ -534,7 +570,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
             }
         }
     }
-    
+
     private void additionalDocsTableAttachmentProcess(int emailID, List<Integer> postalIDList) {
         for (int i = 0; i < additionalDocsTable.getRowCount(); i++) {
             if (additionalDocsTable.getValueAt(i, 1).equals(true)) {
@@ -542,7 +578,6 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                 SMDSDocuments additionalDoc = SMDSDocuments.findDocumentByID(Integer.valueOf(additionalDocsTable.getValueAt(i, 0).toString()));
 
                 String docName = generateDocument.generateSMDSdocument(additionalDoc, 0, toParties, ccParties);
-                Activity.addActivty("Created " + docToGenerate.historyDescription, docName);
 
                 if (emailID > 0) {
                     EmailOutAttachment attach = new EmailOutAttachment();
@@ -552,7 +587,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                     EmailOutAttachment.insertAttachment(attach);
                 }
 
-                for (int postalID : postalIDList){
+                for (int postalID : postalIDList) {
                     PostalOutAttachment attach = new PostalOutAttachment();
                     attach.PostalOutID = postalID;
                     attach.fileName = docName;
@@ -562,7 +597,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
             }
         }
     }
-    
+
     private void additionalDocsTableMEDAttachmentProcess(int emailID, List<Integer> postalIDList) {
         for (int i = 0; i < additionalDocsTable.getRowCount(); i++) {
             if (additionalDocsTable.getValueAt(i, 1).equals(true)) {
@@ -577,7 +612,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                     EmailOutAttachment.insertAttachment(attach);
                 }
 
-                for (int postalID : postalIDList){
+                for (int postalID : postalIDList) {
                     PostalOutAttachment attach = new PostalOutAttachment();
                     attach.PostalOutID = postalID;
                     attach.fileName = destFileName;
@@ -587,12 +622,12 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
             }
         }
     }
-    
+
     private String copyMEDBioToCaseFolder(String fileName) {
         String docSourcePath = Global.templatePath + File.separator + Global.activeSection + fileName;
 
         String docDestPath = Global.activityPath + Global.activeSection
-                + File.separatorChar + Global.caseYear + File.separatorChar 
+                + File.separatorChar + Global.caseYear + File.separatorChar
                 + NumberFormatService.generateFullCaseNumber() + File.separatorChar;
 
         String destFileName = String.valueOf(new java.util.Date().getTime()) + fileName;
@@ -608,12 +643,12 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
 
     private void processThread() {
         Thread temp = new Thread(() -> {
-                generateLetter();
-                dispose();
+            generateLetter();
+            dispose();
         });
         temp.start();
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

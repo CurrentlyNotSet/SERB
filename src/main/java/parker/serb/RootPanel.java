@@ -20,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import parker.serb.CMDS.CMDSHeaderPanel;
+import parker.serb.CMDS.CMDSLetterDialog;
 import parker.serb.CMDS.CMDSRootPanel;
 import parker.serb.CSC.CSCHeaderPanel;
 import parker.serb.CSC.CSCRootPanel;
@@ -160,12 +161,12 @@ public class RootPanel extends javax.swing.JFrame {
                 break; 
             case "Civil Service Commission":
                 card.show(jPanel9, "card8");
-                jLabel1.setIcon(new ImageIcon(getClass().getResource("/PBRLOGO.gif")));
+                jLabel1.setIcon(new ImageIcon(getClass().getResource("/SPBRSeal.png")));
                 cSCHeaderPanel1.loadCases();
                 break;  
             case "CMDS":
                 card.show(jPanel9, "card9");
-                jLabel1.setIcon(new ImageIcon(getClass().getResource("/PBRLOGO.gif")));
+                jLabel1.setIcon(new ImageIcon(getClass().getResource("/SPBRSeal.png")));
                 cMDSHeaderPanel1.loadCases();
                 break;  
             case "Employer Search":
@@ -386,8 +387,8 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton3.setSize(dim);
                 jButton3.setVisible(false);
                 jButton3.setText("All Org Letters");
-                jButton4.setVisible(false);
-                jButton4.setText("Single Letter");
+                jButton4.setVisible(true);
+                jButton4.setText("Letters");
                 jButton5.setVisible(false);
                 jButton5.setText("Reports");
                 jButton6.setVisible(true);
@@ -1439,6 +1440,9 @@ public class RootPanel extends javax.swing.JFrame {
                 break;
             case "ULP":
                 new ULPReportDialog((JFrame) this.getRootPane().getParent(), true);
+                break;
+            case "CMDS":
+                new CMDSLetterDialog((JFrame) this.getRootPane().getParent(), true);
                 break;
             default:
                 break;
