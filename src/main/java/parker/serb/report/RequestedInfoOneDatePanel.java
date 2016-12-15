@@ -69,6 +69,7 @@ public class RequestedInfoOneDatePanel extends javax.swing.JDialog {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Required Report Information");
 
+        startDateField.setEditable(false);
         startDateField.setDateFormat(Global.mmddyyyy);
         startDateField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

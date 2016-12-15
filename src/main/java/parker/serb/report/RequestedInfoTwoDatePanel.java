@@ -72,6 +72,7 @@ public class RequestedInfoTwoDatePanel extends javax.swing.JDialog {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Required Report Information");
 
+        startDateField.setEditable(false);
         startDateField.setDateFormat(Global.mmddyyyy);
         startDateField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -82,6 +83,7 @@ public class RequestedInfoTwoDatePanel extends javax.swing.JDialog {
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel7.setText("Start Date:");
 
+        endDateField.setEditable(false);
         endDateField.setDateFormat(Global.mmddyyyy);
         endDateField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

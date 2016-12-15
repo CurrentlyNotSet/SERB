@@ -6,6 +6,13 @@
 package parker.serb.REP;
 
 //TODO: Load all REP Reports
+
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import parker.serb.report.GenerateReport;
+import parker.serb.sql.SMDSDocuments;
+import parker.serb.util.Item;
+
 //TODO: Create Table to handle all sections
 //TODO: Look into PDFBox vs. Apache vs. iText
 
@@ -22,12 +29,38 @@ public class REPReportDialog extends javax.swing.JDialog {
      */
     public REPReportDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        setUndecorated(true);
         initComponents();
+        loadReports();
         setLocationRelativeTo(parent);
         setVisible(true);
     }
+    
+    private void loadReports(){
+        List<SMDSDocuments> letterList = SMDSDocuments.loadDocumentNamesByTypeAndSection("REP", "Report");
+            
+        DefaultComboBoxModel dt = new DefaultComboBoxModel();
+        ReportComboBox.setModel(dt);
+        ReportComboBox.addItem(new Item<>("0", ""));
+                
+        for (SMDSDocuments letter : letterList) {
+            ReportComboBox.addItem(new Item<>( String.valueOf(letter.id), letter.description ));
+        }
+        ReportComboBox.setSelectedItem(new Item<>("0", "" ));
+    }
 
+    private void generateReport(){
+        SMDSDocuments report = SMDSDocuments.findDocumentByDescription(ReportComboBox.getSelectedItem().toString());
+        GenerateReport.runReport(report);
+    }
+    
+    private void enableGenerateButton() {
+        if(ReportComboBox.getSelectedItem().toString().equals("")) {
+            GenerateButton.setEnabled(false);
+        } else {
+            GenerateButton.setEnabled(true);
+        }
+    }
+        
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -40,9 +73,9 @@ public class REPReportDialog extends javax.swing.JDialog {
         jSeparator4 = new javax.swing.JSeparator();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        ReportComboBox = new javax.swing.JComboBox();
+        GenerateButton = new javax.swing.JButton();
+        CancelButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -53,19 +86,23 @@ public class REPReportDialog extends javax.swing.JDialog {
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Please Select a Report to Generate");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jButton1.setText("Generate");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        ReportComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                ReportComboBoxActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Cancel");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        GenerateButton.setText("Generate");
+        GenerateButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                GenerateButtonActionPerformed(evt);
+            }
+        });
+
+        CancelButton.setText("Cancel");
+        CancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CancelButtonActionPerformed(evt);
             }
         });
 
@@ -76,12 +113,12 @@ public class REPReportDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGap(12, 12, 12)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(ReportComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 140, Short.MAX_VALUE)
-                        .addComponent(jButton1))
+                        .addComponent(CancelButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 299, Short.MAX_VALUE)
+                        .addComponent(GenerateButton))
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(12, 12, 12))
         );
@@ -93,29 +130,33 @@ public class REPReportDialog extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                .addComponent(ReportComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(GenerateButton)
+                    .addComponent(CancelButton))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void GenerateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GenerateButtonActionPerformed
+        generateReport();
+    }//GEN-LAST:event_GenerateButtonActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void CancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelButtonActionPerformed
         dispose();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_CancelButtonActionPerformed
+
+    private void ReportComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReportComboBoxActionPerformed
+        enableGenerateButton();
+    }//GEN-LAST:event_ReportComboBoxActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox jComboBox1;
+    private javax.swing.JButton CancelButton;
+    private javax.swing.JButton GenerateButton;
+    private javax.swing.JComboBox ReportComboBox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JSeparator jSeparator4;
