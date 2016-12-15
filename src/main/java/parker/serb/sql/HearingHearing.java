@@ -31,13 +31,7 @@ public class HearingHearing {
     public String hearingType;
     public String room;
     public String hearingDateTime;
-    
-    /**
-     * Add an activity to the activity table, pulls the case number from the
-     * current selected case
-     * @param action the action that has been preformed
-     * @param fileName the fileName of a document - null if no file
-     */
+
     public static void addHearing(Date hearingTime, String hearingType, String hearingRoom) {
         Statement stmt = null;
             
@@ -74,7 +68,6 @@ public class HearingHearing {
 
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                System.out.println("TESTING");
                 SlackNotification.sendNotification(ex.getMessage());
             } else {
                 SlackNotification.sendNotification(ex.getMessage());
@@ -124,12 +117,13 @@ public class HearingHearing {
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                System.out.println("TESTING");
                 SlackNotification.sendNotification(ex.getMessage());
             } else {
                 SlackNotification.sendNotification(ex.getMessage());
                 Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
             }
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return activityList;
     }

@@ -17,6 +17,7 @@ import javax.swing.event.DocumentListener;
 import parker.serb.Global;
 import parker.serb.sql.CMDSHearing;
 import parker.serb.sql.EmailOutInvites;
+import parker.serb.sql.HearingHearing;
 import parker.serb.sql.HearingRoom;
 import parker.serb.sql.HearingType;
 
@@ -390,10 +391,10 @@ public class HearingAddHearingDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-//        HearingHearing.addHearing(generateDate(),
-//                hearingTypeComboBox.getSelectedItem().toString(),
-//                hearingRoomComboBox.getSelectedItem().toString());
-//        
+        HearingHearing.addHearing(generateDate(),
+                hearingTypeComboBox.getSelectedItem().toString(),
+                hearingRoomComboBox.getSelectedItem().toString());
+        
         dispose();
     }//GEN-LAST:event_saveButtonActionPerformed
 

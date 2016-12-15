@@ -15,28 +15,6 @@ import parker.serb.Global;
 public class Audit {
     
     /**
-     * Creates a blank Audit table
-     */
-    public static void createTable() {
-        try {
-            
-            Statement stmt = Database.connectToDB().createStatement();
-            
-            String sql = "CREATE TABLE Audit" +
-                   "(id int IDENTITY (1,1) NOT NULL, " +
-                   " date datetime NOT NULL, " + 
-                   " userID int NOT NULL, " + 
-                   " action varchar(255) NOT NULL, " + 
-                   " PRIMARY KEY (id))"; 
-            
-            stmt.executeUpdate(sql);
-            System.out.println("Created Audit Table");
-        } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    /**
      * Adds an entry to the audit table
      * @param action performed action to be stored
      */
