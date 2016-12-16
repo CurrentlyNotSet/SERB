@@ -86,6 +86,9 @@
       </Properties>
     </Component>
     <Component class="com.alee.extended.date.WebDateField" name="startDateField">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="startDateFieldActionPerformed"/>
       </Events>
@@ -100,6 +103,9 @@
       </Properties>
     </Component>
     <Component class="com.alee.extended.date.WebDateField" name="endDateField">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="endDateFieldActionPerformed"/>
       </Events>

@@ -137,7 +137,7 @@ public class GenerateReport {
             try {
                 String fileName = report.fileName.substring(0, report.fileName.lastIndexOf("."));
                 if (fileName.length() > 50) {
-                    fileName = System.currentTimeMillis() + "_" + StringUtils.left(fileName.trim(), 50);
+                    fileName = StringUtils.left(fileName.trim(), 50).trim()  + "_" + System.currentTimeMillis();
                 } else {
                     fileName = fileName + "_" + System.currentTimeMillis();
                 }
