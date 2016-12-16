@@ -48,11 +48,13 @@ public class REPReportDialog extends javax.swing.JDialog {
         ReportComboBox.setSelectedItem(new Item<>("0", "" ));
     }
 
-    private void generateReport(){
-        SMDSDocuments report = SMDSDocuments.findDocumentByDescription(ReportComboBox.getSelectedItem().toString());
+    private void generateReport() {
+        Item item = (Item) ReportComboBox.getSelectedItem();
+        int id = Integer.parseInt(item.getValue().toString());
+        SMDSDocuments report = SMDSDocuments.findDocumentByID(id);
         GenerateReport.runReport(report);
     }
-    
+
     private void enableGenerateButton() {
         if(ReportComboBox.getSelectedItem().toString().equals("")) {
             GenerateButton.setEnabled(false);

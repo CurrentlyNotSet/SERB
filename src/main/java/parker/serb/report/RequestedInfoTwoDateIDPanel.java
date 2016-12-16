@@ -56,14 +56,23 @@ public class RequestedInfoTwoDateIDPanel extends javax.swing.JDialog {
     }
 
     private void loadCombobox(String IDType) {
+        List<User> userList = null;
+        
         DefaultComboBoxModel dt = new DefaultComboBoxModel();
         ComboBox.setModel(dt);
         ComboBox.addItem(new Item<>("0", ""));
 
         switch (IDType) {
             case "UserID":
+                userList = User.getEnabledUsers();
+                for (User item : userList) {
+                    ComboBox.addItem(new Item<>(
+                            String.valueOf(item.id),
+                            StringUtilities.buildFullName(item.firstName, item.middleInitial, item.lastName))
+                    );
+                }
             case "InvestigatorID":
-                List<User> userList = User.getEnabledUsers();
+                userList = User.getEnabledUsers();
 
                 for (User item : userList) {
                     if (IDType.equals("InvestigatorID") && item.investigator) {

@@ -54,7 +54,9 @@ public class ULPReportDialog extends javax.swing.JDialog {
     }
 
     private void generateReport(){
-        SMDSDocuments report = SMDSDocuments.findDocumentByDescription(reportComboBox.getSelectedItem().toString());
+        Item item = (Item) reportComboBox.getSelectedItem();
+        int id = Integer.parseInt(item.getValue().toString());
+        SMDSDocuments report = SMDSDocuments.findDocumentByID(id);
         GenerateReport.runReport(report);
     }
     
