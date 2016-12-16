@@ -433,6 +433,37 @@ public class ULPStatusPanel extends javax.swing.JPanel {
             dialog.dispose();
         }
     }
+    
+    public void clearAll() {
+        DefaultTableModel relatedCase = (DefaultTableModel) relatedCaseTable.getModel();
+        
+        relatedCase.setRowCount(0);
+        
+        DefaultTableModel boardMeeting = (DefaultTableModel) boardMeetingTable.getModel();
+        
+        boardMeeting.setRowCount(0);
+        
+        employerNumberTextBox.setText("");
+        barginingUnitNoTextBox.setText("");
+        allegationTextBox.setText("");
+        statusComboBox.setSelectedItem("");
+        priorityComboBox.setSelectedItem(false);
+        assignedDateTextBox.setText("");
+        reportDueDateTextBox.setText("");
+        dismissalDateTextBox.setText("");
+        deferredDateTextBox.setText("");
+        appealReceivedTextBox.setText("");
+        appealSentTextBox.setText("");
+        courtTextBox.setText("");
+        courtCaseNumberTextBox.setText("");
+        serbCaseNumberTextBox.setText("");
+        finalDispositionComboBox.setSelectedItem("");
+        investigatorComboBox.setSelectedItem("");
+        mediatorAssignedComboBox.setSelectedItem("");
+        aljComboBox.setSelectedItem("");
+        filedDateTextBox.setText("");
+        probableCauseCheckBox.setSelected(false);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.

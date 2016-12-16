@@ -36,6 +36,10 @@ public class ULPRootPanel extends javax.swing.JPanel {
         Global.root.getuLPHeaderPanel1().clearAll();
         activityPanel1.clearAll();
         partiesPanel1.clearAll();
+        uLPStatusPanel1.clearAll();
+        uLPStatement1.clearAll();
+        uLPRecommendation1.clearAll();
+        uLPInvestigationReveals1.clearAll();
         notesPanel2.clearAll();
     }
     
