@@ -574,10 +574,14 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
     private void additionalDocsTableAttachmentProcess(int emailID, List<Integer> postalIDList) {
         for (int i = 0; i < additionalDocsTable.getRowCount(); i++) {
             if (additionalDocsTable.getValueAt(i, 1).equals(true)) {
+                String docName = "";
 
-                SMDSDocuments additionalDoc = SMDSDocuments.findDocumentByID(Integer.valueOf(additionalDocsTable.getValueAt(i, 0).toString()));
-
-                String docName = generateDocument.generateSMDSdocument(additionalDoc, 0, toParties, ccParties);
+                if (additionalDocsTable.getValueAt(i, 3).toString().toLowerCase().endsWith(".docx")) {
+                    SMDSDocuments additionalDoc = SMDSDocuments.findDocumentByID(Integer.valueOf(additionalDocsTable.getValueAt(i, 0).toString()));
+                    docName = generateDocument.generateSMDSdocument(additionalDoc, 0, toParties, ccParties);
+                } else {
+                    docName = copyAttachmentToCaseFolder(additionalDocsTable.getValueAt(i, 3).toString());
+                }
 
                 if (emailID > 0) {
                     EmailOutAttachment attach = new EmailOutAttachment();
@@ -602,7 +606,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         for (int i = 0; i < additionalDocsTable.getRowCount(); i++) {
             if (additionalDocsTable.getValueAt(i, 1).equals(true)) {
 
-                String destFileName = copyMEDBioToCaseFolder(additionalDocsTable.getValueAt(i, 3).toString());
+                String destFileName = copyAttachmentToCaseFolder(additionalDocsTable.getValueAt(i, 3).toString());
 
                 if (emailID > 0) {
                     EmailOutAttachment attach = new EmailOutAttachment();
@@ -623,7 +627,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         }
     }
 
-    private String copyMEDBioToCaseFolder(String fileName) {
+    private String copyAttachmentToCaseFolder(String fileName) {
         String docSourcePath = Global.templatePath + File.separator + Global.activeSection + fileName;
 
         String docDestPath = Global.activityPath + Global.activeSection
