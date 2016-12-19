@@ -71,6 +71,9 @@ public class HearingRootPanel extends javax.swing.JPanel {
             case "Parties":
                 partiesPanel1.loadHearingParties();
                 break;
+            case "Hearings":
+                hearingHearingsPanel1.loadInformation();
+                break;
             case "Notes":
                 notesPanel1.loadInformation();
                 break;
@@ -219,6 +222,9 @@ public class HearingRootPanel extends javax.swing.JPanel {
                     notesPanel1.disableUpdate(false);
                 }
                 break; 
+            case "Hearings":
+                hearingHearingsPanel1.removeHearing();
+                break;
         }
     }
 

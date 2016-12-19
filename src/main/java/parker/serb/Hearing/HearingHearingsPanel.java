@@ -12,6 +12,8 @@ import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
 import parker.serb.sql.Activity;
 import parker.serb.sql.CMDSHearing;
+import parker.serb.sql.HearingHearing;
+import parker.serb.sql.User;
 
 /**
  *
@@ -46,7 +48,7 @@ public class HearingHearingsPanel extends javax.swing.JPanel {
         String hearingType = hearingTable.getValueAt(hearingTable.getSelectedRow(), 2).toString();
         String hearingRoom = hearingTable.getValueAt(hearingTable.getSelectedRow(), 3).toString();
         
-        new CMDSRemoveHearingDialog(Global.root, true, id, hearingDate, hearingType, hearingRoom);
+        new HearingRemoveHearingDialog(Global.root, true, id, hearingDate, hearingType, hearingRoom);
         
         loadInformation();
     }
@@ -66,11 +68,11 @@ public class HearingHearingsPanel extends javax.swing.JPanel {
         DefaultTableModel model = (DefaultTableModel) hearingTable.getModel();
         model.setRowCount(0);
         
-         List hearing = CMDSHearing.loadHearingsByCaseNumber();
+         List hearing = HearingHearing.loadHearingsByCaseNumber();
         
         for (Object hearing1 : hearing) {
-            CMDSHearing act = (CMDSHearing) hearing1;
-            model.addRow(new Object[] {act.id, act.hearingDateTime, act.hearingType, act.room});
+            HearingHearing act = (HearingHearing) hearing1;
+            model.addRow(new Object[] {act.id, act.hearingDateTime, act.hearingType, act.room, User.getNameByID(act.aljID), act.comments});
         }
     }
 
@@ -91,15 +93,20 @@ public class HearingHearingsPanel extends javax.swing.JPanel {
 
             },
             new String [] {
-                "id", "Hearing Date", "Hearing Type", "Hearing Room", "ALJ"
+                "id", "Hearing Date", "Hearing Type", "Hearing Room", "ALJ", "Comments"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        hearingTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                hearingTableMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(hearingTable);
@@ -109,6 +116,7 @@ public class HearingHearingsPanel extends javax.swing.JPanel {
             hearingTable.getColumnModel().getColumn(2).setResizable(false);
             hearingTable.getColumnModel().getColumn(3).setResizable(false);
             hearingTable.getColumnModel().getColumn(4).setResizable(false);
+            hearingTable.getColumnModel().getColumn(5).setResizable(false);
         }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -122,6 +130,18 @@ public class HearingHearingsPanel extends javax.swing.JPanel {
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void hearingTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_hearingTableMouseClicked
+        if(evt.getClickCount() == 2) {
+            new HearingUpdateHearingDialog(Global.root, true,
+                hearingTable.getValueAt(hearingTable.getSelectedRow(), 0).toString(),
+                hearingTable.getValueAt(hearingTable.getSelectedRow(), 5).toString(),  
+                hearingTable.getValueAt(hearingTable.getSelectedRow(), 2).toString(),
+                hearingTable.getValueAt(hearingTable.getSelectedRow(), 1).toString()
+            );
+            loadInformation();
+        }
+    }//GEN-LAST:event_hearingTableMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

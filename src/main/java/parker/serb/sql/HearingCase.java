@@ -737,4 +737,32 @@ public class HearingCase {
         }
         return ulpCase;
     }
+    
+    public static String getALJemail() {
+        String email = "";
+        
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select emailAddress "
+                    + "from Users"
+                    + " INNER JOIN CMDSCase"
+                    + " ON CMDSCase.aljID = Users.id"
+                    + " where caseYear = ? and caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, Global.caseYear);
+            preparedStatement.setString(2, Global.caseNumber);
+
+            ResultSet caseNumberRS = preparedStatement.executeQuery();
+           
+            if(caseNumberRS.next()) {
+                email = caseNumberRS.getString("emailAddress");
+            }
+            stmt.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return email;
+    }
 }

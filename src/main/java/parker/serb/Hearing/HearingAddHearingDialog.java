@@ -343,6 +343,11 @@ public class HearingAddHearingDialog extends javax.swing.JDialog {
         jLabel8.setText("ALJ:");
 
         aljComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        aljComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                aljComboBoxActionPerformed(evt);
+            }
+        });
 
         jLabel7.setText("Comments:");
 
@@ -381,8 +386,8 @@ public class HearingAddHearingDialog extends javax.swing.JDialog {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(hourTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel4)
-                                .addGap(0, 0, 0)
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 4, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(minuteTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(amPMComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -437,10 +442,11 @@ public class HearingAddHearingDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-//        HearingHearing.addHearing(generateDate(),
-//                hearingTypeComboBox.getSelectedItem().toString(),
-//                hearingRoomComboBox.getSelectedItem().toString(),
-//                aljComboBox);
+        HearingHearing.addHearing(generateDate(),
+                hearingTypeComboBox.getSelectedItem().toString(),
+                hearingRoomComboBox.getSelectedItem().toString(),
+                aljComboBox.getSelectedItem().toString(),
+                jTextArea1.getText().trim());
         
         dispose();
     }//GEN-LAST:event_saveButtonActionPerformed
@@ -456,6 +462,10 @@ public class HearingAddHearingDialog extends javax.swing.JDialog {
     private void minuteTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minuteTextBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_minuteTextBoxActionPerformed
+
+    private void aljComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aljComboBoxActionPerformed
+        enableSaveButton();
+    }//GEN-LAST:event_aljComboBoxActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> aljComboBox;
