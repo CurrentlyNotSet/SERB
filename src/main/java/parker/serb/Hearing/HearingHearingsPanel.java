@@ -88,17 +88,14 @@ public class HearingHearingsPanel extends javax.swing.JPanel {
 
         hearingTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "id", "Hearing Date", "Hearing Type", "Hearing Room"
+                "id", "Hearing Date", "Hearing Type", "Hearing Room", "ALJ"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -111,6 +108,7 @@ public class HearingHearingsPanel extends javax.swing.JPanel {
             hearingTable.getColumnModel().getColumn(1).setResizable(false);
             hearingTable.getColumnModel().getColumn(2).setResizable(false);
             hearingTable.getColumnModel().getColumn(3).setResizable(false);
+            hearingTable.getColumnModel().getColumn(4).setResizable(false);
         }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);

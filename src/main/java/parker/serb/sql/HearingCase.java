@@ -91,36 +91,6 @@ public class HearingCase {
         return caseNumberList;
     }
     
-//    public static List loadULPCases() {
-//        
-//        List caseNumberList = new ArrayList<>();
-//            
-//        try {
-//            Statement stmt = Database.connectToDB().createStatement();
-//            
-//            String sql = "Select TOP 50 caseYear, caseType, caseMonth, caseNumber, employerIDNumber, barginingUnitNo from ULPCase Order By caseYear DESC, caseNumber DESC";
-//
-//            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-//            
-//            ResultSet caseNumberRS = preparedStatement.executeQuery();
-//            
-//            while(caseNumberRS.next()) {
-//                HearingCase ulpCase = new HearingCase();
-//                ulpCase.caseYear = caseNumberRS.getString("caseYear");
-//                ulpCase.caseType = caseNumberRS.getString("caseType");
-//                ulpCase.caseMonth = caseNumberRS.getString("caseMonth");
-//                ulpCase.caseNumber = caseNumberRS.getString("caseNumber");
-////                ulpCase.employerIDNumber = caseNumberRS.getString("employerIDNumber") == null ? "" : caseNumberRS.getString("employerIDNumber");
-////                ulpCase.barginingUnitNo = caseNumberRS.getString("barginingUnitNo") == null ? "" : caseNumberRS.getString("barginingUnitNo");
-//
-//                caseNumberList.add(ulpCase);
-//            }
-//        } catch (SQLException ex) {
-//            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        return caseNumberList;
-//    }
-    
     public static Timestamp getBoardActionPCDate() {
         
         Timestamp boardActionPCDate = null;
@@ -151,380 +121,89 @@ public class HearingCase {
         return boardActionPCDate;
     }
     
-    public static List<String> loadRelatedCases() {
-        
-        List<String> caseNumberList = new ArrayList<>();
-            
-        try {
-            Statement stmt = Database.connectToDB().createStatement();
-            
-            String sql = "Select caseYear, caseType, caseMonth, caseNumber from ULPCase  where fileDate between DateAdd(DD,-7,GETDATE()) and GETDATE() Order By caseYear DESC, caseNumber DESC";
-
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            
-            
-            ResultSet caseNumberRS = preparedStatement.executeQuery();
-            
-            while(caseNumberRS.next()) {
-                caseNumberList.add(caseNumberRS.getString("caseYear") + "-"
-                    + caseNumberRS.getString("caseType") + "-" 
-                    + caseNumberRS.getString("caseMonth") + "-"
-                    + caseNumberRS.getString("caseNumber"));
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return caseNumberList;
-    }
+//    public static List<String> loadRelatedCases() {
+//        
+//        List<String> caseNumberList = new ArrayList<>();
+//            
+//        try {
+//            Statement stmt = Database.connectToDB().createStatement();
+//            
+//            String sql = "Select caseYear, caseType, caseMonth, caseNumber from ULPCase  where fileDate between DateAdd(DD,-7,GETDATE()) and GETDATE() Order By caseYear DESC, caseNumber DESC";
+//
+//            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+//            
+//            
+//            ResultSet caseNumberRS = preparedStatement.executeQuery();
+//            
+//            while(caseNumberRS.next()) {
+//                caseNumberList.add(caseNumberRS.getString("caseYear") + "-"
+//                    + caseNumberRS.getString("caseType") + "-" 
+//                    + caseNumberRS.getString("caseMonth") + "-"
+//                    + caseNumberRS.getString("caseNumber"));
+//            }
+//        } catch (SQLException ex) {
+//            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return caseNumberList;
+//    }
     
-    public static String loadNote() {
-        String note = null;
-            
-        try {
-            Statement stmt = Database.connectToDB().createStatement();
+//    public static String loadNote() {
+//        String note = null;
+//            
+//        try {
+//            Statement stmt = Database.connectToDB().createStatement();
+//
+//            String sql = "Select Note"
+//                    + " from ULPCase"
+//                    + " where caseYear = ?"
+//                    + " and caseType = ?"
+//                    + " and caseMonth = ?"
+//                    + " and caseNumber = ?";
+//
+//            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+//            preparedStatement.setString(1, Global.caseYear);
+//            preparedStatement.setString(2, Global.caseType);
+//            preparedStatement.setString(3, Global.caseMonth);
+//            preparedStatement.setString(4, Global.caseNumber);
+//
+//            ResultSet caseNumberRS = preparedStatement.executeQuery();
+//            
+//            caseNumberRS.next();
+//            
+//            note = caseNumberRS.getString("note");
+//
+//        } catch (SQLException ex) {
+//            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return note;
+//    }
 
-            String sql = "Select Note"
-                    + " from ULPCase"
-                    + " where caseYear = ?"
-                    + " and caseType = ?"
-                    + " and caseMonth = ?"
-                    + " and caseNumber = ?";
-
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, Global.caseYear);
-            preparedStatement.setString(2, Global.caseType);
-            preparedStatement.setString(3, Global.caseMonth);
-            preparedStatement.setString(4, Global.caseNumber);
-
-            ResultSet caseNumberRS = preparedStatement.executeQuery();
-            
-            caseNumberRS.next();
-            
-            note = caseNumberRS.getString("note");
-
-        } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return note;
-    }
-
-    public static void updateNote(String note) {
-        try {
-            Statement stmt = Database.connectToDB().createStatement();
-
-            String sql = "Update ULPCase"
-                    + " set note = ?"
-                    + " where caseYear = ?"
-                    + " and caseType = ?"
-                    + " and caseMonth = ?"
-                    + " and caseNumber = ?";
-
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, note);
-            preparedStatement.setString(2, Global.caseYear);
-            preparedStatement.setString(3, Global.caseType);
-            preparedStatement.setString(4, Global.caseMonth);
-            preparedStatement.setString(5, Global.caseNumber);
-
-            preparedStatement.executeUpdate();
-            
-            Audit.addAuditEntry("Updated Note for " + Global.caseNumber);
-            Activity.addActivty("Updated Note", null);
-        } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    public static String loadInvestigationReveals() {
-        String investigationReveals = null;
-            
-        try {
-            Statement stmt = Database.connectToDB().createStatement();
-
-            String sql = "Select investigationReveals"
-                    + " from ULPCase"
-                    + " where caseYear = ?"
-                    + " and caseType = ?"
-                    + " and caseMonth = ?"
-                    + " and caseNumber = ?";
-
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, Global.caseYear);
-            preparedStatement.setString(2, Global.caseType);
-            preparedStatement.setString(3, Global.caseMonth);
-            preparedStatement.setString(4, Global.caseNumber);
-
-            ResultSet caseNumberRS = preparedStatement.executeQuery();
-            
-            caseNumberRS.next();
-            
-            investigationReveals = caseNumberRS.getString("investigationReveals");
-
-        } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return investigationReveals;
-    }
-
-    public static void updateInvestigationReveals(String note) {
-        try {
-            Statement stmt = Database.connectToDB().createStatement();
-
-            String sql = "Update ULPCase"
-                    + " set investigationReveals = ?"
-                    + " where caseYear = ?"
-                    + " and caseType = ?"
-                    + " and caseMonth = ?"
-                    + " and caseNumber = ?";
-
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, note);
-            preparedStatement.setString(2, Global.caseYear);
-            preparedStatement.setString(3, Global.caseType);
-            preparedStatement.setString(4, Global.caseMonth);
-            preparedStatement.setString(5, Global.caseNumber);
-
-            preparedStatement.executeUpdate();
-            
-            Audit.addAuditEntry("Updated Investigation Reveals for " + Global.caseNumber);
-            Activity.addActivty("Updated Investigation Reveals", null);
-        } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    public static String loadRecommendation() {
-        String recommendation = null;
-            
-        try {
-            Statement stmt = Database.connectToDB().createStatement();
-
-            String sql = "Select recommendation"
-                    + " from ULPCase"
-                    + " where caseYear = ?"
-                    + " and caseType = ?"
-                    + " and caseMonth = ?"
-                    + " and caseNumber = ?";
-
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, Global.caseYear);
-            preparedStatement.setString(2, Global.caseType);
-            preparedStatement.setString(3, Global.caseMonth);
-            preparedStatement.setString(4, Global.caseNumber);
-
-            ResultSet caseNumberRS = preparedStatement.executeQuery();
-            
-            caseNumberRS.next();
-            
-            recommendation = caseNumberRS.getString("recommendation");
-
-        } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return recommendation;
-    }
-
-    public static void updateRecommendation(String note, String orginal) {
-        try {
-            
-            if(!note.equals(orginal)) {
-                Statement stmt = Database.connectToDB().createStatement();
-
-                String sql = "Update ULPCase"
-                        + " set recommendation = ?"
-                        + " where caseYear = ?"
-                        + " and caseType = ?"
-                        + " and caseMonth = ?"
-                        + " and caseNumber = ?";
-
-                PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-                preparedStatement.setString(1, note);
-                preparedStatement.setString(2, Global.caseYear);
-                preparedStatement.setString(3, Global.caseType);
-                preparedStatement.setString(4, Global.caseMonth);
-                preparedStatement.setString(5, Global.caseNumber);
-
-                preparedStatement.executeUpdate();
-
-                Audit.addAuditEntry("Updated Recommendation for " + Global.caseNumber);
-                Activity.addActivty("Updated Recommendation", null);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    public static String loadStatement() {
-        String recommendation = null;
-            
-        try {
-            Statement stmt = Database.connectToDB().createStatement();
-
-            String sql = "Select statement"
-                    + " from ULPCase"
-                    + " where caseYear = ?"
-                    + " and caseType = ?"
-                    + " and caseMonth = ?"
-                    + " and caseNumber = ?";
-
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, Global.caseYear);
-            preparedStatement.setString(2, Global.caseType);
-            preparedStatement.setString(3, Global.caseMonth);
-            preparedStatement.setString(4, Global.caseNumber);
-
-            ResultSet caseNumberRS = preparedStatement.executeQuery();
-            
-            caseNumberRS.next();
-            
-            recommendation = caseNumberRS.getString("statement");
-
-        } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return recommendation;
-    }
-    
-    public static HearingCase loadStatus() {
-        HearingCase ulp = new HearingCase();
-            
-        try {
-            Statement stmt = Database.connectToDB().createStatement();
-
-            String sql = "Select"
-                    + " employerIDNumber,"
-                    + " deptInState,"
-                    + " barginingUnitNo,"
-                    + " EONumber,"
-                    + " allegation,"
-                    + " currentStatus,"
-                    + " priority,"
-                    + " assignedDate,"
-                    + " turnInDate,"
-                    + " reportDueDate,"
-                    + " fileDate,"
-                    + " probableCause,"
-                    + " appealDateReceived,"
-                    + " appealDateSent,"
-                    + " courtName,"
-                    + " courtCaseNumber,"
-                    + " SERBCaseNumber,"
-                    + " finalDispositionStatus,"
-                    + " investigatorID,"
-                    + " mediatorAssignedID,"
-                    + " aljID,"
-                    + " dismissalDate,"
-                    + " deferredDate"
-                    + " from ULPCase"
-                    + " where caseYear = ? "
-                    + " and caseType = ? "
-                    + " and caseMonth = ? "
-                    + " and caseNumber = ?";
-
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, Global.caseYear);
-            preparedStatement.setString(2, Global.caseType);
-            preparedStatement.setString(3, Global.caseMonth);
-            preparedStatement.setString(4, Global.caseNumber);
-
-            ResultSet caseNumberRS = preparedStatement.executeQuery();
-           
-            caseNumberRS.next();
-            
-//            ulp.employerIDNumber = caseNumberRS.getString("employerIDNumber");
-//            ulp.deptInState = caseNumberRS.getString("deptInState");
-//            ulp.barginingUnitNo = caseNumberRS.getString("barginingUnitNo");
-//            ulp.EONumber = caseNumberRS.getString("EONumber");
-//            ulp.allegation = caseNumberRS.getString("allegation");
-//            ulp.currentStatus = caseNumberRS.getString("currentStatus");
-//            ulp.priority = caseNumberRS.getBoolean("priority");
-//            ulp.assignedDate = caseNumberRS.getTimestamp("assignedDate");
-//            ulp.reportDueDate = caseNumberRS.getTimestamp("reportDueDate");
-//            ulp.dismissalDate = caseNumberRS.getTimestamp("dismissalDate");
-//            ulp.deferredDate = caseNumberRS.getTimestamp("deferredDate");
-//            ulp.appealDateReceived = caseNumberRS.getTimestamp("appealDateReceived");
-//            ulp.appealDateSent = caseNumberRS.getTimestamp("appealDateSent");
-//            ulp.courtName = caseNumberRS.getString("courtName");
-//            ulp.courtCaseNumber = caseNumberRS.getString("courtCaseNumber");
-//            ulp.SERBCaseNumber = caseNumberRS.getString("serbCaseNumber");
-//            ulp.finalDispositionStatus = caseNumberRS.getString("finalDispositionStatus");
-//            ulp.investigatorID = caseNumberRS.getInt("investigatorID");
-//            ulp.mediatorAssignedID = caseNumberRS.getInt("mediatorAssignedID");
-//            ulp.aljID = caseNumberRS.getInt("aljID");
-//            ulp.fileDate = caseNumberRS.getTimestamp("fileDate");
-//            ulp.probableCause = caseNumberRS.getBoolean("probableCause");
-            
-            
-            stmt.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return ulp;
-    }
-
-    public static void updateStatement(String note) {
-        try {
-            Statement stmt = Database.connectToDB().createStatement();
-
-            String sql = "Update ULPCase"
-                    + " set statement = ?"
-                    + " where caseYear = ?"
-                    + " and caseType = ?"
-                    + " and caseMonth = ?"
-                    + " and caseNumber = ?";
-
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, note);
-            preparedStatement.setString(2, Global.caseYear);
-            preparedStatement.setString(3, Global.caseType);
-            preparedStatement.setString(4, Global.caseMonth);
-            preparedStatement.setString(5, Global.caseNumber);
-
-            preparedStatement.executeUpdate();
-            
-            Audit.addAuditEntry("Updated Statement for " + Global.caseNumber);
-            Activity.addActivty("Updated Statement", null);
-        } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    public static boolean validateCaseNumber(String fullCaseNumber) {
-        String[] caseNumberParts = fullCaseNumber.split("-");
-        boolean valid = false;
-        
-        if(caseNumberParts.length != 4) {
-            return false;
-        }
-        
-        try {
-            Statement stmt = Database.connectToDB().createStatement();
-
-            String sql = "Select Count(*) As results"
-                    + " from ULPCase"
-                    + " where caseYear = ?"
-                    + " and caseType = ?"
-                    + " and caseMonth = ?"
-                    + " and caseNumber = ?";
-
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, caseNumberParts[0]);
-            preparedStatement.setString(2, caseNumberParts[1]);
-            preparedStatement.setString(3, caseNumberParts[2]);
-            preparedStatement.setString(4, caseNumberParts[3]);
-            
-            ResultSet validRS = preparedStatement.executeQuery();
-            
-            validRS.next();
-            
-            valid = validRS.getInt("results") > 0;
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return valid;
-    }
+//    public static void updateNote(String note) {
+//        try {
+//            Statement stmt = Database.connectToDB().createStatement();
+//
+//            String sql = "Update ULPCase"
+//                    + " set note = ?"
+//                    + " where caseYear = ?"
+//                    + " and caseType = ?"
+//                    + " and caseMonth = ?"
+//                    + " and caseNumber = ?";
+//
+//            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+//            preparedStatement.setString(1, note);
+//            preparedStatement.setString(2, Global.caseYear);
+//            preparedStatement.setString(3, Global.caseType);
+//            preparedStatement.setString(4, Global.caseMonth);
+//            preparedStatement.setString(5, Global.caseNumber);
+//
+//            preparedStatement.executeUpdate();
+//            
+//            Audit.addAuditEntry("Updated Note for " + Global.caseNumber);
+//            Activity.addActivty("Updated Note", null);
+//        } catch (SQLException ex) {
+//            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
 
     public static void createCase(String caseNumber) 
     {
@@ -559,10 +238,6 @@ public class HearingCase {
                         + "-"
                         + caseNumber.split("-")[3];
                         
-//                CaseNumber.updateNextCaseNumber(caseYear, caseType, String.valueOf(Integer.valueOf(caseNumber) + 1));
-//                Audit.addAuditEntry("Created Case: " + fullCaseNumber);
-//                Activity.addNewCaseActivty(fullCaseNumber, "Case was Received and Started");
-//                Activity.addNewCaseActivty(fullCaseNumber, "Case was Filed");
                 Global.root.getHearingHeaderPanel1().loadCases();
                 Global.root.getHearingHeaderPanel1().getjComboBox2().setSelectedItem(fullCaseNumber); 
             }
@@ -888,113 +563,113 @@ public class HearingCase {
 //        }
     }
     
-    public static String ULPDocketTo(String caseNumber) {
-        String[] parsedCase = caseNumber.trim().split("-");
-        String to = "";
-        
-        try {
-            Statement stmt = Database.connectToDB().createStatement();
-
-            String sql = "Select"
-                    + " investigatorID,"
-                    + " aljID"
-                    + " from ULPCase"
-                    + " where caseYear = ? "
-                    + " and caseType = ? "
-                    + " and caseMonth = ? "
-                    + " and caseNumber = ?";
-
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, parsedCase[0]);
-            preparedStatement.setString(2, parsedCase[1]);
-            preparedStatement.setString(3, parsedCase[2]);
-            preparedStatement.setString(4, parsedCase[3]);
-
-            ResultSet caseNumberRS = preparedStatement.executeQuery();
-           
-            if(caseNumberRS.next()) {
-                if(caseNumberRS.getInt("aljID") != 0) {
-                    to = User.getNameByID(caseNumberRS.getInt("aljID"));
-                } else if(caseNumberRS.getInt("investigatorID") != 0) {
-                    to = User.getNameByID(caseNumberRS.getInt("investigatorID"));
-                }
-            }
-            stmt.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return to;
-    }
+//    public static String ULPDocketTo(String caseNumber) {
+//        String[] parsedCase = caseNumber.trim().split("-");
+//        String to = "";
+//        
+//        try {
+//            Statement stmt = Database.connectToDB().createStatement();
+//
+//            String sql = "Select"
+//                    + " investigatorID,"
+//                    + " aljID"
+//                    + " from ULPCase"
+//                    + " where caseYear = ? "
+//                    + " and caseType = ? "
+//                    + " and caseMonth = ? "
+//                    + " and caseNumber = ?";
+//
+//            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+//            preparedStatement.setString(1, parsedCase[0]);
+//            preparedStatement.setString(2, parsedCase[1]);
+//            preparedStatement.setString(3, parsedCase[2]);
+//            preparedStatement.setString(4, parsedCase[3]);
+//
+//            ResultSet caseNumberRS = preparedStatement.executeQuery();
+//           
+//            if(caseNumberRS.next()) {
+//                if(caseNumberRS.getInt("aljID") != 0) {
+//                    to = User.getNameByID(caseNumberRS.getInt("aljID"));
+//                } else if(caseNumberRS.getInt("investigatorID") != 0) {
+//                    to = User.getNameByID(caseNumberRS.getInt("investigatorID"));
+//                }
+//            }
+//            stmt.close();
+//        } catch (SQLException ex) {
+//            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return to;
+//    }
     
-    public static String ULPDocketNotification(String caseNumber) {
-        String[] parsedCase = caseNumber.trim().split("-");
-        String to = "";
-        
-        try {
-            Statement stmt = Database.connectToDB().createStatement();
-
-            String sql = "Select"
-                    + " mediatorAssignedID"
-                    + " from ULPCase"
-                    + " where caseYear = ? "
-                    + " and caseType = ? "
-                    + " and caseMonth = ? "
-                    + " and caseNumber = ?";
-
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, parsedCase[0]);
-            preparedStatement.setString(2, parsedCase[1]);
-            preparedStatement.setString(3, parsedCase[2]);
-            preparedStatement.setString(4, parsedCase[3]);
-
-            ResultSet caseNumberRS = preparedStatement.executeQuery();
-           
-            if(caseNumberRS.next()) {
-                if(caseNumberRS.getInt("mediatorAssignedID") != 0) {
-                    DocketNotifications.addNotification(caseNumber, "ULP", caseNumberRS.getInt("mediatorAssignedID"));
-                } 
-            }
-            stmt.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return to;
-    }
+//    public static String ULPDocketNotification(String caseNumber) {
+//        String[] parsedCase = caseNumber.trim().split("-");
+//        String to = "";
+//        
+//        try {
+//            Statement stmt = Database.connectToDB().createStatement();
+//
+//            String sql = "Select"
+//                    + " mediatorAssignedID"
+//                    + " from ULPCase"
+//                    + " where caseYear = ? "
+//                    + " and caseType = ? "
+//                    + " and caseMonth = ? "
+//                    + " and caseNumber = ?";
+//
+//            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+//            preparedStatement.setString(1, parsedCase[0]);
+//            preparedStatement.setString(2, parsedCase[1]);
+//            preparedStatement.setString(3, parsedCase[2]);
+//            preparedStatement.setString(4, parsedCase[3]);
+//
+//            ResultSet caseNumberRS = preparedStatement.executeQuery();
+//           
+//            if(caseNumberRS.next()) {
+//                if(caseNumberRS.getInt("mediatorAssignedID") != 0) {
+//                    DocketNotifications.addNotification(caseNumber, "ULP", caseNumberRS.getInt("mediatorAssignedID"));
+//                } 
+//            }
+//            stmt.close();
+//        } catch (SQLException ex) {
+//            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return to;
+//    }
     
-    public static boolean checkIfFristCaseOfMonth(String year, String type, String month) {
-        boolean firstCase = false;
-        
-        try {
-            Statement stmt = Database.connectToDB().createStatement();
-
-            String sql = "Select"
-                    + " COUNT(*) AS CasesThisMonth"
-                    + " from ULPCase"
-                    + " where caseYear = ? "
-                    + " and caseType = ? "
-                    + " and caseMonth = ?";
-
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, year);
-            preparedStatement.setString(2, type);
-            preparedStatement.setString(3, month);
-
-            ResultSet caseNumberRS = preparedStatement.executeQuery();
-           
-            if(caseNumberRS.next()) {
-                 if(caseNumberRS.getInt("CasesThisMonth") > 0) {
-                     firstCase = false;
-                 } else {
-                     firstCase = true;
-                 }
-            }
-            stmt.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return firstCase;
-    }
+//    public static boolean checkIfFristCaseOfMonth(String year, String type, String month) {
+//        boolean firstCase = false;
+//        
+//        try {
+//            Statement stmt = Database.connectToDB().createStatement();
+//
+//            String sql = "Select"
+//                    + " COUNT(*) AS CasesThisMonth"
+//                    + " from ULPCase"
+//                    + " where caseYear = ? "
+//                    + " and caseType = ? "
+//                    + " and caseMonth = ?";
+//
+//            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+//            preparedStatement.setString(1, year);
+//            preparedStatement.setString(2, type);
+//            preparedStatement.setString(3, month);
+//
+//            ResultSet caseNumberRS = preparedStatement.executeQuery();
+//           
+//            if(caseNumberRS.next()) {
+//                 if(caseNumberRS.getInt("CasesThisMonth") > 0) {
+//                     firstCase = false;
+//                 } else {
+//                     firstCase = true;
+//                 }
+//            }
+//            stmt.close();
+//        } catch (SQLException ex) {
+//            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        
+//        return firstCase;
+//    }
     
     public static HearingCase loadULPCaseDetails(String caseYear,
             String caseType,

@@ -86,18 +86,14 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
 //                new HearingCaseNotFound((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
                 caseNumberComboBox.setSelectedItem("");
             } else {
-//                filedDateTextBox.setText(rep.fileDate != null ? Global.mmddyyyy.format(new Date(rep.fileDate.getTime())) : "");
-//                closedDateTextBox.setText(rep.courtClosedDate != null ? Global.mmddyyyy.format(new Date(rep.courtClosedDate.getTime())) : "");
-//                currentStatusTextBox.setText(rep.status1 != null ? rep.status1 : "");
-//                caseTypeTextBox.setText(rep.caseType != null ? rep.caseType : "");
-//                bargainingUnitTextBox.setText(rep.bargainingUnitNumber != null ? rep.bargainingUnitNumber : "");
-//
-
+                aljTextBox.setText("");
+//                pcDateTextBox.setText(hearings.pcDate != null ? Global.mmddyyyy.format(new Date(hearings.pcDate.getTime())) : "");
+                statusTextBox.setText("");
+                finalResultTextBox.setText("");
+                mediatorTextBox.setText("");
 
                 List caseParties = CaseParty.loadPartiesByCase();
-                
-                
-//
+
                 for(Object caseParty: caseParties) {
                     CaseParty partyInformation = (CaseParty) caseParty;
                     
