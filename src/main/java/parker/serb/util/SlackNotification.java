@@ -44,7 +44,7 @@ public class SlackNotification {
                     .icon(Global.slackIcon) // Ref - http://www.emoji-cheat-sheet.com/
                     .sendToChannel(Global.slackChannel)
                     .displayName(Global.slackUser)
-                    .push(new SlackMessage(message));
+                    .push(new SlackMessage(Global.activeUser.username + ": " + message));
         } catch (IOException ex) {
             Logger.getLogger(SlackNotification.class.getName()).log(Level.SEVERE, null, ex);
         }

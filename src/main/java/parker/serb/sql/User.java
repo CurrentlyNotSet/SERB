@@ -633,7 +633,7 @@ public class User {
         try {
             Statement stmt = Database.connectToDB().createStatement();
             
-            String sql = "Select *  from Users where ID = ? and active = 1";
+            String sql = "Select *  from Users where ID = ?";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setInt(1, userID);

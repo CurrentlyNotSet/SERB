@@ -12,12 +12,15 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.table.DefaultTableModel;
 import parker.serb.CMDS.CMDSGroupNumberDialog;
 import parker.serb.Global;
 import parker.serb.sql.CMDSCase;
 import parker.serb.sql.CMDSResult;
 import parker.serb.sql.CMDSStatusType;
 import parker.serb.sql.HearingCase;
+import parker.serb.sql.HearingHearing;
+import parker.serb.sql.HearingsMediation;
 import parker.serb.sql.ReClassCode;
 import parker.serb.sql.User;
 import parker.serb.util.ClearDateDialog;
@@ -35,10 +38,20 @@ public class HearingInformationPanel extends javax.swing.JPanel {
      */
     public HearingInformationPanel() {
         initComponents();
+        setTableColumnWidth();
         jButton1.setVisible(false);
     }
     
+    private void setTableColumnWidth() {
+        mediationTable.getColumnModel().getColumn(0).setPreferredWidth(0);
+        mediationTable.getColumnModel().getColumn(0).setMinWidth(0);
+        mediationTable.getColumnModel().getColumn(0).setMaxWidth(0);
+    }
+    
     public void clearAll() {
+        DefaultTableModel model = (DefaultTableModel) mediationTable.getModel();
+        model.setRowCount(0);
+        
         caseStatusNotesTextBox.setText("");
         
         statusComboBox.setSelectedItem("Open");
@@ -108,7 +121,7 @@ public class HearingInformationPanel extends javax.swing.JPanel {
         caseStatusNotesTextBox.setEnabled(true);
         caseStatusNotesTextBox.setBackground(Color.white);
         
-        
+        jButton1.setVisible(true);
         
 //        aljComboBox.setEnabled(true);
 //        openDateTextBox.setEnabled(true);
@@ -152,6 +165,8 @@ public class HearingInformationPanel extends javax.swing.JPanel {
         caseStatusNotesTextBox.setEnabled(false);
         caseStatusNotesTextBox.setBackground(new Color(238,238,238));
         
+        jButton1.setVisible(false);
+        
         
 //        aljComboBox.setEnabled(false);
 //        openDateTextBox.setEnabled(false);
@@ -189,7 +204,6 @@ public class HearingInformationPanel extends javax.swing.JPanel {
         newInformation.proposedRecDueDate = proposedRecDueDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(proposedRecDueDateTextBox.getText()));
         newInformation.exceptionFilingDate = exceptionsDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(exceptionsDateTextBox.getText()));
                         
-
         newInformation.caseStatusNotes = caseStatusNotesTextBox.getText().equals("") ? null : caseStatusNotesTextBox.getText();
         
 //        newInformation.aljID = (aljComboBox.getSelectedItem() == null || aljComboBox.getSelectedItem().equals("")) ? 0 : (aljComboBox.getSelectedItem().toString().equals("") ? 0 : User.getUserID(aljComboBox.getSelectedItem().toString().trim()));
@@ -245,6 +259,8 @@ public class HearingInformationPanel extends javax.swing.JPanel {
 //        loadCaseStatusComboBox();
 //        loadReclassComboBox();
 //        loadResultComboBox();
+
+        loadMediationTable();
         
         orginalInformation = HearingCase.loadHearingCaseInformation();
         
@@ -311,6 +327,25 @@ public class HearingInformationPanel extends javax.swing.JPanel {
 //        postHearingBriefsDueTextBox.setText(orginalInformation.postHearingBriefsDue != null ? Global.mmddyyyy.format(new Date(orginalInformation.postHearingBriefsDue.getTime())) : "");
 
     }
+    
+    private void loadMediationTable() {
+        DefaultTableModel model = (DefaultTableModel) mediationTable.getModel();
+        model.setRowCount(0);
+        
+        List<HearingsMediation> items = HearingsMediation.loadAllMediationsByCaseNumber();
+        
+        for (HearingsMediation item : items) {
+            model.addRow(new Object[] {
+                item.id,
+                item.pcPreD == null ? "" : item.pcPreD, 
+                User.getNameByID(item.mediatorID),
+                item.dateAssigned == null ? "" : Global.mmddyyyy.format(new Date(item.dateAssigned.getTime())),
+                item.mediationDate == null ? "" : Global.mmddyyyy.format(new Date(item.mediationDate.getTime())),
+                item.outcome == null ? "" : item.outcome
+            });
+        }
+    }
+    
     
     private void clearDate(WebDateField dateField, MouseEvent evt) {
         if(evt.getButton() == MouseEvent.BUTTON3 && dateField.isEnabled()) {
@@ -384,7 +419,7 @@ public class HearingInformationPanel extends javax.swing.JPanel {
         jPanel4 = new javax.swing.JPanel();
         jLabel21 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        relatedCaseTable = new javax.swing.JTable();
+        mediationTable = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
 
         jLabel1.setText("Open/Closed:");
@@ -815,19 +850,19 @@ public class HearingInformationPanel extends javax.swing.JPanel {
         jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel21.setText("Mediation Information");
 
-        relatedCaseTable.setModel(new javax.swing.table.DefaultTableModel(
+        mediationTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "PC / Pre-D", "Mediator", "Date Assigned", "Mediation Date", "Outcome"
+                "id", "PC / Pre-D", "Mediator", "Date Assigned", "Mediation Date", "Outcome"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -838,8 +873,16 @@ public class HearingInformationPanel extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        relatedCaseTable.setRequestFocusEnabled(false);
-        jScrollPane2.setViewportView(relatedCaseTable);
+        mediationTable.setRequestFocusEnabled(false);
+        mediationTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                mediationTableMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(mediationTable);
+        if (mediationTable.getColumnModel().getColumnCount() > 0) {
+            mediationTable.getColumnModel().getColumn(0).setResizable(false);
+        }
 
         jButton1.setText("+");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -901,7 +944,7 @@ public class HearingInformationPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_boardActionPreDDateTextBoxMouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+//        new HearingAddMeidation
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void directiveIssuedDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_directiveIssuedDateTextBoxMouseClicked
@@ -939,6 +982,29 @@ public class HearingInformationPanel extends javax.swing.JPanel {
     private void closeDateTextBox9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closeDateTextBox9MouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_closeDateTextBox9MouseClicked
+
+    private void mediationTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mediationTableMouseClicked
+        if(evt.getClickCount() == 2 && evt.getButton() == MouseEvent.BUTTON1) {
+            new HearingUpdateMediationDialog(Global.root,
+                true,
+                mediationTable.getValueAt(mediationTable.getSelectedRow(), 0).toString(),
+                mediationTable.getValueAt(mediationTable.getSelectedRow(), 1).toString(),
+                mediationTable.getValueAt(mediationTable.getSelectedRow(), 2).toString(),
+                mediationTable.getValueAt(mediationTable.getSelectedRow(), 3).toString(),
+                mediationTable.getValueAt(mediationTable.getSelectedRow(), 4).toString(),
+                mediationTable.getValueAt(mediationTable.getSelectedRow(), 5).toString()
+            );
+            mediationTable.clearSelection();
+            loadMediationTable();
+        } else if(evt.getButton() == MouseEvent.BUTTON3) {
+            new HearingRemoveMediationDialog(Global.root,
+                    true,
+                    mediationTable.getValueAt(mediationTable.getSelectedRow(), 0).toString(),
+                    mediationTable.getValueAt(mediationTable.getSelectedRow(), 4).toString());
+            mediationTable.clearSelection();
+            loadMediationTable();
+        } 
+    }//GEN-LAST:event_mediationTableMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -986,6 +1052,7 @@ public class HearingInformationPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable mediationTable;
     private javax.swing.JComboBox<String> openClosedComboBox;
     private javax.swing.JTextField pbrBoxTextBox1;
     private javax.swing.JTextField pbrBoxTextBox2;
@@ -995,7 +1062,6 @@ public class HearingInformationPanel extends javax.swing.JPanel {
     private javax.swing.JTextField pbrBoxTextBox6;
     private com.alee.extended.date.WebDateField preHearingDateTextBox;
     private com.alee.extended.date.WebDateField proposedRecDueDateTextBox;
-    private javax.swing.JTable relatedCaseTable;
     private javax.swing.JComboBox<String> statusComboBox;
     // End of variables declaration//GEN-END:variables
 }
