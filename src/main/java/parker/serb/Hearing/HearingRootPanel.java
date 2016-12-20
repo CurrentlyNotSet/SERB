@@ -66,7 +66,7 @@ public class HearingRootPanel extends javax.swing.JPanel {
                 activityPanel1.loadAllHearingActivity();
                 break;
             case "Case Information":
-//                hearingInformationPanel1.loadInformation();
+                hearingInformationPanel1.loadInformation();
                 break;
             case "Parties":
                 partiesPanel1.loadHearingParties();
