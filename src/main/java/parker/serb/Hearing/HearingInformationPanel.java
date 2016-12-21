@@ -950,27 +950,27 @@ public class HearingInformationPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void directiveIssuedDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_directiveIssuedDateTextBoxMouseClicked
-        clearDate(boardActionPreDDateTextBox, evt);
+        clearDate(directiveIssuedDateTextBox, evt);
     }//GEN-LAST:event_directiveIssuedDateTextBoxMouseClicked
 
     private void complaintDueDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_complaintDueDateTextBoxMouseClicked
-        // TODO add your handling code here:
+        clearDate(complaintDueDateTextBox, evt);
     }//GEN-LAST:event_complaintDueDateTextBoxMouseClicked
 
     private void draftComplaintToHearingTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_draftComplaintToHearingTextBoxMouseClicked
-        // TODO add your handling code here:
+        clearDate(draftComplaintToHearingTextBox, evt);
     }//GEN-LAST:event_draftComplaintToHearingTextBoxMouseClicked
 
     private void preHearingDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_preHearingDateTextBoxMouseClicked
-        // TODO add your handling code here:
+        clearDate(preHearingDateTextBox, evt);
     }//GEN-LAST:event_preHearingDateTextBoxMouseClicked
 
     private void proposedRecDueDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_proposedRecDueDateTextBoxMouseClicked
-        // TODO add your handling code here:
+        clearDate(proposedRecDueDateTextBox, evt);
     }//GEN-LAST:event_proposedRecDueDateTextBoxMouseClicked
 
     private void exceptionsDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exceptionsDateTextBoxMouseClicked
-        // TODO add your handling code here:
+        clearDate(exceptionsDateTextBox, evt);
     }//GEN-LAST:event_exceptionsDateTextBoxMouseClicked
 
     private void closeDateTextBox7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closeDateTextBox7MouseClicked
