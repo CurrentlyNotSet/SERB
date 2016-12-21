@@ -64,6 +64,12 @@ public class GenerateReport {
                 case "String":
                     new RequestedInfoTwoDateStringPanel(Global.root, true, report, "exact");
                     break;
+                case "ActivityType, Year":
+                    new RequestedInfoComboBoxStringPanel(Global.root, true, report, "ActivityType, Year");
+                    break;
+                case "ALJ, Year":
+                    new RequestedInfoComboBoxStringPanel(Global.root, true, report, "ALJ, Year");
+                    break;
                 default:
                     HashMap hash = new HashMap();
                     generateReport(report, hash);
@@ -116,6 +122,13 @@ public class GenerateReport {
         generateReport(report, hash);
     }
     
+    public static void generateIDStringReport(String ID, String exact, SMDSDocuments report) {
+        HashMap hash = new HashMap();
+        hash.put("ID", ID);
+        hash.put("string", exact);
+        generateReport(report, hash);
+    }
+    
     public static void generateCasenumberReport(String CaseNumber, SMDSDocuments report) {
         NumberFormatService num = NumberFormatService.parseFullCaseNumberNoNGlobal(CaseNumber);
         
@@ -154,7 +167,7 @@ public class GenerateReport {
                 JasperPrint jprint = (JasperPrint) JasperFillManager.fillReport(jasperFileName, hash, conn);
                 try {
                     JasperExportManager.exportReportToPdfFile(jprint, pdfFileName);
-                } catch(Exception e){
+                } catch(JRException e){
                     WebOptionPane.showMessageDialog(Global.root, "<html><center>An old version of this report is currently open elsewhere. "
                             + "<br>Please ensure it is closed before continuing.</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
                 }
