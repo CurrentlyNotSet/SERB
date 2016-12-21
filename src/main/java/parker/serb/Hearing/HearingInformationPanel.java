@@ -54,7 +54,7 @@ public class HearingInformationPanel extends javax.swing.JPanel {
         
         caseStatusNotesTextBox.setText("");
         
-        statusComboBox.setSelectedItem("Open");
+        aljComboBox.setSelectedItem("Open");
         caseTypeTextBox.setText("");
         boardActionPCDateTextBox.setText("");
         boardActionPreDDateTextBox.setText("");
@@ -67,33 +67,19 @@ public class HearingInformationPanel extends javax.swing.JPanel {
         exceptionsDateTextBox.setText("");
     }
     
-//    public void loadALJComboBox() {
-//        aljComboBox.removeAllItems();
-//        
-//        aljComboBox.addItem("");
-//        
-//        List userList = User.loadULPComboBox();
-//        
-//        for (Object user : userList) {
-//            aljComboBox.addItem((String) user);
-//        }
-//        
-//        aljComboBox.setSelectedItem("");
-//    }
-    
-//    public void loadMediatorComboBox() {
-//        mediatorComboBox.removeAllItems();
-//        
-//        mediatorComboBox.addItem("");
-//        
-//        List userList = User.loadULPComboBox();
-//        
-//        for (Object user : userList) {
-//            mediatorComboBox.addItem((String) user);
-//        }
-//        
-//        mediatorComboBox.setSelectedItem("");
-//    }
+    public void loadALJComboBox() {
+        aljComboBox.removeAllItems();
+        
+        aljComboBox.addItem("");
+        
+        List userList = User.loadULPComboBox();
+        
+        for (Object user : userList) {
+            aljComboBox.addItem((String) user);
+        }
+        
+        aljComboBox.setSelectedItem("");
+    }
     
     public void enableUpdate() {
         Global.root.getjButton2().setText("Save");
@@ -206,54 +192,11 @@ public class HearingInformationPanel extends javax.swing.JPanel {
                         
         newInformation.caseStatusNotes = caseStatusNotesTextBox.getText().equals("") ? null : caseStatusNotesTextBox.getText();
         
-//        newInformation.aljID = (aljComboBox.getSelectedItem() == null || aljComboBox.getSelectedItem().equals("")) ? 0 : (aljComboBox.getSelectedItem().toString().equals("") ? 0 : User.getUserID(aljComboBox.getSelectedItem().toString().trim()));
-//        newInformation.openDate = openDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(openDateTextBox.getText()));
-//        newInformation.closeDate = closeDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(closeDateTextBox.getText()));
-//        newInformation.groupNumber = groupNumberTextBox.getText().trim().equals("") ? null : groupNumberTextBox.getText().trim();
-//        newInformation.mediatorID = (mediatorComboBox.getSelectedItem() == null || mediatorComboBox.getSelectedItem().equals("")) ? 0 : (mediatorComboBox.getSelectedItem().toString().equals("") ? 0 : User.getUserID(mediatorComboBox.getSelectedItem().toString().trim()));
-//        
-//        newInformation.PBRBox = pbrBoxTextBox.getText().trim().equals("") ? null : pbrBoxTextBox.getText().trim();
-//        newInformation.groupType = groupTypeComboBox.getSelectedItem().toString().trim().equals("") ? null : groupTypeComboBox.getSelectedItem().toString();
-//        newInformation.caseStatus = statusComboBox.getSelectedItem().toString().trim().equals("") ? null : statusComboBox.getSelectedItem().toString();
-//        newInformation.reclassCode = reclassCodeComboBox.getSelectedItem().toString().trim().equals("") ? null : reclassCodeComboBox.getSelectedItem().toString();
-//        newInformation.result = resultComboBox.getSelectedItem().toString().trim().equals("") ? null : resultComboBox.getSelectedItem().toString();
-        
-//        newInformation.mailedRR = rrMailedTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(rrMailedTextBox.getText()));
-//        newInformation.mailedBO = boMailedTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(boMailedTextBox.getText()));
-//        newInformation.mailedPO1 = po1MailedTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(po1MailedTextBox.getText()));
-//        newInformation.mailedPO2 = po2MailedTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(po2MailedTextBox.getText()));
-//        newInformation.mailedPO3 = po3MailedTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(po3MailedTextBox.getText()));
-//        newInformation.mailedPO4 = po4MailedTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(po4MailedTextBox.getText()));
-//         
-//        newInformation.remailedRR = rrRemailedTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(rrRemailedTextBox.getText()));
-//        newInformation.remailedBO = boRemailedTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(boRemailedTextBox.getText()));
-//        newInformation.remailedPO1 = po1RemailedTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(po1RemailedTextBox.getText()));
-//        newInformation.remailedPO2 = po2RemailedTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(po2RemailedTextBox.getText()));
-//        newInformation.remailedPO3 = po3RemailedTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(po3RemailedTextBox.getText()));
-//        newInformation.remailedPO4 = po4RemailedTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(po4RemailedTextBox.getText()));
-//        
-//        newInformation.returnReceiptRR = rrReturnReceiptTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(rrReturnReceiptTextBox.getText()));
-//        newInformation.returnReceiptBO = boReturnReceiptTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(boReturnReceiptTextBox.getText()));
-//        newInformation.returnReceiptPO1 = po1ReturnReceiptTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(po1ReturnReceiptTextBox.getText()));
-//        newInformation.returnReceiptPO2 = po2ReturnReceiptTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(po2ReturnReceiptTextBox.getText()));
-//        newInformation.returnReceiptPO3 = po3ReturnReceiptTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(po3ReturnReceiptTextBox.getText()));
-//        newInformation.returnReceiptPO4 = po4ReturnReceiptTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(po4ReturnReceiptTextBox.getText()));
-//        
-//        newInformation.pullDateRR = rrPullDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(rrPullDateTextBox.getText()));
-//        newInformation.pullDateBO = boPullDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(boPullDateTextBox.getText()));
-//        newInformation.pullDatePO1 = po1PullDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(po1PullDateTextBox.getText()));
-//        newInformation.pullDatePO2 = po2PullDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(po2PullDateTextBox.getText()));
-//        newInformation.pullDatePO3 = po3PullDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(po3PullDateTextBox.getText()));
-//        newInformation.pullDatePO4 = po4PullDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(po4PullDateTextBox.getText())); 
-        
-//        newInformation.hearingCompletedDate = hearingCompletedDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(hearingCompletedDateTextBox.getText()));
-//        newInformation.postHearingBriefsDue = postHearingBriefsDueTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(postHearingBriefsDueTextBox.getText()));
-        
         HearingCase.updateHearingCaseInformation(newInformation, orginalInformation);
     }
     
     public void loadInformation() {
-//        loadALJComboBox();
+        loadALJComboBox();
 //        loadMediatorComboBox();
 //        loadGroupTypeComboBox();
 //        loadCaseStatusComboBox();
@@ -394,8 +337,7 @@ public class HearingInformationPanel extends javax.swing.JPanel {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        groupTypeComboBox = new javax.swing.JComboBox<>();
-        statusComboBox = new javax.swing.JComboBox<>();
+        aljComboBox = new javax.swing.JComboBox<>();
         jLabel11 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
@@ -404,15 +346,16 @@ public class HearingInformationPanel extends javax.swing.JPanel {
         jLabel18 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
-        pbrBoxTextBox1 = new javax.swing.JTextField();
-        pbrBoxTextBox2 = new javax.swing.JTextField();
-        pbrBoxTextBox3 = new javax.swing.JTextField();
-        pbrBoxTextBox4 = new javax.swing.JTextField();
-        pbrBoxTextBox5 = new javax.swing.JTextField();
         pbrBoxTextBox6 = new javax.swing.JTextField();
-        closeDateTextBox7 = new com.alee.extended.date.WebDateField();
+        boardActionDateTextBox = new com.alee.extended.date.WebDateField();
         closeDateTextBox8 = new com.alee.extended.date.WebDateField();
         closeDateTextBox9 = new com.alee.extended.date.WebDateField();
+        closeDateTextBox10 = new com.alee.extended.date.WebDateField();
+        closeDateTextBox11 = new com.alee.extended.date.WebDateField();
+        closeDateTextBox12 = new com.alee.extended.date.WebDateField();
+        closeDateTextBox13 = new com.alee.extended.date.WebDateField();
+        aljComboBox1 = new javax.swing.JComboBox<>();
+        otherTextBox = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         caseStatusNotesTextBox = new javax.swing.JTextArea();
@@ -639,9 +582,7 @@ public class HearingInformationPanel extends javax.swing.JPanel {
 
         jLabel9.setText("ALJ Assigned:");
 
-        groupTypeComboBox.setEnabled(false);
-
-        statusComboBox.setEnabled(false);
+        aljComboBox.setEnabled(false);
 
         jLabel11.setText("Complaint Issued Date:");
 
@@ -659,39 +600,19 @@ public class HearingInformationPanel extends javax.swing.JPanel {
 
         jLabel20.setText("Companion Cases:");
 
-        pbrBoxTextBox1.setBackground(new java.awt.Color(238, 238, 238));
-        pbrBoxTextBox1.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        pbrBoxTextBox1.setEnabled(false);
-
-        pbrBoxTextBox2.setBackground(new java.awt.Color(238, 238, 238));
-        pbrBoxTextBox2.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        pbrBoxTextBox2.setEnabled(false);
-
-        pbrBoxTextBox3.setBackground(new java.awt.Color(238, 238, 238));
-        pbrBoxTextBox3.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        pbrBoxTextBox3.setEnabled(false);
-
-        pbrBoxTextBox4.setBackground(new java.awt.Color(238, 238, 238));
-        pbrBoxTextBox4.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        pbrBoxTextBox4.setEnabled(false);
-
-        pbrBoxTextBox5.setBackground(new java.awt.Color(238, 238, 238));
-        pbrBoxTextBox5.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        pbrBoxTextBox5.setEnabled(false);
-
         pbrBoxTextBox6.setBackground(new java.awt.Color(238, 238, 238));
         pbrBoxTextBox6.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         pbrBoxTextBox6.setEnabled(false);
 
-        closeDateTextBox7.setEditable(false);
-        closeDateTextBox7.setBackground(new java.awt.Color(238, 238, 238));
-        closeDateTextBox7.setCaretColor(new java.awt.Color(0, 0, 0));
-        closeDateTextBox7.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        closeDateTextBox7.setEnabled(false);
+        boardActionDateTextBox.setEditable(false);
+        boardActionDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        boardActionDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+        boardActionDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        boardActionDateTextBox.setEnabled(false);
         boardActionPreDDateTextBox.setDateFormat(Global.mmddyyyy);
-        closeDateTextBox7.addMouseListener(new java.awt.event.MouseAdapter() {
+        boardActionDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                closeDateTextBox7MouseClicked(evt);
+                boardActionDateTextBoxMouseClicked(evt);
             }
         });
 
@@ -719,6 +640,60 @@ public class HearingInformationPanel extends javax.swing.JPanel {
             }
         });
 
+        closeDateTextBox10.setEditable(false);
+        closeDateTextBox10.setBackground(new java.awt.Color(238, 238, 238));
+        closeDateTextBox10.setCaretColor(new java.awt.Color(0, 0, 0));
+        closeDateTextBox10.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        closeDateTextBox10.setEnabled(false);
+        boardActionPreDDateTextBox.setDateFormat(Global.mmddyyyy);
+        closeDateTextBox10.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                closeDateTextBox10MouseClicked(evt);
+            }
+        });
+
+        closeDateTextBox11.setEditable(false);
+        closeDateTextBox11.setBackground(new java.awt.Color(238, 238, 238));
+        closeDateTextBox11.setCaretColor(new java.awt.Color(0, 0, 0));
+        closeDateTextBox11.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        closeDateTextBox11.setEnabled(false);
+        boardActionPreDDateTextBox.setDateFormat(Global.mmddyyyy);
+        closeDateTextBox11.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                closeDateTextBox11MouseClicked(evt);
+            }
+        });
+
+        closeDateTextBox12.setEditable(false);
+        closeDateTextBox12.setBackground(new java.awt.Color(238, 238, 238));
+        closeDateTextBox12.setCaretColor(new java.awt.Color(0, 0, 0));
+        closeDateTextBox12.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        closeDateTextBox12.setEnabled(false);
+        boardActionPreDDateTextBox.setDateFormat(Global.mmddyyyy);
+        closeDateTextBox12.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                closeDateTextBox12MouseClicked(evt);
+            }
+        });
+
+        closeDateTextBox13.setEditable(false);
+        closeDateTextBox13.setBackground(new java.awt.Color(238, 238, 238));
+        closeDateTextBox13.setCaretColor(new java.awt.Color(0, 0, 0));
+        closeDateTextBox13.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        closeDateTextBox13.setEnabled(false);
+        boardActionPreDDateTextBox.setDateFormat(Global.mmddyyyy);
+        closeDateTextBox13.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                closeDateTextBox13MouseClicked(evt);
+            }
+        });
+
+        aljComboBox1.setEnabled(false);
+
+        otherTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        otherTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        otherTextBox.setEnabled(false);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -738,17 +713,17 @@ public class HearingInformationPanel extends javax.swing.JPanel {
                     .addComponent(jLabel10))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pbrBoxTextBox1)
-                    .addComponent(pbrBoxTextBox2, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(pbrBoxTextBox3, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(pbrBoxTextBox4, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(pbrBoxTextBox5, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(pbrBoxTextBox6, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(closeDateTextBox7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(groupTypeComboBox, 0, 292, Short.MAX_VALUE)
-                    .addComponent(statusComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(boardActionDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(aljComboBox, 0, 292, Short.MAX_VALUE)
                     .addComponent(closeDateTextBox8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(closeDateTextBox9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(closeDateTextBox9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(closeDateTextBox10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(closeDateTextBox11, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(closeDateTextBox12, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(closeDateTextBox13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(aljComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(otherTextBox, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -757,14 +732,14 @@ public class HearingInformationPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(closeDateTextBox7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(boardActionDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(otherTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(groupTypeComboBox)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(statusComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(aljComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(4, 4, 4)
                         .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -779,23 +754,23 @@ public class HearingInformationPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel12)
-                    .addComponent(pbrBoxTextBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(closeDateTextBox11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel16)
-                    .addComponent(pbrBoxTextBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(closeDateTextBox12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel17)
-                    .addComponent(pbrBoxTextBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(closeDateTextBox13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel18)
-                    .addComponent(pbrBoxTextBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(aljComboBox1)
+                    .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel19)
-                    .addComponent(pbrBoxTextBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(closeDateTextBox10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel20)
@@ -912,7 +887,7 @@ public class HearingInformationPanel extends javax.swing.JPanel {
                 .addComponent(jLabel21)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -973,9 +948,9 @@ public class HearingInformationPanel extends javax.swing.JPanel {
         clearDate(exceptionsDateTextBox, evt);
     }//GEN-LAST:event_exceptionsDateTextBoxMouseClicked
 
-    private void closeDateTextBox7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closeDateTextBox7MouseClicked
+    private void boardActionDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_boardActionDateTextBoxMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_closeDateTextBox7MouseClicked
+    }//GEN-LAST:event_boardActionDateTextBoxMouseClicked
 
     private void closeDateTextBox8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closeDateTextBox8MouseClicked
         // TODO add your handling code here:
@@ -1008,13 +983,35 @@ public class HearingInformationPanel extends javax.swing.JPanel {
         } 
     }//GEN-LAST:event_mediationTableMouseClicked
 
+    private void closeDateTextBox10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closeDateTextBox10MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_closeDateTextBox10MouseClicked
+
+    private void closeDateTextBox11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closeDateTextBox11MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_closeDateTextBox11MouseClicked
+
+    private void closeDateTextBox12MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closeDateTextBox12MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_closeDateTextBox12MouseClicked
+
+    private void closeDateTextBox13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closeDateTextBox13MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_closeDateTextBox13MouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> aljComboBox;
+    private javax.swing.JComboBox<String> aljComboBox1;
+    private com.alee.extended.date.WebDateField boardActionDateTextBox;
     private com.alee.extended.date.WebDateField boardActionPCDateTextBox;
     private com.alee.extended.date.WebDateField boardActionPreDDateTextBox;
     private javax.swing.JTextArea caseStatusNotesTextBox;
     private javax.swing.JTextField caseTypeTextBox;
-    private com.alee.extended.date.WebDateField closeDateTextBox7;
+    private com.alee.extended.date.WebDateField closeDateTextBox10;
+    private com.alee.extended.date.WebDateField closeDateTextBox11;
+    private com.alee.extended.date.WebDateField closeDateTextBox12;
+    private com.alee.extended.date.WebDateField closeDateTextBox13;
     private com.alee.extended.date.WebDateField closeDateTextBox8;
     private com.alee.extended.date.WebDateField closeDateTextBox9;
     private com.alee.extended.date.WebDateField complaintDueDateTextBox;
@@ -1022,7 +1019,6 @@ public class HearingInformationPanel extends javax.swing.JPanel {
     private com.alee.extended.date.WebDateField draftComplaintToHearingTextBox;
     private com.alee.extended.date.WebDateField exceptionsDateTextBox;
     private javax.swing.JComboBox<String> expeditedComboBox;
-    private javax.swing.JComboBox<String> groupTypeComboBox;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -1056,14 +1052,9 @@ public class HearingInformationPanel extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable mediationTable;
     private javax.swing.JComboBox<String> openClosedComboBox;
-    private javax.swing.JTextField pbrBoxTextBox1;
-    private javax.swing.JTextField pbrBoxTextBox2;
-    private javax.swing.JTextField pbrBoxTextBox3;
-    private javax.swing.JTextField pbrBoxTextBox4;
-    private javax.swing.JTextField pbrBoxTextBox5;
+    private javax.swing.JTextField otherTextBox;
     private javax.swing.JTextField pbrBoxTextBox6;
     private com.alee.extended.date.WebDateField preHearingDateTextBox;
     private com.alee.extended.date.WebDateField proposedRecDueDateTextBox;
-    private javax.swing.JComboBox<String> statusComboBox;
     // End of variables declaration//GEN-END:variables
 }

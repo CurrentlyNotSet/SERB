@@ -37,33 +37,20 @@ public class HearingCase {
     public Timestamp preHearingDate;
     public Timestamp proposedRecDueDate;
     public Timestamp exceptionFilingDate;
-//    public String employerIDNumber;
-//    public String deptInState;
-//    public String barginingUnitNo;
-//    public String EONumber;
-//    public String allegation;
-//    public String currentStatus;
-//    public boolean priority;
-//    public Timestamp assignedDate;
-//    public Timestamp turnInDate;
-//    public Timestamp reportDueDate;
-//    public Timestamp dismissalDate;
-//    public Timestamp deferredDate;
-//    public Timestamp fileDate;
-//    public boolean probableCause;
-//    public Timestamp appealDateReceived;
-//    public Timestamp appealDateSent;
-//    public String courtName;
-//    public String courtCaseNumber;
-//    public String SERBCaseNumber;
-//    public String finalDispositionStatus;
-//    public int investigatorID;
-//    public int mediatorAssignedID;
-//    public int aljID;
-//    public String statement;
-//    public String recommendation;
-//    public String investigationReveals;
-//    public String note;
+    
+    public Timestamp boardActionDate;
+    public String otherAction;
+    public int aljID;
+    public Timestamp complaintIssuedDate;
+    public Timestamp hearingDate;
+    public Timestamp proposedRecIssuedDate;
+    public Timestamp responseFilingDate;
+    public Timestamp IssuanceOfOptionOrDirectiveDate;
+    public String FinalResult;
+    public Timestamp opinion;
+    public String companionCases;
+    
+    
     
     public static List loadHearingCaseNumbers() {
         
@@ -180,8 +167,11 @@ public class HearingCase {
         try {
             Statement stmt = Database.connectToDB().createStatement();
 
-            String sql = "Select * "
-                    + "from HearingCase"
+            String sql = "Select aljID,"
+                    + " boardActionPCDate,"
+                    + " openClose,"
+                    + " finalResult"
+                    + " from HearingCase"
                     + " where caseYear = ?"
                     + " and caseType = ?"
                     + " and caseMonth = ?"
@@ -197,11 +187,10 @@ public class HearingCase {
             
             if(caseHeader.next()) {
                 hearings = new HearingCase();
+                hearings.aljID = caseHeader.getInt("aljID");
+                hearings.boardActionPCDate = caseHeader.getTimestamp("boardActionPCDate");
                 hearings.openClose = caseHeader.getString("openClose");
-//                ulp.currentStatus = caseHeader.getString("currentStatus");
-//                ulp.investigatorID = caseHeader.getInt("investigatorID");
-//                ulp.aljID = caseHeader.getInt("aljID");
-                
+                hearings.FinalResult = caseHeader.getString("finalResult");
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex.getMessage());

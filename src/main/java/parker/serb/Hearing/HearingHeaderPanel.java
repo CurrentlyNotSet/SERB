@@ -19,6 +19,7 @@ import parker.serb.sql.CaseParty;
 import parker.serb.sql.HearingCase;
 import parker.serb.sql.Party;
 import parker.serb.sql.REPCase;
+import parker.serb.sql.User;
 import parker.serb.util.CaseNotFoundDialog;
 import parker.serb.util.NumberFormatService;
 
@@ -86,10 +87,10 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
 //                new HearingCaseNotFound((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
                 caseNumberComboBox.setSelectedItem("");
             } else {
-                aljTextBox.setText("");
-//                pcDateTextBox.setText(hearings.pcDate != null ? Global.mmddyyyy.format(new Date(hearings.pcDate.getTime())) : "");
-                statusTextBox.setText("");
-                finalResultTextBox.setText("");
+                aljTextBox.setText(User.getNameByID(hearings.aljID));
+                pcDateTextBox.setText(hearings.boardActionPCDate != null ? Global.mmddyyyy.format(new Date(hearings.boardActionPCDate.getTime())) : "");
+                statusTextBox.setText(hearings.openClose);
+                finalResultTextBox.setText(hearings.FinalResult);
                 mediatorTextBox.setText("");
 
                 List caseParties = CaseParty.loadPartiesByCase();
