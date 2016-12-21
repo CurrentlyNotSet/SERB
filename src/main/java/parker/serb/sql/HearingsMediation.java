@@ -35,50 +35,6 @@ public class HearingsMediation {
     public Timestamp mediationDate;
     public String outcome;
     
-    
-//    public static List<HearingsMediation> loadAllHearingRooms(String[] param) {
-//        List<HearingsMediation> list = new ArrayList<>();
-//
-//        try {
-//            Statement stmt = Database.connectToDB().createStatement();
-//
-//            String sql = "SELECT * FROM hearingroom";
-//            if (param.length > 0) {
-//                sql += " WHERE";
-//                for (int i = 0; i < param.length; i++) {
-//                    if (i > 0) {
-//                        sql += " AND";
-//                    }
-//                    sql += " CONCAT(roomAbbreviation, roomName, roomEmail) "
-//                            + "LIKE ?";
-//                }
-//            }
-//            sql += " ORDER BY roomAbbreviation";
-//
-//            PreparedStatement ps = stmt.getConnection().prepareStatement(sql);
-//
-//            for (int i = 0; i < param.length; i++) {
-//                ps.setString((i + 1), "%" + param[i].trim() + "%");
-//            }
-//            
-//            ResultSet rs = ps.executeQuery();
-//
-//            while (rs.next()) {
-//                HearingsMediation item = new HearingsMediation();
-//                item.id = rs.getInt("id");
-//                item.active = rs.getBoolean("active");
-//                item.roomAbbreviation = rs.getString("roomAbbreviation") == null ? "" : rs.getString("roomAbbreviation");
-//                item.roomName = rs.getString("roomName") == null ? "" : rs.getString("roomName");
-//                item.roomEmail = rs.getString("roomEmail") == null ? "" : rs.getString("roomEmail");
-//                list.add(item);
-//            }
-//        } catch (SQLException ex) {
-//            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-//
-//        }
-//        return list;
-//    }
-    
     public static List<HearingsMediation> loadAllMediationsByCaseNumber() {
         List<HearingsMediation> items = new ArrayList<>();
 
@@ -121,21 +77,38 @@ public class HearingsMediation {
         return items;
     }
 
-    public static void addMediation() {
+    public static void addMediation(
+            String pcPreD,
+            int mediatorID,
+            String dateAsigned,
+            String mediationDate,
+            String outcome) 
+    {
         try {
 
             Statement stmt = Database.connectToDB().createStatement();
 
-            String sql = "Insert INTO HearingRoom "
-                    + "(active, roomAbbreviation, roomName, roomEmail)"
+            String sql = "Insert INTO HearingsMediation"
+                    + "(active, caseYear, caseType, caseMonth,"
+                    + " caseNumber, pcPreD, mediator,"
+                    + " dateAssigned, mediationDate, outcome)"
                     + " VALUES "
-                    + "(1, ?, ?, ?)";
+                    + "(1, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-//            preparedStatement.setString(1, item.roomAbbreviation.equals("") ? null : item.roomAbbreviation.trim());
-//            preparedStatement.setString(2, item.roomName.equals("") ? null : item.roomName.trim());
-//            preparedStatement.setString(3, item.roomEmail.equals("") ? null : item.roomEmail.trim());
+            preparedStatement.setString(1, Global.caseYear);
+            preparedStatement.setString(2, Global.caseType);
+            preparedStatement.setString(3, Global.caseMonth);
+            preparedStatement.setString(4, Global.caseNumber);
+            preparedStatement.setString(5, pcPreD.equals("") ? null : pcPreD);
+            preparedStatement.setInt(6, mediatorID);
+            preparedStatement.setTimestamp(7, dateAsigned.equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(dateAsigned)));
+            preparedStatement.setTimestamp(8, mediationDate.equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(mediationDate)));
+            preparedStatement.setString(9, outcome.equals("") ? null : outcome);
+   
             preparedStatement.executeUpdate();
+            
+            Activity.addActivty("Created a Mediation on " + mediationDate, null);
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
         }

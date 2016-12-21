@@ -944,7 +944,9 @@ public class HearingInformationPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_boardActionPreDDateTextBoxMouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-//        new HearingAddMeidation
+        new HearingAddMediationDialog(Global.root, true);
+        mediationTable.clearSelection();
+        loadMediationTable();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void directiveIssuedDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_directiveIssuedDateTextBoxMouseClicked
