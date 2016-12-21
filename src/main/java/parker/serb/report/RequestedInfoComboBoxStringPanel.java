@@ -7,7 +7,6 @@ package parker.serb.report;
 
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
-import parker.serb.Global;
 import parker.serb.sql.SMDSDocuments;
 import parker.serb.sql.User;
 import parker.serb.util.Item;
@@ -17,10 +16,9 @@ import parker.serb.util.StringUtilities;
  *
  * @author User
  */
-public class RequestedInfoDropdownPanel extends javax.swing.JDialog {
+public class RequestedInfoComboBoxStringPanel extends javax.swing.JDialog {
 
     SMDSDocuments report;
-    String Type = "";
 
     /**
      * Creates new form RequestedReportInformationPanel
@@ -28,86 +26,77 @@ public class RequestedInfoDropdownPanel extends javax.swing.JDialog {
      * @param parent
      * @param modal
      * @param reportPassed
-     * @param TypePassed
+     * @param IDType
      */
-    public RequestedInfoDropdownPanel(java.awt.Frame parent, boolean modal, SMDSDocuments reportPassed, String TypePassed) {
+    public RequestedInfoComboBoxStringPanel(java.awt.Frame parent, boolean modal, SMDSDocuments reportPassed, String IDType) {
         super(parent, modal);
         report = reportPassed;
         initComponents();
-        setActive(report.fileName, TypePassed);
+        setActive(report.fileName, IDType);
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }
 
-    private void setActive(String reportName, String TypePassed) {
-        Type = TypePassed;
+    private void setActive(String reportName, String IDType) {
         reportLabel.setText(reportName);
-        switch (Type) {
-            case "Month":
-                comboBoxLabel.setText("Month:");
+        switch (IDType) {
+            case "ActivityType, Year":
+                comboBoxLabel.setText("Activity Type: ");
+                TextFieldLabel.setText("Year: ");
                 break;
-            case "UserID":
-                comboBoxLabel.setText("User:");
+            case "ALJ, Year":
+                comboBoxLabel.setText("ALJ: ");
+                TextFieldLabel.setText("Year: ");
                 break;
             default:
                 break;
         }
-        loadCombobox(Type);
+        loadCombobox(IDType);
         generateButton();
     }
 
     private void loadCombobox(String IDType) {
+        List<User> userList = null;
+        
         DefaultComboBoxModel dt = new DefaultComboBoxModel();
         ComboBox.setModel(dt);
-        
+        ComboBox.addItem(new Item<>("0", ""));
+
         switch (IDType) {
-            case "Month":
-                ComboBox.addItem("");
-                for (String month : Global.monthList) {
-                    ComboBox.addItem(month);
-                }
-                ComboBox.setSelectedItem("");
-                break;
-            case "UserID":
-                ComboBox.addItem(new Item<>("0", ""));
-                List<User> userList = User.getEnabledUsers();
+            case "ActivityType, Year":
+                userList = User.getEnabledUsers();
                 for (User item : userList) {
                     ComboBox.addItem(new Item<>(
                             String.valueOf(item.id),
                             StringUtilities.buildFullName(item.firstName, item.middleInitial, item.lastName))
                     );
                 }
-                ComboBox.setSelectedItem(new Item<>("0", ""));
+            case "ALJ, Year":
+                userList = User.getEnabledUsers();
+
+                for (User item : userList) {
+                    if (IDType.equals("ALJ") && item.investigator) {
+                        ComboBox.addItem(new Item<>(
+                                String.valueOf(item.id),
+                                StringUtilities.buildFullName(item.firstName, item.middleInitial, item.lastName))
+                        );
+                    }
+                }
                 break;
             default:
                 break;
         }
+        ComboBox.setSelectedItem(new Item<>("0", ""));
     }
     
     private void generateButton() {
-        if (ComboBox.getSelectedIndex() > 0) {
-            GenerateReportButton.setEnabled(true);
-        } else {
+        if (TextField.toString().trim().equals("") || ComboBox.getSelectedIndex() < 1) {
             GenerateReportButton.setEnabled(false);
+        } else {
+            GenerateReportButton.setEnabled(true);
         }
     }
 
-    private void generateReport() {
-        switch (Type) {
-            case "Month":
-                GenerateReport.generateExactStringReport(ComboBox.getSelectedItem().toString(), report);
-                break;
-            case "UserID":
-                comboBoxLabel.setText("User:");
-                Item item = (Item) ComboBox.getSelectedItem();
-                String comboBoxID = item.getValue().toString();
-                GenerateReport.generateIDReport(comboBoxID, report);
-                break;
-            default:
-                break;
-        }
-    }
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -123,6 +112,8 @@ public class RequestedInfoDropdownPanel extends javax.swing.JDialog {
         CancelButton = new javax.swing.JButton();
         reportLabel = new javax.swing.JLabel();
         ComboBox = new javax.swing.JComboBox();
+        TextFieldLabel = new javax.swing.JLabel();
+        TextField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Reqired Report Information");
@@ -159,6 +150,9 @@ public class RequestedInfoDropdownPanel extends javax.swing.JDialog {
             }
         });
 
+        TextFieldLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        TextFieldLabel.setText("<<LABEL>>");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -166,21 +160,24 @@ public class RequestedInfoDropdownPanel extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 395, Short.MAX_VALUE)
+                    .addComponent(reportLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(CancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(GenerateReportButton, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(reportLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 459, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(comboBoxLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(ComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(TextFieldLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(TextField)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(55, 55, 55)
-                .addComponent(comboBoxLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -189,11 +186,15 @@ public class RequestedInfoDropdownPanel extends javax.swing.JDialog {
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addComponent(reportLabel)
-                .addGap(30, 30, 30)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(comboBoxLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(TextFieldLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(TextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(CancelButton)
                     .addComponent(GenerateReportButton))
@@ -210,7 +211,8 @@ public class RequestedInfoDropdownPanel extends javax.swing.JDialog {
     }//GEN-LAST:event_CancelButtonActionPerformed
 
     private void GenerateReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GenerateReportButtonActionPerformed
-        generateReport();
+        Item item = (Item) ComboBox.getSelectedItem();
+        GenerateReport.generateIDStringReport(item.getValue().toString(), TextField.getText().trim(), report);
     }//GEN-LAST:event_GenerateReportButtonActionPerformed
 
     private void ComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxActionPerformed
@@ -221,6 +223,8 @@ public class RequestedInfoDropdownPanel extends javax.swing.JDialog {
     private javax.swing.JButton CancelButton;
     private javax.swing.JComboBox ComboBox;
     private javax.swing.JButton GenerateReportButton;
+    private javax.swing.JTextField TextField;
+    private javax.swing.JLabel TextFieldLabel;
     private javax.swing.JLabel comboBoxLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel reportLabel;
