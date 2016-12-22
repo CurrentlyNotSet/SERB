@@ -164,7 +164,7 @@ public class HearingCaseSearchData {
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setTimestamp(1, boardActionPCDate);
-            preparedStatement.setTimestamp(2, status);
+            preparedStatement.setString(2, status);
             preparedStatement.setString(3, User.getNameByID(aljID));
             preparedStatement.setTimestamp(4, boardActionDate);
             preparedStatement.setString(5, Global.caseYear);
