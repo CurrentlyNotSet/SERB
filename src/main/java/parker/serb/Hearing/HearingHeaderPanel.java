@@ -5,9 +5,6 @@
  */
 package parker.serb.Hearing;
 
-import parker.serb.MED.*;
-import parker.serb.ULP.*;
-import parker.serb.REP.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.util.Date;
@@ -15,13 +12,10 @@ import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
-import parker.serb.CSC.CSCCaseSearch;
 import parker.serb.Global;
 import parker.serb.sql.Audit;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.HearingCase;
-import parker.serb.sql.Party;
-import parker.serb.sql.REPCase;
 import parker.serb.sql.User;
 import parker.serb.util.CaseNotFoundDialog;
 import parker.serb.util.NumberFormatService;

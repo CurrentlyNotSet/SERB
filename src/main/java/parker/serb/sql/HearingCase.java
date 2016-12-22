@@ -59,13 +59,12 @@ public class HearingCase {
         try {
             Statement stmt = Database.connectToDB().createStatement();
 
-            String sql = "Select"
+            String sql = "Select TOP 250"
                     + " caseYear,"
                     + " caseType,"
                     + " caseMonth,"
                     + " caseNumber"
                     + " from HearingCase"
-                    //+ " WHERE openClose = 'Open'"
                     + " Order By CaseYear DESC,"
                     + " CaseNumber DESC";
 
@@ -213,7 +212,18 @@ public class HearingCase {
                 + " draftComplaintToHearingDate = ?,"
                 + " preHearingDate = ?,"
                 + " proposedRecDueDate = ?,"
-                + " exceptionFilingDate = ?"
+                + " exceptionFilingDate = ?,"
+                + " boardActionDate = ?,"
+                + " otherAction = ?,"
+                + " aljID = ?,"
+                + " complaintIssuedDate = ?,"
+                + " hearingDate = ?,"
+                + " proposedRecIssuedDate = ?,"
+                + " responseFilingDate = ?,"
+                + " issuanceOfOptionOrDirectiveDate = ?,"
+                + " finalResult = ?,"
+                + " opinion = ?,"
+                + " companionCases = ?"
                 + " where caseYear = ?"
                 + " and caseType = ?"
                 + " and caseMonth = ?"
@@ -231,10 +241,23 @@ public class HearingCase {
             preparedStatement.setTimestamp(9, newCaseInformation.preHearingDate);
             preparedStatement.setTimestamp(10, newCaseInformation.proposedRecDueDate);
             preparedStatement.setTimestamp(11, newCaseInformation.exceptionFilingDate);
-            preparedStatement.setString(12, Global.caseYear);
-            preparedStatement.setString(13, Global.caseType);
-            preparedStatement.setString(14, Global.caseMonth);
-            preparedStatement.setString(15, Global.caseNumber);
+            
+            preparedStatement.setTimestamp(12, newCaseInformation.boardActionDate);
+            preparedStatement.setString(13, newCaseInformation.otherAction);
+            preparedStatement.setInt(14, newCaseInformation.aljID);
+            preparedStatement.setTimestamp(15, newCaseInformation.complaintIssuedDate);
+            preparedStatement.setTimestamp(16, newCaseInformation.hearingDate);
+            preparedStatement.setTimestamp(17, newCaseInformation.proposedRecIssuedDate);
+            preparedStatement.setTimestamp(18, newCaseInformation.responseFilingDate);
+            preparedStatement.setTimestamp(19, newCaseInformation.IssuanceOfOptionOrDirectiveDate);
+            preparedStatement.setString(20, newCaseInformation.FinalResult);
+            preparedStatement.setTimestamp(21, newCaseInformation.opinion);
+            preparedStatement.setString(22, newCaseInformation.companionCases);
+            
+            preparedStatement.setString(23, Global.caseYear);
+            preparedStatement.setString(24, Global.caseType);
+            preparedStatement.setString(25, Global.caseMonth);
+            preparedStatement.setString(26, Global.caseNumber);
             
             int success = preparedStatement.executeUpdate();
             
@@ -343,6 +366,117 @@ public class HearingCase {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.exceptionFilingDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.exceptionFilingDate.getTime()))))
                 Activity.addActivty("Changed Exception Filing Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.exceptionFilingDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.exceptionFilingDate.getTime())), null);
         }
+        
+        //boardActionDate
+        if(newCaseInformation.boardActionDate == null && oldCaseInformation.boardActionDate != null) {
+            Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.boardActionDate.getTime())) + " from Board Action Date", null);
+        } else if(newCaseInformation.boardActionDate != null && oldCaseInformation.boardActionDate == null) {
+            Activity.addActivty("Set Board Action Date to " + Global.mmddyyyy.format(new Date(newCaseInformation.boardActionDate.getTime())), null);
+        } else if(newCaseInformation.boardActionDate != null && oldCaseInformation.boardActionDate != null) {
+            if(!Global.mmddyyyy.format(new Date(oldCaseInformation.boardActionDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.boardActionDate.getTime()))))
+                Activity.addActivty("Changed Board Action Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.boardActionDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.boardActionDate.getTime())), null);
+        }
+        
+        //otherAction
+        if(newCaseInformation.otherAction == null && oldCaseInformation.otherAction != null) {
+            Activity.addActivty("Removed " + oldCaseInformation.otherAction + " from Other Action", null);
+        } else if(newCaseInformation.otherAction != null && oldCaseInformation.otherAction == null) {
+            Activity.addActivty("Set Other Action to " + newCaseInformation.otherAction, null);
+        } else if(newCaseInformation.otherAction != null && oldCaseInformation.otherAction != null) {
+            if(!newCaseInformation.otherAction.equals(oldCaseInformation.otherAction)) 
+                Activity.addActivty("Changed Other Action from " + oldCaseInformation.otherAction + " to " + newCaseInformation.otherAction, null);
+        }
+        
+        //alj
+        if(newCaseInformation.aljID == 0 && oldCaseInformation.aljID != 0) {
+            Activity.addActivty("Removed " + User.getNameByID(oldCaseInformation.aljID) + " from ALJ", null);
+        } else if(newCaseInformation.aljID != 0 && oldCaseInformation.aljID == 0) {
+            Activity.addActivty("Set ALJ to " + User.getNameByID(newCaseInformation.aljID), null);
+        } else if(newCaseInformation.aljID != 0 && oldCaseInformation.aljID != 0) {
+            if(newCaseInformation.aljID != oldCaseInformation.aljID) 
+                Activity.addActivty("Changed ALJ from " + User.getNameByID(oldCaseInformation.aljID) + " to " + User.getNameByID(newCaseInformation.aljID), null);
+        }
+        
+        //complaintIssuedDate
+        if(newCaseInformation.complaintIssuedDate == null && oldCaseInformation.complaintIssuedDate != null) {
+            Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.complaintIssuedDate.getTime())) + " from Complaint Issued Date", null);
+        } else if(newCaseInformation.complaintIssuedDate != null && oldCaseInformation.complaintIssuedDate == null) {
+            Activity.addActivty("Set Complaint Issued Date to " + Global.mmddyyyy.format(new Date(newCaseInformation.complaintIssuedDate.getTime())), null);
+        } else if(newCaseInformation.complaintIssuedDate != null && oldCaseInformation.complaintIssuedDate != null) {
+            if(!Global.mmddyyyy.format(new Date(oldCaseInformation.complaintIssuedDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.complaintIssuedDate.getTime()))))
+                Activity.addActivty("Changed Complaint Issued Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.complaintIssuedDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.complaintIssuedDate.getTime())), null);
+        }
+        
+        //hearingDate
+        if(newCaseInformation.hearingDate == null && oldCaseInformation.hearingDate != null) {
+            Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.hearingDate.getTime())) + " from Hearing Date", null);
+        } else if(newCaseInformation.hearingDate != null && oldCaseInformation.hearingDate == null) {
+            Activity.addActivty("Set Hearing Date to " + Global.mmddyyyy.format(new Date(newCaseInformation.hearingDate.getTime())), null);
+        } else if(newCaseInformation.hearingDate != null && oldCaseInformation.hearingDate != null) {
+            if(!Global.mmddyyyy.format(new Date(oldCaseInformation.hearingDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.hearingDate.getTime()))))
+                Activity.addActivty("Changed Hearing Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.hearingDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.hearingDate.getTime())), null);
+        }
+        
+        //proposedRecIssuedDate
+        if(newCaseInformation.proposedRecIssuedDate == null && oldCaseInformation.proposedRecIssuedDate != null) {
+            Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.proposedRecIssuedDate.getTime())) + " from Proposed Rec Issued Date", null);
+        } else if(newCaseInformation.proposedRecIssuedDate != null && oldCaseInformation.proposedRecIssuedDate == null) {
+            Activity.addActivty("Set Proposed Rec Issued Date to " + Global.mmddyyyy.format(new Date(newCaseInformation.proposedRecIssuedDate.getTime())), null);
+        } else if(newCaseInformation.proposedRecIssuedDate != null && oldCaseInformation.proposedRecIssuedDate != null) {
+            if(!Global.mmddyyyy.format(new Date(oldCaseInformation.proposedRecIssuedDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.proposedRecIssuedDate.getTime()))))
+                Activity.addActivty("Changed Proposed Rec Issued Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.proposedRecIssuedDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.proposedRecIssuedDate.getTime())), null);
+        }
+        
+        //responseFilingDate
+        if(newCaseInformation.responseFilingDate == null && oldCaseInformation.responseFilingDate != null) {
+            Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.responseFilingDate.getTime())) + " from Response Filing Date", null);
+        } else if(newCaseInformation.responseFilingDate != null && oldCaseInformation.responseFilingDate == null) {
+            Activity.addActivty("Set Response Filing Date to " + Global.mmddyyyy.format(new Date(newCaseInformation.responseFilingDate.getTime())), null);
+        } else if(newCaseInformation.responseFilingDate != null && oldCaseInformation.responseFilingDate != null) {
+            if(!Global.mmddyyyy.format(new Date(oldCaseInformation.responseFilingDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.responseFilingDate.getTime()))))
+                Activity.addActivty("Changed Response Filing Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.responseFilingDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.responseFilingDate.getTime())), null);
+        }
+        
+        //issuanceOfOptionOrDirectiveDate
+        if(newCaseInformation.IssuanceOfOptionOrDirectiveDate == null && oldCaseInformation.IssuanceOfOptionOrDirectiveDate != null) {
+            Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.IssuanceOfOptionOrDirectiveDate.getTime())) + " from Issuance Of Option Or Directive Date", null);
+        } else if(newCaseInformation.IssuanceOfOptionOrDirectiveDate != null && oldCaseInformation.IssuanceOfOptionOrDirectiveDate == null) {
+            Activity.addActivty("Set Issuance Of Option Or Directive Date to " + Global.mmddyyyy.format(new Date(newCaseInformation.IssuanceOfOptionOrDirectiveDate.getTime())), null);
+        } else if(newCaseInformation.IssuanceOfOptionOrDirectiveDate != null && oldCaseInformation.IssuanceOfOptionOrDirectiveDate != null) {
+            if(!Global.mmddyyyy.format(new Date(oldCaseInformation.IssuanceOfOptionOrDirectiveDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.IssuanceOfOptionOrDirectiveDate.getTime()))))
+                Activity.addActivty("Changed Issuance Of Option Or Directive Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.IssuanceOfOptionOrDirectiveDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.IssuanceOfOptionOrDirectiveDate.getTime())), null);
+        }
+        
+        //finalResult
+        if(newCaseInformation.FinalResult == null && oldCaseInformation.FinalResult != null) {
+            Activity.addActivty("Removed " + oldCaseInformation.FinalResult + " from Final Result", null);
+        } else if(newCaseInformation.FinalResult != null && oldCaseInformation.FinalResult == null) {
+            Activity.addActivty("Set Final Result to " + newCaseInformation.FinalResult, null);
+        } else if(newCaseInformation.FinalResult != null && oldCaseInformation.FinalResult != null) {
+            if(!newCaseInformation.FinalResult.equals(oldCaseInformation.FinalResult)) 
+                Activity.addActivty("Changed Final Result from " + oldCaseInformation.FinalResult + " to " + newCaseInformation.FinalResult, null);
+        }
+        
+        //opinion
+        if(newCaseInformation.opinion == null && oldCaseInformation.opinion != null) {
+            Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.opinion.getTime())) + " from Opinion Date", null);
+        } else if(newCaseInformation.opinion != null && oldCaseInformation.opinion == null) {
+            Activity.addActivty("Set Opinion Date to " + Global.mmddyyyy.format(new Date(newCaseInformation.opinion.getTime())), null);
+        } else if(newCaseInformation.opinion != null && oldCaseInformation.opinion != null) {
+            if(!Global.mmddyyyy.format(new Date(oldCaseInformation.opinion.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.opinion.getTime()))))
+                Activity.addActivty("Changed Opinion Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.opinion.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.opinion.getTime())), null);
+        }
+        
+        //companionCases
+        if(newCaseInformation.companionCases == null && oldCaseInformation.companionCases != null) {
+            Activity.addActivty("Removed " + oldCaseInformation.companionCases + " from Companion Case", null);
+        } else if(newCaseInformation.companionCases != null && oldCaseInformation.companionCases == null) {
+            Activity.addActivty("Set Companion Case to " + newCaseInformation.companionCases, null);
+        } else if(newCaseInformation.companionCases != null && oldCaseInformation.companionCases != null) {
+            if(!newCaseInformation.companionCases.equals(oldCaseInformation.companionCases)) 
+                Activity.addActivty("Changed Companion Case from " + oldCaseInformation.companionCases + " to " + newCaseInformation.companionCases, null);
+        }
+        
         
         //currentStatus
 //        if(newCaseInformation.currentStatus == null && oldCaseInformation.currentStatus != null) {

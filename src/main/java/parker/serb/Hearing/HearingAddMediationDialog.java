@@ -10,6 +10,7 @@ import java.util.List;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import parker.serb.Global;
+import parker.serb.sql.HearingOutcome;
 import parker.serb.sql.HearingsMediation;
 import parker.serb.sql.User;
 
@@ -30,8 +31,23 @@ public class HearingAddMediationDialog extends javax.swing.JDialog {
         initComponents();
         addListeners();
         loadALJComboBox();
+        loadFinalResultComboBox();
         setLocationRelativeTo(parent);
         setVisible(true);
+    }
+    
+    public void loadFinalResultComboBox() {
+        outcomeComboBox.removeAllItems();
+        
+        outcomeComboBox.addItem("");
+        
+        List<HearingOutcome> userList = HearingOutcome.loadOutcomesByType("OUT");
+        
+        for (HearingOutcome user : userList) {
+            outcomeComboBox.addItem(user.description);
+        }
+        
+        outcomeComboBox.setSelectedItem("");
     }
     
     private void addListeners() {

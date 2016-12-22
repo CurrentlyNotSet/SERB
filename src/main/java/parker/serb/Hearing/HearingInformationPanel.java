@@ -20,6 +20,7 @@ import parker.serb.sql.CMDSResult;
 import parker.serb.sql.CMDSStatusType;
 import parker.serb.sql.HearingCase;
 import parker.serb.sql.HearingHearing;
+import parker.serb.sql.HearingOutcome;
 import parker.serb.sql.HearingsMediation;
 import parker.serb.sql.ReClassCode;
 import parker.serb.sql.User;
@@ -91,6 +92,20 @@ public class HearingInformationPanel extends javax.swing.JPanel {
         }
         
         aljComboBox.setSelectedItem("");
+    }
+    
+    public void loadFinalResultComboBox() {
+        finalResultComboBox.removeAllItems();
+        
+        finalResultComboBox.addItem("");
+        
+        List<HearingOutcome> userList = HearingOutcome.loadOutcomesByType("RST");
+        
+        for (HearingOutcome user : userList) {
+            finalResultComboBox.addItem(user.description);
+        }
+        
+        finalResultComboBox.setSelectedItem("");
     }
     
     public void enableUpdate() {
@@ -212,7 +227,19 @@ public class HearingInformationPanel extends javax.swing.JPanel {
         newInformation.preHearingDate = preHearingDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(preHearingDateTextBox.getText()));
         newInformation.proposedRecDueDate = proposedRecDueDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(proposedRecDueDateTextBox.getText()));
         newInformation.exceptionFilingDate = exceptionsDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(exceptionsDateTextBox.getText()));
-                        
+          
+        newInformation.boardActionDate = boardActionDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(boardActionDateTextBox.getText()));
+        newInformation.otherAction = otherTextBox.getText().equals("") ? null : otherTextBox.getText();
+        newInformation.aljID = aljComboBox.getSelectedItem().toString().trim().equals("") ? 0 : User.getUserID(aljComboBox.getSelectedItem().toString());
+        newInformation.complaintIssuedDate = complaintIssuedDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(complaintIssuedDateTextBox.getText()));
+        newInformation.hearingDate = hearingDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(hearingDateTextBox.getText()));
+        newInformation.proposedRecIssuedDate = proposedRecIssuedTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(proposedRecIssuedTextBox.getText()));
+        newInformation.responseFilingDate = responseFilingDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(responseFilingDateTextBox.getText()));
+        newInformation.IssuanceOfOptionOrDirectiveDate = issuanceOfOPDirDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(issuanceOfOPDirDateTextBox.getText()));
+        newInformation.FinalResult = finalResultComboBox.getSelectedItem().toString().equals("") ? null : finalResultComboBox.getSelectedItem().toString();
+        newInformation.opinion = opinionTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(opinionTextBox.getText()));
+        newInformation.companionCases = companionCasesTextBox.getText().equals("") ? null : companionCasesTextBox.getText();
+
         newInformation.caseStatusNotes = caseStatusNotesTextBox.getText().equals("") ? null : caseStatusNotesTextBox.getText();
         
         HearingCase.updateHearingCaseInformation(newInformation, orginalInformation);
@@ -220,6 +247,7 @@ public class HearingInformationPanel extends javax.swing.JPanel {
     
     public void loadInformation() {
         loadALJComboBox();
+        loadFinalResultComboBox();
 //        loadMediatorComboBox();
 //        loadGroupTypeComboBox();
 //        loadCaseStatusComboBox();
@@ -250,7 +278,7 @@ public class HearingInformationPanel extends javax.swing.JPanel {
         proposedRecIssuedTextBox.setText(orginalInformation.proposedRecIssuedDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.proposedRecIssuedDate.getTime())) : "");
         responseFilingDateTextBox.setText(orginalInformation.responseFilingDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.responseFilingDate.getTime())) : "");
         issuanceOfOPDirDateTextBox.setText(orginalInformation.IssuanceOfOptionOrDirectiveDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.IssuanceOfOptionOrDirectiveDate.getTime())) : "");
-        finalResultComboBox.setSelectedItem(orginalInformation.complaintIssuedDate != null ? orginalInformation.FinalResult : "");
+        finalResultComboBox.setSelectedItem(orginalInformation.FinalResult != null ? orginalInformation.FinalResult : "");
         opinionTextBox.setText(orginalInformation.opinion != null ? Global.mmddyyyy.format(new Date(orginalInformation.opinion.getTime())) : "");
         companionCasesTextBox.setText(orginalInformation.companionCases != null ? orginalInformation.companionCases : "");
         
@@ -595,7 +623,7 @@ public class HearingInformationPanel extends javax.swing.JPanel {
         boardActionDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
         boardActionDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         boardActionDateTextBox.setEnabled(false);
-        boardActionPreDDateTextBox.setDateFormat(Global.mmddyyyy);
+        boardActionDateTextBox.setDateFormat(Global.mmddyyyy);
         boardActionDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 boardActionDateTextBoxMouseClicked(evt);
@@ -607,7 +635,7 @@ public class HearingInformationPanel extends javax.swing.JPanel {
         complaintIssuedDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
         complaintIssuedDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         complaintIssuedDateTextBox.setEnabled(false);
-        boardActionPreDDateTextBox.setDateFormat(Global.mmddyyyy);
+        complaintIssuedDateTextBox.setDateFormat(Global.mmddyyyy);
         complaintIssuedDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 complaintIssuedDateTextBoxMouseClicked(evt);
@@ -619,7 +647,7 @@ public class HearingInformationPanel extends javax.swing.JPanel {
         hearingDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
         hearingDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         hearingDateTextBox.setEnabled(false);
-        boardActionPreDDateTextBox.setDateFormat(Global.mmddyyyy);
+        hearingDateTextBox.setDateFormat(Global.mmddyyyy);
         hearingDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 hearingDateTextBoxMouseClicked(evt);
@@ -631,7 +659,7 @@ public class HearingInformationPanel extends javax.swing.JPanel {
         opinionTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
         opinionTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         opinionTextBox.setEnabled(false);
-        boardActionPreDDateTextBox.setDateFormat(Global.mmddyyyy);
+        opinionTextBox.setDateFormat(Global.mmddyyyy);
         opinionTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 opinionTextBoxMouseClicked(evt);
@@ -643,7 +671,7 @@ public class HearingInformationPanel extends javax.swing.JPanel {
         proposedRecIssuedTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
         proposedRecIssuedTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         proposedRecIssuedTextBox.setEnabled(false);
-        boardActionPreDDateTextBox.setDateFormat(Global.mmddyyyy);
+        proposedRecIssuedTextBox.setDateFormat(Global.mmddyyyy);
         proposedRecIssuedTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 proposedRecIssuedTextBoxMouseClicked(evt);
@@ -655,7 +683,7 @@ public class HearingInformationPanel extends javax.swing.JPanel {
         responseFilingDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
         responseFilingDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         responseFilingDateTextBox.setEnabled(false);
-        boardActionPreDDateTextBox.setDateFormat(Global.mmddyyyy);
+        responseFilingDateTextBox.setDateFormat(Global.mmddyyyy);
         responseFilingDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 responseFilingDateTextBoxMouseClicked(evt);
@@ -667,7 +695,7 @@ public class HearingInformationPanel extends javax.swing.JPanel {
         issuanceOfOPDirDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
         issuanceOfOPDirDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         issuanceOfOPDirDateTextBox.setEnabled(false);
-        boardActionPreDDateTextBox.setDateFormat(Global.mmddyyyy);
+        issuanceOfOPDirDateTextBox.setDateFormat(Global.mmddyyyy);
         issuanceOfOPDirDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 issuanceOfOPDirDateTextBoxMouseClicked(evt);
@@ -935,15 +963,15 @@ public class HearingInformationPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_exceptionsDateTextBoxMouseClicked
 
     private void boardActionDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_boardActionDateTextBoxMouseClicked
-        // TODO add your handling code here:
+        clearDate(boardActionDateTextBox, evt);
     }//GEN-LAST:event_boardActionDateTextBoxMouseClicked
 
     private void complaintIssuedDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_complaintIssuedDateTextBoxMouseClicked
-        // TODO add your handling code here:
+        clearDate(complaintIssuedDateTextBox, evt);
     }//GEN-LAST:event_complaintIssuedDateTextBoxMouseClicked
 
     private void hearingDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_hearingDateTextBoxMouseClicked
-        // TODO add your handling code here:
+        clearDate(hearingDateTextBox, evt);
     }//GEN-LAST:event_hearingDateTextBoxMouseClicked
 
     private void mediationTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mediationTableMouseClicked
@@ -970,19 +998,19 @@ public class HearingInformationPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_mediationTableMouseClicked
 
     private void opinionTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_opinionTextBoxMouseClicked
-        // TODO add your handling code here:
+        clearDate(opinionTextBox, evt);
     }//GEN-LAST:event_opinionTextBoxMouseClicked
 
     private void proposedRecIssuedTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_proposedRecIssuedTextBoxMouseClicked
-        // TODO add your handling code here:
+        clearDate(proposedRecIssuedTextBox, evt);
     }//GEN-LAST:event_proposedRecIssuedTextBoxMouseClicked
 
     private void responseFilingDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_responseFilingDateTextBoxMouseClicked
-        // TODO add your handling code here:
+        clearDate(responseFilingDateTextBox, evt);
     }//GEN-LAST:event_responseFilingDateTextBoxMouseClicked
 
     private void issuanceOfOPDirDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_issuanceOfOPDirDateTextBoxMouseClicked
-        // TODO add your handling code here:
+        clearDate(issuanceOfOPDirDateTextBox, evt);
     }//GEN-LAST:event_issuanceOfOPDirDateTextBoxMouseClicked
 
 

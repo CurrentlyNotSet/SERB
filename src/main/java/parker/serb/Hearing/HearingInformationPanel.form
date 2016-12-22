@@ -644,7 +644,7 @@
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="boardActionDateTextBoxMouseClicked"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="boardActionPreDDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="boardActionDateTextBox.setDateFormat(Global.mmddyyyy);"/>
               </AuxValues>
             </Component>
             <Component class="com.alee.extended.date.WebDateField" name="complaintIssuedDateTextBox">
@@ -665,7 +665,7 @@
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="complaintIssuedDateTextBoxMouseClicked"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="boardActionPreDDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="complaintIssuedDateTextBox.setDateFormat(Global.mmddyyyy);"/>
               </AuxValues>
             </Component>
             <Component class="com.alee.extended.date.WebDateField" name="hearingDateTextBox">
@@ -686,7 +686,7 @@
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="hearingDateTextBoxMouseClicked"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="boardActionPreDDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="hearingDateTextBox.setDateFormat(Global.mmddyyyy);"/>
               </AuxValues>
             </Component>
             <Component class="com.alee.extended.date.WebDateField" name="opinionTextBox">
@@ -707,7 +707,7 @@
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="opinionTextBoxMouseClicked"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="boardActionPreDDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="opinionTextBox.setDateFormat(Global.mmddyyyy);"/>
               </AuxValues>
             </Component>
             <Component class="com.alee.extended.date.WebDateField" name="proposedRecIssuedTextBox">
@@ -728,7 +728,7 @@
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="proposedRecIssuedTextBoxMouseClicked"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="boardActionPreDDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="proposedRecIssuedTextBox.setDateFormat(Global.mmddyyyy);"/>
               </AuxValues>
             </Component>
             <Component class="com.alee.extended.date.WebDateField" name="responseFilingDateTextBox">
@@ -749,7 +749,7 @@
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="responseFilingDateTextBoxMouseClicked"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="boardActionPreDDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="responseFilingDateTextBox.setDateFormat(Global.mmddyyyy);"/>
               </AuxValues>
             </Component>
             <Component class="com.alee.extended.date.WebDateField" name="issuanceOfOPDirDateTextBox">
@@ -770,7 +770,7 @@
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="issuanceOfOPDirDateTextBoxMouseClicked"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="boardActionPreDDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="issuanceOfOPDirDateTextBox.setDateFormat(Global.mmddyyyy);"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JComboBox" name="finalResultComboBox">

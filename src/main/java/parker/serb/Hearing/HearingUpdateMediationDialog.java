@@ -5,26 +5,9 @@
  */
 package parker.serb.Hearing;
 
-import parker.serb.CMDS.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import parker.serb.Global;
-import parker.serb.sql.CMDSHearing;
-import parker.serb.sql.EmailOutInvites;
-import parker.serb.sql.HearingHearing;
-import parker.serb.sql.HearingRoom;
-import parker.serb.sql.HearingType;
+import parker.serb.sql.HearingOutcome;
 import parker.serb.sql.HearingsMediation;
 import parker.serb.sql.User;
 
@@ -51,6 +34,7 @@ public class HearingUpdateMediationDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         loadALJComboBox();
+        loadFinalResultComboBox();
         id = passedID;
         pcPreDComboBox.setSelectedItem(pcPreD);
         mediatorComboBox.setSelectedItem(mediator);
@@ -59,6 +43,20 @@ public class HearingUpdateMediationDialog extends javax.swing.JDialog {
         outcomeComboBox.setSelectedItem(outcome);
         setLocationRelativeTo(parent);
         setVisible(true);
+    }
+    
+    public void loadFinalResultComboBox() {
+        outcomeComboBox.removeAllItems();
+        
+        outcomeComboBox.addItem("");
+        
+        List<HearingOutcome> userList = HearingOutcome.loadOutcomesByType("OUT");
+        
+        for (HearingOutcome user : userList) {
+            outcomeComboBox.addItem(user.description);
+        }
+        
+        outcomeComboBox.setSelectedItem("");
     }
     
     private void loadALJComboBox() {
