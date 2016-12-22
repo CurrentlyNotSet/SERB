@@ -31,15 +31,21 @@ public class HearingHearing {
     public String hearingType;
     public String room;
     public String hearingDateTime;
+    public int aljID;
+    public String comments;
 
-    public static void addHearing(Date hearingTime, String hearingType, String hearingRoom) {
+    public static void addHearing(Date hearingTime, 
+            String hearingType, 
+            String hearingRoom,
+            String alj,
+            String comments) {
         Statement stmt = null;
             
         try {
 
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "Insert INTO HearingHearing VALUES (1,?,?,?,?,?,?,?,?)";
+            String sql = "Insert INTO HearingHearing VALUES (1,?,?,?,?,?,?,?,?,?,?)";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, Global.caseYear);
@@ -50,19 +56,21 @@ public class HearingHearing {
             preparedStatement.setString(6, hearingType);
             preparedStatement.setString(7, hearingRoom);
             preparedStatement.setTimestamp(8, new Timestamp(hearingTime.getTime()));
+            preparedStatement.setInt(9, User.getUserID(alj));
+            preparedStatement.setString(10, comments);
 
             int process = preparedStatement.executeUpdate();
             
             if(process == 1) {
-//                EmailOutInvites.addNewHearing("Hearings",
-//                        HearingCase.getALJemail(),
-//                        HearingRoom.getHearingRoomEmailByName(hearingRoom),
-//                        "An upcoming " + hearingType + " is booked in " + hearingRoom + " at " + Global.mmddyyyyhhmma.format(hearingTime),
-//                        NumberFormatService.generateFullCaseNumber(),
-//                        hearingType,
-//                        hearingRoom,
-//                        hearingType,
-//                        new Timestamp(hearingTime.getTime()));
+                EmailOutInvites.addNewHearing(getCaseSection(),
+                        User.getEmailByID(User.getUserID(alj)),
+                        HearingRoom.getHearingRoomEmailByName(hearingRoom),
+                        "An upcoming " + hearingType + " is booked in " + hearingRoom + " at " + Global.mmddyyyyhhmma.format(hearingTime),
+                        NumberFormatService.generateFullCaseNumber(),
+                        hearingType,
+                        hearingRoom,
+                        hearingType,
+                        new Timestamp(hearingTime.getTime()));
                 Activity.addActivty("Created a " + hearingType + " on " + Global.mmddyyyyhhmma.format(hearingTime) + " in " + hearingRoom, null);
             }
 
@@ -78,6 +86,30 @@ public class HearingHearing {
         }
     }
     
+    private static String getCaseSection() {
+        String section = "";
+        
+        switch(Global.caseType) {
+            case "ULP":
+            case "ERC":
+            case "JWD":
+                section = "ULP";
+                break;
+            case "REP":
+            case "RBT":
+                section = "REP";
+                break;
+            case "MED":
+            case "STK":
+            case "NCN":
+            case "CON":
+                section = "MED";
+                break;
+        }
+        
+        return section;
+    }
+    
     public static List loadHearingsByCaseNumber() {
         List<HearingHearing> activityList = new ArrayList<HearingHearing>();
         
@@ -91,7 +123,9 @@ public class HearingHearing {
                     + " entryDate,"
                     + " hearingType,"
                     + " room,"
-                    + " hearingDateTime"
+                    + " hearingDateTime,"
+                    + " aljID, "
+                    + " comments"
                     + " from HearingHearing"
                     + " Where CaseYear = ?"
                     + " and CaseType = ?"
@@ -113,6 +147,8 @@ public class HearingHearing {
                 hearing.hearingType = caseActivity.getString("hearingType");
                 hearing.room = caseActivity.getString("room");
                 hearing.hearingDateTime = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("hearingDateTime").getTime()));
+                hearing.aljID = caseActivity.getInt("aljID");
+                hearing.comments = caseActivity.getString("comments") != null ? caseActivity.getString("comments") : "";
                 activityList.add(hearing);
             }
         } catch (SQLException ex) {
@@ -148,6 +184,39 @@ public class HearingHearing {
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
                 System.out.println("TESTING");
+                SlackNotification.sendNotification(ex.getMessage());
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    public static void updateHearingByID(String id,
+            String comments, 
+            String hearingType,
+            String hearingDate) {
+        Statement stmt = null;
+            
+        try {
+
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Update HearingHearing"
+                    + " set comments = ?"
+                    + " where id = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, comments);
+            preparedStatement.setString(2, id);
+
+            int passed = preparedStatement.executeUpdate();
+            
+            if(passed == 1) {
+                Activity.addActivty("Updated Comments for " + hearingType + " on " + hearingDate, null);
+            }
+        } catch (SQLException ex) {
+            if(ex.getCause() instanceof SQLServerException) {
                 SlackNotification.sendNotification(ex.getMessage());
             } else {
                 SlackNotification.sendNotification(ex.getMessage());

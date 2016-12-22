@@ -5,20 +5,18 @@
  */
 package parker.serb.Hearing;
 
-import parker.serb.MED.*;
-import parker.serb.ULP.*;
-import parker.serb.REP.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 import parker.serb.Global;
 import parker.serb.sql.Audit;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.HearingCase;
-import parker.serb.sql.Party;
-import parker.serb.sql.REPCase;
+import parker.serb.sql.User;
 import parker.serb.util.CaseNotFoundDialog;
 import parker.serb.util.NumberFormatService;
 
@@ -30,6 +28,7 @@ import parker.serb.util.NumberFormatService;
  */
 public class HearingHeaderPanel extends javax.swing.JPanel {
 
+    HearingCaseSearch search = null;
     /**
      * Creates new form REPHeaderPanel
      */
@@ -67,7 +66,7 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
             NumberFormatService.parseFullCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim());
             loadHeaderInformation();
         } else {
-//            new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());  
+            new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());  
         }
     }
     
@@ -83,13 +82,13 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
         if(Global.caseNumber != null) {
             HearingCase hearings = HearingCase.loadHeaderInformation();
             if(hearings == null) {
-//                new HearingCaseNotFound((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
+                new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());  
                 caseNumberComboBox.setSelectedItem("");
             } else {
-                aljTextBox.setText("");
-//                pcDateTextBox.setText(hearings.pcDate != null ? Global.mmddyyyy.format(new Date(hearings.pcDate.getTime())) : "");
-                statusTextBox.setText("");
-                finalResultTextBox.setText("");
+                aljTextBox.setText(User.getNameByID(hearings.aljID));
+                pcDateTextBox.setText(hearings.boardActionPCDate != null ? Global.mmddyyyy.format(new Date(hearings.boardActionPCDate.getTime())) : "");
+                statusTextBox.setText(hearings.openClose);
+                finalResultTextBox.setText(hearings.FinalResult);
                 mediatorTextBox.setText("");
 
                 List caseParties = CaseParty.loadPartiesByCase();
@@ -281,6 +280,11 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
         setLayout(new java.awt.GridLayout(1, 0));
 
         jLabel11.setText("Case Number:");
+        jLabel11.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel11MouseClicked(evt);
+            }
+        });
 
         caseNumberComboBox.setEditable(true);
         caseNumberComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -430,6 +434,16 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
 
         add(jPanel2);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
+        if(SwingUtilities.isRightMouseButton(evt) || evt.getButton() == MouseEvent.BUTTON3) {
+            if(search == null) {
+                search = new HearingCaseSearch(Global.root, true);
+            } else {
+                search.setVisible(true);
+            }
+        }
+    }//GEN-LAST:event_jLabel11MouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -455,10 +455,18 @@ public class Activity {
                     + " INNER JOIN Users"
                     + " ON Activity.userID = Users.id"
                     + " WHERE date >= ?"
+                    + " AND CaseYear = ?"
+                    + " AND CaseType = ?"
+                    + " AND CaseMonth = ?"
+                    + " AND CaseNumber = ?"
                     + " ORDER BY date DESC ";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setTimestamp(1, HearingCase.getBoardActionPCDate());
+            preparedStatement.setString(2, Global.caseYear);
+            preparedStatement.setString(3, Global.caseType);
+            preparedStatement.setString(4, Global.caseMonth);
+            preparedStatement.setString(5, Global.caseNumber);
 
             ResultSet caseActivity = preparedStatement.executeQuery();
             

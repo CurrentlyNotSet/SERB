@@ -3,28 +3,30 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package parker.serb.util;
+package parker.serb.Hearing;
 
-import javax.swing.JFrame;
-import parker.serb.Global;
-import parker.serb.Hearing.HearingCaseSearch;
-import parker.serb.REP.REPCaseSearch;
-import parker.serb.ULP.ULPCaseSearch;
+import parker.serb.sql.CMDSHearing;
+import parker.serb.sql.HearingHearing;
 
 /**
  *
  * @author parkerjohnston
  */
-public class CaseNotFoundDialog extends javax.swing.JDialog {
+public class HearingRemoveHearingDialog extends javax.swing.JDialog {
 
+    String id;
+    String hearingInformation;
     /**
-     * Creates new form REPCaseNotFound
+     * Creates new form CMDSRemoveHearingDialog
      */
-    public CaseNotFoundDialog(java.awt.Frame parent, boolean modal, String search) {
+    public HearingRemoveHearingDialog(java.awt.Frame parent, boolean modal,
+            String passedID, String hearingDate, String hearingType, String hearingRoom) {
         super(parent, modal);
         initComponents();
+        id = passedID;
+        jLabel2.setText("Are you sure you want to remove the " + hearingType + " on " + hearingDate + "?");
+        hearingInformation = "Removed a " + hearingType + " on " + hearingDate;
         setLocationRelativeTo(parent);
-        jLabel2.setText("Unable to load Case Number: " + search);
         setVisible(true);
     }
 
@@ -46,19 +48,19 @@ public class CaseNotFoundDialog extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Invalid Case Number");
+        jLabel1.setText("Remove Hearing");
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Unable to load Case Number: 2015-REP-01-0001");
+        jLabel2.setText("jLabel2");
 
-        jButton1.setText("Case Search");
+        jButton1.setText("Remove");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Close");
+        jButton2.setText("Cancel");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -73,9 +75,11 @@ public class CaseNotFoundDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 266, Short.MAX_VALUE)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -86,9 +90,9 @@ public class CaseNotFoundDialog extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -96,26 +100,14 @@ public class CaseNotFoundDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        NumberFormatService.clearCaseNumberInformation();
-        if(Global.activeSection.equals("REP")) {
-        } else if(Global.activeSection.equals("ULP")) {
-            Global.root.getuLPHeaderPanel1().getjComboBox2().setSelectedItem("");
-        }
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if(Global.activeSection.equals("REP")) {
-            new REPCaseSearch((JFrame) Global.root.getParent(), true);
-        } else if(Global.activeSection.equals("ULP")) {
-            Global.root.getuLPHeaderPanel1().getjComboBox2().setSelectedItem("");
-            new ULPCaseSearch((JFrame) Global.root.getParent(), true);
-        } else if(Global.activeSection.equals("Hearings")) {
-            Global.root.getHearingHeaderPanel1().getjComboBox2().setSelectedItem("");
-            new HearingCaseSearch((JFrame) Global.root.getParent(), true);
-        }
+        HearingHearing.removeHearingByID(id, hearingInformation);
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

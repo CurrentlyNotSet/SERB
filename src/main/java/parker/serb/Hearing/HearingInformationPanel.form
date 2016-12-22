@@ -43,8 +43,9 @@
                   <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
+                          <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                           <Component id="jLabel14" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Component id="jScrollPane1" max="32767" attributes="0"/>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                       </Group>
@@ -66,16 +67,13 @@
                   </Group>
                   <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="jScrollPane1" pref="64" max="32767" attributes="0"/>
                       <Group type="102" attributes="0">
-                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                           <Component id="jLabel14" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="44" max="32767" attributes="0"/>
-                      </Group>
-                      <Group type="102" attributes="0">
-                          <Component id="jScrollPane1" pref="0" max="32767" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -103,17 +101,17 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="closeDateTextBox1" alignment="0" max="32767" attributes="0"/>
-                          <Component id="closeDateTextBox" alignment="0" max="32767" attributes="0"/>
-                          <Component id="openDateTextBox" alignment="0" max="32767" attributes="0"/>
-                          <Component id="closeDateTextBox2" alignment="1" max="32767" attributes="0"/>
-                          <Component id="closeDateTextBox3" alignment="1" max="32767" attributes="0"/>
-                          <Component id="closeDateTextBox4" alignment="1" max="32767" attributes="0"/>
-                          <Component id="closeDateTextBox5" alignment="1" max="32767" attributes="0"/>
-                          <Component id="closeDateTextBox6" alignment="1" max="32767" attributes="0"/>
-                          <Component id="caseNumberTextBox" alignment="0" max="32767" attributes="0"/>
-                          <Component id="mediatorComboBox" max="32767" attributes="0"/>
-                          <Component id="mediatorComboBox1" alignment="0" max="32767" attributes="0"/>
+                          <Component id="directiveIssuedDateTextBox" alignment="0" max="32767" attributes="0"/>
+                          <Component id="boardActionPreDDateTextBox" alignment="0" max="32767" attributes="0"/>
+                          <Component id="boardActionPCDateTextBox" alignment="0" max="32767" attributes="0"/>
+                          <Component id="complaintDueDateTextBox" alignment="1" max="32767" attributes="0"/>
+                          <Component id="draftComplaintToHearingTextBox" alignment="1" max="32767" attributes="0"/>
+                          <Component id="preHearingDateTextBox" alignment="1" max="32767" attributes="0"/>
+                          <Component id="proposedRecDueDateTextBox" alignment="1" max="32767" attributes="0"/>
+                          <Component id="exceptionsDateTextBox" alignment="1" max="32767" attributes="0"/>
+                          <Component id="expeditedComboBox" alignment="0" pref="291" max="32767" attributes="0"/>
+                          <Component id="caseTypeTextBox" alignment="0" max="32767" attributes="0"/>
+                          <Component id="openClosedComboBox" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -123,61 +121,61 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="caseNumberTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="openClosedComboBox" max="32767" attributes="0"/>
+                          <Component id="jLabel1" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel2" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
-                          <Component id="mediatorComboBox" alignment="3" max="32767" attributes="0"/>
+                          <Component id="caseTypeTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="openDateTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="boardActionPCDateTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="closeDateTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="boardActionPreDDateTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="closeDateTextBox1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="directiveIssuedDateTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel6" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
-                          <Component id="mediatorComboBox1" alignment="3" max="32767" attributes="0"/>
+                          <Component id="expeditedComboBox" alignment="3" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel13" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="closeDateTextBox2" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="complaintDueDateTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel26" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="closeDateTextBox3" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="draftComplaintToHearingTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel28" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="closeDateTextBox4" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="preHearingDateTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel27" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="closeDateTextBox5" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="proposedRecDueDateTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel29" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="closeDateTextBox6" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="exceptionsDateTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -213,7 +211,7 @@
                 <Property name="text" type="java.lang.String" value="Expedited:"/>
               </Properties>
             </Component>
-            <Component class="com.alee.extended.date.WebDateField" name="openDateTextBox">
+            <Component class="com.alee.extended.date.WebDateField" name="boardActionPCDateTextBox">
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -228,13 +226,13 @@
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="openDateTextBoxMouseClicked"/>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="boardActionPCDateTextBoxMouseClicked"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="openDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="boardActionPCDateTextBox.setDateFormat(Global.mmddyyyy);"/>
               </AuxValues>
             </Component>
-            <Component class="com.alee.extended.date.WebDateField" name="closeDateTextBox">
+            <Component class="com.alee.extended.date.WebDateField" name="boardActionPreDDateTextBox">
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -249,32 +247,10 @@
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="closeDateTextBoxMouseClicked"/>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="boardActionPreDDateTextBoxMouseClicked"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="closeDateTextBox.setDateFormat(Global.mmddyyyy);"/>
-              </AuxValues>
-            </Component>
-            <Component class="javax.swing.JTextField" name="caseNumberTextBox">
-              <Properties>
-                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="ee" green="ee" red="ee" type="rgb"/>
-                </Property>
-                <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="0" green="0" red="0" type="rgb"/>
-                </Property>
-                <Property name="enabled" type="boolean" value="false"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JComboBox" name="mediatorComboBox">
-              <Properties>
-                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="0"/>
-                </Property>
-                <Property name="enabled" type="boolean" value="false"/>
-              </Properties>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="boardActionPreDDateTextBox.setDateFormat(Global.mmddyyyy);"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel13">
@@ -302,7 +278,7 @@
                 <Property name="text" type="java.lang.String" value="Exceptions Date:"/>
               </Properties>
             </Component>
-            <Component class="com.alee.extended.date.WebDateField" name="closeDateTextBox1">
+            <Component class="com.alee.extended.date.WebDateField" name="directiveIssuedDateTextBox">
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -317,13 +293,13 @@
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="closeDateTextBox1MouseClicked"/>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="directiveIssuedDateTextBoxMouseClicked"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="closeDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="directiveIssuedDateTextBox.setDateFormat(Global.mmddyyyy);"/>
               </AuxValues>
             </Component>
-            <Component class="com.alee.extended.date.WebDateField" name="closeDateTextBox2">
+            <Component class="com.alee.extended.date.WebDateField" name="complaintDueDateTextBox">
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -338,13 +314,13 @@
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="closeDateTextBox2MouseClicked"/>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="complaintDueDateTextBoxMouseClicked"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="closeDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="complaintDueDateTextBox.setDateFormat(Global.mmddyyyy);"/>
               </AuxValues>
             </Component>
-            <Component class="com.alee.extended.date.WebDateField" name="closeDateTextBox3">
+            <Component class="com.alee.extended.date.WebDateField" name="draftComplaintToHearingTextBox">
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -359,13 +335,13 @@
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="closeDateTextBox3MouseClicked"/>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="draftComplaintToHearingTextBoxMouseClicked"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="closeDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="draftComplaintToHearingTextBox.setDateFormat(Global.mmddyyyy);"/>
               </AuxValues>
             </Component>
-            <Component class="com.alee.extended.date.WebDateField" name="closeDateTextBox4">
+            <Component class="com.alee.extended.date.WebDateField" name="preHearingDateTextBox">
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -380,13 +356,13 @@
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="closeDateTextBox4MouseClicked"/>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="preHearingDateTextBoxMouseClicked"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="closeDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="preHearingDateTextBox.setDateFormat(Global.mmddyyyy);"/>
               </AuxValues>
             </Component>
-            <Component class="com.alee.extended.date.WebDateField" name="closeDateTextBox5">
+            <Component class="com.alee.extended.date.WebDateField" name="proposedRecDueDateTextBox">
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -401,13 +377,13 @@
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="closeDateTextBox5MouseClicked"/>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="proposedRecDueDateTextBoxMouseClicked"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="closeDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="proposedRecDueDateTextBox.setDateFormat(Global.mmddyyyy);"/>
               </AuxValues>
             </Component>
-            <Component class="com.alee.extended.date.WebDateField" name="closeDateTextBox6">
+            <Component class="com.alee.extended.date.WebDateField" name="exceptionsDateTextBox">
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -422,22 +398,50 @@
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="closeDateTextBox6MouseClicked"/>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="exceptionsDateTextBoxMouseClicked"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="closeDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="exceptionsDateTextBox.setDateFormat(Global.mmddyyyy);"/>
               </AuxValues>
             </Component>
-            <Component class="javax.swing.JComboBox" name="mediatorComboBox1">
+            <Component class="javax.swing.JComboBox" name="expeditedComboBox">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="0"/>
+                  <StringArray count="2">
+                    <StringItem index="0" value="No"/>
+                    <StringItem index="1" value="Yes"/>
+                  </StringArray>
                 </Property>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>
+            </Component>
+            <Component class="javax.swing.JComboBox" name="openClosedComboBox">
+              <Properties>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="2">
+                    <StringItem index="0" value="Open"/>
+                    <StringItem index="1" value="Closed"/>
+                  </StringArray>
+                </Property>
+                <Property name="enabled" type="boolean" value="false"/>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+              </AuxValues>
+            </Component>
+            <Component class="javax.swing.JTextField" name="caseTypeTextBox">
+              <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ee" green="ee" red="ee" type="rgb"/>
+                </Property>
+                <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="0" green="0" red="0" type="rgb"/>
+                </Property>
+                <Property name="enabled" type="boolean" value="false"/>
+              </Properties>
             </Component>
           </SubComponents>
         </Container>
@@ -462,17 +466,17 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="pbrBoxTextBox1" alignment="0" max="32767" attributes="0"/>
-                          <Component id="pbrBoxTextBox2" alignment="1" max="32767" attributes="0"/>
-                          <Component id="pbrBoxTextBox3" alignment="1" max="32767" attributes="0"/>
-                          <Component id="pbrBoxTextBox4" alignment="1" max="32767" attributes="0"/>
-                          <Component id="pbrBoxTextBox5" alignment="1" max="32767" attributes="0"/>
-                          <Component id="pbrBoxTextBox6" alignment="1" max="32767" attributes="0"/>
-                          <Component id="closeDateTextBox7" max="32767" attributes="0"/>
-                          <Component id="groupTypeComboBox" alignment="0" max="32767" attributes="0"/>
-                          <Component id="statusComboBox" alignment="0" max="32767" attributes="0"/>
-                          <Component id="closeDateTextBox8" alignment="0" max="32767" attributes="0"/>
-                          <Component id="closeDateTextBox9" alignment="0" max="32767" attributes="0"/>
+                          <Component id="companionCasesTextBox" alignment="1" max="32767" attributes="0"/>
+                          <Component id="boardActionDateTextBox" max="32767" attributes="0"/>
+                          <Component id="aljComboBox" alignment="0" pref="292" max="32767" attributes="0"/>
+                          <Component id="complaintIssuedDateTextBox" alignment="0" max="32767" attributes="0"/>
+                          <Component id="hearingDateTextBox" alignment="0" max="32767" attributes="0"/>
+                          <Component id="opinionTextBox" alignment="0" max="32767" attributes="0"/>
+                          <Component id="proposedRecIssuedTextBox" alignment="1" max="32767" attributes="0"/>
+                          <Component id="responseFilingDateTextBox" alignment="1" max="32767" attributes="0"/>
+                          <Component id="issuanceOfOPDirDateTextBox" alignment="1" max="32767" attributes="0"/>
+                          <Component id="finalResultComboBox" alignment="0" max="32767" attributes="0"/>
+                          <Component id="otherTextBox" alignment="1" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -484,16 +488,16 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="closeDateTextBox7" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="boardActionDateTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabel8" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
+                          <Component id="otherTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="groupTypeComboBox" max="32767" attributes="0"/>
-                          <Component id="jLabel8" max="32767" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="statusComboBox" max="-2" attributes="0"/>
+                          <Component id="aljComboBox" max="-2" attributes="0"/>
                           <Group type="102" attributes="0">
                               <EmptySpace min="4" pref="4" max="-2" attributes="0"/>
                               <Component id="jLabel9" max="32767" attributes="0"/>
@@ -502,42 +506,42 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel11" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
-                          <Component id="closeDateTextBox8" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="complaintIssuedDateTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel10" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
-                          <Component id="closeDateTextBox9" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="hearingDateTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel12" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="pbrBoxTextBox1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="proposedRecIssuedTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel16" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="pbrBoxTextBox2" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="responseFilingDateTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel17" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="pbrBoxTextBox3" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="issuanceOfOPDirDateTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jLabel18" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="pbrBoxTextBox4" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="finalResultComboBox" max="32767" attributes="0"/>
+                          <Component id="jLabel18" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel19" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="pbrBoxTextBox5" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="opinionTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel20" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="pbrBoxTextBox6" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="companionCasesTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
@@ -560,18 +564,7 @@
                 <Property name="text" type="java.lang.String" value="ALJ Assigned:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JComboBox" name="groupTypeComboBox">
-              <Properties>
-                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="0"/>
-                </Property>
-                <Property name="enabled" type="boolean" value="false"/>
-              </Properties>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-              </AuxValues>
-            </Component>
-            <Component class="javax.swing.JComboBox" name="statusComboBox">
+            <Component class="javax.swing.JComboBox" name="aljComboBox">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="0"/>
@@ -622,7 +615,7 @@
                 <Property name="text" type="java.lang.String" value="Companion Cases:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="pbrBoxTextBox1">
+            <Component class="javax.swing.JTextField" name="companionCasesTextBox">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ee" green="ee" red="ee" type="rgb"/>
@@ -633,62 +626,7 @@
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="pbrBoxTextBox2">
-              <Properties>
-                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="ee" green="ee" red="ee" type="rgb"/>
-                </Property>
-                <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="0" green="0" red="0" type="rgb"/>
-                </Property>
-                <Property name="enabled" type="boolean" value="false"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JTextField" name="pbrBoxTextBox3">
-              <Properties>
-                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="ee" green="ee" red="ee" type="rgb"/>
-                </Property>
-                <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="0" green="0" red="0" type="rgb"/>
-                </Property>
-                <Property name="enabled" type="boolean" value="false"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JTextField" name="pbrBoxTextBox4">
-              <Properties>
-                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="ee" green="ee" red="ee" type="rgb"/>
-                </Property>
-                <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="0" green="0" red="0" type="rgb"/>
-                </Property>
-                <Property name="enabled" type="boolean" value="false"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JTextField" name="pbrBoxTextBox5">
-              <Properties>
-                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="ee" green="ee" red="ee" type="rgb"/>
-                </Property>
-                <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="0" green="0" red="0" type="rgb"/>
-                </Property>
-                <Property name="enabled" type="boolean" value="false"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JTextField" name="pbrBoxTextBox6">
-              <Properties>
-                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="ee" green="ee" red="ee" type="rgb"/>
-                </Property>
-                <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="0" green="0" red="0" type="rgb"/>
-                </Property>
-                <Property name="enabled" type="boolean" value="false"/>
-              </Properties>
-            </Component>
-            <Component class="com.alee.extended.date.WebDateField" name="closeDateTextBox7">
+            <Component class="com.alee.extended.date.WebDateField" name="boardActionDateTextBox">
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -703,13 +641,13 @@
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="closeDateTextBox7MouseClicked"/>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="boardActionDateTextBoxMouseClicked"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="closeDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="boardActionDateTextBox.setDateFormat(Global.mmddyyyy);"/>
               </AuxValues>
             </Component>
-            <Component class="com.alee.extended.date.WebDateField" name="closeDateTextBox8">
+            <Component class="com.alee.extended.date.WebDateField" name="complaintIssuedDateTextBox">
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -724,13 +662,13 @@
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="closeDateTextBox8MouseClicked"/>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="complaintIssuedDateTextBoxMouseClicked"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="closeDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="complaintIssuedDateTextBox.setDateFormat(Global.mmddyyyy);"/>
               </AuxValues>
             </Component>
-            <Component class="com.alee.extended.date.WebDateField" name="closeDateTextBox9">
+            <Component class="com.alee.extended.date.WebDateField" name="hearingDateTextBox">
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -745,11 +683,117 @@
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="closeDateTextBox9MouseClicked"/>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="hearingDateTextBoxMouseClicked"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="closeDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="hearingDateTextBox.setDateFormat(Global.mmddyyyy);"/>
               </AuxValues>
+            </Component>
+            <Component class="com.alee.extended.date.WebDateField" name="opinionTextBox">
+              <Properties>
+                <Property name="editable" type="boolean" value="false"/>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ee" green="ee" red="ee" type="rgb"/>
+                </Property>
+                <Property name="caretColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="0" green="0" red="0" type="rgb"/>
+                </Property>
+                <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="0" green="0" red="0" type="rgb"/>
+                </Property>
+                <Property name="enabled" type="boolean" value="false"/>
+              </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="opinionTextBoxMouseClicked"/>
+              </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="opinionTextBox.setDateFormat(Global.mmddyyyy);"/>
+              </AuxValues>
+            </Component>
+            <Component class="com.alee.extended.date.WebDateField" name="proposedRecIssuedTextBox">
+              <Properties>
+                <Property name="editable" type="boolean" value="false"/>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ee" green="ee" red="ee" type="rgb"/>
+                </Property>
+                <Property name="caretColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="0" green="0" red="0" type="rgb"/>
+                </Property>
+                <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="0" green="0" red="0" type="rgb"/>
+                </Property>
+                <Property name="enabled" type="boolean" value="false"/>
+              </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="proposedRecIssuedTextBoxMouseClicked"/>
+              </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="proposedRecIssuedTextBox.setDateFormat(Global.mmddyyyy);"/>
+              </AuxValues>
+            </Component>
+            <Component class="com.alee.extended.date.WebDateField" name="responseFilingDateTextBox">
+              <Properties>
+                <Property name="editable" type="boolean" value="false"/>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ee" green="ee" red="ee" type="rgb"/>
+                </Property>
+                <Property name="caretColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="0" green="0" red="0" type="rgb"/>
+                </Property>
+                <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="0" green="0" red="0" type="rgb"/>
+                </Property>
+                <Property name="enabled" type="boolean" value="false"/>
+              </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="responseFilingDateTextBoxMouseClicked"/>
+              </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="responseFilingDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+              </AuxValues>
+            </Component>
+            <Component class="com.alee.extended.date.WebDateField" name="issuanceOfOPDirDateTextBox">
+              <Properties>
+                <Property name="editable" type="boolean" value="false"/>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ee" green="ee" red="ee" type="rgb"/>
+                </Property>
+                <Property name="caretColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="0" green="0" red="0" type="rgb"/>
+                </Property>
+                <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="0" green="0" red="0" type="rgb"/>
+                </Property>
+                <Property name="enabled" type="boolean" value="false"/>
+              </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="issuanceOfOPDirDateTextBoxMouseClicked"/>
+              </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="issuanceOfOPDirDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+              </AuxValues>
+            </Component>
+            <Component class="javax.swing.JComboBox" name="finalResultComboBox">
+              <Properties>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="0"/>
+                </Property>
+                <Property name="enabled" type="boolean" value="false"/>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+              </AuxValues>
+            </Component>
+            <Component class="javax.swing.JTextField" name="otherTextBox">
+              <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ee" green="ee" red="ee" type="rgb"/>
+                </Property>
+                <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="0" green="0" red="0" type="rgb"/>
+                </Property>
+                <Property name="enabled" type="boolean" value="false"/>
+              </Properties>
             </Component>
           </SubComponents>
         </Container>
@@ -765,7 +809,7 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="javax.swing.JTextArea" name="jTextArea1">
+            <Component class="javax.swing.JTextArea" name="caseStatusNotesTextBox">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ee" green="ee" red="ee" type="rgb"/>
@@ -811,7 +855,7 @@
                   <Component id="jLabel21" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jButton1" pref="127" max="32767" attributes="0"/>
+                      <Component id="jButton1" pref="126" max="32767" attributes="0"/>
                       <Component id="jScrollPane2" pref="0" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -833,10 +877,11 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="javax.swing.JTable" name="relatedCaseTable">
+            <Component class="javax.swing.JTable" name="mediationTable">
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                  <Table columnCount="5" rowCount="0">
+                  <Table columnCount="6" rowCount="0">
+                    <Column editable="false" title="id" type="java.lang.String"/>
                     <Column editable="false" title="PC / Pre-D" type="java.lang.String"/>
                     <Column editable="false" title="Mediator" type="java.lang.String"/>
                     <Column editable="false" title="Date Assigned" type="java.lang.String"/>
@@ -846,6 +891,11 @@
                 </Property>
                 <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                   <TableColumnModel selectionModel="0">
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
+                      <Title/>
+                      <Editor/>
+                      <Renderer/>
+                    </Column>
                     <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                       <Title/>
                       <Editor/>
@@ -878,6 +928,9 @@
                   <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="mediationTableMouseClicked"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

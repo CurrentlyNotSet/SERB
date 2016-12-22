@@ -5,23 +5,14 @@
  */
 package parker.serb.CSC;
 
-import parker.serb.ORG.*;
-import parker.serb.REP.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
-import java.util.Date;
 import java.util.List;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import parker.serb.Global;
-import parker.serb.ULP.ULPCaseSearch;
 import parker.serb.sql.Audit;
 import parker.serb.sql.CSCCase;
-import parker.serb.sql.CaseParty;
-import parker.serb.sql.ORGCase;
-import parker.serb.sql.Party;
-import parker.serb.sql.REPCase;
 
 //
 
