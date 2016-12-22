@@ -198,7 +198,7 @@ public class HearingCaseSearch extends javax.swing.JDialog {
                 (act.caseYear + "-" + act.caseType + "-" + act.caseMonth + "-" + act.caseNumber),
                 act.hearingStatus, 
                 act.hearingParties, 
-                act.hearingBoardActionDate, //county
+                act.hearingPCDate, //county
                 act.hearingALJ, //employerID
                 act.hearingBoardActionDate //BUN Number
             }); 
@@ -463,6 +463,11 @@ public class HearingCaseSearch extends javax.swing.JDialog {
     }//GEN-LAST:event_caseNumberTextBoxActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        caseYearTextBox.setText("");
+        caseTypeTextBox.setText("");
+        caseMonthTextBox.setText("");
+        caseNumberTextBox.setText("");
+        searchTextBox.setText("");
         jButton2.setEnabled(false);
         model.setNumRows(0);
         jLayeredPane1.moveToFront(jPanel1);

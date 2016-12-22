@@ -67,7 +67,7 @@ public class HearingCaseSearchData {
 
             Statement stmt = Database.connectToDB().createStatement();
 
-            String sql = "INSERT INTO MEDCaseSearch (caseYear, caseType, caseMonth, caseNumber) VALUES (?,?,?,?)";
+            String sql = "INSERT INTO HearingCaseSearch (caseYear, caseType, caseMonth, caseNumber, hearingStatus) VALUES (?,?,?,?,'Open')";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, year);
@@ -82,27 +82,57 @@ public class HearingCaseSearchData {
         }
     }
     
-    public static void updateCaseEntryFromParties(String employer, String unionName) {
+    public static void updateCaseEntryFromParties(String caseNumber) {
             
+        String parties = "";
+        
         try {
+            List<CaseParty> caseParties = CaseParty.loadPartiesByCase();
+        
+            for(CaseParty caseParty: caseParties) {
+                if(parties.equals("")) {
+                    if(caseParty.firstName.equals("") 
+                        && caseParty.lastName.equals("")) {
+                        parties += caseParty.companyName;
+                    } else {
+                        parties += (caseParty.prefix.equals("") ? "" : (caseParty.prefix + " "))
+                            + (caseParty.firstName.equals("") ? "" : (caseParty.firstName + " "))
+                            + (caseParty.middleInitial.equals("") ? "" : (caseParty.middleInitial + ". "))
+                            + (caseParty.lastName.equals("") ? "" : (caseParty.lastName))
+                            + (caseParty.suffix.equals("") ? "" : (" " + caseParty.suffix))
+                            + (caseParty.nameTitle.equals("") ? "" : (", " + caseParty.nameTitle));
+                    }
+                } else {
+                    parties += ", ";
+                    if(caseParty.firstName.equals("") 
+                        && caseParty.lastName.equals("")) {
+                        parties += caseParty.companyName;
+                    } else {
+                        parties += (caseParty.prefix.equals("") ? "" : (caseParty.prefix + " "))
+                            + (caseParty.firstName.equals("") ? "" : (caseParty.firstName + " "))
+                            + (caseParty.middleInitial.equals("") ? "" : (caseParty.middleInitial + ". "))
+                            + (caseParty.lastName.equals("") ? "" : (caseParty.lastName))
+                            + (caseParty.suffix.equals("") ? "" : (" " + caseParty.suffix))
+                            + (caseParty.nameTitle.equals("") ? "" : (", " + caseParty.nameTitle));
+                    }
+                }
+            }
 
             Statement stmt = Database.connectToDB().createStatement();
 
-            String sql = "UPDATE MEDCaseSearch SET"
-                    + " employerName = ?,"
-                    + " unionName = ?"
+            String sql = "UPDATE HearingCaseSearch SET"
+                    + " hearingParties = ?"
                     + " WHERE caseYear = ? AND"
                     + " caseType = ? AND"
                     + " caseMonth = ? AND"
                     + " caseNumber = ?";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, employer);
-            preparedStatement.setString(2, unionName);
-            preparedStatement.setString(3, Global.caseYear);
-            preparedStatement.setString(4, Global.caseType);
-            preparedStatement.setString(5, Global.caseMonth);
-            preparedStatement.setString(6, Global.caseNumber);
+            preparedStatement.setString(1, parties);
+            preparedStatement.setString(2, caseNumber.split("-")[0]);
+            preparedStatement.setString(3, caseNumber.split("-")[1]);
+            preparedStatement.setString(4, caseNumber.split("-")[2]);
+            preparedStatement.setString(5, caseNumber.split("-")[3]);
 
             preparedStatement.executeUpdate();
             
@@ -111,30 +141,36 @@ public class HearingCaseSearchData {
         }
     }
     
-    public static void updateCaseEntryFromCaseStatus(
-            String employerID, String bunnumber) {
+    public static void updateCaseEntryFromCaseInformation(
+            Timestamp boardActionPCDate,
+            int aljID,
+            Timestamp boardActionDate,
+            String status
+    ) {
             
         try {
 
             Statement stmt = Database.connectToDB().createStatement();
 
-            String sql = "UPDATE MEDCaseSearch SET"
-                    + " employerID = ?,"
-                    + " bunnumber = ?,"
-                    + " county = ?"
+            String sql = "UPDATE HearingCaseSearch SET"
+                    + " hearingPCDate = ?,"
+                    + " haeringStatus = ?,"
+                    + " hearingALJ = ?,"
+                    + " hearingBoardActionDate = ?"
                     + " WHERE caseYear = ? AND"
                     + " caseType = ? AND"
                     + " caseMonth = ? AND"
                     + " caseNumber = ?";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, employerID);
-            preparedStatement.setString(2, bunnumber);
-            preparedStatement.setString(3, Employer.getEmployerCountyByID(employerID));
-            preparedStatement.setString(4, Global.caseYear);
-            preparedStatement.setString(5, Global.caseType);
-            preparedStatement.setString(6, Global.caseMonth);
-            preparedStatement.setString(7, Global.caseNumber);
+            preparedStatement.setTimestamp(1, boardActionPCDate);
+            preparedStatement.setTimestamp(2, status);
+            preparedStatement.setString(3, User.getNameByID(aljID));
+            preparedStatement.setTimestamp(4, boardActionDate);
+            preparedStatement.setString(5, Global.caseYear);
+            preparedStatement.setString(6, Global.caseType);
+            preparedStatement.setString(7, Global.caseMonth);
+            preparedStatement.setString(8, Global.caseNumber);
             
             preparedStatement.executeUpdate();
             

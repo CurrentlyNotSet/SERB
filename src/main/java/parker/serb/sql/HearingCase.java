@@ -152,6 +152,12 @@ public class HearingCase {
                         + "-"
                         + caseNumber.split("-")[3];
                         
+                HearingCaseSearchData.createNewCaseEntry(
+                        caseNumber.split("-")[0],
+                        caseNumber.split("-")[1],
+                        caseNumber.split("-")[2],
+                        caseNumber.split("-")[3]);
+                HearingCaseSearchData.updateCaseEntryFromParties(caseNumber);
                 Global.root.getHearingHeaderPanel1().loadCases();
                 Global.root.getHearingHeaderPanel1().getjComboBox2().setSelectedItem(fullCaseNumber); 
             }
@@ -263,6 +269,12 @@ public class HearingCase {
             
             if(success == 1) {
                 detailedCaseInformationSaveInformation(newCaseInformation, caseInformation);
+                HearingCaseSearchData.updateCaseEntryFromCaseInformation(
+                    newCaseInformation.boardActionPCDate,
+                    newCaseInformation.aljID,
+                    newCaseInformation.boardActionDate,
+                    newCaseInformation.openClose
+                );
             } 
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex.getMessage());
