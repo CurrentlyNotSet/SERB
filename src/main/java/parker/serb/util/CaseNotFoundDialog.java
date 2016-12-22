@@ -7,6 +7,7 @@ package parker.serb.util;
 
 import javax.swing.JFrame;
 import parker.serb.Global;
+import parker.serb.Hearing.HearingCaseSearch;
 import parker.serb.REP.REPCaseSearch;
 import parker.serb.ULP.ULPCaseSearch;
 
@@ -109,6 +110,9 @@ public class CaseNotFoundDialog extends javax.swing.JDialog {
         } else if(Global.activeSection.equals("ULP")) {
             Global.root.getuLPHeaderPanel1().getjComboBox2().setSelectedItem("");
             new ULPCaseSearch((JFrame) Global.root.getParent(), true);
+        } else if(Global.activeSection.equals("Hearings")) {
+            Global.root.getHearingHeaderPanel1().getjComboBox2().setSelectedItem("");
+            new HearingCaseSearch((JFrame) Global.root.getParent(), true);
         }
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed

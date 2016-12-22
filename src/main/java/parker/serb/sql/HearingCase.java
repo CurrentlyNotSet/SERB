@@ -555,7 +555,18 @@ public class HearingCase {
                     + " draftComplaintToHearingDate,"
                     + " preHearingDate,"
                     + " proposedRecDueDate,"
-                    + " exceptionFilingDate"
+                    + " exceptionFilingDate,"
+                    + " boardActionDate,"
+                    + " otherAction,"
+                    + " aljID,"
+                    + " complaintIssuedDate,"
+                    + " hearingDate,"
+                    + " proposedRecIssuedDate,"
+                    + " responseFilingDate,"
+                    + " issuanceOfOptionOrDirectiveDate,"
+                    + " finalResult,"
+                    + " opinion,"
+                    + " companionCases"
                     + " from HearingCase"
                     + " where caseYear = ?"
                     + " and caseType = ?"
@@ -582,39 +593,18 @@ public class HearingCase {
                 hearingCase.preHearingDate = rs.getTimestamp("preHearingDate");
                 hearingCase.proposedRecDueDate = rs.getTimestamp("proposedRecDueDate");
                 hearingCase.exceptionFilingDate = rs.getTimestamp("exceptionFilingDate");
-
-//                ulpCase.id = rs.getInt("id");
-//                ulpCase.caseYear = rs.getString("caseYear").trim();
-//                ulpCase.caseType = rs.getString("caseType").trim();
-//                ulpCase.caseMonth = rs.getString("caseMonth").trim();
-//                ulpCase.caseNumber = rs.getString("caseNumber").trim();
-//                ulpCase.employerIDNumber = rs.getString("employerIDNumber") == null ? "" : rs.getString("employerIDNumber").trim();
-//                ulpCase.deptInState = rs.getString("deptInState") == null ? "" : rs.getString("deptInState").trim();
-//                ulpCase.barginingUnitNo = rs.getString("barginingUnitNo") == null ? "" : rs.getString("barginingUnitNo").trim();
-//                ulpCase.EONumber = rs.getString("EONumber") == null ? "" : rs.getString("EONumber").trim();
-//                ulpCase.allegation = rs.getString("allegation") == null ? "" : rs.getString("allegation").trim();
-//                ulpCase.currentStatus = rs.getString("currentStatus") == null ? "" : rs.getString("currentStatus").trim();
-//                ulpCase.priority = rs.getBoolean("priority");
-//                ulpCase.assignedDate = rs.getTimestamp("assignedDate");
-//                ulpCase.turnInDate = rs.getTimestamp("turnInDate");
-//                ulpCase.reportDueDate = rs.getTimestamp("reportDueDate");
-////                ulpCase.dismissalDate = rs.getTimestamp("dismissalDate");
-////                ulpCase.deferredDate = rs.getTimestamp("deferredDate");
-//                ulpCase.fileDate = rs.getTimestamp("fileDate");
-//                ulpCase.probableCause = rs.getBoolean("probableCause");
-//                ulpCase.appealDateReceived = rs.getTimestamp("appealDateReceived");
-//                ulpCase.appealDateSent = rs.getTimestamp("appealDateSent");
-//                ulpCase.courtName = rs.getString("courtName") == null ? "" : rs.getString("courtName").trim();
-//                ulpCase.courtCaseNumber = rs.getString("courtCaseNumber") == null ? "" : rs.getString("courtCaseNumber").trim();
-//                ulpCase.SERBCaseNumber = rs.getString("SERBCaseNumber") == null ? "" : rs.getString("SERBCaseNumber").trim();
-//                ulpCase.finalDispositionStatus = rs.getString("finalDispositionStatus") == null ? "" : rs.getString("finalDispositionStatus").trim();
-//                ulpCase.investigatorID = rs.getInt("investigatorID");
-//                ulpCase.mediatorAssignedID = rs.getInt("mediatorAssignedID");
-//                ulpCase.aljID = rs.getInt("aljID");
-//                ulpCase.statement = rs.getString("statement") == null ? "" : rs.getString("statement").trim();
-//                ulpCase.recommendation = rs.getString("recommendation") == null ? "" : rs.getString("recommendation").trim();
-//                ulpCase.investigationReveals = rs.getString("investigationReveals") == null ? "" : rs.getString("investigationReveals").trim();
-//                ulpCase.note = rs.getString("note") == null ? "" : rs.getString("note").trim();
+                
+                hearingCase.boardActionDate = rs.getTimestamp("boardActionDate");
+                hearingCase.otherAction = rs.getString("otherAction");
+                hearingCase.aljID = rs.getInt("aljID");
+                hearingCase.complaintIssuedDate = rs.getTimestamp("complaintIssuedDate");
+                hearingCase.hearingDate = rs.getTimestamp("hearingDate");
+                hearingCase.proposedRecIssuedDate = rs.getTimestamp("proposedRecIssuedDate");
+                hearingCase.responseFilingDate = rs.getTimestamp("responseFilingDate");
+                hearingCase.IssuanceOfOptionOrDirectiveDate = rs.getTimestamp("IssuanceOfOptionOrDirectiveDate");
+                hearingCase.FinalResult = rs.getString("FinalResult");
+                hearingCase.opinion = rs.getTimestamp("opinion");
+                hearingCase.companionCases = rs.getString("companionCases");
             }
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
