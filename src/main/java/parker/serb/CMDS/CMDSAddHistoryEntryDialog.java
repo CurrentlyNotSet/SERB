@@ -85,7 +85,7 @@ public class CMDSAddHistoryEntryDialog extends javax.swing.JDialog {
         
         entryTypeComboBox.addItem("");
         
-        List<CMDSHistoryCategory> entryTypes = CMDSHistoryCategory.loadActiveHistoryDescriptions();
+        List<CMDSHistoryCategory> entryTypes = CMDSHistoryCategory.loadActiveCMDSHistoryDescriptions();
         
         for(int i = 0; i < entryTypes.size(); i++) {
             entryTypeComboBox.addItem(entryTypes.get(i).entryType + " - " + entryTypes.get(i).description);

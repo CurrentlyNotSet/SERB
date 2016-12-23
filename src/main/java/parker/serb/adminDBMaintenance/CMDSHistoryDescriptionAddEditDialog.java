@@ -6,6 +6,7 @@
 package parker.serb.adminDBMaintenance;
 
 import com.alee.laf.optionpane.WebOptionPane;
+import java.util.List;
 import parker.serb.Global;
 import parker.serb.sql.CMDSHistoryCategory;
 import parker.serb.sql.CMDSHistoryDescription;
@@ -18,20 +19,23 @@ public class CMDSHistoryDescriptionAddEditDialog extends javax.swing.JDialog {
 
     private int ID;
     private CMDSHistoryDescription item;
+    String section = "";
     
     /**
      * Creates new form CMDSStatusTypeAddEditDialog
      * @param parent
      * @param modal
      * @param itemIDpassed
+     * @param sectionPassed
      */
-    public CMDSHistoryDescriptionAddEditDialog(java.awt.Frame parent, boolean modal, int itemIDpassed) {
+    public CMDSHistoryDescriptionAddEditDialog(java.awt.Frame parent, boolean modal, int itemIDpassed, String sectionPassed) {
         super(parent, modal);
         initComponents();
-        setDefaults(itemIDpassed);
+        setDefaults(itemIDpassed, sectionPassed);
     }
 
-    private void setDefaults(int itemIDpassed) {
+    private void setDefaults(int itemIDpassed, String sectionPassed) {
+        section = sectionPassed;
         ID = itemIDpassed;
         loadCategories();
         if (ID > 0) {
@@ -49,16 +53,27 @@ public class CMDSHistoryDescriptionAddEditDialog extends javax.swing.JDialog {
     }
         
     private void loadCategories(){
+        List<CMDSHistoryCategory> list = null;
+        if (section.equals("CMDS")) {
+            list = CMDSHistoryCategory.loadActiveCMDSHistoryDescriptions();
+        } else {
+            list = CMDSHistoryCategory.loadActiveHearingHistoryDescriptions();
+        }        
+        
         categoryComboBox.removeAllItems();
         categoryComboBox.addItem("");
-        for (CMDSHistoryCategory cat : CMDSHistoryCategory.loadActiveHistoryDescriptions()){
+        
+        for (CMDSHistoryCategory cat : list){
             categoryComboBox.addItem(cat.entryType);
         }
-        
     }
     
     private void loadInformation() {
-        item = CMDSHistoryDescription.getStatusByID(ID);
+        if (section.equals("CMDS")){
+            item = CMDSHistoryDescription.getCMDSHistoryDescriptionByID(ID);
+        } else {
+            item = CMDSHistoryDescription.getHearingHistoryDescriptionByID(ID);
+        }
         
         if (item.category != null){
             categoryComboBox.setSelectedItem(item.category);
@@ -72,9 +87,17 @@ public class CMDSHistoryDescriptionAddEditDialog extends javax.swing.JDialog {
         item.description = DescriptionTextField.getText().trim();
                        
         if (ID > 0){
-            CMDSHistoryDescription.updateStatusType(item);
+            if (section.equals("CMDS")) {
+                CMDSHistoryDescription.updateCMDSHistoryDescription(item);
+            } else {
+                CMDSHistoryDescription.updateHearingHistoryDescription(item);
+            }
         } else {
-            CMDSHistoryDescription.createStatusType(item);
+            if (section.equals("CMDS")) {
+                CMDSHistoryDescription.createCMDSHistoryDescription(item);
+            } else {
+                CMDSHistoryDescription.createHearingHistoryDescription(item);
+            }
         }
     }
 
