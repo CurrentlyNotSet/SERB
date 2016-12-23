@@ -64,6 +64,43 @@ public class CaseType {
         return activityList;
     }
     
+    public static List<String> getCaseTypeBySection(String section) {
+        Statement stmt = null;
+        
+        List activityList = new ArrayList<>();
+            
+        try {
+
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select caseType from CaseType where Section = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, section);
+
+            ResultSet caseType = preparedStatement.executeQuery();
+            
+            while(caseType.next()) {
+                activityList.add(caseType.getString("caseType"));
+            }
+            
+            switch(section) {
+            case "ORG":
+                activityList.add("ORG");
+                break;
+            case "Civil Service Commission":
+                activityList.add("CSC");
+                break;
+            default:
+                break;
+        }   
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return activityList;
+    }
+    
     public static List<String> getCaseTypeHearings() {
         Statement stmt = null;
         

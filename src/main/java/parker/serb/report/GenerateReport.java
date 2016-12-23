@@ -164,6 +164,24 @@ public class GenerateReport {
         return param;
     }
     
+    private static String generateCaseTypeListBySection(String section){
+        String param = "";
+        List casetypes = null;
+
+        casetypes = CaseType.getCaseTypeBySection(section);
+        
+        if (!casetypes.isEmpty()) {
+                param += "AND (";
+                
+                for (Object casetype : casetypes) {
+                    param += " " + section.replaceAll(" ", "") + ".caseType = '" + casetype.toString() + "' OR";
+                }
+                param = param.substring(0, (param.length() - 2)) + ")";
+            }
+        
+        return param;
+    }
+    
     private static void generateReport(SMDSDocuments report, HashMap hash) {
         long lStartTime = System.currentTimeMillis();
         Connection conn = null;
@@ -174,6 +192,10 @@ public class GenerateReport {
                 Global.activeUser.lastName)
         );
         hash.put("caseTypeBySection", generateCaseTypeList());
+        hash.put("caseTypeMED", generateCaseTypeListBySection("MED"));
+        hash.put("caseTypeREP", generateCaseTypeListBySection("REP"));
+        hash.put("caseTypeULP", generateCaseTypeListBySection("ULP"));
+        hash.put("caseTypeCMDS", generateCaseTypeListBySection("CMDS"));
         
         String jasperFileName = Global.reportingPath  + report.section + File.separator + report.fileName;
         
