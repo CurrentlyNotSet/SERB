@@ -135,6 +135,53 @@ public class Activity {
         }
     }
     
+    public static void addHearingActivty(String action, String fileName, String caseNumber) {
+        Statement stmt = null;
+            
+        try {
+
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, caseNumber.split("-")[0]);
+            preparedStatement.setString(2, caseNumber.split("-")[1]);
+            preparedStatement.setString(3, caseNumber.split("-")[2]);
+            preparedStatement.setString(4, caseNumber.split("-")[3]);
+            preparedStatement.setInt(5, Global.activeUser.id);
+            preparedStatement.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
+            preparedStatement.setString(7, action.equals("") ? null : action);
+            preparedStatement.setString(8, fileName == null || fileName.equals("") ? null : FilenameUtils.getName(fileName));
+            preparedStatement.setString(9, "");
+            preparedStatement.setString(10, "");
+            preparedStatement.setString(11, "");
+            preparedStatement.setString(12, "");
+            preparedStatement.setBoolean(13, false);
+            preparedStatement.setBoolean(14, false);
+
+            preparedStatement.executeUpdate();
+            
+            if(fileName != null && !fileName.equals("")) {
+                File src = new File(fileName);
+                File dst = new File(Global.activityPath + File.separator + "CMDS" + File.separator + caseNumber.split("-")[0] + File.separator + caseNumber + fileName.substring(fileName.lastIndexOf(File.separator)));
+                dst.mkdirs();
+                Files.copy(src.toPath(), dst.toPath(), REPLACE_EXISTING);
+            }
+        } catch (SQLException ex) {
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.getMessage());
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(Activity.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+    }
+    
     public static void addActivtyFromDocket(String action, String fileName,
             String[] caseNumber,
             String from, 

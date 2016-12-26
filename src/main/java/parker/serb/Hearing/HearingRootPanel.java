@@ -39,8 +39,8 @@ public class HearingRootPanel extends javax.swing.JPanel {
         Global.root.getHearingHeaderPanel1().clearAll();
         activityPanel1.clearAll();
         notesPanel1.clearAll();
-//        cMDSInformationPanel1.clearAll();
-//        cMDSHearingsPanel1.clearTable();
+        hearingInformationPanel1.clearAll();
+        hearingHearingsPanel1.clearTable();
         partiesPanel1.clearAll();
     }
     
@@ -145,15 +145,13 @@ public class HearingRootPanel extends javax.swing.JPanel {
     public void hearingUpdate(String buttonText) {
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
             case "Activity":
+                new HearingAddHistoryEntryDialog((JFrame) this.getRootPane().getParent(), true);
                 Global.root.getHearingHeaderPanel1().loadHeaderInformation();
                 break;
             case "Parties":
                 new PartySearchDialog((JFrame) this.getRootPane().getParent(), true);
                 partiesPanel1.loadHearingParties();
                 Global.root.getHearingHeaderPanel1().loadHeaderInformation();
-//                CMDSCaseSearchData.updateCaseEntryFromParties(
-//                        Global.root.getcMDSHeaderPanel1().getAppellantTextBox().getText(),
-//                        Global.root.getcMDSHeaderPanel1().getAppelleeTextBox().getText());
                 break; 
             case "Case Information":
                 if(buttonText.equals("Update")) {

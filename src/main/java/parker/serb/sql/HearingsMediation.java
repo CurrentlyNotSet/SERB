@@ -76,6 +76,36 @@ public class HearingsMediation {
         }
         return items;
     }
+    
+    public static String getLastestMediatorByCase() {
+        String mediator = "";
+
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT TOP 1 mediator FROM HearingsMediation"
+                    + " WHERE caseYear = ?"
+                    + " and caseType = ?"
+                    + " and caseMonth = ?"
+                    + " and caseNumber = ?"
+                    + " order by id DESC";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, Global.caseYear);
+            preparedStatement.setString(2, Global.caseType);
+            preparedStatement.setString(3, Global.caseMonth);
+            preparedStatement.setString(4, Global.caseNumber);
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                mediator = User.getNameByID(rs.getInt("mediator"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return mediator;
+    }
 
     public static void addMediation(
             String pcPreD,
