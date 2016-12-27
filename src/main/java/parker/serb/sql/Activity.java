@@ -859,11 +859,9 @@ public class Activity {
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                System.out.println("TESTING");
                 SlackNotification.sendNotification(ex.getMessage());
             } else {
                 SlackNotification.sendNotification(ex.getMessage());
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
             }
         } finally {
             DbUtils.closeQuietly(stmt);

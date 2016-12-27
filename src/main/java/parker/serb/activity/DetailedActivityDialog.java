@@ -21,6 +21,7 @@ import parker.serb.util.FileService;
  */
 public class DetailedActivityDialog extends javax.swing.JDialog {
 
+    String fileName;
     Activity orgActivity;
     Activity updatedActivity = new Activity();
     String passedID;
@@ -101,6 +102,8 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
         
         if(orgActivity.fileName == null) {
             viewFileButton.setVisible(false);
+        } else {
+            fileName = orgActivity.fileName;
         }
     }
     
@@ -128,8 +131,9 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
                     FileService.renameActivtyFile(orgActivity.fileName, typeComboBox.getSelectedItem().toString());
 
                     updatedActivity.fileName = orgActivity.fileName.split("_")[0] + "_"
-                            + ActivityType.getTypeAbbrv(typeComboBox.getSelectedItem().toString())
+                            + ActivityType.getTypeAbbrv(typeComboBox.getSelectedItem().toString()).replace(" ", "_")
                             + "." + orgActivity.fileName.split("\\.")[1];
+                    fileName = updatedActivity.fileName;
                 }
             } else {
                 updatedActivity.fileName = orgActivity.fileName;
@@ -334,7 +338,7 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_closeButtonActionPerformed
 
     private void viewFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewFileButtonActionPerformed
-        FileService.openFile(orgActivity.fileName);
+        FileService.openFile(fileName);
     }//GEN-LAST:event_viewFileButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

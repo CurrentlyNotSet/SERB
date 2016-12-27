@@ -339,7 +339,7 @@ public class FileService {
                 + File.separator + Global.caseYear + "-" + Global.caseType
                 + "-" + Global.caseMonth + "-" + Global.caseNumber
                 + File.separator + fileName.split("_")[0] + "_"
-                + ActivityType.getTypeAbbrv(updatedType) + "." + fileName.split("\\.")[1]));
+                + ActivityType.getTypeAbbrv(updatedType).replace(" ", "_") + "." + fileName.split("\\.")[1]));
         
         new File(Global.activityPath + Global.activeSection 
                 + File.separator + Global.caseYear
