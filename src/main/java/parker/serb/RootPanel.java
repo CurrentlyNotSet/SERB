@@ -111,10 +111,13 @@ public class RootPanel extends javax.swing.JFrame {
     }
     
     private void setDefaultTab() {
-        //TODO: Make sure default tab is still able to load else remove and load first tab
-        
         if(Global.activeUser.defaultSection != null) {
-            jTabbedPane1.setSelectedIndex(jTabbedPane1.indexOfTab(Global.activeUser.defaultSection));
+            if(jTabbedPane1.indexOfTab(Global.activeUser.defaultSection) == -1) {
+                jTabbedPane1.setSelectedIndex(0);
+            } else {
+                jTabbedPane1.setSelectedIndex(jTabbedPane1.indexOfTab(Global.activeUser.defaultSection));
+            }
+            
         }
         
         if(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()).equals("Docketing")) {
@@ -184,10 +187,8 @@ public class RootPanel extends javax.swing.JFrame {
     private void addListeners() {
         jTabbedPane1.addChangeListener((ChangeEvent e) -> {
             if(Global.activeSection != null) { 
-                Audit.addAuditEntry("Navigated to " + Global.activeSection + " section");
                 Global.activeSection = jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex());
-                
-                System.out.println(Global.activeSection);
+                Audit.addAuditEntry("Navigated to " + Global.activeSection + " section");
                 
                 setHeaderCard();
                 enableButtons();
@@ -1348,9 +1349,9 @@ public class RootPanel extends javax.swing.JFrame {
             case "MED":
                 caseLock = NewCaseLock.checkLock(Global.activeSection);
                 if(caseLock == null) {
-                    caseLock.addLock(Global.activeSection);
+                    NewCaseLock.addLock(Global.activeSection);
                     new CreateNewCaseDialog(Global.root, true);
-                    caseLock.removeLock(Global.activeSection);
+                    NewCaseLock.removeLock(Global.activeSection);
                 } else {
                     new NewCaseLockDialog(Global.root, true, caseLock);
                 }
@@ -1358,9 +1359,9 @@ public class RootPanel extends javax.swing.JFrame {
             case "ORG":
                 caseLock = NewCaseLock.checkLock(Global.activeSection);
                 if(caseLock == null) {
-                    caseLock.addLock(Global.activeSection);
+                    NewCaseLock.addLock(Global.activeSection);
                     new CreateNewOrgDialog(Global.root, true);
-                    caseLock.removeLock(Global.activeSection);
+                    NewCaseLock.removeLock(Global.activeSection);
                 } else {
                     new NewCaseLockDialog(Global.root, true, caseLock);
                 }
@@ -1368,9 +1369,9 @@ public class RootPanel extends javax.swing.JFrame {
             case "Civil Service Commission":
                 caseLock = NewCaseLock.checkLock("CSC");
                 if(caseLock == null) {
-                    caseLock.addLock("CSC");
+                    NewCaseLock.addLock("CSC");
                     new CreateNewCSCDialog(Global.root, true);
-                    caseLock.removeLock("CSC");
+                    NewCaseLock.removeLock("CSC");
                 } else {
                     new NewCaseLockDialog(Global.root, true, caseLock);
                 }
@@ -1378,7 +1379,7 @@ public class RootPanel extends javax.swing.JFrame {
             case "CMDS":
                 caseLock = NewCaseLock.checkLock(Global.activeSection);
                 if(caseLock == null) {
-                    caseLock.addLock(Global.activeSection);
+                    NewCaseLock.addLock(Global.activeSection);
                     new CreateNewCaseDialog(Global.root, true);
                     caseLock.removeLock(Global.activeSection);
                 } else {
@@ -1386,14 +1387,14 @@ public class RootPanel extends javax.swing.JFrame {
                 }
                 break;
             case "Hearings":
-//                caseLock = NewCaseLock.checkLock(Global.activeSection);
-//                if(caseLock == null) {
-//                    caseLock.addLock(Global.activeSection);
+                caseLock = NewCaseLock.checkLock(Global.activeSection);
+                if(caseLock == null) {
+                    NewCaseLock.addLock(Global.activeSection);
                     new CreateNewHearingDialog(Global.root, true);
-//                    caseLock.removeLock(Global.activeSection);
-//                } else {
-//                    new NewCaseLockDialog(Global.root, true, caseLock);
-//                }
+                    NewCaseLock.removeLock(Global.activeSection);
+                } else {
+                    new NewCaseLockDialog(Global.root, true, caseLock);
+                }
                 break;    
             default:
                 break;

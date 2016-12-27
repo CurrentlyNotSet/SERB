@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
 import parker.serb.Global;
 import parker.serb.login.Password;
 import parker.serb.util.NumberFormatService;
@@ -47,11 +48,13 @@ public class User {
     public String   jobTitle;
     
     public static void createUser(User user) {
+        Statement stmt;
+        
         try {
             long passwordSalt = Password.generatePasswordSalt();
             String tempPassword = Password.generateTempPassword();
             
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "INSERT INTO Users VALUES"
                     + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -76,13 +79,14 @@ public class User {
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                System.out.println("TESTING");
                 SlackNotification.sendNotification(ex.getMessage());
+                createUser(user);
             } else {
                 SlackNotification.sendNotification(ex.getMessage());
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
     }
     
     /**
@@ -645,11 +649,9 @@ public class User {
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                System.out.println("TESTING");
                 SlackNotification.sendNotification(ex.getMessage());
             } else {
                 SlackNotification.sendNotification(ex.getMessage());
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return userName;    
@@ -676,7 +678,6 @@ public class User {
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                System.out.println("TESTING");
                 SlackNotification.sendNotification(ex.getMessage());
             } else {
                 SlackNotification.sendNotification(ex.getMessage());
