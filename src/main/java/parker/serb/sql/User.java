@@ -670,7 +670,7 @@ public class User {
     }
     
     public static List getDocketSections() {
-        List<String> docketSections = new ArrayList<>();
+        List docketSections = new ArrayList<>();
         
         try {
             
@@ -739,11 +739,9 @@ public class User {
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                System.out.println("TESTING");
-                SlackNotification.sendNotification(ex.getMessage());
+                SlackNotification.sendNotification(ex.toString());
             } else {
-                SlackNotification.sendNotification(ex.getMessage());
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+                SlackNotification.sendNotification(ex.toString());
             }
         }
         return activeUsers;

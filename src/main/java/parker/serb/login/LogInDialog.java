@@ -122,9 +122,6 @@ public class LogInDialog extends javax.swing.JDialog {
         if(Global.activeUser.passwordReset) {
             new ResetPasswordDialog(null, true, true);
         } else {
-//            if(!Global.activeUser.applicationVersion.equals(Global.applicationVersion)) {
-//                new SingleReleaseNotesDialog(null, true);
-//            }
             new RootPanel();
         }
     }

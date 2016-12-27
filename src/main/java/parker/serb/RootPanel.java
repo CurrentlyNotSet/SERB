@@ -117,7 +117,6 @@ public class RootPanel extends javax.swing.JFrame {
             } else {
                 jTabbedPane1.setSelectedIndex(jTabbedPane1.indexOfTab(Global.activeUser.defaultSection));
             }
-            
         }
         
         if(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()).equals("Docketing")) {

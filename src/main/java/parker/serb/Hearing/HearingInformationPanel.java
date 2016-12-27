@@ -85,7 +85,7 @@ public class HearingInformationPanel extends javax.swing.JPanel {
         
         aljComboBox.addItem("");
         
-        List userList = User.loadULPComboBox();
+        List userList = User.loadSectionDropDowns("Hearings");
         
         for (Object user : userList) {
             aljComboBox.addItem((String) user);

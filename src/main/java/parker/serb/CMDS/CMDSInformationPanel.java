@@ -54,7 +54,7 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
         
         aljComboBox.addItem("");
         
-        List userList = User.loadULPComboBox();
+        List userList = User.loadSectionDropDowns("CMDS");
         
         for (Object user : userList) {
             aljComboBox.addItem((String) user);
@@ -68,7 +68,7 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
         
         mediatorComboBox.addItem("");
         
-        List userList = User.loadULPComboBox();
+        List userList = User.loadSectionDropDowns("CMDS");
         
         for (Object user : userList) {
             mediatorComboBox.addItem((String) user);

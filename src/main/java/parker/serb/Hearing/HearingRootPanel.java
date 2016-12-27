@@ -146,7 +146,7 @@ public class HearingRootPanel extends javax.swing.JPanel {
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
             case "Activity":
                 new HearingAddHistoryEntryDialog((JFrame) this.getRootPane().getParent(), true);
-                Global.root.getHearingHeaderPanel1().loadHeaderInformation();
+                activityPanel1.loadAllActivity();
                 break;
             case "Parties":
                 new PartySearchDialog((JFrame) this.getRootPane().getParent(), true);

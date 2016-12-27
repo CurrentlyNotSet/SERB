@@ -212,12 +212,20 @@ public class fileEmailDialog extends javax.swing.JDialog {
     }
     
     private void loadToComboBox(String section) {
-        List userList = null;
-                
-        switch (section) {
-            case "ULP":  userList = User.loadULPComboBox();
-            case "REP":  userList = User.loadREPComboBox();
-        }
+        List userList = User.loadSectionDropDowns(section);
+        
+//        
+//                
+//        switch (section) {
+//            case "ULP":  userList = User.loadSectionDropDowns("ULP"); break;
+//            case "REP":  userList = User.loadSectionDropDowns("REP"); break;
+//            case "MED":  userList = User.loadSectionDropDowns("MED"); break;
+//            case "ORG":  userList = User.loadSectionDropDowns("ORG"); break;
+//            case "CSC":  userList = User.loadSectionDropDowns("CSC"); break;
+//            case "CMDS":  userList = User.loadSectionDropDowns("CMDS"); break;
+//            case "Hearings":  userList = User.loadSectionDropDowns("Hearings"); break;
+//            default: break;
+//        }
         
         toComboBox.setMaximumRowCount(6);
         toComboBox.removeAllItems();

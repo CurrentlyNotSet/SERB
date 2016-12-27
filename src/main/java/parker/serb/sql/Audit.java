@@ -34,7 +34,7 @@ public class Audit {
             preparedStatement.setInt(2, Global.activeUser.id);
             preparedStatement.setString(3, action);
             
-            int result = preparedStatement.executeUpdate();
+            preparedStatement.executeUpdate();
             
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {

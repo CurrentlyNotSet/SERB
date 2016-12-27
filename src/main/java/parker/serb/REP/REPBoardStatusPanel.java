@@ -104,7 +104,7 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
         
         hearingPersonComboBox.addItem("");
         
-        List hearingPeopleList = User.loadULPComboBox();
+        List hearingPeopleList = User.loadSectionDropDowns("REP");
         
         for (Object hearingPerson : hearingPeopleList) {
             hearingPersonComboBox.addItem(hearingPerson.toString());
