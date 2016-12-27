@@ -1,14 +1,13 @@
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import parker.serb.Global;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -49,7 +48,12 @@ public class REPCaseType {
                 repCaseTypes.add(caseType);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                loadAllREPCaseTypes();
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return repCaseTypes;
     }

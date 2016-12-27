@@ -1,5 +1,6 @@
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,6 +10,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import parker.serb.Global;
+import static parker.serb.sql.REPBoardActionType.loadAllREPBoardActionTypes;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -59,8 +62,12 @@ public class REPCaseSearchData {
                 ulpCaseList.add(repCase);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                loadREPCaseList();
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return ulpCaseList;
     }
@@ -82,7 +89,12 @@ public class REPCaseSearchData {
             preparedStatement.executeUpdate();
             
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                createNewCaseEntry(year, type, month, number);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
     }
     
@@ -113,7 +125,12 @@ public class REPCaseSearchData {
             preparedStatement.executeUpdate();
             
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                updateCaseEntryFromParties(employer, employeeOrg, incumbent);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
     }
     
@@ -147,7 +164,12 @@ public class REPCaseSearchData {
             preparedStatement.executeUpdate();
             
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                updateCaseEntryFromCaseInformation(bunnumber, county, boarddeemed);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
     }
 }

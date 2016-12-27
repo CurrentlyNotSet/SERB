@@ -1,5 +1,6 @@
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,6 +11,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.dbutils.DbUtils;
 import parker.serb.Global;
+import static parker.serb.sql.REPBoardActionType.loadAllREPBoardActionTypes;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -37,7 +40,14 @@ public class REPElectionMultiCase {
 
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "Insert INTO REPElectionMultiCase (caseYear, caseType, caseMonth, caseNumber, multiCase) VALUES (?,?,?,?,?)";
+            String sql = "Insert INTO REPElectionMultiCase ("
+                    + " caseYear,"
+                    + " caseType,"
+                    + " caseMonth,"
+                    + " caseNumber,"
+                    + " multiCase)"
+                    + " VALUES"
+                    + " (?,?,?,?,?)";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, Global.caseYear);
@@ -49,9 +59,12 @@ public class REPElectionMultiCase {
             preparedStatement.executeUpdate();
 
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            DbUtils.closeQuietly(stmt);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                addMultiCase(caseNumber);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
     }
     
@@ -84,7 +97,12 @@ public class REPElectionMultiCase {
             }
             
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                checkCaseIsAlreadyPresent(caseNumber);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return newCase;
     }
@@ -111,7 +129,12 @@ public class REPElectionMultiCase {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                removeMultiCase(caseNumber);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
     }
     
@@ -149,8 +172,12 @@ public class REPElectionMultiCase {
                 activityList.add(caseActivity.getString("multiCase"));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                loadMultiCaseNumber();
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return activityList;
     }
