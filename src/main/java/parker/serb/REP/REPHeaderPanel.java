@@ -45,12 +45,7 @@ public class REPHeaderPanel extends javax.swing.JPanel {
                 Global.root.getrEPRootPanel1().getjTabbedPane1().setSelectedIndex(0);
                 if(caseNumberComboBox.getSelectedItem().toString().trim().equals("")) {
                     if(Global.root != null) {
-//                        Global.root.getjButton2().setText("Update");
                         Global.root.getjButton2().setEnabled(false);
-//                        Global.caseYear = null;
-//                        Global.caseType = null;
-//                        Global.caseMonth = null;
-//                        Global.caseNumber = null;
                         Global.root.getrEPRootPanel1().clearAll();
                     }
                 } else {

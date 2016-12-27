@@ -87,12 +87,6 @@ public class AddSiteElectionDialog extends javax.swing.JDialog {
 
         jLabel8.setText("End Time:");
 
-        addressTextBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addressTextBoxActionPerformed(evt);
-            }
-        });
-
         startTimeTextBox.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 startTimeTextBoxKeyTyped(evt);
@@ -221,10 +215,6 @@ public class AddSiteElectionDialog extends javax.swing.JDialog {
     private void siteDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_siteDateTextBoxMouseClicked
         clearDate(siteDateTextBox, evt);
     }//GEN-LAST:event_siteDateTextBoxMouseClicked
-
-    private void addressTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addressTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_addressTextBoxActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         dispose();

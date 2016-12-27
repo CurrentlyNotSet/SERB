@@ -206,7 +206,7 @@ public class REPAddMediationDialog extends javax.swing.JDialog {
 
     private Date generateDate() {
         int hour = Integer.valueOf(hourTextBox.getText().trim());
-//        
+        
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, Integer.valueOf(dateTextBox.getText().split("/")[2]));
         cal.set(Calendar.MONTH, Integer.valueOf(dateTextBox.getText().split("/")[0]) - 1);
@@ -222,7 +222,7 @@ public class REPAddMediationDialog extends javax.swing.JDialog {
     private void loadToComboBox() {
         List userList = null;
         
-        userList = User.loadREPComboBox();
+        userList = User.loadSectionDropDowns("REP");
         
         mediatorComboBox.setMaximumRowCount(6);
         mediatorComboBox.removeAllItems();
@@ -277,19 +277,7 @@ public class REPAddMediationDialog extends javax.swing.JDialog {
 
         jLabel3.setText("Time:");
 
-        hourTextBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                hourTextBoxActionPerformed(evt);
-            }
-        });
-
         jLabel4.setText(":");
-
-        minuteTextBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                minuteTextBoxActionPerformed(evt);
-            }
-        });
 
         amPMComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "AM", "PM", " " }));
         amPMComboBox.setSelectedIndex(2);
@@ -410,14 +398,6 @@ public class REPAddMediationDialog extends javax.swing.JDialog {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void hourTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hourTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_hourTextBoxActionPerformed
-
-    private void minuteTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minuteTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_minuteTextBoxActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> amPMComboBox;

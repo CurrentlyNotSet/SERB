@@ -94,29 +94,6 @@ public class REPElectionPanel extends javax.swing.JPanel {
             }
         });
         
-//        ballotsCountTime.addKeyListener(new KeyListener() {
-//            @Override
-//            public void keyTyped(KeyEvent e) {
-//                
-//                if (ballotsCountTime.getText().length() == 5) {
-//                    e.consume();
-//                } else {
-//                    char c = e.getKeyChar();
-//                    if (!((c >= '0') && (c <= '9') ||
-//                       (c == KeyEvent.VK_BACK_SPACE) ||
-//                       (c == KeyEvent.VK_DELETE))) {
-//                      e.consume();
-//                    }
-//                } 
-//            }
-//
-//            @Override
-//            public void keyPressed(KeyEvent e) {}
-//
-//            @Override
-//            public void keyReleased(KeyEvent e) {}
-//        });
-        
         pollingStartDate.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -552,14 +529,10 @@ public class REPElectionPanel extends javax.swing.JPanel {
         noTextBox.setBackground(new Color(238, 238, 238));
         challengedTextBox.setEnabled(false);
         challengedTextBox.setBackground(new Color(238, 238, 238));
-//        totalBVotesTextBox.setEnabled(false);
-//        totalBVotesTextBox.setBackground(new Color(238, 238, 238));
         outcomeComboBox.setEnabled(false);
         whoPrevailedComboBox.setEnabled(false);
         voidBallotsTextBox.setEnabled(false);
         voidBallotsTextBox.setBackground(new Color(238, 238, 238));
-//        validVotesTextBox.setEnabled(false);
-//        validVotesTextBox.setBackground(new Color(238, 238, 238));
         votesCastForNoRepresentativeTextBox.setEnabled(false);
         votesCastForNoRepresentativeTextBox.setBackground(new Color(238, 238, 238));
         votesCastforEEOTextBox.setEnabled(false);
@@ -649,12 +622,8 @@ public class REPElectionPanel extends javax.swing.JPanel {
         resultsVotesCastForRivalEEO3.setBackground(Color.WHITE);
         resultsVotesCastForNoRepresentative.setEnabled(true);
         resultsVotesCastForNoRepresentative.setBackground(Color.WHITE);
-//        resultsValidVotesCounted.setEnabled(true);
-//        resultsValidVotesCounted.setBackground(Color.WHITE);
         resultsChallengedBallots.setEnabled(true);
         resultsChallengedBallots.setBackground(Color.WHITE);
-//        resultsTotalBallotsCast.setEnabled(true);
-//        resultsTotalBallotsCast.setBackground(Color.WHITE);
         resultsWhoPrevailed.setEnabled(true);
         
         approxNumberEligibleVotersTextBox.setEnabled(true);
@@ -665,14 +634,10 @@ public class REPElectionPanel extends javax.swing.JPanel {
         noTextBox.setBackground(Color.WHITE);
         challengedTextBox.setEnabled(true);
         challengedTextBox.setBackground(Color.WHITE);
-//        totalBVotesTextBox.setEnabled(true);
-//        totalBVotesTextBox.setBackground(Color.WHITE);
         outcomeComboBox.setEnabled(true);
         whoPrevailedComboBox.setEnabled(true);
         voidBallotsTextBox.setEnabled(true);
         voidBallotsTextBox.setBackground(Color.WHITE);
-//        validVotesTextBox.setEnabled(true);
-//        validVotesTextBox.setBackground(Color.WHITE);
         votesCastForNoRepresentativeTextBox.setEnabled(true);
         votesCastForNoRepresentativeTextBox.setBackground(Color.WHITE);
         votesCastforEEOTextBox.setEnabled(true);
@@ -735,8 +700,6 @@ public class REPElectionPanel extends javax.swing.JPanel {
             //selfReleasing
             newCaseInformation.selfReleasing = selfReleasingTextBox.getText().equals("") ? null : selfReleasingTextBox.getText();
             
-//            preElectionConfDateTextBox.setText(repCase.preElectionConfDate == null ? "" : Global.mmddyyyy.format(repCase.preElectionConfDate.getTime()));
-//            selfReleasingTextBox.setText(repCase.selfReleasing == null ? "" : repCase.selfReleasing);
         } else if(newCaseInformation.electionType1.equals("Mail") ||
                 newCaseInformation.electionType1.equals("Electronic")) {
             //eligibilityDate
@@ -2311,69 +2274,67 @@ public class REPElectionPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void electionType1ComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_electionType1ComboBoxActionPerformed
-//        if(electionType1ComboBox.getSelectedItem() != null) {
-            jPanel2.setVisible(electionType1ComboBox.getSelectedItem().equals("On-Site")); 
-        
-            if(electionType1ComboBox.getSelectedItem().equals("")) {
+        jPanel2.setVisible(electionType1ComboBox.getSelectedItem().equals("On-Site")); 
+
+        if(electionType1ComboBox.getSelectedItem().equals("")) {
+            jPanel3.setVisible(false);
+            jPanel4.setVisible(false);
+        } else {
+            jPanel3.setVisible(true);
+            jPanel4.setVisible(true);
+        }
+
+        switch(electionType1ComboBox.getSelectedItem().toString()) {
+            case "On-Site":
+
+                jPanel14.remove(jPanel16);
+                jPanel14.add(jPanel15);
+                siteCard.show(jPanel14, "card2");
+                if(electionType3ComboBox.getSelectedItem().toString().equals("Standard")) {
+                    if(electionType1ComboBox.getSelectedItem().toString().trim().equals("")) {
+                        jPanel4.setVisible(false);
+                    } else {
+                        jPanel4.setVisible(true);
+                        resultsCard.show(jPanel4, "card2");
+                    }
+                } else {
+                    jPanel4.setVisible(true);
+                    resultsCard.show(jPanel4, "card3");
+                }
+                break;
+            case "Mail":
+            case "Electronic":
+                jPanel14.add(jPanel16);
+                jPanel14.remove(jPanel15);
+                siteCard.show(jPanel14, "card3");
+                if(electionType3ComboBox.getSelectedItem().toString().equals("Standard")) {
+                    if(electionType1ComboBox.getSelectedItem().toString().trim().equals("")) {
+                        jPanel4.setVisible(false);
+                    } else {
+                        jPanel4.setVisible(true);
+                        resultsCard.show(jPanel4, "card2");
+                    }
+                } else {
+                    jPanel4.setVisible(true);
+                    resultsCard.show(jPanel4, "card3");
+                }
+                break;
+            default:
                 jPanel3.setVisible(false);
                 jPanel4.setVisible(false);
-            } else {
-                jPanel3.setVisible(true);
-                jPanel4.setVisible(true);
-            }
-
-            switch(electionType1ComboBox.getSelectedItem().toString()) {
-                case "On-Site":
-                    
-                    jPanel14.remove(jPanel16);
-                    jPanel14.add(jPanel15);
-                    siteCard.show(jPanel14, "card2");
-                    if(electionType3ComboBox.getSelectedItem().toString().equals("Standard")) {
-                        if(electionType1ComboBox.getSelectedItem().toString().trim().equals("")) {
-                            jPanel4.setVisible(false);
-                        } else {
-                            jPanel4.setVisible(true);
-                            resultsCard.show(jPanel4, "card2");
-                        }
+                if(electionType3ComboBox.getSelectedItem().toString().equals("Standard")) {
+                    if(electionType1ComboBox.getSelectedItem().toString().trim().equals("")) {
+                        jPanel4.setVisible(false);
                     } else {
                         jPanel4.setVisible(true);
-                        resultsCard.show(jPanel4, "card3");
+                        resultsCard.show(jPanel4, "card2");
                     }
-                    break;
-                case "Mail":
-                case "Electronic":
-                    jPanel14.add(jPanel16);
-                    jPanel14.remove(jPanel15);
-                    siteCard.show(jPanel14, "card3");
-                    if(electionType3ComboBox.getSelectedItem().toString().equals("Standard")) {
-                        if(electionType1ComboBox.getSelectedItem().toString().trim().equals("")) {
-                            jPanel4.setVisible(false);
-                        } else {
-                            jPanel4.setVisible(true);
-                            resultsCard.show(jPanel4, "card2");
-                        }
-                    } else {
-                        jPanel4.setVisible(true);
-                        resultsCard.show(jPanel4, "card3");
-                    }
-                    break;
-                default:
-                    jPanel3.setVisible(false);
-                    jPanel4.setVisible(false);
-                    if(electionType3ComboBox.getSelectedItem().toString().equals("Standard")) {
-                        if(electionType1ComboBox.getSelectedItem().toString().trim().equals("")) {
-                            jPanel4.setVisible(false);
-                        } else {
-                            jPanel4.setVisible(true);
-                            resultsCard.show(jPanel4, "card2");
-                        }
-                    } else {
-                        jPanel4.setVisible(true);
-                        resultsCard.show(jPanel4, "card3");
-                    }
-                    break;
-            }
-//        }
+                } else {
+                    jPanel4.setVisible(true);
+                    resultsCard.show(jPanel4, "card3");
+                }
+                break;
+        }
     }//GEN-LAST:event_electionType1ComboBoxActionPerformed
 
     private void electionType3ComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_electionType3ComboBoxActionPerformed

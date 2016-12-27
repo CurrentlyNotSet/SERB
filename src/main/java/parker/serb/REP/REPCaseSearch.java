@@ -5,7 +5,6 @@
  */
 package parker.serb.REP;
 
-import parker.serb.REP.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
@@ -14,7 +13,6 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
 import parker.serb.sql.REPCaseSearchData;
-import parker.serb.sql.ULPCaseSearchData;
 
 /**
  *
@@ -25,6 +23,7 @@ public class REPCaseSearch extends javax.swing.JDialog {
     DefaultTableModel model;
     List caseList;
     Object[][] tableData;
+    
     /**
      * Creates new form REPCaseSearch
      */
