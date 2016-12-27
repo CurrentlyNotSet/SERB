@@ -48,7 +48,7 @@ public class User {
     public String   jobTitle;
     
     public static void createUser(User user) {
-        Statement stmt;
+        Statement stmt = null;
         
         try {
             long passwordSalt = Password.generatePasswordSalt();
@@ -84,9 +84,7 @@ public class User {
             } else {
                 SlackNotification.sendNotification(ex.getMessage());
             }
-        } finally {
-            DbUtils.closeQuietly(stmt);
-        }
+        } 
     }
     
     /**
