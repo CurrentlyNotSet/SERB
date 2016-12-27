@@ -43,10 +43,6 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
                         Global.root.getjButton2().setEnabled(false);
                         Global.root.getjButton3().setEnabled(false);
                         Global.root.getjButton6().setEnabled(false);
-//                        Global.caseYear = null;
-//                        Global.caseType = null;
-//                        Global.caseMonth = null;
-//                        Global.caseNumber = null;
                         Global.root.getuLPRootPanel1().clearAll();
                     }
                 } else {
@@ -140,6 +136,11 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
             chargingPartyREPTextBox.setText(chargingPartyREP);
             chargedPartyTextBox.setText(chargedParty);
             chargedPartyREPTextBox.setText(chargedPartyREP);
+            
+            chargingPartyTextBox.setCaretPosition(0);
+            chargingPartyREPTextBox.setCaretPosition(0);
+            chargedPartyTextBox.setCaretPosition(0);
+            chargedPartyREPTextBox.setCaretPosition(0);
         }
     }
     
