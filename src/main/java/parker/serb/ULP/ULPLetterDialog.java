@@ -109,7 +109,7 @@ public class ULPLetterDialog extends javax.swing.JDialog {
             selection = agendaComboBox.getSelectedItem().toString().trim();
         }
 
-        if (!"".equals(selection)) {
+        if (!selection.equals("")) {
             SMDSDocuments template = SMDSDocuments.findDocumentByDescription(selection);
                         
             new LetterGenerationPanel(Global.root, true, template, null);

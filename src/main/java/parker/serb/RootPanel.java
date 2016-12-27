@@ -47,13 +47,19 @@ import parker.serb.util.CreateNewCaseDialog;
 import parker.serb.login.ExitVerification;
 import parker.serb.mailLogViewer.MailLogViewerPanel;
 import parker.serb.publicRecords.PublicRecordsMainPanel;
+import parker.serb.sql.CMDSCase;
 import parker.serb.sql.DocketLock;
 import parker.serb.sql.EmailOut;
+import parker.serb.sql.HearingCase;
+import parker.serb.sql.MEDCase;
 import parker.serb.sql.NewCaseLock;
+import parker.serb.sql.REPCase;
+import parker.serb.sql.ULPCase;
 import parker.serb.util.CreateNewCSCDialog;
 import parker.serb.util.CreateNewHearingDialog;
 import parker.serb.util.CreateNewOrgDialog;
 import parker.serb.util.NewCaseLockDialog;
+import parker.serb.util.NumberFormatService;
 import parker.serb.util.ReleaseNotesDialog;
 
 
@@ -78,12 +84,7 @@ public class RootPanel extends javax.swing.JFrame {
         setHeaderCard();
         enableButtons();
         letterQueueThread();
-        
-        //TODO: Move this to a single call to speed up time
-        User.updateLastLogInTime();
-        User.updateLastPCName();
-        User.updateApplicationVersion();
-        User.updateActiveLogIn();
+        User.updateLogInInformation();
         Global.activeUser.activeLogIn = true;
         Audit.addAuditEntry("Logged In");
         setLocationRelativeTo(null);
@@ -140,11 +141,17 @@ public class RootPanel extends javax.swing.JFrame {
                 card.show(jPanel9, "card3");
                 jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
                 rEPHeaderPanel1.loadCases();
+                if(REPCase.validateCaseNumber(NumberFormatService.generateFullCaseNumber())) {
+                    rEPHeaderPanel1.getjComboBox2().setSelectedItem(NumberFormatService.generateFullCaseNumber());
+                }
                 break;
             case "ULP":
                 card.show(jPanel9, "card4");
                 jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
                 uLPHeaderPanel1.loadCases();
+                if(ULPCase.validateCaseNumber(NumberFormatService.generateFullCaseNumber())) {
+                    uLPHeaderPanel1.getjComboBox2().setSelectedItem(NumberFormatService.generateFullCaseNumber());
+                }
                 break;
             case "ORG":
                 card.show(jPanel9, "card5");
@@ -155,11 +162,17 @@ public class RootPanel extends javax.swing.JFrame {
                 card.show(jPanel9, "card6");
                 jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
                 mEDHeaderPanel1.loadCases();
+                if(MEDCase.validateCaseNumber(NumberFormatService.generateFullCaseNumber())) {
+                    mEDHeaderPanel1.getjComboBox2().setSelectedItem(NumberFormatService.generateFullCaseNumber());
+                }
                 break;    
             case "Hearings":
                 card.show(jPanel9, "card7");
                 jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
                 hearingHeaderPanel1.loadCases();
+                if(HearingCase.validateCaseNumber(NumberFormatService.generateFullCaseNumber())) {
+                    hearingHeaderPanel1.getjComboBox2().setSelectedItem(NumberFormatService.generateFullCaseNumber());
+                }
                 break; 
             case "Civil Service Commission":
                 card.show(jPanel9, "card8");
@@ -409,8 +422,13 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton2.setMinimumSize(dim);
                 jButton2.setMaximumSize(dim);
                 jButton2.setVisible(true);
-                jButton2.setText("Update");
-                jButton2.setEnabled(false);
+                if(Global.caseNumber == null) {
+                    jButton2.setText("Add Entry");
+                    jButton2.setEnabled(false);
+                } else {
+                    jButton2.setText("Add Entry");
+                    jButton2.setEnabled(true);
+                }
                 jButton3.setSize(dim);
                 jButton3.setVisible(false);
                 jButton3.setText("All Org Letters");

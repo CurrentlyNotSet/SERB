@@ -20,33 +20,6 @@ public class CaseNumber {
     public String date;
     public String filePath;
     
-    
-//    public static void createTable() {
-//        Statement stmt = null;
-//        try {
-//            
-//            stmt = Database.connectToDB().createStatement();
-//            
-//            String sql = "CREATE TABLE Activity" +
-//                    "(id int IDENTITY (1,1) NOT NULL, " +
-//                    " caseNumber varchar(16) NOT NULL, " + 
-//                    " userID varchar(1), " +
-//                    " date datetime NOT NULL, " +
-//                    " action text NOT NULL, " +
-//                    " PRIMARY KEY (id))"; 
-//            
-//            stmt.executeUpdate(sql);
-//        } catch (SQLException ex) {
-//            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-//        } finally {
-//            try {
-//                stmt.close();
-//            } catch (SQLException ex) {
-//                Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        }
-//    }
-    
     /**
      * Gets the next case number to be used for case type.  If nothing is found
      * the default returned is 1

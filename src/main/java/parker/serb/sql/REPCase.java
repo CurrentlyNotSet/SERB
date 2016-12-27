@@ -1,5 +1,6 @@
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import parker.serb.Global;
+import static parker.serb.sql.REPBoardActionType.loadAllREPBoardActionTypes;
 import parker.serb.util.SlackNotification;
 
 /**
@@ -198,7 +200,12 @@ public class REPCase {
                 caseNumberList.add(createdCaseNumber);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                loadREPCaseNumbers();
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return caseNumberList;
     }
@@ -234,9 +241,13 @@ public class REPCase {
             valid = validRS.getInt("results") > 0;
             
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                validateCaseNumber(fullCaseNumber);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
-        
         return valid;
     }
     
@@ -270,7 +281,12 @@ public class REPCase {
             note = caseNumberRS.getString("note");
 
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                loadNote();
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return note;
     }
@@ -302,7 +318,12 @@ public class REPCase {
             Audit.addAuditEntry("Updated Note for " + Global.caseNumber);
             Activity.addActivty("Updated Note", null);
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                updateNote(note);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
     }
     
@@ -341,7 +362,12 @@ public class REPCase {
                 Global.root.getrEPHeaderPanel1().getjComboBox2().setSelectedItem(fullCaseNumber); 
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                createCase(caseYear, caseType, caseMonth, caseNumber);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
     }
     
@@ -381,10 +407,13 @@ public class REPCase {
                 rep.type = caseHeader.getString("type");
                 rep.bargainingUnitNumber = caseHeader.getString("bargainingUnitNumber");
             }
-                
-            
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                loadHeaderInformation();
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return rep;
     }
@@ -468,7 +497,12 @@ public class REPCase {
                 rep.clerksClosedUser = caseInformation.getInt("clerksClosedUser");
             }
         } catch (SQLException ex) {
-//            SlackNotification.sendNotification(ex.getMessage());
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                loadCaseInformation();
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return rep;
     }
@@ -636,7 +670,12 @@ public class REPCase {
                 rep.combinedVotesCastForRivalEEO3 = caseInformation.getString("combinedVotesCastForRivalEEO3");
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                loadCaseDetails(caseYear, caseType, caseMonth, caseNumber);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return rep;
     }
@@ -700,7 +739,12 @@ public class REPCase {
                 rep.ERNameChangeTo = caseInformation.getString("ERNameChangeTo");
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                loadCaseDetails();
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return rep;
     }
@@ -738,7 +782,12 @@ public class REPCase {
                 rep.boardStatusBlurb = caseInformation.getString("boardStatusBlurb");
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                loadBoardStatus();
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return rep;
     }
@@ -924,7 +973,12 @@ public class REPCase {
 
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                loadElectionInformation();
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return rep;
     }
@@ -962,7 +1016,12 @@ public class REPCase {
                 detailedBoardStatusDetailsSaveInformation(newCaseInformation, caseInformation);
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                updateBoardStatus(newCaseInformation, caseInformation);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
     }
     
@@ -1145,7 +1204,12 @@ public class REPCase {
                 Activity.addActivty("Updated Election Information", null);
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                updateElectionInformation(newCaseInformation, caseInformation, professional, nonprofessional, combined);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
     }
     
@@ -1206,40 +1270,14 @@ public class REPCase {
                 detailedCaseDetailsSaveInformation(newCaseInformation, caseInformation);
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                updateCaseDetails(newCaseInformation, caseInformation);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
     }
-    
-    /**
-     * Creates a duplicate case, copying all case information, excluding activity,
-     * as well as copying parties
-     * @param caseNumber
-     * @param duplicateCase 
-     */
-//    public static void createDuplicateCase(String caseNumber, String duplicateCase) {
-//        try {
-//            Statement stmt = Database.connectToDB().createStatement();
-//
-//            String sql = "Select * from REPCase where caseNumber = ?";
-//
-//            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-//            preparedStatement.setString(1, duplicateCase);
-//
-//            int success = preparedStatement.executeUpdate();
-//            
-//            if(success == 1) {
-////                SlackNotification.sendNotification("Case " + caseNumber + " Created");
-////                CaseNumber.updateNextCaseNumber(caseNumber);
-////                Activity.addNewCaseActivty(caseNumber);
-//                Global.root.getrEPHeaderPanel1().loadCases();
-//                Global.root.getrEPHeaderPanel1().getjComboBox2().setSelectedItem(caseNumber); 
-//            } else {
-//                SlackNotification.sendNotification("Case " + caseNumber + " Does not exist");
-//            }
-//        } catch (SQLException ex) {
-//            SlackNotification.sendNotification(ex.getMessage());
-//        }
-//    }
     
     public static void updateCaseInformation(REPCase newCaseInformation, REPCase caseInformation) {
         try {
@@ -1327,7 +1365,12 @@ public class REPCase {
                         newCaseInformation.employerIDNumber);
             } 
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                updateCaseInformation(newCaseInformation, caseInformation);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
     }
     
@@ -1827,7 +1870,12 @@ public class REPCase {
                     + caseNumberRS.getString("caseNumber"));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                loadRelatedCases();
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return caseNumberList;
     }
@@ -1861,7 +1909,12 @@ public class REPCase {
             }
             stmt.close();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                checkIfFristCaseOfMonth(year, type, month);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return firstCase;
     }

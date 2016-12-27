@@ -1,5 +1,6 @@
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,7 +15,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.dbutils.DbUtils;
 import parker.serb.Global;
+import static parker.serb.sql.REPBoardActionType.loadAllREPBoardActionTypes;
 import parker.serb.util.NumberFormatService;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -35,9 +38,18 @@ public class REPElectionSiteInformation {
     public String siteAddress2;
     public String siteLocation;
     
-    public static void addSiteLocation(String siteDate, String sitePlace,
-            String siteAddress1, String siteAddress2, String siteLocation,
-            String siteStartTime, String startAMPM, String siteEndTime, String endAMPM) {
+    public static void addSiteLocation(
+            String siteDate,
+            String sitePlace,
+            String siteAddress1,
+            String siteAddress2,
+            String siteLocation,
+            String siteStartTime,
+            String startAMPM,
+            String siteEndTime,
+            String endAMPM
+        ) 
+    {
         Statement stmt = null;
             
         try {
@@ -76,7 +88,22 @@ public class REPElectionSiteInformation {
             
             Activity.addActivty("Added On-Site Election Location", siteDate);
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                addSiteLocation(
+                    siteDate,
+                    sitePlace,
+                    siteAddress1,
+                    siteAddress2,
+                    siteLocation,
+                    siteStartTime,
+                    startAMPM,
+                    siteEndTime,
+                    endAMPM
+                );
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         } catch (ParseException ex) {
             Logger.getLogger(REPElectionSiteInformation.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -97,7 +124,12 @@ public class REPElectionSiteInformation {
             preparedStatement.executeUpdate();
             Activity.addActivty("Removed Site Election Information", null);
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                deleteSiteInformation(id);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
     }
     
@@ -144,8 +176,12 @@ public class REPElectionSiteInformation {
                 activityList.add(info);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                loadSiteInformationByCaseNumber();
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return activityList;
     }

@@ -81,10 +81,6 @@ public class CMDSStatusType {
             ResultSet caseStatusRS = preparedStatement.executeQuery();
             
             while(caseStatusRS.next()) {
-//                CMDSStatusType rep = new CMDSStatusType();
-//                rep.id = caseStatusRS.getInt("id");
-//                rep.statusCode = caseStatusRS.getString("statusCode");
-//                rep.description = caseStatusRS.getString("description");
                 caseStatusList.add(caseStatusRS.getString("statusCode"));
             }
         } catch (SQLException ex) {

@@ -44,12 +44,18 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
                 Global.root.getHearingRootPanel1().getjTabbedPane1().setSelectedIndex(0);
                 if(caseNumberComboBox.getSelectedItem().toString().trim().equals("")) {
                     if(Global.root != null) {
-                        Global.root.getjButton2().setText("Update");
-                        Global.root.getjButton2().setEnabled(false);
-                        Global.caseNumber = null;
-                        Global.caseMonth = null;
-                        Global.caseType = null;
-                        Global.caseYear = null;
+//                        if(Global.caseNumber == null) {
+                            Global.root.getjButton2().setText("Add Entry");
+                            Global.root.getjButton2().setEnabled(false);
+//                        } else {
+//                            Global.root.getjButton2().setText("Add Entry");
+//                            Global.root.getjButton2().setEnabled(true);
+//                        }
+                        
+//                        Global.caseNumber = null;
+//                        Global.caseMonth = null;
+//                        Global.caseType = null;
+//                        Global.caseYear = null;
                         Global.root.getHearingRootPanel1().clearAll();
                     }
                 } else {

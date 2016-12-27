@@ -195,10 +195,6 @@ public class HearingRootPanel extends javax.swing.JPanel {
             case "Parties":
                 partiesPanel1.removeParty();
                 partiesPanel1.loadHearingParties();
-//                Global.root.getcMDSHeaderPanel1().loadHeaderInformation();
-//                CMDSCaseSearchData.updateCaseEntryFromParties(
-//                        Global.root.getcMDSHeaderPanel1().getAppellantTextBox().getText(),
-//                        Global.root.getcMDSHeaderPanel1().getAppelleeTextBox().getText());
                 break;
             case "Case Information":
                 cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);

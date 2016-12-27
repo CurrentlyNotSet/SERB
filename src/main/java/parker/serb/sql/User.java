@@ -391,6 +391,7 @@ public class User {
      * Update the name of the PC that the user was last using upon their last
      * successful log in
      */
+    @Deprecated
     public static void updateLastPCName() {
         try {
             Statement stmt = Database.connectToDB().createStatement();
@@ -415,6 +416,7 @@ public class User {
     /**
      * Update the application version number of the build the user is running
      */
+    @Deprecated
     public static void updateApplicationVersion() {
         try {
             Statement stmt = Database.connectToDB().createStatement();
@@ -433,6 +435,38 @@ public class User {
             } else {
                 SlackNotification.sendNotification(ex.toString());
             }
+        }
+    }
+    
+    public static void updateLogInInformation() {
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+            
+            String sql = "Update Users"
+                    + " SET"
+                    + " applicationVersion = ?,"
+                    + " lastLogInPCName = ?,"
+                    + " lastLogInDateTime = ?,"
+                    + " activeLogIn = ?"
+                    + " where username = ? and active = 1";
+            
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, Global.applicationVersion);
+            preparedStatement.setString(2, InetAddress.getLocalHost().getHostName());
+            preparedStatement.setTimestamp(3, new java.sql.Timestamp(new Date().getTime()));
+            preparedStatement.setBoolean(4, !Global.activeUser.activeLogIn);
+            preparedStatement.setString(5, Global.activeUser.username);
+            
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                updateLogInInformation();
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
+        } catch (UnknownHostException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

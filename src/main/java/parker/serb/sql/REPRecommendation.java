@@ -1,5 +1,6 @@
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -19,9 +21,6 @@ public class REPRecommendation {
     public boolean active;
     public String type;
     public String recommendation;
-    
-    
-   
     
     /**
      * Loads all activity for a specified case number, pulls the case number
@@ -49,8 +48,12 @@ public class REPRecommendation {
                 recommendationList.add(act);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                loadAllREPRecommendations();
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return recommendationList;
     }
@@ -92,8 +95,12 @@ public class REPRecommendation {
                 recommendationList.add(act);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                searchREPRecommendations(param);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return recommendationList;
     }
@@ -118,7 +125,12 @@ public class REPRecommendation {
                 item.recommendation = rs.getString("recommendation") == null ? "" : rs.getString("recommendation");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                getREPReccomendationByID(id);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return item;
     }
@@ -139,7 +151,12 @@ public class REPRecommendation {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                createREPRec(item);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
     }
 
@@ -161,8 +178,12 @@ public class REPRecommendation {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                updateREPRec(item);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
     }
-    
 }

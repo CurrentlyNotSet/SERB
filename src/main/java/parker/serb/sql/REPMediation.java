@@ -1,11 +1,11 @@
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,6 +13,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.dbutils.DbUtils;
 import parker.serb.Global;
+import static parker.serb.sql.REPBoardActionType.loadAllREPBoardActionTypes;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -56,7 +58,12 @@ public class REPMediation {
             Activity.addActivty("Created " + type, null);
 
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                addMediation(date, type, mediator, outcome);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -103,8 +110,12 @@ public class REPMediation {
                 mediationList.add(act);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                loadMediationsByCaseNumber();
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return mediationList;
     }
@@ -134,8 +145,12 @@ public class REPMediation {
                 activity.mediationOutcome = caseActivity.getString("mediationOutcome") == null ? "" : caseActivity.getString("mediationOutcome");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                loadMeidationByID(id);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return activity;
     }
@@ -167,7 +182,12 @@ public class REPMediation {
             
             Activity.addActivty("Updated Mediation", null);
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                updateMediationByID(id, date, type, mediator, outcome);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
     }
     
@@ -186,8 +206,12 @@ public class REPMediation {
             
             Activity.addActivty("Removed Mediation", null);
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                deleteMediationByID(id);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
     }
 }

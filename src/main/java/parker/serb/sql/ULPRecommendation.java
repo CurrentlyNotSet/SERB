@@ -1,5 +1,6 @@
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static parker.serb.sql.ULPCase.loadULPCases;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -48,8 +51,12 @@ public class ULPRecommendation {
                 recommendationList.add(act);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                loadAllULPRecommendations();
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return recommendationList;
     }
@@ -91,8 +98,12 @@ public class ULPRecommendation {
                 recommendationList.add(act);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                searchULPRecommendations(param);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return recommendationList;
     }
@@ -117,7 +128,12 @@ public class ULPRecommendation {
                 item.description = rs.getString("description") == null ? "" : rs.getString("description");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                getULPReccomendationByID(id);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return item;
     }
@@ -138,7 +154,12 @@ public class ULPRecommendation {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                createULPRec(item);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
     }
 
@@ -160,8 +181,12 @@ public class ULPRecommendation {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                updateULPRec(item);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
     }
-
 }

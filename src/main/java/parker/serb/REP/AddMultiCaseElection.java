@@ -170,8 +170,6 @@ public class AddMultiCaseElection extends javax.swing.JDialog {
         } else {
             caseNotFoundLabel.setText("Invalid Case Number");
         }
-        
-        
     }//GEN-LAST:event_addButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

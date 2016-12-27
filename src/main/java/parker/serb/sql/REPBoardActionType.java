@@ -1,5 +1,6 @@
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static parker.serb.sql.ULPCase.checkIfFristCaseOfMonth;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -44,8 +47,12 @@ public class REPBoardActionType {
                 REPBoardActionTypeList.add(caseActivity.getString("shortDescription"));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                loadAllREPBoardActionTypes();
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return REPBoardActionTypeList;
     }
@@ -87,8 +94,12 @@ public class REPBoardActionType {
                 recommendationList.add(act);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                searchREPBoardActionTypes(param);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return recommendationList;
     }
@@ -113,7 +124,12 @@ public class REPBoardActionType {
                 item.longDescription = rs.getString("longDescription") == null ? "" : rs.getString("longDescription");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                getREPBoardActionTypeByID(id);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return item;
     }
@@ -134,7 +150,12 @@ public class REPBoardActionType {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                createREPBoardActionType(item);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
     }
 
@@ -156,9 +177,12 @@ public class REPBoardActionType {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                updateREPBoardActionType(item);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
     }
-    
-    
 }

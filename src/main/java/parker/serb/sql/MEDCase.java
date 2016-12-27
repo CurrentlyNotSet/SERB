@@ -121,8 +121,6 @@ public class MEDCase {
     
     //strike informatin
     public Timestamp strikeFileDate;
-//    public String strikeCaseNumber;
-//    public String medCaseNumber;
     public String description;
     public String unitSize;
     public boolean unauthorizedStrike;
@@ -619,7 +617,6 @@ public class MEDCase {
             String sql = "Select"
                     + " strikeFileDate,"
                     + " relatedCaseNumber,"
-//                    + " medCaseNumber,"
                     + " unitDescription,"
                     + " unitSize,"
                     + " unauthorizedStrike,"
@@ -654,7 +651,6 @@ public class MEDCase {
                 
                 med.strikeFileDate = caseInformation.getTimestamp("strikeFileDate");
                 med.relatedCaseNumber = caseInformation.getString("relatedCaseNumber");
-//                med.medCaseNumber = caseInformation.getString("medCaseNumber");
                 med.description = caseInformation.getString("unitDescription");
                 med.unitSize = caseInformation.getString("unitSize");
                 med.unauthorizedStrike = caseInformation.getBoolean("unauthorizedStrike");
@@ -686,7 +682,6 @@ public class MEDCase {
             String sql = "Update MEDCase Set"
                     + " strikeFileDate = ?,"
                     + " relatedCaseNumber = ?,"
-//                    + " medCaseNumber = ?,"
                     + " unitDescription = ?,"
                     + " unitSize = ? ,"
                     + " unauthorizedStrike = ?,"
@@ -711,7 +706,6 @@ public class MEDCase {
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setTimestamp(1, newCaseInformation.strikeFileDate);
             preparedStatement.setString(2, newCaseInformation.relatedCaseNumber);
-//            preparedStatement.setString(3, newCaseInformation.medCaseNumber);
             preparedStatement.setString(3, newCaseInformation.description);
             preparedStatement.setString(4, newCaseInformation.unitSize);
             preparedStatement.setBoolean(5, newCaseInformation.unauthorizedStrike);
@@ -1036,7 +1030,7 @@ public class MEDCase {
         MEDCase med = null;
         try {
             Statement stmt = Database.connectToDB().createStatement();
-//
+
             String sql = "Update MEDCase set"
                     + " concilList1OrderDate = ?,"
                     + " concilList1SelectionDueDate = ?,"
@@ -1083,7 +1077,7 @@ public class MEDCase {
         MEDCase med = null;
         try {
             Statement stmt = Database.connectToDB().createStatement();
-//
+
             String sql = "Update MEDCase set"
                     + " fileDate = ?,"
                     + " employerIDNumber = ?,"
@@ -1173,7 +1167,7 @@ public class MEDCase {
         MEDCase med = null;
         try {
             Statement stmt = Database.connectToDB().createStatement();
-//
+
             String sql = "Update MEDCase set"
                     + " FFList1OrderDate = ?,"
                     + " FFList1SelectionDueDate = ?,"
@@ -1236,52 +1230,6 @@ public class MEDCase {
         }
     }
     
-    
-    
-    /**
-     * Creates a duplicate case, copying all case information, excluding activity,
-     * as well as copying parties
-     * @param caseNumber
-     * @param duplicateCase 
-     */
-    
-//    public static void createDuplicateCase(String caseNumber, String duplicateCase) {
-//        try {
-//            Statement stmt = Database.connectToDB().createStatement();
-//
-//            String sql = "Select * from REPCase where caseNumber = ?";
-//
-//            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-//            preparedStatement.setString(1, duplicateCase);
-//
-//            int success = preparedStatement.executeUpdate();
-//            
-//            if(success == 1) {
-////                SlackNotification.sendNotification("Case " + caseNumber + " Created");
-////                CaseNumber.updateNextCaseNumber(caseNumber);
-////                Activity.addNewCaseActivty(caseNumber);
-//                Global.root.getrEPHeaderPanel1().loadCases();
-//                Global.root.getrEPHeaderPanel1().getjComboBox2().setSelectedItem(caseNumber); 
-//            } else {
-//                SlackNotification.sendNotification("Case " + caseNumber + " Does not exist");
-//            }
-//        } catch (SQLException ex) {
-//            SlackNotification.sendNotification(ex.getMessage());
-//        }
-//    }
-    
-//    private static String getCertificationText(MEDCase newCase) {
-//        if(newCase.boardCertified) {
-//            return "Board";
-//        } else if(newCase.deemedCertified) {
-//            return "Deemed";
-//        } else if(newCase.certificationRevoked) {
-//            return "Cert Revoked";
-//        } else {
-//            return "";
-//        }
-//    }
-//    
     private static void detailedConciliationDetailSaveInformation(MEDCase newCaseInformation, MEDCase oldCaseInformation) {
        
         //list1orderdate
@@ -1850,17 +1798,6 @@ public class MEDCase {
                 Activity.addActivty("Changed Related Case Number from " + oldCaseInformation.relatedCaseNumber + " to " + newCaseInformation.relatedCaseNumber, null);
         }
         
-        //med case number
-//        if(newCaseInformation.medCaseNumber == null && oldCaseInformation.medCaseNumber != null) {
-//            Activity.addActivty("Removed " + oldCaseInformation.medCaseNumber + " from MED Case Number", null);
-//        } else if(newCaseInformation.medCaseNumber != null && oldCaseInformation.medCaseNumber == null) {
-//            Activity.addActivty("Set MED Case Number to " + newCaseInformation.medCaseNumber, null);
-//        } else if(newCaseInformation.medCaseNumber != null && oldCaseInformation.medCaseNumber != null) {
-//            if(!newCaseInformation.medCaseNumber.equals(oldCaseInformation.medCaseNumber)) 
-//                Activity.addActivty("Changed MED Case Number from " + oldCaseInformation.medCaseNumber + " to " + newCaseInformation.medCaseNumber, null);
-//        }
-        
-        
         //description - T
         if(newCaseInformation.description == null && oldCaseInformation.description != null) {
             Activity.addActivty("Removed " + oldCaseInformation.description + " from Unit Description", null);
@@ -2362,5 +2299,4 @@ public class MEDCase {
         }
         return med;
     }
-    
 }

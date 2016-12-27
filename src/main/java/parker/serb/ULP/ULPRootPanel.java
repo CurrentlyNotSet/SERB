@@ -23,7 +23,7 @@ import parker.serb.util.CancelUpdate;
 public class ULPRootPanel extends javax.swing.JPanel {
 
     String currentTab = "Activity";
-    boolean singleFire = true;
+    
     /**
      * Creates new form REPRootPanel
      */

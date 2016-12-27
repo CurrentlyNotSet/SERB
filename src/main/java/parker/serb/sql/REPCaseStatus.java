@@ -1,5 +1,6 @@
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static parker.serb.sql.REPBoardActionType.loadAllREPBoardActionTypes;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -41,8 +44,12 @@ public class REPCaseStatus {
                 caseStatusList.add(rep);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                loadAll();
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return caseStatusList;
     }
@@ -84,8 +91,12 @@ public class REPCaseStatus {
                 recommendationList.add(act);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                searchREPStatusOptions(param);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return recommendationList;
     }
@@ -110,7 +121,12 @@ public class REPCaseStatus {
                 item.status = rs.getString("status") == null ? "" : rs.getString("status");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                getREPCaseStatusByID(id);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return item;
     }
@@ -131,7 +147,12 @@ public class REPCaseStatus {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                createREPStatusOption(item);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
     }
 
@@ -153,7 +174,12 @@ public class REPCaseStatus {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                updateREPStatusOption(item);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
     }
     

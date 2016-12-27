@@ -22,7 +22,6 @@ import parker.serb.relatedcase.AddNewRelatedCase;
 import parker.serb.relatedcase.RemoveRelatedCaseDialog;
 import parker.serb.sql.BargainingUnit;
 import parker.serb.sql.County;
-import parker.serb.sql.DepartmentInState;
 import parker.serb.sql.REPCase;
 import parker.serb.sql.REPCaseStatus;
 import parker.serb.sql.REPCaseType;
@@ -47,7 +46,6 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         initComponents();
         relatedCaseModel = (DefaultTableModel) relatedCaseTable.getModel();
         addRelatedCaseButton.setVisible(false);
-        
     }
     
     void enableUpdate() {
@@ -64,16 +62,12 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         status2ComboBox.setBackground(Color.WHITE);
         currentOwnerComboBox.setEnabled(true);
         currentOwnerComboBox.setBackground(Color.WHITE);
-//        departmentInStateComboBox.setEnabled(true);
-//        departmentInStateComboBox.setBackground(Color.WHITE);
         
         countyComboBox.setEnabled(true);
         employerIDNumberTextBox.setEnabled(true);
         employerIDNumberTextBox.setBackground(Color.WHITE);
         bargainingUnitNumberTextBox.setEnabled(true);
         bargainingUnitNumberTextBox.setBackground(Color.WHITE);
-//        bargainingUnitNameTextBox.setEnabled(true);
-//        bargainingUnitNameTextBox.setBackground(Color.WHITE);
         
         boardCertifiedCheckBox.setEnabled(true);
         deemedCertifiedCheckBox.setEnabled(true);
@@ -269,7 +263,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         
         currentOwnerComboBox.addItem("");
         
-        List currentOwnerList = User.loadREPComboBox();
+        List currentOwnerList = User.loadSectionDropDowns("REP");
         
         for (Object currentOwners : currentOwnerList) {
             currentOwnerComboBox.addItem(currentOwners.toString());
@@ -283,7 +277,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         repClosedUser.addItem("");
         SOIReturnInitials.addItem("");
         
-        List currentOwnerList = User.loadREPComboBox();
+        List currentOwnerList = User.loadSectionDropDowns("REP");
         
         for (Object currentOwners : currentOwnerList) {
             repClosedUser.addItem(currentOwners.toString());
@@ -296,7 +290,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         
         clerksClosedUser.addItem("");
         
-        List currentOwnerList = User.loadREPComboBox();
+        List currentOwnerList = User.loadSectionDropDowns("REP");
         
         for (Object currentOwners : currentOwnerList) {
             clerksClosedUser.addItem(currentOwners.toString());
@@ -379,8 +373,6 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
     }
     
     public void loadRelatedCasesTable() {
-        
-//        DefaultTableModel relatedCaseModel = (DefaultTableModel) relatedCaseTable.getModel();
         
         relatedCaseModel.setRowCount(0);
         
@@ -1103,9 +1095,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
                     employerIDNumberTextBox.setText(search.getBuNumber().split("-")[0]);
                 }
                 search.dispose();
-            } else {
-//                new employerDetail((JFrame) Global.root.getRootPane().getParent(), true, employerIDNumberTextBox.getText().trim());
-            }
+            } 
         }
     }//GEN-LAST:event_bargainingUnitNumberTextBoxMouseClicked
 
@@ -1118,8 +1108,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_alphaListRecepitDateTextBoxMouseClicked
 
     private void notesTextAreaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_notesTextAreaMouseClicked
-        if(evt.getClickCount() == 2 && 
-            !notesTextArea.getText().equals("")) 
+        if(evt.getClickCount() == 2 && !notesTextArea.getText().equals("")) 
         {
             Global.root.getrEPRootPanel1().getjTabbedPane1().setSelectedIndex(Global.root.getrEPRootPanel1().getjTabbedPane1().indexOfTab("Notes"));
         }
