@@ -18,6 +18,7 @@ import parker.serb.sql.ULPRecommendation;
 public class ULPRecommendationPanel extends javax.swing.JPanel {
 
     String orginalRec = "";
+    
     /**
      * Creates new form ULPInvestigationReveals
      */
