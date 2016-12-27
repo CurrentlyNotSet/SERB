@@ -461,7 +461,7 @@ public class User {
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
                 SlackNotification.sendNotification(ex.toString());
-                updateApplicationVersion();
+                updateLogInInformation();
             } else {
                 SlackNotification.sendNotification(ex.toString());
             }

@@ -1,5 +1,6 @@
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,7 +11,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
 import parker.serb.Global;
+import static parker.serb.sql.User.updateApplicationVersion;
 import parker.serb.util.SlackNotification;
 
 /**
@@ -83,8 +86,13 @@ public class ULPCase {
                 caseNumberList.add(createdCaseNumber);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                loadULPCaseNumbers();
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
+        } 
         return caseNumberList;
     }
     
@@ -113,7 +121,12 @@ public class ULPCase {
                 caseNumberList.add(ulpCase);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                loadULPCases();
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return caseNumberList;
     }
@@ -138,7 +151,12 @@ public class ULPCase {
                     + caseNumberRS.getString("caseNumber"));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                loadRelatedCases();
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return caseNumberList;
     }
@@ -169,7 +187,12 @@ public class ULPCase {
             note = caseNumberRS.getString("note");
 
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                loadNote();
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return note;
     }
@@ -197,7 +220,12 @@ public class ULPCase {
             Audit.addAuditEntry("Updated Note for " + Global.caseNumber);
             Activity.addActivty("Updated Note", null);
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                updateNote(note);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
     }
     
@@ -227,7 +255,12 @@ public class ULPCase {
             investigationReveals = caseNumberRS.getString("investigationReveals");
 
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                loadInvestigationReveals();
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return investigationReveals;
     }
@@ -255,7 +288,12 @@ public class ULPCase {
             Audit.addAuditEntry("Updated Investigation Reveals for " + Global.caseNumber);
             Activity.addActivty("Updated Investigation Reveals", null);
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                updateInvestigationReveals(note);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
     }
     
@@ -285,7 +323,12 @@ public class ULPCase {
             recommendation = caseNumberRS.getString("recommendation");
 
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                loadRecommendation();
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return recommendation;
     }
@@ -316,7 +359,12 @@ public class ULPCase {
                 Activity.addActivty("Updated Recommendation", null);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                updateRecommendation(note, orginal);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
     }
     
@@ -346,7 +394,12 @@ public class ULPCase {
             recommendation = caseNumberRS.getString("statement");
 
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                loadStatement();
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return recommendation;
     }
@@ -423,7 +476,12 @@ public class ULPCase {
             
             stmt.close();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                loadStatus();
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return ulp;
     }
@@ -451,7 +509,12 @@ public class ULPCase {
             Audit.addAuditEntry("Updated Statement for " + Global.caseNumber);
             Activity.addActivty("Updated Statement", null);
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                updateStatement(note);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
     }
     
@@ -486,7 +549,12 @@ public class ULPCase {
             valid = validRS.getInt("results") > 0;
             
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                validateCaseNumber(fullCaseNumber);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         
         return valid;
@@ -539,7 +607,12 @@ public class ULPCase {
                 Global.root.getuLPHeaderPanel1().getjComboBox2().setSelectedItem(fullCaseNumber); 
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                createCase(caseYear, caseType, caseMonth, caseNumber);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
     }
     
@@ -573,7 +646,12 @@ public class ULPCase {
                 
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                loadHeaderInformation();
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return ulp;
     }
@@ -650,7 +728,12 @@ public class ULPCase {
                         newCaseInformation.employerIDNumber);
             } 
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                updateCaseStatusInformation(newCaseInformation, caseInformation);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
     }
     
@@ -899,7 +982,12 @@ public class ULPCase {
             }
             stmt.close();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                ULPDocketTo(caseNumber);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return to;
     }
@@ -934,7 +1022,12 @@ public class ULPCase {
             }
             stmt.close();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                ULPDocketNotification(caseNumber);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return to;
     }
@@ -968,7 +1061,12 @@ public class ULPCase {
             }
             stmt.close();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                checkIfFristCaseOfMonth(year, type, month);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         
         return firstCase;
@@ -1017,8 +1115,6 @@ public class ULPCase {
                 ulpCase.assignedDate = rs.getTimestamp("assignedDate");
                 ulpCase.turnInDate = rs.getTimestamp("turnInDate");
                 ulpCase.reportDueDate = rs.getTimestamp("reportDueDate");
-//                ulpCase.dismissalDate = rs.getTimestamp("dismissalDate");
-//                ulpCase.deferredDate = rs.getTimestamp("deferredDate");
                 ulpCase.fileDate = rs.getTimestamp("fileDate");
                 ulpCase.probableCause = rs.getBoolean("probableCause");
                 ulpCase.appealDateReceived = rs.getTimestamp("appealDateReceived");
@@ -1036,7 +1132,12 @@ public class ULPCase {
                 ulpCase.note = rs.getString("note") == null ? "" : rs.getString("note").trim();
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                loadULPCaseDetails(caseYear, caseType, caseMonth, caseNumber);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
         }
         return ulpCase;
     }
