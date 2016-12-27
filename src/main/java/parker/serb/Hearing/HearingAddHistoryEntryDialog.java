@@ -385,10 +385,7 @@ public class HearingAddHistoryEntryDialog extends javax.swing.JDialog {
                 entryTypeComboBox.getSelectedItem().toString().split("-")[0].trim(),
                 entryDescriptionComboBox.getSelectedItem().toString(),
                 extraTextBox.getText(),
-//                partyName(),
                 originalButton.isSelected() ? "" : "Faxed",
-//                entryDateTextBox.getText().trim(),
-//                this,
                 documnetLinkTextBox.getText().trim()
         );
         dispose();
@@ -403,7 +400,7 @@ public class HearingAddHistoryEntryDialog extends javax.swing.JDialog {
                 File selectedFile = fileChooser.getSelectedFile();
                 documnetLinkTextBox.setText(selectedFile.getAbsolutePath());
             } else {
-               documnetLinkTextBox.setText("");
+                documnetLinkTextBox.setText("");
             }
         }
     }//GEN-LAST:event_documnetLinkTextBoxMouseClicked
