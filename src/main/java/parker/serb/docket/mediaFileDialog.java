@@ -141,11 +141,7 @@ public class mediaFileDialog extends javax.swing.JDialog {
     }
     
     private void loadToComboBox() {
-        List userList = null;
-                
-        switch (selectedSection) {
-            case "ULP":  userList = User.loadULPComboBox();
-        }
+        List userList = User.loadSectionDropDowns(selectedSection);
         
         toComboBox.setMaximumRowCount(6);
         

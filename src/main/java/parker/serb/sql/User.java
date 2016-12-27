@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
 import parker.serb.Global;
 import parker.serb.login.Password;
 import parker.serb.util.NumberFormatService;
@@ -47,11 +48,13 @@ public class User {
     public String   jobTitle;
     
     public static void createUser(User user) {
+        Statement stmt = null;
+        
         try {
             long passwordSalt = Password.generatePasswordSalt();
             String tempPassword = Password.generateTempPassword();
             
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "INSERT INTO Users VALUES"
                     + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -76,11 +79,10 @@ public class User {
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                System.out.println("TESTING");
-                SlackNotification.sendNotification(ex.getMessage());
+                SlackNotification.sendNotification(ex.toString());
+                createUser(user);
             } else {
-                SlackNotification.sendNotification(ex.getMessage());
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+                SlackNotification.sendNotification(ex.toString());
             }
         } 
     }
@@ -126,11 +128,10 @@ public class User {
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                System.out.println("TESTING");
-                SlackNotification.sendNotification(ex.getMessage());
+                SlackNotification.sendNotification(ex.toString());
+                findUserByUsername(username);
             } else {
-                SlackNotification.sendNotification(ex.getMessage());
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+                SlackNotification.sendNotification(ex.toString());
             }
         } 
         return user;
@@ -177,11 +178,10 @@ public class User {
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                System.out.println("TESTING");
-                SlackNotification.sendNotification(ex.getMessage());
+                SlackNotification.sendNotification(ex.toString());
+                findActiveUsers();
             } else {
-                SlackNotification.sendNotification(ex.getMessage());
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+                SlackNotification.sendNotification(ex.toString());
             }
         }
         return activeUsers;
@@ -230,16 +230,74 @@ public class User {
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                System.out.println("TESTING");
-                SlackNotification.sendNotification(ex.getMessage());
+                SlackNotification.sendNotification(ex.toString());
+                getEnabledUsers();
             } else {
-                SlackNotification.sendNotification(ex.getMessage());
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+                SlackNotification.sendNotification(ex.toString());
             }
         }
         return activeUsers;
     }
     
+    public static List loadSectionDropDowns(String section) {
+        
+        String sectionColumnName = "";
+        
+        switch(section) {
+            case "REP":
+                sectionColumnName = "repcaseworker";
+                break;
+            case "ULP":
+                sectionColumnName = "ulpcaseworker";
+                break;
+            case "MED":
+                sectionColumnName = "medcaseworker";
+                break;
+            case "ORG":
+                sectionColumnName = "orgcaseworker";
+                break;
+            case "Hearings":
+                sectionColumnName = "hearingscaseworker";
+                break;    
+            case "CSC":
+                sectionColumnName = "csccaseworker";
+                break;
+            case "CMDS":
+                sectionColumnName = "cmdscaseworker";
+                break;
+        }
+        
+        List activeUsers = new ArrayList<>();
+        
+        try {
+            
+            Statement stmt = Database.connectToDB().createStatement();
+            
+            String sql = "Select * from Users where " + sectionColumnName + " = ? and active = 1";
+            
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setBoolean(1, true);
+            
+            ResultSet users = preparedStatement.executeQuery();
+            
+            while(users.next()) {
+                activeUsers.add(users.getString("firstName") + " " + users.getString("lastName"));
+            }
+        } catch (SQLException ex) {
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.toString());
+                loadSectionDropDowns(section);
+            } else {
+                SlackNotification.sendNotification(ex.toString());
+            }
+        }
+        return activeUsers;
+    }
+    
+    /**
+    * @deprecated replaced by {@link #loadSectionDropDowns(String section)}
+    */
+    @Deprecated
     public static List loadAllREPCurrentOwners() {
         
         List activeUsers = new ArrayList<>();
@@ -270,102 +328,10 @@ public class User {
         return activeUsers;
     }
     
-    public static List loadAllHearingPeople() {
-        
-        List activeUsers = new ArrayList<>();
-//        
-//        try {
-//            
-//            Statement stmt = Database.connectToDB().createStatement();
-//            
-//            String sql = "Select * from Users where hearingPerson = ? and active = 1";
-//            
-//            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-//            preparedStatement.setBoolean(1, true);
-//            
-//            ResultSet users = preparedStatement.executeQuery();
-//            
-//            while(users.next()) {
-//                activeUsers.add(users.getString("firstName") + " " + users.getString("lastName"));
-//            }
-//        } catch (SQLException ex) {
-//            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-        return activeUsers;
-    }
-    
-//    public static List loadAllALJs() {
-//        
-//        List activeUsers = new ArrayList<>();
-//        
-//        try {
-//            
-//            Statement stmt = Database.connectToDB().createStatement();
-//            
-//            String sql = "Select * from Users where alj = ?";
-//            
-//            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-//            preparedStatement.setBoolean(1, true);
-//            
-//            ResultSet users = preparedStatement.executeQuery();
-//            
-//            while(users.next()) {
-//                activeUsers.add(users.getString("firstName") + " " + users.getString("lastName"));
-//            }
-//        } catch (SQLException ex) {
-//            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        return activeUsers;
-//    }
-    
-//    public static List loadAllInvestigators() {
-//        
-//        List activeUsers = new ArrayList<>();
-//        
-//        try {
-//            
-//            Statement stmt = Database.connectToDB().createStatement();
-//            
-//            String sql = "Select * from Users where investigator = ?";
-//            
-//            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-//            preparedStatement.setBoolean(1, true);
-//            
-//            ResultSet users = preparedStatement.executeQuery();
-//            
-//            while(users.next()) {
-//                activeUsers.add(users.getString("firstName") + " " + users.getString("lastName"));
-//            }
-//        } catch (SQLException ex) {
-//            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        return activeUsers;
-//    }
-    
-//    public static List loadAllMediators() {
-//        
-//        List activeUsers = new ArrayList<>();
-//        
-//        try {
-//            
-//            Statement stmt = Database.connectToDB().createStatement();
-//            
-//            String sql = "Select * from Users where mediator = ?";
-//            
-//            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-//            preparedStatement.setBoolean(1, true);
-//            
-//            ResultSet users = preparedStatement.executeQuery();
-//            
-//            while(users.next()) {
-//                activeUsers.add(users.getString("firstName") + " " + users.getString("lastName"));
-//            }
-//        } catch (SQLException ex) {
-//            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        return activeUsers;
-//    }
-    
+    /**
+    * @deprecated replaced by {@link #loadSectionDropDowns(String section)}
+    */
+    @Deprecated
     public static List loadULPComboBox() {
         
         List activeUsers = new ArrayList<>();
@@ -413,11 +379,10 @@ public class User {
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                System.out.println("TESTING");
-                SlackNotification.sendNotification(ex.getMessage());
+                SlackNotification.sendNotification(ex.toString());
+                updateLastLogInTime();
             } else {
-                SlackNotification.sendNotification(ex.getMessage());
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+                SlackNotification.sendNotification(ex.toString());
             }
         }
     }
@@ -439,11 +404,10 @@ public class User {
             preparedStatement.executeUpdate();
         } catch (SQLException | UnknownHostException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                System.out.println("TESTING");
-                SlackNotification.sendNotification(ex.getMessage());
+                SlackNotification.sendNotification(ex.toString());
+                updateLastPCName();
             } else {
-                SlackNotification.sendNotification(ex.getMessage());
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+                SlackNotification.sendNotification(ex.toString());
             }
         }
     }
@@ -464,11 +428,10 @@ public class User {
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                System.out.println("TESTING");
-                SlackNotification.sendNotification(ex.getMessage());
+                SlackNotification.sendNotification(ex.toString());
+                updateApplicationVersion();
             } else {
-                SlackNotification.sendNotification(ex.getMessage());
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+                SlackNotification.sendNotification(ex.toString());
             }
         }
     }
@@ -490,10 +453,9 @@ public class User {
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
                 updateActiveLogIn();
-                SlackNotification.sendNotification(ex.getMessage());
+                SlackNotification.sendNotification(ex.toString());
             } else {
                 SlackNotification.sendNotification(ex.getMessage());
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -517,11 +479,10 @@ public class User {
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                System.out.println("TESTING");
-                SlackNotification.sendNotification(ex.getMessage());
+                SlackNotification.sendNotification(ex.toString());
+                updatePassword(salt, password);
             } else {
-                SlackNotification.sendNotification(ex.getMessage());
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+                SlackNotification.sendNotification(ex.toString());
             }
         }
     }
@@ -542,11 +503,10 @@ public class User {
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                System.out.println("TESTING");
-                SlackNotification.sendNotification(ex.getMessage());
+                SlackNotification.sendNotification(ex.toString());
+                updatePasswordReset();
             } else {
-                SlackNotification.sendNotification(ex.getMessage());
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+                SlackNotification.sendNotification(ex.toString());
             }
         }
     }
@@ -572,11 +532,10 @@ public class User {
             } 
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                System.out.println("TESTING");
-                SlackNotification.sendNotification(ex.getMessage());
+                SlackNotification.sendNotification(ex.toString());
+                findAppliedRoles();
             } else {
-                SlackNotification.sendNotification(ex.getMessage());
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+                SlackNotification.sendNotification(ex.toString());
             }
         }
     }
@@ -618,11 +577,10 @@ public class User {
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                System.out.println("TESTING");
-                SlackNotification.sendNotification(ex.getMessage());
+                SlackNotification.sendNotification(ex.toString());
+                updateUserPrefs(user);
             } else {
-                SlackNotification.sendNotification(ex.getMessage());
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+                SlackNotification.sendNotification(ex.toString());
             }
         }
     } 
@@ -645,11 +603,10 @@ public class User {
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                System.out.println("TESTING");
-                SlackNotification.sendNotification(ex.getMessage());
+                SlackNotification.sendNotification(ex.toString());
+                getNameByID(userID);
             } else {
-                SlackNotification.sendNotification(ex.getMessage());
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+                SlackNotification.sendNotification(ex.toString());
             }
         }
         return userName;    
@@ -676,11 +633,10 @@ public class User {
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                System.out.println("TESTING");
-                SlackNotification.sendNotification(ex.getMessage());
+                SlackNotification.sendNotification(ex.toString());
+                getUserID(userName);
             } else {
-                SlackNotification.sendNotification(ex.getMessage());
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+                SlackNotification.sendNotification(ex.toString());
             }
         }
         return userID;    
@@ -704,18 +660,17 @@ public class User {
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                System.out.println("TESTING");
                 SlackNotification.sendNotification(ex.getMessage());
+                getEmailByID(id);
             } else {
                 SlackNotification.sendNotification(ex.getMessage());
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return userEmail;    
     }
     
     public static List getDocketSections() {
-        List docketSections = new ArrayList<String>();
+        List docketSections = new ArrayList<>();
         
         try {
             
@@ -736,19 +691,34 @@ public class User {
                 if(users.getBoolean("REPDocketing") == true) {
                     docketSections.add("REP");
                 }
+                if(users.getBoolean("ORGDocketing") == true) {
+                    docketSections.add("ORG");
+                }
+                if(users.getBoolean("MEDDocketing") == true) {
+                    docketSections.add("MED");
+                }
+                if(users.getBoolean("CSCDocketing") == true) {
+                    docketSections.add("CSC");
+                }
+                if(users.getBoolean("CMDSDocketing") == true) {
+                    docketSections.add("CMDS");
+                }
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                System.out.println("TESTING");
-                SlackNotification.sendNotification(ex.getMessage());
+                SlackNotification.sendNotification(ex.toString());
+                getDocketSections();
             } else {
-                SlackNotification.sendNotification(ex.getMessage());
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+                SlackNotification.sendNotification(ex.toString());
             }
         }
         return docketSections;
     }
     
+    /**
+    * @deprecated replaced by {@link #loadSectionDropDowns(String section)}
+    */
+    @Deprecated
     public static List loadREPComboBox() {
         
         List activeUsers = new ArrayList<>();
@@ -769,16 +739,18 @@ public class User {
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                System.out.println("TESTING");
-                SlackNotification.sendNotification(ex.getMessage());
+                SlackNotification.sendNotification(ex.toString());
             } else {
-                SlackNotification.sendNotification(ex.getMessage());
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+                SlackNotification.sendNotification(ex.toString());
             }
         }
         return activeUsers;
     }
     
+    /**
+    * @deprecated replaced by {@link #loadSectionDropDowns(String section)}
+    */
+    @Deprecated
     public static List loadORGComboBox() {
         
         List activeUsers = new ArrayList<>();
@@ -835,11 +807,10 @@ public class User {
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                System.out.println("TESTING");
-                SlackNotification.sendNotification(ex.getMessage());
+                SlackNotification.sendNotification(ex.toString());
+                loadAllUsers();
             } else {
-                SlackNotification.sendNotification(ex.getMessage());
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+                SlackNotification.sendNotification(ex.toString());
             }
         }
         return allUsers;
@@ -888,13 +859,11 @@ public class User {
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                System.out.println("TESTING");
-                SlackNotification.sendNotification(ex.getMessage());
+                SlackNotification.sendNotification(ex.toString());
+                searchAllUsers(param);
             } else {
-                SlackNotification.sendNotification(ex.getMessage());
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+                SlackNotification.sendNotification(ex.toString());
             }
-
         }
         return list;
     }

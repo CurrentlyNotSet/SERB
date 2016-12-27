@@ -17,20 +17,23 @@ public class CMDSHistoryCategoryAddEditDialog extends javax.swing.JDialog {
 
     private int ID;
     private CMDSHistoryCategory item;
+    String section = "";
     
     /**
      * Creates new form CMDSStatusTypeAddEditDialog
      * @param parent
      * @param modal
      * @param itemIDpassed
+     * @param sectionPassed
      */
-    public CMDSHistoryCategoryAddEditDialog(java.awt.Frame parent, boolean modal, int itemIDpassed) {
+    public CMDSHistoryCategoryAddEditDialog(java.awt.Frame parent, boolean modal, int itemIDpassed, String sectionPassed) {
         super(parent, modal);
         initComponents();
-        setDefaults(itemIDpassed);
+        setDefaults(itemIDpassed, sectionPassed);
     }
 
-    private void setDefaults(int itemIDpassed) {
+    private void setDefaults(int itemIDpassed, String sectionPassed) {
+        section = sectionPassed;
         ID = itemIDpassed;
         if (ID > 0) {
             titleLabel.setText("Edit History Category");
@@ -47,7 +50,11 @@ public class CMDSHistoryCategoryAddEditDialog extends javax.swing.JDialog {
     }
         
     private void loadInformation() {
-        item = CMDSHistoryCategory.getHistoryDescriptionByID(ID);
+        if (section.equals("CMDS")){
+            item = CMDSHistoryCategory.getCMDSHistoryDescriptionByID(ID);
+        } else {
+            item = CMDSHistoryCategory.getHeaingHistoryDescriptionByID(ID);
+        }
         
         resultTextField.setText(item.entryType);
         DescriptionTextField.setText(item.description);
@@ -59,9 +66,17 @@ public class CMDSHistoryCategoryAddEditDialog extends javax.swing.JDialog {
         item.description = DescriptionTextField.getText().trim();
                        
         if (ID > 0){
-            CMDSHistoryCategory.updateHistoryDescription(item);
+            if (section.equals("CMDS")){
+                CMDSHistoryCategory.updateCMDSHistoryCategory(item);
+            } else {
+                CMDSHistoryCategory.updateHearingHistoryCategory(item);
+            }
         } else {
-            CMDSHistoryCategory.createHistoryDescription(item);
+            if (section.equals("CMDS")){
+                CMDSHistoryCategory.createCMDSHistoryCategory(item);
+            } else {
+                CMDSHistoryCategory.createHearingHistoryCategory(item);
+            } 
         }
     }
 

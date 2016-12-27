@@ -9,6 +9,7 @@ import com.alee.laf.optionpane.WebOptionPane;
 import java.io.File;
 import java.sql.Connection;
 import java.util.HashMap;
+import java.util.List;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -16,6 +17,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.lang3.StringUtils;
 import parker.serb.Global;
+import parker.serb.sql.CaseType;
 import parker.serb.sql.Database;
 import parker.serb.sql.SMDSDocuments;
 import parker.serb.util.FileService;
@@ -140,14 +142,61 @@ public class GenerateReport {
         generateReport(report, hash);
     }
     
+    private static String generateCaseTypeList(){
+        String param = "";
+        List casetypes = null;
+        
+        if (Global.activeSection.equals("Hearings")){
+            casetypes = CaseType.getCaseTypeHearings();
+        } else {
+            casetypes = CaseType.getCaseType();
+        }
+        
+        if (!casetypes.isEmpty()) {
+                param += "AND (";
+                
+                for (Object casetype : casetypes) {
+                    param += " " + Global.activeSection.replaceAll(" ", "") + ".caseType = '" + casetype.toString() + "' OR";
+                }
+                param = param.substring(0, (param.length() - 2)) + ")";
+            }
+        
+        return param;
+    }
+    
+    private static String generateCaseTypeListBySection(String section){
+        String param = "";
+        List casetypes = null;
+
+        casetypes = CaseType.getCaseTypeBySection(section);
+        
+        if (!casetypes.isEmpty()) {
+                param += "AND (";
+                
+                for (Object casetype : casetypes) {
+                    param += " " + section.replaceAll(" ", "") + ".caseType = '" + casetype.toString() + "' OR";
+                }
+                param = param.substring(0, (param.length() - 2)) + ")";
+            }
+        
+        return param;
+    }
+    
     private static void generateReport(SMDSDocuments report, HashMap hash) {
         long lStartTime = System.currentTimeMillis();
         Connection conn = null;
+        
         hash.put("current user", StringUtilities.buildFullName(
                 Global.activeUser.firstName, 
                 Global.activeUser.middleInitial, 
                 Global.activeUser.lastName)
         );
+        hash.put("caseTypeBySection", generateCaseTypeList());
+        hash.put("caseTypeMED", generateCaseTypeListBySection("MED"));
+        hash.put("caseTypeREP", generateCaseTypeListBySection("REP"));
+        hash.put("caseTypeULP", generateCaseTypeListBySection("ULP"));
+        hash.put("caseTypeCMDS", generateCaseTypeListBySection("CMDS"));
+        
         String jasperFileName = Global.reportingPath  + report.section + File.separator + report.fileName;
         
         if (report.fileName == null || !new File(jasperFileName).exists()) {

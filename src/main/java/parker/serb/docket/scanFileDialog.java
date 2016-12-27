@@ -175,11 +175,7 @@ public class scanFileDialog extends javax.swing.JDialog {
     }
     
     private void loadToComboBox() {
-        List userList = null;
-                
-        switch (selectedSection) {
-            case "ULP":  userList = User.loadULPComboBox();
-        }
+        List userList = User.loadSectionDropDowns(selectedSection);
         
         toComboBox.setMaximumRowCount(6);
         
@@ -190,8 +186,6 @@ public class scanFileDialog extends javax.swing.JDialog {
         for(int i = 0; i < userList.size(); i++) {
             toComboBox.addItem(userList.get(i).toString());
         }
-        
-        
     }
     
     private void loadTypeComboBox() {

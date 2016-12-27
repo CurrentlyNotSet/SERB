@@ -16,6 +16,7 @@ import parker.serb.Global;
 import parker.serb.sql.Audit;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.HearingCase;
+import parker.serb.sql.HearingsMediation;
 import parker.serb.sql.User;
 import parker.serb.util.CaseNotFoundDialog;
 import parker.serb.util.NumberFormatService;
@@ -53,8 +54,11 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
                     }
                 } else {
                     loadInformation();
-                    if(Global.root.getHearingRootPanel1().getjTabbedPane1().getSelectedIndex() == 0)
+                    if(Global.root.getHearingRootPanel1().getjTabbedPane1().getSelectedIndex() == 0) {
                         Global.root.getHearingRootPanel1().getActivityPanel1().loadAllHearingActivity();
+                        Global.root.getjButton2().setText("Add Entry");
+                        Global.root.getjButton2().setEnabled(true);
+                    }
                     Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
                 }
             }
@@ -89,7 +93,7 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
                 pcDateTextBox.setText(hearings.boardActionPCDate != null ? Global.mmddyyyy.format(new Date(hearings.boardActionPCDate.getTime())) : "");
                 statusTextBox.setText(hearings.openClose);
                 finalResultTextBox.setText(hearings.FinalResult);
-                mediatorTextBox.setText("");
+                mediatorTextBox.setText(HearingsMediation.getLastestMediatorByCase());
 
                 List caseParties = CaseParty.loadPartiesByCase();
 

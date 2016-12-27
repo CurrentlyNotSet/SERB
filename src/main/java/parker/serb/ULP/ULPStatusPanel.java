@@ -294,7 +294,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         
         investigatorComboBox.addItem("");
         
-        List userList = User.loadULPComboBox();
+        List userList = User.loadSectionDropDowns("ULP");
         
         for (Object user : userList) {
             investigatorComboBox.addItem((String) user);
@@ -308,7 +308,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         
         aljComboBox.addItem("");
         
-        List userList = User.loadULPComboBox();
+        List userList = User.loadSectionDropDowns("ULP");
         
         for (Object user : userList) {
             aljComboBox.addItem((String) user);
@@ -322,7 +322,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         
         mediatorAssignedComboBox.addItem("");
         
-        List userList = User.loadULPComboBox();
+        List userList = User.loadSectionDropDowns("ULP");
         
         for (Object user : userList) {
             mediatorAssignedComboBox.addItem((String) user);

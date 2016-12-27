@@ -1,5 +1,6 @@
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -7,6 +8,7 @@ import java.sql.Timestamp;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import parker.serb.Global;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -32,13 +34,15 @@ public class Audit {
             preparedStatement.setInt(2, Global.activeUser.id);
             preparedStatement.setString(3, action);
             
-            int result = preparedStatement.executeUpdate();
+            preparedStatement.executeUpdate();
             
-            if(result != 1) {
-                System.out.println("ERROR");
-            }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.getMessage());
+                addAuditEntry(action);
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+            }
         } finally {
             try {
                 stmt.close();

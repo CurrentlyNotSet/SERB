@@ -154,7 +154,7 @@ public class HearingCaseSearchData {
 
             String sql = "UPDATE HearingCaseSearch SET"
                     + " hearingPCDate = ?,"
-                    + " haeringStatus = ?,"
+                    + " hearingStatus = ?,"
                     + " hearingALJ = ?,"
                     + " hearingBoardActionDate = ?"
                     + " WHERE caseYear = ? AND"

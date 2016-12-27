@@ -16,18 +16,27 @@ import parker.serb.sql.CMDSHistoryDescription;
  */
 public class CMDSHistoryDescriptionSearchDialog extends javax.swing.JDialog {
 
+    String section = "";
+    
     /**
      * Creates new form CMDSHistoryDescriptionSearchDialog
      * @param parent
      * @param modal
+     * @param section
      */
-    public CMDSHistoryDescriptionSearchDialog(java.awt.Frame parent, boolean modal) {
+    public CMDSHistoryDescriptionSearchDialog(java.awt.Frame parent, boolean modal, String sectionPassed) {
         super(parent, modal);
         initComponents();
-        setColumnSize();
-        loadingThread();
+        setDefaults(sectionPassed);
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
+    }
+
+    private void setDefaults(String sectionPassed){
+        section = sectionPassed;
+        headerLabel.setText(section + " History Descriptions");
+        setColumnSize();
+        loadingThread();
     }
 
     private void loadingThread() {
@@ -62,10 +71,15 @@ public class CMDSHistoryDescriptionSearchDialog extends javax.swing.JDialog {
     private void loadTable() {
         DefaultTableModel model = (DefaultTableModel) SearchTable.getModel();
         model.setRowCount(0);
-
+        List<CMDSHistoryDescription> databaseList = null;
+        
         String[] param = searchTextBox.getText().trim().split(" ");
         
-        List<CMDSHistoryDescription> databaseList = CMDSHistoryDescription.loadAllStatusTypes(param);
+        if (section.equals("CMDS")){
+            databaseList = CMDSHistoryDescription.loadAllCMDSHistoryDescription(param);
+        } else {
+            databaseList = CMDSHistoryDescription.loadAllHearingsHistoryDescription(param);
+        }
 
         for (CMDSHistoryDescription item : databaseList) {
             model.addRow(new Object[]{
@@ -94,7 +108,11 @@ public class CMDSHistoryDescriptionSearchDialog extends javax.swing.JDialog {
             int id = (int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0);
             boolean active = (boolean) SearchTable.getValueAt(SearchTable.getSelectedRow(), 1);
             
-            ActiveStatus.updateActiveStatus("CMDSHistoryDescription", active, id);
+            if (section.equals("CMDS")) {
+                ActiveStatus.updateActiveStatus("CMDSHistoryDescription", active, id);
+            } else {
+                ActiveStatus.updateActiveStatus("HearingHistoryDescription", active, id);                
+            }
         }
     }
     
@@ -109,7 +127,7 @@ public class CMDSHistoryDescriptionSearchDialog extends javax.swing.JDialog {
 
         jLabel6 = new javax.swing.JLabel();
         searchTextBox = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
+        headerLabel = new javax.swing.JLabel();
         AddNewButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         SearchTable = new javax.swing.JTable();
@@ -127,9 +145,9 @@ public class CMDSHistoryDescriptionSearchDialog extends javax.swing.JDialog {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("CMDS History Descriptions");
+        headerLabel.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        headerLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        headerLabel.setText("CMDS History Descriptions");
 
         AddNewButton.setText("Add New");
         AddNewButton.addActionListener(new java.awt.event.ActionListener() {
@@ -198,7 +216,7 @@ public class CMDSHistoryDescriptionSearchDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(headerLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -215,7 +233,7 @@ public class CMDSHistoryDescriptionSearchDialog extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(headerLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
@@ -234,13 +252,13 @@ public class CMDSHistoryDescriptionSearchDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void AddNewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddNewButtonActionPerformed
-        new CMDSHistoryDescriptionAddEditDialog(null, true, 0);
+        new CMDSHistoryDescriptionAddEditDialog(null, true, 0, section);
         loadTable();
     }//GEN-LAST:event_AddNewButtonActionPerformed
 
     private void EditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditButtonActionPerformed
         if ((int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0) > 0){
-            new CMDSHistoryDescriptionAddEditDialog(null, true, (int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0));
+            new CMDSHistoryDescriptionAddEditDialog(null, true, (int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0), section);
             loadTable();
         }
     }//GEN-LAST:event_EditButtonActionPerformed
@@ -262,7 +280,7 @@ public class CMDSHistoryDescriptionSearchDialog extends javax.swing.JDialog {
     private javax.swing.JButton CloseButton;
     private javax.swing.JButton EditButton;
     private javax.swing.JTable SearchTable;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel headerLabel;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField searchTextBox;

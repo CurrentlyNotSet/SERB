@@ -18,31 +18,31 @@ import java.util.logging.Logger;
  *
  * @author Andrew
  */
-public class CMDSHistoryDescription {
+public class HearingHistoryCategory {
     
     public int id;
     public boolean active;
-    public String category;
+    public String entryType;
     public String description;
     
-    public static List<CMDSHistoryDescription> loadAllCMDSHistoryDescription(String[] param) {
-        List<CMDSHistoryDescription> list = new ArrayList<>();
+    public static List<HearingHistoryCategory> loadAllCMDSHistoryDescriptions(String[] param) {
+        List<HearingHistoryCategory> list = new ArrayList<>();
 
         try {
             Statement stmt = Database.connectToDB().createStatement();
 
-            String sql = "SELECT * FROM CMDSHistoryDescription";
+            String sql = "SELECT * FROM HearingHistoryCategory";
             if (param.length > 0) {
                 sql += " WHERE";
                 for (int i = 0; i < param.length; i++) {
                     if (i > 0) {
                         sql += " AND";
                     }
-                    sql += " CONCAT(category, description) "
+                    sql += " CONCAT(entryType, description) "
                             + "LIKE ?";
                 }
             }
-            sql += " ORDER BY category";
+            sql += " ORDER BY entryType";
 
             PreparedStatement ps = stmt.getConnection().prepareStatement(sql);
 
@@ -53,10 +53,10 @@ public class CMDSHistoryDescription {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                CMDSHistoryDescription item = new CMDSHistoryDescription();
+                HearingHistoryCategory item = new HearingHistoryCategory();
                 item.id = rs.getInt("id");
                 item.active = rs.getBoolean("active");
-                item.category = rs.getString("category") == null ? "" : rs.getString("category");
+                item.entryType = rs.getString("entryType") == null ? "" : rs.getString("entryType");
                 item.description = rs.getString("description") == null ? "" : rs.getString("description");
                 list.add(item);
             }
@@ -67,24 +67,24 @@ public class CMDSHistoryDescription {
         return list;
     }
     
-    public static List<CMDSHistoryDescription> loadAllHearingsHistoryDescription(String[] param) {
-        List<CMDSHistoryDescription> list = new ArrayList<>();
+    public static List<HearingHistoryCategory> loadAllHearingHistoryDescriptions(String[] param) {
+        List<HearingHistoryCategory> list = new ArrayList<>();
 
         try {
             Statement stmt = Database.connectToDB().createStatement();
 
-            String sql = "SELECT * FROM HearingHistoryDescription";
+            String sql = "SELECT * FROM HearingHistoryCategory";
             if (param.length > 0) {
                 sql += " WHERE";
                 for (int i = 0; i < param.length; i++) {
                     if (i > 0) {
                         sql += " AND";
                     }
-                    sql += " CONCAT(category, description) "
+                    sql += " CONCAT(entryType, description) "
                             + "LIKE ?";
                 }
             }
-            sql += " ORDER BY category";
+            sql += " ORDER BY entryType";
 
             PreparedStatement ps = stmt.getConnection().prepareStatement(sql);
 
@@ -95,10 +95,10 @@ public class CMDSHistoryDescription {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                CMDSHistoryDescription item = new CMDSHistoryDescription();
+                HearingHistoryCategory item = new HearingHistoryCategory();
                 item.id = rs.getInt("id");
                 item.active = rs.getBoolean("active");
-                item.category = rs.getString("category") == null ? "" : rs.getString("category");
+                item.entryType = rs.getString("entryType") == null ? "" : rs.getString("entryType");
                 item.description = rs.getString("description") == null ? "" : rs.getString("description");
                 list.add(item);
             }
@@ -109,24 +109,23 @@ public class CMDSHistoryDescription {
         return list;
     }
     
-    public static List<CMDSHistoryDescription> loadAllStatusTypes(String category) {
-        List<CMDSHistoryDescription> list = new ArrayList<>();
+    public static List<HearingHistoryCategory> loadActiveCMDSHistoryDescriptions() {
+        List<HearingHistoryCategory> list = new ArrayList<>();
 
         try {
             Statement stmt = Database.connectToDB().createStatement();
 
-            String sql = "SELECT * FROM CMDSHistoryDescription where category = ? order by description";
+            String sql = "SELECT * FROM HearingHistoryCategory WHERE active = 1 ORDER BY entryType";
 
             PreparedStatement ps = stmt.getConnection().prepareStatement(sql);
-            ps.setString(1, category);
             
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                CMDSHistoryDescription item = new CMDSHistoryDescription();
+                HearingHistoryCategory item = new HearingHistoryCategory();
                 item.id = rs.getInt("id");
                 item.active = rs.getBoolean("active");
-                item.category = rs.getString("category") == null ? "" : rs.getString("category");
+                item.entryType = rs.getString("entryType") == null ? "" : rs.getString("entryType");
                 item.description = rs.getString("description") == null ? "" : rs.getString("description");
                 list.add(item);
             }
@@ -137,13 +136,40 @@ public class CMDSHistoryDescription {
         return list;
     }
     
-    public static CMDSHistoryDescription getCMDSHistoryDescriptionByID(int id) {
-        CMDSHistoryDescription item = new CMDSHistoryDescription();
+    public static List<HearingHistoryCategory> loadActiveHistoryDescriptions() {
+        List<HearingHistoryCategory> list = new ArrayList<>();
 
         try {
             Statement stmt = Database.connectToDB().createStatement();
 
-            String sql = "SELECT * FROM CMDSHistoryDescription WHERE id = ?";
+            String sql = "SELECT * FROM HearingHistoryCategory WHERE active = 1 ORDER BY entryType";
+
+            PreparedStatement ps = stmt.getConnection().prepareStatement(sql);
+            
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                HearingHistoryCategory item = new HearingHistoryCategory();
+                item.id = rs.getInt("id");
+                item.active = rs.getBoolean("active");
+                item.entryType = rs.getString("entryType") == null ? "" : rs.getString("entryType");
+                item.description = rs.getString("description") == null ? "" : rs.getString("description");
+                list.add(item);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
+        return list;
+    }
+    
+    public static HearingHistoryCategory getCMDSHistoryDescriptionByID(int id) {
+        HearingHistoryCategory item = new HearingHistoryCategory();
+
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT * FROM CMDSHistoryCategory WHERE id = ?";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setInt(1, id);
@@ -153,7 +179,7 @@ public class CMDSHistoryDescription {
             while (rs.next()) {
                 item.id = rs.getInt("id");
                 item.active = rs.getBoolean("active");
-                item.category = rs.getString("category") == null ? "" : rs.getString("category").trim();
+                item.entryType = rs.getString("entryType") == null ? "" : rs.getString("entryType").trim();
                 item.description = rs.getString("description") == null ? "" : rs.getString("description").trim();
             }
         } catch (SQLException ex) {
@@ -161,14 +187,14 @@ public class CMDSHistoryDescription {
         }
         return item;
     }
-    
-    public static CMDSHistoryDescription getHearingHistoryDescriptionByID(int id) {
-        CMDSHistoryDescription item = new CMDSHistoryDescription();
+
+    public static HearingHistoryCategory getHearingHistoryDescriptionByID(int id) {
+        HearingHistoryCategory item = new HearingHistoryCategory();
 
         try {
             Statement stmt = Database.connectToDB().createStatement();
 
-            String sql = "SELECT * FROM HearingHistoryDescription WHERE id = ?";
+            String sql = "SELECT * FROM HearingHistoryCategory WHERE id = ?";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setInt(1, id);
@@ -178,7 +204,7 @@ public class CMDSHistoryDescription {
             while (rs.next()) {
                 item.id = rs.getInt("id");
                 item.active = rs.getBoolean("active");
-                item.category = rs.getString("category") == null ? "" : rs.getString("category").trim();
+                item.entryType = rs.getString("entryType") == null ? "" : rs.getString("entryType").trim();
                 item.description = rs.getString("description") == null ? "" : rs.getString("description").trim();
             }
         } catch (SQLException ex) {
@@ -187,37 +213,18 @@ public class CMDSHistoryDescription {
         return item;
     }
     
-    public static void createCMDSHistoryDescription(CMDSHistoryDescription item) {
+    public static void createCMDSHistoryCategory(HearingHistoryCategory item) {
         try {
 
             Statement stmt = Database.connectToDB().createStatement();
 
-            String sql = "Insert INTO CMDSHistoryDescription "
-                    + "(active, category, description)"
+            String sql = "Insert INTO CMDSHistoryCategory "
+                    + "(active, entryType, description)"
                     + " VALUES "
                     + "(1, ?, ?)";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, item.category.equals("") ? null : item.category.trim());
-            preparedStatement.setString(2, item.description.equals("") ? null : item.description.trim());
-            preparedStatement.executeUpdate();
-        } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    public static void createHearingHistoryDescription(CMDSHistoryDescription item) {
-        try {
-
-            Statement stmt = Database.connectToDB().createStatement();
-
-            String sql = "Insert INTO HearingHistoryDescription "
-                    + "(active, category, description)"
-                    + " VALUES "
-                    + "(1, ?, ?)";
-
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, item.category.equals("") ? null : item.category.trim());
+            preparedStatement.setString(1, item.entryType.equals("") ? null : item.entryType.trim());
             preparedStatement.setString(2, item.description.equals("") ? null : item.description.trim());
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
@@ -225,19 +232,19 @@ public class CMDSHistoryDescription {
         }
     }
 
-    public static void updateCMDSHistoryDescription(CMDSHistoryDescription item) {
+    public static void updateCMDSHistoryCategory(HearingHistoryCategory item) {
         try {
             Statement stmt = Database.connectToDB().createStatement();
 
-            String sql = "UPDATE CMDSHistoryDescription SET "
+            String sql = "UPDATE CMDSHistoryCategory SET "
                     + "active = ?, "
-                    + "category = ?, "
+                    + "entryType = ?, "
                     + "description = ? "
                     + "where id = ?";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setBoolean(1, item.active);
-            preparedStatement.setString(2, item.category.equals("") ? null : item.category.trim());
+            preparedStatement.setString(2, item.entryType.equals("") ? null : item.entryType.trim());
             preparedStatement.setString(3, item.description.equals("") ? null : item.description.trim());
             preparedStatement.setInt(4, item.id);
 
@@ -246,20 +253,40 @@ public class CMDSHistoryDescription {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-        
-    public static void updateHearingHistoryDescription(CMDSHistoryDescription item) {
+    
+    
+    public static void createHearingHistoryCategory(HearingHistoryCategory item) {
+        try {
+
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Insert INTO HearingHistoryCategory "
+                    + "(active, entryType, description)"
+                    + " VALUES "
+                    + "(1, ?, ?)";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, item.entryType.equals("") ? null : item.entryType.trim());
+            preparedStatement.setString(2, item.description.equals("") ? null : item.description.trim());
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static void updateHearingHistoryCategory(HearingHistoryCategory item) {
         try {
             Statement stmt = Database.connectToDB().createStatement();
 
-            String sql = "UPDATE HearingHistoryDescription SET "
+            String sql = "UPDATE HearingHistoryCategory SET "
                     + "active = ?, "
-                    + "category = ?, "
+                    + "entryType = ?, "
                     + "description = ? "
                     + "where id = ?";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setBoolean(1, item.active);
-            preparedStatement.setString(2, item.category.equals("") ? null : item.category.trim());
+            preparedStatement.setString(2, item.entryType.equals("") ? null : item.entryType.trim());
             preparedStatement.setString(3, item.description.equals("") ? null : item.description.trim());
             preparedStatement.setInt(4, item.id);
 

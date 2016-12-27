@@ -25,7 +25,7 @@ public class CMDSHistoryCategory {
     public String entryType;
     public String description;
     
-    public static List<CMDSHistoryCategory> loadAllHistoryDescriptions(String[] param) {
+    public static List<CMDSHistoryCategory> loadAllCMDSHistoryDescriptions(String[] param) {
         List<CMDSHistoryCategory> list = new ArrayList<>();
 
         try {
@@ -67,7 +67,49 @@ public class CMDSHistoryCategory {
         return list;
     }
     
-    public static List<CMDSHistoryCategory> loadActiveHistoryDescriptions() {
+    public static List<CMDSHistoryCategory> loadAllHearingHistoryDescriptions(String[] param) {
+        List<CMDSHistoryCategory> list = new ArrayList<>();
+
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT * FROM HearingHistoryCategory";
+            if (param.length > 0) {
+                sql += " WHERE";
+                for (int i = 0; i < param.length; i++) {
+                    if (i > 0) {
+                        sql += " AND";
+                    }
+                    sql += " CONCAT(entryType, description) "
+                            + "LIKE ?";
+                }
+            }
+            sql += " ORDER BY entryType";
+
+            PreparedStatement ps = stmt.getConnection().prepareStatement(sql);
+
+            for (int i = 0; i < param.length; i++) {
+                ps.setString((i + 1), "%" + param[i].trim() + "%");
+            }
+            
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                CMDSHistoryCategory item = new CMDSHistoryCategory();
+                item.id = rs.getInt("id");
+                item.active = rs.getBoolean("active");
+                item.entryType = rs.getString("entryType") == null ? "" : rs.getString("entryType");
+                item.description = rs.getString("description") == null ? "" : rs.getString("description");
+                list.add(item);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
+        return list;
+    }
+    
+    public static List<CMDSHistoryCategory> loadActiveCMDSHistoryDescriptions() {
         List<CMDSHistoryCategory> list = new ArrayList<>();
 
         try {
@@ -94,7 +136,34 @@ public class CMDSHistoryCategory {
         return list;
     }
     
-    public static CMDSHistoryCategory getHistoryDescriptionByID(int id) {
+    public static List<CMDSHistoryCategory> loadActiveHearingHistoryDescriptions() {
+        List<CMDSHistoryCategory> list = new ArrayList<>();
+
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT * FROM HearingHistoryCategory WHERE active = 1 ORDER BY entryType";
+
+            PreparedStatement ps = stmt.getConnection().prepareStatement(sql);
+            
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                CMDSHistoryCategory item = new CMDSHistoryCategory();
+                item.id = rs.getInt("id");
+                item.active = rs.getBoolean("active");
+                item.entryType = rs.getString("entryType") == null ? "" : rs.getString("entryType");
+                item.description = rs.getString("description") == null ? "" : rs.getString("description");
+                list.add(item);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
+        return list;
+    }
+    
+    public static CMDSHistoryCategory getCMDSHistoryDescriptionByID(int id) {
         CMDSHistoryCategory item = new CMDSHistoryCategory();
 
         try {
@@ -119,7 +188,32 @@ public class CMDSHistoryCategory {
         return item;
     }
 
-    public static void createHistoryDescription(CMDSHistoryCategory item) {
+    public static CMDSHistoryCategory getHeaingHistoryDescriptionByID(int id) {
+        CMDSHistoryCategory item = new CMDSHistoryCategory();
+
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT * FROM HearingHistoryCategory WHERE id = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                item.id = rs.getInt("id");
+                item.active = rs.getBoolean("active");
+                item.entryType = rs.getString("entryType") == null ? "" : rs.getString("entryType").trim();
+                item.description = rs.getString("description") == null ? "" : rs.getString("description").trim();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return item;
+    }
+    
+    public static void createCMDSHistoryCategory(CMDSHistoryCategory item) {
         try {
 
             Statement stmt = Database.connectToDB().createStatement();
@@ -138,7 +232,7 @@ public class CMDSHistoryCategory {
         }
     }
 
-    public static void updateHistoryDescription(CMDSHistoryCategory item) {
+    public static void updateCMDSHistoryCategory(CMDSHistoryCategory item) {
         try {
             Statement stmt = Database.connectToDB().createStatement();
 
@@ -160,4 +254,45 @@ public class CMDSHistoryCategory {
         }
     }
     
+    
+    public static void createHearingHistoryCategory(CMDSHistoryCategory item) {
+        try {
+
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Insert INTO HearingHistoryCategory "
+                    + "(active, entryType, description)"
+                    + " VALUES "
+                    + "(1, ?, ?)";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, item.entryType.equals("") ? null : item.entryType.trim());
+            preparedStatement.setString(2, item.description.equals("") ? null : item.description.trim());
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static void updateHearingHistoryCategory(CMDSHistoryCategory item) {
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "UPDATE HearingHistoryCategory SET "
+                    + "active = ?, "
+                    + "entryType = ?, "
+                    + "description = ? "
+                    + "where id = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setBoolean(1, item.active);
+            preparedStatement.setString(2, item.entryType.equals("") ? null : item.entryType.trim());
+            preparedStatement.setString(3, item.description.equals("") ? null : item.description.trim());
+            preparedStatement.setInt(4, item.id);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

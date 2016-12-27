@@ -18,15 +18,15 @@ import java.util.logging.Logger;
  *
  * @author Andrew
  */
-public class CMDSHistoryDescription {
+public class HearingHistoryDescription {
     
     public int id;
     public boolean active;
     public String category;
     public String description;
     
-    public static List<CMDSHistoryDescription> loadAllCMDSHistoryDescription(String[] param) {
-        List<CMDSHistoryDescription> list = new ArrayList<>();
+    public static List<HearingHistoryDescription> loadAllCMDSHistoryDescription(String[] param) {
+        List<HearingHistoryDescription> list = new ArrayList<>();
 
         try {
             Statement stmt = Database.connectToDB().createStatement();
@@ -53,7 +53,7 @@ public class CMDSHistoryDescription {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                CMDSHistoryDescription item = new CMDSHistoryDescription();
+                HearingHistoryDescription item = new HearingHistoryDescription();
                 item.id = rs.getInt("id");
                 item.active = rs.getBoolean("active");
                 item.category = rs.getString("category") == null ? "" : rs.getString("category");
@@ -67,8 +67,8 @@ public class CMDSHistoryDescription {
         return list;
     }
     
-    public static List<CMDSHistoryDescription> loadAllHearingsHistoryDescription(String[] param) {
-        List<CMDSHistoryDescription> list = new ArrayList<>();
+    public static List<HearingHistoryDescription> loadAllHearingsHistoryDescription(String[] param) {
+        List<HearingHistoryDescription> list = new ArrayList<>();
 
         try {
             Statement stmt = Database.connectToDB().createStatement();
@@ -95,7 +95,7 @@ public class CMDSHistoryDescription {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                CMDSHistoryDescription item = new CMDSHistoryDescription();
+                HearingHistoryDescription item = new HearingHistoryDescription();
                 item.id = rs.getInt("id");
                 item.active = rs.getBoolean("active");
                 item.category = rs.getString("category") == null ? "" : rs.getString("category");
@@ -109,8 +109,8 @@ public class CMDSHistoryDescription {
         return list;
     }
     
-    public static List<CMDSHistoryDescription> loadAllStatusTypes(String category) {
-        List<CMDSHistoryDescription> list = new ArrayList<>();
+    public static List<HearingHistoryDescription> loadAllStatusTypes(String category) {
+        List<HearingHistoryDescription> list = new ArrayList<>();
 
         try {
             Statement stmt = Database.connectToDB().createStatement();
@@ -123,7 +123,7 @@ public class CMDSHistoryDescription {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                CMDSHistoryDescription item = new CMDSHistoryDescription();
+                HearingHistoryDescription item = new HearingHistoryDescription();
                 item.id = rs.getInt("id");
                 item.active = rs.getBoolean("active");
                 item.category = rs.getString("category") == null ? "" : rs.getString("category");
@@ -137,8 +137,8 @@ public class CMDSHistoryDescription {
         return list;
     }
     
-    public static CMDSHistoryDescription getCMDSHistoryDescriptionByID(int id) {
-        CMDSHistoryDescription item = new CMDSHistoryDescription();
+    public static HearingHistoryDescription getCMDSHistoryDescriptionByID(int id) {
+        HearingHistoryDescription item = new HearingHistoryDescription();
 
         try {
             Statement stmt = Database.connectToDB().createStatement();
@@ -162,8 +162,8 @@ public class CMDSHistoryDescription {
         return item;
     }
     
-    public static CMDSHistoryDescription getHearingHistoryDescriptionByID(int id) {
-        CMDSHistoryDescription item = new CMDSHistoryDescription();
+    public static HearingHistoryDescription getHearingHistoryDescriptionByID(int id) {
+        HearingHistoryDescription item = new HearingHistoryDescription();
 
         try {
             Statement stmt = Database.connectToDB().createStatement();
@@ -187,7 +187,7 @@ public class CMDSHistoryDescription {
         return item;
     }
     
-    public static void createCMDSHistoryDescription(CMDSHistoryDescription item) {
+    public static void createCMDSHistoryDescription(HearingHistoryDescription item) {
         try {
 
             Statement stmt = Database.connectToDB().createStatement();
@@ -206,7 +206,7 @@ public class CMDSHistoryDescription {
         }
     }
     
-    public static void createHearingHistoryDescription(CMDSHistoryDescription item) {
+    public static void createHearingHistoryDescription(HearingHistoryDescription item) {
         try {
 
             Statement stmt = Database.connectToDB().createStatement();
@@ -225,7 +225,7 @@ public class CMDSHistoryDescription {
         }
     }
 
-    public static void updateCMDSHistoryDescription(CMDSHistoryDescription item) {
+    public static void updateCMDSHistoryDescription(HearingHistoryDescription item) {
         try {
             Statement stmt = Database.connectToDB().createStatement();
 
@@ -247,7 +247,7 @@ public class CMDSHistoryDescription {
         }
     }
         
-    public static void updateHearingHistoryDescription(CMDSHistoryDescription item) {
+    public static void updateHearingHistoryDescription(HearingHistoryDescription item) {
         try {
             Statement stmt = Database.connectToDB().createStatement();
 

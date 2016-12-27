@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package parker.serb.CMDS;
+package parker.serb.Hearing;
 
 import java.io.File;
 import java.util.Date;
@@ -12,25 +12,28 @@ import javax.swing.JFileChooser;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import parker.serb.Global;
-import parker.serb.sql.CMDSHistoryCategory;
-import parker.serb.sql.CMDSHistoryDescription;
+import parker.serb.sql.HearingHistoryCategory;
+import parker.serb.sql.HearingHistoryDescription;
 
 /**
  *
  * @author parkerjohnston
  */
-public class CMDSAddHistoryEntryDialog extends javax.swing.JDialog {
+public class HearingAddHistoryEntryDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form CMDSAddHistoryEntryDialog
      */
-    public CMDSAddHistoryEntryDialog(java.awt.Frame parent, boolean modal) {
+    public HearingAddHistoryEntryDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         addListeners();
         entryDateTextBox.setText(Global.mmddyyyy.format(new Date()));
         loadMailTypeComboBox();
         loadEntryTypeComboBox();
+        noneButton.setVisible(false);
+        appellantButton.setVisible(false);
+        appelleeButton.setVisible(false);
         setLocationRelativeTo(parent);
         setVisible(true);
     }
@@ -85,7 +88,7 @@ public class CMDSAddHistoryEntryDialog extends javax.swing.JDialog {
         
         entryTypeComboBox.addItem("");
         
-        List<CMDSHistoryCategory> entryTypes = CMDSHistoryCategory.loadActiveCMDSHistoryDescriptions();
+        List<HearingHistoryCategory> entryTypes = HearingHistoryCategory.loadActiveHistoryDescriptions();
         
         for(int i = 0; i < entryTypes.size(); i++) {
             entryTypeComboBox.addItem(entryTypes.get(i).entryType + " - " + entryTypes.get(i).description);
@@ -95,7 +98,7 @@ public class CMDSAddHistoryEntryDialog extends javax.swing.JDialog {
     private void loadEntryDescriptionComboBox() {
         entryDescriptionComboBox.removeAllItems();
         
-        List<CMDSHistoryDescription> entryTypes = CMDSHistoryDescription.loadAllStatusTypes(entryTypeComboBox.getSelectedItem().toString().split("-")[0].trim());
+        List<HearingHistoryDescription> entryTypes = HearingHistoryDescription.loadAllStatusTypes(entryTypeComboBox.getSelectedItem().toString().split("-")[0].trim());
         
         for(int i = 0; i < entryTypes.size(); i++) {
             entryDescriptionComboBox.addItem(entryTypes.get(i).description);
@@ -300,12 +303,12 @@ public class CMDSAddHistoryEntryDialog extends javax.swing.JDialog {
                     .addComponent(jLabel2)
                     .addComponent(entryDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(mailTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(originalButton)
-                        .addComponent(faxedButton)))
+                        .addComponent(faxedButton))
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(entryTypeComboBox)
@@ -378,14 +381,11 @@ public class CMDSAddHistoryEntryDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_entryDescriptionComboBoxActionPerformed
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-        CMDSCaseHistoryEntryTypes.updateCaseHistory(
+        HearingCaseHistoryEntryTypes.updateCaseHistory(
                 entryTypeComboBox.getSelectedItem().toString().split("-")[0].trim(),
                 entryDescriptionComboBox.getSelectedItem().toString(),
                 extraTextBox.getText(),
-                partyName(),
                 originalButton.isSelected() ? "" : "Faxed",
-                entryDateTextBox.getText().trim(),
-                this,
                 documnetLinkTextBox.getText().trim()
         );
         dispose();
@@ -400,7 +400,7 @@ public class CMDSAddHistoryEntryDialog extends javax.swing.JDialog {
                 File selectedFile = fileChooser.getSelectedFile();
                 documnetLinkTextBox.setText(selectedFile.getAbsolutePath());
             } else {
-               documnetLinkTextBox.setText("");
+                documnetLinkTextBox.setText("");
             }
         }
     }//GEN-LAST:event_documnetLinkTextBoxMouseClicked

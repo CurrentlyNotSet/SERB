@@ -30,7 +30,7 @@ public class CaseType {
     public static List<String> getCaseType() {
         Statement stmt = null;
         
-        List activityList = new ArrayList<String>();
+        List activityList = new ArrayList<>();
             
         try {
 
@@ -58,6 +58,68 @@ public class CaseType {
                 break;
         }   
             
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return activityList;
+    }
+    
+    public static List<String> getCaseTypeBySection(String section) {
+        Statement stmt = null;
+        
+        List activityList = new ArrayList<>();
+            
+        try {
+
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select caseType from CaseType where Section = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, section);
+
+            ResultSet caseType = preparedStatement.executeQuery();
+            
+            while(caseType.next()) {
+                activityList.add(caseType.getString("caseType"));
+            }
+            
+            switch(section) {
+            case "ORG":
+                activityList.add("ORG");
+                break;
+            case "Civil Service Commission":
+                activityList.add("CSC");
+                break;
+            default:
+                break;
+        }   
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return activityList;
+    }
+    
+    public static List<String> getCaseTypeHearings() {
+        Statement stmt = null;
+        
+        List activityList = new ArrayList<>();
+            
+        try {
+
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select caseType from CaseType where Section = 'REP' OR Section = 'MED' OR Section = 'ULP' ";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+
+            ResultSet caseType = preparedStatement.executeQuery();
+            
+            while(caseType.next()) {
+                activityList.add(caseType.getString("caseType"));
+            }
+                        
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -176,32 +238,5 @@ public class CaseType {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
 }

@@ -53,13 +53,13 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
         List userList = null;
                 
         switch (Global.activeSection) {
-            case "ULP":  userList = User.loadULPComboBox(); break;
-            case "REP":  userList = User.loadREPComboBox(); break;
-            case "MED":  userList = User.loadREPComboBox(); break;
-            case "ORG":  userList = User.loadORGComboBox(); break;
-            case "Civil Service Commission":  userList = User.loadORGComboBox(); break;
-            case "CMDS":  userList = User.loadORGComboBox(); break;
-            case "Hearings":  userList = User.loadORGComboBox(); break;
+            case "ULP":  userList = User.loadSectionDropDowns("ULP"); break;
+            case "REP":  userList = User.loadSectionDropDowns("REP"); break;
+            case "MED":  userList = User.loadSectionDropDowns("MED"); break;
+            case "ORG":  userList = User.loadSectionDropDowns("ORG"); break;
+            case "Civil Service Commission":  userList = User.loadSectionDropDowns("CSC"); break;
+            case "CMDS":  userList = User.loadSectionDropDowns("CMDS"); break;
+            case "Hearings":  userList = User.loadSectionDropDowns("Hearings"); break;
             default: break;
         }
         
