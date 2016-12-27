@@ -17,27 +17,27 @@ import java.util.logging.Logger;
  */
 public class UserRole {
     
-    public static void createTable() {
-        Statement stmt = null;
-        try {
-            
-            stmt = Database.connectToDB().createStatement();
-            
-            String sql = "CREATE TABLE UserRole" +
-                    "(userID int NOT NULL, " + 
-                    " roleID int NOT NULL)"; 
-            
-            stmt.executeUpdate(sql);
-        } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                stmt.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
+//    public static void createTable() {
+//        Statement stmt = null;
+//        try {
+//            
+//            stmt = Database.connectToDB().createStatement();
+//            
+//            String sql = "CREATE TABLE UserRole" +
+//                    "(userID int NOT NULL, " + 
+//                    " roleID int NOT NULL)"; 
+//            
+//            stmt.executeUpdate(sql);
+//        } catch (SQLException ex) {
+//            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+//        } finally {
+//            try {
+//                stmt.close();
+//            } catch (SQLException ex) {
+//                Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        }
+//    }
     
 //    public static void insertDefulatData() {
 //        roles.add("Admin");

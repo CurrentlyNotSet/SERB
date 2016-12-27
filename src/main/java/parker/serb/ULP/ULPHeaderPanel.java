@@ -43,10 +43,10 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
                         Global.root.getjButton2().setEnabled(false);
                         Global.root.getjButton3().setEnabled(false);
                         Global.root.getjButton6().setEnabled(false);
-                        Global.caseYear = null;
-                        Global.caseType = null;
-                        Global.caseMonth = null;
-                        Global.caseNumber = null;
+//                        Global.caseYear = null;
+//                        Global.caseType = null;
+//                        Global.caseMonth = null;
+//                        Global.caseNumber = null;
                         Global.root.getuLPRootPanel1().clearAll();
                     }
                 } else {

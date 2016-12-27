@@ -4,9 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -112,7 +110,6 @@ public class REPElectionMultiCase {
             preparedStatement.setString(5, caseNumber);
 
             preparedStatement.executeUpdate();
-//            Activity.addActivty("Removed " + caseNumber + " from Related Case", null);
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
         }

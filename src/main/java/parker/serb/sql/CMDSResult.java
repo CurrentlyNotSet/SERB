@@ -147,10 +147,6 @@ public class CMDSResult {
             ResultSet caseStatusRS = preparedStatement.executeQuery();
             
             while(caseStatusRS.next()) {
-//                CMDSStatusType rep = new CMDSStatusType();
-//                rep.id = caseStatusRS.getInt("id");
-//                rep.statusCode = caseStatusRS.getString("statusCode");
-//                rep.description = caseStatusRS.getString("description");
                 caseStatusList.add(caseStatusRS.getString("result"));
             }
         } catch (SQLException ex) {

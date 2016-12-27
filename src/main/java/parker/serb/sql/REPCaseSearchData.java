@@ -150,33 +150,4 @@ public class REPCaseSearchData {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-//    public static void updateCaseEntryFromStatus(String employerNumber, String unionNumber) {
-//            
-//        try {
-//
-//            Statement stmt = Database.connectToDB().createStatement();
-//
-//            String sql = "UPDATE REPCaseSearch SET"
-//                    + " employerNumber = ?,"
-//                    + " unionNumber = ?"
-//                    + " WHERE caseYear = ? AND"
-//                    + " caseType = ? AND"
-//                    + " caseMonth = ? AND"
-//                    + " caseNumber = ?";
-//
-//            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-//            preparedStatement.setString(1, employerNumber);
-//            preparedStatement.setString(2, unionNumber);
-//            preparedStatement.setString(3, Global.caseYear);
-//            preparedStatement.setString(4, Global.caseType);
-//            preparedStatement.setString(5, Global.caseMonth);
-//            preparedStatement.setString(6, Global.caseNumber);
-//
-//            preparedStatement.executeUpdate();
-//            
-//        } catch (SQLException ex) {
-//            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//    }
 }

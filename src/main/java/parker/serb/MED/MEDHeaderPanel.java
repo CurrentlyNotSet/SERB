@@ -47,10 +47,10 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
                     if(Global.root != null) {
                         Global.root.getjButton2().setText("Update");
                         Global.root.getjButton2().setEnabled(false);
-                        Global.caseYear = null;
-                        Global.caseType = null;
-                        Global.caseMonth = null;
-                        Global.caseNumber = null;
+//                        Global.caseYear = null;
+//                        Global.caseType = null;
+//                        Global.caseMonth = null;
+//                        Global.caseNumber = null;
                         Global.root.getmEDRootPanel1().clearAll();
                     }
                 } else {

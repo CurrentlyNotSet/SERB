@@ -5,7 +5,6 @@
  */
 package parker.serb.CMDS;
 
-import parker.serb.MED.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
@@ -14,7 +13,6 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
 import parker.serb.sql.CMDSCaseSearchData;
-import parker.serb.sql.MEDCaseSearchData;
 
 /**
  *

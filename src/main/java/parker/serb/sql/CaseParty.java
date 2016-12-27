@@ -246,9 +246,7 @@ public class CaseParty {
             Statement stmt = Database.connectToDB().createStatement();
             
             String sql = "SELECT * FROM CaseParty Left JOIN Party on CaseParty.partyID = Party.id where"
-//                    + " where caseYear = ?"
                     + " caseType = ?"
-//                    + " and caseMonth = ?"
                     + " and caseParty.caseNumber = ?"
                     + " order by caseRelation";
 
@@ -301,9 +299,7 @@ public class CaseParty {
             Statement stmt = Database.connectToDB().createStatement();
             
             String sql = "SELECT * FROM CaseParty Left JOIN Party on CaseParty.partyID = Party.id where"
-//                    + " where caseYear = ?"
                     + " caseType = ?"
-//                    + " and caseMonth = ?"
                     + " and caseParty.caseNumber = ?"
                     + " order by caseRelation";
 

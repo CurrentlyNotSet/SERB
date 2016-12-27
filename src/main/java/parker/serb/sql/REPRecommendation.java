@@ -20,9 +20,6 @@ public class REPRecommendation {
     public String type;
     public String recommendation;
     
-    
-   
-    
     /**
      * Loads all activity for a specified case number, pulls the case number
      * from global

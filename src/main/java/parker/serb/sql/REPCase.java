@@ -1210,37 +1210,6 @@ public class REPCase {
         }
     }
     
-    /**
-     * Creates a duplicate case, copying all case information, excluding activity,
-     * as well as copying parties
-     * @param caseNumber
-     * @param duplicateCase 
-     */
-//    public static void createDuplicateCase(String caseNumber, String duplicateCase) {
-//        try {
-//            Statement stmt = Database.connectToDB().createStatement();
-//
-//            String sql = "Select * from REPCase where caseNumber = ?";
-//
-//            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-//            preparedStatement.setString(1, duplicateCase);
-//
-//            int success = preparedStatement.executeUpdate();
-//            
-//            if(success == 1) {
-////                SlackNotification.sendNotification("Case " + caseNumber + " Created");
-////                CaseNumber.updateNextCaseNumber(caseNumber);
-////                Activity.addNewCaseActivty(caseNumber);
-//                Global.root.getrEPHeaderPanel1().loadCases();
-//                Global.root.getrEPHeaderPanel1().getjComboBox2().setSelectedItem(caseNumber); 
-//            } else {
-//                SlackNotification.sendNotification("Case " + caseNumber + " Does not exist");
-//            }
-//        } catch (SQLException ex) {
-//            SlackNotification.sendNotification(ex.getMessage());
-//        }
-//    }
-    
     public static void updateCaseInformation(REPCase newCaseInformation, REPCase caseInformation) {
         try {
             Statement stmt = Database.connectToDB().createStatement();

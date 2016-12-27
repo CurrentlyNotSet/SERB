@@ -159,6 +159,4 @@ public class REPBoardActionType {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    
 }
