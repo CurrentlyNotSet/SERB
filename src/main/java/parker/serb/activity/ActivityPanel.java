@@ -15,6 +15,8 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
@@ -59,7 +61,6 @@ public class ActivityPanel extends javax.swing.JPanel {
 //            }
 //        });
         
-        
         searchTextBox.getDocument().addDocumentListener(new DocumentListener() {
 
             @Override
@@ -78,11 +79,24 @@ public class ActivityPanel extends javax.swing.JPanel {
             }
         });
         
+        actvityTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if(actvityTable.getSelectedRow() >= 0) {
+                    Global.root.getjButton9().setEnabled(true);
+                } else {
+                    Global.root.getjButton9().setEnabled(false);
+                }
+            }
+        });
+
+                
         actvityTable.addMouseListener(new MouseListener() {
 
             @Override
             public void mouseClicked(MouseEvent e) {
                 String filePath = actvityTable.getValueAt(actvityTable.getSelectedRow(), 4).toString();
+                
                 if(e.getClickCount() == 2 && !filePath.equals("") && actvityTable.getSelectedColumn() == 4) {
                     FileService.openFile(filePath);
                 } else if(e.getClickCount() == 2 && actvityTable.getSelectedColumn() != 4) {
@@ -205,6 +219,11 @@ public class ActivityPanel extends javax.swing.JPanel {
             }
         }
     }
+
+    public JTable getActvityTable() {
+        return actvityTable;
+    }
+    
     
     /**
      * This method is called from within the constructor to initialize the form.

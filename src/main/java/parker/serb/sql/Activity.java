@@ -182,6 +182,33 @@ public class Activity {
         }
     }
     
+    public static void disableActivtyByID(String id) {
+        Statement stmt = null;
+            
+        try {
+
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Update Activity set active = 0 where id = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, id);
+            
+            preparedStatement.executeUpdate();
+            
+            Audit.addAuditEntry("Deactivated Activity:" + id);
+        } catch (SQLException ex) {
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex.getMessage());
+                disableActivtyByID(id);
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+    }
+    
     public static void addActivtyFromDocket(String action, String fileName,
             String[] caseNumber,
             String from, 
@@ -356,7 +383,9 @@ public class Activity {
                     + " caseNumber = ? and"
                     + " (firstName like ? or"
                     + " lastName like ? or"
-                    + " action like ?) ORDER BY date DESC ";
+                    + " action like ?)"
+                    + " and active = 1"
+                    + " ORDER BY date DESC ";
 
                 preparedStatement = stmt.getConnection().prepareStatement(sql);
                 preparedStatement.setObject(1, Global.caseType);
@@ -385,7 +414,9 @@ public class Activity {
                     + " caseNumber = ? and"
                     + " (firstName like ? or"
                     + " lastName like ? or"
-                    + " action like ?) ORDER BY date DESC ";
+                    + " action like ?) "
+                    + " and Activity.active = 1"
+                    + "ORDER BY date DESC ";
 
                 preparedStatement = stmt.getConnection().prepareStatement(sql);
                 preparedStatement.setObject(1, Global.caseYear);
@@ -411,7 +442,7 @@ public class Activity {
                 act.id = caseActivity.getInt("id");
                 act.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
                 act.action = caseActivity.getString("action");
-                act.comment = caseActivity.getString("comment");
+                act.comment = caseActivity.getString("comment") == null ? "" : caseActivity.getString("comment");
                 act.fileName = caseActivity.getString("fileName");
                 activityList.add(act);
             }
@@ -451,6 +482,7 @@ public class Activity {
                     + " from Activity"
                     + " INNER JOIN Users"
                     + " ON Activity.userID = Users.id"
+                    + " WHERE Activity.active = 1"
                     + " ORDER BY date DESC ";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
@@ -512,6 +544,7 @@ public class Activity {
                     + " AND CaseType = ?"
                     + " AND CaseMonth = ?"
                     + " AND CaseNumber = ?"
+                    + " and Activity.active = 1"
                     + " ORDER BY date DESC ";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
@@ -577,7 +610,9 @@ public class Activity {
                     + " from Activity"
                     + " INNER JOIN Users"
                     + " ON Activity.userID = Users.id"
-                    + " Where Activity.id = ?";
+                    + " Where Activity.id = ?"
+                    + " and active = 1";
+            
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setInt(1, Integer.parseInt(id));
@@ -666,7 +701,8 @@ public class Activity {
                     + "caseYear = ? AND "
                     + "caseType = ? AND "
                     + "caseMonth = ? AND "
-                    + "caseNumber = ? ";
+                    + "caseNumber = ? "
+                    + " and active = 1";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
@@ -718,6 +754,7 @@ public class Activity {
                     + "caseType = ? AND "
                     + "caseMonth = ? AND "
                     + "caseNumber = ? AND "
+                    + "active = 1 and "
                     + "action NOT LIKE '%UNREDACTED%' "
                     + "ORDER BY date DESC";
 
@@ -772,6 +809,7 @@ public class Activity {
                     + "caseType = ? AND "
                     + "caseMonth IS NULL AND "
                     + "caseNumber = ? AND "
+                    + "active = 1 and "
                     + "action NOT LIKE '%UNREDACTED%' "
                     + "ORDER BY date DESC";
 
@@ -820,6 +858,7 @@ public class Activity {
             String sql = "SELECT * FROM Activity WHERE "
                     + "awaitingTimestamp = 0 AND "
                     + "fileName IS NOT NULL AND "
+                    + "active = 1 AND"
                     + "redacted = 0 AND "
                     + "action LIKE 'REDACTED - %' ";
             
@@ -882,7 +921,8 @@ public class Activity {
             
             String sql = "SELECT * FROM Activity WHERE Activity.date >= ?  AND Activity.date <= ? "
                     + "AND Activity.fileName IS NOT NULL AND Activity.fileName != '' " 
-                    + "AND (Activity.action LIKE 'IN -%' OR Activity.action LIKE 'OUT -%') ";
+                    + "AND (Activity.action LIKE 'IN -%' OR Activity.action LIKE 'OUT -%') "
+                    + " and active = 1";
             
             if (!casetypes.isEmpty()) {
                 sql += "AND (";
