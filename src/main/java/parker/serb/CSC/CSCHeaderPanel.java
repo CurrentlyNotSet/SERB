@@ -41,10 +41,12 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
                     if(Global.root != null) {
                         Global.root.getjButton2().setText("Update");
                         Global.root.getjButton2().setEnabled(false);
-                        Global.caseNumber = null;
-                        Global.caseMonth = null;
-                        Global.caseType = null;
-                        Global.caseYear = null;
+                        if(Global.caseNumber == null) {
+                            Global.caseNumber = null;
+                            Global.caseMonth = null;
+                            Global.caseType = null;
+                            Global.caseYear = null;
+                        }
                         Global.root.getcSCRootPanel1().clearAll();
                     }
                 } else {

@@ -198,9 +198,9 @@ public class RootPanel extends javax.swing.JFrame {
                 card.show(jPanel9, "card9");
                 jLabel1.setIcon(new ImageIcon(getClass().getResource("/SPBRSeal.png")));
                 cMDSHeaderPanel1.loadCases();
-//                if(CMDSCase.validateCaseNumber(NumberFormatService.generateFullCaseNumber())) {
-//                    cMDSHeaderPanel1.getjComboBox2().setSelectedItem(NumberFormatService.generateFullCaseNumber());
-//                }
+                if(CMDSCase.validateCaseNumber(NumberFormatService.generateFullCaseNumber())) {
+                    cMDSHeaderPanel1.getjComboBox2().setSelectedItem(NumberFormatService.generateFullCaseNumber());
+                }
                 break;  
             case "Employer Search":
                 card.show(jPanel9, "card2");
