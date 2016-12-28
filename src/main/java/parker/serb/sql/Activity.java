@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.io.FilenameUtils;
 import parker.serb.Global;
 import parker.serb.util.SlackNotification;
@@ -81,7 +82,9 @@ public class Activity {
             if(ex.getCause() instanceof SQLServerException) {
                 addActivty(action, fileName);
             } 
-        } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
     }
     
     public static void addCMDSActivty(String action, String fileName, String caseNumber) {
@@ -125,7 +128,9 @@ public class Activity {
             } 
         } catch (IOException ex) {
             SlackNotification.sendNotification(ex);
-        } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
     }
     
     public static void addHearingActivty(String action, String fileName, String caseNumber) {
@@ -169,7 +174,9 @@ public class Activity {
             } 
         } catch (IOException ex) {
             SlackNotification.sendNotification(ex);
-        } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
     }
     
     public static void disableActivtyByID(String id) {
@@ -192,6 +199,8 @@ public class Activity {
             if(ex.getCause() instanceof SQLServerException) {
                 disableActivtyByID(id);
             } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
@@ -236,6 +245,8 @@ public class Activity {
             if(ex.getCause() instanceof SQLServerException) {
                 addActivtyFromDocket(action, fileName, caseNumber, from, to, type, comment, redacted, needsTimestamp);
             } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
@@ -280,12 +291,15 @@ public class Activity {
             if(ex.getCause() instanceof SQLServerException) {
                 addActivtyFromDocket(action, fileName, caseNumber, from, to, type, comment, redacted, needsTimestamp, activityDate);
             } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     /**
      * Creates activity entry when new cases are created
      * @param caseNumber the new case number
+     * @param message
      */
     public static void addNewCaseActivty(String caseNumber, String message) {
         Statement stmt = null;
@@ -321,6 +335,8 @@ public class Activity {
             if(ex.getCause() instanceof SQLServerException) {
                 addNewCaseActivty(caseNumber, message);
             } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
@@ -332,11 +348,11 @@ public class Activity {
      */
     public static List loadCaseNumberActivity(String searchTerm) {
         List<Activity> activityList = new ArrayList<>();
-        PreparedStatement preparedStatement = null;
         
         Statement stmt = null;
             
         try {
+            PreparedStatement preparedStatement;
 
             stmt = Database.connectToDB().createStatement();
 
@@ -428,12 +444,14 @@ public class Activity {
             if(ex.getCause() instanceof SQLServerException) {
                 loadCaseNumberActivity(searchTerm);
             } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return activityList;
     }
     
     public static List loadAllActivity() {
-        List<Activity> activityList = new ArrayList<Activity>();
+        List<Activity> activityList = new ArrayList<>();
         
         Statement stmt = null;
             
@@ -481,12 +499,14 @@ public class Activity {
             if(ex.getCause() instanceof SQLServerException) {
                 loadAllActivity();
             } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return activityList;
     }
     
     public static List loadHearingActivity() {
-        List<Activity> activityList = new ArrayList<Activity>();
+        List<Activity> activityList = new ArrayList<>();
         
         Statement stmt = null;
             
@@ -544,6 +564,8 @@ public class Activity {
             if(ex.getCause() instanceof SQLServerException) {
                 loadHearingActivity();
             } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return activityList;
     }
@@ -604,6 +626,8 @@ public class Activity {
             if(ex.getCause() instanceof SQLServerException) {
                 loadActivityByID(id);
             } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return activity;
     }
@@ -639,11 +663,13 @@ public class Activity {
             if(ex.getCause() instanceof SQLServerException) {
                 updateActivtyEntry(activty);
             } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static List<Activity> loadActivityDocumentsByGlobalCase() {
-        List<Activity> activityList = new ArrayList<Activity>();
+        List<Activity> activityList = new ArrayList<>();
         
         Statement stmt = null;
             
@@ -686,6 +712,8 @@ public class Activity {
             if(ex.getCause() instanceof SQLServerException) {
                 loadActivityDocumentsByGlobalCase();
             } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return activityList;
     }
@@ -737,6 +765,8 @@ public class Activity {
             if(ex.getCause() instanceof SQLServerException) {
                 loadActivityDocumentsByGlobalCasePublicRecords();
             } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return activityList;
     }
@@ -786,6 +816,8 @@ public class Activity {
             if(ex.getCause() instanceof SQLServerException) {
                 loadActivityDocumentsByGlobalCaseORGCSCPublicRecords();
             } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return activityList;
     }
@@ -845,6 +877,8 @@ public class Activity {
             if(ex.getCause() instanceof SQLServerException) {
                 loadDocumentsBySectionAwaitingRedaction();
             } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return activityList;
     }    
@@ -869,7 +903,6 @@ public class Activity {
                 sql += "AND (";
                 
                 for (Object casetype : casetypes) {
-                    
                     sql += " Activity.caseType = ? OR";
                 }
                 
@@ -912,13 +945,17 @@ public class Activity {
             if(ex.getCause() instanceof SQLServerException) {
                 loadMailLogBySection(startDate, endDate);
             } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return activityList;
     }
     
     public static void updateRedactedStatus(boolean redacted, int id) {
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE  activity SET redacted = ? where id = ?";
 
@@ -932,6 +969,8 @@ public class Activity {
             if(ex.getCause() instanceof SQLServerException) {
                 updateRedactedStatus(redacted, id);
             } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
@@ -953,6 +992,8 @@ public class Activity {
             if(ex.getCause() instanceof SQLServerException) {
                 updateUnRedactedAction(action, id);
             } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
@@ -994,6 +1035,8 @@ public class Activity {
             if(ex.getCause() instanceof SQLServerException) {
                 getFULLActivityByID(id);
             } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return activity;
     }
@@ -1058,6 +1101,8 @@ public class Activity {
             if(ex.getCause() instanceof SQLServerException) {
                 duplicatePublicRecordActivty(item);
             } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }  
 }
