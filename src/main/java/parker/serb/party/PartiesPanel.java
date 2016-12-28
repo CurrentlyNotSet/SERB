@@ -5,12 +5,17 @@
  */
 package parker.serb.party;
 
+import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JFrame;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JTable;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -130,22 +135,33 @@ public class PartiesPanel extends javax.swing.JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if(e.getClickCount() == 2) {
-                    if(!jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("")) {
-                        new ViewUpdateCasePartyPanel(Global.root, true, jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString());
-                        if(Global.activeSection.equalsIgnoreCase("ORG")) {
-                            loadORGParties();
-                            loadORGPartySearch(jTextField1.getText().trim());
-                        } else if(Global.activeSection.equalsIgnoreCase("Civil Service Commission")) {
-                            loadCSCParties();
-                            loadCSCPartySearch(jTextField1.getText().trim());
-                        } else if(Global.activeSection.equalsIgnoreCase("Hearings")) {
-                            loadHearingParties();
-                            loadHearingsPartySearch(jTextField1.getText().trim());
-                            //updateHeader
-                        } else {
-                            loadParties();
-                            loadPartySearch(jTextField1.getText().trim());
-                            updateHeader();
+                    if(jTable1.getSelectedColumn() == 5 && e.getClickCount() == 2
+                            && !jTable1.getValueAt(jTable1.getSelectedRow(), 5).toString().equals("")) {
+                        try {
+                            Desktop.getDesktop().mail(new URI("mailto:" + jTable1.getValueAt(jTable1.getSelectedRow(), 5).toString() + "?bcc=" + Global.activeUser.emailAddress));
+                        } catch (IOException ex) {
+                            Logger.getLogger(PartiesPanel.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (URISyntaxException ex) {
+                            Logger.getLogger(PartiesPanel.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    } else {
+                        if(!jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("")) {
+                            new ViewUpdateCasePartyPanel(Global.root, true, jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString());
+                            if(Global.activeSection.equalsIgnoreCase("ORG")) {
+                                loadORGParties();
+                                loadORGPartySearch(jTextField1.getText().trim());
+                            } else if(Global.activeSection.equalsIgnoreCase("Civil Service Commission")) {
+                                loadCSCParties();
+                                loadCSCPartySearch(jTextField1.getText().trim());
+                            } else if(Global.activeSection.equalsIgnoreCase("Hearings")) {
+                                loadHearingParties();
+                                loadHearingsPartySearch(jTextField1.getText().trim());
+                                //updateHeader
+                            } else {
+                                loadParties();
+                                loadPartySearch(jTextField1.getText().trim());
+                                updateHeader();
+                            }
                         }
                     }
                 }

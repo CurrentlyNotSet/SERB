@@ -359,6 +359,11 @@ public class ViewUpdateCasePartyPanel extends javax.swing.JDialog {
 
         emailAddressTextBox.setBackground(new java.awt.Color(238, 238, 238));
         emailAddressTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        emailAddressTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                emailAddressTextBoxMouseClicked(evt);
+            }
+        });
 
         jButton1.setText("Close");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -602,6 +607,18 @@ public class ViewUpdateCasePartyPanel extends javax.swing.JDialog {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         processMailingAddressBookmarks.processSingleEnvelopeInsert(Global.templatePath, "EnvelopeInsert.docx", partyInformation);
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void emailAddressTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_emailAddressTextBoxMouseClicked
+        if(evt.getClickCount() == 2) {
+            try {
+                Desktop.getDesktop().mail(new URI("mailto:" + emailAddressTextBox.getText().trim() + "?bcc=" + Global.activeUser.emailAddress));
+            } catch (IOException ex) {
+                Logger.getLogger(ViewUpdateCasePartyPanel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (URISyntaxException ex) {
+                Logger.getLogger(ViewUpdateCasePartyPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_emailAddressTextBoxMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField address1TextBox;
