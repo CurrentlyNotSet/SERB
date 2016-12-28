@@ -33,18 +33,18 @@ public class CMDSReport {
         try {
             Statement stmt = Database.connectToDB().createStatement();
 
-            String sql = "SELECT * FROM CaseType";
+            String sql = "SELECT * FROM CMDSReport";
             if (param.length > 0) {
                 sql += " WHERE";
                 for (int i = 0; i < param.length; i++) {
                     if (i > 0) {
                         sql += " AND";
                     }
-                    sql += " CONCAT(section, caseType, description) "
+                    sql += " CONCAT(section, fileName, description) "
                             + "LIKE ?";
                 }
             }
-            sql += " ORDER BY section, caseType";
+            sql += " ORDER BY section, description";
 
             PreparedStatement ps = stmt.getConnection().prepareStatement(sql);
 

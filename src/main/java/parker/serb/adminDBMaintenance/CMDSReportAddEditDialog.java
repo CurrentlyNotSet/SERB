@@ -13,7 +13,7 @@ import parker.serb.sql.CMDSReport;
  *
  * @author Andrew
  */
-public class CMDSReportsAddEditDialog extends javax.swing.JDialog {
+public class CMDSReportAddEditDialog extends javax.swing.JDialog {
 
     private int ID;
     private CMDSReport item;
@@ -24,7 +24,7 @@ public class CMDSReportsAddEditDialog extends javax.swing.JDialog {
      * @param modal
      * @param itemIDpassed
      */
-    public CMDSReportsAddEditDialog(java.awt.Frame parent, boolean modal, int itemIDpassed) {
+    public CMDSReportAddEditDialog(java.awt.Frame parent, boolean modal, int itemIDpassed) {
         super(parent, modal);
         initComponents();
         setDefaults(itemIDpassed);
@@ -32,6 +32,7 @@ public class CMDSReportsAddEditDialog extends javax.swing.JDialog {
 
     private void setDefaults(int itemIDpassed) {
         ID = itemIDpassed;
+        loadParameterComboBox();
         if (ID > 0) {
             titleLabel.setText("Edit Report");
             editButton.setText("Save");
@@ -44,6 +45,24 @@ public class CMDSReportsAddEditDialog extends javax.swing.JDialog {
         }
         this.setLocationRelativeTo(Global.root);
         this.setVisible(true);
+    }
+    
+    private void loadParameterComboBox(){
+        parametersComboBox.removeAllItems();
+        parametersComboBox.addItem("");
+        parametersComboBox.addItem("ActivityType, Year");
+        parametersComboBox.addItem("ALJ, Year");
+        parametersComboBox.addItem("begin date, end date");
+        parametersComboBox.addItem("begin date, end date, InvestigatorID");
+        parametersComboBox.addItem("begin date, end date, LikeString");
+        parametersComboBox.addItem("begin date, end date, UserID");
+        parametersComboBox.addItem("begin date, end date, String");
+        parametersComboBox.addItem("caseNumber");
+        parametersComboBox.addItem("date");
+        parametersComboBox.addItem("EmployerID");
+        parametersComboBox.addItem("month");
+        parametersComboBox.addItem("String");
+        parametersComboBox.addItem("UserID");
     }
         
     private void loadInformation() {

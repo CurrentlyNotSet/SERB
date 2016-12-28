@@ -8,20 +8,20 @@ package parker.serb.adminDBMaintenance;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.sql.ActiveStatus;
-import parker.serb.sql.CMDSReport;
+import parker.serb.sql.SMDSDocuments;
 
 /**
  *
  * @author User
  */
-public class CMDSReportsSearchDialog extends javax.swing.JDialog {
+public class SMDSDocumentSearchDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form CMDSStatusTypeAddEditDialog
      * @param parent
      * @param modal
      */
-    public CMDSReportsSearchDialog(java.awt.Frame parent, boolean modal) {
+    public SMDSDocumentSearchDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         setColumnSize();
@@ -65,13 +65,14 @@ public class CMDSReportsSearchDialog extends javax.swing.JDialog {
 
         String[] param = searchTextBox.getText().trim().split(" ");
         
-        List<CMDSReport> databaseList = CMDSReport.loadAllReports(param);
+        List<SMDSDocuments> databaseList = SMDSDocuments.loadAllDocuments(param);
 
-        for (CMDSReport item : databaseList) {
+        for (SMDSDocuments item : databaseList) {
             model.addRow(new Object[]{
                 item.id,
                 item.active,
                 item.section,
+                item.type,
                 item.description,
                 item.fileName
             });
@@ -95,7 +96,7 @@ public class CMDSReportsSearchDialog extends javax.swing.JDialog {
             int id = (int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0);
             boolean active = (boolean) SearchTable.getValueAt(SearchTable.getSelectedRow(), 1);
             
-            ActiveStatus.updateActiveStatus("CMDSReport", active, id);
+            ActiveStatus.updateActiveStatus("SMDSDocuments", active, id);
         }
     }
     
@@ -130,7 +131,7 @@ public class CMDSReportsSearchDialog extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("CMDS Reports");
+        jLabel1.setText("SMDS Documents");
 
         AddNewButton.setText("Add New");
         AddNewButton.addActionListener(new java.awt.event.ActionListener() {
@@ -144,14 +145,14 @@ public class CMDSReportsSearchDialog extends javax.swing.JDialog {
 
             },
             new String [] {
-                "ID", "Active", "Section", "Description", "File Name"
+                "ID", "Active", "Section", "Type", "Description", "File Name"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.Object.class, java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, false, false, false
+                false, true, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -175,6 +176,7 @@ public class CMDSReportsSearchDialog extends javax.swing.JDialog {
             SearchTable.getColumnModel().getColumn(2).setResizable(false);
             SearchTable.getColumnModel().getColumn(3).setResizable(false);
             SearchTable.getColumnModel().getColumn(4).setResizable(false);
+            SearchTable.getColumnModel().getColumn(5).setResizable(false);
         }
 
         EditButton.setText("Edit");
@@ -236,13 +238,13 @@ public class CMDSReportsSearchDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void AddNewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddNewButtonActionPerformed
-        new CMDSReportAddEditDialog(null, true, 0);
+        new SMDSDocumentAddEditDialog(null, true, 0);
         loadTable();
     }//GEN-LAST:event_AddNewButtonActionPerformed
 
     private void EditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditButtonActionPerformed
         if ((int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0) > 0){
-            new CMDSReportAddEditDialog(null, true, (int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0));
+            new SMDSDocumentAddEditDialog(null, true, (int) SearchTable.getValueAt(SearchTable.getSelectedRow(), 0));
             loadTable();
         }
     }//GEN-LAST:event_EditButtonActionPerformed

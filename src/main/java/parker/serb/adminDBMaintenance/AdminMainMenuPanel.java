@@ -42,7 +42,7 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        CloseButton = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         PreFixesButton = new javax.swing.JButton();
@@ -183,10 +183,10 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setText("General");
 
-        jButton1.setText("Close");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        CloseButton.setText("Close");
+        CloseButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                CloseButtonActionPerformed(evt);
             }
         });
 
@@ -297,7 +297,6 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
         });
 
         SMDSTemplatesButton.setText("SMDS Documents");
-        SMDSTemplatesButton.setEnabled(false);
         SMDSTemplatesButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 SMDSTemplatesButtonActionPerformed(evt);
@@ -323,7 +322,7 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(411, 411, 411)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(CloseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -476,7 +475,7 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
                     .addComponent(CMDSTemplatesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(SMDSTemplatesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addComponent(CloseButton)
                 .addContainerGap())
         );
 
@@ -537,9 +536,9 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
         new REPBoardActionTypeSearchDialog(Global.root, true);
     }//GEN-LAST:event_BoardActionTypeButtonActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void CloseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CloseButtonActionPerformed
         this.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_CloseButtonActionPerformed
 
     private void PreFixesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PreFixesButtonActionPerformed
         new PreFixSearchDialog(Global.root, true);
@@ -598,7 +597,7 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
     }//GEN-LAST:event_CMDSTemplatesButtonActionPerformed
 
     private void SMDSTemplatesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SMDSTemplatesButtonActionPerformed
-        // TODO add your handling code here:
+        new SMDSDocumentSearchDialog(Global.root, true);
     }//GEN-LAST:event_SMDSTemplatesButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -611,6 +610,7 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
     private javax.swing.JButton CMDSTemplatesButton;
     private javax.swing.JButton CaseStatusTypeButton;
     private javax.swing.JButton CaseTypesButton;
+    private javax.swing.JButton CloseButton;
     private javax.swing.JButton DirectorsButton;
     private javax.swing.JButton FFConciliatorsButton;
     private javax.swing.JButton HearingRoomsButton;
@@ -630,7 +630,6 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
     private javax.swing.JButton SystemSERBButton;
     private javax.swing.JButton ULPRecsButton;
     private javax.swing.JButton UsersButton;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
