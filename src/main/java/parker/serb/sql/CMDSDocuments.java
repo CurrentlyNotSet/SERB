@@ -72,6 +72,47 @@ public class CMDSDocuments {
     public String emailSubject;
     public String emailBody;
 
+    public static List<CMDSDocuments> loadAllCMDSDocuments(String[] param) {
+        List<CMDSDocuments> list = new ArrayList<>();
+
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT * FROM CMDSDocuments";
+            if (param.length > 0) {
+                sql += " WHERE";
+                for (int i = 0; i < param.length; i++) {
+                    if (i > 0) {
+                        sql += " AND";
+                    }
+                    sql += " CONCAT(MainCategory, SubCategory, LetterName) "
+                            + "LIKE ?";
+                }
+            }
+            sql += " ORDER BY MainCategory, SubCategory, LetterName";
+
+            PreparedStatement ps = stmt.getConnection().prepareStatement(sql);
+
+            for (int i = 0; i < param.length; i++) {
+                ps.setString((i + 1), "%" + param[i].trim() + "%");
+            }
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                CMDSDocuments item = new CMDSDocuments();
+                item.ID = rs.getInt("id");
+                item.Active = rs.getBoolean("active");
+                item.MainCategory = rs.getString("MainCategory") == null ? "" : rs.getString("MainCategory");
+                item.SubCategory = rs.getString("SubCategory") == null ? "" : rs.getString("SubCategory");
+                item.LetterName = rs.getString("LetterName") == null ? "" : rs.getString("LetterName");
+                list.add(item);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+    
     public static CMDSDocuments findDocumentByID(int id) {
         CMDSDocuments doc = new CMDSDocuments();
         
@@ -407,6 +448,241 @@ public class CMDSDocuments {
 
         }
         return subTypesList;
+    }
+    
+    public static void createCMDSDocument(CMDSDocuments item) {
+        try {
+
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Insert INTO CMDSDocuments ("
+                    + "Active, "
+                    + "MainCategory, "
+                    + "SubCategory, "
+                    + "LetterName, "
+                    + "Location, "
+                    + "MultiplePrint, "
+                    + "ResponseDue, "
+                    + "ActionAppealed, "
+                    + "ClassificationTitle, "
+                    + "ClassificationNumber, "
+                    + "BarginingUnit, "
+                    + "AppelantAppointed, "
+                    + "ProbitionaryPeriod, "
+                    + "HearingDate, "
+                    + "HearingTime, "
+                    + "HearingServed, "
+                    + "MemorandumContra, "
+                    + "Gender, "
+                    + "AddressBlock, "
+                    + "FirstLetterSent, "
+                    + "CodeSection, "
+                    + "CountyName, "
+                    + "StayDate, "
+                    + "CasePendingResolution, "
+                    + "LastUpdate, "
+                    + "DateGranted, "
+                    + "MatterContinued, "
+                    + "SettlementDue, "
+                    + "FilingParty, "
+                    + "RespondingParty, "
+                    + "RequestingParty, "
+                    + "Deposition, "
+                    + "RepHimOrHer, "
+                    + "TypeOfAction, "
+                    + "CodeSectionFillIn, "
+                    + "DocumentName, "
+                    + "DateFiled, "
+                    + "InfoRedacted, "
+                    + "RedactorName, "
+                    + "RedactorTitle, "
+                    + "DatePOSent, "
+                    + "AppealType, "
+                    + "AppealType2, "
+                    + "AppealTypeUF, "
+                    + "AppealTypeLS, "
+                    + "RequestingPartyC, "
+                    + "DateRequested, "
+                    + "PurposeOfExtension, "
+                    + "emailSubject, "
+                    + "emailBody "
+                    + ") VALUES (";
+                    for(int i=0; i<49; i++){
+                        sql += "?, ";   //01-49
+                    }
+                     sql += "?)"; //50
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setBoolean( 1, true);
+            preparedStatement.setString ( 2, item.MainCategory.equals("") ? null : item.MainCategory.trim());
+            preparedStatement.setString ( 3, item.SubCategory.equals("") ? null : item.SubCategory.trim());
+            preparedStatement.setString ( 4, item.LetterName.equals("") ? null : item.LetterName.trim());
+            preparedStatement.setString ( 5, item.Location.equals("") ? null : item.Location.trim());
+            preparedStatement.setBoolean( 6, item.MultiplePrint);
+            preparedStatement.setBoolean( 7, item.ResponseDue);
+            preparedStatement.setBoolean( 8, item.ActionAppealed);
+            preparedStatement.setBoolean( 9, item.ClassificationTitle);
+            preparedStatement.setBoolean(10, item.ClassificationNumber);
+            preparedStatement.setBoolean(11, item.BarginingUnit);
+            preparedStatement.setBoolean(12, item.AppelantAppointed);
+            preparedStatement.setBoolean(13, item.ProbitionaryPeriod);
+            preparedStatement.setBoolean(14, item.HearingDate);
+            preparedStatement.setBoolean(15, item.HearingTime);
+            preparedStatement.setBoolean(16, item.HearingServed);
+            preparedStatement.setBoolean(17, item.MemorandumContra);
+            preparedStatement.setBoolean(18, item.Gender);
+            preparedStatement.setBoolean(19, item.AddressBlock);
+            preparedStatement.setBoolean(20, item.FirstLetterSent);
+            preparedStatement.setBoolean(21, item.CodeSection);
+            preparedStatement.setBoolean(22, item.CountyName);
+            preparedStatement.setBoolean(23, item.StayDate);
+            preparedStatement.setBoolean(24, item.CasePendingResolution);
+            preparedStatement.setBoolean(25, item.LastUpdate);
+            preparedStatement.setBoolean(26, item.DateGranted);
+            preparedStatement.setBoolean(27, item.MatterContinued);
+            preparedStatement.setBoolean(28, item.SettlementDue);
+            preparedStatement.setBoolean(29, item.FilingParty);
+            preparedStatement.setBoolean(30, item.RespondingParty);
+            preparedStatement.setBoolean(31, item.RequestingParty);
+            preparedStatement.setBoolean(32, item.Deposition);
+            preparedStatement.setBoolean(33, item.RepHimOrHer);
+            preparedStatement.setBoolean(34, item.TypeOfAction);
+            preparedStatement.setBoolean(35, item.CodeSectionFillIn);
+            preparedStatement.setBoolean(36, item.DocumentName);
+            preparedStatement.setBoolean(37, item.DateFiled);
+            preparedStatement.setBoolean(38, item.InfoRedacted);
+            preparedStatement.setBoolean(39, item.RedactorName);
+            preparedStatement.setBoolean(40, item.RedactorTitle);
+            preparedStatement.setBoolean(41, item.DatePOSent);
+            preparedStatement.setBoolean(42, item.AppealType);
+            preparedStatement.setBoolean(43, item.AppealType2);
+            preparedStatement.setBoolean(44, item.AppealTypeUF);
+            preparedStatement.setBoolean(45, item.AppealTypeLS);
+            preparedStatement.setBoolean(46, item.RequestingPartyC);
+            preparedStatement.setBoolean(47, item.DateRequested);
+            preparedStatement.setBoolean(48, item.PurposeOfExtension);
+            preparedStatement.setString (49, item.emailSubject.equals("") ? null : item.emailSubject.trim());
+            preparedStatement.setString (50, item.emailBody.equals("") ? null : item.emailBody.trim());
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static void updateCMDSDocument(CMDSDocuments item) {
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "UPDATE CMDSDocuments SET "
+                    + "Active = ?, "
+                    + "MainCategory = ?, "
+                    + "SubCategory = ?, "
+                    + "LetterName = ?, "
+                    + "Location = ?, "
+                    + "MultiplePrint = ?, "
+                    + "ResponseDue = ?, "
+                    + "ActionAppealed = ?, "
+                    + "ClassificationTitle = ?, "
+                    + "ClassificationNumber = ?, "
+                    + "BarginingUnit = ?, "
+                    + "AppelantAppointed = ?, "
+                    + "ProbitionaryPeriod = ?, "
+                    + "HearingDate = ?, "
+                    + "HearingTime = ?, "
+                    + "HearingServed = ?, "
+                    + "MemorandumContra = ?, "
+                    + "Gender = ?, "
+                    + "AddressBlock = ?, "
+                    + "FirstLetterSent = ?, "
+                    + "CodeSection = ?, "
+                    + "CountyName = ?, "
+                    + "StayDate = ?, "
+                    + "CasePendingResolution = ?, "
+                    + "LastUpdate = ?, "
+                    + "DateGranted = ?, "
+                    + "MatterContinued = ?, "
+                    + "SettlementDue = ?, "
+                    + "FilingParty = ?, "
+                    + "RespondingParty = ?, "
+                    + "RequestingParty = ?, "
+                    + "Deposition = ?, "
+                    + "RepHimOrHer = ?, "
+                    + "TypeOfAction = ?, "
+                    + "CodeSectionFillIn = ?, "
+                    + "DocumentName = ?, "
+                    + "DateFiled = ?, "
+                    + "InfoRedacted = ?, "
+                    + "RedactorName = ?, "
+                    + "RedactorTitle = ?, "
+                    + "DatePOSent = ?, "
+                    + "AppealType = ?, "
+                    + "AppealType2 = ?, "
+                    + "AppealTypeUF = ?, "
+                    + "AppealTypeLS = ?, "
+                    + "RequestingPartyC = ?, "
+                    + "DateRequested = ?, "
+                    + "PurposeOfExtension = ?, "
+                    + "emailSubject = ?, "
+                    + "emailBody = ? "
+                    + "where id = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setBoolean( 1, item.Active);
+            preparedStatement.setString ( 2, item.MainCategory.equals("") ? null : item.MainCategory.trim());
+            preparedStatement.setString ( 3, item.SubCategory.equals("") ? null : item.SubCategory.trim());
+            preparedStatement.setString ( 4, item.LetterName.equals("") ? null : item.LetterName.trim());
+            preparedStatement.setString ( 5, item.Location.equals("") ? null : item.Location.trim());
+            preparedStatement.setBoolean( 6, item.MultiplePrint);
+            preparedStatement.setBoolean( 7, item.ResponseDue);
+            preparedStatement.setBoolean( 8, item.ActionAppealed);
+            preparedStatement.setBoolean( 9, item.ClassificationTitle);
+            preparedStatement.setBoolean(10, item.ClassificationNumber);
+            preparedStatement.setBoolean(11, item.BarginingUnit);
+            preparedStatement.setBoolean(12, item.AppelantAppointed);
+            preparedStatement.setBoolean(13, item.ProbitionaryPeriod);
+            preparedStatement.setBoolean(14, item.HearingDate);
+            preparedStatement.setBoolean(15, item.HearingTime);
+            preparedStatement.setBoolean(16, item.HearingServed);
+            preparedStatement.setBoolean(17, item.MemorandumContra);
+            preparedStatement.setBoolean(18, item.Gender);
+            preparedStatement.setBoolean(19, item.AddressBlock);
+            preparedStatement.setBoolean(20, item.FirstLetterSent);
+            preparedStatement.setBoolean(21, item.CodeSection);
+            preparedStatement.setBoolean(22, item.CountyName);
+            preparedStatement.setBoolean(23, item.StayDate);
+            preparedStatement.setBoolean(24, item.CasePendingResolution);
+            preparedStatement.setBoolean(25, item.LastUpdate);
+            preparedStatement.setBoolean(26, item.DateGranted);
+            preparedStatement.setBoolean(27, item.MatterContinued);
+            preparedStatement.setBoolean(28, item.SettlementDue);
+            preparedStatement.setBoolean(29, item.FilingParty);
+            preparedStatement.setBoolean(30, item.RespondingParty);
+            preparedStatement.setBoolean(31, item.RequestingParty);
+            preparedStatement.setBoolean(32, item.Deposition);
+            preparedStatement.setBoolean(33, item.RepHimOrHer);
+            preparedStatement.setBoolean(34, item.TypeOfAction);
+            preparedStatement.setBoolean(35, item.CodeSectionFillIn);
+            preparedStatement.setBoolean(36, item.DocumentName);
+            preparedStatement.setBoolean(37, item.DateFiled);
+            preparedStatement.setBoolean(38, item.InfoRedacted);
+            preparedStatement.setBoolean(39, item.RedactorName);
+            preparedStatement.setBoolean(40, item.RedactorTitle);
+            preparedStatement.setBoolean(41, item.DatePOSent);
+            preparedStatement.setBoolean(42, item.AppealType);
+            preparedStatement.setBoolean(43, item.AppealType2);
+            preparedStatement.setBoolean(44, item.AppealTypeUF);
+            preparedStatement.setBoolean(45, item.AppealTypeLS);
+            preparedStatement.setBoolean(46, item.RequestingPartyC);
+            preparedStatement.setBoolean(47, item.DateRequested);
+            preparedStatement.setBoolean(48, item.PurposeOfExtension);
+            preparedStatement.setString (49, item.emailSubject);
+            preparedStatement.setString (50, item.emailBody);
+            preparedStatement.setInt    (51, item.ID);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 }
