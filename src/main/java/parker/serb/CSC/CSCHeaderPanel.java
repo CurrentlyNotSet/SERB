@@ -13,6 +13,7 @@ import javax.swing.SwingUtilities;
 import parker.serb.Global;
 import parker.serb.sql.Audit;
 import parker.serb.sql.CSCCase;
+import parker.serb.sql.User;
 
 //
 
@@ -61,6 +62,7 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
         Global.caseType = "CSC";
         Global.caseMonth = null;
         Global.caseNumber = caseNumberComboBox.getSelectedItem().toString().trim();
+        User.updateLastCaseNumber();
         loadHeaderInformation();
     }
     

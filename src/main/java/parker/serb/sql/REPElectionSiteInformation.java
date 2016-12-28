@@ -89,7 +89,7 @@ public class REPElectionSiteInformation {
             Activity.addActivty("Added On-Site Election Location", siteDate);
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 addSiteLocation(
                     siteDate,
                     sitePlace,
@@ -102,7 +102,7 @@ public class REPElectionSiteInformation {
                     endAMPM
                 );
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         } catch (ParseException ex) {
             Logger.getLogger(REPElectionSiteInformation.class.getName()).log(Level.SEVERE, null, ex);
@@ -125,10 +125,10 @@ public class REPElectionSiteInformation {
             Activity.addActivty("Removed Site Election Information", null);
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 deleteSiteInformation(id);
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         }
     }
@@ -177,10 +177,10 @@ public class REPElectionSiteInformation {
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 loadSiteInformationByCaseNumber();
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         }
         return activityList;

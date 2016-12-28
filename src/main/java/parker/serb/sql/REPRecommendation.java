@@ -49,10 +49,10 @@ public class REPRecommendation {
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 loadAllREPRecommendations();
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         }
         return recommendationList;
@@ -96,10 +96,10 @@ public class REPRecommendation {
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 searchREPRecommendations(param);
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         }
         return recommendationList;
@@ -126,10 +126,10 @@ public class REPRecommendation {
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 getREPReccomendationByID(id);
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         }
         return item;
@@ -152,10 +152,10 @@ public class REPRecommendation {
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 createREPRec(item);
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         }
     }
@@ -179,10 +179,10 @@ public class REPRecommendation {
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 updateREPRec(item);
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         }
     }

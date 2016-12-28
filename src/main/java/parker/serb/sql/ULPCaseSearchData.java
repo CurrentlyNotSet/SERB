@@ -54,10 +54,10 @@ public class ULPCaseSearchData {
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 loadULPCaseList();
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         }
         return ulpCaseList;
@@ -85,10 +85,10 @@ public class ULPCaseSearchData {
             
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 createNewCaseEntry(year, type, month, number);
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         }
     }
@@ -119,10 +119,10 @@ public class ULPCaseSearchData {
             
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 updateCaseEntryFromParties(charged, charging);
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         }
     }
@@ -153,10 +153,10 @@ public class ULPCaseSearchData {
             
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 updateCaseEntryFromStatus(employerNumber, unionNumber);
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         }
     }

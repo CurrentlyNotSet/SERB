@@ -74,6 +74,7 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
     private void loadInformation() {
         if(caseNumberComboBox.getSelectedItem().toString().trim().length() == 16) {
             NumberFormatService.parseFullCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim());
+            User.updateLastCaseNumber();
             loadHeaderInformation();
         } else {
             new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());  

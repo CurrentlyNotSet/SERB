@@ -68,7 +68,7 @@ public class FileService {
                     break;    
             }
         } catch (UnknownHostException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -85,7 +85,7 @@ public class FileService {
                     + fileName));
         } catch (IOException | NullPointerException | IllegalArgumentException ex) {
             new FileNotFoundDialog((JFrame) Global.root.getRootPane().getParent(), true, fileName);
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -100,7 +100,7 @@ public class FileService {
                     + fileName));
         } catch (IOException | NullPointerException | IllegalArgumentException ex) {
             new FileNotFoundDialog((JFrame) Global.root.getRootPane().getParent(), true, fileName);
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -117,7 +117,7 @@ public class FileService {
                     + fileName));
         } catch (IOException | NullPointerException | IllegalArgumentException ex) {
             new FileNotFoundDialog((JFrame) Global.root.getRootPane().getParent(), true, fileName);
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -129,7 +129,7 @@ public class FileService {
                     + File.separatorChar
                     + fileName));
         } catch (IOException | NullPointerException | IllegalArgumentException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -141,7 +141,7 @@ public class FileService {
                     + File.separatorChar
                     + EmailAttachment.getEmailAttachmentFileByID(id)));
         } catch (IOException | NullPointerException | IllegalArgumentException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -153,7 +153,7 @@ public class FileService {
                     + File.separatorChar
                     + Email.getEmailBodyFileByID(id)));
         } catch (IOException | NullPointerException | IllegalArgumentException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -377,7 +377,7 @@ public class FileService {
             desktop.open(filePathName);
         } catch (IOException ex) {
             new FileNotFoundDialog((JFrame) Global.root.getRootPane().getParent(), true, filePathName.toString());
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
     }
     

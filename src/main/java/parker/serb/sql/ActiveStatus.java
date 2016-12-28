@@ -5,11 +5,14 @@
  */
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -29,7 +32,10 @@ public class ActiveStatus {
             
             ps.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateActiveStatus(tableName, active, id);
+            } 
+        } 
     }
 }

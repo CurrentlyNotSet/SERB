@@ -319,7 +319,7 @@ public class MEDCase {
                 Global.root.getmEDHeaderPanel1().getjComboBox2().setSelectedItem(fullCaseNumber); 
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -361,7 +361,7 @@ public class MEDCase {
                 
             
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
         return med;
     }
@@ -430,7 +430,7 @@ public class MEDCase {
                 med.concilList2Name5 = caseInformation.getString("concilList2Name5");
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
         return med;
     }
@@ -519,7 +519,7 @@ public class MEDCase {
                 med.FFNote = caseInformation.getString("FFNote");
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
         return med;
     }
@@ -604,7 +604,7 @@ public class MEDCase {
                 
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
         return med;
     }
@@ -669,7 +669,7 @@ public class MEDCase {
                 med.strikeNotes = caseInformation.getString("strikeNote");
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
         return med;
     }
@@ -734,7 +734,7 @@ public class MEDCase {
                 detailedStrikeSaveInformation(newCaseInformation, caseInformation);
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -777,7 +777,7 @@ public class MEDCase {
                 Activity.addActivty("Generated Conciliator List (" + names + ")", null);
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -820,7 +820,7 @@ public class MEDCase {
                 Activity.addActivty("Generated Conciliator List (" + names + ")", null);
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -849,7 +849,7 @@ public class MEDCase {
                 Activity.addActivty("Replaced " + oldName + " with " + newName, null);
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -878,7 +878,7 @@ public class MEDCase {
                 Activity.addActivty("Replaced " + oldName + " with " + newName, null);
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -921,7 +921,7 @@ public class MEDCase {
                 Activity.addActivty("Generated Fact Finder List (" + names + ")", null);
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -964,7 +964,7 @@ public class MEDCase {
                 Activity.addActivty("Generated Fact Finder List (" + names + ")", null);
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -993,7 +993,7 @@ public class MEDCase {
                 Activity.addActivty("Replaced " + oldName + " with " + newName, null);
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -1022,7 +1022,7 @@ public class MEDCase {
                 Activity.addActivty("Replaced " + oldName + " with " + newName, null);
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -1069,7 +1069,7 @@ public class MEDCase {
                 detailedConciliationDetailSaveInformation(newCaseInformation, caseInformation);
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -1159,7 +1159,7 @@ public class MEDCase {
                         newCaseInformation.employerIDNumber);
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -1226,7 +1226,7 @@ public class MEDCase {
                 detailedFFDetailSaveInformation(newCaseInformation, caseInformation);
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -1988,7 +1988,7 @@ public class MEDCase {
                 yearList.add(caseNumberRS.getString("caseYear"));
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
         return yearList;
     }
@@ -2011,7 +2011,7 @@ public class MEDCase {
                 monthList.add(caseNumberRS.getString("caseMonth"));
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
         return monthList;
     }
@@ -2038,7 +2038,7 @@ public class MEDCase {
             preparedStatement.executeUpdate();
 
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -2064,7 +2064,7 @@ public class MEDCase {
             preparedStatement.executeUpdate();
 
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
     }
      
@@ -2115,7 +2115,7 @@ public class MEDCase {
                 medcaseList.add(item);
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
         return medcaseList;
     }
@@ -2165,7 +2165,7 @@ public class MEDCase {
                 medcaseList.add(item);
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
         return medcaseList;
     }
@@ -2295,7 +2295,7 @@ public class MEDCase {
                 med.strikeNotes = rs.getString("strikeNote");
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
         return med;
     }

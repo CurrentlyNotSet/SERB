@@ -662,7 +662,7 @@ public class CMDSCase {
                 Global.root.getcMDSHeaderPanel1().getjComboBox2().setSelectedItem(fullCaseNumber); 
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -741,7 +741,7 @@ public class CMDSCase {
                 cmds.result = caseHeader.getString("result");
             }         
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
         return cmds;
     }
@@ -854,7 +854,7 @@ public class CMDSCase {
                 cmds.postHearingBriefsDue = caseInformation.getTimestamp("postHearingDriefsDue");
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
         return cmds;
     }
@@ -956,7 +956,7 @@ public class CMDSCase {
                 detailedCaseInformationSaveInformation(newCaseInformation, caseInformation);
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
     }
     

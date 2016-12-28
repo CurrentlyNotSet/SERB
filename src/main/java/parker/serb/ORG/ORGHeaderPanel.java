@@ -5,21 +5,16 @@
  */
 package parker.serb.ORG;
 
-import parker.serb.REP.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import parker.serb.Global;
-import parker.serb.ULP.ULPCaseSearch;
 import parker.serb.sql.Audit;
-import parker.serb.sql.CaseParty;
 import parker.serb.sql.ORGCase;
-import parker.serb.sql.Party;
-import parker.serb.sql.REPCase;
+import parker.serb.sql.User;
 
 //
 
@@ -47,10 +42,12 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
                     if(Global.root != null) {
                         Global.root.getjButton2().setText("Update");
                         Global.root.getjButton2().setEnabled(false);
-                        Global.caseNumber = null;
-                        Global.caseMonth = null;
-                        Global.caseType = null;
-                        Global.caseYear = null;
+                        if(Global.caseNumber == null) {
+                            Global.caseNumber = null;
+                            Global.caseMonth = null;
+                            Global.caseType = null;
+                            Global.caseYear = null;
+                        } 
                         Global.root.getoRGRootPanel1().clearAll();
                     }
                 } else {
@@ -68,6 +65,7 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
         Global.caseType = "ORG";
         Global.caseMonth = null;
         Global.caseNumber = caseNumberComboBox.getSelectedItem().toString().trim();
+        
         loadHeaderInformation();
     }
     
@@ -81,6 +79,7 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
             } else {
                 Global.caseNumber = org.orgNumber != null ? org.orgNumber : "";
                 Global.caseType = "ORG";
+                User.updateLastCaseNumber();
                 orgNumberTextBox.setText(org.orgNumber != null ? org.orgNumber : "");
                 fiscalYearEndingTextBox.setText(org.fiscalYearEnding != null ? org.fiscalYearEnding : "");
                 filingDueDateTextBox.setText(org.filingDueDate != null ? org.filingDueDate : "");

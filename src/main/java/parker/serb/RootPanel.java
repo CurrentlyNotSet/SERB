@@ -118,7 +118,10 @@ public class RootPanel extends javax.swing.JFrame {
             } else {
                 jTabbedPane1.setSelectedIndex(jTabbedPane1.indexOfTab(Global.activeUser.defaultSection));
                 if(Global.activeUser.lastTab.equals(Global.activeUser.defaultSection)) {
-                    
+                    Global.caseYear = Global.activeUser.lastCaseYear;
+                    Global.caseType = Global.activeUser.lastCaseType;
+                    Global.caseMonth = Global.activeUser.lastCaseMonth;
+                    Global.caseNumber = Global.activeUser.lastCaseNumber;
                 } 
                 User.updateLastTab(Global.activeUser.defaultSection);
             }
@@ -161,6 +164,7 @@ public class RootPanel extends javax.swing.JFrame {
                 card.show(jPanel9, "card5");
                 jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
                 oRGHeaderPanel2.loadCases();
+                
                 break;
             case "MED":
                 card.show(jPanel9, "card6");

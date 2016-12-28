@@ -5,6 +5,7 @@
  */
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -235,7 +237,12 @@ public class EmailOut {
                 count += emailListRS.getInt("count");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex);
+                getEmailCount(section);
+            } else {
+                SlackNotification.sendNotification(ex);
+            }
         }
         return count;
     }

@@ -60,10 +60,10 @@ public class REPElectionMultiCase {
 
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 addMultiCase(caseNumber);
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         }
     }
@@ -98,10 +98,10 @@ public class REPElectionMultiCase {
             
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 checkCaseIsAlreadyPresent(caseNumber);
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         }
         return newCase;
@@ -130,10 +130,10 @@ public class REPElectionMultiCase {
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 removeMultiCase(caseNumber);
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         }
     }
@@ -173,10 +173,10 @@ public class REPElectionMultiCase {
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 loadMultiCaseNumber();
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         }
         return activityList;

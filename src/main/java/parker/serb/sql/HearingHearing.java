@@ -76,9 +76,9 @@ public class HearingHearing {
 
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.getMessage());
+                SlackNotification.sendNotification(ex);
             } else {
-                SlackNotification.sendNotification(ex.getMessage());
+                SlackNotification.sendNotification(ex);
                 Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
             }
         } finally {
@@ -153,9 +153,9 @@ public class HearingHearing {
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.getMessage());
+                SlackNotification.sendNotification(ex);
             } else {
-                SlackNotification.sendNotification(ex.getMessage());
+                SlackNotification.sendNotification(ex);
                 Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
             }
         } finally {
@@ -184,9 +184,9 @@ public class HearingHearing {
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
                 System.out.println("TESTING");
-                SlackNotification.sendNotification(ex.getMessage());
+                SlackNotification.sendNotification(ex);
             } else {
-                SlackNotification.sendNotification(ex.getMessage());
+                SlackNotification.sendNotification(ex);
                 Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -217,9 +217,9 @@ public class HearingHearing {
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.getMessage());
+                SlackNotification.sendNotification(ex);
             } else {
-                SlackNotification.sendNotification(ex.getMessage());
+                SlackNotification.sendNotification(ex);
                 Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

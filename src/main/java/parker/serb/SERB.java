@@ -28,7 +28,7 @@ public class SERB {
          * This is used to monitor Apple key commands on a mac
          */
         if(System.getProperty("os.name").equalsIgnoreCase("Mac OS X")) {
-            try {
+//            try {
                 Application macOSXApplication=Application.getApplication();
 
                 macOSXApplication.setQuitHandler((AppEvent.QuitEvent qe, QuitResponse qr) -> {
@@ -40,10 +40,9 @@ public class SERB {
                     }
                     System.exit(0);
                 });
-            }
-            catch (Throwable ex) {
-                SlackNotification.sendNotification(ex.getMessage());
-            }
+//            } catch (Throwable ex) {
+//                SlackNotification.sendNotification(ex);
+//            }
         }
         
         //install weblaf look and feel

@@ -289,7 +289,7 @@ public class ORGCase {
                 org.filedByParent = caseHeader.getBoolean("filedByParent");
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
         return org;
     }
@@ -375,7 +375,7 @@ public class ORGCase {
                 org.extensionDate = caseInformation.getTimestamp("extensionDate");
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
         return org;
     }
@@ -575,7 +575,7 @@ public class ORGCase {
                 detailedSaveOrgInformation(newCaseInformation, caseInformation);
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
     }
     

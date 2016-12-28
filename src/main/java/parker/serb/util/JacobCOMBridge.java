@@ -59,7 +59,7 @@ public class JacobCOMBridge {
             return true;
         } catch (UnsatisfiedLinkError e) {
             System.err.println("Missing DLL: " + dllPath);
-            SlackNotification.sendNotification(e.toString());
+//            SlackNotification.sendNotification(ex);
             return false;
         }
     }

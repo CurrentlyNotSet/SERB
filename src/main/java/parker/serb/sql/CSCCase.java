@@ -238,7 +238,7 @@ public class CSCCase {
                 org.cscNumber = caseHeader.getString("cscNumber");
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
         return org;
     }
@@ -306,7 +306,7 @@ public class CSCCase {
                 org.statutory = caseInformation.getBoolean("statutory");
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
         return org;
     }
@@ -374,7 +374,7 @@ public class CSCCase {
                 detailedSaveCSCInformation(newCaseInformation, caseInformation);
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
     }
     
