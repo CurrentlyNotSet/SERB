@@ -5,13 +5,14 @@
  */
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
 import parker.serb.util.NumberFormatService;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -36,10 +37,12 @@ public class AdministrationInformation {
     
     public static AdministrationInformation loadAdminInfo(String dept) {
         AdministrationInformation exec = null;
-            
+          
+        Statement stmt = null;
+        
         try {
 
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM AdministrationInformation where active = 1 AND department = ?";
 
@@ -65,14 +68,21 @@ public class AdministrationInformation {
                 return exec;
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadAdminInfo(dept);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return exec;
     }
     
     public static void updateAdministrationInformation(AdministrationInformation item) {
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE AdministrationInformation SET "
                     + "governorName = ?, "  //01
@@ -104,7 +114,12 @@ public class AdministrationInformation {
 
             ps.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateAdministrationInformation(item);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
 }
