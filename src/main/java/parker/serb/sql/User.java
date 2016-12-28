@@ -12,7 +12,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.commons.dbutils.DbUtils;
 import parker.serb.Global;
 import parker.serb.login.Password;
 import parker.serb.util.NumberFormatService;
@@ -46,6 +45,7 @@ public class User {
     public String   initials;
     public boolean  investigator;
     public String   jobTitle;
+    public String   lastTab;
     
     public static void createUser(User user) {
         Statement stmt = null;
@@ -57,7 +57,7 @@ public class User {
             stmt = Database.connectToDB().createStatement();
             
             String sql = "INSERT INTO Users VALUES"
-                    + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setBoolean(1, true);
@@ -75,6 +75,7 @@ public class User {
             preparedStatement.setBoolean(13, true);
             preparedStatement.setString(14, null);
             preparedStatement.setString(15, null);
+            preparedStatement.setString(16, null);
             
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
@@ -125,6 +126,7 @@ public class User {
                 user.applicationVersion = foundUser.getString("applicationVersion");
                 user.defaultSection = foundUser.getString("defaultSection");
                 user.jobTitle = foundUser.getString("jobTitle");
+                user.lastTab = foundUser.getString("lastTab") == null ? "" : foundUser.getString("lastTab");
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
@@ -174,6 +176,7 @@ public class User {
                 user.workPhone = users.getString("workPhone");
                 user.middleInitial = users.getString("middleInitial");
                 user.jobTitle = users.getString("jobTitle");
+                user.lastTab = users.getString("lastTab") == null ? "" : users.getString("lastTab");
                 activeUsers.add(user);
             }
         } catch (SQLException ex) {
@@ -226,6 +229,7 @@ public class User {
                 user.initials = users.getString("initials");
                 user.investigator = users.getBoolean("investigator");
                 user.jobTitle = users.getString("jobTitle");
+                user.lastTab = users.getString("lastTab") == null ? "" : users.getString("lastTab");
                 activeUsers.add(user);
             }
         } catch (SQLException ex) {
@@ -366,6 +370,7 @@ public class User {
     /**
      * Update the time/date stamp that the user last successfully logged in
      */
+    @Deprecated
     public static void updateLastLogInTime() {
         try {
             Statement stmt = Database.connectToDB().createStatement();
@@ -481,6 +486,39 @@ public class User {
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setBoolean(1, !Global.activeUser.activeLogIn);
+            preparedStatement.setString(2, Global.activeUser.username);
+            
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            if(ex.getCause() instanceof SQLServerException) {
+                updateActiveLogIn();
+                SlackNotification.sendNotification(ex.toString());
+            } else {
+                SlackNotification.sendNotification(ex.getMessage());
+            }
+        }
+    }
+    
+    public static void updateLastTab(String tabName) {
+        try {
+            
+            String tab = "";
+            
+            switch(tabName) {
+                case "Civil Service Commission":
+                    tab = "CSC";
+                    break;
+                default:
+                    tab = tabName;
+                    break;
+            }
+            
+            Statement stmt = Database.connectToDB().createStatement();
+            
+            String sql = "Update Users SET lastTab = ? where username = ?";
+            
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, tab);
             preparedStatement.setString(2, Global.activeUser.username);
             
             preparedStatement.executeUpdate();
@@ -625,7 +663,7 @@ public class User {
         try {
             Statement stmt = Database.connectToDB().createStatement();
             
-            String sql = "Select *  from Users where ID = ?";
+            String sql = "Select firstName, lastName from Users where ID = ?";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setInt(1, userID);
@@ -654,7 +692,7 @@ public class User {
         try {
             Statement stmt = Database.connectToDB().createStatement();
             
-            String sql = "Select *  from Users where firstName = ? and lastName = ? and active = 1";
+            String sql = "Select id from Users where firstName = ? and lastName = ? and active = 1";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, parsedUserName[0]);

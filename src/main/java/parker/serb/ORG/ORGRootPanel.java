@@ -5,16 +5,13 @@
  */
 package parker.serb.ORG;
 
-import parker.serb.MED.*;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import parker.serb.activity.ActivityPanel;
 import parker.serb.Global;
 import parker.serb.activity.RemoveActivityEntryDialog;
-import parker.serb.party.PartiesPanel;
 import parker.serb.party.PartySearchDialog;
-import parker.serb.sql.MEDCaseSearchData;
 import parker.serb.util.CancelUpdate;
 
 /**

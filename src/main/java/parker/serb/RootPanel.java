@@ -117,6 +117,10 @@ public class RootPanel extends javax.swing.JFrame {
                 jTabbedPane1.setSelectedIndex(0);
             } else {
                 jTabbedPane1.setSelectedIndex(jTabbedPane1.indexOfTab(Global.activeUser.defaultSection));
+                if(Global.activeUser.lastTab.equals(Global.activeUser.defaultSection)) {
+                    
+                } 
+                User.updateLastTab(Global.activeUser.defaultSection);
             }
         }
         
@@ -201,6 +205,7 @@ public class RootPanel extends javax.swing.JFrame {
             if(Global.activeSection != null) { 
                 Global.activeSection = jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex());
                 Audit.addAuditEntry("Navigated to " + Global.activeSection + " section");
+                User.updateLastTab(Global.activeSection);
                 
                 setHeaderCard();
                 enableButtons();
