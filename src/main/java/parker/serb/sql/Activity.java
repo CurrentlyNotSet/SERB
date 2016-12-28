@@ -824,11 +824,12 @@ public class Activity {
     
     public static List<Activity> loadDocumentsBySectionAwaitingRedaction() {
         Statement stmt = null;
+        
         List casetypes = CaseType.getCaseType();
         List<Activity> activityList = new ArrayList<>();
                     
         try {
-
+            int i = 0;
             stmt = Database.connectToDB().createStatement();
             
             String sql = "SELECT * FROM Activity WHERE "
@@ -841,8 +842,9 @@ public class Activity {
             if (!casetypes.isEmpty()) {
                 sql += "AND (";
                 
-                for (Object casetype : casetypes) {
+                while(i < casetypes.size()) {
                     sql += " Activity.caseType = ? OR";
+                    i++;
                 }
                 
                 sql = sql.substring(0, (sql.length() - 2)) + ")";
@@ -891,7 +893,7 @@ public class Activity {
         Statement stmt = null;
             
         try {
-
+            int i = 0;
             stmt = Database.connectToDB().createStatement();
             
             String sql = "SELECT * FROM Activity WHERE Activity.date >= ?  AND Activity.date <= ? "
@@ -902,8 +904,9 @@ public class Activity {
             if (!casetypes.isEmpty()) {
                 sql += "AND (";
                 
-                for (Object casetype : casetypes) {
+                while(i < casetypes.size()) {
                     sql += " Activity.caseType = ? OR";
+                    i++;
                 }
                 
                 sql = sql.substring(0, (sql.length() - 2)) + ")";
