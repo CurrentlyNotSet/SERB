@@ -58,6 +58,9 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
         jLabel6 = new javax.swing.JLabel();
         HearingsHistoryCategoryButton = new javax.swing.JButton();
         HearingsHistoryDescriptionButton = new javax.swing.JButton();
+        CMDSReportsButton = new javax.swing.JButton();
+        CMDSTemplatesButton = new javax.swing.JButton();
+        SMDSTemplatesButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -279,6 +282,29 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
             }
         });
 
+        CMDSReportsButton.setText("Reports");
+        CMDSReportsButton.setEnabled(false);
+        CMDSReportsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CMDSReportsButtonActionPerformed(evt);
+            }
+        });
+
+        CMDSTemplatesButton.setText("Templates");
+        CMDSTemplatesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CMDSTemplatesButtonActionPerformed(evt);
+            }
+        });
+
+        SMDSTemplatesButton.setText("SMDS Templates");
+        SMDSTemplatesButton.setEnabled(false);
+        SMDSTemplatesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SMDSTemplatesButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -356,11 +382,18 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
                                         .addComponent(HearingRoomsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
                                         .addComponent(HearingTypesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(CaseTypesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(CaseTypesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(SMDSTemplatesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(18, 18, 18)
-                                .addComponent(CMDSResultsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(CMDSResultsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(CMDSReportsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
-                                .addComponent(AppealCourtButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(AppealCourtButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(CMDSTemplatesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(21, 21, 21)
@@ -438,8 +471,12 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
                     .addComponent(CMDSResultsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(AppealCourtButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(CaseTypesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(CaseTypesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(CMDSReportsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(CMDSTemplatesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(SMDSTemplatesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addContainerGap())
         );
@@ -553,12 +590,26 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
         new CMDSHistoryDescriptionSearchDialog(Global.root, true, "Hearings");
     }//GEN-LAST:event_HearingsHistoryDescriptionButtonActionPerformed
 
+    private void CMDSReportsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CMDSReportsButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CMDSReportsButtonActionPerformed
+
+    private void CMDSTemplatesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CMDSTemplatesButtonActionPerformed
+        new CMDSTemplateSearchDialog(Global.root, true);
+    }//GEN-LAST:event_CMDSTemplatesButtonActionPerformed
+
+    private void SMDSTemplatesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SMDSTemplatesButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_SMDSTemplatesButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AppealCourtButton;
     private javax.swing.JButton BoardActionTypeButton;
     private javax.swing.JButton CMDSHistoryCategoryButton;
     private javax.swing.JButton CMDSHistoryDescriptionButton;
+    private javax.swing.JButton CMDSReportsButton;
     private javax.swing.JButton CMDSResultsButton;
+    private javax.swing.JButton CMDSTemplatesButton;
     private javax.swing.JButton CaseStatusTypeButton;
     private javax.swing.JButton CaseTypesButton;
     private javax.swing.JButton DirectorsButton;
@@ -575,6 +626,7 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
     private javax.swing.JButton REPRecsButton;
     private javax.swing.JButton REPStatusOptionsButton;
     private javax.swing.JButton SERBExecButton;
+    private javax.swing.JButton SMDSTemplatesButton;
     private javax.swing.JButton SystemPBRButton;
     private javax.swing.JButton SystemSERBButton;
     private javax.swing.JButton ULPRecsButton;

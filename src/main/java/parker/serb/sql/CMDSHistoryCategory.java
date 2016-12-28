@@ -253,8 +253,7 @@ public class CMDSHistoryCategory {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    
+        
     public static void createHearingHistoryCategory(CMDSHistoryCategory item) {
         try {
 
