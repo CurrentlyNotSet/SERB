@@ -56,7 +56,7 @@ public class Activity {
 
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, Global.caseYear);
@@ -73,6 +73,7 @@ public class Activity {
             preparedStatement.setString(12, "");
             preparedStatement.setBoolean(13, false);
             preparedStatement.setBoolean(14, false);
+            preparedStatement.setBoolean(15, true);
 
             preparedStatement.executeUpdate();
 
@@ -95,7 +96,7 @@ public class Activity {
 
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, caseNumber.split("-")[0]);
@@ -112,6 +113,7 @@ public class Activity {
             preparedStatement.setString(12, "");
             preparedStatement.setBoolean(13, false);
             preparedStatement.setBoolean(14, false);
+            preparedStatement.setBoolean(15, true);
 
             preparedStatement.executeUpdate();
             
@@ -142,7 +144,7 @@ public class Activity {
 
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, caseNumber.split("-")[0]);
@@ -159,6 +161,7 @@ public class Activity {
             preparedStatement.setString(12, "");
             preparedStatement.setBoolean(13, false);
             preparedStatement.setBoolean(14, false);
+            preparedStatement.setBoolean(15, false);
 
             preparedStatement.executeUpdate();
             
@@ -223,7 +226,7 @@ public class Activity {
 
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, caseNumber[0].trim());
@@ -240,6 +243,7 @@ public class Activity {
             preparedStatement.setString(12, comment.equals("") ? null : comment);
             preparedStatement.setBoolean(13, redacted);
             preparedStatement.setBoolean(14, needsTimestamp);
+            preparedStatement.setBoolean(15, true);
 
 
             preparedStatement.executeUpdate();
@@ -271,7 +275,7 @@ public class Activity {
 
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, caseNumber[0].trim());
@@ -288,6 +292,7 @@ public class Activity {
             preparedStatement.setString(12, comment.equals("") ? null : comment);
             preparedStatement.setBoolean(13, redacted);
             preparedStatement.setBoolean(14, needsTimestamp);
+            preparedStatement.setBoolean(15, true);
 
             preparedStatement.executeUpdate();
 
@@ -314,7 +319,7 @@ public class Activity {
 
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             String[] parsedCaseNumber = caseNumber.split("-");
@@ -332,6 +337,7 @@ public class Activity {
             preparedStatement.setString(12, null);
             preparedStatement.setBoolean(13, false);
             preparedStatement.setBoolean(14, false);
+            preparedStatement.setBoolean(15, true);
 
             preparedStatement.executeUpdate();
 
@@ -384,7 +390,7 @@ public class Activity {
                     + " (firstName like ? or"
                     + " lastName like ? or"
                     + " action like ?)"
-                    + " and active = 1"
+                    + " and Activity.active = 1"
                     + " ORDER BY date DESC ";
 
                 preparedStatement = stmt.getConnection().prepareStatement(sql);
@@ -611,7 +617,7 @@ public class Activity {
                     + " INNER JOIN Users"
                     + " ON Activity.userID = Users.id"
                     + " Where Activity.id = ?"
-                    + " and active = 1";
+                    + " and Activity.active = 1";
             
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
@@ -922,7 +928,7 @@ public class Activity {
             String sql = "SELECT * FROM Activity WHERE Activity.date >= ?  AND Activity.date <= ? "
                     + "AND Activity.fileName IS NOT NULL AND Activity.fileName != '' " 
                     + "AND (Activity.action LIKE 'IN -%' OR Activity.action LIKE 'OUT -%') "
-                    + " and active = 1";
+                    + " and Activity.active = 1";
             
             if (!casetypes.isEmpty()) {
                 sql += "AND (";
