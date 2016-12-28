@@ -9,8 +9,6 @@ import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.dbutils.DbUtils;
 import parker.serb.util.SlackNotification;
 
@@ -21,8 +19,10 @@ import parker.serb.util.SlackNotification;
 public class ActiveStatus {
     
     public static void updateActiveStatus(String tableName, boolean active, int id) {
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE  " + tableName + " SET active = ? where id = ?";
 
@@ -36,6 +36,8 @@ public class ActiveStatus {
             if(ex.getCause() instanceof SQLServerException) {
                 updateActiveStatus(tableName, active, id);
             } 
-        } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
     }
 }
