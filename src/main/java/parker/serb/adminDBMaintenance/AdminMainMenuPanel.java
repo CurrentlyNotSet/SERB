@@ -283,7 +283,6 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
         });
 
         CMDSReportsButton.setText("Reports");
-        CMDSReportsButton.setEnabled(false);
         CMDSReportsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 CMDSReportsButtonActionPerformed(evt);
@@ -297,7 +296,7 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
             }
         });
 
-        SMDSTemplatesButton.setText("SMDS Templates");
+        SMDSTemplatesButton.setText("SMDS Documents");
         SMDSTemplatesButton.setEnabled(false);
         SMDSTemplatesButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -591,7 +590,7 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
     }//GEN-LAST:event_HearingsHistoryDescriptionButtonActionPerformed
 
     private void CMDSReportsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CMDSReportsButtonActionPerformed
-        // TODO add your handling code here:
+        new CMDSReportsSearchDialog(Global.root, true);
     }//GEN-LAST:event_CMDSReportsButtonActionPerformed
 
     private void CMDSTemplatesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CMDSTemplatesButtonActionPerformed

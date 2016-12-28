@@ -278,7 +278,7 @@ public class CMDSTemplateAddEditDialog extends javax.swing.JDialog {
 
         jLabel6.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel6.setText("Sub Category");
+        jLabel6.setText("Sub Category:");
 
         subCategoryTextField.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         subCategoryTextField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
