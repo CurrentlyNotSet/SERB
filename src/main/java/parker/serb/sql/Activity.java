@@ -16,10 +16,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.io.FilenameUtils;
 import parker.serb.Global;
-import static parker.serb.sql.ActiveStatus.updateActiveStatus;
 import parker.serb.util.SlackNotification;
 
 /**
