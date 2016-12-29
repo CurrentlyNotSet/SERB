@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import org.apache.commons.dbutils.DbUtils;
 import parker.serb.Global;
 import static parker.serb.sql.User.updateApplicationVersion;
+import parker.serb.util.NumberFormatService;
 import parker.serb.util.SlackNotification;
 
 /**
@@ -217,7 +218,7 @@ public class ULPCase {
 
             preparedStatement.executeUpdate();
             
-            Audit.addAuditEntry("Updated Note for " + Global.caseNumber);
+            Audit.addAuditEntry("Updated Note for " + NumberFormatService.generateFullCaseNumber());
             Activity.addActivty("Updated Note", null);
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
@@ -285,7 +286,7 @@ public class ULPCase {
 
             preparedStatement.executeUpdate();
             
-            Audit.addAuditEntry("Updated Investigation Reveals for " + Global.caseNumber);
+            Audit.addAuditEntry("Updated Investigation Reveals for " + NumberFormatService.generateFullCaseNumber());
             Activity.addActivty("Updated Investigation Reveals", null);
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
@@ -355,7 +356,7 @@ public class ULPCase {
 
                 preparedStatement.executeUpdate();
 
-                Audit.addAuditEntry("Updated Recommendation for " + Global.caseNumber);
+                Audit.addAuditEntry("Updated Recommendation for " + NumberFormatService.generateFullCaseNumber());
                 Activity.addActivty("Updated Recommendation", null);
             }
         } catch (SQLException ex) {
@@ -506,7 +507,7 @@ public class ULPCase {
 
             preparedStatement.executeUpdate();
             
-            Audit.addAuditEntry("Updated Statement for " + Global.caseNumber);
+            Audit.addAuditEntry("Updated Statement for " + NumberFormatService.generateFullCaseNumber());
             Activity.addActivty("Updated Statement", null);
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {

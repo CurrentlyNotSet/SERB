@@ -46,10 +46,12 @@ public class REPHeaderPanel extends javax.swing.JPanel {
                 Global.root.getrEPRootPanel1().getjTabbedPane1().setSelectedIndex(0);
                 if(caseNumberComboBox.getSelectedItem().toString().trim().equals("")) {
                     if(Global.root != null) {
+                        
                         Global.root.getjButton2().setEnabled(false);
                         Global.root.getrEPRootPanel1().clearAll();
                     }
                 } else {
+                    Global.root.getjButton2().setEnabled(true);
                     loadInformation();
                     if(Global.root.getrEPRootPanel1().getjTabbedPane1().getSelectedIndex() == 0)
                         Global.root.getrEPRootPanel1().getActivityPanel1().loadAllActivity();
