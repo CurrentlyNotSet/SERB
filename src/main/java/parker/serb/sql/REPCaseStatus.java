@@ -45,10 +45,10 @@ public class REPCaseStatus {
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 loadAll();
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         }
         return caseStatusList;
@@ -92,10 +92,10 @@ public class REPCaseStatus {
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 searchREPStatusOptions(param);
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         }
         return recommendationList;
@@ -122,10 +122,10 @@ public class REPCaseStatus {
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 getREPCaseStatusByID(id);
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         }
         return item;
@@ -148,10 +148,10 @@ public class REPCaseStatus {
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 createREPStatusOption(item);
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         }
     }
@@ -175,10 +175,10 @@ public class REPCaseStatus {
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 updateREPStatusOption(item);
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         }
     }

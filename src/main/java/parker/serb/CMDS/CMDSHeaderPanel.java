@@ -47,10 +47,12 @@ public class CMDSHeaderPanel extends javax.swing.JPanel {
                     if(Global.root != null) {
                         Global.root.getjButton2().setText("Update");
                         Global.root.getjButton2().setEnabled(false);
-                        Global.caseYear = null;
-                        Global.caseType = null;
-                        Global.caseMonth = null;
-                        Global.caseNumber = null;
+                        if(Global.caseNumber == null) {
+                            Global.caseNumber = null;
+                            Global.caseMonth = null;
+                            Global.caseType = null;
+                            Global.caseYear = null;
+                        }
                         Global.root.getcMDSRootPanel1().clearAll();
                     }
                 } else {
@@ -69,6 +71,7 @@ public class CMDSHeaderPanel extends javax.swing.JPanel {
     private void loadInformation() {
         if(caseNumberComboBox.getSelectedItem().toString().trim().length() == 16) {
             NumberFormatService.parseFullCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim());
+            User.updateLastCaseNumber();
             loadHeaderInformation();
         } else {
             new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());  

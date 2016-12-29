@@ -238,7 +238,7 @@ public class CSCCase {
                 org.cscNumber = caseHeader.getString("cscNumber");
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
         return org;
     }
@@ -306,7 +306,7 @@ public class CSCCase {
                 org.statutory = caseInformation.getBoolean("statutory");
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
         return org;
     }
@@ -374,7 +374,7 @@ public class CSCCase {
                 detailedSaveCSCInformation(newCaseInformation, caseInformation);
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -600,5 +600,31 @@ public class CSCCase {
         } else if(newCaseInformation.valid != false && oldCaseInformation.valid == false) {
             Activity.addActivty("Set Valid", null);
         }
+    }
+    
+    public static boolean validateCSC(String cscNumber) {
+        boolean valid = false;
+        
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select Count(*) As results"
+                    + " from CscCase"
+                    + " where cscNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, cscNumber);
+            
+            ResultSet validRS = preparedStatement.executeQuery();
+            
+            validRS.next();
+            
+            valid = validRS.getInt("results") > 0;
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return valid;
     }
 }

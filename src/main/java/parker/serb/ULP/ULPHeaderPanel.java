@@ -43,11 +43,14 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
                         Global.root.getjButton2().setEnabled(false);
                         Global.root.getjButton3().setEnabled(false);
                         Global.root.getjButton6().setEnabled(false);
+                        Global.root.getjButton9().setEnabled(false);
+                        Global.root.getjButton9().setVisible(false);
                         Global.root.getuLPRootPanel1().clearAll();
                     }
                 } else {
                     Global.root.getjButton6().setEnabled(true);
                     Global.root.getjButton3().setEnabled(true);
+                    Global.root.getjButton9().setVisible(true);
                     loadInformation();
                     if(Global.root.getuLPRootPanel1().getjTabbedPane1().getSelectedIndex() == 0)
                         Global.root.getuLPRootPanel1().getActivityPanel1().loadAllActivity();
@@ -60,6 +63,7 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
     private void loadInformation() {
         if(caseNumberComboBox.getSelectedItem().toString().trim().length() == 16) {
             NumberFormatService.parseFullCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim());
+            User.updateLastCaseNumber();
             loadHeaderInformation();
         } else {
             new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());  

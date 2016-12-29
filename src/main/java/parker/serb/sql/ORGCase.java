@@ -289,7 +289,7 @@ public class ORGCase {
                 org.filedByParent = caseHeader.getBoolean("filedByParent");
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
         return org;
     }
@@ -375,7 +375,7 @@ public class ORGCase {
                 org.extensionDate = caseInformation.getTimestamp("extensionDate");
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
         return org;
     }
@@ -575,7 +575,7 @@ public class ORGCase {
                 detailedSaveOrgInformation(newCaseInformation, caseInformation);
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -879,5 +879,31 @@ public class ORGCase {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.extensionDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.extensionDate.getTime()))))
                 Activity.addActivty("Changed Extension Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.extensionDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.extensionDate.getTime())), null);
         }
+    }
+    
+    public static boolean validateOrg(String orgNumber) {
+        boolean valid = false;
+        
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select Count(*) As results"
+                    + " from OrgCase"
+                    + " where orgNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, orgNumber);
+            
+            ResultSet validRS = preparedStatement.executeQuery();
+            
+            validRS.next();
+            
+            valid = validRS.getInt("results") > 0;
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return valid;
     }
 }

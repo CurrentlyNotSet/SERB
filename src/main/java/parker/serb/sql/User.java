@@ -12,7 +12,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.commons.dbutils.DbUtils;
 import parker.serb.Global;
 import parker.serb.login.Password;
 import parker.serb.util.NumberFormatService;
@@ -46,6 +45,11 @@ public class User {
     public String   initials;
     public boolean  investigator;
     public String   jobTitle;
+    public String   lastTab;
+    public String   lastCaseYear;
+    public String   lastCaseType;
+    public String   lastCaseMonth;
+    public String   lastCaseNumber;
     
     public static void createUser(User user) {
         Statement stmt = null;
@@ -57,7 +61,7 @@ public class User {
             stmt = Database.connectToDB().createStatement();
             
             String sql = "INSERT INTO Users VALUES"
-                    + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setBoolean(1, true);
@@ -75,14 +79,19 @@ public class User {
             preparedStatement.setBoolean(13, true);
             preparedStatement.setString(14, null);
             preparedStatement.setString(15, null);
+            preparedStatement.setString(16, null);
+            preparedStatement.setString(17, null);
+            preparedStatement.setString(18, null);
+            preparedStatement.setString(19, null);
+            preparedStatement.setString(20, null);
             
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 createUser(user);
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         } 
     }
@@ -125,13 +134,18 @@ public class User {
                 user.applicationVersion = foundUser.getString("applicationVersion");
                 user.defaultSection = foundUser.getString("defaultSection");
                 user.jobTitle = foundUser.getString("jobTitle");
+                user.lastTab = foundUser.getString("lastTab") == null ? "" : foundUser.getString("lastTab");
+                user.lastCaseYear = foundUser.getString("lastCaseYear");
+                user.lastCaseType = foundUser.getString("lastCaseType");
+                user.lastCaseMonth = foundUser.getString("lastCaseMonth");
+                user.lastCaseNumber = foundUser.getString("lastCaseNumber");
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 findUserByUsername(username);
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         } 
         return user;
@@ -141,9 +155,9 @@ public class User {
      * Load a list of all users currently logged into the application
      * @return a list of user instance
      */
-    public static List findActiveUsers() {
+    public static List<User> findActiveUsers() {
         
-        List activeUsers = new ArrayList<User>();
+        List<User> activeUsers = new ArrayList<User>();
         
         try {
             
@@ -174,14 +188,19 @@ public class User {
                 user.workPhone = users.getString("workPhone");
                 user.middleInitial = users.getString("middleInitial");
                 user.jobTitle = users.getString("jobTitle");
+                user.lastTab = users.getString("lastTab") == null ? "" : users.getString("lastTab");
+                user.lastCaseYear = users.getString("lastCaseYear");
+                user.lastCaseType = users.getString("lastCaseType");
+                user.lastCaseMonth = users.getString("lastCaseMonth");
+                user.lastCaseNumber = users.getString("lastCaseNumber");
                 activeUsers.add(user);
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 findActiveUsers();
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         }
         return activeUsers;
@@ -226,14 +245,19 @@ public class User {
                 user.initials = users.getString("initials");
                 user.investigator = users.getBoolean("investigator");
                 user.jobTitle = users.getString("jobTitle");
+                user.lastTab = users.getString("lastTab") == null ? "" : users.getString("lastTab");
+                user.lastCaseYear = users.getString("lastCaseYear");
+                user.lastCaseType = users.getString("lastCaseType");
+                user.lastCaseMonth = users.getString("lastCaseMonth");
+                user.lastCaseNumber = users.getString("lastCaseNumber");
                 activeUsers.add(user);
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 getEnabledUsers();
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         }
         return activeUsers;
@@ -285,10 +309,10 @@ public class User {
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 loadSectionDropDowns(section);
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         }
         return activeUsers;
@@ -319,9 +343,9 @@ public class User {
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
                 System.out.println("TESTING");
-                SlackNotification.sendNotification(ex.getMessage());
+                SlackNotification.sendNotification(ex);
             } else {
-                SlackNotification.sendNotification(ex.getMessage());
+                SlackNotification.sendNotification(ex);
                 Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -353,9 +377,9 @@ public class User {
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
                 System.out.println("TESTING");
-                SlackNotification.sendNotification(ex.getMessage());
+                SlackNotification.sendNotification(ex);
             } else {
-                SlackNotification.sendNotification(ex.getMessage());
+                SlackNotification.sendNotification(ex);
                 Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -366,6 +390,7 @@ public class User {
     /**
      * Update the time/date stamp that the user last successfully logged in
      */
+    @Deprecated
     public static void updateLastLogInTime() {
         try {
             Statement stmt = Database.connectToDB().createStatement();
@@ -379,10 +404,10 @@ public class User {
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 updateLastLogInTime();
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         }
     }
@@ -405,10 +430,10 @@ public class User {
             preparedStatement.executeUpdate();
         } catch (SQLException | UnknownHostException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 updateLastPCName();
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         }
     }
@@ -430,10 +455,10 @@ public class User {
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 updateApplicationVersion();
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         }
     }
@@ -460,10 +485,10 @@ public class User {
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 updateLogInInformation();
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         } catch (UnknownHostException ex) {
             Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
@@ -487,9 +512,72 @@ public class User {
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
                 updateActiveLogIn();
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             } else {
-                SlackNotification.sendNotification(ex.getMessage());
+                SlackNotification.sendNotification(ex);
+            }
+        }
+    }
+    
+    public static void updateLastTab(String tabName) {
+        try {
+            
+            String tab;
+            
+            switch(tabName) {
+                case "Civil Service Commission":
+                    tab = "CSC";
+                    break;
+                default:
+                    tab = tabName;
+                    break;
+            }
+            
+            Statement stmt = Database.connectToDB().createStatement();
+            
+            String sql = "Update Users SET lastTab = ? where username = ?";
+            
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, tab);
+            preparedStatement.setString(2, Global.activeUser.username);
+            
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            if(ex.getCause() instanceof SQLServerException) {
+                updateLastTab(tabName);
+                SlackNotification.sendNotification(ex);
+            } else {
+                SlackNotification.sendNotification(ex);
+            }
+        }
+    }
+    
+    public static void updateLastCaseNumber() {
+        try {
+            
+            Statement stmt = Database.connectToDB().createStatement();
+            
+            String sql = "Update Users SET"
+                    + " lastCaseYear = ?,"
+                    + " lastCaseType = ?,"
+                    + " lastCaseMonth = ?,"
+                    + " lastCaseNumber = ?"
+                    + " where username = ?";
+            
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, Global.caseYear);
+            preparedStatement.setString(2, Global.caseType);
+            preparedStatement.setString(3, Global.caseMonth);
+            preparedStatement.setString(4, Global.caseNumber);
+            preparedStatement.setString(5, Global.activeUser.username);
+            
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            if(ex.getCause() instanceof SQLServerException) {
+                updateLastCaseNumber();
+                SlackNotification.sendNotification(ex);
+            } else {
+                SlackNotification.sendNotification(ex);
             }
         }
     }
@@ -513,10 +601,10 @@ public class User {
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 updatePassword(salt, password);
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         }
     }
@@ -537,10 +625,10 @@ public class User {
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 updatePasswordReset();
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         }
     }
@@ -566,10 +654,10 @@ public class User {
             } 
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 findAppliedRoles();
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         }
     }
@@ -611,10 +699,10 @@ public class User {
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 updateUserPrefs(user);
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         }
     } 
@@ -625,7 +713,7 @@ public class User {
         try {
             Statement stmt = Database.connectToDB().createStatement();
             
-            String sql = "Select *  from Users where ID = ?";
+            String sql = "Select firstName, lastName from Users where ID = ?";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setInt(1, userID);
@@ -637,10 +725,10 @@ public class User {
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 getNameByID(userID);
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         }
         return userName;    
@@ -654,7 +742,7 @@ public class User {
         try {
             Statement stmt = Database.connectToDB().createStatement();
             
-            String sql = "Select *  from Users where firstName = ? and lastName = ? and active = 1";
+            String sql = "Select id from Users where firstName = ? and lastName = ? and active = 1";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, parsedUserName[0]);
@@ -667,10 +755,10 @@ public class User {
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 getUserID(userName);
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         }
         return userID;    
@@ -694,10 +782,10 @@ public class User {
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.getMessage());
+                SlackNotification.sendNotification(ex);
                 getEmailByID(id);
             } else {
-                SlackNotification.sendNotification(ex.getMessage());
+                SlackNotification.sendNotification(ex);
             }
         }
         return userEmail;    
@@ -740,10 +828,10 @@ public class User {
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 getDocketSections();
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         }
         return docketSections;
@@ -773,9 +861,9 @@ public class User {
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         }
         return activeUsers;
@@ -806,9 +894,9 @@ public class User {
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
                 System.out.println("TESTING");
-                SlackNotification.sendNotification(ex.getMessage());
+                SlackNotification.sendNotification(ex);
             } else {
-                SlackNotification.sendNotification(ex.getMessage());
+                SlackNotification.sendNotification(ex);
                 Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -841,10 +929,10 @@ public class User {
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 loadAllUsers();
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         }
         return allUsers;
@@ -893,10 +981,10 @@ public class User {
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 searchAllUsers(param);
             } else {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
             }
         }
         return list;

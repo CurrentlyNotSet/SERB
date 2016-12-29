@@ -5,21 +5,20 @@
  */
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
+import parker.serb.util.SlackNotification;
 
-/**
- *
- * @author User
- */
 public class ActiveStatus {
     
     public static void updateActiveStatus(String tableName, boolean active, int id) {
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE  " + tableName + " SET active = ? where id = ?";
 
@@ -28,8 +27,14 @@ public class ActiveStatus {
             ps.setInt(2, id);
             
             ps.executeUpdate();
+            
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateActiveStatus(tableName, active, id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
 }

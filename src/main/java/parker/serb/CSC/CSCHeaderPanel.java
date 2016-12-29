@@ -13,6 +13,7 @@ import javax.swing.SwingUtilities;
 import parker.serb.Global;
 import parker.serb.sql.Audit;
 import parker.serb.sql.CSCCase;
+import parker.serb.sql.User;
 
 //
 
@@ -40,10 +41,12 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
                     if(Global.root != null) {
                         Global.root.getjButton2().setText("Update");
                         Global.root.getjButton2().setEnabled(false);
-                        Global.caseNumber = null;
-                        Global.caseMonth = null;
-                        Global.caseType = null;
-                        Global.caseYear = null;
+                        if(Global.caseNumber == null) {
+                            Global.caseNumber = null;
+                            Global.caseMonth = null;
+                            Global.caseType = null;
+                            Global.caseYear = null;
+                        }
                         Global.root.getcSCRootPanel1().clearAll();
                     }
                 } else {
@@ -74,6 +77,7 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
             } else {
                 Global.caseNumber = csc.cscNumber != null ? csc.cscNumber : "";
                 Global.caseType = "CSC";
+                User.updateLastCaseNumber();
                 CSCNumberTextBox.setText(csc.cscNumber != null ? csc.cscNumber : "");
             }
         }
@@ -90,6 +94,7 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
             } else {
                 Global.caseNumber = org.cscNumber != null ? org.cscNumber : "";
                 Global.caseType = "CSC";
+                User.updateLastCaseNumber();
                 CSCNumberTextBox.setText(org.cscNumber != null ? org.cscNumber : "");
             }
         }

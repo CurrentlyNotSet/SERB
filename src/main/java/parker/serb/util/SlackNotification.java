@@ -8,6 +8,8 @@ package parker.serb.util;
 import in.ashwanthkumar.slack.webhook.Slack;
 import in.ashwanthkumar.slack.webhook.SlackMessage;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.logging.Level;
@@ -38,17 +40,32 @@ public class SlackNotification {
         }
     }
     
-    public static void sendNotification(String message) {
+    public static void sendNotification(Exception ex) {
+        
+        String message = "User: " + Global.activeUser.username + "\n";
+        message += "Class Name: " + Thread.currentThread().getStackTrace()[2].getClassName() + "\n";
+        message += "Method Name: " + Thread.currentThread().getStackTrace()[2].getMethodName()+ "\n";
+        message += "Exception Type: " + ex.getClass().getSimpleName() + "\n";
+        message += "Stack Trace: " + convertStackTrace(ex);
+        
         try {
             new Slack(Global.slackHook)
                     .icon(Global.slackIcon) // Ref - http://www.emoji-cheat-sheet.com/
                     .sendToChannel(Global.slackChannel)
                     .displayName(Global.slackUser)
-                    .push(new SlackMessage(Global.activeUser.username + ": " + message));
-        } catch (IOException ex) {
-            Logger.getLogger(SlackNotification.class.getName()).log(Level.SEVERE, null, ex);
+                    .push(new SlackMessage(message));
+        } catch (IOException e) {
+            //nothing should go here -- let it fail to post to slack...nothing major
         }
     }
+    
+    private static String convertStackTrace(Exception ex) {
+        StringWriter sw = new StringWriter();
+        ex.printStackTrace(new PrintWriter(sw));
+        return sw.toString();
+    }
+    
+    
     
     
 //    public static void sendAttachement(String filePath) {

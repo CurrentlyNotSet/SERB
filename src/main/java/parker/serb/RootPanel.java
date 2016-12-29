@@ -48,11 +48,13 @@ import parker.serb.login.ExitVerification;
 import parker.serb.mailLogViewer.MailLogViewerPanel;
 import parker.serb.publicRecords.PublicRecordsMainPanel;
 import parker.serb.sql.CMDSCase;
+import parker.serb.sql.CSCCase;
 import parker.serb.sql.DocketLock;
 import parker.serb.sql.EmailOut;
 import parker.serb.sql.HearingCase;
 import parker.serb.sql.MEDCase;
 import parker.serb.sql.NewCaseLock;
+import parker.serb.sql.ORGCase;
 import parker.serb.sql.REPCase;
 import parker.serb.sql.ULPCase;
 import parker.serb.util.CreateNewCSCDialog;
@@ -113,10 +115,17 @@ public class RootPanel extends javax.swing.JFrame {
     
     private void setDefaultTab() {
         if(Global.activeUser.defaultSection != null) {
-            if(jTabbedPane1.indexOfTab(Global.activeUser.defaultSection) == -1) {
+            if(jTabbedPane1.indexOfTab(Global.activeUser.defaultSection.equals("CSC") ? "Civil Service Commission" : Global.activeUser.defaultSection) == -1) {
                 jTabbedPane1.setSelectedIndex(0);
             } else {
-                jTabbedPane1.setSelectedIndex(jTabbedPane1.indexOfTab(Global.activeUser.defaultSection));
+                jTabbedPane1.setSelectedIndex(jTabbedPane1.indexOfTab(Global.activeUser.defaultSection.equals("CSC") ? "Civil Service Commission" : Global.activeUser.defaultSection));
+                if(Global.activeUser.lastTab.equals(Global.activeUser.defaultSection)) {
+                    Global.caseYear = Global.activeUser.lastCaseYear;
+                    Global.caseType = Global.activeUser.lastCaseType;
+                    Global.caseMonth = Global.activeUser.lastCaseMonth;
+                    Global.caseNumber = Global.activeUser.lastCaseNumber;
+                } 
+                User.updateLastTab(Global.activeUser.defaultSection);
             }
         }
         
@@ -157,6 +166,9 @@ public class RootPanel extends javax.swing.JFrame {
                 card.show(jPanel9, "card5");
                 jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
                 oRGHeaderPanel2.loadCases();
+                if(ORGCase.validateOrg(Global.caseNumber)) {
+                    oRGHeaderPanel2.getjComboBox2().setSelectedItem(ORGCase.getORGName());
+                }
                 break;
             case "MED":
                 card.show(jPanel9, "card6");
@@ -178,11 +190,17 @@ public class RootPanel extends javax.swing.JFrame {
                 card.show(jPanel9, "card8");
                 jLabel1.setIcon(new ImageIcon(getClass().getResource("/SPBRSeal.png")));
                 cSCHeaderPanel1.loadCases();
+                if(CSCCase.validateCSC(Global.caseNumber)) {
+                    cSCHeaderPanel1.getjComboBox2().setSelectedItem(CSCCase.getCSCName());
+                }
                 break;  
             case "CMDS":
                 card.show(jPanel9, "card9");
                 jLabel1.setIcon(new ImageIcon(getClass().getResource("/SPBRSeal.png")));
                 cMDSHeaderPanel1.loadCases();
+                if(CMDSCase.validateCaseNumber(NumberFormatService.generateFullCaseNumber())) {
+                    cMDSHeaderPanel1.getjComboBox2().setSelectedItem(NumberFormatService.generateFullCaseNumber());
+                }
                 break;  
             case "Employer Search":
                 card.show(jPanel9, "card2");
@@ -201,6 +219,7 @@ public class RootPanel extends javax.swing.JFrame {
             if(Global.activeSection != null) { 
                 Global.activeSection = jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex());
                 Audit.addAuditEntry("Navigated to " + Global.activeSection + " section");
+                User.updateLastTab(Global.activeSection);
                 
                 setHeaderCard();
                 enableButtons();

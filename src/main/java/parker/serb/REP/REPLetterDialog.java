@@ -7,14 +7,9 @@ package parker.serb.REP;
 
 //TODO: Load all of the letter types
 
-import com.alee.laf.optionpane.WebOptionPane;
 import java.awt.event.ItemEvent;
 import java.util.List;
-import parker.serb.Global;
-import parker.serb.bookmarkProcessing.generateDocument;
-import parker.serb.sql.Activity;
 import parker.serb.sql.SMDSDocuments;
-import parker.serb.util.FileService;
 
 /**
  *

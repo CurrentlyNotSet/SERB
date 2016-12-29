@@ -1,13 +1,14 @@
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -23,10 +24,11 @@ public class ActivityType {
     
     /**
      * Loads all activities without a limited result
+     * @param section
      * @return list of all Activities per case
      */
     public static List loadAllActivityTypeBySection(String section) {
-        List<ActivityType> activityTypeList = new ArrayList<ActivityType>();
+        List<ActivityType> activityTypeList = new ArrayList<>();
         
         Statement stmt = null;
             
@@ -53,8 +55,12 @@ public class ActivityType {
                 activityTypeList.add(activityType);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadAllActivityTypeBySection(section);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return activityTypeList;
     }
@@ -80,8 +86,12 @@ public class ActivityType {
                 fullType = activityTypeListRS.getString("descriptionFull");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getFullType(typeAbbrv);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return fullType;
     }
@@ -107,8 +117,12 @@ public class ActivityType {
                 typeAbbrv = activityTypeListRS.getString("descriptionAbbrv");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getTypeAbbrv(typeFull);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return typeAbbrv;
     }
@@ -118,10 +132,12 @@ public class ActivityType {
     
     public static List searchActivityType(String[] param) {
         List<ActivityType> list = new ArrayList<>();
+        
+        Statement stmt = null;
 
         try {
 
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM ActivityType";
             if (param.length > 0) {
@@ -153,8 +169,12 @@ public class ActivityType {
                 list.add(item);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                searchActivityType(param);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return list;
     }
@@ -162,8 +182,10 @@ public class ActivityType {
     public static ActivityType getActivityTypeByID(int id) {
         ActivityType item = new ActivityType();
 
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM ActivityType WHERE id = ?";
 
@@ -180,15 +202,22 @@ public class ActivityType {
                 item.descriptionFull = rs.getString("descriptionFull") == null ? "" : rs.getString("descriptionFull");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getActivityTypeByID(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return item;
     }
 
     public static void createActivityType(ActivityType item) {
+        Statement stmt = null;
+        
         try {
 
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert INTO ActivityType ("
                     + "active, "
@@ -208,13 +237,20 @@ public class ActivityType {
             preparedStatement.setString(4, item.descriptionFull.equals("") ? null : item.descriptionFull);
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                createActivityType(item);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
 
     public static void updateActivityType(ActivityType item) {
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE ActivityType SET "
                     + "active = ?, "
@@ -232,9 +268,12 @@ public class ActivityType {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateActivityType(item);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
-    
-    
 }

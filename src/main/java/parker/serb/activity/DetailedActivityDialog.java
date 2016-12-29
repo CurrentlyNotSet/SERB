@@ -21,6 +21,7 @@ import parker.serb.util.FileService;
  */
 public class DetailedActivityDialog extends javax.swing.JDialog {
 
+    String fileName;
     Activity orgActivity;
     Activity updatedActivity = new Activity();
     String passedID;
@@ -101,41 +102,42 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
         
         if(orgActivity.fileName == null) {
             viewFileButton.setVisible(false);
+        } else {
+            fileName = orgActivity.fileName;
         }
     }
     
     private void enableInputs(boolean value) {
-        fromTextBox.setEditable(value);
-        toComboBox.setEnabled(value);
         typeComboBox.setEnabled(value);
         commentTextArea.setEditable(value);
     }
     
     private void updateAction() {
         updatedActivity.id = orgActivity.id;
-        updatedActivity.action = generateNewAction();
+        updatedActivity.action = actionTextBox.getText().trim();
         updatedActivity.comment = commentTextArea.getText();
         updatedActivity.from = fromTextBox.getText();
-        updatedActivity.to = toComboBox.getSelectedItem().toString();
+        updatedActivity.to = toComboBox.getSelectedItem() == null ? "" : toComboBox.getSelectedItem().toString();
         updatedActivity.type = typeComboBox.getSelectedItem().toString();
         
         Activity.updateActivtyEntry(updatedActivity);
-        
-    }
-    
-    private String generateNewAction() {
-        return "Filed " + typeComboBox.getSelectedItem().toString() + " from " +  fromTextBox.getText();
     }
     
     private void updateFileName() {
-        if(!orgActivity.type.equals(typeComboBox.getSelectedItem().toString())) {
-            FileService.renameActivtyFile(orgActivity.fileName, typeComboBox.getSelectedItem().toString());
-            
-            updatedActivity.fileName = orgActivity.fileName.split("_")[0] + "_"
-                    + ActivityType.getTypeAbbrv(typeComboBox.getSelectedItem().toString())
-                    + "." + orgActivity.fileName.split("\\.")[1];
-        } else {
-            updatedActivity.fileName = orgActivity.fileName;
+        if(orgActivity.type != null) 
+        {
+            if(!orgActivity.type.equals(typeComboBox.getSelectedItem().toString())) {
+                if(orgActivity.fileName != null) {
+                    FileService.renameActivtyFile(orgActivity.fileName, typeComboBox.getSelectedItem().toString());
+
+                    updatedActivity.fileName = orgActivity.fileName.split("_")[0] + "_"
+                            + ActivityType.getTypeAbbrv(typeComboBox.getSelectedItem().toString()).replace(" ", "_")
+                            + "." + orgActivity.fileName.split("\\.")[1];
+                    fileName = updatedActivity.fileName;
+                }
+            } else {
+                updatedActivity.fileName = orgActivity.fileName;
+            }
         }
     }
 
@@ -189,8 +191,12 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
         dateTextBox.setEnabled(false);
 
         actionTextBox.setEditable(false);
+        actionTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        actionTextBox.setEnabled(false);
 
         fromTextBox.setEditable(false);
+        fromTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        fromTextBox.setEnabled(false);
 
         toComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         toComboBox.setEnabled(false);
@@ -332,7 +338,7 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_closeButtonActionPerformed
 
     private void viewFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewFileButtonActionPerformed
-        FileService.openFile(orgActivity.fileName);
+        FileService.openFile(fileName);
     }//GEN-LAST:event_viewFileButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

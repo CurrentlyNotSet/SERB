@@ -20,6 +20,7 @@ import parker.serb.sql.Audit;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.Party;
 import parker.serb.sql.REPCase;
+import parker.serb.sql.User;
 import parker.serb.util.NumberFormatService;
 
 //
@@ -61,6 +62,7 @@ public class REPHeaderPanel extends javax.swing.JPanel {
     private void loadInformation() {
         if(caseNumberComboBox.getSelectedItem().toString().trim().length() == 16) {
             NumberFormatService.parseFullCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim());
+            User.updateLastCaseNumber();
             loadHeaderInformation();
         } else {
             new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());  

@@ -167,11 +167,11 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
             case "MED":
             case "CMDS":
             case "Hearings":
-                activtyList = Activity.loadActivityDocumentsByGlobalCasePublicRectords();
+                activtyList = Activity.loadActivityDocumentsByGlobalCasePublicRecords();
                 break;
             case "Civil Service Commission":
             case "ORG":
-                activtyList = Activity.loadActivityDocumentsByGlobalCaseORGCSCPublicRectords();
+                activtyList = Activity.loadActivityDocumentsByGlobalCaseORGCSCPublicRecords();
                 break;
         }
 

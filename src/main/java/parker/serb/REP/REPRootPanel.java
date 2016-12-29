@@ -10,6 +10,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import parker.serb.activity.ActivityPanel;
 import parker.serb.Global;
+import parker.serb.activity.RemoveActivityEntryDialog;
 import parker.serb.party.PartySearchDialog;
 import parker.serb.sql.REPCaseSearchData;
 import parker.serb.util.CancelUpdate;
@@ -252,6 +253,16 @@ public class REPRootPanel extends javax.swing.JPanel {
         CancelUpdate cancel;
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
             case "Activity":
+                new RemoveActivityEntryDialog(
+                    Global.root,
+                    true,
+                    activityPanel1.getActvityTable().getValueAt
+                    (
+                        activityPanel1.getActvityTable().getSelectedRow(),
+                        5
+                    ).toString()
+                );
+                activityPanel1.loadAllActivity();
                 break;
             case "Information":
                 cancel = new CancelUpdate(Global.root, true);

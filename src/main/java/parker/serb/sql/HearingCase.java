@@ -162,7 +162,7 @@ public class HearingCase {
                 Global.root.getHearingHeaderPanel1().getjComboBox2().setSelectedItem(fullCaseNumber); 
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -198,7 +198,7 @@ public class HearingCase {
                 hearings.FinalResult = caseHeader.getString("finalResult");
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
         return hearings;
     }
@@ -277,7 +277,7 @@ public class HearingCase {
                 );
             } 
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
     }
     

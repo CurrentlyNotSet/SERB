@@ -34,7 +34,7 @@ public class WordToPDF {
                 JacobCOMBridge.setWordActive(false, false, eolWord);
                 return FilenameUtils.getName(pdfFile);
             } catch (InterruptedException ex) {
-                SlackNotification.sendNotification(ex.toString());
+                SlackNotification.sendNotification(ex);
                 return "";
             }
         }

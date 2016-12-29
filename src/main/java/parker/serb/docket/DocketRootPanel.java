@@ -87,11 +87,11 @@ public class DocketRootPanel extends javax.swing.JPanel {
                         docs.add(docket);
                     }
                 } catch (IOException ex) {
-                    SlackNotification.sendNotification(ex.getMessage());
+                    SlackNotification.sendNotification(ex);
                 }
             });
         } catch (IOException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -112,15 +112,15 @@ public class DocketRootPanel extends javax.swing.JPanel {
                             docket.type = "Media";
                             docs.add(docket);
                         } catch (IOException ex) {
-                            SlackNotification.sendNotification(ex.getMessage());
+                            SlackNotification.sendNotification(ex);
                         }
                     }
                 } catch (IOException ex) {
-                    SlackNotification.sendNotification(ex.getMessage());
+                    SlackNotification.sendNotification(ex);
                 }
             });
         } catch (IOException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
         }
     }
     

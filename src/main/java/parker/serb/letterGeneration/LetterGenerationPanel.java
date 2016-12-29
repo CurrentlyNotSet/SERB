@@ -639,7 +639,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         try {
             Files.copy(Paths.get(docSourcePath), Paths.get(docDestPath + destFileName), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException ex) {
-            SlackNotification.sendNotification(ex.getMessage());
+            SlackNotification.sendNotification(ex);
             return "";
         }
         return destFileName;
