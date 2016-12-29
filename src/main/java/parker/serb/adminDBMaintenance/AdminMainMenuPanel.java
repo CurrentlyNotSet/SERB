@@ -109,7 +109,6 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
         });
 
         UsersButton.setText("Users");
-        UsersButton.setEnabled(false);
         UsersButton.setMargin(new java.awt.Insets(2, 2, 2, 2));
         UsersButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
