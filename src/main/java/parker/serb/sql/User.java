@@ -339,6 +339,9 @@ public class User {
             case "CMDS":
                 sectionColumnName = "cmdscaseworker";
                 break;
+            case "ALJ":
+                sectionColumnName = "investigator";
+                break;
         }
         
         List activeUsers = new ArrayList<>();
