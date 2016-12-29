@@ -1,0 +1,524 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
+  <Properties>
+    <Property name="defaultCloseOperation" type="int" value="2"/>
+    <Property name="resizable" type="boolean" value="false"/>
+  </Properties>
+  <SyntheticProperties>
+    <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
+  </SyntheticProperties>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jSeparator1" max="32767" attributes="0"/>
+                  <Component id="titleLabel" max="32767" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Component id="closeButton" min="-2" pref="100" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="editButton" min="-2" pref="100" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jLabel12" linkSize="1" alignment="0" min="-2" pref="75" max="-2" attributes="0"/>
+                          <Component id="jLabel10" linkSize="1" alignment="0" min="-2" pref="75" max="-2" attributes="0"/>
+                          <Component id="jLabel4" linkSize="1" alignment="0" min="-2" pref="75" max="-2" attributes="0"/>
+                          <Component id="jLabel2" linkSize="1" alignment="0" min="-2" pref="75" max="-2" attributes="0"/>
+                          <Component id="jLabel7" linkSize="1" alignment="0" min="-2" pref="75" max="-2" attributes="0"/>
+                          <Component id="jLabel11" linkSize="1" alignment="0" min="-2" pref="75" max="-2" attributes="0"/>
+                          <Component id="jLabel8" linkSize="1" alignment="0" min="-2" pref="75" max="-2" attributes="0"/>
+                          <Component id="jLabel3" linkSize="1" alignment="0" min="-2" pref="75" max="-2" attributes="0"/>
+                          <Component id="jLabel9" linkSize="1" min="-2" pref="95" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="JobTitleTextField" alignment="0" min="-2" pref="325" max="-2" attributes="0"/>
+                          <Component id="InitialsTextField" alignment="0" min="-2" pref="325" max="-2" attributes="0"/>
+                          <Component id="defaultSectionComboBox" alignment="0" min="-2" pref="325" max="-2" attributes="0"/>
+                          <Component id="FirstNameTextField" alignment="0" min="-2" pref="325" max="-2" attributes="1"/>
+                          <Component id="EmailTextField" alignment="0" min="-2" pref="325" max="-2" attributes="0"/>
+                          <Component id="LastNameTextField" alignment="0" min="-2" pref="325" max="-2" attributes="1"/>
+                          <Component id="PhoneTextField" alignment="0" min="-2" pref="325" max="-2" attributes="0"/>
+                          <Component id="UserNameTextField" alignment="0" min="-2" pref="325" max="-2" attributes="1"/>
+                          <Component id="MiddleInitialTextField" alignment="0" min="-2" pref="50" max="-2" attributes="1"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jSeparator2" min="-2" pref="10" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="ActiveLoginCheckBox" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="PasswordResetCheckBox" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="InvestigatorCheckBox" min="-2" pref="103" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Component id="jScrollPane1" pref="0" max="32767" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="RemoveAccessButton" max="32767" attributes="0"/>
+                                  <Component id="AddAccessButton" min="-2" pref="107" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                      </Group>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="CMDSWorkerCheckBox" linkSize="4" min="-2" max="-2" attributes="0"/>
+                          <Component id="CMDSDocketingCheckBox" linkSize="4" min="-2" pref="115" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="CSCDocketingCheckBox" linkSize="4" max="32767" attributes="0"/>
+                          <Component id="CSCWorkerCheckBox" linkSize="4" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="HearingsWorkerCheckBox" linkSize="4" max="32767" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="MEDWorkerCheckBox" linkSize="8" min="-2" pref="107" max="-2" attributes="0"/>
+                          <Component id="MEDDocketingCheckBox" linkSize="8" min="-2" pref="115" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="ORGDocketingCheckBox" linkSize="7" max="32767" attributes="0"/>
+                          <Component id="ORGWorkerCheckBox" linkSize="7" min="-2" pref="104" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="REPWorkerCheckBox" linkSize="6" min="-2" pref="105" max="-2" attributes="0"/>
+                          <Component id="REPDocketingCheckBox" linkSize="6" min="-2" pref="104" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="ULPWorkerCheckBox" linkSize="4" max="32767" attributes="0"/>
+                          <Component id="ULPDocketingCheckBox" linkSize="4" min="-2" pref="105" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Component id="titleLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                      <Component id="jLabel3" linkSize="2" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="jLabel2" linkSize="2" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="jLabel4" linkSize="2" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="jLabel11" linkSize="2" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="jLabel10" linkSize="2" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
+                      <Component id="jLabel7" linkSize="2" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="jLabel8" linkSize="2" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="jLabel9" linkSize="2" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="103" alignment="1" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="ActiveLoginCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="PasswordResetCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="InvestigatorCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Group type="102" attributes="0">
+                                  <Component id="AddAccessButton" min="-2" pref="50" max="-2" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
+                                  <Component id="RemoveAccessButton" min="-2" pref="49" max="-2" attributes="0"/>
+                              </Group>
+                              <Component id="jScrollPane1" min="-2" pref="203" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="UserNameTextField" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="FirstNameTextField" linkSize="2" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="MiddleInitialTextField" linkSize="2" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="LastNameTextField" linkSize="2" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="InitialsTextField" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="JobTitleTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel12" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="EmailTextField" linkSize="2" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="PhoneTextField" linkSize="2" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="defaultSectionComboBox" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="jSeparator2" alignment="1" min="-2" pref="268" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="jSeparator1" min="-2" pref="10" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="CMDSDocketingCheckBox" linkSize="5" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="CSCDocketingCheckBox" linkSize="5" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="ORGDocketingCheckBox" linkSize="5" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                      <Component id="REPDocketingCheckBox" linkSize="5" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="ULPDocketingCheckBox" linkSize="5" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Component id="MEDDocketingCheckBox" linkSize="5" alignment="0" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="HearingsWorkerCheckBox" linkSize="5" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" alignment="0" groupAlignment="1" attributes="0">
+                      <Component id="CMDSWorkerCheckBox" linkSize="5" alignment="1" min="-2" max="-2" attributes="0"/>
+                      <Component id="CSCWorkerCheckBox" linkSize="5" alignment="1" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="103" alignment="1" groupAlignment="0" attributes="0">
+                      <Component id="MEDWorkerCheckBox" linkSize="5" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" alignment="0" groupAlignment="1" attributes="0">
+                          <Component id="ORGWorkerCheckBox" linkSize="5" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" alignment="1" groupAlignment="3" attributes="0">
+                              <Component id="REPWorkerCheckBox" linkSize="5" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="ULPWorkerCheckBox" linkSize="5" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                  </Group>
+              </Group>
+              <EmptySpace pref="30" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="editButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="closeButton" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Component class="javax.swing.JLabel" name="titleLabel">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Arial" size="14" style="1"/>
+        </Property>
+        <Property name="horizontalAlignment" type="int" value="0"/>
+        <Property name="text" type="java.lang.String" value="&lt;&lt;TITLE&gt;&gt;"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="closeButton">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Arial" size="11" style="0"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Close"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="closeButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="editButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="&lt;&lt;EDIT&gt;&gt;"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="editButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JTextField" name="PhoneTextField">
+      <Properties>
+        <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="0" green="0" red="0" type="rgb"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel8">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Phone:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="EmailTextField">
+      <Properties>
+        <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="0" green="0" red="0" type="rgb"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel7">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Email:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel2">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="First Name:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="FirstNameTextField">
+      <Properties>
+        <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="0" green="0" red="0" type="rgb"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="caretUpdate" listener="javax.swing.event.CaretListener" parameters="javax.swing.event.CaretEvent" handler="FirstNameTextFieldCaretUpdate"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel4">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Middle Initial:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel11">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Last Name:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="LastNameTextField">
+      <Properties>
+        <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="0" green="0" red="0" type="rgb"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="caretUpdate" listener="javax.swing.event.CaretListener" parameters="javax.swing.event.CaretEvent" handler="LastNameTextFieldCaretUpdate"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JTextField" name="MiddleInitialTextField">
+      <Properties>
+        <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="0" green="0" red="0" type="rgb"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="UserNameTextField">
+      <Properties>
+        <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="0" green="0" red="0" type="rgb"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="caretUpdate" listener="javax.swing.event.CaretListener" parameters="javax.swing.event.CaretEvent" handler="UserNameTextFieldCaretUpdate"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel3">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="User Name:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="ActiveLoginCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Active Login"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="PasswordResetCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Password Reset"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="ULPDocketingCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="ULP Docketing"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="REPDocketingCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="REP Docketing"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="MEDDocketingCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="MED Docketing"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="ORGDocketingCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="ORG Docketing"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="CSCDocketingCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="CSC Docketing"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="CMDSDocketingCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="CMDS Docketing"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="ULPWorkerCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="ULP Worker"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="CMDSWorkerCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="CMDS Worker"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="CSCWorkerCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="CSC Worker"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="ORGWorkerCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="ORG Worker"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="MEDWorkerCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="MED Worker"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="REPWorkerCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="REP Worker"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="HearingsWorkerCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Hearings Worker"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel9">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Default Section:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="defaultSectionComboBox">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="0"/>
+        </Property>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel10">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Initials:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="InitialsTextField">
+      <Properties>
+        <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="0" green="0" red="0" type="rgb"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="InvestigatorCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Investigator"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel12">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Job Title:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="JobTitleTextField">
+      <Properties>
+        <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="0" green="0" red="0" type="rgb"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JSeparator" name="jSeparator2">
+      <Properties>
+        <Property name="orientation" type="int" value="1"/>
+      </Properties>
+    </Component>
+    <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+      <AuxValues>
+        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+      </AuxValues>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+      <SubComponents>
+        <Component class="javax.swing.JTable" name="UserRoleTable">
+          <Properties>
+            <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
+              <Table columnCount="2" rowCount="0">
+                <Column editable="false" title="roleID" type="java.lang.Object"/>
+                <Column editable="false" title="Tab Access" type="java.lang.Object"/>
+              </Table>
+            </Property>
+            <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
+              <TableColumnModel selectionModel="0">
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+              </TableColumnModel>
+            </Property>
+            <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
+              <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
+            </Property>
+          </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="UserRoleTableMouseClicked"/>
+          </Events>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Component class="javax.swing.JButton" name="AddAccessButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Add Access"/>
+        <Property name="enabled" type="boolean" value="false"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="AddAccessButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="RemoveAccessButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Remove Access"/>
+        <Property name="enabled" type="boolean" value="false"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="RemoveAccessButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JSeparator" name="jSeparator1">
+    </Component>
+  </SubComponents>
+</Form>
