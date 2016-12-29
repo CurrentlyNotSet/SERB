@@ -12,12 +12,12 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import parker.serb.Global;
-import parker.serb.employer.employerDetail;
-import parker.serb.employer.employerSearch;
+import org.apache.commons.validator.routines.EmailValidator;
 import parker.serb.sql.CSCCase;
 import parker.serb.sql.County;
-import parker.serb.sql.Employer;
 import parker.serb.util.ClearDateDialog;
 import parker.serb.util.NumberFormatService;
 
@@ -33,10 +33,39 @@ public class CSCInformationPanel extends javax.swing.JPanel {
      */
     public CSCInformationPanel() {
         initComponents();
+        addListeners();
         loadOrgTypeComboBox();
         loadStateComboBox();
         loadFiscalYearEndingComboBox();
         loadDueDateComboBox();
+    }
+    
+    private void addListeners() {
+        cscEmailTextBox.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                Global.root.getjButton2().setEnabled(
+                    EmailValidator.getInstance().isValid(cscEmailTextBox.getText()) ||
+                    cscEmailTextBox.getText().equals("")
+                );
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                Global.root.getjButton2().setEnabled(
+                    EmailValidator.getInstance().isValid(cscEmailTextBox.getText()) ||
+                    cscEmailTextBox.getText().equals("")
+                );
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                Global.root.getjButton2().setEnabled(
+                    EmailValidator.getInstance().isValid(cscEmailTextBox.getText()) ||
+                    cscEmailTextBox.getText().equals("")
+                );
+            }
+        });
     }
     
     private void loadOrgTypeComboBox() {
