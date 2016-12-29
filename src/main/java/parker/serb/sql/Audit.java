@@ -5,8 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
 import parker.serb.Global;
 import parker.serb.util.SlackNotification;
 
@@ -44,11 +43,7 @@ public class Audit {
                 SlackNotification.sendNotification(ex);
             }
         } finally {
-            try {
-                stmt.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            DbUtils.closeQuietly(stmt);
         }
     }
 }
