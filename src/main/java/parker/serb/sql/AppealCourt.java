@@ -5,14 +5,15 @@
  */
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -28,8 +29,10 @@ public class AppealCourt {
     public static List<AppealCourt> loadAllAppealCourt(String[] param) {
         List<AppealCourt> list = new ArrayList<>();
 
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM AppealCourt";
             if (param.length > 0) {
@@ -61,8 +64,12 @@ public class AppealCourt {
                 list.add(item);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadAllAppealCourt(param);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return list;
     }
@@ -70,8 +77,10 @@ public class AppealCourt {
     public static List<String> loadAllAppealCourt() {
         List<String> list = new ArrayList<>();
 
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM AppealCourt where active = 1"
                 +" ORDER BY courtName";
@@ -84,8 +93,12 @@ public class AppealCourt {
                 list.add(rs.getString("courtName"));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadAllAppealCourt();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return list;
     }
@@ -93,8 +106,10 @@ public class AppealCourt {
     public static AppealCourt getAppealCourtByID(int id) {
         AppealCourt item = new AppealCourt();
 
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM AppealCourt WHERE id = ?";
 
@@ -110,15 +125,22 @@ public class AppealCourt {
                 item.courtName = rs.getString("courtName") == null ? "" : rs.getString("courtName").trim();
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getAppealCourtByID(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return item;
     }
 
     public static void createAppealCourt(AppealCourt item) {
+        Statement stmt = null;
+        
         try {
 
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert INTO AppealCourt "
                     + "(active, type, courtName)"
@@ -130,13 +152,20 @@ public class AppealCourt {
             preparedStatement.setString(2, item.courtName.equals("") ? null : item.courtName.trim());
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                createAppealCourt(item);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
 
     public static void updateAppealCourt(AppealCourt item) {
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE AppealCourt SET "
                     + "active = ?, "
@@ -152,8 +181,12 @@ public class AppealCourt {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateAppealCourt(item);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
-    
 }
