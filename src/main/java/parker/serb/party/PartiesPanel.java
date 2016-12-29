@@ -138,7 +138,7 @@ public class PartiesPanel extends javax.swing.JPanel {
                     if(jTable1.getSelectedColumn() == 5 && e.getClickCount() == 2
                             && !jTable1.getValueAt(jTable1.getSelectedRow(), 5).toString().equals("")) {
                         try {
-                            Desktop.getDesktop().mail(new URI("mailto:" + jTable1.getValueAt(jTable1.getSelectedRow(), 5).toString() + "?bcc=" + Global.activeUser.emailAddress));
+                            Desktop.getDesktop().mail(new URI("mailto:" + jTable1.getValueAt(jTable1.getSelectedRow(), 5).toString().replace(" ", "") + "?bcc=" + Global.activeUser.emailAddress));
                         } catch (IOException ex) {
                             Logger.getLogger(PartiesPanel.class.getName()).log(Level.SEVERE, null, ex);
                         } catch (URISyntaxException ex) {
