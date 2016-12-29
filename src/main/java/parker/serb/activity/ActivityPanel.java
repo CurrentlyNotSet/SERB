@@ -213,7 +213,7 @@ public class ActivityPanel extends javax.swing.JPanel {
                 if(act.fileName == null) {
                     model.addRow(new Object[] {act.date, act.action, act.comment, act.user, "", act.id});
                 } else {
-                    actvityTable.getColumnModel().getColumn(3).setCellRenderer(new ImageRenderer());
+                    actvityTable.getColumnModel().getColumn(4).setCellRenderer(new ImageRenderer());
                     model.addRow(new Object[] {act.date, act.action, act.comment, act.user, act.fileName.trim(), act.id});
                 }      
             }
