@@ -10,6 +10,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import parker.serb.activity.ActivityPanel;
 import parker.serb.Global;
+import parker.serb.activity.AddActivtyForSMDSDialog;
 import parker.serb.activity.RemoveActivityEntryDialog;
 import parker.serb.party.PartySearchDialog;
 import parker.serb.util.CancelUpdate;
@@ -167,6 +168,7 @@ public class ORGRootPanel extends javax.swing.JPanel {
     public void orgUpdate(String buttonText) {
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
             case "Activity":
+                new AddActivtyForSMDSDialog(Global.root, true);
                 activityPanel1.loadAllActivity();
                 break;
             case "Parties":

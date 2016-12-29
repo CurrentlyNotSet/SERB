@@ -51,6 +51,7 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
                         Global.root.getoRGRootPanel1().clearAll();
                     }
                 } else {
+                    Global.root.getjButton2().setEnabled(true);
                     loadInformation();
                     if(Global.root.getoRGRootPanel1().getjTabbedPane1().getSelectedIndex() == 0)
                         Global.root.getoRGRootPanel1().getActivityPanel1().loadAllActivity();
