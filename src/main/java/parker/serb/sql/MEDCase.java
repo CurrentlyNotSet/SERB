@@ -277,7 +277,7 @@ public class MEDCase {
 
             preparedStatement.executeUpdate();
             
-            Audit.addAuditEntry("Updated Note for " + Global.caseNumber);
+            Audit.addAuditEntry("Updated Note for " + NumberFormatService.generateFullCaseNumber());
             Activity.addActivty("Updated Note", null);
         } catch (SQLException ex) {
             Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);

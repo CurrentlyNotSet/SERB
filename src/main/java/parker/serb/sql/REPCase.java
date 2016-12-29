@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import parker.serb.Global;
 import static parker.serb.sql.REPBoardActionType.loadAllREPBoardActionTypes;
+import parker.serb.util.NumberFormatService;
 import parker.serb.util.SlackNotification;
 
 /**
@@ -315,7 +316,7 @@ public class REPCase {
 
             preparedStatement.executeUpdate();
             
-            Audit.addAuditEntry("Updated Note for " + Global.caseNumber);
+            Audit.addAuditEntry("Updated Note for " + NumberFormatService.generateFullCaseNumber());
             Activity.addActivty("Updated Note", null);
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
