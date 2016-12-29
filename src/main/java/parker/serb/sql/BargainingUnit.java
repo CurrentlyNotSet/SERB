@@ -1,17 +1,15 @@
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.dbutils.DbUtils;
-import parker.serb.Global;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -42,10 +40,12 @@ public class BargainingUnit {
     public static String getCertStatus(String number) {
         String[] buNumberParts = number.split("-");
         String certStatus = "";
-            
+        
+        Statement stmt = null;
+        
         try {
 
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "select cert from BarginingUnit where EmployerNumber = ? and UnitNumber = ?";
                     
@@ -59,17 +59,24 @@ public class BargainingUnit {
                 certStatus = caseActivity.getString("cert");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getCertStatus(number);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return certStatus;
     }
 
     public static List loadBUList() {
-        List<BargainingUnit> employerList = new ArrayList<BargainingUnit>();
+        List<BargainingUnit> employerList = new ArrayList<>();
             
+        Statement stmt = null;
+        
         try {
 
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "select employerNumber, unitNumber, buEmployerName,"
                     + " lUnion, county, unitDescription, caseRefYear,"
@@ -98,7 +105,12 @@ public class BargainingUnit {
                 employerList.add(emp);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadBUList();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return employerList;
     }
@@ -107,9 +119,10 @@ public class BargainingUnit {
         String[] buNumberParts = buNumber.split("-");
         String unitDesc = "";
             
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "select unitDescription from BarginingUnit where EmployerNumber = ? and UnitNumber = ?";
                     
@@ -123,7 +136,12 @@ public class BargainingUnit {
                 unitDesc = caseActivity.getString("unitDescription");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getUnitDescription(buNumber);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return unitDesc;
     }
