@@ -12,10 +12,6 @@ import java.sql.Statement;
 import org.apache.commons.dbutils.DbUtils;
 import parker.serb.util.SlackNotification;
 
-/**
- *
- * @author User
- */
 public class ActiveStatus {
     
     public static void updateActiveStatus(String tableName, boolean active, int id) {
@@ -31,6 +27,7 @@ public class ActiveStatus {
             ps.setInt(2, id);
             
             ps.executeUpdate();
+            
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
