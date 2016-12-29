@@ -71,6 +71,35 @@ public class CMDSReport {
         return list;
     }
     
+    public static List<CMDSReport> loadActiveReportsBySection(String section) {
+        List<CMDSReport> list = new ArrayList<>();
+
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT * FROM CMDSReport WHERE active = 1 AND section = ?";
+
+            PreparedStatement ps = stmt.getConnection().prepareStatement(sql);
+            ps.setString(1, section);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                CMDSReport item = new CMDSReport();
+                item.id = rs.getInt("id");
+                item.active = rs.getBoolean("active");
+                item.section = rs.getString("section") == null ? "" : rs.getString("section");
+                item.description = rs.getString("description") == null ? "" : rs.getString("description");
+                item.fileName = rs.getString("fileName") == null ? "" : rs.getString("fileName");
+                item.parameters = rs.getString("parameters") == null ? "" : rs.getString("parameters");
+                list.add(item);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
+        return list;
+    }
+    
     public static CMDSReport getReportByID(int id) {
         CMDSReport item = new CMDSReport();
 
