@@ -34,124 +34,130 @@
               <Component id="jLabel2" max="32767" attributes="0"/>
               <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
           </Group>
-          <Group type="102" alignment="0" attributes="0">
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="jSeparator1" alignment="1" min="-2" pref="1166" max="-2" attributes="0"/>
-                  <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="411" max="-2" attributes="0"/>
-                              <Component id="CloseButton" min="-2" pref="70" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" attributes="0">
-                                              <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Component id="UsersButton" linkSize="2" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
-                                                  <Component id="PreFixesButton" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
+          <Group type="102" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="103" alignment="0" groupAlignment="1" attributes="0">
+                      <Component id="jSeparator1" alignment="1" min="-2" pref="1166" max="-2" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="-2" pref="411" max="-2" attributes="0"/>
+                                  <Component id="CloseButton" min="-2" pref="70" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" attributes="0">
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" attributes="0">
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Group type="102" attributes="0">
+                                                  <Group type="103" groupAlignment="0" attributes="0">
+                                                      <Component id="UsersButton" linkSize="2" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
+                                                      <Component id="PreFixesButton" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
+                                                  </Group>
+                                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="1" attributes="0">
+                                                      <Component id="SERBExecButton" linkSize="2" min="-2" pref="130" max="-2" attributes="0"/>
+                                                      <Component id="SystemSERBButton" linkSize="2" min="-2" pref="130" max="-2" attributes="0"/>
+                                                  </Group>
                                               </Group>
-                                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="1" attributes="0">
-                                                  <Component id="SERBExecButton" linkSize="2" min="-2" pref="130" max="-2" attributes="0"/>
-                                                  <Component id="SystemSERBButton" linkSize="2" min="-2" pref="130" max="-2" attributes="0"/>
+                                              <Component id="jLabel7" linkSize="6" min="-2" pref="277" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                              <Component id="jLabel8" linkSize="6" min="-2" pref="130" max="-2" attributes="0"/>
+                                              <Group type="102" alignment="0" attributes="0">
+                                                  <Component id="SystemPBRButton" linkSize="5" min="-2" pref="130" max="-2" attributes="0"/>
+                                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                                  <Component id="DirectorsButton" min="-2" pref="130" max="-2" attributes="0"/>
+                                              </Group>
+                                              <Group type="102" alignment="0" attributes="0">
+                                                  <Component id="PBRExecsButton" linkSize="5" min="-2" pref="130" max="-2" attributes="0"/>
+                                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                                  <Component id="CMDSHistoryCategoryButton" min="-2" pref="130" max="-2" attributes="0"/>
                                               </Group>
                                           </Group>
-                                          <Component id="jLabel7" linkSize="6" min="-2" pref="277" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                          <Component id="jLabel8" linkSize="6" min="-2" pref="130" max="-2" attributes="0"/>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="SystemPBRButton" linkSize="5" min="-2" pref="130" max="-2" attributes="0"/>
-                                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                                              <Component id="DirectorsButton" min="-2" pref="130" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="PBRExecsButton" linkSize="5" min="-2" pref="130" max="-2" attributes="0"/>
-                                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                                              <Component id="CMDSHistoryCategoryButton" min="-2" pref="130" max="-2" attributes="0"/>
+                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="FFConciliatorsButton" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
+                                              <Component id="MediatorsButton" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
+                                              <Component id="jLabel4" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="FFConciliatorsButton" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
-                                          <Component id="MediatorsButton" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
-                                          <Component id="jLabel4" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
+                                      <Group type="102" attributes="0">
+                                          <Component id="PartyButton" linkSize="2" min="-2" pref="130" max="-2" attributes="0"/>
+                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                          <Component id="HistoryTypesButton" linkSize="2" min="-2" pref="130" max="-2" attributes="0"/>
+                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                          <Component id="CaseStatusTypeButton" min="-2" pref="130" max="-2" attributes="0"/>
+                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                          <Component id="CMDSHistoryDescriptionButton" min="-2" pref="130" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
-                                  <Group type="102" attributes="0">
-                                      <Component id="PartyButton" linkSize="2" min="-2" pref="130" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="HistoryTypesButton" linkSize="2" min="-2" pref="130" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="CaseStatusTypeButton" min="-2" pref="130" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="CMDSHistoryDescriptionButton" min="-2" pref="130" max="-2" attributes="0"/>
-                                  </Group>
-                              </Group>
-                              <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="BoardActionTypeButton" min="-2" pref="130" max="-2" attributes="0"/>
-                                  <Component id="REPStatusOptionsButton" min="-2" pref="130" max="-2" attributes="0"/>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="REPRecsButton" linkSize="2" min="-2" pref="130" max="-2" attributes="0"/>
-                                          <Component id="jLabel3" min="-2" pref="130" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="jLabel5" min="-2" pref="127" max="-2" attributes="0"/>
-                                          <Component id="ULPRecsButton" linkSize="2" min="-2" pref="130" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="BoardActionTypeButton" min="-2" pref="130" max="-2" attributes="0"/>
+                                      <Component id="REPStatusOptionsButton" min="-2" pref="130" max="-2" attributes="0"/>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="REPRecsButton" linkSize="2" min="-2" pref="130" max="-2" attributes="0"/>
+                                              <Component id="jLabel3" min="-2" pref="130" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="jLabel5" min="-2" pref="127" max="-2" attributes="0"/>
+                                              <Component id="ULPRecsButton" linkSize="2" min="-2" pref="130" max="-2" attributes="0"/>
+                                          </Group>
                                       </Group>
                                   </Group>
                               </Group>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="HearingRoomsButton" min="-2" pref="130" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="HearingTypesButton" min="-2" pref="130" max="-2" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Component id="HearingRoomsButton" min="-2" pref="130" max="-2" attributes="0"/>
+                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                          <Component id="HearingTypesButton" min="-2" pref="130" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Component id="CaseTypesButton" min="-2" pref="130" max="-2" attributes="0"/>
+                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                          <Component id="SMDSTemplatesButton" min="-2" pref="130" max="-2" attributes="0"/>
+                                      </Group>
                                   </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="CaseTypesButton" min="-2" pref="130" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="SMDSTemplatesButton" min="-2" pref="130" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="1" attributes="0">
+                                      <Component id="CMDSResultsButton" min="-2" pref="130" max="-2" attributes="0"/>
+                                      <Component id="CMDSReportsButton" min="-2" pref="130" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="AppealCourtButton" min="-2" pref="130" max="-2" attributes="0"/>
+                                      <Component id="CMDSTemplatesButton" min="-2" pref="130" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="CMDSResultsButton" min="-2" pref="130" max="-2" attributes="0"/>
-                                  <Component id="CMDSReportsButton" min="-2" pref="130" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" attributes="0">
+                                  <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+                                  <Component id="jLabel6" min="-2" pref="127" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="AppealCourtButton" min="-2" pref="130" max="-2" attributes="0"/>
-                                  <Component id="CMDSTemplatesButton" min="-2" pref="130" max="-2" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Component id="HearingsHistoryCategoryButton" min="-2" pref="130" max="-2" attributes="0"/>
                               </Group>
-                          </Group>
-                      </Group>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
-                              <Component id="jLabel6" min="-2" pref="127" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="HearingsHistoryCategoryButton" min="-2" pref="130" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="HearingsHistoryDescriptionButton" min="-2" pref="130" max="-2" attributes="0"/>
+                              <Group type="102" alignment="1" attributes="0">
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="HearingsHistoryDescriptionButton" min="-2" pref="130" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
                       </Group>
                   </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="EmailErrorListButton" min="-2" pref="130" max="-2" attributes="0"/>
+                  </Group>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -232,7 +238,9 @@
                   <Component id="CMDSTemplatesButton" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                   <Component id="SMDSTemplatesButton" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="69" max="32767" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="EmailErrorListButton" min="-2" pref="40" max="-2" attributes="0"/>
+              <EmptySpace pref="47" max="32767" attributes="0"/>
               <Component id="CloseButton" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -548,6 +556,14 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="SMDSTemplatesButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="EmailErrorListButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Errors Email List"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="EmailErrorListButtonActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>
