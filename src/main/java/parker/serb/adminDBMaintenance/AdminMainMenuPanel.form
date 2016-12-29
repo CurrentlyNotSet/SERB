@@ -301,7 +301,6 @@
     <Component class="javax.swing.JButton" name="UsersButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Users"/>
-        <Property name="enabled" type="boolean" value="false"/>
         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
           <Insets value="[2, 2, 2, 2]"/>
         </Property>
