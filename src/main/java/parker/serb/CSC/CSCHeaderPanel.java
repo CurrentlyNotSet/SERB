@@ -64,7 +64,6 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
         Global.caseType = "CSC";
         Global.caseMonth = null;
         Global.caseNumber = caseNumberComboBox.getSelectedItem().toString().trim();
-        User.updateLastCaseNumber();
         loadHeaderInformation();
     }
     
@@ -78,6 +77,7 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
             } else {
                 Global.caseNumber = csc.cscNumber != null ? csc.cscNumber : "";
                 Global.caseType = "CSC";
+                User.updateLastCaseNumber();
                 CSCNumberTextBox.setText(csc.cscNumber != null ? csc.cscNumber : "");
             }
         }
@@ -94,6 +94,7 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
             } else {
                 Global.caseNumber = org.cscNumber != null ? org.cscNumber : "";
                 Global.caseType = "CSC";
+                User.updateLastCaseNumber();
                 CSCNumberTextBox.setText(org.cscNumber != null ? org.cscNumber : "");
             }
         }

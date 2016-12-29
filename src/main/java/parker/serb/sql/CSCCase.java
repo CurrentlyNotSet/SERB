@@ -601,4 +601,30 @@ public class CSCCase {
             Activity.addActivty("Set Valid", null);
         }
     }
+    
+    public static boolean validateCSC(String cscNumber) {
+        boolean valid = false;
+        
+        try {
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select Count(*) As results"
+                    + " from CscCase"
+                    + " where cscNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, cscNumber);
+            
+            ResultSet validRS = preparedStatement.executeQuery();
+            
+            validRS.next();
+            
+            valid = validRS.getInt("results") > 0;
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return valid;
+    }
 }

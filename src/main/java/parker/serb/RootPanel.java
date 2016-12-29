@@ -115,10 +115,10 @@ public class RootPanel extends javax.swing.JFrame {
     
     private void setDefaultTab() {
         if(Global.activeUser.defaultSection != null) {
-            if(jTabbedPane1.indexOfTab(Global.activeUser.defaultSection) == -1) {
+            if(jTabbedPane1.indexOfTab(Global.activeUser.defaultSection.equals("CSC") ? "Civil Service Commission" : Global.activeUser.defaultSection) == -1) {
                 jTabbedPane1.setSelectedIndex(0);
             } else {
-                jTabbedPane1.setSelectedIndex(jTabbedPane1.indexOfTab(Global.activeUser.defaultSection));
+                jTabbedPane1.setSelectedIndex(jTabbedPane1.indexOfTab(Global.activeUser.defaultSection.equals("CSC") ? "Civil Service Commission" : Global.activeUser.defaultSection));
                 if(Global.activeUser.lastTab.equals(Global.activeUser.defaultSection)) {
                     Global.caseYear = Global.activeUser.lastCaseYear;
                     Global.caseType = Global.activeUser.lastCaseType;
@@ -190,9 +190,9 @@ public class RootPanel extends javax.swing.JFrame {
                 card.show(jPanel9, "card8");
                 jLabel1.setIcon(new ImageIcon(getClass().getResource("/SPBRSeal.png")));
                 cSCHeaderPanel1.loadCases();
-//                if(CSCCase.validateCSC(Global.caseNumber)) {
-//                    oRGHeaderPanel2.getjComboBox2().setSelectedItem(ORGCase.getORGName());
-//                }
+                if(CSCCase.validateCSC(Global.caseNumber)) {
+                    cSCHeaderPanel1.getjComboBox2().setSelectedItem(CSCCase.getCSCName());
+                }
                 break;  
             case "CMDS":
                 card.show(jPanel9, "card9");
