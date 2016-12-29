@@ -256,9 +256,9 @@ public class User {
         return activeUsers;
     }
     
-    public static List getEnabledUsers() {
+    public static List<User> getEnabledUsers() {
         
-        List activeUsers = new ArrayList<User>();
+        List<User> activeUsers = new ArrayList<>();
         
         try {
             
