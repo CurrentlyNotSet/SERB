@@ -5,7 +5,6 @@
  */
 package parker.serb.Hearing;
 
-import com.alee.utils.swing.DocumentChangeListener;
 import java.util.List;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;

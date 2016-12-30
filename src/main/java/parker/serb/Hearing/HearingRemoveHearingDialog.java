@@ -5,7 +5,6 @@
  */
 package parker.serb.Hearing;
 
-import parker.serb.sql.CMDSHearing;
 import parker.serb.sql.HearingHearing;
 
 /**
