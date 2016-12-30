@@ -7,7 +7,10 @@ package parker.serb.adminDBMaintenance;
 
 import com.alee.laf.optionpane.WebOptionPane;
 import java.util.List;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
+import org.apache.commons.validator.routines.EmailValidator;
 import parker.serb.Global;
 import parker.serb.sql.ActiveStatus;
 import parker.serb.sql.User;
@@ -32,7 +35,36 @@ public class UserAddEditDialog extends javax.swing.JDialog {
     public UserAddEditDialog(java.awt.Frame parent, boolean modal, int itemIDpassed) {
         super(parent, modal);
         initComponents();
+        addListeners();
         setDefaults(itemIDpassed);
+    }
+    
+    private void addListeners() {
+        EmailTextField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                editButton.setEnabled(
+                    EmailValidator.getInstance().isValid(EmailTextField.getText()) ||
+                    EmailTextField.getText().equals("")
+                );
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                editButton.setEnabled(
+                    EmailValidator.getInstance().isValid(EmailTextField.getText()) ||
+                    EmailTextField.getText().equals("")
+                );
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                editButton.setEnabled(
+                    EmailValidator.getInstance().isValid(EmailTextField.getText()) ||
+                    EmailTextField.getText().equals("")
+                );
+            }
+        });
     }
 
     private void setDefaults(int itemIDpassed) {

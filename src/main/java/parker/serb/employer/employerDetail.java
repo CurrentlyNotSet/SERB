@@ -8,6 +8,9 @@ package parker.serb.employer;
 import java.awt.Color;
 import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import org.apache.commons.validator.routines.EmailValidator;
 import parker.serb.Global;
 import parker.serb.sql.County;
 import parker.serb.sql.Employer;
@@ -28,10 +31,39 @@ public class employerDetail extends javax.swing.JDialog {
     public employerDetail(java.awt.Frame parent, boolean modal, String passedEmpIDNumber) {
         super(parent, modal);
         initComponents();
+        addListeners();
         empIDNumber = passedEmpIDNumber;
         loadInformation(empIDNumber);
         setLocationRelativeTo(parent);
         setVisible(true);
+    }
+    
+    private void addListeners() {
+        emailAddressTextBox.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                jButton2.setEnabled(
+                    EmailValidator.getInstance().isValid(emailAddressTextBox.getText()) ||
+                    emailAddressTextBox.getText().equals("")
+                );
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                jButton2.setEnabled(
+                    EmailValidator.getInstance().isValid(emailAddressTextBox.getText()) ||
+                    emailAddressTextBox.getText().equals("")
+                );
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                jButton2.setEnabled(
+                    EmailValidator.getInstance().isValid(emailAddressTextBox.getText()) ||
+                    emailAddressTextBox.getText().equals("")
+                );
+            }
+        });
     }
     
     private void loadInformation(String passedEmpIDNumber) {
@@ -525,12 +557,12 @@ public class employerDetail extends javax.swing.JDialog {
                     .addComponent(jLabel14)
                     .addComponent(emailAddressTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel15)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel16)
                         .addComponent(employerIRNTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(populationTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(populationTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel15))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)

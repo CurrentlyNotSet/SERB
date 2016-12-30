@@ -13,6 +13,7 @@ import javax.swing.JFrame;
 import parker.serb.util.NumberFormatService;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import org.apache.commons.validator.routines.EmailValidator;
 import parker.serb.Global;
 import parker.serb.sql.NamePrefix;
 import parker.serb.sql.Party;
@@ -183,6 +184,32 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
             @Override
             public void changedUpdate(DocumentEvent e) {
                 validateCreateButton();
+            }
+        });
+        
+        emailTextBox.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                jButton2.setEnabled(
+                    EmailValidator.getInstance().isValid(emailTextBox.getText()) ||
+                    emailTextBox.getText().equals("")
+                );
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                jButton2.setEnabled(
+                    EmailValidator.getInstance().isValid(emailTextBox.getText()) ||
+                    emailTextBox.getText().equals("")
+                );
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                jButton2.setEnabled(
+                    EmailValidator.getInstance().isValid(emailTextBox.getText()) ||
+                    emailTextBox.getText().equals("")
+                );
             }
         });
     }

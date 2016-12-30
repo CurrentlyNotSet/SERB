@@ -1456,16 +1456,16 @@ public class RootPanel extends javax.swing.JFrame {
                     new NewCaseLockDialog(Global.root, true, caseLock);
                 }
                 break;
-            case "Hearings":
-                caseLock = NewCaseLock.checkLock(Global.activeSection);
-                if(caseLock == null) {
-                    NewCaseLock.addLock(Global.activeSection);
-                    new CreateNewHearingDialog(Global.root, true);
-                    NewCaseLock.removeLock(Global.activeSection);
-                } else {
-                    new NewCaseLockDialog(Global.root, true, caseLock);
-                }
-                break;    
+//            case "Hearings":
+//                caseLock = NewCaseLock.checkLock(Global.activeSection);
+//                if(caseLock == null) {
+//                    NewCaseLock.addLock(Global.activeSection);
+//                    new CreateNewHearingDialog(Global.root, true);
+//                    NewCaseLock.removeLock(Global.activeSection);
+//                } else {
+//                    new NewCaseLockDialog(Global.root, true, caseLock);
+//                }
+//                break;    
             default:
                 break;
         }

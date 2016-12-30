@@ -20,6 +20,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import org.apache.commons.validator.routines.EmailValidator;
 import parker.serb.Global;
 import parker.serb.bookmarkProcessing.processMailingAddressBookmarks;
 import parker.serb.sql.CaseParty;
@@ -60,6 +63,32 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
     }
     
     private void addListeners() {
+        emailAddressTextBox.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateButton.setEnabled(
+                    EmailValidator.getInstance().isValid(emailAddressTextBox.getText()) ||
+                    emailAddressTextBox.getText().equals("")
+                );
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateButton.setEnabled(
+                    EmailValidator.getInstance().isValid(emailAddressTextBox.getText()) ||
+                    emailAddressTextBox.getText().equals("")
+                );
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateButton.setEnabled(
+                    EmailValidator.getInstance().isValid(emailAddressTextBox.getText()) ||
+                    emailAddressTextBox.getText().equals("")
+                );
+            }
+        });
+        
         middleInitialTextBox.addKeyListener(new KeyListener() {
 
             @Override

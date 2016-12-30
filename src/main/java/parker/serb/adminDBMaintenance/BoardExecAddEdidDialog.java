@@ -6,6 +6,9 @@
 package parker.serb.adminDBMaintenance;
 
 import com.alee.laf.optionpane.WebOptionPane;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import org.apache.commons.validator.routines.EmailValidator;
 import parker.serb.Global;
 import parker.serb.sql.SystemExecutive;
 
@@ -28,7 +31,36 @@ public class BoardExecAddEdidDialog extends javax.swing.JDialog {
     public BoardExecAddEdidDialog(java.awt.Frame parent, boolean modal, int itemIDpassed, String deptPassed) {
         super(parent, modal);
         initComponents();
+        addListeners();
         setDefaults(itemIDpassed, deptPassed);
+    }
+    
+    private void addListeners() {
+        EmailTextBox.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                editButton.setEnabled(
+                    EmailValidator.getInstance().isValid(EmailTextBox.getText()) ||
+                    EmailTextBox.getText().equals("")
+                );
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                editButton.setEnabled(
+                    EmailValidator.getInstance().isValid(EmailTextBox.getText()) ||
+                    EmailTextBox.getText().equals("")
+                );
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                editButton.setEnabled(
+                    EmailValidator.getInstance().isValid(EmailTextBox.getText()) ||
+                    EmailTextBox.getText().equals("")
+                );
+            }
+        });
     }
 
     private void setDefaults(int itemIDpassed, String deptPassed) {
