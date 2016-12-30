@@ -13,6 +13,7 @@ public class CMDSClearDateDialog extends javax.swing.JDialog {
 
     String dateType = "";
     String whichDate = "";
+    
     /**
      * Creates new form CMDSRRorPODialog
      */
@@ -30,8 +31,6 @@ public class CMDSClearDateDialog extends javax.swing.JDialog {
     public String getWhichDate() {
         return whichDate;
     }
-    
-    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -76,11 +75,6 @@ public class CMDSClearDateDialog extends javax.swing.JDialog {
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mailed", "ReMailed", "Green Card Signed", "Pull Date", " " }));
         jComboBox2.setSelectedIndex(4);
-        jComboBox2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox2ActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -139,10 +133,6 @@ public class CMDSClearDateDialog extends javax.swing.JDialog {
             jButton1.setEnabled(false);
         }
     }//GEN-LAST:event_jComboBox1ActionPerformed
-
-    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox2ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

@@ -6,7 +6,6 @@
 package parker.serb.CMDS;
 
 import parker.serb.sql.CMDSCase;
-import parker.serb.util.*;
 
 /**
  *
@@ -97,7 +96,6 @@ public class CMDSRemoveGroupCaseDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
         setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 

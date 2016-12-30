@@ -160,11 +160,6 @@ public class CMDSAddHistoryEntryDialog extends javax.swing.JDialog {
         entryDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
         entryDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         entryDateTextBox.setDateFormat(Global.mmddyyyy);
-        entryDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                entryDateTextBoxMouseClicked(evt);
-            }
-        });
 
         jLabel3.setText("Mail Type:");
 
@@ -178,11 +173,6 @@ public class CMDSAddHistoryEntryDialog extends javax.swing.JDialog {
         buttonGroup1.add(originalButton);
         originalButton.setSelected(true);
         originalButton.setText("Original");
-        originalButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                originalButtonActionPerformed(evt);
-            }
-        });
 
         buttonGroup1.add(faxedButton);
         faxedButton.setText("Faxed");
@@ -212,11 +202,6 @@ public class CMDSAddHistoryEntryDialog extends javax.swing.JDialog {
 
         buttonGroup2.add(appellantButton);
         appellantButton.setText("Appellant");
-        appellantButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                appellantButtonActionPerformed(evt);
-            }
-        });
 
         buttonGroup2.add(appelleeButton);
         appelleeButton.setText("Appellee");
@@ -337,18 +322,6 @@ public class CMDSAddHistoryEntryDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void entryDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_entryDateTextBoxMouseClicked
-//        clearDate(entryDateTextBox, evt);
-    }//GEN-LAST:event_entryDateTextBoxMouseClicked
-
-    private void originalButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_originalButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_originalButtonActionPerformed
-
-    private void appellantButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_appellantButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_appellantButtonActionPerformed
-
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -368,7 +341,6 @@ public class CMDSAddHistoryEntryDialog extends javax.swing.JDialog {
             }
             enableSaveButton();
         }
-        
     }//GEN-LAST:event_entryTypeComboBoxActionPerformed
 
     private void entryDescriptionComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_entryDescriptionComboBoxActionPerformed
@@ -379,15 +351,16 @@ public class CMDSAddHistoryEntryDialog extends javax.swing.JDialog {
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
         CMDSCaseHistoryEntryTypes.updateCaseHistory(
-                entryTypeComboBox.getSelectedItem().toString().split("-")[0].trim(),
-                entryDescriptionComboBox.getSelectedItem().toString(),
-                extraTextBox.getText(),
-                partyName(),
-                originalButton.isSelected() ? "" : "Faxed",
-                entryDateTextBox.getText().trim(),
-                this,
-                documnetLinkTextBox.getText().trim()
+            entryTypeComboBox.getSelectedItem().toString().split("-")[0].trim(),
+            entryDescriptionComboBox.getSelectedItem().toString(),
+            extraTextBox.getText(),
+            partyName(),
+            originalButton.isSelected() ? "" : "Faxed",
+            entryDateTextBox.getText().trim(),
+            this,
+            documnetLinkTextBox.getText().trim()
         );
+        
         dispose();
     }//GEN-LAST:event_saveButtonActionPerformed
 
@@ -404,7 +377,6 @@ public class CMDSAddHistoryEntryDialog extends javax.swing.JDialog {
             }
         }
     }//GEN-LAST:event_documnetLinkTextBoxMouseClicked
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton appellantButton;

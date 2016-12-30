@@ -7,9 +7,8 @@ package parker.serb.CMDS;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import parker.serb.Global;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -133,7 +132,7 @@ public class CMDSRemailedDialog extends javax.swing.JDialog {
             remailedDate = new Timestamp(Global.mmddyyyy.parse(responseDueDateTextBox.getText()).getTime());
             setVisible(false);
         } catch (ParseException ex) {
-            Logger.getLogger(CMDSRemailedDialog.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 

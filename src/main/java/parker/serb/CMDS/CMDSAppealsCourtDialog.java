@@ -31,7 +31,6 @@ public class CMDSAppealsCourtDialog extends javax.swing.JDialog {
         List<String> courts = AppealCourt.loadAllAppealCourt();
         
         jComboBox1.removeAllItems();
-        
         jComboBox1.addItem("");
         
         for(int i = 0; i < courts.size(); i++) {

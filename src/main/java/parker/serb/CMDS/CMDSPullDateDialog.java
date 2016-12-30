@@ -7,9 +7,8 @@ package parker.serb.CMDS;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import parker.serb.Global;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -127,7 +126,7 @@ public class CMDSPullDateDialog extends javax.swing.JDialog {
         try {
             responseDueDate = new Timestamp(Global.mmddyyyy.parse(responseDueDateTextBox.getText()).getTime());
         } catch (ParseException ex) {
-            Logger.getLogger(CMDSPullDateDialog.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
         }
         setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed

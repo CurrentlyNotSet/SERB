@@ -25,8 +25,6 @@ public class CMDSRRorPODialog extends javax.swing.JDialog {
     public String getSelection() {
         return selection;
     }
-    
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
