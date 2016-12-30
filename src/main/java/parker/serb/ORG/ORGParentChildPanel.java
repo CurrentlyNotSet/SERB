@@ -5,17 +5,13 @@
  */
 package parker.serb.ORG;
 
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
-import parker.serb.sql.Activity;
-import parker.serb.sql.CaseParty;
 import parker.serb.sql.ORGParentChildLink;
-import parker.serb.sql.ULPCase;
 
 /**
  *

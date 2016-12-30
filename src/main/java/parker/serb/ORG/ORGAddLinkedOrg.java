@@ -7,9 +7,7 @@ package parker.serb.ORG;
 
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
-import parker.serb.Global;
 import parker.serb.sql.ORGCase;
-import parker.serb.sql.ORGParentChildLink;
 
 /**
  *

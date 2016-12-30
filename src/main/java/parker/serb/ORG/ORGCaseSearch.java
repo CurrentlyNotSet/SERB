@@ -5,7 +5,6 @@
  */
 package parker.serb.ORG;
 
-import parker.serb.ORG.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
@@ -14,7 +13,6 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
 import parker.serb.sql.ORGCase;
-import parker.serb.sql.ULPCaseSearchData;
 
 /**
  *
