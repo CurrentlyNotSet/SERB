@@ -5,13 +5,10 @@
  */
 package parker.serb.REP;
 
-import parker.serb.relatedcase.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import parker.serb.Global;
 import parker.serb.sql.CaseValidation;
 import parker.serb.sql.REPElectionMultiCase;
-import parker.serb.sql.RelatedCase;
 import parker.serb.util.NumberFormatService;
 
 /**
