@@ -151,6 +151,56 @@ public class User {
         return user;
     }
     
+    public static User findUserByID(int ID) {
+        User user = new User();
+        
+        try {
+            
+            Statement stmt = Database.connectToDB().createStatement();
+            
+            String sql = "Select * from Users where id = ?";
+            
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setInt(1, ID);
+            
+            ResultSet foundUser = preparedStatement.executeQuery();
+            
+            if(foundUser.next()) {
+            
+                user.id = foundUser.getInt("id");
+                user.active = foundUser.getBoolean("active");
+                user.activeLogIn = foundUser.getBoolean("activeLogIn");
+                user.emailAddress = foundUser.getString("emailAddress");
+                user.firstName = foundUser.getString("firstName");
+                user.lastName = foundUser.getString("lastName");
+                user.id = foundUser.getInt("id");
+                user.password = foundUser.getString("password");
+                user.passwordSalt = foundUser.getLong("passwordSalt");
+                user.passwordReset = foundUser.getBoolean("passwordReset");
+                user.username = foundUser.getString("username");
+                user.lastLogInPCName = foundUser.getString("lastLogInPCName");
+                user.workPhone = foundUser.getString("workPhone");
+                user.middleInitial = foundUser.getString("middleInitial");
+                user.applicationVersion = foundUser.getString("applicationVersion");
+                user.defaultSection = foundUser.getString("defaultSection");
+                user.jobTitle = foundUser.getString("jobTitle");
+                user.lastTab = foundUser.getString("lastTab") == null ? "" : foundUser.getString("lastTab");
+                user.lastCaseYear = foundUser.getString("lastCaseYear");
+                user.lastCaseType = foundUser.getString("lastCaseType");
+                user.lastCaseMonth = foundUser.getString("lastCaseMonth");
+                user.lastCaseNumber = foundUser.getString("lastCaseNumber");
+            }
+        } catch (SQLException ex) {
+            if(ex.getCause() instanceof SQLServerException) {
+                SlackNotification.sendNotification(ex);
+                findUserByID(ID);
+            } else {
+                SlackNotification.sendNotification(ex);
+            }
+        } 
+        return user;
+    }
+    
     /**
      * Load a list of all users currently logged into the application
      * @return a list of user instance
@@ -206,9 +256,9 @@ public class User {
         return activeUsers;
     }
     
-    public static List getEnabledUsers() {
+    public static List<User> getEnabledUsers() {
         
-        List activeUsers = new ArrayList<User>();
+        List<User> activeUsers = new ArrayList<>();
         
         try {
             
@@ -288,6 +338,9 @@ public class User {
                 break;
             case "CMDS":
                 sectionColumnName = "cmdscaseworker";
+                break;
+            case "ALJ":
+                sectionColumnName = "investigator";
                 break;
         }
         

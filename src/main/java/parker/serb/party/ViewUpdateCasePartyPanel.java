@@ -611,10 +611,8 @@ public class ViewUpdateCasePartyPanel extends javax.swing.JDialog {
     private void emailAddressTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_emailAddressTextBoxMouseClicked
         if(evt.getClickCount() == 2) {
             try {
-                Desktop.getDesktop().mail(new URI("mailto:" + emailAddressTextBox.getText().trim() + "?bcc=" + Global.activeUser.emailAddress));
-            } catch (IOException ex) {
-                Logger.getLogger(ViewUpdateCasePartyPanel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (URISyntaxException ex) {
+                Desktop.getDesktop().mail(new URI("mailto:" + emailAddressTextBox.getText().replace(" ", "").trim() + "?bcc=" + Global.activeUser.emailAddress));
+            } catch (IOException | URISyntaxException ex) {
                 Logger.getLogger(ViewUpdateCasePartyPanel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

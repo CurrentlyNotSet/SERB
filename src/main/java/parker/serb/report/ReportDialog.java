@@ -3,56 +3,102 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package parker.serb.REP;
+package parker.serb.report;
 
 //TODO: Load all REP Reports
 
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
-import parker.serb.report.GenerateReport;
+import parker.serb.Global;
+import parker.serb.sql.CMDSReport;
 import parker.serb.sql.SMDSDocuments;
 import parker.serb.util.Item;
-
-//TODO: Create Table to handle all sections
-//TODO: Look into PDFBox vs. Apache vs. iText
 
 /**
  *
  * @author parker
  */
-public class REPReportDialog extends javax.swing.JDialog {
+public class ReportDialog extends javax.swing.JDialog {
 
+    String section;
+    
     /**
      * Creates new form REPReportDialog
      * @param parent
      * @param modal
+     * @param sectionPassed
      */
-    public REPReportDialog(java.awt.Frame parent, boolean modal) {
+    public ReportDialog(java.awt.Frame parent, boolean modal, String sectionPassed) {
         super(parent, modal);
         initComponents();
+        section = sectionPassed;
         loadReports();
-        setLocationRelativeTo(parent);
-        setVisible(true);
+        this.setLocationRelativeTo(parent);
+        this.setVisible(true);
     }
     
-    private void loadReports(){
-        List<SMDSDocuments> letterList = SMDSDocuments.loadDocumentNamesByTypeAndSection("REP", "Report");
-            
+    private void loadReports() {
         DefaultComboBoxModel dt = new DefaultComboBoxModel();
         ReportComboBox.setModel(dt);
         ReportComboBox.addItem(new Item<>("0", ""));
+        
+        switch (Global.activeSection) {
+            case "REP":
+            case "ULP":
+            case "MED":
+            case "ORG":
+            case "Hearings":
+                List<SMDSDocuments> smdsletterList = SMDSDocuments.loadDocumentNamesByTypeAndSection(section, "Report");
                 
-        for (SMDSDocuments letter : letterList) {
-            ReportComboBox.addItem(new Item<>( String.valueOf(letter.id), letter.description ));
+                for (SMDSDocuments letter : smdsletterList) {
+                    ReportComboBox.addItem(new Item<>(String.valueOf(letter.id), letter.description));
+                }
+                ReportComboBox.setSelectedItem(new Item<>("0", ""));
+                break;
+            case "Civil Service Commission":
+            case "CMDS":
+                List<CMDSReport> cmdsletterList = CMDSReport.loadActiveReportsBySection(section);
+
+                for (CMDSReport letter : cmdsletterList) {
+                    ReportComboBox.addItem(new Item<>(String.valueOf(letter.id), letter.description));
+                }
+                ReportComboBox.setSelectedItem(new Item<>("0", ""));
+
+                break;
+            default:
+                break;
         }
-        ReportComboBox.setSelectedItem(new Item<>("0", "" ));
+
     }
 
     private void generateReport() {
         Item item = (Item) ReportComboBox.getSelectedItem();
         int id = Integer.parseInt(item.getValue().toString());
-        SMDSDocuments report = SMDSDocuments.findDocumentByID(id);
-        GenerateReport.runReport(report);
+        
+        switch (Global.activeSection) {
+            case "REP":
+            case "ULP":
+            case "MED":
+            case "ORG":
+            case "Hearings":
+                SMDSDocuments report = SMDSDocuments.findDocumentByID(id);
+                GenerateReport.runReport(report);
+                break;
+            case "Civil Service Commission":
+            case "CMDS":
+                CMDSReport cmdsreport = CMDSReport.getReportByID(id);
+        
+                SMDSDocuments SMDSreport = new SMDSDocuments();
+                SMDSreport.section = cmdsreport.section;
+                SMDSreport.description = cmdsreport.description;
+                SMDSreport.fileName = cmdsreport.fileName;
+                SMDSreport.parameters = cmdsreport.parameters;
+
+                GenerateReport.runReport(SMDSreport);
+                break;
+            default:
+                break;
+        }
     }
 
     private void enableGenerateButton() {

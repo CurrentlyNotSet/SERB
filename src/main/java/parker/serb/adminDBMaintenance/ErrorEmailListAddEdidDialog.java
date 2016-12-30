@@ -7,24 +7,24 @@ package parker.serb.adminDBMaintenance;
 
 import com.alee.laf.optionpane.WebOptionPane;
 import parker.serb.Global;
-import parker.serb.sql.User;
+import parker.serb.sql.SystemErrorEmailList;
 
 /**
  *
  * @author Andrew
  */
-public class UserAddEdidDialog extends javax.swing.JDialog {
+public class ErrorEmailListAddEdidDialog extends javax.swing.JDialog {
 
     private int ID;
-    private User item;
+    private SystemErrorEmailList item;
     
     /**
-     * Creates new form MediatorAddEdidDialog
+     * Creates new form BoardExecAddEdidDialog
      * @param parent
      * @param modal
      * @param itemIDpassed
      */
-    public UserAddEdidDialog(java.awt.Frame parent, boolean modal, int itemIDpassed) {
+    public ErrorEmailListAddEdidDialog(java.awt.Frame parent, boolean modal, int itemIDpassed) {
         super(parent, modal);
         initComponents();
         setDefaults(itemIDpassed);
@@ -33,48 +33,44 @@ public class UserAddEdidDialog extends javax.swing.JDialog {
     private void setDefaults(int itemIDpassed) {
         ID = itemIDpassed;
         if (ID > 0) {
-            titleLabel.setText("Edit User");
+            titleLabel.setText("Edit Contact");
             editButton.setText("Save");
             loadInformation();
         } else {
-            titleLabel.setText("Add User");
+            titleLabel.setText("Add Contact");
             editButton.setText("Add");
             editButton.setEnabled(false);
-            item = new User();
+            item = new SystemErrorEmailList();
         }
         this.setLocationRelativeTo(Global.root);
         this.setVisible(true);
     }
         
     private void loadInformation() {
-//        item = User.getFactFinderByID(ID);
-//        
-//        EmailTextBox.setText(item.email);
-//        FirstNameTextField.setText(item.firstName);
-//        MiddleInitialTextField.setText(item.middleName);
-//        LastNameTextField.setText(item.lastName);
-//        PhoneTextBox.setText(item.phone);
+        item = SystemErrorEmailList.getErrorEmailListByID(ID);
         
+        FirstNameTextField.setText(item.firstName);
+        LastNameTextField.setText(item.lastName);
+        EmailTextBox.setText(item.emailAddress);
     }
    
     private void saveInformation() {
-//        item.firstName = FirstNameTextField.getText().trim();
-//        item.middleName = MiddleInitialTextField.getText().trim();
-//        item.lastName = LastNameTextField.getText().trim();
-//        item.email = EmailTextBox.getText().trim();
-//        item.phone = PhoneTextBox.getText().trim();
-//        item.id = ID;
-//        
-//        if (ID > 0) {
-//            User.updateFactFinder(item);
-//        } else {
-//            User.createFactFinder(item);
-//        }
+        item.firstName = FirstNameTextField.getText().trim();
+        item.lastName = LastNameTextField.getText().trim();
+        item.emailAddress = EmailTextBox.getText().trim();
+        item.id = ID;
+        
+        if (ID > 0) {
+            SystemErrorEmailList.updateErrorEmailUser(item);
+        } else {
+            SystemErrorEmailList.createErrorEmailUser(item);
+        }
     }
 
     private void checkButton(){
         if (FirstNameTextField.getText().trim().equals("") ||
-                LastNameTextField.getText().trim().equals("")){
+                LastNameTextField.getText().trim().equals("") ||
+                EmailTextBox.getText().trim().equals("")){
             editButton.setEnabled(false);
         } else {
             editButton.setEnabled(true);
@@ -93,16 +89,12 @@ public class UserAddEdidDialog extends javax.swing.JDialog {
         titleLabel = new javax.swing.JLabel();
         closeButton = new javax.swing.JButton();
         editButton = new javax.swing.JButton();
-        PhoneTextBox = new javax.swing.JTextField();
-        jLabel8 = new javax.swing.JLabel();
         EmailTextBox = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         FirstNameTextField = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         LastNameTextField = new javax.swing.JTextField();
-        MiddleInitialTextField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -126,35 +118,32 @@ public class UserAddEdidDialog extends javax.swing.JDialog {
             }
         });
 
-        PhoneTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-
-        jLabel8.setText("Phone:");
-
         EmailTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        EmailTextBox.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                EmailTextBoxKeyTyped(evt);
+            }
+        });
 
         jLabel7.setText("Email:");
 
         jLabel2.setText("First Name:");
 
         FirstNameTextField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        FirstNameTextField.addCaretListener(new javax.swing.event.CaretListener() {
-            public void caretUpdate(javax.swing.event.CaretEvent evt) {
-                FirstNameTextFieldCaretUpdate(evt);
+        FirstNameTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                FirstNameTextFieldKeyTyped(evt);
             }
         });
-
-        jLabel4.setText("Middle Initial:");
 
         jLabel11.setText("Last Name:");
 
         LastNameTextField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        LastNameTextField.addCaretListener(new javax.swing.event.CaretListener() {
-            public void caretUpdate(javax.swing.event.CaretEvent evt) {
-                LastNameTextFieldCaretUpdate(evt);
+        LastNameTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                LastNameTextFieldKeyTyped(evt);
             }
         });
-
-        MiddleInitialTextField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -164,51 +153,39 @@ public class UserAddEdidDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(titleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 319, Short.MAX_VALUE)
+                        .addComponent(editButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(MiddleInitialTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(FirstNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE))
+                                .addComponent(FirstNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 389, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(EmailTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE))
+                                .addComponent(EmailTextBox))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(LastNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(PhoneTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 247, Short.MAX_VALUE)
-                        .addComponent(editButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(LastNameTextField)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel11, jLabel2, jLabel4, jLabel7, jLabel8});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel11, jLabel2, jLabel7});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(titleLabel)
-                .addGap(18, 18, 18)
+                .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(FirstNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(MiddleInitialTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(LastNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -217,18 +194,14 @@ public class UserAddEdidDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(EmailTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(PhoneTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(editButton)
                     .addComponent(closeButton))
                 .addContainerGap())
         );
 
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {EmailTextBox, FirstNameTextField, LastNameTextField, MiddleInitialTextField, PhoneTextBox, jLabel11, jLabel2, jLabel4, jLabel7, jLabel8});
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {EmailTextBox, FirstNameTextField, LastNameTextField, jLabel11, jLabel2, jLabel7});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -245,27 +218,27 @@ public class UserAddEdidDialog extends javax.swing.JDialog {
         this.dispose();
     }//GEN-LAST:event_editButtonActionPerformed
 
-    private void FirstNameTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_FirstNameTextFieldCaretUpdate
+    private void FirstNameTextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_FirstNameTextFieldKeyTyped
         checkButton();
-    }//GEN-LAST:event_FirstNameTextFieldCaretUpdate
+    }//GEN-LAST:event_FirstNameTextFieldKeyTyped
 
-    private void LastNameTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_LastNameTextFieldCaretUpdate
+    private void LastNameTextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_LastNameTextFieldKeyTyped
         checkButton();
-    }//GEN-LAST:event_LastNameTextFieldCaretUpdate
+    }//GEN-LAST:event_LastNameTextFieldKeyTyped
+
+    private void EmailTextBoxKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_EmailTextBoxKeyTyped
+        checkButton();
+    }//GEN-LAST:event_EmailTextBoxKeyTyped
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField EmailTextBox;
     private javax.swing.JTextField FirstNameTextField;
     private javax.swing.JTextField LastNameTextField;
-    private javax.swing.JTextField MiddleInitialTextField;
-    private javax.swing.JTextField PhoneTextBox;
     private javax.swing.JButton closeButton;
     private javax.swing.JButton editButton;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel titleLabel;
     // End of variables declaration//GEN-END:variables
 }

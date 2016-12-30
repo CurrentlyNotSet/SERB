@@ -68,7 +68,7 @@ public class HearingAddHearingDialog extends javax.swing.JDialog {
         aljComboBox.removeAllItems();
         aljComboBox.addItem("");
         
-        List userList = User.loadSectionDropDowns("Hearings");
+        List userList = User.loadSectionDropDowns("ALJ");
         
         for (Object user : userList) {
             aljComboBox.addItem((String) user);

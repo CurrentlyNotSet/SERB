@@ -11,6 +11,11 @@
     
     <dependencies>
             <dependency>
+                <groupId>commons-validator</groupId>
+                <artifactId>commons-validator</artifactId>
+                <version>1.5.1</version>
+            </dependency>
+            <dependency>
                 <groupId>in.ashwanthkumar</groupId>
                 <artifactId>slack-java-webhook</artifactId>
                 <version>0.0.4</version>

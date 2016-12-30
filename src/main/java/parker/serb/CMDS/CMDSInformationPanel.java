@@ -54,7 +54,7 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
         
         aljComboBox.addItem("");
         
-        List userList = User.loadSectionDropDowns("CMDS");
+        List userList = User.loadSectionDropDowns("ALJ");
         
         for (Object user : userList) {
             aljComboBox.addItem((String) user);

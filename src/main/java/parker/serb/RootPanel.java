@@ -8,7 +8,6 @@ package parker.serb;
 import parker.serb.sql.User;
 import parker.serb.REP.REPHeaderPanel;
 import parker.serb.REP.REPRootPanel;
-import parker.serb.REP.REPReportDialog;
 import parker.serb.REP.REPLetterDialog;
 import java.awt.CardLayout;
 import java.awt.Dimension;
@@ -36,7 +35,6 @@ import parker.serb.ORG.ORGHeaderPanel;
 import parker.serb.ORG.ORGRootPanel;
 import parker.serb.ULP.ULPHeaderPanel;
 import parker.serb.ULP.ULPLetterDialog;
-import parker.serb.ULP.ULPReportDialog;
 import parker.serb.ULP.ULPRootPanel;
 import parker.serb.adminDBMaintenance.AdminMainMenuPanel;
 import parker.serb.admin.SystemMontiorDialog;
@@ -47,6 +45,7 @@ import parker.serb.util.CreateNewCaseDialog;
 import parker.serb.login.ExitVerification;
 import parker.serb.mailLogViewer.MailLogViewerPanel;
 import parker.serb.publicRecords.PublicRecordsMainPanel;
+import parker.serb.report.ReportDialog;
 import parker.serb.sql.CMDSCase;
 import parker.serb.sql.CSCCase;
 import parker.serb.sql.DocketLock;
@@ -273,8 +272,13 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton2.setMinimumSize(dim);
                 jButton2.setMaximumSize(dim);
                 jButton2.setVisible(true);
-                jButton2.setText("Update");
-                jButton2.setEnabled(false);
+                if(Global.caseNumber == null) {
+                    jButton2.setText("Add Entry");
+                    jButton2.setEnabled(false);
+                } else {
+                    jButton2.setText("Add Entry");
+                    jButton2.setEnabled(true);
+                }
                 jButton3.setVisible(false);
                 jButton3.setText("Letters");
                 jButton4.setVisible(true);
@@ -303,12 +307,17 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton2.setMinimumSize(dim);
                 jButton2.setMaximumSize(dim);
                 jButton2.setVisible(true);
-                jButton2.setText("Update");
-                jButton2.setEnabled(false);
+                if(Global.caseNumber == null) {
+                    jButton2.setText("Add Entry");
+                    jButton2.setEnabled(false);
+                } else {
+                    jButton2.setText("Add Entry");
+                    jButton2.setEnabled(true);
+                }
                 jButton3.setVisible(true);
                 jButton3.setText("Letters");
                 jButton3.setEnabled(false);
-                jButton4.setVisible(false);
+                jButton4.setVisible(true);
                 jButton4.setText("Reports");
                 jButton5.setVisible(true);
                 jButton5.setText("Queue");
@@ -329,8 +338,13 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton2.setMinimumSize(dim);
                 jButton2.setMaximumSize(dim);
                 jButton2.setVisible(true);
-                jButton2.setText("Update");
-                jButton2.setEnabled(false);
+                if(Global.caseNumber == null) {
+                    jButton2.setText("Add Entry");
+                    jButton2.setEnabled(false);
+                } else {
+                    jButton2.setText("Add Entry");
+                    jButton2.setEnabled(true);
+                }
                 jButton3.setVisible(false);
                 jButton3.setText("Letters");
                 jButton4.setVisible(true);
@@ -346,7 +360,7 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton9.setSize(dim);
                 jButton9.setMinimumSize(dim);
                 jButton9.setMaximumSize(dim);
-                jButton9.setVisible(false);
+                jButton9.setVisible(true);
                 jButton9.setEnabled(false);
                 break;
             case "ORG":
@@ -360,14 +374,19 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton2.setMinimumSize(dim);
                 jButton2.setMaximumSize(dim);
                 jButton2.setVisible(true);
-                jButton2.setText("Update");
-                jButton2.setEnabled(false);
+                if(Global.caseNumber == null) {
+                    jButton2.setText("Add Entry");
+                    jButton2.setEnabled(false);
+                } else {
+                    jButton2.setText("Add Entry");
+                    jButton2.setEnabled(true);
+                }
                 jButton3.setSize(dim);
                 jButton3.setVisible(false);
                 jButton3.setText("All Org Letters");
                 jButton4.setVisible(false);
                 jButton4.setText("Single Letter");
-                jButton5.setVisible(false);
+                jButton5.setVisible(true);
                 jButton5.setText("Reports");                
                 jButton6.setVisible(true);
                 jButton6.setText("Queue");                
@@ -387,8 +406,13 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton2.setMinimumSize(dim);
                 jButton2.setMaximumSize(dim);
                 jButton2.setVisible(true);
-                jButton2.setText("Update");
-                jButton2.setEnabled(false);
+                if(Global.caseNumber == null) {
+                    jButton2.setText("Add Entry");
+                    jButton2.setEnabled(false);
+                } else {
+                    jButton2.setText("Add Entry");
+                    jButton2.setEnabled(true);
+                }
                 jButton3.setSize(dim);
                 jButton3.setVisible(false);
                 jButton3.setText("All Org Letters");
@@ -414,14 +438,19 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton2.setMinimumSize(dim);
                 jButton2.setMaximumSize(dim);
                 jButton2.setVisible(true);
-                jButton2.setText("Update");
-                jButton2.setEnabled(false);
+                if(Global.caseNumber == null) {
+                    jButton2.setText("Add Entry");
+                    jButton2.setEnabled(false);
+                } else {
+                    jButton2.setText("Add Entry");
+                    jButton2.setEnabled(true);
+                }
                 jButton3.setSize(dim);
                 jButton3.setVisible(false);
                 jButton3.setText("All Org Letters");
                 jButton4.setVisible(true);
                 jButton4.setText("Letters");
-                jButton5.setVisible(false);
+                jButton5.setVisible(true);
                 jButton5.setText("Reports");
                 jButton6.setVisible(true);
                 jButton6.setText("Queue");
@@ -453,7 +482,7 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton3.setText("All Org Letters");
                 jButton4.setVisible(false);
                 jButton4.setText("Single Letter");
-                jButton5.setVisible(false);
+                jButton5.setVisible(true);
                 jButton5.setText("Reports");
                 jButton6.setVisible(false);
                 jButton6.setText("Queue");
@@ -461,6 +490,11 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton7.setText("Public Records");
                 jButton8.setVisible(false);
                 jButton8.setText("Mail Log");
+                jButton9.setSize(dim);
+                jButton9.setMinimumSize(dim);
+                jButton9.setMaximumSize(dim);
+                jButton9.setVisible(true);
+                jButton9.setEnabled(false);
                 break;    
             case "Employer Search":
                 jButton1.setSize(dim);
@@ -1472,11 +1506,14 @@ public class RootPanel extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         switch(Global.activeSection) {
+            case "MED":
+                new ReportDialog((JFrame) this.getRootPane().getParent(), true, "MED");
+                break;
             case "REP":
-                new REPReportDialog((JFrame) this.getRootPane().getParent(), true);
+                new ReportDialog((JFrame) this.getRootPane().getParent(), true, "REP");
                 break;
             case "ULP":
-                new ULPReportDialog((JFrame) this.getRootPane().getParent(), true);
+                new ReportDialog((JFrame) this.getRootPane().getParent(), true, "ULP");
                 break;
             case "CMDS":
                 new CMDSLetterDialog((JFrame) this.getRootPane().getParent(), true);
@@ -1532,6 +1569,15 @@ public class RootPanel extends javax.swing.JFrame {
             case "ULP":
             case "MED":    
                 new LetterQueuePanel((JFrame) this.getRootPane().getParent(), true);
+                break;
+            case "Hearings":
+                new ReportDialog((JFrame) this.getRootPane().getParent(), true, "HRG");
+                break;
+            case "ORG":
+                new ReportDialog((JFrame) this.getRootPane().getParent(), true, "ORG");
+                break;
+            case "CMDS":
+                new ReportDialog((JFrame) this.getRootPane().getParent(), true, "CMDS");
                 break;
             default:
                 break;
