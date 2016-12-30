@@ -9,7 +9,6 @@ import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
 import parker.serb.report.GenerateReport;
-import parker.serb.report.RequestedInfoOneDatePanel;
 import parker.serb.sql.MEDCase;
 import parker.serb.sql.SMDSDocuments;
 import parker.serb.util.NumberFormatService;
@@ -74,7 +73,8 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
         caseTable.getColumnModel().getColumn(3).setMinWidth(80);
         caseTable.getColumnModel().getColumn(3).setPreferredWidth(80);
         caseTable.getColumnModel().getColumn(3).setMaxWidth(80);
-    //get Table
+        
+        //get Table
         model = (DefaultTableModel) caseTable.getModel();
     }
 

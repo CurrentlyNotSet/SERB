@@ -188,9 +188,7 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
         
         newInformation.duplicateCaseNumber = duplicateCaseNumberTextBox.getText().equals("") ? null : duplicateCaseNumberTextBox.getText();
         newInformation.relatedCaseNumber = relatedCaseNumberTextBox.getText().equals("") ? null : relatedCaseNumberTextBox.getText();       
-        
-        
-        
+
         newInformation.negotiationType = negotiationTypeComboBox.getSelectedItem().toString().trim().equals("") ? null : negotiationTypeComboBox.getSelectedItem().toString();
         newInformation.expirationDate = expirationDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(expirationDateTextBox.getText()));
         newInformation.NTNFiledBy = NTNFiledByComboBox.getSelectedItem().toString().trim().equals("") ? null : NTNFiledByComboBox.getSelectedItem().toString();
@@ -307,9 +305,7 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
     }
     
     public void loadRelatedCasesTable() {
-        
-//        DefaultTableModel relatedCaseModel = (DefaultTableModel) relatedCaseTable.getModel();
-        
+     
         relatedCaseModel.setRowCount(0);
         
         List relatedCases = RelatedCase.loadRelatedCases();

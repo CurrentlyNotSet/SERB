@@ -32,8 +32,7 @@ public class MEDConciliationPanel extends javax.swing.JPanel {
     DefaultListModel concilList1Model = new DefaultListModel();
     DefaultListModel concilList2Model = new DefaultListModel();
     MEDCase orginalInformation;
-    
-    
+
     /**
      * Creates new form MEDConciliationPanel
      */
@@ -108,15 +107,10 @@ public class MEDConciliationPanel extends javax.swing.JPanel {
         appointmentDateTextBox.setBackground(new Color(238,238,238));
         conciliationTypeComboBox.setEnabled(false);
         
-//        if(!conciliationTypeComboBox.getSelectedItem().toString().trim().equals("")) {
-            conciliatorSelectionComboBox.setEnabled(false);
-            replacementConciliatorComboBox.setEnabled(false);
-            originalConciliationDateTextBox.setEnabled(false);
-            originalConciliationDateTextBox.setBackground(new Color(238,238,238));
-//        }
-        
-        
-        
+        conciliatorSelectionComboBox.setEnabled(false);
+        replacementConciliatorComboBox.setEnabled(false);
+        originalConciliationDateTextBox.setEnabled(false);
+        originalConciliationDateTextBox.setBackground(new Color(238,238,238));
         
         if(save) {
             saveInformation();
@@ -137,46 +131,20 @@ public class MEDConciliationPanel extends javax.swing.JPanel {
         if(orginalInformation.concilType != null) {
             switch(orginalInformation.concilType) {
                 case "Selected by parties":
-//                    conciliatorSelectionComboBox.setSelectedItem("");
-//                    replacementConciliatorComboBox.setSelectedItem("");
-//                    conciliatorSelectionComboBox.setEnabled(true);
-//                    replacementConciliatorComboBox.setEnabled(true);
-//                    originalConciliationDateTextBox.setEnabled(true);
-//                    originalConciliationDateTextBox.setBackground(Color.white);
                     populateConciliatorSelection();
                     populateConciliatorReplacement();
                     break;
                 case "Discretionary":
-//                    conciliatorSelectionComboBox.setSelectedItem("");
-//                    replacementConciliatorComboBox.setSelectedItem("");
-//                    conciliatorSelectionComboBox.setEnabled(true);
-//                    replacementConciliatorComboBox.setEnabled(true);
-//                    originalConciliationDateTextBox.setEnabled(true);
-//                    originalConciliationDateTextBox.setBackground(Color.white);
                     populateFullConciliatorSelection();
                     populateFullConciliatorReplacement();
                     break;
                 case "Replacement":
-//                    conciliatorSelectionComboBox.setSelectedItem("");
-//                    replacementConciliatorComboBox.setSelectedItem("");
-//                    conciliatorSelectionComboBox.setEnabled(false);
-//                    conciliatorSelectionComboBox.setSelectedItem("");
-//                    replacementConciliatorComboBox.setEnabled(true);
-//                    originalConciliationDateTextBox.setEnabled(true);
-//                    originalConciliationDateTextBox.setBackground(Color.white);
                     populateFullConciliatorSelection();
                     populateFullConciliatorReplacement();
                     break;
                 case "Alternate Selection":
-//                    conciliatorSelectionComboBox.setSelectedItem("");
-//                    replacementConciliatorComboBox.setSelectedItem("");
-//                    conciliatorSelectionComboBox.setEnabled(true);
-//                    replacementConciliatorComboBox.setEnabled(true);
-//                    originalConciliationDateTextBox.setEnabled(true);
-//                    originalConciliationDateTextBox.setBackground(Color.white);
                     populateFullConciliatorSelection();
                     populateFullConciliatorReplacement();
-                    
                     break;
             } 
         }
@@ -196,8 +164,6 @@ public class MEDConciliationPanel extends javax.swing.JPanel {
             } else {
                 conciliation2GenerateButton.setEnabled(false);
             }
-            
-            
         } else {
             concilList1Model.removeAllElements();
             conciliation1List.setModel(concilList1Model);
@@ -226,9 +192,6 @@ public class MEDConciliationPanel extends javax.swing.JPanel {
             concilList2Model.removeAllElements();
             conciliation2List.setModel(concilList2Model);
         }
-        
-//        populateConciliatorSelection();
-//        populateConciliatorReplacement();
     }
     
     private void saveInformation() {
@@ -255,8 +218,6 @@ public class MEDConciliationPanel extends javax.swing.JPanel {
         newMEDCaseInformation.concilType = conciliationTypeComboBox.getSelectedItem().toString().equals("") ? null : conciliationTypeComboBox.getSelectedItem().toString();
         newMEDCaseInformation.concilSelection = conciliatorSelectionComboBox.getSelectedItem() == null || conciliatorSelectionComboBox.getSelectedItem().toString().equals("") ? null : conciliatorSelectionComboBox.getSelectedItem().toString();
         newMEDCaseInformation.concilReplacement = replacementConciliatorComboBox.getSelectedItem() == null || replacementConciliatorComboBox.getSelectedItem().toString().equals("") ? null : replacementConciliatorComboBox.getSelectedItem().toString();
-        
-        //only set the value if it is blank
         
         if(concilOriginalConciliator.getText().equals("")) {
             newMEDCaseInformation.concilOriginalConciliator = conciliatorSelectionComboBox.getSelectedItem().toString().equals("") ? null : conciliatorSelectionComboBox.getSelectedItem().toString();
@@ -351,19 +312,13 @@ public class MEDConciliationPanel extends javax.swing.JPanel {
             conciliation2GenerateButton.setEnabled(false);
             MEDCase.saveConciliationList2(concilList2Model);
         }
-        
-//        populateConciliatorSelection();
-//        populateConciliatorReplacement();
     }
     
     private void populateConciliatorSelection() {
         String currentSelectedConcil = "";
         
         currentSelectedConcil = conciliatorSelectionComboBox.getSelectedItem() == null ? "" : conciliatorSelectionComboBox.getSelectedItem().toString();
-//        
-//        conciliatorSelectionComboBox.setSelectedItem("");
-//        replacementConciliatorComboBox.setSelectedItem("");
-        
+
         conciliatorSelectionComboBox.removeAllItems();
         conciliatorSelectionComboBox.addItem("");
         
@@ -382,10 +337,7 @@ public class MEDConciliationPanel extends javax.swing.JPanel {
         String currentSelectedConcil = "";
         
         currentSelectedConcil = conciliatorSelectionComboBox.getSelectedItem() == null ? "" : conciliatorSelectionComboBox.getSelectedItem().toString();
-//        
-//        conciliatorSelectionComboBox.setSelectedItem("");
-//        replacementConciliatorComboBox.setSelectedItem("");
-        
+       
         conciliatorSelectionComboBox.removeAllItems();
         conciliatorSelectionComboBox.addItem("");
         
@@ -400,21 +352,14 @@ public class MEDConciliationPanel extends javax.swing.JPanel {
         String currentSelectedConcil = "";
         
         currentSelectedConcil = replacementConciliatorComboBox.getSelectedItem() == null ? "" : replacementConciliatorComboBox.getSelectedItem().toString();
-        
-//        conciliatorSelectionComboBox.setSelectedItem("");
-//        replacementConciliatorComboBox.setSelectedItem("");
-        
+       
         replacementConciliatorComboBox.removeAllItems();
         replacementConciliatorComboBox.addItem("");
         
         for(int i = 0; i < fullConcilList.size(); i++) {
             replacementConciliatorComboBox.addItem(fullConcilList.get(i));
         }
-        
-//        for(int i = 0; i < conciliation2List.getModel().getSize(); i++) {
-//            replacementConciliatorComboBox.addItem(conciliation2List.getModel().getElementAt(i));
-//        }
-        
+               
         if(conciliatorSelectionComboBox.getSelectedItem() != null &&
                 !conciliatorSelectionComboBox.getSelectedItem().toString().equals("")) {
             replacementConciliatorComboBox.removeItem(conciliatorSelectionComboBox.getSelectedItem().toString());
@@ -427,9 +372,6 @@ public class MEDConciliationPanel extends javax.swing.JPanel {
         String currentSelectedConcil = "";
         
         currentSelectedConcil = replacementConciliatorComboBox.getSelectedItem() == null ? "" : replacementConciliatorComboBox.getSelectedItem().toString();
-        
-//        conciliatorSelectionComboBox.setSelectedItem("");
-//        replacementConciliatorComboBox.setSelectedItem("");
         
         replacementConciliatorComboBox.removeAllItems();
         replacementConciliatorComboBox.addItem("");
@@ -479,15 +421,8 @@ public class MEDConciliationPanel extends javax.swing.JPanel {
             MEDCase.replaceList2Concil(concilLocation, newName, oldName);
             randomConcilList.remove(randomNumber);
             randomConcilList.add(concilList2Model.get(concilLocation).toString());
-//            concilList2Model.remove(concilLocation);
-//            int randomNumber = new Random().nextInt(randomConcilList.size());
-//            concilList2Model.add(concilLocation, randomConcilList.get(randomNumber));
-//            randomConcilList.remove(randomNumber);
-//            randomConcilList.add(concilList2Model.get(concilLocation).toString());
         }
     }
-    
-//    private void enableConcilComboBoxes()
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -907,27 +842,23 @@ public class MEDConciliationPanel extends javax.swing.JPanel {
 
     private void conciliatorSelectionComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_conciliatorSelectionComboBoxActionPerformed
         switch(conciliationTypeComboBox.getSelectedItem().toString().trim()) {
-                case "Selected by parties":
-                    populateConciliatorReplacement();
-                    break;
-                case "Discretionary":
-                    populateFullConciliatorReplacement();
-                    break;
-                case "Replacement":
-                    populateFullConciliatorReplacement();
-                    break;
-                case "Alternate Selection":
-                    populateFullConciliatorReplacement();
-                    break;
-            }
-        
-//        populateConciliatorReplacement();
+            case "Selected by parties":
+                populateConciliatorReplacement();
+                break;
+            case "Discretionary":
+                populateFullConciliatorReplacement();
+                break;
+            case "Replacement":
+                populateFullConciliatorReplacement();
+                break;
+            case "Alternate Selection":
+                populateFullConciliatorReplacement();
+                break;
+        }
     }//GEN-LAST:event_conciliatorSelectionComboBoxActionPerformed
 
     private void conciliationTypeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_conciliationTypeComboBoxActionPerformed
-//        enableUpdate();
-//        System.out.println("TYPE: " + conciliationTypeComboBox.getSelectedItem().toString());
-        
+       
         if(conciliationTypeComboBox.isEnabled()) {
             switch(conciliationTypeComboBox.getSelectedItem().toString().trim()) {
                 case "Selected by parties":
@@ -982,10 +913,7 @@ public class MEDConciliationPanel extends javax.swing.JPanel {
                     break;
             }
         }
-        
-        
     }//GEN-LAST:event_conciliationTypeComboBoxActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.alee.extended.date.WebDateField appointmentDateTextBox;

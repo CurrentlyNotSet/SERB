@@ -5,13 +5,9 @@
  */
 package parker.serb.MED;
 
-import parker.serb.REP.*;
-import parker.serb.relatedcase.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import parker.serb.Global;
 import parker.serb.sql.CaseValidation;
-import parker.serb.sql.REPElectionMultiCase;
 import parker.serb.sql.RelatedCase;
 import parker.serb.util.NumberFormatService;
 
@@ -171,8 +167,6 @@ public class AddMultiCaseDialog extends javax.swing.JDialog {
         } else {
             caseNotFoundLabel.setText("Invalid Case Number");
         }
-        
-        
     }//GEN-LAST:event_addButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -12,8 +12,6 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -22,6 +20,7 @@ import parker.serb.sql.MEDCase;
 import parker.serb.sql.Mediator;
 import parker.serb.util.ClearDateDialog;
 import parker.serb.util.NumberFormatService;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -87,7 +86,7 @@ public class MEDStrikePanel extends javax.swing.JPanel {
                 int days = (int) (diffInMillies / (1000*60*60*24));
                 totalNumberOfDaysTextBox.setText(Integer.toString(days));
             } catch (ParseException ex) {
-                Logger.getLogger(MEDStrikePanel.class.getName()).log(Level.SEVERE, null, ex);
+                SlackNotification.sendNotification(ex);
             }
         }
     }

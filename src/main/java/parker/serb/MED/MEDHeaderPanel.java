@@ -204,8 +204,6 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
         return employerTextBox;
     }
     
-    
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -408,7 +406,6 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_jLabel11MouseClicked
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox caseNumberComboBox;
