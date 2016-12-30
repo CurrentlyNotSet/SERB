@@ -12,6 +12,9 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import org.apache.commons.validator.routines.EmailValidator;
 import parker.serb.Global;
 import parker.serb.employer.employerDetail;
 import parker.serb.employer.employerSearch;
@@ -34,10 +37,39 @@ public class ORGInformationPanel extends javax.swing.JPanel {
      */
     public ORGInformationPanel() {
         initComponents();
+        addListeners();
         loadOrgTypeComboBox();
         loadStateComboBox();
         loadFiscalYearEndingComboBox();
 //        loadDueDateComboBox();
+    }
+    
+    private void addListeners() {
+        orgEmailTextBox.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                Global.root.getjButton2().setEnabled(
+                    EmailValidator.getInstance().isValid(orgEmailTextBox.getText()) ||
+                    orgEmailTextBox.getText().equals("")
+                );
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                Global.root.getjButton2().setEnabled(
+                    EmailValidator.getInstance().isValid(orgEmailTextBox.getText()) ||
+                    orgEmailTextBox.getText().equals("")
+                );
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                Global.root.getjButton2().setEnabled(
+                    EmailValidator.getInstance().isValid(orgEmailTextBox.getText()) ||
+                    orgEmailTextBox.getText().equals("")
+                );
+            }
+        });
     }
     
     private void loadOrgTypeComboBox() {
