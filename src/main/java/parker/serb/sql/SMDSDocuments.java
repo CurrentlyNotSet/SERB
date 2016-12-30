@@ -81,6 +81,82 @@ public class SMDSDocuments {
         return documentList;
     }
     
+    public static List loadDocumentGroupByTypeAndSection(String section, String type) {
+        List<String> documentList = new ArrayList<>();
+            
+        try {
+
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "select DISTINCT [group] from SMDSDocuments where"
+                    + " section = ? AND"
+                    + " type = ? AND"
+                    + " active = 1";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, section);
+            preparedStatement.setString(2, type);
+
+            ResultSet docList = preparedStatement.executeQuery();
+            
+            while(docList.next()) {
+                if (docList.getString("group") != null) {
+                    documentList.add(docList.getString("group"));
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return documentList;
+    }
+    
+    public static List loadDocumentNamesByTypeSectionGroup(String section, String type, String group) {
+        List<SMDSDocuments> documentList = new ArrayList<>();
+            
+        try {
+
+            Statement stmt = Database.connectToDB().createStatement();
+
+            String sql = "select * from SMDSDocuments where"
+                    + " section = ? AND "
+                    + " type = ? AND "
+                    + " [group] = ? AND "
+                    + " active = 1"
+                    + " order by cast(description as nvarchar(max))";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, section);
+            preparedStatement.setString(2, type);
+            preparedStatement.setString(3, group);
+
+            ResultSet docList = preparedStatement.executeQuery();
+            
+            while(docList.next()) {
+                SMDSDocuments doc = new SMDSDocuments();
+                doc.id = docList.getInt("id");
+                doc.active = docList.getBoolean("active");
+                doc.section = docList.getString("section");
+                doc.type = docList.getString("type");
+                doc.description = docList.getString("description");
+                doc.fileName = docList.getString("fileName");
+                doc.dueDate = docList.getInt("dueDate");
+                doc.group = docList.getString("group");
+                doc.historyFileName = docList.getString("historyFileName");
+                doc.historyDescription = docList.getString("historyDescription");
+                doc.CHDCHG = docList.getString("CHDCHG");
+                doc.questionsFileName = docList.getString("questionsFileName");
+                doc.emailSubject = docList.getString("emailSubject");
+                doc.parameters = docList.getString("parameters");
+                doc.emailBody = docList.getString("emailBody");
+                doc.sortOrder = docList.getDouble("sortOrder");
+                documentList.add(doc);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return documentList;
+    }
+    
     public static SMDSDocuments findDocumentByID(int id) {
         SMDSDocuments doc = new SMDSDocuments();
         

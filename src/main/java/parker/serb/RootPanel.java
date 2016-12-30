@@ -63,7 +63,6 @@ import parker.serb.util.NewCaseLockDialog;
 import parker.serb.util.NumberFormatService;
 import parker.serb.util.ReleaseNotesDialog;
 
-
 /**
  *
  * @author parker
