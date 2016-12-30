@@ -14,7 +14,6 @@ import parker.serb.sql.Audit;
 import parker.serb.sql.DocketLock;
 import parker.serb.sql.NewCaseLock;
 import parker.serb.sql.User;
-import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -28,21 +27,17 @@ public class SERB {
          * This is used to monitor Apple key commands on a mac
          */
         if(System.getProperty("os.name").equalsIgnoreCase("Mac OS X")) {
-//            try {
-                Application macOSXApplication=Application.getApplication();
+            Application macOSXApplication=Application.getApplication();
 
-                macOSXApplication.setQuitHandler((AppEvent.QuitEvent qe, QuitResponse qr) -> {
-                    if(Global.activeUser != null) {
-                        DocketLock.removeUserLocks();
-                        NewCaseLock.removeUserLocks();
-                        User.updateActiveLogIn();
-                        Audit.addAuditEntry("Logged Off");
-                    }
-                    System.exit(0);
-                });
-//            } catch (Throwable ex) {
-//                SlackNotification.sendNotification(ex);
-//            }
+            macOSXApplication.setQuitHandler((AppEvent.QuitEvent qe, QuitResponse qr) -> {
+                if(Global.activeUser != null) {
+                    DocketLock.removeUserLocks();
+                    NewCaseLock.removeUserLocks();
+                    User.updateActiveLogIn();
+                    Audit.addAuditEntry("Logged Off");
+                }
+                System.exit(0);
+            });
         }
         
         //install weblaf look and feel

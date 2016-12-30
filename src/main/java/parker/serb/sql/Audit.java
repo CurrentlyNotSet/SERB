@@ -37,7 +37,6 @@ public class Audit {
             
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 addAuditEntry(action);
             } else {
                 SlackNotification.sendNotification(ex);

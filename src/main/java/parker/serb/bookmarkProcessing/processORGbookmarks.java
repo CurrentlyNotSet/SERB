@@ -87,7 +87,7 @@ public class processORGbookmarks {
         
         
         //ProcessBookmarks
-        for (int i = 0; i < Global.bookmarkLimit; i++) {
+        for (int i = 0; i < Global.BOOKMARK_LIMIT; i++) {
             
             if (toRep){
                 processBookmark.process("RepName" + (i == 0 ? "" : i), repNames, Document);

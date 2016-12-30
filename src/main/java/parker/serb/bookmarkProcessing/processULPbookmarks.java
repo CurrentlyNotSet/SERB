@@ -137,7 +137,7 @@ public class processULPbookmarks {
 
                 
         //ProcessBookmarks
-        for (int i = 0; i < Global.bookmarkLimit; i++) {
+        for (int i = 0; i < Global.BOOKMARK_LIMIT; i++) {
             //CaseNumber Related Information
             processBookmark.process("STATEMENT" + (i == 0 ? "" : i), item.statement, Document);
             processBookmark.process("RECOMMENDATION" + (i == 0 ? "" : i), item.recommendation, Document);

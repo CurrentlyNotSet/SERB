@@ -28,7 +28,7 @@ public class SingleReleaseNotesDialog extends javax.swing.JDialog {
     }
     
     private void loadReleaseInformation() {
-        ReleaseNotes release = ReleaseNotes.loadReleaseInformation(Global.applicationVersion);
+        ReleaseNotes release = ReleaseNotes.loadReleaseInformation(Global.APPLICATION_VERSION);
         notesPane.setText(release.releaseNotes);
     }
     

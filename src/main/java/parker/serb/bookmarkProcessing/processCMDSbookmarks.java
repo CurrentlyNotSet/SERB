@@ -435,7 +435,7 @@ public class processCMDSbookmarks {
         }
 
         //ProcessBookmarks
-        for (int i = 0; i < Global.bookmarkLimit; i++) {
+        for (int i = 0; i < Global.BOOKMARK_LIMIT; i++) {
             //Case Data
             processBookmark.process("CaseNumber" + (i == 0 ? "" : i), NumberFormatService.generateFullCaseNumberNonGlobal(
                     item.caseYear, item.caseType, item.caseMonth, item.caseNumber), Document);

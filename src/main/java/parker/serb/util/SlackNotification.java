@@ -17,8 +17,6 @@ import java.util.logging.Logger;
 import parker.serb.Global;
 import parker.serb.sql.SystemError;
 
-//TODO: Update file to Slack (DB Backup)
-
 /**
  *
  * @author parkerjohnston
@@ -43,30 +41,29 @@ public class SlackNotification {
     
     public static void sendNotification(Exception ex) {
         
-        String message = "User: " + Global.activeUser.username + "\n";
-        message += "Class Name: " + Thread.currentThread().getStackTrace()[2].getClassName() + "\n";
-        message += "Method Name: " + Thread.currentThread().getStackTrace()[2].getMethodName() + "\n";
-        message += "Exception Type: " + ex.getClass().getSimpleName() + "\n";
-        message += "Stack Trace: " + convertStackTrace(ex);
-        
         try {
-            new Slack(Global.slackHook)
-                    .icon(Global.slackIcon) // Ref - http://www.emoji-cheat-sheet.com/
-                    .sendToChannel(Global.slackChannel)
-                    .displayName(Global.slackUser)
-                    .push(new SlackMessage(message));
+            String message = "User: " + Global.activeUser.username + "\n";
+            message += "Class Name: " + Thread.currentThread().getStackTrace()[2].getClassName() + "\n";
+            message += "Method Name: " + Thread.currentThread().getStackTrace()[2].getMethodName() + "\n";
+            message += "Exception Type: " + ex.getClass().getSimpleName() + "\n";
+            message += "Stack Trace: " + convertStackTrace(ex);
+            
+            new Slack(Global.SLACK_HOOK)
+                .icon(Global.SLACK_ICON) // Ref - http://www.emoji-cheat-sheet.com/
+                .sendToChannel(Global.SLACK_CHANNEL)
+                .displayName(Global.SLACK_USER)
+                .push(new SlackMessage(message)); //nothing should go here -- let it fail to post to slack...nothing major
             
             SystemError.addSystemErrorEntry
             (
-                Thread.currentThread().getStackTrace()[2].getClassName(),
-                Thread.currentThread().getStackTrace()[2].getMethodName(),
-                ex.getClass().getSimpleName(),
-                ex.toString(),
-                convertStackTrace(ex)
+                    Thread.currentThread().getStackTrace()[2].getClassName(),
+                    Thread.currentThread().getStackTrace()[2].getMethodName(),
+                    ex.getClass().getSimpleName(),
+                    ex.toString(),
+                    convertStackTrace(ex)
             );
-            
-        } catch (IOException e) {
-            //nothing should go here -- let it fail to post to slack...nothing major
+        } catch (IOException ex1) {
+            Logger.getLogger(SlackNotification.class.getName()).log(Level.SEVERE, null, ex1);
         }
     }
     

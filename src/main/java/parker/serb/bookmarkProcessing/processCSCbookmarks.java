@@ -66,7 +66,7 @@ public class processCSCbookmarks {
         
         
         //ProcessBookmarks
-        for (int i = 0; i < Global.bookmarkLimit; i++) {
+        for (int i = 0; i < Global.BOOKMARK_LIMIT; i++) {
             processBookmark.process("RepSalutation" + (i == 0 ? "" : i), repNames, Document);
             
             processBookmark.process("CommissionName" + (i == 0 ? "" : i), item.name, Document);

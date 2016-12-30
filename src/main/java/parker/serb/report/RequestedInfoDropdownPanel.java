@@ -63,7 +63,7 @@ public class RequestedInfoDropdownPanel extends javax.swing.JDialog {
         switch (IDType) {
             case "Month":
                 ComboBox.addItem("");
-                for (String month : Global.monthList) {
+                for (String month : Global.MONTH_LIST) {
                     ComboBox.addItem(month);
                 }
                 ComboBox.setSelectedItem("");

@@ -234,7 +234,7 @@ public class processREPbookmarks {
         }   
         
         //ProcessBookmarks
-        for (int i = 0; i < Global.bookmarkLimit; i++) {            
+        for (int i = 0; i < Global.BOOKMARK_LIMIT; i++) {            
             //Case Number Related Information
             processBookmark.process("CASENUMBER" + (i == 0 ? "" : i), NumberFormatService.generateFullCaseNumber(), Document);
             processBookmark.process("DATEFILED" + (i == 0 ? "" : i), (caseInfo.fileDate == null ? "" : Global.MMMMddyyyy.format(caseInfo.fileDate)), Document);

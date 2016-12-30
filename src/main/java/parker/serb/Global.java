@@ -16,12 +16,9 @@ import java.util.List;
  * @author parker
  */
 public class Global {
-    
-    //TODO: implement verbose logging at project end
-    public static final boolean verboseLogging = true;
-    
+  
     //Application Version
-    public static final String applicationVersion = "3.0";
+    public static final String APPLICATION_VERSION = "3.0";
 
     //All Date and Time formatters
     public static SimpleDateFormat mmddyyyyhhmma = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
@@ -55,10 +52,10 @@ public class Global {
     
     //Slack Informaiton
     //TODO: Move this hook and value to another gitignore file
-    public static final String slackHook = "https://hooks.slack.com/services/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";
-    public static final String slackIcon = ":computer:";
-    public static final String slackChannel = "serbapplication";
-    public static final String slackUser = "SERB";
+    public static final String SLACK_HOOK = "https://hooks.slack.com/services/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";
+    public static final String SLACK_ICON = ":computer:";
+    public static final String SLACK_CHANNEL = "serbapplication";
+    public static final String SLACK_USER = "SERB";
     
     //indicate which section the user is currently in
     public static String activeSection;
@@ -75,7 +72,7 @@ public class Global {
         "VI", "WA", "WV", "WI", "WY"};
     
     //List of Months
-    public static final String monthList[] = {"January", "Febuary", "March", "April", 
+    public static final String MONTH_LIST[] = {"January", "Febuary", "March", "April", 
         "May", "June", "July", "August", "September", "October", "November", "December"
     };
     
@@ -91,7 +88,7 @@ public class Global {
     public static boolean errorNotifications;
     
     //bookmark loop limit
-    public static final int bookmarkLimit = 10;
+    public static final int BOOKMARK_LIMIT = 10;
     
     //format Ending for dates
     public static String[] daySuffixes =

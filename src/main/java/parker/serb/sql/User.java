@@ -502,7 +502,7 @@ public class User {
             String sql = "Update Users SET applicationVersion = ? where username = ? and active = 1";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, Global.applicationVersion);
+            preparedStatement.setString(1, Global.APPLICATION_VERSION);
             preparedStatement.setString(2, Global.activeUser.username);
             
             preparedStatement.executeUpdate();
@@ -529,7 +529,7 @@ public class User {
                     + " where username = ? and active = 1";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, Global.applicationVersion);
+            preparedStatement.setString(1, Global.APPLICATION_VERSION);
             preparedStatement.setString(2, InetAddress.getLocalHost().getHostName());
             preparedStatement.setTimestamp(3, new java.sql.Timestamp(new Date().getTime()));
             preparedStatement.setBoolean(4, !Global.activeUser.activeLogIn);
