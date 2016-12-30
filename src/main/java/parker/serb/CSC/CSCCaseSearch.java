@@ -13,7 +13,6 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
 import parker.serb.sql.CSCCase;
-import parker.serb.sql.ORGCase;
 
 /**
  *
