@@ -434,6 +434,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                 Global.root.getmEDRootPanel1().getActivityPanel1().loadAllActivity();
                 break;
             case "Hearings":
+                Global.root.getHearingRootPanel1().getActivityPanel1().loadAllHearingActivity();
                 break;
             case "Civil Service Commission":
                 Global.root.getcSCRootPanel1().getActivityPanel1().loadAllActivity();

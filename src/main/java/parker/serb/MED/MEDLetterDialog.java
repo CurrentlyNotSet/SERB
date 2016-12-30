@@ -5,14 +5,13 @@
  */
 package parker.serb.MED;
 
-//TODO: Load all of the letter types
-
 import java.awt.event.ItemEvent;
 import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 import parker.serb.Global;
 import parker.serb.letterGeneration.LetterGenerationPanel;
 import parker.serb.sql.SMDSDocuments;
-
+import parker.serb.util.Item;
 
 /**
  *
@@ -37,20 +36,20 @@ public class MEDLetterDialog extends javax.swing.JDialog {
     
     private void addListeners() {
         letterComboBox.addItemListener((ItemEvent e) -> {
-            directiveComboBox.setSelectedItem("");
-            memoComboBox.setSelectedItem("");
+            directiveComboBox.setSelectedItem(new Item<>("0", ""));
+            memoComboBox.setSelectedItem(new Item<>("0", ""));
             enableGenerateButton();
         });
 
         directiveComboBox.addItemListener((ItemEvent e) -> {
-            letterComboBox.setSelectedItem("");
-            memoComboBox.setSelectedItem("");
+            letterComboBox.setSelectedItem(new Item<>("0", ""));
+            memoComboBox.setSelectedItem(new Item<>("0", ""));
             enableGenerateButton();
         });
         
         memoComboBox.addItemListener((ItemEvent e) -> {
-            directiveComboBox.setSelectedItem("");
-            letterComboBox.setSelectedItem("");
+            directiveComboBox.setSelectedItem(new Item<>("0", ""));
+            letterComboBox.setSelectedItem(new Item<>("0", ""));
             enableGenerateButton();
         });
     }
@@ -66,52 +65,57 @@ public class MEDLetterDialog extends javax.swing.JDialog {
     }
     
     private void loadLetters() {
-        letterComboBox.removeAllItems();
-        letterComboBox.addItem("");
+        DefaultComboBoxModel dt = new DefaultComboBoxModel();
+        letterComboBox.setModel(dt);
+        letterComboBox.addItem(new Item<>("0", ""));
         
         List<SMDSDocuments> letterList = SMDSDocuments.loadDocumentNamesByTypeAndSection("MED", "Letter");
         for (SMDSDocuments letter : letterList) {
-            letterComboBox.addItem(letter.description);
+            letterComboBox.addItem(new Item<>(String.valueOf(letter.id), letter.description));
         }
-        letterComboBox.setSelectedItem("");
+        letterComboBox.setSelectedItem(new Item<>("0", ""));
     }
     
     private void loadDirectives() {
-        directiveComboBox.removeAllItems();
-        directiveComboBox.addItem("");
+        DefaultComboBoxModel dt = new DefaultComboBoxModel();
+        directiveComboBox.setModel(dt);
+        directiveComboBox.addItem(new Item<>("0", ""));
         
         List<SMDSDocuments> letterList = SMDSDocuments.loadDocumentNamesByTypeAndSection("MED", "Directive");
         for (SMDSDocuments letter : letterList) {
-            directiveComboBox.addItem(letter.description);
+            directiveComboBox.addItem(new Item<>(String.valueOf(letter.id), letter.description));
         }
-        directiveComboBox.setSelectedItem("");
+        directiveComboBox.setSelectedItem(new Item<>("0", ""));
     }
     
     private void loadAgenda() {
-        memoComboBox.removeAllItems();
-        memoComboBox.addItem("");
+        DefaultComboBoxModel dt = new DefaultComboBoxModel();
+        memoComboBox.setModel(dt);
+        memoComboBox.addItem(new Item<>("0", ""));
         
         List<SMDSDocuments> letterList = SMDSDocuments.loadDocumentNamesByTypeAndSection("MED", "Memo");
         for (SMDSDocuments letter : letterList) {
-            memoComboBox.addItem(letter.description);
+            memoComboBox.addItem(new Item<>(String.valueOf(letter.id), letter.description));
         }
-        memoComboBox.setSelectedItem("");
+        memoComboBox.setSelectedItem(new Item<>("0", ""));
     }
     
     
     private void generateDocument() {
-        String selection = "";
+        int selection = 0;
         if (!letterComboBox.getSelectedItem().toString().trim().equals("")) {
-            selection = letterComboBox.getSelectedItem().toString().trim();
+            Item item = (Item) letterComboBox.getSelectedItem();
+            selection = Integer.parseInt(item.getValue().toString());
         } else if (!directiveComboBox.getSelectedItem().toString().trim().equals("")) {
-            selection = directiveComboBox.getSelectedItem().toString().trim();
+            Item item = (Item) directiveComboBox.getSelectedItem();
+            selection = Integer.parseInt(item.getValue().toString());
         } else if (!memoComboBox.getSelectedItem().toString().trim().equals("")) {
-            selection = memoComboBox.getSelectedItem().toString().trim();
+            Item item = (Item) memoComboBox.getSelectedItem();
+            selection = Integer.parseInt(item.getValue().toString());
         }
 
-        if (!"".equals(selection)) {
-            SMDSDocuments template = SMDSDocuments.findDocumentByDescription(selection);
-                     
+        if (selection > 0) {
+            SMDSDocuments template = SMDSDocuments.findDocumentByID(selection);
             new LetterGenerationPanel(Global.root, true, template, null);
         }
     }
@@ -138,15 +142,9 @@ public class MEDLetterDialog extends javax.swing.JDialog {
 
         jLabel2.setText("Letters");
 
-        letterComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         jLabel3.setText("Directives");
 
-        directiveComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         jLabel5.setText("Memo");
-
-        memoComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         generateButton.setText("Generate");
         generateButton.setEnabled(false);
