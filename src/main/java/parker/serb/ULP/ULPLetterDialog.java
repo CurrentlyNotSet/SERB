@@ -5,8 +5,6 @@
  */
 package parker.serb.ULP;
 
-//TODO: Load all of the letter types
-
 import java.awt.event.ItemEvent;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
