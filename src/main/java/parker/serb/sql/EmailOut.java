@@ -13,8 +13,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
 import parker.serb.util.SlackNotification;
 
 /**
@@ -44,9 +43,10 @@ public class EmailOut {
     public static List<EmailOut> getEmailOutBySection(String section) {
         List<EmailOut> emailList = new ArrayList<>();
         
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT C.id, C.section, C.caseYear, C.caseType, "
                     + "C.caseMonth, C.caseNumber, C.[to], C.[from], C.cc, "
@@ -86,7 +86,12 @@ public class EmailOut {
                 emailList.add(eml);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getEmailOutBySection(section);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return emailList;
     }
@@ -94,8 +99,10 @@ public class EmailOut {
     public static EmailOut getEmailByID(int id) {
         EmailOut eml = null;
         
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "select * from EmailOut where id = ?";
             
@@ -124,14 +131,21 @@ public class EmailOut {
                 eml.internalNote = emailListRS.getString("internalNote");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getEmailByID(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return eml;
     }
     
     public static void updateEmailOut(EmailOut item) {
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE EmailOut SET "
                     + "body = ?, "
@@ -145,13 +159,20 @@ public class EmailOut {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateEmailOut(item);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void markEmailReadyToSend(int id) {
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE EmailOut SET okToSend = true where id = ?";
 
@@ -160,14 +181,20 @@ public class EmailOut {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                markEmailReadyToSend(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static int insertEmail(EmailOut item) {
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert INTO EmailOut ("
                     + "section, "       //01
@@ -214,15 +241,23 @@ public class EmailOut {
                 return newRow.getInt(1);
             }            
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                insertEmail(item);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return 0;
     }
     
     public static int getEmailCount(String section) {
         int count = 0;
+        
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT COUNT(*) AS [count] FROM emailout WHERE section = ? "
                     + "UNION ALL SELECT COUNT(*) AS [count] FROM postalOut WHERE section = ?";
@@ -237,14 +272,13 @@ public class EmailOut {
                 count += emailListRS.getInt("count");
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 getEmailCount(section);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return count;
     }
-    
 }

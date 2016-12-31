@@ -1,14 +1,15 @@
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
 import parker.serb.util.NumberFormatService;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -25,14 +26,13 @@ public class Mediator {
     public String phone;
     public String email;
     
-    
-
     public static List loadMediators(String type) {
         List<Mediator> mediatorList = new ArrayList<Mediator>();
             
+        Statement stmt = null;
         try {
 
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "select firstName, middleName, lastName"
                     + " from Mediator"
@@ -53,17 +53,22 @@ public class Mediator {
                 mediatorList.add(med);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadMediators(type);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return mediatorList;
     }
     
     public static List loadAllMediators() {
         List<Mediator> mediatorList = new ArrayList<Mediator>();
-            
+        
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "select firstName, middleName, lastName"
                     + " from Mediator"
@@ -73,8 +78,7 @@ public class Mediator {
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             
             ResultSet employerListRS = preparedStatement.executeQuery();
-            
-            
+
             while(employerListRS.next()) {
                 Mediator med = new Mediator();
                 med.firstName = employerListRS.getString("firstName") == null ? "" : employerListRS.getString("firstName");
@@ -83,7 +87,12 @@ public class Mediator {
                 mediatorList.add(med);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadAllMediators();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return mediatorList;
     }
@@ -91,10 +100,10 @@ public class Mediator {
     public static String getMediatorPhoneNumber(String name) {
         String[] nameParts = name.split(" ");
         String phone = "";
-            
+          
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "select phone from mediator where firstName = ? and lastName = ?";
                     
@@ -108,7 +117,12 @@ public class Mediator {
                 phone = caseActivity.getString("phone");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getMediatorPhoneNumber(name);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return phone;
     }
@@ -116,9 +130,9 @@ public class Mediator {
     public static String getMediatorNameByID(String id) {
         String name = "";
             
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "select firstName, LastName from mediator where id = ?";
                     
@@ -132,17 +146,22 @@ public class Mediator {
                 name += caseActivity.getString("lastName");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getMediatorNameByID(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return name;
     }
     
     public static String getMediatorPhoneByID(String id) {
         String phone = "";
-            
+         
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "select phone from mediator where id = ?";
                     
@@ -155,7 +174,12 @@ public class Mediator {
                 phone = caseActivity.getString("phone");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getMediatorPhoneByID(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return phone;
     }
@@ -164,9 +188,9 @@ public class Mediator {
         String[] nameParts = name.split(" ");
         String id = "";
             
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "select id from mediator where firstName = ? and lastName = ?";
                     
@@ -180,20 +204,22 @@ public class Mediator {
                 id = caseActivity.getString("id");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getMediatorIDByName(name);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return id;
     }
     
-    
-    
-    
     public static List searchMediator(String[] param) {
         List<Mediator> list = new ArrayList<>();
 
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM Mediator";
             if (param.length > 0) {
@@ -229,8 +255,12 @@ public class Mediator {
                 list.add(item);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                searchMediator(param);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return list;
     }
@@ -238,8 +268,9 @@ public class Mediator {
     public static Mediator getMediatorByID(int id) {
         Mediator item = new Mediator();
 
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM Mediator WHERE id = ?";
 
@@ -259,15 +290,20 @@ public class Mediator {
                 item.phone = rs.getString("phone") == null ? "" : NumberFormatService.convertStringToPhoneNumber(rs.getString("phone"));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getMediatorByID(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return item;
     }
 
     public static void createMediator(Mediator item) {
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert INTO Mediator ("
                     + "active, "    //01
@@ -293,13 +329,19 @@ public class Mediator {
             preparedStatement.setString(7, item.phone.equals("") ? null : NumberFormatService.convertPhoneNumberToString(item.phone));
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                createMediator(item);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
 
     public static void updateMediator(Mediator item) {
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE Mediator SET "
                     + "active = ?, "    //01
@@ -323,8 +365,12 @@ public class Mediator {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateMediator(item);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
-    
 }

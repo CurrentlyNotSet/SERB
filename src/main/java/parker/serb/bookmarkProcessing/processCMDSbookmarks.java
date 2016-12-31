@@ -9,8 +9,6 @@ import com.jacob.com.Dispatch;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import parker.serb.Global;
 import parker.serb.sql.CaseParty;
 import parker.serb.util.StringUtilities;
@@ -21,6 +19,7 @@ import parker.serb.sql.EmailOutInvites;
 import parker.serb.sql.User;
 import parker.serb.util.DateConversion;
 import parker.serb.util.NumberFormatService;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -268,7 +267,7 @@ public class processCMDSbookmarks {
             try {
                 dateHearingServed = Global.MMMMMdyyyy.format(Global.mmddyyyy.parse(answers.getHearingServed()));
             } catch (ParseException ex) {
-                Logger.getLogger(processCMDSbookmarks.class.getName()).log(Level.SEVERE, null, ex);
+                SlackNotification.sendNotification(ex);
             }
         }
 
@@ -276,7 +275,7 @@ public class processCMDSbookmarks {
             try {
                 hearingDateString = Global.MMMMMdyyyy.format(Global.mmddyyyy.parse(answers.getHearingDate()));
             } catch (ParseException ex) {
-                Logger.getLogger(processCMDSbookmarks.class.getName()).log(Level.SEVERE, null, ex);
+                SlackNotification.sendNotification(ex);
             }
         }
 
@@ -284,7 +283,7 @@ public class processCMDSbookmarks {
             try {
                 dateFiledString = Global.MMMMMdyyyy.format(Global.mmddyyyy.parse(answers.getDateFiled()));
             } catch (ParseException ex) {
-                Logger.getLogger(processCMDSbookmarks.class.getName()).log(Level.SEVERE, null, ex);
+                SlackNotification.sendNotification(ex);
             }
         }
 
@@ -313,7 +312,7 @@ public class processCMDSbookmarks {
             try {
                 dateRequestedString = Global.MMMMMdyyyy.format(Global.mmddyyyy.parse(dateRequestedString));
             } catch (ParseException ex) {
-                Logger.getLogger(processCMDSbookmarks.class.getName()).log(Level.SEVERE, null, ex);
+                SlackNotification.sendNotification(ex);
             }
         }
 
@@ -416,7 +415,7 @@ public class processCMDSbookmarks {
                 try {
                     parsedDate = new Timestamp(Global.mmddyyyy.parse(answers.getResponseDueDate()).getTime());
                 } catch (ParseException ex) {
-                    Logger.getLogger(processCMDSbookmarks.class.getName()).log(Level.SEVERE, null, ex);
+                    SlackNotification.sendNotification(ex);
                 }
                 if (parsedDate != null) {
                     dateResponseDueString = Global.MMMMMdyyyy.format(parsedDate);

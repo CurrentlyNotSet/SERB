@@ -5,14 +5,15 @@
  */
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -27,9 +28,10 @@ public class EmailAttachment {
     public static List getAttachmentList(String id) {
         List emailAttachmentList = new ArrayList<>();
         
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "select * from EmailAttachment where emailID = ?";
             
@@ -46,14 +48,21 @@ public class EmailAttachment {
                 emailAttachmentList.add(docket);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getAttachmentList(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return emailAttachmentList;
     }
     
     public static void deleteEmailAttachmentEntry(int id) {
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Delete from EmailAttachment where id = ?";
             
@@ -63,16 +72,22 @@ public class EmailAttachment {
             preparedStatement.executeUpdate();
             
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                deleteEmailAttachmentEntry(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static String getEmailAttachmentFileByID(String id) {
         String emailAttachmentFileName = "";
         
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "select fileName from EmailAttachment where id = ?";
             
@@ -85,7 +100,12 @@ public class EmailAttachment {
                 emailAttachmentFileName = emailListRS.getString("fileName");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getEmailAttachmentFileByID(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return emailAttachmentFileName;
     }

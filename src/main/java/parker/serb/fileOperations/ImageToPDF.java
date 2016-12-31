@@ -11,8 +11,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -22,6 +20,7 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.JPEGFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -88,7 +87,7 @@ public class ImageToPDF {
                 doc.save(folderPath + pdfFile);
             }
         } catch (IOException ex) {
-            Logger.getLogger(ImageToPDF.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
             return "";
         } finally {
             if (doc != null) {
@@ -96,7 +95,7 @@ public class ImageToPDF {
                     doc.close();
 
                 } catch (IOException ex) {
-                    Logger.getLogger(ImageToPDF.class.getName()).log(Level.SEVERE, null, ex);
+                    SlackNotification.sendNotification(ex);
                     return "";
                 }
             }
@@ -105,7 +104,7 @@ public class ImageToPDF {
             try {
                 fileStream.close();
             } catch (IOException ex) {
-                Logger.getLogger(ImageToPDF.class.getName()).log(Level.SEVERE, null, ex);
+                SlackNotification.sendNotification(ex);
                 return "";
             }
         }

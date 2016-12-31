@@ -1,13 +1,14 @@
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -23,9 +24,7 @@ public class NamePrefix {
         List<String> prefixList = new ArrayList<>();
 
         Statement stmt = null;
-
         try {
-
             stmt = Database.connectToDB().createStatement();
 
             String sql = "select prefix from NamePrefix where active = 1"
@@ -39,8 +38,12 @@ public class NamePrefix {
                 prefixList.add(prefixRS.getString("prefix"));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadActivePrefix();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return prefixList;
     }
@@ -49,9 +52,7 @@ public class NamePrefix {
         List<NamePrefix> prefixList = new ArrayList<>();
 
         Statement stmt = null;
-
         try {
-
             stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM NamePrefix ORDER BY prefix";
@@ -68,8 +69,12 @@ public class NamePrefix {
                 prefixList.add(item);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadAllPrefix();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return prefixList;
     }
@@ -77,8 +82,9 @@ public class NamePrefix {
     public static NamePrefix getPreFixByID(int id) {
         NamePrefix item = new NamePrefix();
         
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM NamePrefix WHERE id = ?";
 
@@ -93,15 +99,20 @@ public class NamePrefix {
                 item.prefix = prefixRS.getString("prefix");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getPreFixByID(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return item;
     }
     
     public static void createPrefix(NamePrefix item) {
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert INTO NamePrefix (active, prefix) VALUES (1, ?)";
 
@@ -110,13 +121,19 @@ public class NamePrefix {
             
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                createPrefix(item);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void updatePrefix(NamePrefix item ){
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE NamePrefix SET "
                     + "active = ?, "
@@ -130,8 +147,12 @@ public class NamePrefix {
             
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updatePrefix(item);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
-    
 }

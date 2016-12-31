@@ -1,31 +1,21 @@
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.dbutils.DbUtils;
-import parker.serb.Global;
+import parker.serb.util.SlackNotification;
 
 /**
  *
  * @author parkerjohnston
  */
 public class CaseValidation {
-    
-    /**
-     * Add an activity to the activity table, pulls the case number from the
-     * current selected case
-     * @param action the action that has been preformed
-     * @param filePath the filepath of a document - null if no file
-     */
+
     public static boolean validateCaseNumber(String caseNumber) {
+        Statement stmt = null;        
         
         String[] parsedCaseNumber = caseNumber.split("-");
         
@@ -65,7 +55,7 @@ public class CaseValidation {
         }
             
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, parsedCaseNumber[0]);
@@ -81,8 +71,13 @@ public class CaseValidation {
                 validCase = true;
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                validateCaseNumber(caseNumber);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
         
         return validCase;
     }

@@ -7,14 +7,10 @@ package parker.serb.login;
 
 import parker.serb.sql.User;
 import java.security.SecureRandom;
-import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
 import org.apache.commons.lang3.RandomStringUtils;
 import parker.serb.Global;
 import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
-import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
-import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
 
-//TODO: Test the validation of passwords, with a logged in user
 
 /**
  *

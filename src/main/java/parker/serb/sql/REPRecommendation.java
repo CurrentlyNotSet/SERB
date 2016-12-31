@@ -7,8 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
 import parker.serb.util.SlackNotification;
 
 /**
@@ -21,18 +20,13 @@ public class REPRecommendation {
     public boolean active;
     public String type;
     public String recommendation;
-    
-    /**
-     * Loads all activity for a specified case number, pulls the case number
-     * from global
-     * @return List of Activities
-     */
+
     public static List loadAllREPRecommendations() {
         List<REPRecommendation> recommendationList = new ArrayList<>();
         
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "select * from REPRecommendation ORDER BY recommendation";
 
@@ -48,12 +42,12 @@ public class REPRecommendation {
                 recommendationList.add(act);
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 loadAllREPRecommendations();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return recommendationList;
     }
@@ -61,9 +55,9 @@ public class REPRecommendation {
     public static List searchREPRecommendations(String[] param) {
         List<REPRecommendation> recommendationList = new ArrayList<>();
 
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM REPRecommendation";
             if (param.length > 0) {
@@ -95,12 +89,12 @@ public class REPRecommendation {
                 recommendationList.add(act);
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 searchREPRecommendations(param);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return recommendationList;
     }
@@ -108,8 +102,9 @@ public class REPRecommendation {
     public static REPRecommendation getREPReccomendationByID(int id) {
         REPRecommendation item = new REPRecommendation();
 
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM REPRecommendation WHERE id = ?";
 
@@ -125,20 +120,20 @@ public class REPRecommendation {
                 item.recommendation = rs.getString("recommendation") == null ? "" : rs.getString("recommendation");
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 getREPReccomendationByID(id);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return item;
     }
 
     public static void createREPRec(REPRecommendation item) {
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert INTO REPRecommendation "
                     + "(active, type, recommendation)"
@@ -151,18 +146,19 @@ public class REPRecommendation {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 createREPRec(item);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
 
     public static void updateREPRec(REPRecommendation item) {
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE REPRecommendation SET "
                     + "active = ?, "
@@ -178,12 +174,12 @@ public class REPRecommendation {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 updateREPRec(item);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
 }

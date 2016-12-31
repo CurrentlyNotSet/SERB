@@ -5,14 +5,16 @@
  */
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
+import static parker.serb.sql.CMDSCaseSearchData.createNewCaseEntry;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -75,8 +77,10 @@ public class CMDSDocuments {
     public static List<CMDSDocuments> loadAllCMDSDocuments(String[] param) {
         List<CMDSDocuments> list = new ArrayList<>();
 
+        Statement stmt = null; 
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM CMDSDocuments";
             if (param.length > 0) {
@@ -108,7 +112,12 @@ public class CMDSDocuments {
                 list.add(item);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadAllCMDSDocuments(param);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return list;
     }
@@ -116,9 +125,11 @@ public class CMDSDocuments {
     public static CMDSDocuments findDocumentByID(int id) {
         CMDSDocuments doc = new CMDSDocuments();
         
+        Statement stmt = null;
+        
         try {
             
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "Select * from CMDSDocuments where id = ?";
             
@@ -180,7 +191,12 @@ public class CMDSDocuments {
 
             }
         } catch (SQLException ex) {
-            Logger.getLogger(SMDSDocuments.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                findDocumentByID(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return doc;
     }
@@ -188,9 +204,11 @@ public class CMDSDocuments {
     public static CMDSDocuments findDocumentByName(String name) {
         CMDSDocuments doc = new CMDSDocuments();
         
+        Statement stmt = null;
+        
         try {
             
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "Select * from CMDSDocuments where LetterName = ?";
             
@@ -252,7 +270,12 @@ public class CMDSDocuments {
 
             }
         } catch (SQLException ex) {
-            Logger.getLogger(SMDSDocuments.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                findDocumentByName(name);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return doc;
     }
@@ -400,10 +423,12 @@ public class CMDSDocuments {
         
     public static List<String> findSubCategoriesByMainCategory(String mainCat)  {
         List<String> subTypesList = new ArrayList<>();
-            
+           
+        Statement stmt = null;
+        
         try {
 
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT DISTINCT subCategory FROM CMDSDocuments WHERE active = 1 "
                     + "AND mainCategory = ? ORDER BY subCategory";
@@ -418,18 +443,24 @@ public class CMDSDocuments {
                 subTypesList.add(caseStatusRS.getString("subCategory"));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                findDocumentsBySubCategories(mainCat);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return subTypesList;
     }
     
     public static List<String> findDocumentsBySubCategories(String subCat)  {
         List<String> subTypesList = new ArrayList<>();
-            
+           
+        Statement stmt = null;
+        
         try {
 
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT LetterName FROM CMDSDocuments WHERE active = 1 "
                     + "AND subCategory = ? ORDER BY LetterName";
@@ -444,16 +475,22 @@ public class CMDSDocuments {
                 subTypesList.add(caseStatusRS.getString("LetterName"));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                findDocumentsBySubCategories(subCat);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return subTypesList;
     }
     
     public static void createCMDSDocument(CMDSDocuments item) {
+        Statement stmt = null;
+        
         try {
 
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert INTO CMDSDocuments ("
                     + "Active, "
@@ -565,13 +602,20 @@ public class CMDSDocuments {
             preparedStatement.setString (50, item.emailBody.equals("") ? null : item.emailBody.trim());
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                createCMDSDocument(item);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
 
     public static void updateCMDSDocument(CMDSDocuments item) {
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE CMDSDocuments SET "
                     + "Active = ?, "
@@ -681,8 +725,12 @@ public class CMDSDocuments {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateCMDSDocument(item);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
-    
 }

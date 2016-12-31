@@ -8,8 +8,6 @@ package parker.serb.util;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import parker.serb.Global;
 
 /**
@@ -55,7 +53,7 @@ public class NumberFormatService {
             try {
                 date = Global.mmddyyyy.parse(mmddyyyyDate);
             } catch (ParseException ex) {
-                Logger.getLogger(NumberFormatService.class.getName()).log(Level.SEVERE, null, ex);
+                SlackNotification.sendNotification(ex);
             }
             return date.getTime();
         }
@@ -70,7 +68,7 @@ public class NumberFormatService {
             try {
                 date = Global.hmma.parse(hmma);
             } catch (ParseException ex) {
-                Logger.getLogger(NumberFormatService.class.getName()).log(Level.SEVERE, null, ex);
+                SlackNotification.sendNotification(ex);
             }
             return date.getTime();
         }

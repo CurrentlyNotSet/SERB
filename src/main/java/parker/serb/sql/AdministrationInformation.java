@@ -33,7 +33,6 @@ public class AdministrationInformation {
     public String Phone;
     public String Fax;
     public String Footer;
-        
     
     public static AdministrationInformation loadAdminInfo(String dept) {
         AdministrationInformation exec = null;

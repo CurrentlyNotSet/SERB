@@ -1,17 +1,14 @@
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.dbutils.DbUtils;
-import parker.serb.Global;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -52,12 +49,11 @@ public class Employer {
     public String employerIRN;
 
     public static List loadEmployerList() {
-        List<Employer> employerList = new ArrayList<Employer>();
+        List<Employer> employerList = new ArrayList<>();
         
         Statement stmt = null;
             
         try {
-
             stmt = Database.connectToDB().createStatement();
 
             String sql = "select employerIDNumber,"
@@ -78,17 +74,23 @@ public class Employer {
                 employerList.add(emp);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadEmployerList();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return employerList;
     }
     
     public static Employer loadEmployerByID(String id) {
         Employer employer = new Employer();
-            
+           
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "select  * from Employers where EmployerIDNumber = ?";
                     
@@ -134,16 +136,21 @@ public class Employer {
                 employer.employerIRN = caseActivity.getString("EmployerIRN");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadEmployerByID(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return employer;
     }
     
     public static void updateEmployerByEmployerIDNumber(String id, Employer emp) {
- 
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Update Employers set"
                     + " employerName = ?,"
@@ -190,18 +197,22 @@ public class Employer {
             preparedStatement.executeUpdate();
 
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateEmployerByEmployerIDNumber(id, emp);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
-//        return employer;
     }
     
     public static String getEmployerCountyByID(String id) {
- 
+        Statement stmt = null;
+        
         String county = "";
         
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select county from Employers"
                     + " WHERE employerIDNumber = ?";
@@ -219,18 +230,23 @@ public class Employer {
                 county = caseActivity.getString("county");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getEmployerCountyByID(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return county;
     }
     
     public static String getEmployerNameByID(String id) {
- 
         String name = "";
         
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select employerName from Employers"
                     + " WHERE employerIDNumber = ?";
@@ -248,7 +264,12 @@ public class Employer {
                 name = caseActivity.getString("employerName");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getEmployerNameByID(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return name;
     }

@@ -187,7 +187,7 @@ public class REPUpdateMediationDialog extends javax.swing.JDialog {
     private void loadToComboBox() {
         List userList = null;
         
-        userList = User.loadREPComboBox();
+        userList = User.loadSectionDropDowns("REP");
         
         mediatorComboBox.setMaximumRowCount(6);
         mediatorComboBox.removeAllItems();

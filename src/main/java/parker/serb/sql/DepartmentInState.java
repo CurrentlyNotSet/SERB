@@ -1,14 +1,14 @@
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import parker.serb.Global;
+import org.apache.commons.dbutils.DbUtils;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -28,9 +28,10 @@ public class DepartmentInState {
     public static List loadAllDepartments() {
         List departmentsInStateList = new ArrayList<>();
             
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "select * from DeptInState order by code";
 
@@ -47,7 +48,12 @@ public class DepartmentInState {
                 departmentsInStateList.add(department);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadAllDepartments();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return departmentsInStateList;
     }

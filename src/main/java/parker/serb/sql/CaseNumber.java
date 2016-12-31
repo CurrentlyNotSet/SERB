@@ -1,12 +1,12 @@
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -30,9 +30,10 @@ public class CaseNumber {
     public static String getCaseNumber(String caseType, String year) {
         String nextNumber = "0001";
             
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select caseNumber from CaseNumber where caseType = ? and year = ?";
 
@@ -46,7 +47,12 @@ public class CaseNumber {
                 nextNumber = caseNumber.getString("caseNumber");
             } 
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getCaseNumber(caseType, year);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return nextNumber;
     }
@@ -54,9 +60,10 @@ public class CaseNumber {
     public static String getCMDSCaseNumber(String year) {
         String nextNumber = "0001";
             
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select caseNumber from CaseNumber where year = ?";
 
@@ -69,7 +76,12 @@ public class CaseNumber {
                 nextNumber = caseNumber.getString("caseNumber");
             } 
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getCMDSCaseNumber(year);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return nextNumber;
     }
@@ -77,9 +89,10 @@ public class CaseNumber {
     public static String getORGNumber() {
         String nextNumber = null;
             
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select caseNumber from CaseNumber where caseType = 'ORG'";
 
@@ -91,7 +104,12 @@ public class CaseNumber {
                 nextNumber = caseNumber.getString("caseNumber");
             } 
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getORGNumber();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return nextNumber;
     }
@@ -99,9 +117,10 @@ public class CaseNumber {
     public static String getCSCNumber() {
         String nextNumber = null;
             
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select caseNumber from CaseNumber where caseType = 'CSC'";
 
@@ -113,7 +132,12 @@ public class CaseNumber {
                 nextNumber = caseNumber.getString("caseNumber");
             } 
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getCSCNumber();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return nextNumber;
     }
@@ -124,9 +148,10 @@ public class CaseNumber {
      * @param caseNumber the case number that was created
      */
     public static void updateNextCaseNumber(String caseYear, String caseType, String caseNumber) {
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Update CaseNumber set caseNumber = ? where"
                     + " year = ? and caseType = ?";
@@ -142,14 +167,20 @@ public class CaseNumber {
                 createCaseNumber(caseYear, caseType);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateNextCaseNumber(caseYear, caseType, caseNumber);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void updateNextCMDSCaseNumber(String caseYear, String caseNumber) {
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Update CaseNumber set caseNumber = ? where"
                     + " year = ?";
@@ -164,14 +195,20 @@ public class CaseNumber {
                 createCaseNumber(caseYear);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateNextCMDSCaseNumber(caseYear, caseNumber);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void updateOrgCaseNumber(String orgNumber) {
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Update CaseNumber set caseNumber = ? where caseType = 'ORG'";
 
@@ -181,14 +218,20 @@ public class CaseNumber {
             preparedStatement.executeUpdate();
             
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateOrgCaseNumber(orgNumber);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void updateCSCCaseNumber(String orgNumber) {
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Update CaseNumber set caseNumber = ? where caseType = 'CSC'";
 
@@ -198,7 +241,12 @@ public class CaseNumber {
             preparedStatement.executeUpdate();
             
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateCSCCaseNumber(orgNumber);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
@@ -208,9 +256,10 @@ public class CaseNumber {
      * @param type the type of the case
      */
     private static void createCaseNumber(String year, String type) {
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert into CaseNumber Values (?,?,?)";
 
@@ -221,14 +270,20 @@ public class CaseNumber {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                createCaseNumber(year, type);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     private static void createCaseNumber(String year) {
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert into CaseNumber Values (?,?)";
 
@@ -238,7 +293,12 @@ public class CaseNumber {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                createCaseNumber(year);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     

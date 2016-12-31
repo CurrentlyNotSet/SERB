@@ -12,8 +12,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import parker.serb.Global;
 import parker.serb.sql.SystemError;
 
@@ -22,22 +20,6 @@ import parker.serb.sql.SystemError;
  * @author parkerjohnston
  */
 public class SlackNotification {
-    
-    public static void enableNotifications() {
-        try {
-            switch(InetAddress.getLocalHost().getHostName()) {
-                case "Parkers-MacBook-Air.local":
-                case "Alienware15":
-                case "Sniper":
-                    Global.errorNotifications = true;
-                    break;
-                default:
-                    Global.errorNotifications = false;
-            }
-        } catch (UnknownHostException ex) {
-            Logger.getLogger(FileService.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
     
     public static void sendNotification(Exception ex) {
         
@@ -52,7 +34,7 @@ public class SlackNotification {
                 .icon(Global.SLACK_ICON) // Ref - http://www.emoji-cheat-sheet.com/
                 .sendToChannel(Global.SLACK_CHANNEL)
                 .displayName(Global.SLACK_USER)
-                .push(new SlackMessage(message)); //nothing should go here -- let it fail to post to slack...nothing major
+                .push(new SlackMessage(message)); 
             
             SystemError.addSystemErrorEntry
             (
@@ -63,7 +45,7 @@ public class SlackNotification {
                     convertStackTrace(ex)
             );
         } catch (IOException ex1) {
-            Logger.getLogger(SlackNotification.class.getName()).log(Level.SEVERE, null, ex1);
+            //leave blank
         }
     }
     
@@ -72,21 +54,4 @@ public class SlackNotification {
         ex.printStackTrace(new PrintWriter(sw));
         return sw.toString();
     }
-    
-    
-    
-    
-//    public static void sendAttachement(String filePath) {
-//        
-//        try {
-//            new Slack(Global.slackHook)
-//                .icon(Global.slackIcon) // Ref - http://www.emoji-cheat-sheet.com/
-//                .sendToChannel(Global.slackChannel)
-//                .displayName(Global.slackUser)
-//                .push(new SlackAttachment(filePath));
-//        } catch (IOException ex) {
-//            Logger.getLogger(SlackNotification.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//    }
-    
 }

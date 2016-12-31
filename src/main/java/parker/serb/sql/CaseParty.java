@@ -1,15 +1,16 @@
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
 import parker.serb.Global;
 import parker.serb.util.NumberFormatService;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -45,11 +46,12 @@ public class CaseParty {
     
     
     public static void createParty(String id, String type) {
+        Statement stmt = null;
+        
         try {
-            
             Party party = Party.getPartyByID(id);
 
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert INTO CaseParty VALUES ("
                     + "?,"
@@ -105,16 +107,22 @@ public class CaseParty {
             
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                createParty(id, type);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void createPartyForCaseDuplication(int id, String type, String newCaseNumber) {
+        Statement stmt = null;
+        
         try {
-            
             Party partyInformation = Party.getPartyByID(String.valueOf(id));
 
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert INTO CaseParty VALUES ("
                     + "?," //caseYear
@@ -171,7 +179,12 @@ public class CaseParty {
             
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                createPartyForCaseDuplication(id, type, newCaseNumber);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
@@ -183,9 +196,10 @@ public class CaseParty {
     public static List<CaseParty> loadPartiesByCase() {
         List<CaseParty> parties = new ArrayList<>();
         
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "Select * from CaseParty"
                     + " where caseYear = ?"
@@ -233,7 +247,12 @@ public class CaseParty {
                 parties.add(party);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadPartiesByCase();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return parties;
     }
@@ -241,9 +260,10 @@ public class CaseParty {
     public static List<CaseParty> loadORGPartiesByCase() {
         List<CaseParty> parties = new ArrayList<>();
         
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "SELECT * FROM CaseParty Left JOIN Party on CaseParty.partyID = Party.id where"
                     + " caseType = ?"
@@ -286,7 +306,12 @@ public class CaseParty {
                 parties.add(party);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadORGPartiesByCase();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return parties;
     }
@@ -294,9 +319,10 @@ public class CaseParty {
     public static List<CaseParty> loadCSCPartiesByCase() {
         List<CaseParty> parties = new ArrayList<>();
         
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "SELECT * FROM CaseParty Left JOIN Party on CaseParty.partyID = Party.id where"
                     + " caseType = ?"
@@ -339,7 +365,12 @@ public class CaseParty {
                 parties.add(party);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadCSCPartiesByCase();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return parties;
     }
@@ -347,9 +378,10 @@ public class CaseParty {
     public static List<CaseParty> loadORGPartiesByCase(String orgNumber) {
         List<CaseParty> parties = new ArrayList<>();
         
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "SELECT * FROM CaseParty"
                     + " where caseYear IS NULL "
@@ -393,14 +425,21 @@ public class CaseParty {
                 parties.add(party);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadORGPartiesByCase(orgNumber);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return parties;
     }
     
     public static void updateParty(CaseParty party, String id) {
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "Update CaseParty"
                     + " set caseRelation = ?,"
@@ -450,16 +489,22 @@ public class CaseParty {
                 Party.updateParty(party, CaseParty.getPartyID(id));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(CaseParty.class.getName()).log(Level.SEVERE, null, ex);
-        }  
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateParty(party, id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        } 
     }
     
     public static int getPartyID(String id) {
         int partyID = 0;
         
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "Select partyID from CaseParty"
                     + " where id = ?";
@@ -473,7 +518,12 @@ public class CaseParty {
                 partyID = casePartyRS.getInt("partyID");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getPartyID(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return partyID;
     }
@@ -481,14 +531,14 @@ public class CaseParty {
     public static String getCasePartyByIDForElection(int id) {
         String party = null;
         
+        Statement stmt = null;
+        
         try {
-            
             if(id == 0) {
                 return "No Representative";
             }
-            
 
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "Select * from CaseParty"
                     + " where id = ?";
@@ -499,32 +549,6 @@ public class CaseParty {
             ResultSet casePartyRS = preparedStatement.executeQuery();
             
             while(casePartyRS.next()) {
-//                party = new CaseParty();
-//                party.id = casePartyRS.getInt("id");
-//                party.caseYear = casePartyRS.getString("caseYear");
-//                party.caseType = casePartyRS.getString("caseType");
-//                party.caseMonth = casePartyRS.getString("caseMonth");
-//                party.caseNumber = casePartyRS.getString("caseNumber");
-//                party.partyID = casePartyRS.getInt("partyID");
-//                party.caseRelation = casePartyRS.getString("caseRelation");
-//                party.prefix = casePartyRS.getString("prefix");
-//                party.firstName = casePartyRS.getString("firstName");
-//                party.middleInitial = casePartyRS.getString("middleInitial");
-//                party.lastName = casePartyRS.getString("lastName");
-//                party.suffix = casePartyRS.getString("suffix");
-//                party.nameTitle = casePartyRS.getString("nameTitle");
-//                party.jobTitle = casePartyRS.getString("jobTitle");
-//                party.companyName = casePartyRS.getString("companyName");
-//                party.address1 = casePartyRS.getString("address1");
-//                party.address2 = casePartyRS.getString("address2");
-//                party.address3 = casePartyRS.getString("address3");
-//                party.city = casePartyRS.getString("city");
-//                party.stateCode = casePartyRS.getString("stateCode");
-//                party.zipcode = casePartyRS.getString("zipcode");
-//                party.phone1 = casePartyRS.getString("phone1") == null ? "" : NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("phone1"));
-//                party.phone2 = casePartyRS.getString("phone2") == null ? "" : NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("phone2"));
-//                party.emailAddress = casePartyRS.getString("email");
-//                
                 if(casePartyRS.getString("companyName") == null) {
                     party = casePartyRS.getString("firstName") + " " + casePartyRS.getString("LastName");
                 } else {
@@ -532,7 +556,12 @@ public class CaseParty {
                 }
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getCasePartyByIDForElection(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return party;
     }
@@ -540,9 +569,10 @@ public class CaseParty {
     public static int getElectionID(String name) {
         int partyID = 0;
         
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "Select COUNT(*) AS THERE from CaseParty"
                     + " where companyName = ?"
@@ -584,9 +614,6 @@ public class CaseParty {
                 if(casePartyRS2.next()) {
                     partyID = casePartyRS2.getInt("id");
                 }
-                
-                
-                
             } else {
                 Statement stmt3 = Database.connectToDB().createStatement();
             
@@ -613,7 +640,12 @@ public class CaseParty {
             }
             
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getElectionID(name);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return partyID;
     }
@@ -621,9 +653,10 @@ public class CaseParty {
     public static CaseParty getCasePartyByID(String id) {
         CaseParty party = null;
         
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "Select * from CaseParty"
                     + " where id = ?";
@@ -662,7 +695,12 @@ public class CaseParty {
                 party.emailAddress = casePartyRS.getString("email");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getCasePartyByID(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return party;
     }
@@ -671,9 +709,10 @@ public class CaseParty {
         String caseType, String caseMonth, String caseNumber) {
         List<CaseParty> parties = new ArrayList<>();
         
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "Select * from caseParty"
                     + " where caseYear = ?"
@@ -720,14 +759,21 @@ public class CaseParty {
                 parties.add(party);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadPartiesByCase(caseYear, caseType, caseMonth, caseNumber);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return parties;
     }
     
     public static void removePartyFromCase(String id) {
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "Delete from CaseParty where id = ?";
 
@@ -736,15 +782,22 @@ public class CaseParty {
             
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                removePartyFromCase(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static boolean duplicateParty(String id) {
         boolean validEntry = true;
         
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "Select * from CaseParty where partyID = ? and CaseNumber = ?";
 
@@ -758,15 +811,21 @@ public class CaseParty {
                 validEntry = false;
             } 
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                duplicateParty(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return validEntry;
     }
     
     public static void duplicatePartyInformation(String newCase, String oldCase) {
+        Statement stmt = null;        
         
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "Select partyID, caseRelation from CaseParty where CaseYear = ? and"
                     + " CaseType = ? and CaseMonth = ? and CaseNumber = ?";
@@ -783,7 +842,12 @@ public class CaseParty {
                 createPartyForCaseDuplication(results.getInt("partyID"), results.getString("caseRelation"), newCase);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(CaseParty.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                duplicatePartyInformation(newCase, oldCase);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.dbutils.DbUtils;
 import parker.serb.util.SlackNotification;
 
 /**
@@ -21,16 +22,12 @@ public class REPCaseType {
     public String typeName;
     public String description;
     
-    /**
-     * Load the list of party types by the current selected section
-     * @return a list of all party types for the selected section
-     */
     public static List loadAllREPCaseTypes() {
         List repCaseTypes = new ArrayList<>();
-            
+         
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "select * from REPCaseType";
 
@@ -48,12 +45,12 @@ public class REPCaseType {
                 repCaseTypes.add(caseType);
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 loadAllREPCaseTypes();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return repCaseTypes;
     }

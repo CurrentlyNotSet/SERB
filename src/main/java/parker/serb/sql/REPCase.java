@@ -9,10 +9,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
 import parker.serb.Global;
-import static parker.serb.sql.REPBoardActionType.loadAllREPBoardActionTypes;
 import parker.serb.util.NumberFormatService;
 import parker.serb.util.SlackNotification;
 
@@ -169,13 +167,11 @@ public class REPCase {
      * @return list of rep case numbers
      */
     public static List loadREPCaseNumbers() {
-        
-        //TODO: Limit the load to the last 6 months of filed dates
-        
         List caseNumberList = new ArrayList<>();
-            
+
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select TOP 250"
                     + " caseYear,"
@@ -201,12 +197,12 @@ public class REPCase {
                 caseNumberList.add(createdCaseNumber);
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 loadREPCaseNumbers();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return caseNumberList;
     }
@@ -219,8 +215,9 @@ public class REPCase {
             return false;
         }
         
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select Count(*) As results"
                     + " from REPCase"
@@ -242,12 +239,12 @@ public class REPCase {
             valid = validRS.getInt("results") > 0;
             
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 validateCaseNumber(fullCaseNumber);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return valid;
     }
@@ -258,9 +255,10 @@ public class REPCase {
      */
     public static String loadNote() {
         String note = null;
-            
+          
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select Note"
                     + " from REPCase"
@@ -282,12 +280,12 @@ public class REPCase {
             note = caseNumberRS.getString("note");
 
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 loadNote();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return note;
     }
@@ -297,8 +295,9 @@ public class REPCase {
      * @param note the new note value to be stored
      */
     public static void updateNote(String note) {
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Update REPCase"
                     + " set note = ?"
@@ -319,12 +318,12 @@ public class REPCase {
             Audit.addAuditEntry("Updated Note for " + NumberFormatService.generateFullCaseNumber());
             Activity.addActivty("Updated Note", null);
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 updateNote(note);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
@@ -333,8 +332,9 @@ public class REPCase {
      * @param caseNumber the case number to be created 
      */
     public static void createCase(String caseYear, String caseType, String caseMonth, String caseNumber) {
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert into REPCase (CaseYear, CaseType, CaseMonth, CaseNumber, FileDate) Values (?,?,?,?,?)";
 
@@ -363,12 +363,12 @@ public class REPCase {
                 Global.root.getrEPHeaderPanel1().getjComboBox2().setSelectedItem(fullCaseNumber); 
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 createCase(caseYear, caseType, caseMonth, caseNumber);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
@@ -379,8 +379,10 @@ public class REPCase {
      */
     public static REPCase loadHeaderInformation() {
         REPCase rep = null;
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select fileDate,"
                     + " courtClosedDate,"
@@ -409,20 +411,22 @@ public class REPCase {
                 rep.bargainingUnitNumber = caseHeader.getString("bargainingUnitNumber");
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 loadHeaderInformation();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return rep;
     }
     
     public static REPCase loadCaseInformation() {
         REPCase rep = null;
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select"
                     + " [type],"
@@ -498,20 +502,22 @@ public class REPCase {
                 rep.clerksClosedUser = caseInformation.getInt("clerksClosedUser");
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 loadCaseInformation();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return rep;
     }
     
     public static REPCase loadCaseDetails(String caseYear, String caseType, String caseMonth, String caseNumber) {
         REPCase rep = null;
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select * from "
                     + "REPCase where caseYear = ? "
@@ -671,20 +677,22 @@ public class REPCase {
                 rep.combinedVotesCastForRivalEEO3 = caseInformation.getString("combinedVotesCastForRivalEEO3");
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 loadCaseDetails(caseYear, caseType, caseMonth, caseNumber);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return rep;
     }
     
     public static REPCase loadCaseDetails() {
         REPCase rep = null;
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select"
                     + " type,"
@@ -740,20 +748,22 @@ public class REPCase {
                 rep.ERNameChangeTo = caseInformation.getString("ERNameChangeTo");
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 loadCaseDetails();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return rep;
     }
     
     public static REPCase loadBoardStatus() {
         REPCase rep = null;
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select"
                     + " boardActionType,"
@@ -783,20 +793,22 @@ public class REPCase {
                 rep.boardStatusBlurb = caseInformation.getString("boardStatusBlurb");
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 loadBoardStatus();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return rep;
     }
     
     public static REPCase loadElectionInformation() {
         REPCase rep = null;
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select"
                     + " multicaseElection,"
@@ -974,20 +986,22 @@ public class REPCase {
 
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 loadElectionInformation();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return rep;
     }
     
     public static void updateBoardStatus(REPCase newCaseInformation, REPCase caseInformation) {
         REPCase rep = null;
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Update REPCase set"
                     + " boardActionType = ?,"
@@ -1017,19 +1031,21 @@ public class REPCase {
                 detailedBoardStatusDetailsSaveInformation(newCaseInformation, caseInformation);
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 updateBoardStatus(newCaseInformation, caseInformation);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void updateElectionInformation(REPCase newCaseInformation, REPCase caseInformation, String[] professional, String[] nonprofessional, String[] combined) {
         REPCase rep = null;
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Update REPCase set"
                     + " multicaseElection = ?,"
@@ -1205,19 +1221,21 @@ public class REPCase {
                 Activity.addActivty("Updated Election Information", null);
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 updateElectionInformation(newCaseInformation, caseInformation, professional, nonprofessional, combined);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void updateCaseDetails(REPCase newCaseInformation, REPCase caseInformation) {
         REPCase rep = null;
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Update REPCase set"
                     + " fileBy = ?,"
@@ -1271,20 +1289,21 @@ public class REPCase {
                 detailedCaseDetailsSaveInformation(newCaseInformation, caseInformation);
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 updateCaseDetails(newCaseInformation, caseInformation);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void updateCaseInformation(REPCase newCaseInformation, REPCase caseInformation) {
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
-             String sql = "Update REPCase set"
+            String sql = "Update REPCase set"
                     + " type = ?,"
                     + " status1 = ?,"
                     + " status2 = ?,"
@@ -1366,12 +1385,12 @@ public class REPCase {
                         newCaseInformation.employerIDNumber);
             } 
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 updateCaseInformation(newCaseInformation, caseInformation);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
@@ -1852,11 +1871,12 @@ public class REPCase {
     }
     
     public static List<String> loadRelatedCases() {
-        
         List<String> caseNumberList = new ArrayList<>();
+        
+        Statement stmt = null;
             
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "Select caseYear, caseType, caseMonth, caseNumber from REPCase  where fileDate between DateAdd(DD,-7,GETDATE()) and GETDATE() Order By caseYear DESC, caseNumber DESC";
 
@@ -1871,12 +1891,12 @@ public class REPCase {
                     + caseNumberRS.getString("caseNumber"));
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 loadRelatedCases();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return caseNumberList;
     }
@@ -1884,8 +1904,9 @@ public class REPCase {
     public static boolean checkIfFristCaseOfMonth(String year, String type, String month) {
         boolean firstCase = false;
         
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select"
                     + " COUNT(*) AS CasesThisMonth"
@@ -1910,12 +1931,12 @@ public class REPCase {
             }
             stmt.close();
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 checkIfFristCaseOfMonth(year, type, month);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return firstCase;
     }

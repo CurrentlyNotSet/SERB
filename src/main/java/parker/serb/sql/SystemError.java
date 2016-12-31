@@ -25,7 +25,6 @@ public class SystemError {
     {
         Statement stmt = null;
         try {
-            
             stmt = Database.connectToDB().createStatement();
             
             String sql = "INSERT INTO SystemError VALUES (?,?,?,?,?,?,?)";
@@ -40,11 +39,9 @@ public class SystemError {
             preparedStatement.setString(7, exceptionLong);
             
             preparedStatement.executeUpdate();
-            
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 addSystemErrorEntry(className, methodName, exceptionType, exceptionShort, exceptionLong);
             } 
         } finally {

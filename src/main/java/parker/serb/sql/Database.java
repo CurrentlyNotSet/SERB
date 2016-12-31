@@ -1,5 +1,6 @@
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -7,10 +8,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import parker.serb.DBConnectionInfo;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -23,11 +24,14 @@ public class Database {
     
     public static Connection connectToDB() {
         int nbAttempts = 0;
+        
         Connection connection = null;
+        
         String url = DBConnectionInfo.url;
         String driver = DBConnectionInfo.driver;
         String userName = DBConnectionInfo.userName;
         String password = DBConnectionInfo.password;
+        
         while (true) {
             try {
                 Class.forName(driver);
@@ -41,9 +45,12 @@ public class Database {
         return connection;
     }
     
+    //TODO
     public static void createDBBackup(String location, String db) {
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
 //            String sql = "BACKUP DATABASE ? \n" +
 //                "TO DISK = ?"; 
@@ -57,15 +64,22 @@ public class Database {
             Audit.addAuditEntry("Created a backup of " + db);
             updateBackupInformation();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                createDBBackup(location, db);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static Database getBackupInformation() {
         Database db = new Database();
         
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select * from [Database]"; 
 
@@ -77,15 +91,23 @@ public class Database {
             
             db.lastBackup = result.getTimestamp("lastBackup");
             db.nextBackup = result.getTimestamp("nextBackup");
+            
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getBackupInformation();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return db;
     }
     
     private static void updateBackupInformation() {
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Update [Database] SET lastBackup = ?, nextBackup = ?";
             
@@ -100,15 +122,22 @@ public class Database {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateBackupInformation();;
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static String getDBStats() {
         String stats = "";
         
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT (size*8)/1024 SizeMB\n" +
                 "FROM sys.master_files\n" +
@@ -122,7 +151,12 @@ public class Database {
             
             stats = result.getString("SizeMB");
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getDBStats();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return stats;
     }

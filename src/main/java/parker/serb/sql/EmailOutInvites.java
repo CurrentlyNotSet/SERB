@@ -5,8 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.dbutils.DbUtils;
 import parker.serb.util.SlackNotification;
 
@@ -62,22 +60,18 @@ public class EmailOutInvites {
                 preparedStatement.executeUpdate();
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                System.out.println("TESTING");
-                SlackNotification.sendNotification(ex);
-            } else {
-                SlackNotification.sendNotification(ex);
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
+                addNewHearing(section, toAddress, ccAddress, emailBody, caseNumber, hearingType, hearingRoomAbv, hearingDescription, hearingStartDateTime);
+            } 
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
     
-    public static Timestamp generateHearingEndDateTime(Timestamp startDateTime, String hearingType) {
-        
+    public static Timestamp generateHearingEndDateTime(Timestamp startDateTime, String hearingType) {   
         Timestamp endDateTime = new Timestamp(startDateTime.getTime());
-        
+
         if(hearingType == null) {
             hearingType = "";
         }
@@ -99,5 +93,4 @@ public class EmailOutInvites {
         }
         return endDateTime;
     }
-    
 }

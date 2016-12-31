@@ -1,5 +1,6 @@
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,10 +9,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import org.apache.commons.dbutils.DbUtils;
 import parker.serb.Global;
 import parker.serb.util.NumberFormatService;
 import parker.serb.util.SlackNotification;
@@ -22,8 +21,6 @@ import parker.serb.util.SlackNotification;
  */
 public class MEDCase {
 
-    
-    
     public int id;
     public boolean active;
     public String caseYear;
@@ -32,7 +29,6 @@ public class MEDCase {
     public String caseNumber;
     public String note;
    
-    
     //concil
     public Timestamp concilList1OrderDate;
     public Timestamp concilList1SelectionDueDate;
@@ -137,20 +133,13 @@ public class MEDCase {
     public String totalNumberOfDays;
     public String strikeMediatorAppointedID;
     public String strikeNotes;
-    
-    
-    /**
-     * Load a list of the most recent 250 REP case numbers
-     * @return list of rep case numbers
-     */
+
     public static List loadMEDCaseNumbers() {
-        
-        //TODO: Limit the load to the last 6 months of filed dates
-        
         List caseNumberList = new ArrayList<>();
             
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select TOP 250"
                     + " caseYear,"
@@ -176,7 +165,12 @@ public class MEDCase {
                 caseNumberList.add(createdCaseNumber);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadMEDCaseNumbers();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return caseNumberList;
     }
@@ -189,8 +183,9 @@ public class MEDCase {
             return false;
         }
         
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select Count(*) As results"
                     + " from MEDCase"
@@ -212,9 +207,13 @@ public class MEDCase {
             valid = validRS.getInt("results") > 0;
             
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                validateCaseNumber(fullCaseNumber);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
-        
         return valid;
     }
     
@@ -225,8 +224,9 @@ public class MEDCase {
     public static String loadNote() {
         String note = null;
             
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select Note"
                     + " from MEDCase"
@@ -246,9 +246,13 @@ public class MEDCase {
             caseNumberRS.next();
             
             note = caseNumberRS.getString("note");
-
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadNote();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return note;
     }
@@ -258,8 +262,9 @@ public class MEDCase {
      * @param note the new note value to be stored
      */
     public static void updateNote(String note) {
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Update MEDCase"
                     + " set note = ?"
@@ -280,7 +285,12 @@ public class MEDCase {
             Audit.addAuditEntry("Updated Note for " + NumberFormatService.generateFullCaseNumber());
             Activity.addActivty("Updated Note", null);
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateNote(note);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
@@ -289,8 +299,9 @@ public class MEDCase {
      * @param caseNumber the case number to be created 
      */
     public static void createCase(String caseYear, String caseType, String caseMonth, String caseNumber) {
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert into MEDCase (CaseYear, CaseType, CaseMonth, CaseNumber, FileDate, caseStatus) Values (?,?,?,?,?,'Open')";
 
@@ -320,6 +331,11 @@ public class MEDCase {
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                createCase(caseYear, caseType, caseMonth, caseNumber);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
@@ -330,8 +346,10 @@ public class MEDCase {
      */
     public static MEDCase loadHeaderInformation() {
         MEDCase med = null;
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select"
                     + " fileDate,"
@@ -358,18 +376,23 @@ public class MEDCase {
                 med.FMCSMediatorAppointedID = caseHeader.getString("FMCSMediatorAppointedID");
                 med.caseStatus = caseHeader.getString("caseStatus");
             }
-                
-            
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadHeaderInformation();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return med;
     }
     
     public static MEDCase loadConciliationInformation() {
         MEDCase med = null;
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select"
                     + " concilList1OrderDate,"
@@ -407,7 +430,7 @@ public class MEDCase {
             
             if(caseInformation.next()) {
                 med = new MEDCase();
-//                
+                
                 med.concilList1OrderDate = caseInformation.getTimestamp("concilList1OrderDate");
                 med.concilList1SelectionDueDate = caseInformation.getTimestamp("concilList1SelectionDueDate");
                 med.concilList1Name1 = caseInformation.getString("concilList1Name1");
@@ -431,14 +454,21 @@ public class MEDCase {
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadConciliationInformation();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return med;
     }
     
     public static MEDCase loadFFInformation() {
         MEDCase med = null;
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select"
                     + " FFList1OrderDate,"
@@ -520,14 +550,21 @@ public class MEDCase {
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadFFInformation();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return med;
     }
     
     public static MEDCase loadStatusInformation() {
         MEDCase med = null;
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();            
+            stmt = Database.connectToDB().createStatement();            
             
             String sql = "Select"
                     + " fileDate,"
@@ -605,14 +642,21 @@ public class MEDCase {
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadStatusInformation();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return med;
     }
     
     public static MEDCase loadStrikeInformation() {
         MEDCase med = null;
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();  
+            stmt = Database.connectToDB().createStatement();  
             
             String sql = "Select"
                     + " strikeFileDate,"
@@ -670,14 +714,21 @@ public class MEDCase {
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadStrikeInformation();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return med;
     }
     
     public static void updateStrikeInformation(MEDCase newCaseInformation, MEDCase caseInformation) {
         MEDCase med = null;
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();  
+            stmt = Database.connectToDB().createStatement();  
             
             String sql = "Update MEDCase Set"
                     + " strikeFileDate = ?,"
@@ -730,18 +781,24 @@ public class MEDCase {
             int success = preparedStatement.executeUpdate();
             
             if(success == 1) {
-                
                 detailedStrikeSaveInformation(newCaseInformation, caseInformation);
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateStrikeInformation(newCaseInformation, caseInformation);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void saveConciliationList1(DefaultListModel concilList1Model) {
         MEDCase med = null;
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Update MEDCase set"
                     + " concilList1Name1 = ?,"
@@ -778,13 +835,20 @@ public class MEDCase {
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                saveConciliationList1(concilList1Model);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void saveConciliationList2(DefaultListModel concilList2Model) {
         MEDCase med = null;
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Update MEDCase set"
                     + " concilList2Name1 = ?,"
@@ -821,13 +885,20 @@ public class MEDCase {
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                saveConciliationList2(concilList2Model);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void replaceList2Concil(int location, String newName, String oldName) {
         MEDCase med = null;
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Update MEDCase set"
                     + " concilList2Name" + String.valueOf(location + 1) + " = ?"
@@ -850,13 +921,20 @@ public class MEDCase {
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                replaceList2Concil(location, newName, oldName);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void replaceList1Concil(int location, String newName, String oldName) {
         MEDCase med = null;
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Update MEDCase set"
                     + " concilList1Name" + String.valueOf(location + 1) + " = ?"
@@ -879,14 +957,21 @@ public class MEDCase {
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                replaceList1Concil(location, newName, oldName);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void saveFFList1(DefaultListModel concilList1Model) {
         MEDCase med = null;
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
-//
+            stmt = Database.connectToDB().createStatement();
+
             String sql = "Update MEDCase set"
                     + " FFList1Name1 = ?,"
                     + " FFList1Name2 = ?,"
@@ -922,13 +1007,20 @@ public class MEDCase {
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                saveFFList1(concilList1Model);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void saveFFList2(DefaultListModel concilList2Model) {
         MEDCase med = null;
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Update MEDCase set"
                     + " FFList2Name1 = ?,"
@@ -965,13 +1057,20 @@ public class MEDCase {
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                saveFFList2(concilList2Model);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void replaceList2FF(int location, String newName, String oldName) {
         MEDCase med = null;
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Update MEDCase set"
                     + " FFList2Name" + String.valueOf(location + 1) + " = ?"
@@ -994,13 +1093,20 @@ public class MEDCase {
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                replaceList2FF(location, newName, oldName);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void replaceList1FF(int location, String newName, String oldName) {
         MEDCase med = null;
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Update MEDCase set"
                     + " FFList1Name" + String.valueOf(location + 1) + " = ?"
@@ -1023,13 +1129,20 @@ public class MEDCase {
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                replaceList1FF(location, newName, oldName);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void updateConciliation(MEDCase newCaseInformation, MEDCase caseInformation) {
         MEDCase med = null;
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Update MEDCase set"
                     + " concilList1OrderDate = ?,"
@@ -1070,13 +1183,20 @@ public class MEDCase {
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateConciliation(newCaseInformation, caseInformation);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void updateStatusInformation(MEDCase newCaseInformation, MEDCase caseInformation) {
         MEDCase med = null;
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Update MEDCase set"
                     + " fileDate = ?,"
@@ -1111,7 +1231,7 @@ public class MEDCase {
                     + " AND caseType = ? "
                     + " AND caseMonth = ? "
                     + " AND caseNumber = ?";
-//
+
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setTimestamp(1, newCaseInformation.fileDate);
             preparedStatement.setString(2, newCaseInformation.employerIDNumber);
@@ -1160,13 +1280,20 @@ public class MEDCase {
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateStatusInformation(newCaseInformation, caseInformation);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void updateFF(MEDCase newCaseInformation, MEDCase caseInformation) {
         MEDCase med = null;
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Update MEDCase set"
                     + " FFList1OrderDate = ?,"
@@ -1227,6 +1354,11 @@ public class MEDCase {
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateFF(newCaseInformation, caseInformation);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
@@ -1751,12 +1883,12 @@ public class MEDCase {
         } 
     }
     
-    public static List<String> loadRelatedCases() {
-        
+    public static List<String> loadRelatedCases() {        
         List<String> caseNumberList = new ArrayList<>();
-            
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "Select caseYear, caseType, caseMonth, caseNumber from MEDCase  where fileDate between DateAdd(DD,-7,GETDATE()) and GETDATE() Order By caseYear DESC, caseNumber DESC";
 
@@ -1771,7 +1903,12 @@ public class MEDCase {
                     + caseNumberRS.getString("caseNumber"));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadRelatedCases();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return caseNumberList;
     }
@@ -1938,8 +2075,9 @@ public class MEDCase {
     public static boolean checkIfFristCaseOfMonth(String year, String type, String month) {
         boolean firstCase = false;
         
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select"
                     + " COUNT(*) AS CasesThisMonth"
@@ -1964,18 +2102,24 @@ public class MEDCase {
             }
             stmt.close();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                checkIfFristCaseOfMonth(year, type, month);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return firstCase;
     }
     
     
     public static List<String> getSettleCaseYears() {
-        
         List<String> yearList = new ArrayList<>();
+        
+        Statement stmt = null;
             
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "SELECT DISTINCT caseYear FROM medcase WHERE caseStatus = 'open' "
                     + "AND settlementDate IS NULL ORDER BY caseYear DESC";
@@ -1989,16 +2133,21 @@ public class MEDCase {
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getSettleCaseYears();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return yearList;
     }
     
     public static List<String> getSettleCaseMonths(String caseYear) {
-        
         List<String> monthList = new ArrayList<>();
-            
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "SELECT DISTINCT caseMonth FROM medcase WHERE caseStatus = 'open' "
                     + "AND settlementDate IS NULL AND caseYear = ? ORDER BY caseMonth ASC";
@@ -2012,15 +2161,21 @@ public class MEDCase {
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getSettleCaseMonths(caseYear);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return monthList;
     }
         
     public static void updateSettledCases(String caseNumber, java.sql.Date settleDate) {
-         NumberFormatService num = NumberFormatService.parseFullCaseNumberNoNGlobal(caseNumber);
+        NumberFormatService num = NumberFormatService.parseFullCaseNumberNoNGlobal(caseNumber);
          
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Update MEDCase set "
                     + " settlementDate = ? "
@@ -2036,17 +2191,22 @@ public class MEDCase {
             preparedStatement.setString(4, num.caseMonth);
             preparedStatement.setString(5, num.caseNumber);
             preparedStatement.executeUpdate();
-
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateSettledCases(caseNumber, settleDate);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void updateClosedCases(String caseNumber) {
-         NumberFormatService num = NumberFormatService.parseFullCaseNumberNoNGlobal(caseNumber);
-         
+        NumberFormatService num = NumberFormatService.parseFullCaseNumberNoNGlobal(caseNumber);
+        
+        Statement stmt = null; 
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Update MEDCase set "
                     + "SendToBoardToClose = ? "
@@ -2062,18 +2222,22 @@ public class MEDCase {
             preparedStatement.setString(4, num.caseMonth);
             preparedStatement.setString(5, num.caseNumber);
             preparedStatement.executeUpdate();
-
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateClosedCases(caseNumber);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
      
      public static List<MEDCase> getSettleList(String caseYear, String caseMonth) {
-        
         List<MEDCase> medcaseList = new ArrayList<>();
-            
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "SELECT "
                     + "MEDCase.caseYear AS CaseYear, "
@@ -2116,16 +2280,21 @@ public class MEDCase {
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getSettleList(caseYear, caseMonth);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return medcaseList;
     }
      
      public static List<MEDCase> getCloseList(Date startDate, Date endDate) {
-        
         List<MEDCase> medcaseList = new ArrayList<>();
-            
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "SELECT "
                     + "MEDCase.caseYear AS CaseYear, "
@@ -2166,14 +2335,21 @@ public class MEDCase {
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getCloseList(startDate, endDate);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return medcaseList;
     }
      
      public static MEDCase loadEntireCaseInformation() {
         MEDCase med = null;
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();  
+            stmt = Database.connectToDB().createStatement();  
             
             String sql = "SELECT * FROM MEDCase"
                     + " WHERE caseYear = ? "
@@ -2296,6 +2472,11 @@ public class MEDCase {
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadEntireCaseInformation();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return med;
     }
