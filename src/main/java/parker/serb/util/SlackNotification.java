@@ -24,7 +24,7 @@ public class SlackNotification {
     public static void sendNotification(Exception ex) {
         
         try {
-            String message = "User: " + Global.activeUser.username + "\n";
+            String message = "User: " + (Global.activeUser != null ? Global.activeUser.username : "NO USER") + "\n" ;
             message += "Class Name: " + Thread.currentThread().getStackTrace()[2].getClassName() + "\n";
             message += "Method Name: " + Thread.currentThread().getStackTrace()[2].getMethodName() + "\n";
             message += "Exception Type: " + ex.getClass().getSimpleName() + "\n";

@@ -135,6 +135,8 @@ public class RootPanel extends javax.swing.JFrame {
      * Sets the card displayed depending on the active section
      * Sets the logo displayed depending on the active section
      */
+    
+    boolean initialLoad = true;
     private void setHeaderCard() {
         CardLayout card = (CardLayout)jPanel9.getLayout();
         
@@ -147,57 +149,99 @@ public class RootPanel extends javax.swing.JFrame {
                 card.show(jPanel9, "card3");
                 jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
                 rEPHeaderPanel1.loadCases();
-                if(REPCase.validateCaseNumber(NumberFormatService.generateFullCaseNumber())) {
+                if(REPCase.validateCaseNumber(NumberFormatService.generateFullCaseNumber()) && initialLoad) {
                     rEPHeaderPanel1.getjComboBox2().setSelectedItem(NumberFormatService.generateFullCaseNumber());
+                } else {
+                    Global.caseYear = null;
+                    Global.caseType = null;
+                    Global.caseMonth = null;
+                    Global.caseNumber = null;
                 }
+                initialLoad = false;
                 break;
             case "ULP":
                 card.show(jPanel9, "card4");
                 jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
                 uLPHeaderPanel1.loadCases();
-                if(ULPCase.validateCaseNumber(NumberFormatService.generateFullCaseNumber())) {
+                if(ULPCase.validateCaseNumber(NumberFormatService.generateFullCaseNumber()) && initialLoad) {
                     uLPHeaderPanel1.getjComboBox2().setSelectedItem(NumberFormatService.generateFullCaseNumber());
+                } else {
+                    Global.caseYear = null;
+                    Global.caseType = null;
+                    Global.caseMonth = null;
+                    Global.caseNumber = null;
                 }
+                initialLoad = false;
                 break;
             case "ORG":
                 card.show(jPanel9, "card5");
                 jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
                 oRGHeaderPanel2.loadCases();
-                if(ORGCase.validateOrg(Global.caseNumber)) {
+                if(ORGCase.validateOrg(Global.caseNumber) && initialLoad) {
                     oRGHeaderPanel2.getjComboBox2().setSelectedItem(ORGCase.getORGName());
+                } else {
+                    Global.caseYear = null;
+                    Global.caseType = null;
+                    Global.caseMonth = null;
+                    Global.caseNumber = null;
                 }
+                initialLoad = false;
                 break;
             case "MED":
                 card.show(jPanel9, "card6");
                 jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
                 mEDHeaderPanel1.loadCases();
-                if(MEDCase.validateCaseNumber(NumberFormatService.generateFullCaseNumber())) {
+                if(MEDCase.validateCaseNumber(NumberFormatService.generateFullCaseNumber()) && initialLoad) {
                     mEDHeaderPanel1.getjComboBox2().setSelectedItem(NumberFormatService.generateFullCaseNumber());
+                } else {
+                    Global.caseYear = null;
+                    Global.caseType = null;
+                    Global.caseMonth = null;
+                    Global.caseNumber = null;
                 }
+                initialLoad = false;
                 break;    
             case "Hearings":
                 card.show(jPanel9, "card7");
                 jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
                 hearingHeaderPanel1.loadCases();
-                if(HearingCase.validateCaseNumber(NumberFormatService.generateFullCaseNumber())) {
+                if(HearingCase.validateCaseNumber(NumberFormatService.generateFullCaseNumber()) && initialLoad) {
                     hearingHeaderPanel1.getjComboBox2().setSelectedItem(NumberFormatService.generateFullCaseNumber());
+                } else {
+                    Global.caseYear = null;
+                    Global.caseType = null;
+                    Global.caseMonth = null;
+                    Global.caseNumber = null;
                 }
+                initialLoad = false;
                 break; 
             case "Civil Service Commission":
                 card.show(jPanel9, "card8");
                 jLabel1.setIcon(new ImageIcon(getClass().getResource("/SPBRSeal.png")));
                 cSCHeaderPanel1.loadCases();
-                if(CSCCase.validateCSC(Global.caseNumber)) {
+                if(CSCCase.validateCSC(Global.caseNumber) && initialLoad) {
                     cSCHeaderPanel1.getjComboBox2().setSelectedItem(CSCCase.getCSCName());
+                } else {
+                    Global.caseYear = null;
+                    Global.caseType = null;
+                    Global.caseMonth = null;
+                    Global.caseNumber = null;
                 }
+                initialLoad = false;
                 break;  
             case "CMDS":
                 card.show(jPanel9, "card9");
                 jLabel1.setIcon(new ImageIcon(getClass().getResource("/SPBRSeal.png")));
                 cMDSHeaderPanel1.loadCases();
-                if(CMDSCase.validateCaseNumber(NumberFormatService.generateFullCaseNumber())) {
+                if(CMDSCase.validateCaseNumber(NumberFormatService.generateFullCaseNumber()) && initialLoad) {
                     cMDSHeaderPanel1.getjComboBox2().setSelectedItem(NumberFormatService.generateFullCaseNumber());
+                } else {
+                    Global.caseYear = null;
+                    Global.caseType = null;
+                    Global.caseMonth = null;
+                    Global.caseNumber = null;
                 }
+                initialLoad = false;
                 break;  
             case "Employer Search":
                 card.show(jPanel9, "card2");
@@ -262,10 +306,10 @@ public class RootPanel extends javax.swing.JFrame {
                 
                 jButton8.setVisible(false);
                 
-                jButton9.setSize(dim);
                 jButton9.setMinimumSize(dim);
                 jButton9.setMaximumSize(dim);
-                jButton9.setVisible(true);
+                jButton9.setEnabled(false);
+                jButton9.setVisible(false);
                 break;
             case "REP":
                 jButton1.setSize(dim);
@@ -314,7 +358,7 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton7.setSize(dim);
                 jButton7.setMinimumSize(dim);
                 jButton7.setMaximumSize(dim);
-                jButton7.setVisible(false);
+                jButton7.setVisible(true);
                 jButton7.setText("Mail Log");
                 
                 jButton8.setSize(dim);
@@ -324,8 +368,13 @@ public class RootPanel extends javax.swing.JFrame {
                 
                 jButton9.setMinimumSize(dim);
                 jButton9.setMaximumSize(dim);
-                jButton9.setEnabled(false);
-                jButton9.setVisible(false);
+                if(Global.caseNumber != null) {
+                    jButton9.setEnabled(false);
+                    jButton9.setVisible(true);
+                } else {
+                    jButton9.setEnabled(false);
+                    jButton9.setVisible(false);
+                }
                 break;
             case "MED":
                 jButton1.setSize(dim);
@@ -382,9 +431,16 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton8.setMaximumSize(dim);
                 jButton8.setVisible(false);
                 
-                jButton9.setSize(dim);
                 jButton9.setMinimumSize(dim);
                 jButton9.setMaximumSize(dim);
+                if(Global.caseNumber != null) {
+                    jButton9.setEnabled(false);
+                    jButton9.setVisible(true);
+                } else {
+                    jButton9.setEnabled(false);
+                    jButton9.setVisible(false);
+                }
+                
                 break;
             case "ULP":
                 jButton1.setSize(dim);
@@ -434,7 +490,7 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton7.setSize(dim);
                 jButton7.setMinimumSize(dim);
                 jButton7.setMaximumSize(dim);
-                jButton7.setVisible(false);
+                jButton7.setVisible(true);
                 jButton7.setText("Mail Log");
                 
                 jButton8.setSize(dim);
@@ -442,11 +498,15 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton8.setMaximumSize(dim);
                 jButton8.setVisible(false);
                 
-                jButton9.setSize(dim);
                 jButton9.setMinimumSize(dim);
                 jButton9.setMaximumSize(dim);
-                jButton9.setVisible(true);
-                jButton9.setEnabled(false);
+                if(Global.caseNumber != null) {
+                    jButton9.setEnabled(false);
+                    jButton9.setVisible(true);
+                } else {
+                    jButton9.setEnabled(false);
+                    jButton9.setVisible(false);
+                }
                 break;
             case "ORG":
                 jButton1.setSize(dim);
@@ -505,9 +565,15 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton8.setVisible(true);
                 jButton8.setText("Mail Log");
                 
-                jButton9.setSize(dim);
                 jButton9.setMinimumSize(dim);
                 jButton9.setMaximumSize(dim);
+                if(Global.caseNumber != null) {
+                    jButton9.setEnabled(false);
+                    jButton9.setVisible(true);
+                } else {
+                    jButton9.setEnabled(false);
+                    jButton9.setVisible(false);
+                }
                 break;
             case "Civil Service Commission":
                 jButton1.setSize(dim);
@@ -566,9 +632,15 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton8.setVisible(true);
                 jButton8.setText("Mail Log");
                 
-                jButton9.setSize(dim);
                 jButton9.setMinimumSize(dim);
                 jButton9.setMaximumSize(dim);
+                if(Global.caseNumber != null) {
+                    jButton9.setEnabled(false);
+                    jButton9.setVisible(true);
+                } else {
+                    jButton9.setEnabled(false);
+                    jButton9.setVisible(false);
+                }
                 break;
             case "CMDS":
                 jButton1.setSize(dim);
@@ -626,9 +698,15 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton8.setVisible(true);
                 jButton8.setText("Mail Log");
                 
-                jButton9.setSize(dim);
                 jButton9.setMinimumSize(dim);
                 jButton9.setMaximumSize(dim);
+                if(Global.caseNumber != null) {
+                    jButton9.setEnabled(false);
+                    jButton9.setVisible(true);
+                } else {
+                    jButton9.setEnabled(false);
+                    jButton9.setVisible(false);
+                }
                 break;
             case "Hearings":
                 jButton1.setSize(dim);
@@ -686,11 +764,15 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton8.setVisible(false);
                 jButton8.setText("Mail Log");
                 
-                jButton9.setSize(dim);
                 jButton9.setMinimumSize(dim);
                 jButton9.setMaximumSize(dim);
-                jButton9.setVisible(true);
-                jButton9.setEnabled(false);
+                if(Global.caseNumber != null) {
+                    jButton9.setEnabled(false);
+                    jButton9.setVisible(true);
+                } else {
+                    jButton9.setEnabled(false);
+                    jButton9.setVisible(false);
+                }
                 break;    
             case "Employer Search":
                 jButton1.setVisible(false);

@@ -43,16 +43,20 @@ public class REPHeaderPanel extends javax.swing.JPanel {
             if(caseNumberComboBox.getSelectedItem() != null) {
                 Global.root.getrEPRootPanel1().getjTabbedPane1().setSelectedIndex(0);
                 if(caseNumberComboBox.getSelectedItem().toString().trim().equals("")) {
+                    Global.root.getjButton9().setVisible(false);
                     if(Global.root != null) {
-                        
                         Global.root.getjButton2().setEnabled(false);
                         Global.root.getrEPRootPanel1().clearAll();
                     }
                 } else {
                     Global.root.getjButton2().setEnabled(true);
                     loadInformation();
-                    if(Global.root.getrEPRootPanel1().getjTabbedPane1().getSelectedIndex() == 0)
+                    if(Global.root.getrEPRootPanel1().getjTabbedPane1().getSelectedIndex() == 0) {
                         Global.root.getrEPRootPanel1().getActivityPanel1().loadAllActivity();
+                        Global.root.getjButton9().setVisible(true);
+                        Global.root.getjButton2().setText("Add Entry");
+                        Global.root.getjButton2().setEnabled(true);
+                    }
                     Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
                 }
             }
