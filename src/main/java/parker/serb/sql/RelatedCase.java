@@ -1,14 +1,15 @@
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
 import parker.serb.Global;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -24,10 +25,9 @@ public class RelatedCase {
     
     
     public static void addNewRelatedCase(String caseNumber) {
-        
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert INTO RelatedCase VALUES (?,?,?,?,?)";
 
@@ -43,15 +43,19 @@ public class RelatedCase {
             Activity.addActivty("Added " + caseNumber + " as Related Case", null);
 
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                addNewRelatedCase(caseNumber);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void addNewMultiCase(String caseNumber) {
-        
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert INTO RelatedCase VALUES (?,?,?,?,?)";
 
@@ -65,18 +69,22 @@ public class RelatedCase {
             preparedStatement.executeUpdate();
             
             Activity.addActivty("Added " + caseNumber + " as Multi Case", null);
-
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                addNewMultiCase(caseNumber);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static List loadRelatedCases() {
         List<String> relatedCasesList = new ArrayList<>();
-            
+        
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "select * from RelatedCase where"
                     + " caseYear = ? AND"
@@ -96,18 +104,22 @@ public class RelatedCase {
                 relatedCasesList.add((String) relatedCaseRS.getString("relatedCaseNumber"));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadRelatedCases();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return relatedCasesList;
     }
     
     public static boolean checkCaseIsAlreadyRelated(String caseNumber) {
-        
         boolean newCase = true;
-            
+        
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "select * from RelatedCase where"
                     + " caseYear = ? AND"
@@ -128,18 +140,21 @@ public class RelatedCase {
             while (relatedCaseRS.next()) {
                 newCase = false;
             }
-            
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                checkCaseIsAlreadyRelated(caseNumber);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return newCase;
     }
     
     public static void removeRelatedCase(String caseNumber) {
-            
+        Statement stmt = null;    
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Delete from RelatedCase where"
                     + " caseYear = ? AND"
@@ -158,15 +173,19 @@ public class RelatedCase {
             preparedStatement.executeUpdate();
             Activity.addActivty("Removed " + caseNumber + " from Related Case", null);
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                removeRelatedCase(caseNumber);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void removeMultiCase(String caseNumber) {
-            
+        Statement stmt = null;    
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Delete from RelatedCase where"
                     + " caseYear = ? AND"
@@ -185,7 +204,12 @@ public class RelatedCase {
             preparedStatement.executeUpdate();
             Activity.addActivty("Removed " + caseNumber + " from Multi Case", null);
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                removeMultiCase(caseNumber);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
 }

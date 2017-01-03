@@ -5,17 +5,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.dbutils.DbUtils;
 import parker.serb.Global;
-import static parker.serb.sql.REPBoardActionType.loadAllREPBoardActionTypes;
 import parker.serb.util.NumberFormatService;
 import parker.serb.util.SlackNotification;
 
@@ -51,9 +48,7 @@ public class REPElectionSiteInformation {
         ) 
     {
         Statement stmt = null;
-            
         try {
-
             stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert INTO REPElectionSiteInformation "
@@ -88,33 +83,21 @@ public class REPElectionSiteInformation {
             
             Activity.addActivty("Added On-Site Election Location", siteDate);
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
-                addSiteLocation(
-                    siteDate,
-                    sitePlace,
-                    siteAddress1,
-                    siteAddress2,
-                    siteLocation,
-                    siteStartTime,
-                    startAMPM,
-                    siteEndTime,
-                    endAMPM
-                );
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+                addSiteLocation(siteDate, sitePlace, siteAddress1, siteAddress2, siteLocation, siteStartTime, startAMPM, siteEndTime, endAMPM);
+            } 
         } catch (ParseException ex) {
-            Logger.getLogger(REPElectionSiteInformation.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void deleteSiteInformation(int id) {
-            
+        Statement stmt = null;    
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Delete from REPElectionSiteInformation where id = ?";
 
@@ -124,28 +107,20 @@ public class REPElectionSiteInformation {
             preparedStatement.executeUpdate();
             Activity.addActivty("Removed Site Election Information", null);
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 deleteSiteInformation(id);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
-    
-    /**
-     * Loads all activity for a specified case number, pulls the case number
-     * from global
-     * @param searchTerm term to limit the search results
-     * @return List of Activities
-     */
+
     public static List loadSiteInformationByCaseNumber() {
         List<REPElectionSiteInformation> activityList = new ArrayList<>();
         
-        Statement stmt = null;
-            
+        Statement stmt = null; 
         try {
-
             stmt = Database.connectToDB().createStatement();
 
             String sql = "select *"
@@ -176,12 +151,12 @@ public class REPElectionSiteInformation {
                 activityList.add(info);
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 loadSiteInformationByCaseNumber();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return activityList;
     }

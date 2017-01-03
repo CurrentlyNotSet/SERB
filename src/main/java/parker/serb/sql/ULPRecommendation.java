@@ -7,9 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import static parker.serb.sql.ULPCase.loadULPCases;
+import org.apache.commons.dbutils.DbUtils;
 import parker.serb.util.SlackNotification;
 
 /**
@@ -23,18 +21,12 @@ public class ULPRecommendation {
     public String code;
     public String description;
 
-    /**
-     * Loads all activity for a specified case number, pulls the case number
-     * from global
-     *
-     * @return List of Activities
-     */
     public static List loadAllULPRecommendations() {
         List<ULPRecommendation> recommendationList = new ArrayList<>();
 
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "select * from ULPRecommendation ORDER BY code";
 
@@ -51,12 +43,12 @@ public class ULPRecommendation {
                 recommendationList.add(act);
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 loadAllULPRecommendations();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return recommendationList;
     }
@@ -64,9 +56,9 @@ public class ULPRecommendation {
     public static List searchULPRecommendations(String[] param) {
         List<ULPRecommendation> recommendationList = new ArrayList<>();
 
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM ULPRecommendation";
             if (param.length > 0) {
@@ -98,12 +90,12 @@ public class ULPRecommendation {
                 recommendationList.add(act);
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 searchULPRecommendations(param);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return recommendationList;
     }
@@ -111,8 +103,9 @@ public class ULPRecommendation {
     public static ULPRecommendation getULPReccomendationByID(int id) {
         ULPRecommendation item = new ULPRecommendation();
 
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM ULPRecommendation WHERE id = ?";
 
@@ -128,20 +121,20 @@ public class ULPRecommendation {
                 item.description = rs.getString("description") == null ? "" : rs.getString("description");
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 getULPReccomendationByID(id);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return item;
     }
 
     public static void createULPRec(ULPRecommendation item) {
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert INTO ULPRecommendation "
                     + "(active, code, description)"
@@ -154,18 +147,19 @@ public class ULPRecommendation {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 createULPRec(item);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
 
     public static void updateULPRec(ULPRecommendation item) {
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE ULPRecommendation SET "
                     + "active = ?, "
@@ -181,12 +175,12 @@ public class ULPRecommendation {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 updateULPRec(item);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
 }

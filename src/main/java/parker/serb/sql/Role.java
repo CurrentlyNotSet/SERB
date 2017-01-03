@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.dbutils.DbUtils;
 import parker.serb.util.SlackNotification;
 
 /**
@@ -26,9 +27,10 @@ public class Role {
     
     public static List<Role> loadActiveRoles() {
         List<Role> roleList = new ArrayList<>();
-
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM Role WHERE active = 1";
 
@@ -44,14 +46,13 @@ public class Role {
                 roleList.add(act);
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 loadActiveRoles();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return roleList;
     }
-    
 }

@@ -7,11 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.dbutils.DbUtils;
 import parker.serb.Global;
-import static parker.serb.sql.REPBoardActionType.loadAllREPBoardActionTypes;
 import parker.serb.util.SlackNotification;
 
 /**
@@ -26,18 +23,10 @@ public class REPElectionMultiCase {
     public String caseMonth;
     public String caseNumber;
     public String multiCase;
-    
-    /**
-     * Add an activity to the activity table, pulls the case number from the
-     * current selected case
-     * @param action the action that has been preformed
-     * @param fileName the fileName of a document - null if no file
-     */
+
     public static void addMultiCase(String caseNumber) {
         Statement stmt = null;
-            
         try {
-
             stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert INTO REPElectionMultiCase ("
@@ -57,24 +46,22 @@ public class REPElectionMultiCase {
             preparedStatement.setString(5, caseNumber);
 
             preparedStatement.executeUpdate();
-
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 addMultiCase(caseNumber);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static boolean checkCaseIsAlreadyPresent(String caseNumber) {
-        
         boolean newCase = true;
-            
+        
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "select * from REPElectionMultiCase where"
                     + " caseYear = ? AND"
@@ -95,23 +82,21 @@ public class REPElectionMultiCase {
             while (relatedCaseRS.next()) {
                 newCase = false;
             }
-            
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 checkCaseIsAlreadyPresent(caseNumber);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return newCase;
     }
     
     public static void removeMultiCase(String caseNumber) {
-            
+        Statement stmt = null;    
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Delete from REPElectionMultiCase where"
                     + " caseYear = ? AND"
@@ -129,28 +114,20 @@ public class REPElectionMultiCase {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 removeMultiCase(caseNumber);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
-    /**
-     * Loads all activity for a specified case number, pulls the case number
-     * from global
-     * @param searchTerm term to limit the search results
-     * @return List of Activities
-     */
     public static List loadMultiCaseNumber() {
         List<String> activityList = new ArrayList<>();
         
-        Statement stmt = null;
-            
+        Statement stmt = null;    
         try {
-
             stmt = Database.connectToDB().createStatement();
 
             String sql = "select multicase"
@@ -172,12 +149,12 @@ public class REPElectionMultiCase {
                 activityList.add(caseActivity.getString("multiCase"));
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 loadMultiCaseNumber();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return activityList;
     }

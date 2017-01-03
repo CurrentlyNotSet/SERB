@@ -5,14 +5,15 @@
  */
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -30,8 +31,9 @@ public class CMDSReport {
     public static List<CMDSReport> loadAllReports(String[] param) {
         List<CMDSReport> list = new ArrayList<>();
 
-        try {
-            Statement stmt = Database.connectToDB().createStatement();
+        Statement stmt = null;
+        
+        try {stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM CMDSReport";
             if (param.length > 0) {
@@ -65,8 +67,12 @@ public class CMDSReport {
                 list.add(item);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadAllReports(param);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return list;
     }
@@ -74,8 +80,10 @@ public class CMDSReport {
     public static List<CMDSReport> loadActiveReportsBySection(String section) {
         List<CMDSReport> list = new ArrayList<>();
 
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM CMDSReport WHERE active = 1 AND section = ?";
 
@@ -94,8 +102,12 @@ public class CMDSReport {
                 list.add(item);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadActiveReportsBySection(section);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return list;
     }
@@ -103,8 +115,10 @@ public class CMDSReport {
     public static CMDSReport getReportByID(int id) {
         CMDSReport item = new CMDSReport();
 
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM CMDSReport WHERE id = ?";
 
@@ -122,15 +136,21 @@ public class CMDSReport {
                 item.parameters = rs.getString("parameters") == null ? "" : rs.getString("parameters");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getReportByID(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return item;
     }
     
     public static void createReport(CMDSReport item) {
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert INTO CMDSReport ("
                     + "active, "
@@ -154,13 +174,20 @@ public class CMDSReport {
             
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                createReport(item);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
 
     public static void updateReport(CMDSReport item) {
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE CMDSReport SET "
                     + "active = ?, "
@@ -180,8 +207,12 @@ public class CMDSReport {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateReport(item);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
-    
 }

@@ -5,6 +5,7 @@
  */
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,8 +13,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -37,9 +38,9 @@ public class PostalOut {
     public static List<PostalOut> getPostalOutBySection(String section) {
         List<PostalOut> emailList = new ArrayList<>();
         
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT C.id, C.section, C.caseYear, C.caseType, "
                     + "C.caseMonth, C.caseNumber, C.person, C.addressBlock, C.userID, C.suggestedSendDate, "
@@ -72,7 +73,12 @@ public class PostalOut {
                 emailList.add(eml);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getPostalOutBySection(section);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return emailList;
     }
@@ -80,8 +86,9 @@ public class PostalOut {
     public static PostalOut getPostalOutByID(int id) {
         PostalOut eml = null;
         
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "select * from PostalOut where id = ?";
             
@@ -105,14 +112,20 @@ public class PostalOut {
                 eml.historyDescription = emailListRS.getString("historyDescription");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getPostalOutByID(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return eml;
     }
     
     public static void markEmailReadyToSend(int id) {
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE PostalOut SET okToSend = true where id = ?";
 
@@ -121,14 +134,19 @@ public class PostalOut {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                markEmailReadyToSend(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static int insertPostalOut(PostalOut item) {
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert INTO PostalOut ("
                     + "section, "       //01
@@ -165,15 +183,21 @@ public class PostalOut {
                 return newRow.getInt(1);
             }            
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                insertPostalOut(item);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return 0;
     }
     
     
     public static void updatePostalOut(PostalOut item) {
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE PostalOut SET "
                     + "suggestedSendDate = ? "
@@ -185,13 +209,19 @@ public class PostalOut {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updatePostalOut(item);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void removeEntry(int id){
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "DELETE FROM PostalOut WHERE id = ?";
 
@@ -200,7 +230,12 @@ public class PostalOut {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                removeEntry(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
 }

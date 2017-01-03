@@ -1,14 +1,15 @@
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
 import parker.serb.Global;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -30,9 +31,9 @@ public class MEDCaseSearchData {
     public static List loadMEDCaseList() {
         List<MEDCaseSearchData> ulpCaseList = new ArrayList<>();
             
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "select * from MEDCaseSearch ORDER BY id DESC";
 
@@ -55,17 +56,20 @@ public class MEDCaseSearchData {
                 ulpCaseList.add(repCase);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadMEDCaseList();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return ulpCaseList;
     }
     
     public static void createNewCaseEntry(String year, String type, String month, String number) {
-            
+        Statement stmt = null; 
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "INSERT INTO MEDCaseSearch (caseYear, caseType, caseMonth, caseNumber) VALUES (?,?,?,?)";
 
@@ -76,17 +80,20 @@ public class MEDCaseSearchData {
             preparedStatement.setString(4, number);
 
             preparedStatement.executeUpdate();
-            
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                createNewCaseEntry(year, type, month, number);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void updateCaseEntryFromParties(String employer, String unionName) {
-            
+        Statement stmt = null;  
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE MEDCaseSearch SET"
                     + " employerName = ?,"
@@ -105,18 +112,22 @@ public class MEDCaseSearchData {
             preparedStatement.setString(6, Global.caseNumber);
 
             preparedStatement.executeUpdate();
-            
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateCaseEntryFromParties(employer, unionName);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void updateCaseEntryFromCaseStatus(
-            String employerID, String bunnumber) {
-            
+            String employerID, String bunnumber) 
+    {
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE MEDCaseSearch SET"
                     + " employerID = ?,"
@@ -137,9 +148,13 @@ public class MEDCaseSearchData {
             preparedStatement.setString(7, Global.caseNumber);
             
             preparedStatement.executeUpdate();
-            
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateCaseEntryFromCaseStatus(employerID, bunnumber);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
 }

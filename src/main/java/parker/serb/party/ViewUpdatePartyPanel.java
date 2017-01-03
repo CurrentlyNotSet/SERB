@@ -16,8 +16,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
@@ -29,6 +27,7 @@ import parker.serb.sql.CaseParty;
 import parker.serb.sql.NamePrefix;
 import parker.serb.sql.Party;
 import parker.serb.util.CancelUpdate;
+import parker.serb.util.SlackNotification;
 
 //TODO: Allow for a party to be updated from this panel
 //TODO: Reload Table after changes have been made to name, phone number, email
@@ -117,7 +116,7 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
                         desktop = Desktop.getDesktop();
                         desktop.mail(mailURI);
                     } catch (URISyntaxException | IOException ex) {
-                        Logger.getLogger(ViewUpdatePartyPanel.class.getName()).log(Level.SEVERE, null, ex);
+                        SlackNotification.sendNotification(ex);
                     }
                 }
             }

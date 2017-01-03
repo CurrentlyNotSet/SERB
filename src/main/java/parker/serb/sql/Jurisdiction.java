@@ -1,17 +1,14 @@
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.dbutils.DbUtils;
-import parker.serb.Global;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -22,20 +19,12 @@ public class Jurisdiction {
     public int id;
     public String jurisCode;
     public String jurisName;
-    
-    /**
-     * Loads all activity for a specified case number, pulls the case number
-     * from global
-     * @param searchTerm term to limit the search results
-     * @return List of Activities
-     */
+
     public static List loadJurisdictionList() {
         List<Jurisdiction> jurisList = new ArrayList<>();
         
-        Statement stmt = null;
-            
+        Statement stmt = null;   
         try {
-
             stmt = Database.connectToDB().createStatement();
 
             String sql = "select * from Jurisdiction ORDER BY jurisCode ASC";
@@ -52,8 +41,12 @@ public class Jurisdiction {
                 jurisList.add(juris);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadJurisdictionList();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return jurisList;
     }

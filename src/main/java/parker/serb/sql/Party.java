@@ -5,15 +5,16 @@
  */
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
 import parker.serb.util.NumberFormatService;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -49,9 +50,9 @@ public class Party {
     public static Party getPartyByID(String id) {
         Party party = new Party();
         
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "select * from Party where id = ? ";
 
@@ -82,7 +83,12 @@ public class Party {
                 party.fax = partyRS.getString("fax") == null ? null : NumberFormatService.convertStringToPhoneNumber(partyRS.getString("fax"));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getPartyByID(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return party;
     }
@@ -92,11 +98,11 @@ public class Party {
      * @return A list of party instances of the found parties
      */
     public static List loadAllParties() {
-        List parties = new ArrayList<Party>();
-            
+        List parties = new ArrayList<>();
+        
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "select * from Party";
 
@@ -130,7 +136,12 @@ public class Party {
                 parties.add(party);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadAllParties();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return parties;
     }
@@ -140,9 +151,9 @@ public class Party {
      * @param party the party instance that should be created
      */
     public static void createParty(Party party) {
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert INTO Party VALUES ("
                     + "?,"
@@ -187,13 +198,19 @@ public class Party {
             preparedStatement.setString(19, party.fax.equals("") ? null : party.fax);
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                createParty(party);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void updateParty(CaseParty party, int id) {
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Update Party set "
                     + "prefix = ?,"
@@ -239,7 +256,12 @@ public class Party {
             
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateParty(party, id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
 }

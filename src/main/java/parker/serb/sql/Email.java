@@ -5,6 +5,7 @@
  */
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,9 +13,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import parker.serb.Global;
+import org.apache.commons.dbutils.DbUtils;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -39,9 +39,10 @@ public class Email {
     public static List getAllEmails(String section) {
         List emailList = new ArrayList<>();
         
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "select * from Email where Section = ? and readyToFile = ?";
             
@@ -69,14 +70,21 @@ public class Email {
                 emailList.add(docket);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getAllEmails(section);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return emailList;
     }
     
     public static void deleteEmailEntry(int id) {
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Delete from Email where id = ?";
             
@@ -86,15 +94,22 @@ public class Email {
             preparedStatement.executeUpdate();
             
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                deleteEmailEntry(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static Email getEmailByID(String id) {
         Email email = null;
         
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "select * from Email where id = ?";
             
@@ -112,7 +127,12 @@ public class Email {
                 email.emailBody = emailListRS.getString("emailBody");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getEmailByID(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return email;
     }
@@ -120,8 +140,10 @@ public class Email {
     public static String getEmailBodyFileByID(String id) {
         String fileName = "";
         
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "select * from Email where id = ?";
             
@@ -134,7 +156,12 @@ public class Email {
                 fileName = emailListRS.getString("emailBodyFileName");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getEmailBodyFileByID(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return fileName;
     }

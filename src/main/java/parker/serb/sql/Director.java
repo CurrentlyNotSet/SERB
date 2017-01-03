@@ -5,14 +5,15 @@
  */
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -30,8 +31,10 @@ public class Director {
     public static List<Director> loadAllDirectors(String[] param) {
         List<Director> list = new ArrayList<>();
 
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM Director";
             if (param.length > 0) {
@@ -64,8 +67,12 @@ public class Director {
                 list.add(item);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadAllDirectors(param);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return list;
     }
@@ -73,8 +80,10 @@ public class Director {
     public static Director getDirectorByID(int id) {
         Director item = new Director();
 
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM Director WHERE id = ?";
 
@@ -91,15 +100,21 @@ public class Director {
                 item.Name = rs.getString("Name") == null ? "" : rs.getString("Name");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getDirectorByID(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return item;
     }
 
     public static void createDirector(Director item) {
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert INTO Director "
                     + "(active, Agency, Title, Name)"
@@ -112,13 +127,20 @@ public class Director {
             preparedStatement.setString(3, item.Name.equals("") ? null : item.Name.trim());
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                createDirector(item);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
 
     public static void updateDirector(Director item) {
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE Director SET "
                     + "active = ?, "
@@ -136,10 +158,12 @@ public class Director {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateDirector(item);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
-    
-    
-    
 }

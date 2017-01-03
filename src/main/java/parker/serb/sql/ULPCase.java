@@ -9,11 +9,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.dbutils.DbUtils;
 import parker.serb.Global;
-import static parker.serb.sql.User.updateApplicationVersion;
 import parker.serb.util.NumberFormatService;
 import parker.serb.util.SlackNotification;
 
@@ -57,11 +54,11 @@ public class ULPCase {
     public String note;
     
     public static List loadULPCaseNumbers() {
-        
         List caseNumberList = new ArrayList<>();
-            
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select TOP 250"
                     + " caseYear,"
@@ -87,22 +84,22 @@ public class ULPCase {
                 caseNumberList.add(createdCaseNumber);
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 loadULPCaseNumbers();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         } 
         return caseNumberList;
     }
     
     public static List loadULPCases() {
-        
         List caseNumberList = new ArrayList<>();
-            
+        
+        Statement stmt = null;    
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "Select TOP 50 caseYear, caseType, caseMonth, caseNumber, employerIDNumber, barginingUnitNo from ULPCase Order By caseYear DESC, caseNumber DESC";
 
@@ -122,22 +119,22 @@ public class ULPCase {
                 caseNumberList.add(ulpCase);
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 loadULPCases();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return caseNumberList;
     }
     
     public static List<String> loadRelatedCases() {
-        
         List<String> caseNumberList = new ArrayList<>();
-            
+        
+        Statement stmt =null;  
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "Select caseYear, caseType, caseMonth, caseNumber from ULPCase  where fileDate between DateAdd(DD,-7,GETDATE()) and GETDATE() Order By caseYear DESC, caseNumber DESC";
 
@@ -152,21 +149,22 @@ public class ULPCase {
                     + caseNumberRS.getString("caseNumber"));
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 loadRelatedCases();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return caseNumberList;
     }
     
     public static String loadNote() {
         String note = null;
-            
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select Note"
                     + " from ULPCase"
@@ -186,21 +184,21 @@ public class ULPCase {
             caseNumberRS.next();
             
             note = caseNumberRS.getString("note");
-
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 loadNote();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return note;
     }
 
     public static void updateNote(String note) {
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Update ULPCase"
                     + " set note = ?"
@@ -221,20 +219,21 @@ public class ULPCase {
             Audit.addAuditEntry("Updated Note for " + NumberFormatService.generateFullCaseNumber());
             Activity.addActivty("Updated Note", null);
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 updateNote(note);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static String loadInvestigationReveals() {
         String investigationReveals = null;
-            
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select investigationReveals"
                     + " from ULPCase"
@@ -254,21 +253,21 @@ public class ULPCase {
             caseNumberRS.next();
             
             investigationReveals = caseNumberRS.getString("investigationReveals");
-
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 loadInvestigationReveals();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return investigationReveals;
     }
 
     public static void updateInvestigationReveals(String note) {
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Update ULPCase"
                     + " set investigationReveals = ?"
@@ -289,20 +288,21 @@ public class ULPCase {
             Audit.addAuditEntry("Updated Investigation Reveals for " + NumberFormatService.generateFullCaseNumber());
             Activity.addActivty("Updated Investigation Reveals", null);
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 updateInvestigationReveals(note);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static String loadRecommendation() {
         String recommendation = null;
-            
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select recommendation"
                     + " from ULPCase"
@@ -322,23 +322,22 @@ public class ULPCase {
             caseNumberRS.next();
             
             recommendation = caseNumberRS.getString("recommendation");
-
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 loadRecommendation();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return recommendation;
     }
 
     public static void updateRecommendation(String note, String orginal) {
+        Statement stmt = null;
         try {
-            
             if(!note.equals(orginal)) {
-                Statement stmt = Database.connectToDB().createStatement();
+                stmt = Database.connectToDB().createStatement();
 
                 String sql = "Update ULPCase"
                         + " set recommendation = ?"
@@ -360,20 +359,21 @@ public class ULPCase {
                 Activity.addActivty("Updated Recommendation", null);
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 updateRecommendation(note, orginal);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static String loadStatement() {
         String recommendation = null;
-            
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select statement"
                     + " from ULPCase"
@@ -395,21 +395,22 @@ public class ULPCase {
             recommendation = caseNumberRS.getString("statement");
 
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 loadStatement();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return recommendation;
     }
     
     public static ULPCase loadStatus() {
         ULPCase ulp = new ULPCase();
-            
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select"
                     + " employerIDNumber,"
@@ -474,22 +475,22 @@ public class ULPCase {
             ulp.fileDate = caseNumberRS.getTimestamp("fileDate");
             ulp.probableCause = caseNumberRS.getBoolean("probableCause");
             
-            
             stmt.close();
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 loadStatus();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return ulp;
     }
 
     public static void updateStatement(String note) {
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Update ULPCase"
                     + " set statement = ?"
@@ -510,12 +511,12 @@ public class ULPCase {
             Audit.addAuditEntry("Updated Statement for " + NumberFormatService.generateFullCaseNumber());
             Activity.addActivty("Updated Statement", null);
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 updateStatement(note);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
@@ -527,8 +528,9 @@ public class ULPCase {
             return false;
         }
         
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select Count(*) As results"
                     + " from ULPCase"
@@ -548,16 +550,14 @@ public class ULPCase {
             validRS.next();
             
             valid = validRS.getInt("results") > 0;
-            
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 validateCaseNumber(fullCaseNumber);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
-        
         return valid;
     }
 
@@ -566,8 +566,9 @@ public class ULPCase {
             String caseMonth, 
             String caseNumber) 
     {
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert into ULPCase"
                     + " (caseYear,"
@@ -608,20 +609,21 @@ public class ULPCase {
                 Global.root.getuLPHeaderPanel1().getjComboBox2().setSelectedItem(fullCaseNumber); 
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 createCase(caseYear, caseType, caseMonth, caseNumber);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static ULPCase loadHeaderInformation() {
-        
         ULPCase ulp = null;
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select fileDate, currentStatus, investigatorID, aljID "
                     + "from ULPCase"
@@ -647,19 +649,20 @@ public class ULPCase {
                 
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 loadHeaderInformation();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return ulp;
     }
     
     public static void updateCaseStatusInformation(ULPCase newCaseInformation, ULPCase caseInformation) {
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement(); 
+            stmt = Database.connectToDB().createStatement(); 
 
             String sql = "Update ULPCase"
                 + " set employerIDNumber = ?,"
@@ -729,12 +732,12 @@ public class ULPCase {
                         newCaseInformation.employerIDNumber);
             } 
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 updateCaseStatusInformation(newCaseInformation, caseInformation);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
@@ -954,8 +957,9 @@ public class ULPCase {
         String[] parsedCase = caseNumber.trim().split("-");
         String to = "";
         
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select"
                     + " investigatorID,"
@@ -981,14 +985,13 @@ public class ULPCase {
                     to = User.getNameByID(caseNumberRS.getInt("investigatorID"));
                 }
             }
-            stmt.close();
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 ULPDocketTo(caseNumber);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return to;
     }
@@ -997,8 +1000,9 @@ public class ULPCase {
         String[] parsedCase = caseNumber.trim().split("-");
         String to = "";
         
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select"
                     + " mediatorAssignedID"
@@ -1021,14 +1025,13 @@ public class ULPCase {
                     DocketNotifications.addNotification(caseNumber, "ULP", caseNumberRS.getInt("mediatorAssignedID"));
                 } 
             }
-            stmt.close();
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 ULPDocketNotification(caseNumber);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return to;
     }
@@ -1036,8 +1039,9 @@ public class ULPCase {
     public static boolean checkIfFristCaseOfMonth(String year, String type, String month) {
         boolean firstCase = false;
         
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select"
                     + " COUNT(*) AS CasesThisMonth"
@@ -1060,30 +1064,27 @@ public class ULPCase {
                      firstCase = true;
                  }
             }
-            stmt.close();
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 checkIfFristCaseOfMonth(year, type, month);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
-        
         return firstCase;
     }
     
     public static ULPCase loadULPCaseDetails(String caseYear,
             String caseType,
             String caseMonth,
-            String caseNumber) {
-        
+            String caseNumber) 
+    {
         ULPCase ulpCase = new ULPCase();
-            
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
-            
-            
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "Select *"
                     + " from ULPCase"
@@ -1133,12 +1134,12 @@ public class ULPCase {
                 ulpCase.note = rs.getString("note") == null ? "" : rs.getString("note").trim();
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 loadULPCaseDetails(caseYear, caseType, caseMonth, caseNumber);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return ulpCase;
     }

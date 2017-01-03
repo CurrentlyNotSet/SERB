@@ -1,5 +1,6 @@
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,8 +9,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
 import parker.serb.Global;
 import parker.serb.util.SlackNotification;
 
@@ -25,7 +25,6 @@ public class HearingCase {
     public String caseMonth;
     public String caseNumber;
     public String openClose;
-    
     
     public String caseStatusNotes;
     public Timestamp boardActionPCDate;
@@ -50,14 +49,13 @@ public class HearingCase {
     public Timestamp opinion;
     public String companionCases;
     
-    
-    
     public static List loadHearingCaseNumbers() {
-        
         List caseNumberList = new ArrayList<>();
+        
+        Statement stmt = null;
             
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select TOP 250"
                     + " caseYear,"
@@ -84,17 +82,23 @@ public class HearingCase {
                 caseNumberList.add(createdCaseNumber);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadHearingCaseNumbers();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return caseNumberList;
     }
     
     public static Timestamp getBoardActionPCDate() {
-        
         Timestamp boardActionPCDate = null;
-            
+        
+        Statement stmt = null;
+           
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "Select boardActionPCDate from HearingCase"
                     + " where caseYear = ?" 
@@ -114,15 +118,21 @@ public class HearingCase {
                 boardActionPCDate = caseNumberRS.getTimestamp("boardActionPCDate");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getBoardActionPCDate();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return boardActionPCDate;
     }
 
-    public static void createCase(String caseNumber) 
-    {
+    public static void createCase(String caseNumber) {
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert into HearingCase"
                     + " (caseYear,"
@@ -163,14 +173,19 @@ public class HearingCase {
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                createCase(caseNumber);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static HearingCase loadHeaderInformation() {
-        
+        Statement stmt = null;
         HearingCase hearings = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select aljID,"
                     + " boardActionPCDate,"
@@ -199,13 +214,20 @@ public class HearingCase {
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadHeaderInformation();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return hearings;
     }
     
     public static void updateHearingCaseInformation(HearingCase newCaseInformation, HearingCase caseInformation) {
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement(); 
+            stmt = Database.connectToDB().createStatement(); 
 
             String sql = "Update HearingCase"
                 + " set caseStatusNotes = ?,"
@@ -278,6 +300,11 @@ public class HearingCase {
             } 
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateHearingCaseInformation(newCaseInformation, caseInformation);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
@@ -491,11 +518,12 @@ public class HearingCase {
     }
     
     public static HearingCase loadHearingCaseInformation() {
-        
         HearingCase hearingCase = new HearingCase();
+        
+        Statement stmt = null;
             
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "Select caseStatusNotes,"
                     + " openClose,"
@@ -559,7 +587,12 @@ public class HearingCase {
                 hearingCase.companionCases = rs.getString("companionCases");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadHearingCaseInformation();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return hearingCase;
     }
@@ -567,8 +600,9 @@ public class HearingCase {
     public static String getALJemail() {
         String email = "";
         
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select emailAddress "
                     + "from Users"
@@ -587,7 +621,12 @@ public class HearingCase {
             }
             stmt.close();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getALJemail();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return email;
     }
@@ -596,12 +635,14 @@ public class HearingCase {
         String[] caseNumberParts = fullCaseNumber.split("-");
         boolean valid = false;
         
+        Statement stmt = null;
+        
         if(caseNumberParts.length != 4) {
             return false;
         }
         
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select Count(*) As results"
                     + " from HearingCase"
@@ -621,11 +662,14 @@ public class HearingCase {
             validRS.next();
             
             valid = validRS.getInt("results") > 0;
-            
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                validateCaseNumber(fullCaseNumber);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
-        
         return valid;
     }
 }

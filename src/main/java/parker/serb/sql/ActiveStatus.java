@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import org.apache.commons.dbutils.DbUtils;
+import static parker.serb.sql.Audit.addAuditEntry;
 import parker.serb.util.SlackNotification;
 
 public class ActiveStatus {

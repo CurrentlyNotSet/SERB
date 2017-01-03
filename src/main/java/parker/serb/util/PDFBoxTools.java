@@ -9,8 +9,6 @@ import java.awt.Dimension;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 
 /**
@@ -54,7 +52,7 @@ public class PDFBoxTools {
                         lastSpace = spaceIndex;
                     }
                 } catch (IOException ex) {
-                    Logger.getLogger(PDFBoxTools.class.getName()).log(Level.SEVERE, null, ex);
+                    SlackNotification.sendNotification(ex);
                 }
             }
         }

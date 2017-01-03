@@ -5,14 +5,15 @@
  */
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -29,8 +30,9 @@ public class HearingRoom {
     public static List<HearingRoom> loadAllHearingRooms(String[] param) {
         List<HearingRoom> list = new ArrayList<>();
 
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM hearingroom";
             if (param.length > 0) {
@@ -63,8 +65,12 @@ public class HearingRoom {
                 list.add(item);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadAllHearingRooms(param);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return list;
     }
@@ -72,8 +78,9 @@ public class HearingRoom {
     public static HearingRoom getHearingRoomByID(int id) {
         HearingRoom item = new HearingRoom();
 
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM HearingRoom WHERE id = ?";
 
@@ -90,15 +97,21 @@ public class HearingRoom {
                 item.roomEmail = rs.getString("roomEmail") == null ? "" : rs.getString("roomEmail").trim();
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getHearingRoomByID(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return item;
     }
 
     public static void createHearingRoom(HearingRoom item) {
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert INTO HearingRoom "
                     + "(active, roomAbbreviation, roomName, roomEmail)"
@@ -111,13 +124,20 @@ public class HearingRoom {
             preparedStatement.setString(3, item.roomEmail.equals("") ? null : item.roomEmail.trim());
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                createHearingRoom(item);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
 
     public static void updateHearingRoom(HearingRoom item) {
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE HearingRoom SET "
                     + "active = ?, "
@@ -135,15 +155,21 @@ public class HearingRoom {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateHearingRoom(item);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static List<HearingRoom> loadActiveHearingRooms() {
         List<HearingRoom> list = new ArrayList<>();
 
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             String sql = "SELECT * FROM hearingroom WHERE active = 1 ORDER BY roomAbbreviation";
             PreparedStatement ps = stmt.getConnection().prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -158,8 +184,12 @@ public class HearingRoom {
                 list.add(item);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadActiveHearingRooms();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return list;
     }
@@ -167,8 +197,9 @@ public class HearingRoom {
     public static String getHearingRoomEmailByName(String roomAbbv) {
         String hearingEmail = "";
 
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             String sql = "SELECT roomEmail FROM hearingroom WHERE roomAbbreviation = ?";
             
             PreparedStatement ps = stmt.getConnection().prepareStatement(sql);
@@ -180,8 +211,12 @@ public class HearingRoom {
                 hearingEmail = rs.getString("roomEmail") == null ? "" : rs.getString("roomEmail");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getHearingRoomEmailByName(roomAbbv);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return hearingEmail;
     }

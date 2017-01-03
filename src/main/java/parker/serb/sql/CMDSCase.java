@@ -1299,9 +1299,7 @@ public class CMDSCase {
         return validCase;
     }
     
-    public static void updateCMDSGroupNumber(String caseNumber, String groupNumber) {
-        boolean validCase = false;
-        
+    public static void updateCMDSGroupNumber(String caseNumber, String groupNumber) {        
         Statement stmt = null;
         
         try {

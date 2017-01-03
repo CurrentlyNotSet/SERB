@@ -111,9 +111,7 @@ public class SystemErrorEmailList {
 
     public static void createErrorEmailUser(SystemErrorEmailList item) {
         Statement stmt = null;
-        
         try {
-
             stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert INTO SystemErrorEmailList "
@@ -138,7 +136,6 @@ public class SystemErrorEmailList {
 
     public static void updateErrorEmailUser(SystemErrorEmailList item) {
         Statement stmt = null;
-        
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -166,5 +163,4 @@ public class SystemErrorEmailList {
             DbUtils.closeQuietly(stmt);
         }
     }
-        
 }

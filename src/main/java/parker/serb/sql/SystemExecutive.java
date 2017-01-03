@@ -5,15 +5,16 @@
  */
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
 import parker.serb.util.NumberFormatService;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -31,13 +32,12 @@ public class SystemExecutive {
     public String phoneNumber;
     public String email;
     
-    
     public static List loadExecs(String dept) {
         List execsList = new ArrayList<>();
-            
+        
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM SystemExecutive where active = 1 AND department = ?";
 
@@ -59,17 +59,22 @@ public class SystemExecutive {
                 execsList.add(exec);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadExecs(dept);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return execsList;
     }
     
     public static List loadExecsAllByDeptartment(String dept, String[] param) {
         List execsList = new ArrayList<>();
-            
+        
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM SystemExecutive where department = ?";
 
@@ -106,7 +111,12 @@ public class SystemExecutive {
                 execsList.add(exec);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadExecsAllByDeptartment(dept, param);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return execsList;
     }
@@ -116,8 +126,9 @@ public class SystemExecutive {
     public static SystemExecutive getSystemExecutiveByID(int id) {
         SystemExecutive item = new SystemExecutive();
 
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM SystemExecutive WHERE id = ?";
 
@@ -138,15 +149,20 @@ public class SystemExecutive {
                 item.lastName = rs.getString("lastName") == null ? "" : rs.getString("lastName");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getSystemExecutiveByID(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return item;
     }
 
     public static void createSystemExecutive(SystemExecutive item) {
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert INTO SystemExecutive ("
                     + "active, "        //01
@@ -174,13 +190,19 @@ public class SystemExecutive {
             preparedStatement.setString(8, item.lastName.equals("") ? null : item.lastName);
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                createSystemExecutive(item);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
 
     public static void updateSystemExecutive(SystemExecutive item) {
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE SystemExecutive SET "
                     + "active = ?, "     //01
@@ -206,8 +228,12 @@ public class SystemExecutive {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateSystemExecutive(item);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
-    
 }

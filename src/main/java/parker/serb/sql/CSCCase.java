@@ -1,5 +1,6 @@
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,8 +9,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
 import parker.serb.Global;
 import parker.serb.util.NumberFormatService;
 import parker.serb.util.SlackNotification;
@@ -19,8 +19,6 @@ import parker.serb.util.SlackNotification;
  * @author parkerjohnston
  */
 public class CSCCase {
-
-    
     
     public int id;
     public boolean active;
@@ -52,9 +50,10 @@ public class CSCCase {
     public String county;
     
     public static void createNewCSC(String number, String name) {
+        Statement stmt = null;
+        
         try {
-            
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert Into CSCCase (name, cscNumber, type) Values (?,?,'Municipal')";
 
@@ -76,17 +75,22 @@ public class CSCCase {
             }
             
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                createNewCSC(number, name);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
-    
     public static List loadCSCNames() {
-        
         List orgNameList = new ArrayList<>();
-            
+           
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select "
                     + " name" 
@@ -101,17 +105,23 @@ public class CSCCase {
                 orgNameList.add(caseNumberRS.getString("name") != null ? caseNumberRS.getString("name") : "");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadCSCNames();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return orgNameList;
     }
     
     public static List getCaseSearchData() {
-        
         List orgNameList = new ArrayList<>();
             
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select "
                     + " name, cscNumber, alsoKnownAs" 
@@ -130,7 +140,12 @@ public class CSCCase {
                 orgNameList.add(org);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getCaseSearchData();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return orgNameList;
     }
@@ -142,8 +157,10 @@ public class CSCCase {
     public static String loadNote() {
         String note = null;
             
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select Note"
                     + " from CSCCase"
@@ -159,7 +176,12 @@ public class CSCCase {
             note = caseNumberRS.getString("note");
 
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadNote();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return note;
     }
@@ -167,8 +189,10 @@ public class CSCCase {
     public static String getCSCName() {
         String name = null;
             
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select name"
                     + " from CSCCase"
@@ -184,18 +208,25 @@ public class CSCCase {
             name = caseNumberRS.getString("name");
 
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getCSCName();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return name;
     }
-//    
+    
     /**
      * Updates the note that is related to the case number
      * @param note the new note value to be stored
      */
     public static void updateNote(String note) {
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Update CSCCase"
                     + " set note = ?"
@@ -210,7 +241,12 @@ public class CSCCase {
             Audit.addAuditEntry("Updated Note for " + Global.caseNumber);
             Activity.addActivty("Updated Note", null);
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateNote(note);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
@@ -221,8 +257,11 @@ public class CSCCase {
      */
     public static CSCCase loadHeaderInformation() {
         CSCCase org = null;
+        
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select"
                     + " cscnumber"
@@ -239,14 +278,22 @@ public class CSCCase {
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadHeaderInformation();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return org;
     }
     
     public static CSCCase loadCSCInformation() {
         CSCCase org = null;
+        
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select"
                     + " name,"
@@ -307,14 +354,22 @@ public class CSCCase {
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadCSCInformation();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return org;
     }
     
     public static void updateCSCInformation(CSCCase newCaseInformation, CSCCase caseInformation) {
         CSCCase med = null;
+        
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();  
+            stmt = Database.connectToDB().createStatement();  
             
             String sql = "Update CSCCase Set"
                     + " name = ?,"
@@ -375,6 +430,11 @@ public class CSCCase {
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateCSCInformation(newCaseInformation, caseInformation);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
@@ -605,8 +665,10 @@ public class CSCCase {
     public static boolean validateCSC(String cscNumber) {
         boolean valid = false;
         
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select Count(*) As results"
                     + " from CscCase"
@@ -622,9 +684,13 @@ public class CSCCase {
             valid = validRS.getInt("results") > 0;
             
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                validateCSC(cscNumber);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
-        
         return valid;
     }
 }

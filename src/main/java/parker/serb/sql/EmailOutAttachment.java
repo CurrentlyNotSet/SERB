@@ -5,15 +5,15 @@
  */
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import org.apache.commons.dbutils.DbUtils;
+import parker.serb.util.SlackNotification;
 /**
  *
  * @author User
@@ -27,9 +27,10 @@ public class EmailOutAttachment {
     public static List<EmailOutAttachment> getEmailAttachments(int id) {
         List<EmailOutAttachment> emailList = new ArrayList<>();
         
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM EmailOutAttachment WHERE emailOutID = ?";
             
@@ -47,15 +48,21 @@ public class EmailOutAttachment {
                 emailList.add(eml);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getEmailAttachments(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return emailList;
     }
     
     public static void insertAttachment(EmailOutAttachment item) {
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert INTO EmailOutAttachment ("
                     + "emailOutID, "
@@ -73,7 +80,12 @@ public class EmailOutAttachment {
             preparedStatement.setBoolean(3, item.primaryAttachment);
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                insertAttachment(item);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
 }
