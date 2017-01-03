@@ -28,28 +28,28 @@
             </MenuItem>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator1">
             </MenuItem>
-            <Menu class="javax.swing.JMenu" name="jMenu5">
+            <Menu class="javax.swing.JMenu" name="batchCloseCasesSubMenu">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Batch Close Cases"/>
+                <Property name="text" type="java.lang.String" value="Batch Handle Cases"/>
               </Properties>
               <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem7">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="REP"/>
-                  </Properties>
-                </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem8">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="ULP"/>
-                  </Properties>
-                </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem9">
+                <MenuItem class="javax.swing.JMenuItem" name="batchCloseMEDMenuItem">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="MED"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem9ActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="batchCloseMEDMenuItemActionPerformed"/>
                   </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="batchCloseREPMenuItem">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="REP"/>
+                  </Properties>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="batchCloseULPMenuItem">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="ULP"/>
+                  </Properties>
                 </MenuItem>
               </SubComponents>
             </Menu>

@@ -25,6 +25,7 @@ import parker.serb.CSC.CSCHeaderPanel;
 import parker.serb.CSC.CSCRootPanel;
 import parker.serb.Hearing.HearingHeaderPanel;
 import parker.serb.Hearing.HearingRootPanel;
+import parker.serb.MED.MEDBulkHandleCases;
 import parker.serb.MED.MEDBulkSendToBoardDialog;
 import parker.serb.MED.MEDBulkSettleCasesDialog;
 import parker.serb.MED.MEDHeaderPanel;
@@ -108,6 +109,24 @@ public class RootPanel extends javax.swing.JFrame {
                 }
             }
         }
+        
+        if(!Global.activeUserRoles.contains("REP") && !Global.activeUserRoles.contains("MED") && !Global.activeUserRoles.contains("ULP")) {
+            jMenuBar1.remove(batchCloseCasesSubMenu);
+        }
+        
+        if(!Global.activeUserRoles.contains("REP")) {
+            jMenuBar1.remove(batchCloseREPMenuItem);
+        }
+        
+        if(!Global.activeUserRoles.contains("MED")) {
+            jMenuBar1.remove(batchCloseMEDMenuItem);
+        }
+        
+        if(!Global.activeUserRoles.contains("ULP")) {
+            jMenuBar1.remove(batchCloseULPMenuItem);
+        }
+        
+        
     }
     
     private void setDefaultTab() {
@@ -1057,10 +1076,10 @@ public class RootPanel extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
-        jMenu5 = new javax.swing.JMenu();
-        jMenuItem7 = new javax.swing.JMenuItem();
-        jMenuItem8 = new javax.swing.JMenuItem();
-        jMenuItem9 = new javax.swing.JMenuItem();
+        batchCloseCasesSubMenu = new javax.swing.JMenu();
+        batchCloseMEDMenuItem = new javax.swing.JMenuItem();
+        batchCloseREPMenuItem = new javax.swing.JMenuItem();
+        batchCloseULPMenuItem = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
@@ -1512,23 +1531,23 @@ public class RootPanel extends javax.swing.JFrame {
         jMenu1.add(jMenuItem1);
         jMenu1.add(jSeparator1);
 
-        jMenu5.setText("Batch Close Cases");
+        batchCloseCasesSubMenu.setText("Batch Handle Cases");
 
-        jMenuItem7.setText("REP");
-        jMenu5.add(jMenuItem7);
-
-        jMenuItem8.setText("ULP");
-        jMenu5.add(jMenuItem8);
-
-        jMenuItem9.setText("MED");
-        jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
+        batchCloseMEDMenuItem.setText("MED");
+        batchCloseMEDMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem9ActionPerformed(evt);
+                batchCloseMEDMenuItemActionPerformed(evt);
             }
         });
-        jMenu5.add(jMenuItem9);
+        batchCloseCasesSubMenu.add(batchCloseMEDMenuItem);
 
-        jMenu1.add(jMenu5);
+        batchCloseREPMenuItem.setText("REP");
+        batchCloseCasesSubMenu.add(batchCloseREPMenuItem);
+
+        batchCloseULPMenuItem.setText("ULP");
+        batchCloseCasesSubMenu.add(batchCloseULPMenuItem);
+
+        jMenu1.add(batchCloseCasesSubMenu);
         jMenu1.add(jSeparator2);
 
         jMenuItem3.setText("Log Off");
@@ -1902,9 +1921,9 @@ public class RootPanel extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton8ActionPerformed
 
-    private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem9ActionPerformed
+    private void batchCloseMEDMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_batchCloseMEDMenuItemActionPerformed
+        new MEDBulkHandleCases((JFrame) this.getRootPane().getParent(), true);
+    }//GEN-LAST:event_batchCloseMEDMenuItemActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel CMDS;
@@ -1918,6 +1937,10 @@ public class RootPanel extends javax.swing.JFrame {
     private javax.swing.JPanel REP;
     private javax.swing.JPanel ULP;
     private javax.swing.JMenuItem adminPanelMenuItem;
+    private javax.swing.JMenu batchCloseCasesSubMenu;
+    private javax.swing.JMenuItem batchCloseMEDMenuItem;
+    private javax.swing.JMenuItem batchCloseREPMenuItem;
+    private javax.swing.JMenuItem batchCloseULPMenuItem;
     private parker.serb.CMDS.CMDSHeaderPanel cMDSHeaderPanel1;
     private parker.serb.CMDS.CMDSRootPanel cMDSRootPanel1;
     private parker.serb.CSC.CSCHeaderPanel cSCHeaderPanel1;
@@ -1943,7 +1966,6 @@ public class RootPanel extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
-    private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
@@ -1951,9 +1973,6 @@ public class RootPanel extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
-    private javax.swing.JMenuItem jMenuItem7;
-    private javax.swing.JMenuItem jMenuItem8;
-    private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;

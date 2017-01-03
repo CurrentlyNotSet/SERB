@@ -133,8 +133,16 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
     }
     
     private void printList(){
-        SMDSDocuments report = SMDSDocuments.findDocumentByFileName("MED Cases to be Closed by Board.jasper");
-        GenerateReport.runReport(report);
+        jLayeredPane1.moveToFront(jPanel1);
+        
+        Thread temp = new Thread(() -> {
+            SMDSDocuments report = SMDSDocuments.findDocumentByFileName("MED Cases to be Closed by Board.jasper");
+            GenerateReport.runReport(report);
+            jLayeredPane1.moveToBack(jPanel1);
+        });
+        temp.start();
+        
+        
     }
         
     /**
