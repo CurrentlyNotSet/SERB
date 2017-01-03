@@ -99,7 +99,7 @@ public class MEDRootPanel extends javax.swing.JPanel {
                 System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
                 Global.root.getjButton2().setText("Update");
                 Global.root.getjButton2().setEnabled(false);
-                Global.root.getjButton9().setVisible(false);
+//                Global.root.getjButton9().setVisible(false);
                 break;
             case "Information":
                 System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));

@@ -9,8 +9,6 @@ import com.jacob.com.Dispatch;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import parker.serb.Global;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.REPCase;
@@ -18,6 +16,7 @@ import parker.serb.sql.REPMediation;
 import parker.serb.sql.RelatedCase;
 import parker.serb.sql.User;
 import parker.serb.util.NumberFormatService;
+import parker.serb.util.SlackNotification;
 import parker.serb.util.StringUtilities;
 
 /**
@@ -215,7 +214,7 @@ public class processREPbookmarks {
                 try {
                     mediationDateTime = new Timestamp(Global.mmddyyyyhhmma.parse(mediation.mediationDate).getTime());
                 } catch (ParseException ex) {
-                    Logger.getLogger(processREPbookmarks.class.getName()).log(Level.SEVERE, null, ex);
+                    SlackNotification.sendNotification(ex);
                 }
                 mediationDate = Global.MMMMMdyyyy.format(mediationDateTime);
                 mediationTime = Global.hhmma.format(mediationDateTime);
@@ -234,7 +233,7 @@ public class processREPbookmarks {
         }   
         
         //ProcessBookmarks
-        for (int i = 0; i < Global.bookmarkLimit; i++) {            
+        for (int i = 0; i < Global.BOOKMARK_LIMIT; i++) {            
             //Case Number Related Information
             processBookmark.process("CASENUMBER" + (i == 0 ? "" : i), NumberFormatService.generateFullCaseNumber(), Document);
             processBookmark.process("DATEFILED" + (i == 0 ? "" : i), (caseInfo.fileDate == null ? "" : Global.MMMMddyyyy.format(caseInfo.fileDate)), Document);

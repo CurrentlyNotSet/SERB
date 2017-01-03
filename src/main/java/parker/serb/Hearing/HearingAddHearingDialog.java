@@ -5,7 +5,6 @@
  */
 package parker.serb.Hearing;
 
-import parker.serb.CMDS.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -16,13 +15,10 @@ import java.util.List;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import parker.serb.Global;
-import parker.serb.sql.CMDSHearing;
-import parker.serb.sql.EmailOutInvites;
 import parker.serb.sql.HearingHearing;
 import parker.serb.sql.HearingRoom;
 import parker.serb.sql.HearingType;
 import parker.serb.sql.User;
-
 
 /**
  *

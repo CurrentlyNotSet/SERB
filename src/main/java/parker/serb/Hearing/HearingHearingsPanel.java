@@ -5,13 +5,10 @@
  */
 package parker.serb.Hearing;
 
-import parker.serb.CMDS.*;
 import java.util.List;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
-import parker.serb.sql.Activity;
-import parker.serb.sql.CMDSHearing;
 import parker.serb.sql.HearingHearing;
 import parker.serb.sql.User;
 

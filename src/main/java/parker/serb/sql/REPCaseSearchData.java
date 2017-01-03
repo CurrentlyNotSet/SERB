@@ -7,10 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
 import parker.serb.Global;
-import static parker.serb.sql.REPBoardActionType.loadAllREPBoardActionTypes;
 import parker.serb.util.SlackNotification;
 
 /**
@@ -34,10 +32,10 @@ public class REPCaseSearchData {
     
     public static List loadREPCaseList() {
         List<REPCaseSearchData> ulpCaseList = new ArrayList<>();
-            
+        
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "select * from REPCaseSearch ORDER BY id DESC";
 
@@ -62,21 +60,20 @@ public class REPCaseSearchData {
                 ulpCaseList.add(repCase);
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 loadREPCaseList();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return ulpCaseList;
     }
     
     public static void createNewCaseEntry(String year, String type, String month, String number) {
-            
+        Statement stmt = null;   
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "INSERT INTO REPCaseSearch (caseYear, caseType, caseMonth, caseNumber) VALUES (?,?,?,?)";
 
@@ -87,22 +84,20 @@ public class REPCaseSearchData {
             preparedStatement.setString(4, number);
 
             preparedStatement.executeUpdate();
-            
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 createNewCaseEntry(year, type, month, number);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void updateCaseEntryFromParties(String employer, String employeeOrg, String incumbent) {
-            
+        Statement stmt = null;    
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE REPCaseSearch SET"
                     + " employerName = ?,"
@@ -123,23 +118,22 @@ public class REPCaseSearchData {
             preparedStatement.setString(7, Global.caseNumber);
 
             preparedStatement.executeUpdate();
-            
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 updateCaseEntryFromParties(employer, employeeOrg, incumbent);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void updateCaseEntryFromCaseInformation(
-            String bunnumber, String county, String boarddeemed) {
-            
+            String bunnumber, String county, String boarddeemed)
+    {    
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE REPCaseSearch SET"
                     + " bunnumber = ?,"
@@ -162,14 +156,13 @@ public class REPCaseSearchData {
             preparedStatement.setString(8, Global.caseNumber);
 
             preparedStatement.executeUpdate();
-            
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 updateCaseEntryFromCaseInformation(bunnumber, county, boarddeemed);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
 }

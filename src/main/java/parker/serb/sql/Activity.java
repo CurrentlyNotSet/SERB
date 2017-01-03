@@ -14,11 +14,10 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.io.FilenameUtils;
 import parker.serb.Global;
+import static parker.serb.sql.ActiveStatus.updateActiveStatus;
 import parker.serb.util.SlackNotification;
 
 /**
@@ -78,10 +77,11 @@ public class Activity {
             preparedStatement.executeUpdate();
 
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 addActivty(action, fileName);
-            } 
+            } else {
+                SlackNotification.sendNotification(ex);
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -122,11 +122,12 @@ public class Activity {
                 Files.copy(src.toPath(), dst.toPath(), REPLACE_EXISTING);
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 addCMDSActivty(action, fileName, caseNumber);
-            } 
-        } catch (IOException ex) {
+            } else {
+                SlackNotification.sendNotification(ex);
+            }
+        }  catch (IOException ex) {
             SlackNotification.sendNotification(ex);
         } finally {
             DbUtils.closeQuietly(stmt);
@@ -168,11 +169,12 @@ public class Activity {
                 Files.copy(src.toPath(), dst.toPath(), REPLACE_EXISTING);
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 addHearingActivty(action, fileName, caseNumber);
-            } 
-        } catch (IOException ex) {
+            } else {
+                SlackNotification.sendNotification(ex);
+            }
+        }  catch (IOException ex) {
             SlackNotification.sendNotification(ex);
         } finally {
             DbUtils.closeQuietly(stmt);
@@ -195,10 +197,11 @@ public class Activity {
             
             Audit.addAuditEntry("Deactivated Activity:" + id);
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 disableActivtyByID(id);
-            } 
+            } else {
+                SlackNotification.sendNotification(ex);
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -241,10 +244,11 @@ public class Activity {
             preparedStatement.executeUpdate();
 
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 addActivtyFromDocket(action, fileName, caseNumber, from, to, type, comment, redacted, needsTimestamp);
-            } 
+            } else {
+                SlackNotification.sendNotification(ex);
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -287,10 +291,11 @@ public class Activity {
             preparedStatement.executeUpdate();
 
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 addActivtyFromDocket(action, fileName, caseNumber, from, to, type, comment, redacted, needsTimestamp, activityDate);
-            } 
+            } else {
+                SlackNotification.sendNotification(ex);
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -331,10 +336,11 @@ public class Activity {
             preparedStatement.executeUpdate();
 
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 addNewCaseActivty(caseNumber, message);
-            } 
+            } else {
+                SlackNotification.sendNotification(ex);
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -440,10 +446,11 @@ public class Activity {
                 activityList.add(act);
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadCaseNumberActivity(searchTerm);
-            } 
+            } else {
+                SlackNotification.sendNotification(ex);
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -495,10 +502,11 @@ public class Activity {
                 activityList.add(act);
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadAllActivity();
-            } 
+            } else {
+                SlackNotification.sendNotification(ex);
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -560,10 +568,11 @@ public class Activity {
                 activityList.add(act);
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadHearingActivity();
-            } 
+            } else {
+                SlackNotification.sendNotification(ex);
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -622,10 +631,11 @@ public class Activity {
                 
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadActivityByID(id);
-            } 
+            } else {
+                SlackNotification.sendNotification(ex);
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -659,10 +669,11 @@ public class Activity {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateActivtyEntry(activty);
-            } 
+            } else {
+                SlackNotification.sendNotification(ex);
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -708,10 +719,11 @@ public class Activity {
                 activityList.add(act);
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadActivityDocumentsByGlobalCase();
-            } 
+            } else {
+                SlackNotification.sendNotification(ex);
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -761,10 +773,11 @@ public class Activity {
                 activityList.add(act);
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadActivityDocumentsByGlobalCasePublicRecords();
-            } 
+            } else {
+                SlackNotification.sendNotification(ex);
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -812,10 +825,11 @@ public class Activity {
                 activityList.add(act);
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadActivityDocumentsByGlobalCaseORGCSCPublicRecords();
-            } 
+            } else {
+                SlackNotification.sendNotification(ex);
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -875,10 +889,11 @@ public class Activity {
                 activityList.add(act);
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadDocumentsBySectionAwaitingRedaction();
-            } 
+            } else {
+                SlackNotification.sendNotification(ex);
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -944,10 +959,11 @@ public class Activity {
                 activityList.add(activity);
             }
         } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadMailLogBySection(startDate, endDate);
-            } 
+            } else {
+                SlackNotification.sendNotification(ex);
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -1050,7 +1066,7 @@ public class Activity {
         try {
             time = new Timestamp(Global.SQLDateTimeFormat.parse(item.date).getTime());
         } catch (ParseException ex) {
-            Logger.getLogger(Activity.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
         }
 
         Statement stmt = null;

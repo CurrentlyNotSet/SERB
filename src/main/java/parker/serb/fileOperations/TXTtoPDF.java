@@ -12,8 +12,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -22,6 +20,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -50,14 +49,14 @@ public class TXTtoPDF {
                 textBody += sCurrentLine + System.getProperty("line.separator");
             }
         } catch (IOException ex) {
-            Logger.getLogger(TXTtoPDF.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
         } finally {
             try {
                 if (br != null) {
                     br.close();
                 }
             } catch (IOException ex) {
-                Logger.getLogger(TXTtoPDF.class.getName()).log(Level.SEVERE, null, ex);
+                SlackNotification.sendNotification(ex);
             }
         }
         return textBody;
@@ -123,13 +122,13 @@ public class TXTtoPDF {
             contentStream.close();
             doc.save(pdfFile);
         } catch (IOException ex) {
-            Logger.getLogger(TXTtoPDF.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
         } finally {
             if (doc != null) {
                 try {
                     doc.close();
                 } catch (IOException ex) {
-                    Logger.getLogger(TXTtoPDF.class.getName()).log(Level.SEVERE, null, ex);
+                    SlackNotification.sendNotification(ex);
                 }
             }
         }

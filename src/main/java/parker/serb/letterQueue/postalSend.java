@@ -11,8 +11,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.pdfbox.io.MemoryUsageSetting;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
@@ -26,6 +24,7 @@ import parker.serb.sql.PostalOut;
 import parker.serb.sql.PostalOutAttachment;
 import parker.serb.util.FileService;
 import parker.serb.util.NumberFormatService;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -64,7 +63,7 @@ public class postalSend {
             tempPDFList.add(casePath + envelopeFilePDF);
             tempPDFList.add(casePath + envelopeFileName);
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(postalSend.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
         }
 
         //Convert Attachments
@@ -82,7 +81,7 @@ public class postalSend {
                     ut.addSource(casePath + fileName);
                     tempPDFList.add(casePath + fileName);
                 } catch (FileNotFoundException ex) {
-                    Logger.getLogger(postalSend.class.getName()).log(Level.SEVERE, null, ex);
+                    SlackNotification.sendNotification(ex);
                 }
 
                 //If Word Doc
@@ -94,9 +93,8 @@ public class postalSend {
                     ut.addSource(casePath + fileName);
                     tempPDFList.add(casePath + fileName);
                 } catch (FileNotFoundException ex) {
-                    Logger.getLogger(postalSend.class.getName()).log(Level.SEVERE, null, ex);
+                    SlackNotification.sendNotification(ex);
                 }
-
                 //If Text File
             } else if ("txt".equals(extension)) {
                 fileName = TXTtoPDF.createPDF(casePath, fileName);
@@ -106,7 +104,7 @@ public class postalSend {
                     ut.addSource(casePath + fileName);
                     tempPDFList.add(casePath + fileName);
                 } catch (FileNotFoundException ex) {
-                    Logger.getLogger(postalSend.class.getName()).log(Level.SEVERE, null, ex);
+                    SlackNotification.sendNotification(ex);
                 }
 
                 //If PDF
@@ -116,7 +114,7 @@ public class postalSend {
                 try {
                     ut.addSource(casePath + fileName);
                 } catch (FileNotFoundException ex) {
-                    Logger.getLogger(postalSend.class.getName()).log(Level.SEVERE, null, ex);
+                    SlackNotification.sendNotification(ex);
                 }
             }
         }
@@ -131,7 +129,7 @@ public class postalSend {
         try {
             ut.mergeDocuments(MemoryUsageSetting.setupMainMemoryOnly());
         } catch (IOException ex) {
-            Logger.getLogger(postalSend.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
         }
 
         //Open File

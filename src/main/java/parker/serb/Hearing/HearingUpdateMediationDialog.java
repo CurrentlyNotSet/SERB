@@ -11,7 +11,6 @@ import parker.serb.sql.HearingOutcome;
 import parker.serb.sql.HearingsMediation;
 import parker.serb.sql.User;
 
-
 /**
  *
  * @author parkerjohnston

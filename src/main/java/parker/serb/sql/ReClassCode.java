@@ -5,14 +5,15 @@
  */
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -26,10 +27,10 @@ public class ReClassCode {
     
     public static List loadAll() {
         List caseStatusList = new ArrayList<>();
-            
+         
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "select code from ReClassCode where active = 1";
 
@@ -41,8 +42,12 @@ public class ReClassCode {
                 caseStatusList.add(caseStatusRS.getString("code"));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadAll();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return caseStatusList;
     }

@@ -25,8 +25,6 @@ public class CMDSWhichPOPullDateDialog extends javax.swing.JDialog {
     public String getWhichPO() {
         return whichPO;
     }
-    
-    
 
     /**
      * This method is called from within the constructor to initialize the form.

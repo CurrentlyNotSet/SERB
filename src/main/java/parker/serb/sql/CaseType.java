@@ -1,14 +1,15 @@
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
 import parker.serb.Global;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -33,7 +34,6 @@ public class CaseType {
         List activityList = new ArrayList<>();
             
         try {
-
             stmt = Database.connectToDB().createStatement();
 
             String sql = "Select caseType from CaseType where Section = ?";
@@ -48,18 +48,23 @@ public class CaseType {
             }
             
             switch(Global.activeSection) {
-            case "ORG":
-                activityList.add("ORG");
-                break;
-            case "Civil Service Commission":
-                activityList.add("CSC");
-                break;
-            default:
-                break;
-        }   
+                case "ORG":
+                    activityList.add("ORG");
+                    break;
+                case "Civil Service Commission":
+                    activityList.add("CSC");
+                    break;
+                default:
+                    break;
+            }   
             
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getCaseType();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return activityList;
     }
@@ -70,7 +75,6 @@ public class CaseType {
         List activityList = new ArrayList<>();
             
         try {
-
             stmt = Database.connectToDB().createStatement();
 
             String sql = "Select caseType from CaseType where Section = ?";
@@ -85,18 +89,23 @@ public class CaseType {
             }
             
             switch(section) {
-            case "ORG":
-                activityList.add("ORG");
-                break;
-            case "Civil Service Commission":
-                activityList.add("CSC");
-                break;
-            default:
-                break;
-        }   
+                case "ORG":
+                    activityList.add("ORG");
+                    break;
+                case "Civil Service Commission":
+                    activityList.add("CSC");
+                    break;
+                default:
+                    break;
+            }   
             
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getCaseTypeBySection(section);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return activityList;
     }
@@ -107,7 +116,6 @@ public class CaseType {
         List activityList = new ArrayList<>();
             
         try {
-
             stmt = Database.connectToDB().createStatement();
 
             String sql = "Select caseType from CaseType where Section = 'REP' OR Section = 'MED' OR Section = 'ULP' ";
@@ -118,10 +126,14 @@ public class CaseType {
             
             while(caseType.next()) {
                 activityList.add(caseType.getString("caseType"));
-            }
-                        
+            }        
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getCaseTypeHearings();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return activityList;
     }
@@ -129,8 +141,10 @@ public class CaseType {
     public static List<CaseType> loadAllStatusTypes(String[] param) {
         List<CaseType> list = new ArrayList<>();
 
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM CaseType";
             if (param.length > 0) {
@@ -163,8 +177,12 @@ public class CaseType {
                 list.add(item);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadAllStatusTypes(param);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return list;
     }
@@ -172,8 +190,10 @@ public class CaseType {
     public static CaseType getTypeByID(int id) {
         CaseType item = new CaseType();
 
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM CaseType WHERE id = ?";
 
@@ -190,15 +210,21 @@ public class CaseType {
                 item.description = rs.getString("description") == null ? "" : rs.getString("description");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getTypeByID(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return item;
     }
 
     public static void createStatusType(CaseType item) {
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert INTO CaseType "
                     + "(active, section, caseType, description)"
@@ -211,13 +237,20 @@ public class CaseType {
             preparedStatement.setString(3, item.description.equals("") ? null : item.description.trim());
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                createStatusType(item);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
 
     public static void updateCaseType(CaseType item) {
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE CaseType SET "
                     + "active = ?, "
@@ -235,8 +268,12 @@ public class CaseType {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateCaseType(item);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
-    
 }

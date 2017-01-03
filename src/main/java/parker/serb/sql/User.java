@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
 import parker.serb.Global;
 import parker.serb.login.Password;
 import parker.serb.util.NumberFormatService;
@@ -87,13 +88,13 @@ public class User {
             
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 createUser(user);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
-        } 
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
     }
     
     /**
@@ -104,9 +105,9 @@ public class User {
     public static User findUserByUsername(String username) {
         User user = new User();
         
+        Statement stmt = null;
         try {
-            
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "Select * from Users where username = ? and active = 1";
             
@@ -141,22 +142,22 @@ public class User {
                 user.lastCaseNumber = foundUser.getString("lastCaseNumber");
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 findUserByUsername(username);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
-        } 
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
         return user;
     }
     
     public static User findUserByID(int ID) {
         User user = new User();
         
+        Statement stmt = null;
         try {
-            
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "Select * from Users where id = ?";
             
@@ -191,12 +192,12 @@ public class User {
                 user.lastCaseNumber = foundUser.getString("lastCaseNumber");
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 findUserByID(ID);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         } 
         return user;
     }
@@ -206,12 +207,11 @@ public class User {
      * @return a list of user instance
      */
     public static List<User> findActiveUsers() {
+        List<User> activeUsers = new ArrayList<>();
         
-        List<User> activeUsers = new ArrayList<User>();
-        
+        Statement stmt = null;
         try {
-            
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "Select * from Users where activeLogIn = ? and active = 1";
             
@@ -246,23 +246,22 @@ public class User {
                 activeUsers.add(user);
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 findActiveUsers();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return activeUsers;
     }
     
     public static List<User> getEnabledUsers() {
-        
         List<User> activeUsers = new ArrayList<>();
         
+        Statement stmt = null;
         try {
-            
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "Select * from Users where active = 1";
             
@@ -303,18 +302,17 @@ public class User {
                 activeUsers.add(user);
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 getEnabledUsers();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return activeUsers;
     }
     
     public static List loadSectionDropDowns(String section) {
-        
         String sectionColumnName = "";
         
         switch(section) {
@@ -343,12 +341,11 @@ public class User {
                 sectionColumnName = "investigator";
                 break;
         }
-        
         List activeUsers = new ArrayList<>();
         
+        Statement stmt = null;
         try {
-            
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "Select * from Users where " + sectionColumnName + " = ? and active = 1";
             
@@ -361,164 +358,20 @@ public class User {
                 activeUsers.add(users.getString("firstName") + " " + users.getString("lastName"));
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 loadSectionDropDowns(section);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return activeUsers;
-    }
-    
-    /**
-    * @deprecated replaced by {@link #loadSectionDropDowns(String section)}
-    */
-    @Deprecated
-    public static List loadAllREPCurrentOwners() {
-        
-        List activeUsers = new ArrayList<>();
-        
-        try {
-            
-            Statement stmt = Database.connectToDB().createStatement();
-            
-            String sql = "Select * from Users where repcurrentowner = ? and active = 1";
-            
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setBoolean(1, true);
-            
-            ResultSet users = preparedStatement.executeQuery();
-            
-            while(users.next()) {
-                activeUsers.add(users.getString("firstName") + " " + users.getString("lastName"));
-            }
-        } catch (SQLException ex) {
-            if(ex.getCause() instanceof SQLServerException) {
-                System.out.println("TESTING");
-                SlackNotification.sendNotification(ex);
-            } else {
-                SlackNotification.sendNotification(ex);
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return activeUsers;
-    }
-    
-    /**
-    * @deprecated replaced by {@link #loadSectionDropDowns(String section)}
-    */
-    @Deprecated
-    public static List loadULPComboBox() {
-        
-        List activeUsers = new ArrayList<>();
-        
-        try {
-            
-            Statement stmt = Database.connectToDB().createStatement();
-            
-            String sql = "Select * from Users where ULPCaseWorker = ? and active = 1";
-            
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setBoolean(1, true);
-            
-            ResultSet users = preparedStatement.executeQuery();
-            
-            while(users.next()) {
-                activeUsers.add(users.getString("firstName") + " " + users.getString("lastName"));
-            }
-        } catch (SQLException ex) {
-            if(ex.getCause() instanceof SQLServerException) {
-                System.out.println("TESTING");
-                SlackNotification.sendNotification(ex);
-            } else {
-                SlackNotification.sendNotification(ex);
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return activeUsers;
-    }
-    
-    
-    /**
-     * Update the time/date stamp that the user last successfully logged in
-     */
-    @Deprecated
-    public static void updateLastLogInTime() {
-        try {
-            Statement stmt = Database.connectToDB().createStatement();
-            
-            String sql = "Update Users SET lastLogInDateTime = ? where username = ? and active = 1";
-            
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setTimestamp(1, new java.sql.Timestamp(new Date().getTime()));
-            preparedStatement.setString(2, Global.activeUser.username);
-            
-            preparedStatement.executeUpdate();
-        } catch (SQLException ex) {
-            if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
-                updateLastLogInTime();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
-        }
-    }
-    
-    /**
-     * Update the name of the PC that the user was last using upon their last
-     * successful log in
-     */
-    @Deprecated
-    public static void updateLastPCName() {
-        try {
-            Statement stmt = Database.connectToDB().createStatement();
-            
-            String sql = "Update Users SET lastLogInPCName = ? where username = ? and active = 1";
-            
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, InetAddress.getLocalHost().getHostName());
-            preparedStatement.setString(2, Global.activeUser.username);
-            
-            preparedStatement.executeUpdate();
-        } catch (SQLException | UnknownHostException ex) {
-            if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
-                updateLastPCName();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
-        }
-    }
-    
-    /**
-     * Update the application version number of the build the user is running
-     */
-    @Deprecated
-    public static void updateApplicationVersion() {
-        try {
-            Statement stmt = Database.connectToDB().createStatement();
-            
-            String sql = "Update Users SET applicationVersion = ? where username = ? and active = 1";
-            
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, Global.applicationVersion);
-            preparedStatement.setString(2, Global.activeUser.username);
-            
-            preparedStatement.executeUpdate();
-        } catch (SQLException ex) {
-            if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
-                updateApplicationVersion();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
-        }
     }
     
     public static void updateLogInInformation() {
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "Update Users"
                     + " SET"
@@ -529,7 +382,7 @@ public class User {
                     + " where username = ? and active = 1";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, Global.applicationVersion);
+            preparedStatement.setString(1, Global.APPLICATION_VERSION);
             preparedStatement.setString(2, InetAddress.getLocalHost().getHostName());
             preparedStatement.setTimestamp(3, new java.sql.Timestamp(new Date().getTime()));
             preparedStatement.setBoolean(4, !Global.activeUser.activeLogIn);
@@ -537,14 +390,14 @@ public class User {
             
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 updateLogInInformation();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
         } catch (UnknownHostException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
@@ -552,8 +405,9 @@ public class User {
      * Updates the boolean value of the current active log in
      */
     public static void updateActiveLogIn() {
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "Update Users SET activeLogIn = ? where username = ? and active = 1";
             
@@ -563,18 +417,18 @@ public class User {
             
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateActiveLogIn();
-                SlackNotification.sendNotification(ex);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void updateLastTab(String tabName) {
+        Statement stmt = null;
         try {
-            
             String tab;
             
             switch(tabName) {
@@ -585,8 +439,7 @@ public class User {
                     tab = tabName;
                     break;
             }
-            
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "Update Users SET lastTab = ? where username = ?";
             
@@ -596,12 +449,12 @@ public class User {
             
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateLastTab(tabName);
-                SlackNotification.sendNotification(ex);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
@@ -641,8 +494,9 @@ public class User {
      * @param password the plain text password
      */
     public static void updatePassword(long salt, String password) {
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "Update Users SET passwordSalt = ?, password = ? where username = ? and active = 1";
             
@@ -653,12 +507,12 @@ public class User {
             
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 updatePassword(salt, password);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
@@ -666,8 +520,9 @@ public class User {
      * Update the boolean value of the users password reset value
      */
     public static void updatePasswordReset() {
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "Update Users SET passwordReset = ? where username = ? and active = 1";
             
@@ -677,12 +532,12 @@ public class User {
             
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 updatePasswordReset();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
@@ -690,8 +545,9 @@ public class User {
      * Find all roles that the user is able to view
      */
     public static void findAppliedRoles() {
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "Select Role AS Role from Role " +
             "INNER JOIN UserRole on UserRole.roleID = Role.id " +
@@ -706,12 +562,12 @@ public class User {
                Global.activeUserRoles.add(foundUser.getString("Role"));
             } 
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 findAppliedRoles();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
@@ -722,8 +578,9 @@ public class User {
      * @param user 
      */
     public static void updateUserPrefs(User user) {
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "Update Users set"
                     + " firstName = ?,"
@@ -751,20 +608,21 @@ public class User {
                 Global.activeUser = findUserByUsername(user.username);
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 updateUserPrefs(user);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     } 
     
     public static String getNameByID(int userID) {
         String userName = "";
         
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "Select firstName, lastName from Users where ID = ?";
             
@@ -777,12 +635,12 @@ public class User {
                 userName = success.getString("FirstName") + " " + success.getString("LastName");
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 getNameByID(userID);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return userName;    
     }
@@ -792,8 +650,9 @@ public class User {
         
         String[] parsedUserName = userName.split(" ");
         
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "Select id from Users where firstName = ? and lastName = ? and active = 1";
             
@@ -807,12 +666,12 @@ public class User {
                 userID = success.getInt("id");
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 getUserID(userName);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return userID;    
     }
@@ -820,8 +679,9 @@ public class User {
     public static String getEmailByID(int id) {
         String userEmail = "";
         
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "Select emailAddress from Users where id = ? and active = 1";
             
@@ -834,12 +694,12 @@ public class User {
                 userEmail = success.getString("emailAddress");
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 getEmailByID(id);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return userEmail;    
     }
@@ -847,9 +707,9 @@ public class User {
     public static List getDocketSections() {
         List docketSections = new ArrayList<>();
         
+        Statement stmt = null;
         try {
-            
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "Select * from Users where username = ? and active = 1";
             
@@ -880,89 +740,22 @@ public class User {
                 }
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 getDocketSections();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return docketSections;
     }
-    
-    /**
-    * @deprecated replaced by {@link #loadSectionDropDowns(String section)}
-    */
-    @Deprecated
-    public static List loadREPComboBox() {
         
-        List activeUsers = new ArrayList<>();
-        
-        try {
-            
-            Statement stmt = Database.connectToDB().createStatement();
-            
-            String sql = "Select * from Users where REPCaseWorker = ? and active = 1";
-            
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setBoolean(1, true);
-            
-            ResultSet users = preparedStatement.executeQuery();
-            
-            while(users.next()) {
-                activeUsers.add(users.getString("firstName") + " " + users.getString("lastName"));
-            }
-        } catch (SQLException ex) {
-            if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
-        }
-        return activeUsers;
-    }
-    
-    /**
-    * @deprecated replaced by {@link #loadSectionDropDowns(String section)}
-    */
-    @Deprecated
-    public static List loadORGComboBox() {
-        
-        List activeUsers = new ArrayList<>();
-        
-        try {
-            
-            Statement stmt = Database.connectToDB().createStatement();
-            
-            String sql = "Select * from Users where REPCaseWorker = ? and active = 1";
-            
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setBoolean(1, true);
-            
-            ResultSet users = preparedStatement.executeQuery();
-            
-            while(users.next()) {
-                activeUsers.add(users.getString("firstName") + " " + users.getString("lastName"));
-            }
-        } catch (SQLException ex) {
-            if(ex.getCause() instanceof SQLServerException) {
-                System.out.println("TESTING");
-                SlackNotification.sendNotification(ex);
-            } else {
-                SlackNotification.sendNotification(ex);
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return activeUsers;
-    }
-        
-    public static List loadAllUsers() {
-        
+    public static List loadAllUsers() { 
         List allUsers = new ArrayList<>();
         
+        Statement stmt = null;
         try {
-            
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "SELECT * FROM Users";
             
@@ -981,12 +774,12 @@ public class User {
                 allUsers.add(user);
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 loadAllUsers();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return allUsers;
     }
@@ -994,9 +787,9 @@ public class User {
     public static List searchAllUsers(String[] param) {
         List<User> list = new ArrayList<>();
 
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM Users";
             if (param.length > 0) {
@@ -1033,12 +826,12 @@ public class User {
                 list.add(item);
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 searchAllUsers(param);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return list;
     }

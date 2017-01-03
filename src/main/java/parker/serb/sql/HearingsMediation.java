@@ -5,6 +5,7 @@
  */
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,10 +13,10 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
 import parker.serb.Global;
 import parker.serb.util.NumberFormatService;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -38,8 +39,9 @@ public class HearingsMediation {
     public static List<HearingsMediation> loadAllMediationsByCaseNumber() {
         List<HearingsMediation> items = new ArrayList<>();
 
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM HearingsMediation"
                     + " WHERE caseYear = ?"
@@ -72,7 +74,12 @@ public class HearingsMediation {
                 items.add(med);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadAllMediationsByCaseNumber();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return items;
     }
@@ -80,8 +87,9 @@ public class HearingsMediation {
     public static String getLastestMediatorByCase() {
         String mediator = "";
 
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT TOP 1 mediator FROM HearingsMediation"
                     + " WHERE caseYear = ?"
@@ -102,7 +110,12 @@ public class HearingsMediation {
                 mediator = User.getNameByID(rs.getInt("mediator"));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getLastestMediatorByCase();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return mediator;
     }
@@ -114,9 +127,9 @@ public class HearingsMediation {
             String mediationDate,
             String outcome) 
     {
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert INTO HearingsMediation"
                     + "(active, caseYear, caseType, caseMonth,"
@@ -140,14 +153,19 @@ public class HearingsMediation {
             
             Activity.addActivty("Created a Mediation on " + mediationDate, null);
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                addMediation(pcPreD, mediatorID, dateAsigned, mediationDate, outcome);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void removeMediationByID(String id, String mediationDate) {
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Delete from HearingsMediation where id = ?";
 
@@ -158,7 +176,12 @@ public class HearingsMediation {
             
             Activity.addActivty("Removed Meidation occuring " + mediationDate, null);
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                removeMediationByID(id, mediationDate);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
 
@@ -168,9 +191,11 @@ public class HearingsMediation {
             int mediatorID,
             String dateAsigned,
             String mediationDate,
-            String outcome) {
+            String outcome)
+    {
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE HearingsMediation SET "
                     + "pcPreD = ?, "
@@ -192,8 +217,12 @@ public class HearingsMediation {
             
             Activity.addActivty("Updated Information for Meidation on " + mediationDate, null);
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateMediation(id, pcPreD, mediatorID, dateAsigned, mediationDate, outcome);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
-    
 }

@@ -68,7 +68,6 @@ public class CMDSAddCaseToGroupDialog extends javax.swing.JDialog {
     public String getGroupNumber() {
         return groupNumber;
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.

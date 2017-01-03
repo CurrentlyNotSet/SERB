@@ -9,14 +9,13 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import parker.serb.Global;
 import parker.serb.sql.Activity;
 import parker.serb.sql.CMDSCase;
 import parker.serb.sql.EmailOutInvites;
 import parker.serb.util.DateConversion;
 import parker.serb.util.NumberFormatService;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -147,8 +146,6 @@ public class CMDSCaseHistoryEntryTypes {
             
             Date date = Global.mmddyyyy.parse(entryDate);
             
-            boolean updateAllCases = false;
-            
             CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
             
             if(status.isUpdateStatus()) {
@@ -162,11 +159,7 @@ public class CMDSCaseHistoryEntryTypes {
                 if(groupList.size() > 0) {
                     CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
                     
-                    if(update.isUpdateStatus()) {
-                        updateAllCases = true;
-                    } else {
-                        updateAllCases = false;
-                    }
+                    boolean updateAllCases = update.isUpdateStatus();
                     
                     for(int i = 0; i < groupList.size(); i++) {
                         Activity.addCMDSActivty(activity, filePath, groupList.get(i).toString());
@@ -188,7 +181,7 @@ public class CMDSCaseHistoryEntryTypes {
                 }
             }
         } catch (ParseException ex) {
-            Logger.getLogger(CMDSCaseHistoryEntryTypes.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -204,8 +197,6 @@ public class CMDSCaseHistoryEntryTypes {
             
             Date date = Global.mmddyyyy.parse(entryDate);
             
-            boolean updateAllCases = false;
-            
             CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
             
             if(status.isUpdateStatus()) {
@@ -219,11 +210,7 @@ public class CMDSCaseHistoryEntryTypes {
                 if(groupList.size() > 0) {
                     CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
                     
-                    if(update.isUpdateStatus()) {
-                        updateAllCases = true;
-                    } else {
-                        updateAllCases = false;
-                    }
+                    boolean updateAllCases = update.isUpdateStatus();
                     
                     for(int i = 0; i < groupList.size(); i++) {
                         Activity.addCMDSActivty(activity, filePath, groupList.get(i).toString());
@@ -245,7 +232,7 @@ public class CMDSCaseHistoryEntryTypes {
                 }
             }
         } catch (ParseException ex) {
-            Logger.getLogger(CMDSCaseHistoryEntryTypes.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -288,8 +275,6 @@ public class CMDSCaseHistoryEntryTypes {
 
                 Date date = Global.mmddyyyy.parse(entryDate);
 
-                boolean updateAllCases = false;
-
                 CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
 
                 if(status.isUpdateStatus()) {
@@ -304,11 +289,7 @@ public class CMDSCaseHistoryEntryTypes {
                     if(groupList.size() > 0) {
                         CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
 
-                        if(update.isUpdateStatus()) {
-                            updateAllCases = true;
-                        } else {
-                            updateAllCases = false;
-                        }
+                        boolean updateAllCases = update.isUpdateStatus();
 
                         for(int i = 0; i < groupList.size(); i++) {
                             Activity.addCMDSActivty(activity, filePath, groupList.get(i).toString());
@@ -334,7 +315,7 @@ public class CMDSCaseHistoryEntryTypes {
             }
             result.dispose();
         } catch (ParseException ex) {
-            Logger.getLogger(CMDSCaseHistoryEntryTypes.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -343,7 +324,6 @@ public class CMDSCaseHistoryEntryTypes {
             java.awt.Dialog dialog, String filePath) {
             
         try {
-            
             
             CMDSResponseDueDateDialog dueDate = new CMDSResponseDueDateDialog(dialog, true);
             
@@ -400,8 +380,6 @@ public class CMDSCaseHistoryEntryTypes {
 
                 Date date = Global.mmddyyyy.parse(entryDate);
 
-                boolean updateAllCases = false;
-
                 CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
 
                 if(status.isUpdateStatus()) {
@@ -416,11 +394,7 @@ public class CMDSCaseHistoryEntryTypes {
                     if(groupList.size() > 0) {
                         CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
 
-                        if(update.isUpdateStatus()) {
-                            updateAllCases = true;
-                        } else {
-                            updateAllCases = false;
-                        }
+                        boolean updateAllCases = update.isUpdateStatus();
 
                         for(int i = 0; i < groupList.size(); i++) {
                             Activity.addCMDSActivty(activity, filePath, groupList.get(i).toString());
@@ -445,7 +419,7 @@ public class CMDSCaseHistoryEntryTypes {
                 }
             }
         } catch (ParseException ex) {
-            Logger.getLogger(CMDSCaseHistoryEntryTypes.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -468,15 +442,22 @@ public class CMDSCaseHistoryEntryTypes {
                 
                 CMDSPullDateDialog pullDate = new CMDSPullDateDialog(dialog, true);
                 
-                if(whichPO.getWhichPO().equals("PO1")) {
-                    rrpoPullDates.pullDatePO1 = pullDate.getResponseDueDate();
-                } else if(whichPO.getWhichPO().equals("PO2")) {
-                    rrpoPullDates.pullDatePO2 = pullDate.getResponseDueDate();
-                } else if(whichPO.getWhichPO().equals("PO3")) {
-                    rrpoPullDates.pullDatePO3 = pullDate.getResponseDueDate();
-                } else if(whichPO.getWhichPO().equals("PO4")) {
-                    rrpoPullDates.pullDatePO4 = pullDate.getResponseDueDate();
-                } 
+                switch (whichPO.getWhichPO()) {
+                    case "PO1":
+                        rrpoPullDates.pullDatePO1 = pullDate.getResponseDueDate();
+                        break;
+                    case "PO2":
+                        rrpoPullDates.pullDatePO2 = pullDate.getResponseDueDate();
+                        break;
+                    case "PO3":
+                        rrpoPullDates.pullDatePO3 = pullDate.getResponseDueDate(); 
+                        break;
+                    case "PO4":
+                        rrpoPullDates.pullDatePO4 = pullDate.getResponseDueDate();
+                        break;
+                    default:
+                        break;
+                }
                 
                 whichPO.dispose();
                 pullDate.dispose();
@@ -487,8 +468,6 @@ public class CMDSCaseHistoryEntryTypes {
             activity += (mailType.equals("") ? "" : " " + mailType);
 
             Date date = Global.mmddyyyy.parse(entryDate);
-
-            boolean updateAllCases = false;
 
             CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
 
@@ -504,11 +483,7 @@ public class CMDSCaseHistoryEntryTypes {
                 if(groupList.size() > 0) {
                     CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
 
-                    if(update.isUpdateStatus()) {
-                        updateAllCases = true;
-                    } else {
-                        updateAllCases = false;
-                    }
+                    boolean updateAllCases = update.isUpdateStatus();
 
                     for(int i = 0; i < groupList.size(); i++) {
                         Activity.addCMDSActivty(activity, filePath, groupList.get(i).toString());
@@ -532,7 +507,7 @@ public class CMDSCaseHistoryEntryTypes {
                 }
             }
         } catch (ParseException ex) {
-            Logger.getLogger(CMDSCaseHistoryEntryTypes.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -564,8 +539,6 @@ public class CMDSCaseHistoryEntryTypes {
 
                 Date date = Global.mmddyyyy.parse(entryDate);
 
-                boolean updateAllCases = false;
-
                 CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
 
                 if(status.isUpdateStatus()) {
@@ -579,11 +552,7 @@ public class CMDSCaseHistoryEntryTypes {
                     if(groupList.size() > 0) {
                         CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
 
-                        if(update.isUpdateStatus()) {
-                            updateAllCases = true;
-                        } else {
-                            updateAllCases = false;
-                        }
+                        boolean updateAllCases = update.isUpdateStatus();
 
                         for(int i = 0; i < groupList.size(); i++) {
                             Activity.addCMDSActivty(activity, filePath, groupList.get(i).toString());
@@ -605,7 +574,7 @@ public class CMDSCaseHistoryEntryTypes {
                 }
             }
         } catch (ParseException ex) {
-            Logger.getLogger(CMDSCaseHistoryEntryTypes.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -637,8 +606,6 @@ public class CMDSCaseHistoryEntryTypes {
 
                 Date date = Global.mmddyyyy.parse(entryDate);
 
-                boolean updateAllCases = false;
-
                 CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
 
                 if(status.isUpdateStatus()) {
@@ -652,11 +619,7 @@ public class CMDSCaseHistoryEntryTypes {
                     if(groupList.size() > 0) {
                         CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
 
-                        if(update.isUpdateStatus()) {
-                            updateAllCases = true;
-                        } else {
-                            updateAllCases = false;
-                        }
+                        boolean updateAllCases = update.isUpdateStatus();
 
                         for(int i = 0; i < groupList.size(); i++) {
                             Activity.addCMDSActivty(activity, filePath, groupList.get(i).toString());
@@ -678,7 +641,7 @@ public class CMDSCaseHistoryEntryTypes {
                 }
             }
         } catch (ParseException ex) {
-            Logger.getLogger(CMDSCaseHistoryEntryTypes.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -694,8 +657,6 @@ public class CMDSCaseHistoryEntryTypes {
 
             Date date = Global.mmddyyyy.parse(entryDate);
 
-            boolean updateAllCases = false;
-
             CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
 
             if(status.isUpdateStatus()) {
@@ -709,11 +670,7 @@ public class CMDSCaseHistoryEntryTypes {
                 if(groupList.size() > 0) {
                     CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
 
-                    if(update.isUpdateStatus()) {
-                        updateAllCases = true;
-                    } else {
-                        updateAllCases = false;
-                    }
+                    boolean updateAllCases = update.isUpdateStatus();
 
                     for(int i = 0; i < groupList.size(); i++) {
                         Activity.addCMDSActivty(activity, filePath, groupList.get(i).toString());
@@ -734,7 +691,7 @@ public class CMDSCaseHistoryEntryTypes {
                 }
             }
         } catch (ParseException ex) {
-            Logger.getLogger(CMDSCaseHistoryEntryTypes.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -766,8 +723,6 @@ public class CMDSCaseHistoryEntryTypes {
 
                 Date date = Global.mmddyyyy.parse(entryDate);
 
-                boolean updateAllCases = false;
-
                 CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
 
                 if(status.isUpdateStatus()) {
@@ -781,11 +736,7 @@ public class CMDSCaseHistoryEntryTypes {
                     if(groupList.size() > 0) {
                         CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
 
-                        if(update.isUpdateStatus()) {
-                            updateAllCases = true;
-                        } else {
-                            updateAllCases = false;
-                        }
+                        boolean updateAllCases = update.isUpdateStatus();
 
                         for(int i = 0; i < groupList.size(); i++) {
                             Activity.addCMDSActivty(activity, filePath, groupList.get(i).toString());
@@ -807,7 +758,7 @@ public class CMDSCaseHistoryEntryTypes {
                 }
             }
         } catch (ParseException ex) {
-            Logger.getLogger(CMDSCaseHistoryEntryTypes.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -823,8 +774,6 @@ public class CMDSCaseHistoryEntryTypes {
 
             Date date = Global.mmddyyyy.parse(entryDate);
 
-            boolean updateAllCases = false;
-
             CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
 
             if(status.isUpdateStatus()) {
@@ -838,11 +787,7 @@ public class CMDSCaseHistoryEntryTypes {
                 if(groupList.size() > 0) {
                     CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
 
-                    if(update.isUpdateStatus()) {
-                        updateAllCases = true;
-                    } else {
-                        updateAllCases = false;
-                    }
+                    boolean updateAllCases = update.isUpdateStatus();
 
                     for(int i = 0; i < groupList.size(); i++) {
                         Activity.addCMDSActivty(activity, filePath, groupList.get(i).toString());
@@ -863,7 +808,7 @@ public class CMDSCaseHistoryEntryTypes {
                 }
             }
         } catch (ParseException ex) {
-            Logger.getLogger(CMDSCaseHistoryEntryTypes.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -919,7 +864,7 @@ public class CMDSCaseHistoryEntryTypes {
                 }
             }
         } catch (ParseException ex) {
-            Logger.getLogger(CMDSCaseHistoryEntryTypes.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -984,7 +929,7 @@ public class CMDSCaseHistoryEntryTypes {
             }
             status.dispose();
         } catch (ParseException ex) {
-            Logger.getLogger(CMDSCaseHistoryEntryTypes.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -1046,7 +991,7 @@ public class CMDSCaseHistoryEntryTypes {
                 }
             }
         } catch (ParseException ex) {
-            Logger.getLogger(CMDSCaseHistoryEntryTypes.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -1121,7 +1066,7 @@ public class CMDSCaseHistoryEntryTypes {
             }
             
         } catch (ParseException ex) {
-            Logger.getLogger(CMDSCaseHistoryEntryTypes.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -1177,7 +1122,7 @@ public class CMDSCaseHistoryEntryTypes {
                 }
             }
         } catch (ParseException ex) {
-            Logger.getLogger(CMDSCaseHistoryEntryTypes.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -1258,7 +1203,7 @@ public class CMDSCaseHistoryEntryTypes {
             }
             pullDate.dispose();
         } catch (ParseException ex) {
-            Logger.getLogger(CMDSCaseHistoryEntryTypes.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -1319,7 +1264,7 @@ public class CMDSCaseHistoryEntryTypes {
                 }
             }
         } catch (ParseException ex) {
-            Logger.getLogger(CMDSCaseHistoryEntryTypes.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -1375,7 +1320,7 @@ public class CMDSCaseHistoryEntryTypes {
                 }
             }
         } catch (ParseException ex) {
-            Logger.getLogger(CMDSCaseHistoryEntryTypes.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -1443,7 +1388,7 @@ public class CMDSCaseHistoryEntryTypes {
             }
             pbr.dispose();
         } catch (ParseException ex) {
-            Logger.getLogger(CMDSCaseHistoryEntryTypes.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -1524,7 +1469,7 @@ public class CMDSCaseHistoryEntryTypes {
             }
             remailed.dispose();
         } catch (ParseException ex) {
-            Logger.getLogger(CMDSCaseHistoryEntryTypes.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -1580,7 +1525,7 @@ public class CMDSCaseHistoryEntryTypes {
                 }
             }
         } catch (ParseException ex) {
-            Logger.getLogger(CMDSCaseHistoryEntryTypes.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
         }
     }
     
@@ -1784,6 +1729,4 @@ public class CMDSCaseHistoryEntryTypes {
         }
         return greenCardDateString;
     }
-        
-        
 }

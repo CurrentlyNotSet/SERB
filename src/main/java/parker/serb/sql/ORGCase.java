@@ -1,5 +1,6 @@
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,8 +9,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
 import parker.serb.Global;
 import parker.serb.util.NumberFormatService;
 import parker.serb.util.SlackNotification;
@@ -20,8 +20,6 @@ import parker.serb.util.SlackNotification;
  */
 public class ORGCase {
 
-    
-    
     public int id;
     public boolean active;
     public String orgName;
@@ -61,9 +59,9 @@ public class ORGCase {
     public Timestamp extensionDate;
     
     public static void createNewOrg(String number, String name) {
+        Statement stmt = null;
         try {
-            
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert Into ORGCase (ORGName, ORGNumber, ORGType) Values (?,?,'Local')";
 
@@ -71,7 +69,6 @@ public class ORGCase {
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, number);
             
-
             int success = preparedStatement.executeUpdate();
             
             if (success == 1) {
@@ -83,19 +80,23 @@ public class ORGCase {
                 Global.root.getoRGHeaderPanel2().loadCases();
                 Global.root.getoRGHeaderPanel2().getjComboBox2().setSelectedItem(name);
             }
-            
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                createNewOrg(number, name);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
-    
     public static List loadORGNames() {
-        
         List orgNameList = new ArrayList<>();
+        
+        Statement stmt = null;
             
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select "
                     + " orgName" 
@@ -110,17 +111,22 @@ public class ORGCase {
                 orgNameList.add(caseNumberRS.getString("orgName") != null ? caseNumberRS.getString("orgName") : "");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadORGNames();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return orgNameList;
     }
     
     public static List loadORGNamesAndIDs() {
-        
         List orgNameList = new ArrayList<>();
-            
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select "
                     + " orgName, orgNumber" 
@@ -138,17 +144,23 @@ public class ORGCase {
                 orgNameList.add(org);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadORGNamesAndIDs();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return orgNameList;
     }
     
-    public static List getCaseSearchData() {
-        
+    public static List getCaseSearchData() {       
         List orgNameList = new ArrayList<>();
+        
+        Statement stmt = null;
             
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select "
                     + " orgName, orgNumber, alsoKnownAs" 
@@ -167,20 +179,22 @@ public class ORGCase {
                 orgNameList.add(org);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getCaseSearchData();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return orgNameList;
     }
     
-    /**
-     * Loads the notes that are related to the case
-     * @return a stringified note
-     */
     public static String loadNote() {
         String note = null;
-            
+         
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select Note"
                     + " from ORGCase"
@@ -194,9 +208,13 @@ public class ORGCase {
             caseNumberRS.next();
             
             note = caseNumberRS.getString("note");
-
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadNote();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return note;
     }
@@ -204,8 +222,9 @@ public class ORGCase {
     public static String getORGName() {
         String name = null;
             
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select orgName"
                     + " from ORGCase"
@@ -219,20 +238,25 @@ public class ORGCase {
             caseNumberRS.next();
             
             name = caseNumberRS.getString("orgName");
-
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getORGName();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return name;
     }
-//    
+    
     /**
      * Updates the note that is related to the case number
      * @param note the new note value to be stored
      */
     public static void updateNote(String note) {
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Update ORGCase"
                     + " set note = ?"
@@ -247,19 +271,21 @@ public class ORGCase {
             Audit.addAuditEntry("Updated Note for " + Global.caseNumber);
             Activity.addActivty("Updated Note", null);
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateNote(note);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
-    /**
-     * Load information that is to be displayed in the header.  Dates are
-     * formatted before being returned
-     * @return a REPCase instance with the needed values
-     */
     public static ORGCase loadHeaderInformation() {
         ORGCase org = null;
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select"
                     + " orgNumber,"
@@ -290,14 +316,21 @@ public class ORGCase {
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadHeaderInformation();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return org;
     }
     
     public static ORGCase loadORGInformation() {
         ORGCase org = null;
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select"
                     + " orgName,"
@@ -376,6 +409,11 @@ public class ORGCase {
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadORGInformation();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return org;
     }
@@ -383,8 +421,9 @@ public class ORGCase {
     public static List<ORGCase> getOrgCasesAllLettersDefault(){
         List orgLettersList = new ArrayList<>();
             
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM ORGCase WHERE "
                     + "registrationReport IS NULL AND "
@@ -429,16 +468,22 @@ public class ORGCase {
                 orgLettersList.add(org);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getOrgCasesAllLettersDefault();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return orgLettersList;        
     }
     
     public static List<ORGCase> getOrgCasesAllLetters(String month, String date){
         List orgLettersList = new ArrayList<>();
-            
+         
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM ORGCase WHERE "
                     + "Active = 1 AND Valid = 1 AND FiledByParent = 0 AND fiscalYearEnding = ? "
@@ -489,15 +534,22 @@ public class ORGCase {
                 orgLettersList.add(org);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getOrgCasesAllLetters(month, date);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return orgLettersList;        
     }
     
     public static void updateORGInformation(ORGCase newCaseInformation, ORGCase caseInformation) {
         ORGCase med = null;
+        
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();  
+            stmt = Database.connectToDB().createStatement();  
             
             String sql = "Update ORGCase Set"
                     + " orgName = ?,"
@@ -576,6 +628,11 @@ public class ORGCase {
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateORGInformation(newCaseInformation, caseInformation);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
@@ -884,8 +941,9 @@ public class ORGCase {
     public static boolean validateOrg(String orgNumber) {
         boolean valid = false;
         
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Select Count(*) As results"
                     + " from OrgCase"
@@ -901,9 +959,13 @@ public class ORGCase {
             valid = validRS.getInt("results") > 0;
             
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                validateOrg(orgNumber);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
-        
         return valid;
     }
 }

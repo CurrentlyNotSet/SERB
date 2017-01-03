@@ -42,19 +42,24 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
                     if(Global.root != null) {
                         Global.root.getjButton2().setText("Update");
                         Global.root.getjButton2().setEnabled(false);
+                        Global.root.getjButton9().setVisible(false);
                         if(Global.caseNumber == null) {
                             Global.caseNumber = null;
                             Global.caseMonth = null;
                             Global.caseType = null;
                             Global.caseYear = null;
+                            
                         } 
                         Global.root.getoRGRootPanel1().clearAll();
                     }
                 } else {
                     Global.root.getjButton2().setEnabled(true);
                     loadInformation();
-                    if(Global.root.getoRGRootPanel1().getjTabbedPane1().getSelectedIndex() == 0)
+                    if(Global.root.getoRGRootPanel1().getjTabbedPane1().getSelectedIndex() == 0) {
+                        Global.root.getjButton9().setVisible(true);
                         Global.root.getoRGRootPanel1().getActivityPanel1().loadAllActivity();
+                    }
+                        
                     Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
                 }
             }

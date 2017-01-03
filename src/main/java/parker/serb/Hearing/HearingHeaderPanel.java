@@ -21,8 +21,6 @@ import parker.serb.sql.User;
 import parker.serb.util.CaseNotFoundDialog;
 import parker.serb.util.NumberFormatService;
 
-//
-
 /**
  *
  * @author parker

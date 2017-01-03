@@ -11,24 +11,21 @@ import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.sql.Timestamp;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
-import parker.serb.boardmeetings.RemoveBoardMeetingDialog;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.REPCase;
 import parker.serb.sql.REPElectionMultiCase;
 import parker.serb.sql.REPElectionSiteInformation;
 import parker.serb.util.ClearDateDialog;
 import parker.serb.util.NumberFormatService;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -358,9 +355,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
     }
     
     private void loadWhoPrevailed() {
-        List comps = new ArrayList<>();
-        
-        comps = CaseParty.loadPartiesByCase();
+        List comps = CaseParty.loadPartiesByCase();
         
         System.out.println(comps.size());
         
@@ -670,96 +665,99 @@ public class REPElectionPanel extends javax.swing.JPanel {
         newCaseInformation.electionType2 = electionType2ComboBox.getSelectedItem().toString().trim().equals("") ? null : electionType2ComboBox.getSelectedItem().toString();
         newCaseInformation.electionType3 = electionType3ComboBox.getSelectedItem().toString().trim().equals("") ? null : electionType3ComboBox.getSelectedItem().toString();
         
-        if(newCaseInformation.electionType1.equals("On-Site")) {
-            //eligibilityDate
-            newCaseInformation.eligibilityDate = eligibiltyDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(eligibiltyDateTextBox.getText()));
-            //ballotOne
-            newCaseInformation.ballotOne = ballotOneTextBox.getText().equals("") ? null : ballotOneTextBox.getText();
-            //ballotTwo
-            newCaseInformation.ballotTwo = ballotTwoTextBox.getText().equals("") ? null : ballotTwoTextBox.getText();
-            //ballotThree
-            newCaseInformation.ballotThree = ballotThreeTextBox.getText().equals("") ? null : ballotThreeTextBox.getText();
-            //ballotFour
-            newCaseInformation.ballotFour = ballotFourTextBox.getText().equals("") ? null : ballotFourTextBox.getText();
-            //mailKitDate --> null
-            newCaseInformation.mailKitDate = null;
-            //pollingStartDate --> null
-            newCaseInformation.pollingStartDate = null;
-            //pollingEndDate --> null
-            newCaseInformation.pollingEndDate = null;
-            //ballotsCountDay --> null
-            newCaseInformation.ballotsCountDay = null;
-            //ballotsCountDate --> null
-            newCaseInformation.ballotsCountDate = null;
-            //ballotsCountTime --> null
-            newCaseInformation.ballotsCountTime = null;
-            //eligibilityListDate --> null
-            newCaseInformation.eligibilityListDate = null;
-            //preElectionConfDate
-            newCaseInformation.preElectionConfDate = preElectionConfDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(preElectionConfDateTextBox.getText()));
-            //selfReleasing
-            newCaseInformation.selfReleasing = selfReleasingTextBox.getText().equals("") ? null : selfReleasingTextBox.getText();
-            
-        } else if(newCaseInformation.electionType1.equals("Mail") ||
-                newCaseInformation.electionType1.equals("Electronic")) {
-            //eligibilityDate
-            newCaseInformation.eligibilityDate = eligibilityDate.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(eligibilityDate.getText()));
-            //ballotOne
-            newCaseInformation.ballotOne = ballotOne.getText().equals("") ? null : ballotOne.getText();
-            //ballotTwo
-            newCaseInformation.ballotTwo = ballotTwo.getText().equals("") ? null : ballotTwo.getText();
-            //ballotThree
-            newCaseInformation.ballotThree = ballotThree.getText().equals("") ? null : ballotThree.getText();
-            //ballotFour
-            newCaseInformation.ballotFour = ballotFour.getText().equals("") ? null : ballotFour.getText();
-            //mailKitDate
-            newCaseInformation.mailKitDate = mailKitDate.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(mailKitDate.getText()));
-            //pollingStartDate
-            newCaseInformation.pollingStartDate = pollingStartDate.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(pollingStartDate.getText()));
-            //pollingEndDate
-            newCaseInformation.pollingEndDate = pollingEndDate.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(pollingEndDate.getText()));
-            //ballotsCountDay
-            newCaseInformation.ballotsCountDay = ballotsCountDay.getSelectedItem().toString().trim().equals("") ? null : ballotsCountDay.getSelectedItem().toString().trim();
-            //ballotsCountDate
-            newCaseInformation.ballotsCountDate = ballotsCountDate.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(ballotsCountDate.getText()));
-            //ballotsCountTime
-            newCaseInformation.ballotsCountTime = ballotsCountTime.getText().equals("") ? null : new Timestamp(NumberFormatService.converthmma(ballotsCountTime.getText() + " " + amPMComboBox.getSelectedItem().toString()));
-            //eligibilityListDate
-            newCaseInformation.eligibilityListDate = eligibilityListDate.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(eligibilityListDate.getText()));
-            //preElectionConfDate --> null
-            newCaseInformation.preElectionConfDate = null;
-            //selfReleasing --> null
-            newCaseInformation.selfReleasing = null;
-        } else {
-            //eligibilityDate --> null
-            newCaseInformation.eligibilityDate = null;
-            //ballotOne --> null
-            newCaseInformation.ballotOne = null;
-            //ballotTwo --> null
-            newCaseInformation.ballotTwo = null;
-            //ballotThree --> null
-            newCaseInformation.ballotThree = null;
-            //ballotFour --> null
-            newCaseInformation.ballotFour = null;
-            //mailKitDate --> null
-            newCaseInformation.mailKitDate = null;
-            //pollingStartDate --> null
-            newCaseInformation.pollingStartDate = null;
-            //pollingEndDate --> null
-            newCaseInformation.pollingEndDate = null;
-            //ballotsCountDay --> null
-            newCaseInformation.ballotsCountDay = null;
-            //ballotsCountDate --> null
-            newCaseInformation.ballotsCountDate = null;
-            //ballotsCountTime --> null
-            newCaseInformation.ballotsCountTime = null;
-            //eligibilityListDate --> null
-            newCaseInformation.eligibilityListDate = null;
-            //preElectionConfDate --> null
-            newCaseInformation.preElectionConfDate = null;
-            //selfReleasing --> null
-            newCaseInformation.selfReleasing = null;
-        }    
+        switch (newCaseInformation.electionType1) {
+            case "On-Site":
+                //eligibilityDate
+                newCaseInformation.eligibilityDate = eligibiltyDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(eligibiltyDateTextBox.getText()));
+                //ballotOne
+                newCaseInformation.ballotOne = ballotOneTextBox.getText().equals("") ? null : ballotOneTextBox.getText();
+                //ballotTwo
+                newCaseInformation.ballotTwo = ballotTwoTextBox.getText().equals("") ? null : ballotTwoTextBox.getText();
+                //ballotThree
+                newCaseInformation.ballotThree = ballotThreeTextBox.getText().equals("") ? null : ballotThreeTextBox.getText();
+                //ballotFour
+                newCaseInformation.ballotFour = ballotFourTextBox.getText().equals("") ? null : ballotFourTextBox.getText();
+                //mailKitDate --> null
+                newCaseInformation.mailKitDate = null;
+                //pollingStartDate --> null
+                newCaseInformation.pollingStartDate = null;
+                //pollingEndDate --> null
+                newCaseInformation.pollingEndDate = null;
+                //ballotsCountDay --> null
+                newCaseInformation.ballotsCountDay = null;
+                //ballotsCountDate --> null
+                newCaseInformation.ballotsCountDate = null;
+                //ballotsCountTime --> null
+                newCaseInformation.ballotsCountTime = null;
+                //eligibilityListDate --> null
+                newCaseInformation.eligibilityListDate = null;
+                //preElectionConfDate
+                newCaseInformation.preElectionConfDate = preElectionConfDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(preElectionConfDateTextBox.getText()));
+                //selfReleasing
+                newCaseInformation.selfReleasing = selfReleasingTextBox.getText().equals("") ? null : selfReleasingTextBox.getText();
+                break;
+            case "Mail":
+            case "Electronic":
+                //eligibilityDate
+                newCaseInformation.eligibilityDate = eligibilityDate.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(eligibilityDate.getText()));
+                //ballotOne
+                newCaseInformation.ballotOne = ballotOne.getText().equals("") ? null : ballotOne.getText();
+                //ballotTwo
+                newCaseInformation.ballotTwo = ballotTwo.getText().equals("") ? null : ballotTwo.getText();
+                //ballotThree
+                newCaseInformation.ballotThree = ballotThree.getText().equals("") ? null : ballotThree.getText();
+                //ballotFour
+                newCaseInformation.ballotFour = ballotFour.getText().equals("") ? null : ballotFour.getText();
+                //mailKitDate
+                newCaseInformation.mailKitDate = mailKitDate.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(mailKitDate.getText()));
+                //pollingStartDate
+                newCaseInformation.pollingStartDate = pollingStartDate.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(pollingStartDate.getText()));
+                //pollingEndDate
+                newCaseInformation.pollingEndDate = pollingEndDate.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(pollingEndDate.getText()));
+                //ballotsCountDay
+                newCaseInformation.ballotsCountDay = ballotsCountDay.getSelectedItem().toString().trim().equals("") ? null : ballotsCountDay.getSelectedItem().toString().trim();
+                //ballotsCountDate
+                newCaseInformation.ballotsCountDate = ballotsCountDate.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(ballotsCountDate.getText()));
+                //ballotsCountTime
+                newCaseInformation.ballotsCountTime = ballotsCountTime.getText().equals("") ? null : new Timestamp(NumberFormatService.converthmma(ballotsCountTime.getText() + " " + amPMComboBox.getSelectedItem().toString()));
+                //eligibilityListDate
+                newCaseInformation.eligibilityListDate = eligibilityListDate.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(eligibilityListDate.getText()));
+                //preElectionConfDate --> null
+                newCaseInformation.preElectionConfDate = null;
+                //selfReleasing --> null
+                newCaseInformation.selfReleasing = null;
+                break;
+            default:
+                //eligibilityDate --> null
+                newCaseInformation.eligibilityDate = null;
+                //ballotOne --> null
+                newCaseInformation.ballotOne = null;
+                //ballotTwo --> null
+                newCaseInformation.ballotTwo = null;
+                //ballotThree --> null
+                newCaseInformation.ballotThree = null;
+                //ballotFour --> null
+                newCaseInformation.ballotFour = null;
+                //mailKitDate --> null
+                newCaseInformation.mailKitDate = null;
+                //pollingStartDate --> null
+                newCaseInformation.pollingStartDate = null;
+                //pollingEndDate --> null
+                newCaseInformation.pollingEndDate = null;
+                //ballotsCountDay --> null
+                newCaseInformation.ballotsCountDay = null;
+                //ballotsCountDate --> null
+                newCaseInformation.ballotsCountDate = null;
+                //ballotsCountTime --> null
+                newCaseInformation.ballotsCountTime = null;
+                //eligibilityListDate --> null
+                newCaseInformation.eligibilityListDate = null;
+                //preElectionConfDate --> null
+                newCaseInformation.preElectionConfDate = null;
+                //selfReleasing --> null
+                newCaseInformation.selfReleasing = null;
+                break;
+        }
         
         if(jPanel5.isVisible()) {
             newCaseInformation.resultApproxNumberEligibleVotes = resultsApproxNumberOfEligibleVoters.getText().equals("") ? null : resultsApproxNumberOfEligibleVoters.getText();
@@ -2501,7 +2499,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
             cal.add(Calendar.DATE, 14);
             pollingEndDate.setText(Global.mmddyyyy.format(cal.getTime()));
         } catch (ParseException ex) {
-            Logger.getLogger(REPElectionPanel.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
         }
         
     }//GEN-LAST:event_pollingStartDateCaretPositionChanged
@@ -2514,7 +2512,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
             cal.add(Calendar.DATE, 14);
             pollingEndDate.setText(Global.mmddyyyy.format(cal.getTime()));
         } catch (ParseException ex) {
-            Logger.getLogger(REPElectionPanel.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
         }
     }//GEN-LAST:event_pollingStartDateActionPerformed
 

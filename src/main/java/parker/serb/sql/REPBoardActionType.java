@@ -7,9 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import static parker.serb.sql.ULPCase.checkIfFristCaseOfMonth;
+import org.apache.commons.dbutils.DbUtils;
 import parker.serb.util.SlackNotification;
 
 /**
@@ -32,9 +30,7 @@ public class REPBoardActionType {
         List<String> REPBoardActionTypeList = new ArrayList<String>();
         
         Statement stmt = null;
-            
         try {
-
             stmt = Database.connectToDB().createStatement();
 
             String sql = "select shortDescription from REPBoardActionType where active = 1 ORDER BY shortDescription";
@@ -47,12 +43,12 @@ public class REPBoardActionType {
                 REPBoardActionTypeList.add(caseActivity.getString("shortDescription"));
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 loadAllREPBoardActionTypes();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return REPBoardActionTypeList;
     }
@@ -60,9 +56,9 @@ public class REPBoardActionType {
     public static List searchREPBoardActionTypes(String[] param) {
         List<REPBoardActionType> recommendationList = new ArrayList<>();
 
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM REPBoardActionType";
             if (param.length > 0) {
@@ -94,12 +90,12 @@ public class REPBoardActionType {
                 recommendationList.add(act);
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 searchREPBoardActionTypes(param);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return recommendationList;
     }
@@ -107,8 +103,9 @@ public class REPBoardActionType {
     public static REPBoardActionType getREPBoardActionTypeByID(int id) {
         REPBoardActionType item = new REPBoardActionType();
 
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM REPBoardActionType WHERE id = ?";
 
@@ -124,20 +121,20 @@ public class REPBoardActionType {
                 item.longDescription = rs.getString("longDescription") == null ? "" : rs.getString("longDescription");
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 getREPBoardActionTypeByID(id);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return item;
     }
 
     public static void createREPBoardActionType(REPBoardActionType item) {
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert INTO REPBoardActionType "
                     + "(active, shortDescription, longDescription)"
@@ -150,18 +147,19 @@ public class REPBoardActionType {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 createREPBoardActionType(item);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
 
     public static void updateREPBoardActionType(REPBoardActionType item) {
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE REPBoardActionType SET "
                     + "active = ?, "
@@ -177,12 +175,12 @@ public class REPBoardActionType {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 updateREPBoardActionType(item);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
 }

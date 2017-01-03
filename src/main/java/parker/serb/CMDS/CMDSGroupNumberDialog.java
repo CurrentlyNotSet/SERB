@@ -157,8 +157,7 @@ public class CMDSGroupNumberDialog extends javax.swing.JDialog {
         
         if(groupNumber.equals("")) {
             groupNumber = addToGroup.getGroupNumber();
-            groupNumberLabel.setText(groupNumber);
-            
+            groupNumberLabel.setText(groupNumber); 
         }
         
         loadGroupCases();

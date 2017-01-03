@@ -15,7 +15,6 @@ import javax.swing.JFrame;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import parker.serb.Global;
-import parker.serb.sql.BoardMeeting;
 import parker.serb.sql.REPMediation;
 import parker.serb.sql.User;
 import parker.serb.util.CancelUpdate;
@@ -188,7 +187,7 @@ public class REPUpdateMediationDialog extends javax.swing.JDialog {
     private void loadToComboBox() {
         List userList = null;
         
-        userList = User.loadREPComboBox();
+        userList = User.loadSectionDropDowns("REP");
         
         mediatorComboBox.setMaximumRowCount(6);
         mediatorComboBox.removeAllItems();

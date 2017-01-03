@@ -1,5 +1,6 @@
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,11 +9,11 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.dbutils.DbUtils;
 import parker.serb.Global;
+import static parker.serb.sql.BargainingUnit.getCertStatus;
 import parker.serb.util.NumberFormatService;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -61,7 +62,10 @@ public class BoardMeeting {
             Activity.addActivty("Added New Board Meeting Information", null);
 
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                addULPBoardMeeting(meetingDate, agendaItem, recommendation);
+            } 
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -74,7 +78,6 @@ public class BoardMeeting {
         Statement stmt = null;
             
         try {
-
             stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert INTO BoardMeeting"
@@ -101,9 +104,11 @@ public class BoardMeeting {
             preparedStatement.executeUpdate();
             
             Activity.addActivty("Added New Board Meeting Information", null);
-
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                addREPBoardMeeting(meetingDate, agendaItem, recommendation, memoDate);
+            } 
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -111,10 +116,12 @@ public class BoardMeeting {
     
     public static List loadULPBoardMeetings() {
         List<BoardMeeting> boardMeetingList = new ArrayList<>();
-            
+        
+        Statement stmt = null;
+        
         try {
 
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "select * from BoardMeeting where"
                     + " caseYear = ? AND"
@@ -140,17 +147,24 @@ public class BoardMeeting {
                 boardMeetingList.add(meeting);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadULPBoardMeetings();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return boardMeetingList;
     }
     
     public static List loadREPBoardMeetings() {
         List<BoardMeeting> boardMeetingList = new ArrayList<>();
-            
+         
+        Statement stmt = null;
+        
         try {
 
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "select * from BoardMeeting where"
                     + " caseYear = ? AND"
@@ -177,15 +191,22 @@ public class BoardMeeting {
                 boardMeetingList.add(meeting);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadREPBoardMeetings();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return boardMeetingList;
     }
     
     public static void updateULPBoardMeeting(String id, String date, String agenda, String rec) {
+        Statement stmt = null;
+        
         try {
 
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Update BoardMeeting SET"
                     + " boardMeetingDate = ?,"
@@ -202,14 +223,21 @@ public class BoardMeeting {
             preparedStatement.executeUpdate();
             Activity.addActivty("Updated Board Meeting Information", null);
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateULPBoardMeeting(id, date, agenda, rec);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void updateREPBoardMeeting(String id, String date, String agenda, String rec, String memoDate) {
+        Statement stmt = null;
+        
         try {
 
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Update BoardMeeting SET"
                     + " boardMeetingDate = ?,"
@@ -224,19 +252,24 @@ public class BoardMeeting {
             preparedStatement.setString(3, rec);
             preparedStatement.setTimestamp(4, new Timestamp(NumberFormatService.convertMMDDYYYY(memoDate)));
             preparedStatement.setString(5, id);
-            
 
             preparedStatement.executeUpdate();
             Activity.addActivty("Updated Board Meeting Information", null);
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateREPBoardMeeting(id, date, agenda, rec, memoDate);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
-    public static void removeBoardMeeting(String id)
-    {
+    public static void removeBoardMeeting(String id) {
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Delete from BoardMeeting"
                     + " where id = ?";
@@ -247,7 +280,12 @@ public class BoardMeeting {
             preparedStatement.executeUpdate();
             Activity.addActivty("Removed Board Meeting Information", null);
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                removeBoardMeeting(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
 }

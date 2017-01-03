@@ -13,7 +13,6 @@ import javax.swing.JFrame;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import parker.serb.Global;
-import parker.serb.sql.Database;
 
 /**
  *

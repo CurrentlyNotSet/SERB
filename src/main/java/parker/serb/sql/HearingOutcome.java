@@ -1,13 +1,14 @@
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -19,18 +20,12 @@ public class HearingOutcome {
     public boolean active;
     public String type;
     public String description;
-    
-    /**
-     * Loads all activities without a limited result
-     * @return list of all Activities per case
-     */
+
     public static List loadOutcomesByType(String section) {
         List<HearingOutcome> activityTypeList = new ArrayList<HearingOutcome>();
         
-        Statement stmt = null;
-            
+        Statement stmt = null; 
         try {
-
             stmt = Database.connectToDB().createStatement();
 
             String sql = "select * from HearingOutcome"
@@ -51,8 +46,12 @@ public class HearingOutcome {
                 activityTypeList.add(activityType);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadOutcomesByType(section);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return activityTypeList;
     }

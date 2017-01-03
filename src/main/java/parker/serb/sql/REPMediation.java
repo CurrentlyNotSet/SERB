@@ -9,11 +9,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.dbutils.DbUtils;
 import parker.serb.Global;
-import static parker.serb.sql.REPBoardActionType.loadAllREPBoardActionTypes;
 import parker.serb.util.SlackNotification;
 
 /**
@@ -34,10 +31,8 @@ public class REPMediation {
     public String mediationOutcome;
     
     public static void addMediation(Date date, String type, String mediator, String outcome) {
-        Statement stmt = null;
-            
+        Statement stmt = null; 
         try {
-
             stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert INTO REPMediation VALUES (?,?,?,?,?,?,?,?,?)";
@@ -56,33 +51,22 @@ public class REPMediation {
             preparedStatement.executeUpdate();
             
             Activity.addActivty("Created " + type, null);
-
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 addMediation(date, type, mediator, outcome);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
     
-    
-    
-    /**
-     * Loads all activity for a specified case number, pulls the case number
-     * from global
-     * @param searchTerm term to limit the search results
-     * @return List of Activities
-     */
     public static List loadMediationsByCaseNumber() {
         List<REPMediation> mediationList = new ArrayList<>();
-            
+        
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "select * from REPMediation"
                     + " where caseYear = ? and"
@@ -110,12 +94,12 @@ public class REPMediation {
                 mediationList.add(act);
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 loadMediationsByCaseNumber();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return mediationList;
     }
@@ -124,9 +108,7 @@ public class REPMediation {
         REPMediation activity = new REPMediation();
         
         Statement stmt = null;
-            
         try {
-
             stmt = Database.connectToDB().createStatement();
 
             String sql = "select * From REPMediation"
@@ -145,12 +127,12 @@ public class REPMediation {
                 activity.mediationOutcome = caseActivity.getString("mediationOutcome") == null ? "" : caseActivity.getString("mediationOutcome");
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 loadMeidationByID(id);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return activity;
     }
@@ -159,10 +141,11 @@ public class REPMediation {
             Date date,
             String type,
             String mediator,
-            String outcome) {
+            String outcome)
+    {
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "update REPMediation SET"
                     + " mediationDate = ?,"
@@ -182,19 +165,19 @@ public class REPMediation {
             
             Activity.addActivty("Updated Mediation", null);
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 updateMediationByID(id, date, type, mediator, outcome);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void deleteMediationByID(int id) {
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "delete from REPMediation"
                     + " Where id = ?";
@@ -206,12 +189,12 @@ public class REPMediation {
             
             Activity.addActivty("Removed Mediation", null);
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 deleteMediationByID(id);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
 }

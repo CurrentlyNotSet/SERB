@@ -1,5 +1,6 @@
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,9 +9,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
 import parker.serb.Global;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -30,10 +31,11 @@ public class EmployerCaseSearchData {
     
     public static List loadEmployerCaseList() {
         List<EmployerCaseSearchData> ulpCaseList = new ArrayList<>();
-            
+          
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "select * from EmployerCaseSearchData ORDER BY filedate DESC";
 
@@ -55,17 +57,21 @@ public class EmployerCaseSearchData {
                 ulpCaseList.add(repCase);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadEmployerCaseList();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return ulpCaseList;
     }
     
     public static void createNewCaseEntry(String year, String type, String month, String number) {
-            
+        Statement stmt = null;   
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "INSERT INTO EmployerCaseSearchData (caseYear, caseType, caseMonth, caseNumber) VALUES (?,?,?,?)";
 
@@ -78,15 +84,20 @@ public class EmployerCaseSearchData {
             preparedStatement.executeUpdate();
             
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                createNewCaseEntry(year, type, month, number);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void updateCaseStatus(String caseStatus) {
-            
+        Statement stmt = null;  
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE EmployerCaseSearchData SET"
                     + " caseStatus = ?"
@@ -105,15 +116,20 @@ public class EmployerCaseSearchData {
             preparedStatement.executeUpdate();
             
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateCaseStatus(caseStatus);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void updateFileDate(Timestamp fileDate) {
-            
+        Statement stmt = null;    
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE EmployerCaseSearchData SET"
                     + " fileDate = ?"
@@ -132,15 +148,20 @@ public class EmployerCaseSearchData {
             preparedStatement.executeUpdate();
             
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateFileDate(fileDate);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void updateEmployer(String employerID) {
-            
+        Statement stmt = null;    
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE EmployerCaseSearchData SET"
                     + " employer = ?,"
@@ -161,16 +182,21 @@ public class EmployerCaseSearchData {
             preparedStatement.executeUpdate();
             
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateEmployer(employerID);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void updateCaseEntryFromCaseInformation(
             String bunnumber, String county, String boarddeemed) {
-            
-        try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+        Statement stmt = null;    
+        
+        try {   
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE MEDCaseSearch SET"
                     + " bunnumber = ?,"
@@ -195,7 +221,12 @@ public class EmployerCaseSearchData {
             preparedStatement.executeUpdate();
             
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateCaseEntryFromCaseInformation(bunnumber, county, boarddeemed);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
 }

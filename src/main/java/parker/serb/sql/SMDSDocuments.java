@@ -5,14 +5,15 @@
  */
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -38,10 +39,10 @@ public class SMDSDocuments {
     
     public static List loadDocumentNamesByTypeAndSection(String section, String type) {
         List<SMDSDocuments> documentList = new ArrayList<>();
-            
+        
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "select * from SMDSDocuments where"
                     + " section = ? AND"
@@ -76,7 +77,98 @@ public class SMDSDocuments {
                 documentList.add(doc);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadDocumentNamesByTypeAndSection(section, type);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return documentList;
+    }
+    
+    public static List loadDocumentGroupByTypeAndSection(String section, String type) {
+        List<String> documentList = new ArrayList<>();
+        
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "select DISTINCT [group] from SMDSDocuments where"
+                    + " section = ? AND"
+                    + " type = ? AND"
+                    + " active = 1";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, section);
+            preparedStatement.setString(2, type);
+
+            ResultSet docList = preparedStatement.executeQuery();
+            
+            while(docList.next()) {
+                if (docList.getString("group") != null) {
+                    documentList.add(docList.getString("group"));
+                }
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadDocumentGroupByTypeAndSection(section, type);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return documentList;
+    }
+    
+    public static List loadDocumentNamesByTypeSectionGroup(String section, String type, String group) {
+        List<SMDSDocuments> documentList = new ArrayList<>();
+        
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "select * from SMDSDocuments where"
+                    + " section = ? AND "
+                    + " type = ? AND "
+                    + " [group] = ? AND "
+                    + " active = 1"
+                    + " order by cast(description as nvarchar(max))";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, section);
+            preparedStatement.setString(2, type);
+            preparedStatement.setString(3, group);
+
+            ResultSet docList = preparedStatement.executeQuery();
+            
+            while(docList.next()) {
+                SMDSDocuments doc = new SMDSDocuments();
+                doc.id = docList.getInt("id");
+                doc.active = docList.getBoolean("active");
+                doc.section = docList.getString("section");
+                doc.type = docList.getString("type");
+                doc.description = docList.getString("description");
+                doc.fileName = docList.getString("fileName");
+                doc.dueDate = docList.getInt("dueDate");
+                doc.group = docList.getString("group");
+                doc.historyFileName = docList.getString("historyFileName");
+                doc.historyDescription = docList.getString("historyDescription");
+                doc.CHDCHG = docList.getString("CHDCHG");
+                doc.questionsFileName = docList.getString("questionsFileName");
+                doc.emailSubject = docList.getString("emailSubject");
+                doc.parameters = docList.getString("parameters");
+                doc.emailBody = docList.getString("emailBody");
+                doc.sortOrder = docList.getDouble("sortOrder");
+                documentList.add(doc);
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadDocumentNamesByTypeSectionGroup(section, type, group);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return documentList;
     }
@@ -84,9 +176,9 @@ public class SMDSDocuments {
     public static SMDSDocuments findDocumentByID(int id) {
         SMDSDocuments doc = new SMDSDocuments();
         
+        Statement stmt = null;
         try {
-            
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "Select * from SMDSDocuments where id = ?";
             
@@ -114,7 +206,12 @@ public class SMDSDocuments {
                 doc.sortOrder = foundDoc.getDouble("sortOrder");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(SMDSDocuments.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                findDocumentByID(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return doc;
     }
@@ -122,9 +219,9 @@ public class SMDSDocuments {
     public static SMDSDocuments findDocumentByFileName(String fileName) {
         SMDSDocuments doc = new SMDSDocuments();
         
+        Statement stmt = null;
         try {
-            
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "Select * from SMDSDocuments where fileName = ?";
             
@@ -152,7 +249,12 @@ public class SMDSDocuments {
                 doc.sortOrder = foundDoc.getDouble("sortOrder");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(SMDSDocuments.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                findDocumentByFileName(fileName);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return doc;
     }
@@ -160,9 +262,9 @@ public class SMDSDocuments {
     public static SMDSDocuments findDocumentByDescription(String description) {
         SMDSDocuments doc = new SMDSDocuments();
         
+        Statement stmt = null;
         try {
-            
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
             
             String sql = "Select * from SMDSDocuments where description = ?";
             
@@ -190,7 +292,12 @@ public class SMDSDocuments {
                 doc.sortOrder = foundDoc.getDouble("sortOrder");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(SMDSDocuments.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                findDocumentByDescription(description);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return doc;
     }
@@ -198,8 +305,9 @@ public class SMDSDocuments {
     public static List<SMDSDocuments> loadAllDocuments(String[] param) {
         List<SMDSDocuments> list = new ArrayList<>();
 
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM SMDSDocuments";
             if (param.length > 0) {
@@ -243,7 +351,12 @@ public class SMDSDocuments {
                 list.add(item);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadAllDocuments(param);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return list;
     }    
@@ -251,8 +364,9 @@ public class SMDSDocuments {
     public static SMDSDocuments getDocumentByID(int id) {
         SMDSDocuments item = new SMDSDocuments();
 
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM SMDSDocuments WHERE id = ?";
 
@@ -280,15 +394,20 @@ public class SMDSDocuments {
                 item.sortOrder = rs.getDouble("sortOrder");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getDocumentByID(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return item;
     }
     
     public static void createDocument(SMDSDocuments item) {
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert INTO SMDSDocuments ("
                     + "active, "
@@ -348,13 +467,19 @@ public class SMDSDocuments {
             }
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                createDocument(item);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
 
     public static void updateDocument(SMDSDocuments item) {
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE SMDSDocuments SET "
                     + "active = ?, "        //01
@@ -402,8 +527,12 @@ public class SMDSDocuments {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateDocument(item);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
-    
 }

@@ -14,8 +14,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JTable;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -27,6 +25,7 @@ import parker.serb.sql.CaseParty;
 import parker.serb.sql.MEDCaseSearchData;
 import parker.serb.sql.REPCaseSearchData;
 import parker.serb.sql.ULPCaseSearchData;
+import parker.serb.util.SlackNotification;
 
 //TODO: Implement duplicate party catch
 
@@ -139,10 +138,8 @@ public class PartiesPanel extends javax.swing.JPanel {
                             && !jTable1.getValueAt(jTable1.getSelectedRow(), 5).toString().equals("")) {
                         try {
                             Desktop.getDesktop().mail(new URI("mailto:" + jTable1.getValueAt(jTable1.getSelectedRow(), 5).toString().replace(" ", "") + "?bcc=" + Global.activeUser.emailAddress));
-                        } catch (IOException ex) {
-                            Logger.getLogger(PartiesPanel.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (URISyntaxException ex) {
-                            Logger.getLogger(PartiesPanel.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (IOException | URISyntaxException ex) {
+                            SlackNotification.sendNotification(ex);
                         }
                     } else {
                         if(!jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("")) {

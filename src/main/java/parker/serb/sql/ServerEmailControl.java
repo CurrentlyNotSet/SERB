@@ -5,13 +5,14 @@
  */
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -28,8 +29,9 @@ public class ServerEmailControl {
     public static ServerEmailControl getServerEmailControl() {
         ServerEmailControl item = new ServerEmailControl();
 
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM ServerEmailControl WHERE id = 1";
 
@@ -46,7 +48,12 @@ public class ServerEmailControl {
                 item.stampScans = rs.getTimestamp("stampScans") == null ? null : rs.getTimestamp("stampScans");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getServerEmailControl();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return item;
     }

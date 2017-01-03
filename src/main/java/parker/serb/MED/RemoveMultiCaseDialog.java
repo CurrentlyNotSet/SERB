@@ -5,7 +5,6 @@
  */
 package parker.serb.MED;
 
-import parker.serb.relatedcase.*;
 import parker.serb.sql.RelatedCase;
 
 /**

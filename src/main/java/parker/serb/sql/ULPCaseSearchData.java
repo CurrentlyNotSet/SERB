@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.dbutils.DbUtils;
 import parker.serb.Global;
 import parker.serb.util.SlackNotification;
 
@@ -28,10 +29,10 @@ public class ULPCaseSearchData {
     
     public static List loadULPCaseList() {
         List<ULPCaseSearchData> ulpCaseList = new ArrayList<>();
-            
+        
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "select * from ULPCaseSearch ORDER BY id DESC";
 
@@ -53,21 +54,20 @@ public class ULPCaseSearchData {
                 ulpCaseList.add(ulpCase);
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 loadULPCaseList();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return ulpCaseList;
     }
     
     public static void createNewCaseEntry(String year, String type, String month, String number) {
-            
+        Statement stmt = null;    
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "INSERT INTO ULPCaseSearch VALUES (?,?,?,?,?,?,?,?)";
 
@@ -82,22 +82,20 @@ public class ULPCaseSearchData {
             preparedStatement.setString(8, null);
 
             preparedStatement.executeUpdate();
-            
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 createNewCaseEntry(year, type, month, number);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void updateCaseEntryFromParties(String charged, String charging) {
-            
+        Statement stmt = null;    
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE ULPCaseSearch SET"
                     + " chargingParty = ?,"
@@ -116,22 +114,20 @@ public class ULPCaseSearchData {
             preparedStatement.setString(6, Global.caseNumber);
 
             preparedStatement.executeUpdate();
-            
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 updateCaseEntryFromParties(charged, charging);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void updateCaseEntryFromStatus(String employerNumber, String unionNumber) {
-            
+        Statement stmt = null;    
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE ULPCaseSearch SET"
                     + " employerNumber = ?,"
@@ -150,14 +146,13 @@ public class ULPCaseSearchData {
             preparedStatement.setString(6, Global.caseNumber);
 
             preparedStatement.executeUpdate();
-            
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 updateCaseEntryFromStatus(employerNumber, unionNumber);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
 }

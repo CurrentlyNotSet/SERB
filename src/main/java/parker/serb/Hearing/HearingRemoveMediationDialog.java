@@ -5,7 +5,6 @@
  */
 package parker.serb.Hearing;
 
-import parker.serb.sql.CMDSHearing;
 import parker.serb.sql.HearingsMediation;
 
 /**
@@ -16,9 +15,7 @@ public class HearingRemoveMediationDialog extends javax.swing.JDialog {
 
     String id;
     String mediationDate;
-    /**
-     * Creates new form CMDSRemoveHearingDialog
-     */
+    
     public HearingRemoveMediationDialog(java.awt.Frame parent, boolean modal,
             String passedID, String passedMediationDate) {
         super(parent, modal);
@@ -107,7 +104,6 @@ public class HearingRemoveMediationDialog extends javax.swing.JDialog {
         HearingsMediation.removeMediationByID(id, mediationDate);
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

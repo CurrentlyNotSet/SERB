@@ -7,9 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import static parker.serb.sql.REPBoardActionType.loadAllREPBoardActionTypes;
+import org.apache.commons.dbutils.DbUtils;
 import parker.serb.util.SlackNotification;
 
 /**
@@ -25,10 +23,10 @@ public class REPCaseStatus {
        
     public static List loadAll() {
         List caseStatusList = new ArrayList<>();
-            
+           
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "select * from REPCaseStatus where active = 1";
 
@@ -44,12 +42,12 @@ public class REPCaseStatus {
                 caseStatusList.add(rep);
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 loadAll();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return caseStatusList;
     }
@@ -57,9 +55,9 @@ public class REPCaseStatus {
     public static List searchREPStatusOptions(String[] param) {
         List<REPCaseStatus> recommendationList = new ArrayList<>();
 
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM REPCaseStatus";
             if (param.length > 0) {
@@ -91,12 +89,12 @@ public class REPCaseStatus {
                 recommendationList.add(act);
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 searchREPStatusOptions(param);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return recommendationList;
     }
@@ -132,9 +130,9 @@ public class REPCaseStatus {
     }
 
     public static void createREPStatusOption(REPCaseStatus item) {
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert INTO REPCaseStatus "
                     + "(active, statusType, status)"
@@ -147,18 +145,19 @@ public class REPCaseStatus {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 createREPStatusOption(item);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
 
     public static void updateREPStatusOption(REPCaseStatus item) {
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE REPCaseStatus SET "
                     + "active = ?, "
@@ -174,13 +173,12 @@ public class REPCaseStatus {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 updateREPStatusOption(item);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
-    
 }

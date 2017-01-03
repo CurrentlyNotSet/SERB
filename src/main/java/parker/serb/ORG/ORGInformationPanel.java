@@ -20,7 +20,6 @@ import parker.serb.employer.employerDetail;
 import parker.serb.employer.employerSearch;
 import parker.serb.sql.County;
 import parker.serb.sql.Employer;
-import parker.serb.sql.MEDCase;
 import parker.serb.sql.ORGCase;
 import parker.serb.util.ClearDateDialog;
 import parker.serb.util.NumberFormatService;

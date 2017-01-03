@@ -21,8 +21,6 @@ import parker.serb.sql.User;
 import parker.serb.util.CaseNotFoundDialog;
 import parker.serb.util.NumberFormatService;
 
-//
-
 /**
  *
  * @author parker
@@ -48,6 +46,7 @@ public class CMDSHeaderPanel extends javax.swing.JPanel {
                         Global.root.getjButton2().setText("Update");
                         Global.root.getjButton2().setEnabled(false);
                         if(Global.caseNumber == null) {
+                            Global.root.getjButton9().setVisible(false);
                             Global.caseNumber = null;
                             Global.caseMonth = null;
                             Global.caseType = null;
@@ -61,6 +60,7 @@ public class CMDSHeaderPanel extends javax.swing.JPanel {
                         Global.root.getcMDSRootPanel1().getActivityPanel1().loadAllActivity();
                         Global.root.getjButton2().setText("Add Entry");
                         Global.root.getjButton2().setEnabled(true);
+                        Global.root.getjButton9().setVisible(false);
                     }
                     Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
                 }
@@ -185,9 +185,6 @@ public class CMDSHeaderPanel extends javax.swing.JPanel {
         return appelleeTextBox;
     }
     
-    
-    
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -248,11 +245,6 @@ public class CMDSHeaderPanel extends javax.swing.JPanel {
         groupNumberTextBox.setEditable(false);
         groupNumberTextBox.setBackground(new java.awt.Color(238, 238, 238));
         groupNumberTextBox.setFocusable(false);
-        groupNumberTextBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                groupNumberTextBoxActionPerformed(evt);
-            }
-        });
 
         aljTextBox.setEditable(false);
         aljTextBox.setBackground(new java.awt.Color(238, 238, 238));
@@ -413,10 +405,6 @@ public class CMDSHeaderPanel extends javax.swing.JPanel {
 
         add(jPanel2);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void groupNumberTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_groupNumberTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_groupNumberTextBoxActionPerformed
 
     private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
         if(SwingUtilities.isRightMouseButton(evt) || evt.getButton() == MouseEvent.BUTTON3) {

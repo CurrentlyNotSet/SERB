@@ -5,14 +5,15 @@
  */
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -27,9 +28,9 @@ public class PostalOutAttachment {
     public static List<PostalOutAttachment> getPostalOutAttachments(int id) {
         List<PostalOutAttachment> emailList = new ArrayList<>();
         
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM PostalOutAttachment WHERE postalOutID = ? ORDER BY primaryAttachment DESC";
             
@@ -47,15 +48,20 @@ public class PostalOutAttachment {
                 emailList.add(eml);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getPostalOutAttachments(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return emailList;
     }
     
     public static void insertAttachment(PostalOutAttachment item) {
+        Statement stmt = null;
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert INTO PostalOutAttachment ("
                     + "postalOutID, "
@@ -73,13 +79,19 @@ public class PostalOutAttachment {
             preparedStatement.setBoolean(3, item.primaryAttachment);
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                insertAttachment(item);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void removeEntry(int id){
+        Statement stmt = null;
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "DELETE FROM PostalOutAttachment WHERE postalOutID = ?";
 
@@ -88,7 +100,12 @@ public class PostalOutAttachment {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                removeEntry(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
 }

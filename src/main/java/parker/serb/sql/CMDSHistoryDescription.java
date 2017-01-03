@@ -5,14 +5,15 @@
  */
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -28,8 +29,10 @@ public class CMDSHistoryDescription {
     public static List<CMDSHistoryDescription> loadAllCMDSHistoryDescription(String[] param) {
         List<CMDSHistoryDescription> list = new ArrayList<>();
 
+        Statement stmt = null;        
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM CMDSHistoryDescription";
             if (param.length > 0) {
@@ -61,8 +64,12 @@ public class CMDSHistoryDescription {
                 list.add(item);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadAllHearingsHistoryDescription(param);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return list;
     }
@@ -70,8 +77,10 @@ public class CMDSHistoryDescription {
     public static List<CMDSHistoryDescription> loadAllHearingsHistoryDescription(String[] param) {
         List<CMDSHistoryDescription> list = new ArrayList<>();
 
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM HearingHistoryDescription";
             if (param.length > 0) {
@@ -103,8 +112,12 @@ public class CMDSHistoryDescription {
                 list.add(item);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadAllHearingsHistoryDescription(param);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return list;
     }
@@ -112,8 +125,10 @@ public class CMDSHistoryDescription {
     public static List<CMDSHistoryDescription> loadAllStatusTypes(String category) {
         List<CMDSHistoryDescription> list = new ArrayList<>();
 
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM CMDSHistoryDescription where category = ? order by description";
 
@@ -131,8 +146,12 @@ public class CMDSHistoryDescription {
                 list.add(item);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadAllStatusTypes(category);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return list;
     }
@@ -140,8 +159,10 @@ public class CMDSHistoryDescription {
     public static CMDSHistoryDescription getCMDSHistoryDescriptionByID(int id) {
         CMDSHistoryDescription item = new CMDSHistoryDescription();
 
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM CMDSHistoryDescription WHERE id = ?";
 
@@ -157,7 +178,12 @@ public class CMDSHistoryDescription {
                 item.description = rs.getString("description") == null ? "" : rs.getString("description").trim();
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getCMDSHistoryDescriptionByID(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return item;
     }
@@ -165,8 +191,10 @@ public class CMDSHistoryDescription {
     public static CMDSHistoryDescription getHearingHistoryDescriptionByID(int id) {
         CMDSHistoryDescription item = new CMDSHistoryDescription();
 
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM HearingHistoryDescription WHERE id = ?";
 
@@ -182,15 +210,21 @@ public class CMDSHistoryDescription {
                 item.description = rs.getString("description") == null ? "" : rs.getString("description").trim();
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getHearingHistoryDescriptionByID(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return item;
     }
     
     public static void createCMDSHistoryDescription(CMDSHistoryDescription item) {
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert INTO CMDSHistoryDescription "
                     + "(active, category, description)"
@@ -202,14 +236,20 @@ public class CMDSHistoryDescription {
             preparedStatement.setString(2, item.description.equals("") ? null : item.description.trim());
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                createCMDSHistoryDescription(item);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void createHearingHistoryDescription(CMDSHistoryDescription item) {
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert INTO HearingHistoryDescription "
                     + "(active, category, description)"
@@ -221,13 +261,20 @@ public class CMDSHistoryDescription {
             preparedStatement.setString(2, item.description.equals("") ? null : item.description.trim());
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                createHearingHistoryDescription(item);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
 
     public static void updateCMDSHistoryDescription(CMDSHistoryDescription item) {
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE CMDSHistoryDescription SET "
                     + "active = ?, "
@@ -243,13 +290,20 @@ public class CMDSHistoryDescription {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateCMDSHistoryDescription(item);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
         
     public static void updateHearingHistoryDescription(CMDSHistoryDescription item) {
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE HearingHistoryDescription SET "
                     + "active = ?, "
@@ -265,7 +319,12 @@ public class CMDSHistoryDescription {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateHearingHistoryDescription(item);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
 }

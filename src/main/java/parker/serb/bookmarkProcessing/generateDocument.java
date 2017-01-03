@@ -199,7 +199,7 @@ public class generateDocument {
         Date twentyOneDayOut = c.getTime();
                        
         //ProcessBookmarks
-        for (int i = 0; i < Global.bookmarkLimit; i++) {
+        for (int i = 0; i < Global.BOOKMARK_LIMIT; i++) {
             //System Executives
             processBookmark.process("BOARDCHAIRLASTNAME" + (i == 0 ? "" : i), chairmanLastName, Document);
             processBookmark.process("BOARDVICECHAIRLASTNAME" + (i == 0 ? "" : i), viceChairmanLastName, Document);
@@ -316,7 +316,7 @@ public class generateDocument {
         Date twentyOneDayOut = c.getTime();
         
         //ProcessBookmarks
-        for (int i = 0; i < Global.bookmarkLimit; i++) {
+        for (int i = 0; i < Global.BOOKMARK_LIMIT; i++) {
             //System Executives            
             processBookmark.process("ChairmanName" + (i == 0 ? "" : i), chairmanFullName, Document);
             processBookmark.process("ChairmanLastName" + (i == 0 ? "" : i), chairmanLastName, Document);

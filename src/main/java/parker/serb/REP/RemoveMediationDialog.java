@@ -5,8 +5,6 @@
  */
 package parker.serb.REP;
 
-import parker.serb.boardmeetings.*;
-import parker.serb.sql.BoardMeeting;
 import parker.serb.sql.REPMediation;
 
 /**

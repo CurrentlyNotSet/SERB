@@ -146,9 +146,6 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="hourTextBox">
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="hourTextBoxActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel4">
       <Properties>
@@ -156,9 +153,6 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="minuteTextBox">
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="minuteTextBoxActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JComboBox" name="amPMComboBox">
       <Properties>

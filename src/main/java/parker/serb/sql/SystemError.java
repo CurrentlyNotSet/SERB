@@ -25,14 +25,13 @@ public class SystemError {
     {
         Statement stmt = null;
         try {
-            
             stmt = Database.connectToDB().createStatement();
             
             String sql = "INSERT INTO SystemError VALUES (?,?,?,?,?,?,?)";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
-            preparedStatement.setString(2, Global.activeUser.username);
+            preparedStatement.setString(2, Global.activeUser != null ? Global.activeUser.username : null);
             preparedStatement.setString(3, className);
             preparedStatement.setString(4, methodName);
             preparedStatement.setString(5, exceptionType);
@@ -40,11 +39,9 @@ public class SystemError {
             preparedStatement.setString(7, exceptionLong);
             
             preparedStatement.executeUpdate();
-            
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 addSystemErrorEntry(className, methodName, exceptionType, exceptionShort, exceptionLong);
             } 
         } finally {

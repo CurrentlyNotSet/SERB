@@ -16,9 +16,10 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import org.apache.commons.validator.routines.EmailValidator;
 import parker.serb.Global;
 import parker.serb.bookmarkProcessing.processMailingAddressBookmarks;
 import parker.serb.fileOperations.WordToPDF;
@@ -26,6 +27,7 @@ import parker.serb.sql.CaseParty;
 import parker.serb.sql.NamePrefix;
 import parker.serb.sql.PartyType;
 import parker.serb.util.CancelUpdate;
+import parker.serb.util.SlackNotification;
 
 //TODO: Allow for a party to be updated from this panel
 //TODO: Reload Table after changes have been made to name, phone number, email
@@ -59,6 +61,32 @@ public class ViewUpdateCasePartyPanel extends javax.swing.JDialog {
     }
     
     private void addListeners() {
+        emailAddressTextBox.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                jButton2.setEnabled(
+                    EmailValidator.getInstance().isValid(emailAddressTextBox.getText()) ||
+                    emailAddressTextBox.getText().equals("")
+                );
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                jButton2.setEnabled(
+                    EmailValidator.getInstance().isValid(emailAddressTextBox.getText()) ||
+                    emailAddressTextBox.getText().equals("")
+                );
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                jButton2.setEnabled(
+                    EmailValidator.getInstance().isValid(emailAddressTextBox.getText()) ||
+                    emailAddressTextBox.getText().equals("")
+                );
+            }
+        });
+        
         middleInitialTextBox.addKeyListener(new KeyListener() {
 
             @Override
@@ -87,7 +115,7 @@ public class ViewUpdateCasePartyPanel extends javax.swing.JDialog {
                         desktop = Desktop.getDesktop();
                         desktop.mail(mailURI);
                     } catch (URISyntaxException | IOException ex) {
-                        Logger.getLogger(ViewUpdateCasePartyPanel.class.getName()).log(Level.SEVERE, null, ex);
+                        SlackNotification.sendNotification(ex);
                     }
                 }
             }
@@ -613,7 +641,7 @@ public class ViewUpdateCasePartyPanel extends javax.swing.JDialog {
             try {
                 Desktop.getDesktop().mail(new URI("mailto:" + emailAddressTextBox.getText().replace(" ", "").trim() + "?bcc=" + Global.activeUser.emailAddress));
             } catch (IOException | URISyntaxException ex) {
-                Logger.getLogger(ViewUpdateCasePartyPanel.class.getName()).log(Level.SEVERE, null, ex);
+                SlackNotification.sendNotification(ex);
             }
         }
     }//GEN-LAST:event_emailAddressTextBoxMouseClicked

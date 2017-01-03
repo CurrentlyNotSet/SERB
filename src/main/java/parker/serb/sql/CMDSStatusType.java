@@ -5,14 +5,15 @@
  */
 package parker.serb.sql;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.dbutils.DbUtils;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -28,8 +29,10 @@ public class CMDSStatusType {
     public static List<CMDSStatusType> loadAllStatusTypes(String[] param) {
         List<CMDSStatusType> list = new ArrayList<>();
 
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM CMDSStatusType";
             if (param.length > 0) {
@@ -61,18 +64,23 @@ public class CMDSStatusType {
                 list.add(item);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadAllStatusTypes(param);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return list;
     }
     
     public static List loadAll() {
         List caseStatusList = new ArrayList<>();
-            
+          
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "select * from CMDSStatusType where active = 1";
 
@@ -84,8 +92,12 @@ public class CMDSStatusType {
                 caseStatusList.add(caseStatusRS.getString("statusCode"));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
-
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadAll();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return caseStatusList;
     }
@@ -93,8 +105,10 @@ public class CMDSStatusType {
     public static CMDSStatusType getStatusByID(int id) {
         CMDSStatusType item = new CMDSStatusType();
 
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM CMDSStatusType WHERE id = ?";
 
@@ -110,15 +124,21 @@ public class CMDSStatusType {
                 item.description = rs.getString("description") == null ? "" : rs.getString("description").trim();
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getStatusByID(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
         return item;
     }
 
     public static void createStatusType(CMDSStatusType item) {
+        Statement stmt = null;
+        
         try {
-
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert INTO CMDSStatusType "
                     + "(active, statusCode, description)"
@@ -130,13 +150,20 @@ public class CMDSStatusType {
             preparedStatement.setString(2, item.description.equals("") ? null : item.description.trim());
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                createStatusType(item);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
 
     public static void updateStatusType(CMDSStatusType item) {
+        Statement stmt = null;
+        
         try {
-            Statement stmt = Database.connectToDB().createStatement();
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE CMDSStatusType SET "
                     + "active = ?, "
@@ -152,7 +179,12 @@ public class CMDSStatusType {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(Audit.class.getName()).log(Level.SEVERE, null, ex);
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateStatusType(item);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     

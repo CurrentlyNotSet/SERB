@@ -9,8 +9,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.dbutils.DbUtils;
 import parker.serb.Global;
 import parker.serb.util.NumberFormatService;
@@ -42,7 +40,6 @@ public class HearingHearing {
         Statement stmt = null;
             
         try {
-
             stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert INTO HearingHearing VALUES (1,?,?,?,?,?,?,?,?,?,?)";
@@ -75,12 +72,10 @@ public class HearingHearing {
             }
 
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
-            } else {
-                SlackNotification.sendNotification(ex);
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
+                addHearing(hearingTime, hearingType, hearingRoom, alj, comments);
+            } 
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -106,7 +101,6 @@ public class HearingHearing {
                 section = "MED";
                 break;
         }
-        
         return section;
     }
     
@@ -152,12 +146,10 @@ public class HearingHearing {
                 activityList.add(hearing);
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
-            } else {
-                SlackNotification.sendNotification(ex);
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
+                loadHearingsByCaseNumber();
+            } 
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -168,7 +160,6 @@ public class HearingHearing {
         Statement stmt = null;
             
         try {
-
             stmt = Database.connectToDB().createStatement();
 
             String sql = "Delete from HearingHearing where id = ?";
@@ -182,24 +173,23 @@ public class HearingHearing {
                 Activity.addActivty(hearingInformation, null);
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                System.out.println("TESTING");
-                SlackNotification.sendNotification(ex);
-            } else {
-                SlackNotification.sendNotification(ex);
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
+                removeHearingByID(id, hearingInformation);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
     
     public static void updateHearingByID(String id,
             String comments, 
             String hearingType,
-            String hearingDate) {
+            String hearingDate) 
+    {
         Statement stmt = null;
             
         try {
-
             stmt = Database.connectToDB().createStatement();
 
             String sql = "Update HearingHearing"
@@ -216,12 +206,12 @@ public class HearingHearing {
                 Activity.addActivty("Updated Comments for " + hearingType + " on " + hearingDate, null);
             }
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
-            } else {
-                SlackNotification.sendNotification(ex);
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
+                updateHearingByID(id, comments, hearingType, hearingDate);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
         }
     }
 }

@@ -33,7 +33,6 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
     DefaultListModel FFList2Model = new DefaultListModel();
     MEDCase orginalInformation;
     
-    
     /**
      * Creates new form MEDFFPanel
      */
@@ -258,8 +257,7 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
         newMEDCaseInformation.FFType = FFTypeComboBox.getSelectedItem().toString().equals("") ? null : FFTypeComboBox.getSelectedItem().toString();
         newMEDCaseInformation.FFSelection = FFSelectionComboBox.getSelectedItem() == null || FFSelectionComboBox.getSelectedItem().toString().equals("") ? null : FFSelectionComboBox.getSelectedItem().toString();
         newMEDCaseInformation.FFReplacement = replacementFFComboBox.getSelectedItem() == null || replacementFFComboBox.getSelectedItem().toString().equals("") ? null : replacementFFComboBox.getSelectedItem().toString();
-        
-        
+
         //only set the value if it is blank
         if(FFOriginalFactFinder.getText().equals("")) {
             newMEDCaseInformation.FFOriginalFactFinder = FFSelectionComboBox.getSelectedItem().toString().equals("") ? null : FFSelectionComboBox.getSelectedItem().toString();
@@ -1199,7 +1197,6 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
     private void MediatedSettlementCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MediatedSettlementCheckBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_MediatedSettlementCheckBoxActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> AcceptedByComboBox;

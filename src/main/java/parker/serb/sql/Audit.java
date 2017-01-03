@@ -34,14 +34,11 @@ public class Audit {
             preparedStatement.setString(3, action);
             
             preparedStatement.executeUpdate();
-            
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                SlackNotification.sendNotification(ex);
                 addAuditEntry(action);
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
+            } 
         } finally {
             DbUtils.closeQuietly(stmt);
         }

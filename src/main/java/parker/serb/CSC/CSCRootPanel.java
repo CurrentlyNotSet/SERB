@@ -5,7 +5,6 @@
  */
 package parker.serb.CSC;
 
-import parker.serb.ORG.*;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
@@ -85,7 +84,7 @@ public class CSCRootPanel extends javax.swing.JPanel {
                 System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
                 Global.root.getjButton2().setText("Update");
                 Global.root.getjButton2().setEnabled(false);
-                Global.root.getjButton9().setVisible(false);
+//                Global.root.getjButton9().setVisible(false);
                 break;
             case "Parties":
                 System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));

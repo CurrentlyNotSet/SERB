@@ -5,11 +5,8 @@
  */
 package parker.serb.admin;
 
-import java.awt.Dialog;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
@@ -17,6 +14,7 @@ import parker.serb.sql.Activity;
 import parker.serb.sql.Database;
 import parker.serb.sql.ServerEmailControl;
 import parker.serb.sql.User;
+import parker.serb.util.SlackNotification;
 
 //TODO: Remove the flash that occurs on update
 //TODO: Add button for DB Backup
@@ -59,7 +57,7 @@ public class SystemMontiorDialog extends javax.swing.JDialog implements Runnable
                         try {
                             Thread.sleep(5000);
                         } catch (InterruptedException ex) {
-                            Logger.getLogger(SystemMontiorDialog.class.getName()).log(Level.SEVERE, null, ex);
+                            SlackNotification.sendNotification(ex);
                         }
                     }
                 }
@@ -77,7 +75,7 @@ public class SystemMontiorDialog extends javax.swing.JDialog implements Runnable
                         try {
                             Thread.sleep(5000);
                         } catch (InterruptedException ex) {
-                            Logger.getLogger(SystemMontiorDialog.class.getName()).log(Level.SEVERE, null, ex);
+                            SlackNotification.sendNotification(ex);
                         }
                     }
                 }
@@ -95,7 +93,7 @@ public class SystemMontiorDialog extends javax.swing.JDialog implements Runnable
                         try {
                             Thread.sleep(10000);
                         } catch (InterruptedException ex) {
-                            Logger.getLogger(SystemMontiorDialog.class.getName()).log(Level.SEVERE, null, ex);
+                            SlackNotification.sendNotification(ex);
                         }
                     }
                 }

@@ -5,9 +5,7 @@
  */
 package parker.serb.REP;
 
-import parker.serb.relatedcase.*;
 import parker.serb.sql.REPElectionMultiCase;
-import parker.serb.sql.RelatedCase;
 
 /**
  *

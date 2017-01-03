@@ -226,7 +226,7 @@ public class processMEDbookmarks {
         }
         
         
-        for (int i = 0; i < Global.bookmarkLimit; i++) {            
+        for (int i = 0; i < Global.BOOKMARK_LIMIT; i++) {            
             //Case Number Related Information
             processBookmark.process("CASENUM" + (i == 0 ? "" : i), NumberFormatService.generateFullCaseNumber(), Document);
             processBookmark.process("RELATEDCASENUMBERS" + (i == 0 ? "" : i), relatedCaseNumbers, Document);

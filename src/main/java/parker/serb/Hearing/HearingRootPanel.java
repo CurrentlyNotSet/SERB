@@ -5,7 +5,6 @@
  */
 package parker.serb.Hearing;
 
-import parker.serb.CMDS.*;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
@@ -13,7 +12,6 @@ import parker.serb.activity.ActivityPanel;
 import parker.serb.Global;
 import parker.serb.activity.RemoveActivityEntryDialog;
 import parker.serb.party.PartySearchDialog;
-import parker.serb.sql.CMDSCaseSearchData;
 import parker.serb.util.CancelUpdate;
 
 /**
@@ -30,7 +28,6 @@ public class HearingRootPanel extends javax.swing.JPanel {
     public HearingRootPanel() {
         initComponents();
         addListeners();
-//        jTabbedPane1.remove(2);
     }
     
     /**
@@ -240,7 +237,6 @@ public class HearingRootPanel extends javax.swing.JPanel {
     public ActivityPanel getActivityPanel1() {
         return activityPanel1;
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
