@@ -135,6 +135,7 @@ public class generateDocument {
         String boardMemberLastName = "";
         String boardMemberFullName = "";
         String executiveDirectorFullName = "";
+        String personnelAddressBlock = "";
         
         for (SystemExecutive exec : execsList){
             if (null != exec.position)switch (exec.position) {
@@ -162,7 +163,7 @@ public class generateDocument {
             serbAddress += sysAdminInfo.Address1.trim();
         }
         if (!sysAdminInfo.Address2.equals("")) {
-            serbAddress += " " + sysAdminInfo.Address2.trim();
+            serbAddress += ", " + sysAdminInfo.Address2.trim();
         }
         if (!sysAdminInfo.City.equals("")) {
             serbCityStateZip += sysAdminInfo.City.trim();
@@ -197,7 +198,29 @@ public class generateDocument {
         c.setTime(today);
         c.add(Calendar.DATE, 21);
         Date twentyOneDayOut = c.getTime();
-                       
+              
+        if (!chairmanFullName.trim().equals("")) {
+            personnelAddressBlock += chairmanFullName + ", Chair";
+        }
+        if (personnelAddressBlock.trim().equals("")) {
+            personnelAddressBlock += "\n";
+        }
+        if (!viceChairmanFullName.trim().equals("")) {
+            personnelAddressBlock += viceChairmanFullName + ", Vice Chair";
+        }
+        if (personnelAddressBlock.trim().equals("")) {
+            personnelAddressBlock += "\n";
+        }
+        if (!boardMemberFullName.trim().equals("")) {
+            personnelAddressBlock += boardMemberFullName + ", Board Member";
+        }
+        if (personnelAddressBlock.trim().equals("")) {
+            personnelAddressBlock += "\n\n";
+        }
+        if (!executiveDirectorFullName.trim().equals("")) {
+            personnelAddressBlock += executiveDirectorFullName + ", Executive Director";
+        }
+        
         //ProcessBookmarks
         for (int i = 0; i < Global.BOOKMARK_LIMIT; i++) {
             //System Executives
@@ -206,21 +229,25 @@ public class generateDocument {
             processBookmark.process("BOARDMEMBERLASTNAME" + (i == 0 ? "" : i), boardMemberLastName, Document);
             processBookmark.process("BOARDCHAIRMANNAME" + (i == 0 ? "" : i), chairmanFullName, Document); 
             
-            processBookmark.process("HeaderChairmanName" + (i == 0 ? "" : i), chairmanFullName, Document);
-            processBookmark.process("HeaderViceChairmanName" + (i == 0 ? "" : i), viceChairmanFullName, Document);
-            processBookmark.process("HeaderBoardMemberName" + (i == 0 ? "" : i), boardMemberFullName, Document);
-            processBookmark.process("HeaderExecutiveDirectorName" + (i == 0 ? "" : i), executiveDirectorFullName, Document);
+            processBookmark.process("HeaderChairmanName" + (i == 0 ? "" : i), chairmanFullName + ", Chair", Document);
+            processBookmark.process("HeaderViceChairmanName" + (i == 0 ? "" : i), viceChairmanFullName + ", Vice Chair", Document);
+            processBookmark.process("HeaderBoardMemberName" + (i == 0 ? "" : i), boardMemberFullName + ", Board Member", Document);
+            processBookmark.process("HeaderExecutiveDirectorName" + (i == 0 ? "" : i), executiveDirectorFullName + ", Executive Director", Document);
+            
+            processBookmark.process("HeaderPersonnelBlock" + (i == 0 ? "" : i), personnelAddressBlock, Document); //No Governor
             
             //System Administration Information
-            processBookmark.process("GovernorName" + (i == 0 ? "" : i), sysAdminInfo.governorName, Document);
+            processBookmark.process("GovernorName" + (i == 0 ? "" : i), sysAdminInfo.governorName + ", Governor", Document);
             processBookmark.process("LtGovernorName" + (i == 0 ? "" : i), sysAdminInfo.LtGovernorName, Document);
             processBookmark.process("SerbAddress" + (i == 0 ? "" : i), serbAddress, Document);
             processBookmark.process("SerbCityStateZip" + (i == 0 ? "" : i), serbCityStateZip, Document);
             processBookmark.process("SerbURL" + (i == 0 ? "" : i), sysAdminInfo.Url, Document);
             
-            processBookmark.process("SerbPhone" + (i == 0 ? "" : i), sysAdminInfo.Phone, Document);
             processBookmark.process("SerbFooter" + (i == 0 ? "" : i), sysAdminInfo.Footer, Document);
-            processBookmark.process("SerbFax" + (i == 0 ? "" : i), sysAdminInfo.Fax, Document);
+            processBookmark.process("SerbPhone" + (i == 0 ? "" : i), sysAdminInfo.Phone == null ? "" 
+                    : "Tel:" + NumberFormatService.convertStringToPhoneNumber(sysAdminInfo.Phone), Document);
+            processBookmark.process("SerbFax" + (i == 0 ? "" : i), sysAdminInfo.Fax == null ? "" 
+                    : "Fax:" + NumberFormatService.convertStringToPhoneNumber(sysAdminInfo.Fax), Document);
             
             //Made up stuff
             processBookmark.process("TODAYSDATE" + (i == 0 ? "" : i), Global.MMMMddyyyy.format(new Date()), Document);
@@ -254,6 +281,7 @@ public class generateDocument {
         String executiveDirectorLastName = "";
         String chiefAdminLawJudgeFullName = "";
         String chiefAdminLawJudgeLastName = "";
+        String personnelAddressBlock = "";
         
         for (SystemExecutive exec : execsList){
             if (null != exec.position)switch (exec.position) {
@@ -315,6 +343,36 @@ public class generateDocument {
         c.add(Calendar.DATE, 21);
         Date twentyOneDayOut = c.getTime();
         
+        
+        if (!chairmanFullName.trim().equals("")) {
+            personnelAddressBlock += chairmanFullName + ", Chair";
+        }
+        if (personnelAddressBlock.trim().equals("")) {
+            personnelAddressBlock += "\n";
+        }
+        if (!viceChairmanFullName.trim().equals("")) {
+            personnelAddressBlock += viceChairmanFullName + ", Vice Chair";
+        }
+        if (personnelAddressBlock.trim().equals("")) {
+            personnelAddressBlock += "\n";
+        }
+        if (!boardMemberFullName.trim().equals("")) {
+            personnelAddressBlock += boardMemberFullName + ", Board Member";
+        }
+        if (personnelAddressBlock.trim().equals("")) {
+            personnelAddressBlock += "\n\n";
+        }
+        if (!executiveDirectorFullName.trim().equals("")) {
+            personnelAddressBlock += executiveDirectorFullName + ", Executive Director";
+        } 
+        if (personnelAddressBlock.trim().equals("")) {
+            personnelAddressBlock += "\n";
+        }
+        if (!chiefAdminLawJudgeFullName.trim().equals("")) {
+            personnelAddressBlock += chiefAdminLawJudgeFullName + ", Chief Administrative Law Judge";
+        }
+        
+        
         //ProcessBookmarks
         for (int i = 0; i < Global.BOOKMARK_LIMIT; i++) {
             //System Executives            
@@ -328,6 +386,8 @@ public class generateDocument {
             processBookmark.process("ExecutativeDirectorLastName" + (i == 0 ? "" : i), executiveDirectorLastName, Document);
             processBookmark.process("ChiefAdminLawJudgeName" + (i == 0 ? "" : i), chiefAdminLawJudgeFullName, Document);
             processBookmark.process("ChiefAdminLawJudgeLastName" + (i == 0 ? "" : i), chiefAdminLawJudgeLastName, Document);
+            
+            processBookmark.process("HeaderPersonnelBlock" + (i == 0 ? "" : i), personnelAddressBlock, Document); //No Governor
             
             //System Administration Information
             processBookmark.process("GovernorName" + (i == 0 ? "" : i), sysAdminInfo.governorName, Document);
