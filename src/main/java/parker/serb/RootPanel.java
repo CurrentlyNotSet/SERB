@@ -34,6 +34,8 @@ import parker.serb.MED.MEDRootPanel;
 import parker.serb.ORG.ORGAllLettersPanel;
 import parker.serb.ORG.ORGHeaderPanel;
 import parker.serb.ORG.ORGRootPanel;
+import parker.serb.REP.REPBulkCloseCasesDialog;
+import parker.serb.ULP.ULPBulkCloseCasesDialog;
 import parker.serb.ULP.ULPHeaderPanel;
 import parker.serb.ULP.ULPLetterDialog;
 import parker.serb.ULP.ULPRootPanel;
@@ -1542,9 +1544,19 @@ public class RootPanel extends javax.swing.JFrame {
         batchCloseCasesSubMenu.add(batchCloseMEDMenuItem);
 
         batchCloseREPMenuItem.setText("REP");
+        batchCloseREPMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                batchCloseREPMenuItemActionPerformed(evt);
+            }
+        });
         batchCloseCasesSubMenu.add(batchCloseREPMenuItem);
 
         batchCloseULPMenuItem.setText("ULP");
+        batchCloseULPMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                batchCloseULPMenuItemActionPerformed(evt);
+            }
+        });
         batchCloseCasesSubMenu.add(batchCloseULPMenuItem);
 
         jMenu1.add(batchCloseCasesSubMenu);
@@ -1924,6 +1936,14 @@ public class RootPanel extends javax.swing.JFrame {
     private void batchCloseMEDMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_batchCloseMEDMenuItemActionPerformed
         new MEDBulkHandleCases((JFrame) this.getRootPane().getParent(), true);
     }//GEN-LAST:event_batchCloseMEDMenuItemActionPerformed
+
+    private void batchCloseULPMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_batchCloseULPMenuItemActionPerformed
+        new ULPBulkCloseCasesDialog((JFrame) this.getRootPane().getParent(), true);
+    }//GEN-LAST:event_batchCloseULPMenuItemActionPerformed
+
+    private void batchCloseREPMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_batchCloseREPMenuItemActionPerformed
+        new REPBulkCloseCasesDialog((JFrame) this.getRootPane().getParent(), true);
+    }//GEN-LAST:event_batchCloseREPMenuItemActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel CMDS;
