@@ -66,10 +66,49 @@ public class Activity {
             preparedStatement.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
             preparedStatement.setString(7, action.equals("") ? null : action);
             preparedStatement.setString(8, fileName == null ? null : fileName);
-            preparedStatement.setString(9, "");
-            preparedStatement.setString(10, "");
-            preparedStatement.setString(11, "");
-            preparedStatement.setString(12, "");
+            preparedStatement.setString(9, null);
+            preparedStatement.setString(10, null);
+            preparedStatement.setString(11, null);
+            preparedStatement.setString(12, null);
+            preparedStatement.setBoolean(13, false);
+            preparedStatement.setBoolean(14, false);
+            preparedStatement.setBoolean(15, true);
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException ex) {
+            if(ex.getCause() instanceof SQLServerException) {
+                addActivty(action, fileName);
+            } else {
+                SlackNotification.sendNotification(ex);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+    }
+    
+    public static void addActivtyORGCase( String orgNumber, String action, String fileName) {
+        Statement stmt = null;
+            
+        try {
+
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, null);
+            preparedStatement.setString(2, "ORG");
+            preparedStatement.setString(3, null);
+            preparedStatement.setString(4, orgNumber);
+            preparedStatement.setInt(5, Global.activeUser.id);
+            preparedStatement.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
+            preparedStatement.setString(7, action.equals("") ? null : action);
+            preparedStatement.setString(8, fileName == null ? null : fileName);
+            preparedStatement.setString(9, null);
+            preparedStatement.setString(10, null);
+            preparedStatement.setString(11, null);
+            preparedStatement.setString(12, null);
             preparedStatement.setBoolean(13, false);
             preparedStatement.setBoolean(14, false);
             preparedStatement.setBoolean(15, true);
@@ -105,10 +144,10 @@ public class Activity {
             preparedStatement.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
             preparedStatement.setString(7, action.equals("") ? null : action);
             preparedStatement.setString(8, fileName == null || fileName.equals("") ? null : FilenameUtils.getName(fileName));
-            preparedStatement.setString(9, "");
-            preparedStatement.setString(10, "");
-            preparedStatement.setString(11, "");
-            preparedStatement.setString(12, "");
+            preparedStatement.setString(9, null);
+            preparedStatement.setString(10, null);
+            preparedStatement.setString(11, null);
+            preparedStatement.setString(12, null);
             preparedStatement.setBoolean(13, false);
             preparedStatement.setBoolean(14, false);
             preparedStatement.setBoolean(15, true);
@@ -152,10 +191,10 @@ public class Activity {
             preparedStatement.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
             preparedStatement.setString(7, action.equals("") ? null : action);
             preparedStatement.setString(8, fileName == null || fileName.equals("") ? null : FilenameUtils.getName(fileName));
-            preparedStatement.setString(9, "");
-            preparedStatement.setString(10, "");
-            preparedStatement.setString(11, "");
-            preparedStatement.setString(12, "");
+            preparedStatement.setString(9, null);
+            preparedStatement.setString(10, null);
+            preparedStatement.setString(11, null);
+            preparedStatement.setString(12, null);
             preparedStatement.setBoolean(13, false);
             preparedStatement.setBoolean(14, false);
             preparedStatement.setBoolean(15, false);

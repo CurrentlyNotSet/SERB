@@ -47,7 +47,7 @@ public class StringUtilities {
         if (item.suffix != null) {
             fullName = fullName.trim() + " " + item.suffix.trim();
         }
-        if ("".equals(fullName.trim())){
+        if ("".equals(fullName.trim()) && item.companyName != null){
             fullName = fullName.trim() + item.companyName.trim();
         }
         

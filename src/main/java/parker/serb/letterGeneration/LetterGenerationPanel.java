@@ -341,7 +341,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
             }
             docName = generateDocument.generateCMDSdocument(CMDSdocToGenerate, answers, 0, toParties, ccParties);
         } else {
-            docName = generateDocument.generateSMDSdocument(SMDSdocToGenerate, 0, toParties, ccParties);
+            docName = generateDocument.generateSMDSdocument(SMDSdocToGenerate, 0, toParties, ccParties, null);
         }
 
         if (docName != null) {
@@ -449,9 +449,9 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         
         String emailBody = "";
         if (Global.activeSection.equals("CMDS")){
-            emailBody = CMDSdocToGenerate.emailBody;
+            emailBody = CMDSdocToGenerate.emailBody == null ? "" : CMDSdocToGenerate.emailBody;
         } else {
-            emailBody = SMDSdocToGenerate.emailBody;
+            emailBody = SMDSdocToGenerate.emailBody == null ? "" : SMDSdocToGenerate.emailBody;
         }
 
         emailBody += System.lineSeparator() + System.lineSeparator()
@@ -579,7 +579,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
 
                 if (additionalDocsTable.getValueAt(i, 3).toString().toLowerCase().endsWith(".docx")) {
                     SMDSDocuments additionalDoc = SMDSDocuments.findDocumentByID(Integer.valueOf(additionalDocsTable.getValueAt(i, 0).toString()));
-                    docName = generateDocument.generateSMDSdocument(additionalDoc, 0, toParties, ccParties);
+                    docName = generateDocument.generateSMDSdocument(additionalDoc, 0, toParties, ccParties, null);
                 } else {
                     docName = copyAttachmentToCaseFolder(additionalDocsTable.getValueAt(i, 3).toString());
                 }
@@ -629,13 +629,13 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
     }
 
     private String copyAttachmentToCaseFolder(String fileName) {
-        String docSourcePath = Global.templatePath + File.separator + Global.activeSection + fileName;
+        String docSourcePath = Global.templatePath + File.separator + Global.activeSection + File.separator + fileName;
 
         String docDestPath = Global.activityPath + Global.activeSection
                 + File.separatorChar + Global.caseYear + File.separatorChar
                 + NumberFormatService.generateFullCaseNumber() + File.separatorChar;
 
-        String destFileName = String.valueOf(new java.util.Date().getTime()) + fileName;
+        String destFileName = String.valueOf(new java.util.Date().getTime()) + "_" + fileName;
 
         try {
             Files.copy(Paths.get(docSourcePath), Paths.get(docDestPath + destFileName), StandardCopyOption.REPLACE_EXISTING);

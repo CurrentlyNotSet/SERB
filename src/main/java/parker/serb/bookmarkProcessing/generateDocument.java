@@ -16,6 +16,7 @@ import parker.serb.Global;
 import parker.serb.sql.AdministrationInformation;
 import parker.serb.sql.SMDSDocuments;
 import parker.serb.sql.CMDSDocuments;
+import parker.serb.sql.ORGCase;
 import parker.serb.sql.SystemExecutive;
 import parker.serb.util.JacobCOMBridge;
 import parker.serb.util.NumberFormatService;
@@ -27,16 +28,24 @@ import parker.serb.util.StringUtilities;
  */
 public class generateDocument {
     
-    public static String generateSMDSdocument(SMDSDocuments template, int senderID, List<Integer> toParties, List<Integer> ccParties){
+    public static String generateSMDSdocument(SMDSDocuments template, int senderID, List<Integer> toParties, List<Integer> ccParties, ORGCase orgCase){
+        File docPath = null;
         String saveDocName = null;
         ActiveXComponent eolWord = null;
         eolWord = JacobCOMBridge.setWordActive(true, false, eolWord);
         if (eolWord != null){
             //Setup Document
-            File docPath = new File(Global.activityPath
+            if (orgCase == null){
+            docPath = new File(Global.activityPath
                     + Global.activeSection + File.separator
                     + Global.caseYear + File.separator
                     + NumberFormatService.generateFullCaseNumber());
+            } else {
+                docPath = new File(Global.activityPath
+                    + Global.activeSection + File.separator
+                    + orgCase.orgNumber);
+            }
+            
             docPath.mkdirs();
             saveDocName = String.valueOf(new Date().getTime()) + "_" 
                     + (template.historyFileName == null ? template.description : template.historyFileName)
@@ -63,7 +72,7 @@ public class generateDocument {
                         break;
                     case "ORG":
                         document = defaultSMDSBookmarks(document, template.dueDate);
-                        document = processORGbookmarks.processDoAORGWordLetter(document, true, toParties, ccParties);
+                        document = processORGbookmarks.processDoAORGWordLetter(document, true, toParties, ccParties, orgCase);
                         break;
                     case "CSC":
                         document = defaultCMDSBookmarks(document);

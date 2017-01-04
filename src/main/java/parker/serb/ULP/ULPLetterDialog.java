@@ -5,7 +5,9 @@
  */
 package parker.serb.ULP;
 
+import com.alee.laf.optionpane.WebOptionPane;
 import java.awt.event.ItemEvent;
+import java.io.File;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import parker.serb.Global;
@@ -115,7 +117,13 @@ public class ULPLetterDialog extends javax.swing.JDialog {
 
         if (selection > 0) {
             SMDSDocuments template = SMDSDocuments.findDocumentByID(selection);
-            new LetterGenerationPanel(Global.root, true, template, null);
+            File templateFile = new File(Global.templatePath + Global.activeSection + File.separator + template.fileName);
+            
+            if (templateFile.exists()){
+                new LetterGenerationPanel(Global.root, true, template, null);
+            } else {
+                WebOptionPane.showMessageDialog(Global.root, "<html><center> Sorry, unable to locate temaplate. <br><br>" + template.fileName + "</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 

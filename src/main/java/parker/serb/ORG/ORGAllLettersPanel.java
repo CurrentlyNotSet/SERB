@@ -5,16 +5,31 @@
  */
 package parker.serb.ORG;
 
+import com.alee.laf.optionpane.WebOptionPane;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
+import parker.serb.bookmarkProcessing.generateDocument;
+import parker.serb.sql.Activity;
 import parker.serb.sql.CaseParty;
+import parker.serb.sql.EmailOut;
+import parker.serb.sql.EmailOutAttachment;
 import parker.serb.sql.ORGCase;
+import parker.serb.sql.PostalOut;
+import parker.serb.sql.PostalOutAttachment;
 import parker.serb.sql.SMDSDocuments;
 import parker.serb.util.Item;
+import parker.serb.util.NumberFormatService;
+import parker.serb.util.SlackNotification;
+import parker.serb.util.StringUtilities;
 
 /**
  *
@@ -199,24 +214,184 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
         }
     }
     
-    private void generateLetters(){
-        for (ORGCase item : orgCaseList) {
-            partyList = CaseParty.loadORGPartiesByCase(item.orgNumber);
-            for (CaseParty party : partyList) {
-                if (party.caseRelation.equals("Representative")) {
+    private void generateLetters() {
+        int selection = 0;
+
+        if (!letterComboBox.getSelectedItem().toString().trim().equals("")) {
+            Item item = (Item) letterComboBox.getSelectedItem();
+            selection = Integer.parseInt(item.getValue().toString());
+        }
+
+        if (selection > 0) {
+            SMDSDocuments template = SMDSDocuments.findDocumentByID(selection);
+            File templateFile = new File(Global.templatePath + Global.activeSection + File.separator + template.fileName);
+
+            if (templateFile.exists()) {
+                
+                for (ORGCase item : orgCaseList) {
+                    String attachDocName = "";
+                    
+                    String docName = generateDocument.generateSMDSdocument(template, 0, null, null, item);
+                    
+                    
+                    if (template.questionsFileName != null) {
+                        attachDocName = copyAttachmentToCaseFolder(item, template.questionsFileName);
+                    }
+                    
+                    Activity.addActivtyORGCase(item.orgNumber ,
+                            "Created " + (template.historyDescription == null ? template.description : template.historyDescription)
+                            , docName);
+                                        
+                    partyList = CaseParty.loadORGPartiesByCase(item.orgNumber);
+                    for (CaseParty party : partyList) {
+                        if (party.caseRelation.equals("Representative")) {
+                            
+                            if (item.orgEmail != null) {
+                                int emailID = insertEmail(template, item.orgNumber, party.emailAddress);
+                                insertGeneratedAttachementEmail(emailID, docName, true);
+                                if (!attachDocName.equals("")){
+                                    insertGeneratedAttachementEmail(emailID, attachDocName, false);
+                                }
+                                
+                            } else if (party.address1 != null & party.city != null & party.stateCode != null && party.zipcode != null) {
+                                int postalID = insertPostal(template, item.orgNumber, party);
+                                insertGeneratedAttachementPostal(postalID, docName, true);
+                                if (!attachDocName.equals("")){
+                                    insertGeneratedAttachementPostal(postalID, attachDocName, false);
+                                }
+                            }
+                        }
+                    }
+
                     if (item.orgEmail != null) {
-                        //TODO: Email Message to Rep
+                        int emailID = insertEmail(template, item.orgNumber, item.orgEmail);
+                        insertGeneratedAttachementEmail(emailID, docName, true);
+                        if (!attachDocName.equals("")) {
+                            insertGeneratedAttachementEmail(emailID, attachDocName, false);
+                        }
                     } else if (item.orgAddress1 != null & item.orgCity != null & item.orgState != null && item.orgZip != null) {
-                        //TODO: Postal Message to Rep
+                        int postalID = insertPostalORG(template, item);
+                        insertGeneratedAttachementPostal(postalID, docName, true);
+                        if (!attachDocName.equals("")) {
+                            insertGeneratedAttachementPostal(postalID, attachDocName, false);
+                        }
                     }
                 }
+            } else {
+                WebOptionPane.showMessageDialog(Global.root, "<html><center> Sorry, unable to locate temaplate. <br><br>" + template.fileName + "</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
             }
+        }
+    }
+    
+    private String copyAttachmentToCaseFolder(ORGCase item, String fileName) {
+        String docSourcePath = Global.templatePath + File.separator + Global.activeSection + File.separator + fileName;
 
-            if (item.orgEmail != null){
-                //TODO: Email Message to ORG
-            } else if (item.orgAddress1 != null & item.orgCity != null & item.orgState != null && item.orgZip != null){
-                //TODO: Postal Message to ORG
-            }
+        String docDestPath = Global.activityPath + Global.activeSection
+                + File.separatorChar + item.orgNumber + File.separatorChar;
+
+        String destFileName = String.valueOf(new java.util.Date().getTime()) + "_" + fileName;
+
+        try {
+            Files.copy(Paths.get(docSourcePath), Paths.get(docDestPath + destFileName), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ex) {
+            SlackNotification.sendNotification(ex);
+            return "";
+        }
+        return destFileName;
+    }
+    
+    private int insertEmail(SMDSDocuments SMDSdocToGenerate, String orgNumber, String toEmail) {
+        String emailBody = SMDSdocToGenerate.emailBody == null ? "" : SMDSdocToGenerate.emailBody;
+
+        emailBody += System.lineSeparator() + System.lineSeparator()
+                + StringUtilities.buildFullName(Global.activeUser.firstName, Global.activeUser.middleInitial, Global.activeUser.lastName)
+                + System.lineSeparator() + (Global.activeUser.jobTitle == null ? "" : Global.activeUser.jobTitle + System.lineSeparator())
+                + StringUtilities.generateDepartmentAddressBlock() + System.lineSeparator()
+                + (Global.activeUser.workPhone == null ? "" : "Telephone: " + NumberFormatService.convertStringToPhoneNumber(Global.activeUser.workPhone));
+
+        EmailOut eml = new EmailOut();
+
+        eml.section = "ORG";
+        eml.caseYear = null;
+        eml.caseType = "ORG";
+        eml.caseMonth = null;
+        eml.caseNumber = orgNumber;
+        eml.to = toEmail.trim().equals("") ? null : toEmail.trim();
+        eml.from = Global.activeUser.emailAddress;
+        eml.cc = null;
+        eml.bcc = null;      
+        eml.subject = SMDSdocToGenerate.emailSubject != null ? SMDSdocToGenerate.emailSubject 
+                : (SMDSdocToGenerate.description == null ? "" : SMDSdocToGenerate.description);
+        eml.body = emailBody;
+        eml.userID = Global.activeUser.id;
+        eml.suggestedSendDate = null;
+        eml.okToSend = false;
+
+        return EmailOut.insertEmail(eml);
+    }
+    
+    private int insertPostal(SMDSDocuments SMDSdocToGenerate, String orgNumber, CaseParty party) {
+        PostalOut post = new PostalOut();
+
+        post.section = "ORG";
+        post.caseYear = null;
+        post.caseType = "ORG";
+        post.caseMonth = null;
+        post.caseNumber = orgNumber;
+        post.person = StringUtilities.buildCasePartyName(party);
+        post.addressBlock = StringUtilities.buildAddressBlockWithLineBreaks(party);
+        post.userID = Global.activeUser.id;
+        post.suggestedSendDate = null;
+        post.historyDescription = SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription;
+        
+
+        return PostalOut.insertPostalOut(post);
+    }
+
+    private int insertPostalORG(SMDSDocuments SMDSdocToGenerate, ORGCase item) {
+        CaseParty orgAddress = new CaseParty();
+        
+        orgAddress.address1 = item.orgAddress1;
+        orgAddress.address2 = item.orgAddress2;
+        orgAddress.city = item.orgCity;
+        orgAddress.stateCode = item.orgState;
+        orgAddress.zipcode = item.orgZip;       
+        
+        PostalOut post = new PostalOut();
+
+        post.section = "ORG";
+        post.caseYear = null;
+        post.caseType = "ORG";
+        post.caseMonth = null;
+        post.caseNumber = item.orgNumber;
+        post.person = item.orgName;
+        post.addressBlock = StringUtilities.buildAddressBlockWithLineBreaks(orgAddress);
+        post.userID = Global.activeUser.id;
+        post.suggestedSendDate = null;
+        post.historyDescription = SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription;
+        
+        return PostalOut.insertPostalOut(post);
+    }
+    
+    private void insertGeneratedAttachementEmail(int emailID, String docName, boolean primary) {
+        if (emailID > 0) {
+            EmailOutAttachment attach = new EmailOutAttachment();
+
+            attach.emailOutID = emailID;
+            attach.fileName = docName;
+            attach.primaryAttachment = primary;
+            EmailOutAttachment.insertAttachment(attach);
+        }
+    }
+
+    private void insertGeneratedAttachementPostal(int postalID, String docName, boolean primary) {
+        if (postalID > 0) {
+            PostalOutAttachment attach = new PostalOutAttachment();
+
+            attach.PostalOutID = postalID;
+            attach.fileName = docName;
+            attach.primaryAttachment = primary;
+            PostalOutAttachment.insertAttachment(attach);
         }
     }
     
