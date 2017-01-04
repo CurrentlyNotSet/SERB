@@ -1146,7 +1146,7 @@ public class ULPCase {
     
     public static List<ULPCase> loadULPCasesToClose(Date boardDate) {
         List<ULPCase> ULPCaseList = new ArrayList<>();
-          
+        List casetypes = CaseType.getCaseTypeBySection("ULP");
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
@@ -1158,11 +1158,22 @@ public class ULPCase {
                     + "AND boardMeeting.caseType = ulpcase.caseType "
                     + "AND boardMeeting.caseMonth = ulpcase.caseMonth "
                     + "AND boardMeeting.caseNumber = ulpcase.caseNumber "
-                    + "WHERE boardMeeting.caseType = 'ULP' AND boardMeetingDate = ? ";
+                    + "WHERE boardMeetingDate = ? ";
+                        
+            if (!casetypes.isEmpty()) {
+                sql += "AND (";
+                
+                for (Object casetype : casetypes) {
+                    
+                    sql += " boardMeeting.caseType = '" + casetype.toString() + "' OR";
+                }
+                
+                sql = sql.substring(0, (sql.length() - 2)) + ")";
+            }
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
-            preparedStatement.setDate(1, new java.sql.Date(boardDate.getTime()));
+            preparedStatement.setDate(1, new java.sql.Date(boardDate.getTime()));           
 
             ResultSet rs = preparedStatement.executeQuery();
             

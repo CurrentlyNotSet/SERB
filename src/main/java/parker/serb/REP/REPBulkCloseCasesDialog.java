@@ -5,11 +5,15 @@
 package parker.serb.REP;
 
 import java.util.Date;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
 import parker.serb.report.GenerateReport;
+import parker.serb.sql.Activity;
 import parker.serb.sql.MEDCase;
+import parker.serb.sql.REPCase;
 import parker.serb.sql.SMDSDocuments;
+import parker.serb.util.NumberFormatService;
 
 /**
  *
@@ -17,12 +21,11 @@ import parker.serb.sql.SMDSDocuments;
  */
 public class REPBulkCloseCasesDialog extends javax.swing.JFrame {
 
-    String dateForm;
     DefaultTableModel model;
     String startDate = "";
     
     /**
-     * Creates new form MEDsettleCases
+     * Creates new form REPBulkCloseCasesDialog
      * @param parent
      * @param modal
      */
@@ -46,7 +49,6 @@ public class REPBulkCloseCasesDialog extends javax.swing.JFrame {
             }
         });
     }
-
     
     private void setTableSize(){
         //CheckBox
@@ -54,18 +56,25 @@ public class REPBulkCloseCasesDialog extends javax.swing.JFrame {
         caseTable.getColumnModel().getColumn(0).setPreferredWidth(35);
         caseTable.getColumnModel().getColumn(0).setMaxWidth(35);
         
-        //Case Number
-        caseTable.getColumnModel().getColumn(1).setMinWidth(125);
-        caseTable.getColumnModel().getColumn(1).setPreferredWidth(125);
-        caseTable.getColumnModel().getColumn(1).setMaxWidth(125);
-
-        //Filed Date
-        caseTable.getColumnModel().getColumn(3).setMinWidth(80);
-        caseTable.getColumnModel().getColumn(3).setPreferredWidth(80);
-        caseTable.getColumnModel().getColumn(3).setMaxWidth(80);
+        //ID
+        caseTable.getColumnModel().getColumn(1).setMinWidth(0);
+        caseTable.getColumnModel().getColumn(1).setPreferredWidth(0);
+        caseTable.getColumnModel().getColumn(1).setMaxWidth(0);
         
-        //get Table
-        model = (DefaultTableModel) caseTable.getModel();
+//        //Case Number
+//        caseTable.getColumnModel().getColumn(2).setMinWidth(125);
+//        caseTable.getColumnModel().getColumn(2).setPreferredWidth(125);
+//        caseTable.getColumnModel().getColumn(2).setMaxWidth(125);
+//
+//        //Filed Date
+//        caseTable.getColumnModel().getColumn(4).setMinWidth(80);
+//        caseTable.getColumnModel().getColumn(4).setPreferredWidth(80);
+//        caseTable.getColumnModel().getColumn(4).setMaxWidth(80);
+        
+        //Status
+        caseTable.getColumnModel().getColumn(5).setMinWidth(0);
+        caseTable.getColumnModel().getColumn(5).setPreferredWidth(0);
+        caseTable.getColumnModel().getColumn(5).setMaxWidth(0);
     }
 
     private void clearTable() {
@@ -92,31 +101,35 @@ public class REPBulkCloseCasesDialog extends javax.swing.JFrame {
     }
     
     private void loadTable(){
-//        Date start = new Date(NumberFormatService.convertMMDDYYYY(startDateField.getText()));
-//
-//        List<MEDCase> caseList = MEDCase.getCloseList(start);
-//
-//        for (MEDCase item : caseList) {
-//            String caseNumber = NumberFormatService.generateFullCaseNumberNonGlobal(
-//                    item.caseYear, item.caseType, item.caseMonth, item.caseNumber);
-//
-//            model.addRow(new Object[]{
-//                false,
-//                caseNumber,
-//                item.employerIDNumber,
-//                Global.mmddyyyy.format(item.fileDate)
-//            });
-//        }
-//        jLayeredPane1.moveToBack(jPanel1);
-//        countLabel.setText("Entries: " + caseTable.getRowCount());
+        Date start = new Date(NumberFormatService.convertMMDDYYYY(startDateField.getText()));
+
+        List<REPCase> caseList = REPCase.loadREPCasesToClose(start);
+
+        for (REPCase item : caseList) {
+            String caseNumber = NumberFormatService.generateFullCaseNumberNonGlobal(
+                    item.caseYear, item.caseType, item.caseMonth, item.caseNumber);
+
+            model.addRow(new Object[]{
+                false,
+                item.id,
+                caseNumber,
+                item.bargainingUnitNumber.trim().equals("") ? item.employerIDNumber : item.bargainingUnitNumber,
+                Global.mmddyyyy.format(item.fileDate),
+                item.status2
+            });
+        }
+        jLayeredPane1.moveToBack(jPanel1);
+        countLabel.setText("Entries: " + caseTable.getRowCount());
     }
         
     private void updateList(){
         for (int i = 0; i < caseTable.getRowCount(); i++) {
             if (caseTable.getValueAt(i, 0).equals(true)) {
-                String caseNumber = caseTable.getValueAt(i, 1).toString();
-                
-                MEDCase.updateClosedCases(caseNumber);
+                int caseNumberID = Integer.valueOf(caseTable.getValueAt(i, 1).toString());
+                String[] caseNumber = caseTable.getValueAt(i, 2).toString().split("-");
+                                
+                REPCase.updateClosedCases(caseNumberID);
+                Activity.addActivtyFromDocket("Case Closed", "", caseNumber, "", "", "", "", false, false);
             }
         }
     }
@@ -125,7 +138,7 @@ public class REPBulkCloseCasesDialog extends javax.swing.JFrame {
         jLayeredPane1.moveToFront(jPanel1);
         
         Thread temp = new Thread(() -> {
-            SMDSDocuments report = SMDSDocuments.findDocumentByFileName("MED Cases to be Closed by Board.jasper");
+            SMDSDocuments report = SMDSDocuments.findDocumentByFileName("REP Cases Closed.jasper");
             GenerateReport.runReport(report);
             jLayeredPane1.moveToBack(jPanel1);
         });
@@ -201,14 +214,14 @@ public class REPBulkCloseCasesDialog extends javax.swing.JFrame {
 
             },
             new String [] {
-                "", "Case Number", "Employer", "File Date"
+                "", "ID", "Case Number", "Employer", "File Date", "Status"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                true, false, false, false
+                true, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {

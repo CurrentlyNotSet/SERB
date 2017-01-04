@@ -10,7 +10,6 @@ import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
 import parker.serb.report.GenerateReport;
 import parker.serb.sql.Activity;
-import parker.serb.sql.MEDCase;
 import parker.serb.sql.SMDSDocuments;
 import parker.serb.sql.ULPCase;
 import parker.serb.util.NumberFormatService;
@@ -76,9 +75,6 @@ public class ULPBulkCloseCasesDialog extends javax.swing.JFrame {
         caseTable.getColumnModel().getColumn(5).setMinWidth(0);
         caseTable.getColumnModel().getColumn(5).setPreferredWidth(0);
         caseTable.getColumnModel().getColumn(5).setMaxWidth(0);
-        
-        //get Table
-        model = (DefaultTableModel) caseTable.getModel();
     }
 
     private void clearTable() {
