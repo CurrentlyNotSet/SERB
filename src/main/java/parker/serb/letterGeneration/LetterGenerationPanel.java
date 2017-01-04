@@ -36,6 +36,7 @@ import parker.serb.sql.EmailOut;
 import parker.serb.sql.EmailOutAttachment;
 import parker.serb.sql.FactFinder;
 import parker.serb.sql.MEDCase;
+import parker.serb.sql.ORGCase;
 import parker.serb.sql.PostalOut;
 import parker.serb.sql.PostalOutAttachment;
 import parker.serb.sql.SMDSDocuments;
@@ -54,6 +55,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
     SMDSDocuments SMDSdocToGenerate;
     CMDSDocuments CMDSdocToGenerate;
     MEDCase medCaseData;
+    ORGCase orgCase;
     List<Integer> toParties = new ArrayList<>();
     List<Integer> ccParties = new ArrayList<>();
     boolean sendToEmail = false;
@@ -179,8 +181,28 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
             }
         });
 
-        List<CaseParty> partyList = CaseParty.loadPartiesByCase();
+        List<CaseParty> partyList = null;
+        
+        if (Global.activeSection.equals("ORG")){
+            partyList = CaseParty.loadORGPartiesByCase();
+            
+            orgCase = ORGCase.loadORGInformation();
+            
+            String toCC = "";
+            String emailPostal = "";
 
+            model.addRow(new Object[]{
+                orgCase.orgNumber, // ID
+                toCC, // TO/CC
+                emailPostal, // Email/Postal
+                "ORG",
+                orgCase.orgName, // NAME
+                orgCase.orgEmail
+            });
+        } else {
+            partyList = CaseParty.loadPartiesByCase();
+        }
+                
         for (CaseParty party : partyList) {
             String toCC = "";
             String emailPostal = "";
@@ -210,8 +232,14 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         DefaultTableModel model = (DefaultTableModel) activityTable.getModel();
         model.setRowCount(0);
 
-        List<Activity> activtyList = Activity.loadActivityDocumentsByGlobalCase();
-
+        List<Activity> activtyList = null;
+        
+        if (Global.activeSection.equals("ORG")){
+            activtyList = Activity.loadActivityDocumentsByGlobalCaseORG();
+        } else {
+            activtyList = Activity.loadActivityDocumentsByGlobalCase();
+        }
+        
         for (Activity doc : activtyList) {
             model.addRow(new Object[]{
                 doc.id,
@@ -332,20 +360,40 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         String docName;
         questionsCMDSModel answers = null;
 
-        if (Global.activeSection.equals("CMDS")) {
-            int count = CMDSDocuments.CMDSQuestionCount(CMDSdocToGenerate);
-            if (count > 0) {
-                questionsCMDSPanel returnInfo = new questionsCMDSPanel(Global.root, true, CMDSdocToGenerate, count);
-                answers = returnInfo.answers;
-                returnInfo.dispose();
-            }
-            docName = generateDocument.generateCMDSdocument(CMDSdocToGenerate, answers, 0, toParties, ccParties);
-        } else {
-            docName = generateDocument.generateSMDSdocument(SMDSdocToGenerate, 0, toParties, ccParties);
+        switch (Global.activeSection) {
+            case "CMDS":
+                int count = CMDSDocuments.CMDSQuestionCount(CMDSdocToGenerate);
+                if (count > 0) {
+                    questionsCMDSPanel returnInfo = new questionsCMDSPanel(Global.root, true, CMDSdocToGenerate, count);
+                    answers = returnInfo.answers;
+                    returnInfo.dispose();
+                }   docName = generateDocument.generateCMDSdocument(CMDSdocToGenerate, answers, 0, toParties, ccParties);
+                break;
+            case "ORG":
+                docName = generateDocument.generateSMDSdocument(SMDSdocToGenerate, 0, toParties, ccParties, orgCase);
+                break;
+            default:
+                docName = generateDocument.generateSMDSdocument(SMDSdocToGenerate, 0, toParties, ccParties, null);
+                break;
         }
 
         if (docName != null) {
-            Activity.addActivty("Created " + (Global.activeSection.equals("CMDS") ? CMDSdocToGenerate.LetterName : SMDSdocToGenerate.historyDescription), docName);
+            
+            switch (Global.activeSection) {
+                case "CMDS":
+                    Activity.addActivty("Created " + CMDSdocToGenerate.LetterName, docName);
+                    break;
+                case "ORG":
+                    Activity.addActivtyORGCase(orgCase.orgNumber ,
+                            "Created " + (SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription)
+                            , docName);
+                    break;
+                default:
+                    Activity.addActivty("Created " + (SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription), docName);
+                    break;
+            }
+            
+            
 
             int emailID = 0;
             int postalID = 0;
@@ -359,9 +407,14 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                 for (int i = 0; i < personTable.getRowCount(); i++) {
                     if (!personTable.getValueAt(i, 1).equals("")
                             && (personTable.getValueAt(i, 2).equals("Postal") || personTable.getValueAt(i, 2).equals("Both"))) {
-                        postalID = insertPostal(personTable.getValueAt(i, 0).toString());
+                        
+                        boolean org = false;
+                        if (personTable.getValueAt(i, 3).equals("ORG")) {
+                            org = true;
+                        }
+                        
+                        postalID = insertPostal(personTable.getValueAt(i, 0).toString(), org);
                         insertGeneratedAttachementPostal(postalID, docName);
-
                         postalIDList.add(postalID);
                     }
                 }
@@ -369,7 +422,12 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
 
             insertExtraAttachmentsEmail(emailID, postalIDList);
 
-            FileService.openFile(docName);
+            if (Global.activeSection.equals("ORG")){
+                FileService.openFileWithORGNumber(orgCase.orgNumber, docName);
+            } else { 
+                FileService.openFile(docName);
+            }
+            
             reloadActivity();
         } else {
             WebOptionPane.showMessageDialog(Global.root,
@@ -449,9 +507,9 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         
         String emailBody = "";
         if (Global.activeSection.equals("CMDS")){
-            emailBody = CMDSdocToGenerate.emailBody;
+            emailBody = CMDSdocToGenerate.emailBody == null ? "" : CMDSdocToGenerate.emailBody;
         } else {
-            emailBody = SMDSdocToGenerate.emailBody;
+            emailBody = SMDSdocToGenerate.emailBody == null ? "" : SMDSdocToGenerate.emailBody;
         }
 
         emailBody += System.lineSeparator() + System.lineSeparator()
@@ -484,9 +542,28 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         return EmailOut.insertEmail(eml);
     }
 
-    private int insertPostal(String partyID) {
-        CaseParty party = CaseParty.getCasePartyByID(partyID);
-
+    private int insertPostal(String partyID, boolean Org) {
+        String name = "";
+        String address = "";
+        
+        if (Org){
+            CaseParty orgAddress = new CaseParty();
+        
+            orgAddress.address1 = orgCase.orgAddress1;
+            orgAddress.address2 = orgCase.orgAddress2;
+            orgAddress.city = orgCase.orgCity;
+            orgAddress.stateCode = orgCase.orgState;
+            orgAddress.zipcode = orgCase.orgZip; 
+            
+            name = orgCase.orgName;
+            address = StringUtilities.buildAddressBlockWithLineBreaks(orgAddress);
+            
+        } else {
+            CaseParty party = CaseParty.getCasePartyByID(partyID);
+            name = StringUtilities.buildCasePartyName(party);
+            address = StringUtilities.buildAddressBlockWithLineBreaks(party);
+        }
+        
         PostalOut post = new PostalOut();
 
         post.section = Global.activeSection;
@@ -494,8 +571,8 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         post.caseType = Global.caseType;
         post.caseMonth = Global.caseMonth;
         post.caseNumber = Global.caseNumber;
-        post.person = StringUtilities.buildCasePartyName(party);
-        post.addressBlock = StringUtilities.buildAddressBlockWithLineBreaks(party);
+        post.person = name;
+        post.addressBlock = address;
         post.userID = Global.activeUser.id;
         post.suggestedSendDate = suggestedSendDatePicker.getText().equals("") ? null : new Date(NumberFormatService.convertMMDDYYYY(suggestedSendDatePicker.getText()));
         
@@ -579,7 +656,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
 
                 if (additionalDocsTable.getValueAt(i, 3).toString().toLowerCase().endsWith(".docx")) {
                     SMDSDocuments additionalDoc = SMDSDocuments.findDocumentByID(Integer.valueOf(additionalDocsTable.getValueAt(i, 0).toString()));
-                    docName = generateDocument.generateSMDSdocument(additionalDoc, 0, toParties, ccParties);
+                    docName = generateDocument.generateSMDSdocument(additionalDoc, 0, toParties, ccParties, null);
                 } else {
                     docName = copyAttachmentToCaseFolder(additionalDocsTable.getValueAt(i, 3).toString());
                 }
@@ -629,13 +706,13 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
     }
 
     private String copyAttachmentToCaseFolder(String fileName) {
-        String docSourcePath = Global.templatePath + File.separator + Global.activeSection + fileName;
+        String docSourcePath = Global.templatePath + File.separator + Global.activeSection + File.separator + fileName;
 
         String docDestPath = Global.activityPath + Global.activeSection
                 + File.separatorChar + Global.caseYear + File.separatorChar
                 + NumberFormatService.generateFullCaseNumber() + File.separatorChar;
 
-        String destFileName = String.valueOf(new java.util.Date().getTime()) + fileName;
+        String destFileName = String.valueOf(new java.util.Date().getTime()) + "_" + fileName;
 
         try {
             Files.copy(Paths.get(docSourcePath), Paths.get(docDestPath + destFileName), StandardCopyOption.REPLACE_EXISTING);

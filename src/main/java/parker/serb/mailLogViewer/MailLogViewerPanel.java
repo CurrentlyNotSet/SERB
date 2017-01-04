@@ -295,7 +295,7 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
                 
         if(evt.getClickCount() == 2 && !fileName.equals("")) {
             if (Global.activeSection.equals("ORG") || Global.activeSection.equals("Civil Service Commission")){
-                FileService.openFileWithORGNumber(Global.activeSection, jTable1.getValueAt(jTable1.getSelectedRow(), 6).toString(), fileName);
+                FileService.openFileWithORGNumber(jTable1.getValueAt(jTable1.getSelectedRow(), 6).toString(), fileName);
             } else {
                 FileService.openFileWithCaseNumber(Global.activeSection, caseNumber[0], caseNumber[1], caseNumber[2], caseNumber[3], fileName);
             }    

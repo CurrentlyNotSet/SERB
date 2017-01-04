@@ -13,7 +13,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.dbutils.DbUtils;
-import static parker.serb.sql.CMDSCaseSearchData.createNewCaseEntry;
 import parker.serb.util.SlackNotification;
 
 /**
@@ -453,8 +452,8 @@ public class CMDSDocuments {
         return subTypesList;
     }
     
-    public static List<String> findDocumentsBySubCategories(String subCat)  {
-        List<String> subTypesList = new ArrayList<>();
+    public static List<CMDSDocuments> findDocumentsBySubCategories(String subCat)  {
+        List<CMDSDocuments> list = new ArrayList<>();
            
         Statement stmt = null;
         
@@ -462,17 +461,23 @@ public class CMDSDocuments {
 
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "SELECT LetterName FROM CMDSDocuments WHERE active = 1 "
+            String sql = "SELECT * FROM CMDSDocuments WHERE active = 1 "
                     + "AND subCategory = ? ORDER BY LetterName";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             
             preparedStatement.setString(1, subCat);
             
-            ResultSet caseStatusRS = preparedStatement.executeQuery();
+            ResultSet rs = preparedStatement.executeQuery();
             
-            while(caseStatusRS.next()) {
-                subTypesList.add(caseStatusRS.getString("LetterName"));
+            while(rs.next()) {
+                CMDSDocuments item = new CMDSDocuments();
+                item.ID = rs.getInt("id");
+                item.Active = rs.getBoolean("active");
+                item.MainCategory = rs.getString("MainCategory") == null ? "" : rs.getString("MainCategory");
+                item.SubCategory = rs.getString("SubCategory") == null ? "" : rs.getString("SubCategory");
+                item.LetterName = rs.getString("LetterName") == null ? "" : rs.getString("LetterName");
+                list.add(item);
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
@@ -482,7 +487,7 @@ public class CMDSDocuments {
         } finally {
             DbUtils.closeQuietly(stmt);
         }
-        return subTypesList;
+        return list;
     }
     
     public static void createCMDSDocument(CMDSDocuments item) {

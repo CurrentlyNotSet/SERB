@@ -66,10 +66,49 @@ public class Activity {
             preparedStatement.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
             preparedStatement.setString(7, action.equals("") ? null : action);
             preparedStatement.setString(8, fileName == null ? null : fileName);
-            preparedStatement.setString(9, "");
-            preparedStatement.setString(10, "");
-            preparedStatement.setString(11, "");
-            preparedStatement.setString(12, "");
+            preparedStatement.setString(9, null);
+            preparedStatement.setString(10, null);
+            preparedStatement.setString(11, null);
+            preparedStatement.setString(12, null);
+            preparedStatement.setBoolean(13, false);
+            preparedStatement.setBoolean(14, false);
+            preparedStatement.setBoolean(15, true);
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException ex) {
+            if(ex.getCause() instanceof SQLServerException) {
+                addActivty(action, fileName);
+            } else {
+                SlackNotification.sendNotification(ex);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+    }
+    
+    public static void addActivtyORGCase( String orgNumber, String action, String fileName) {
+        Statement stmt = null;
+            
+        try {
+
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, null);
+            preparedStatement.setString(2, "ORG");
+            preparedStatement.setString(3, null);
+            preparedStatement.setString(4, orgNumber);
+            preparedStatement.setInt(5, Global.activeUser.id);
+            preparedStatement.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
+            preparedStatement.setString(7, action.equals("") ? null : action);
+            preparedStatement.setString(8, fileName == null ? null : fileName);
+            preparedStatement.setString(9, null);
+            preparedStatement.setString(10, null);
+            preparedStatement.setString(11, null);
+            preparedStatement.setString(12, null);
             preparedStatement.setBoolean(13, false);
             preparedStatement.setBoolean(14, false);
             preparedStatement.setBoolean(15, true);
@@ -105,10 +144,10 @@ public class Activity {
             preparedStatement.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
             preparedStatement.setString(7, action.equals("") ? null : action);
             preparedStatement.setString(8, fileName == null || fileName.equals("") ? null : FilenameUtils.getName(fileName));
-            preparedStatement.setString(9, "");
-            preparedStatement.setString(10, "");
-            preparedStatement.setString(11, "");
-            preparedStatement.setString(12, "");
+            preparedStatement.setString(9, null);
+            preparedStatement.setString(10, null);
+            preparedStatement.setString(11, null);
+            preparedStatement.setString(12, null);
             preparedStatement.setBoolean(13, false);
             preparedStatement.setBoolean(14, false);
             preparedStatement.setBoolean(15, true);
@@ -152,10 +191,10 @@ public class Activity {
             preparedStatement.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
             preparedStatement.setString(7, action.equals("") ? null : action);
             preparedStatement.setString(8, fileName == null || fileName.equals("") ? null : FilenameUtils.getName(fileName));
-            preparedStatement.setString(9, "");
-            preparedStatement.setString(10, "");
-            preparedStatement.setString(11, "");
-            preparedStatement.setString(12, "");
+            preparedStatement.setString(9, null);
+            preparedStatement.setString(10, null);
+            preparedStatement.setString(11, null);
+            preparedStatement.setString(12, null);
             preparedStatement.setBoolean(13, false);
             preparedStatement.setBoolean(14, false);
             preparedStatement.setBoolean(15, false);
@@ -703,6 +742,53 @@ public class Activity {
             preparedStatement.setString(2, Global.caseType);
             preparedStatement.setString(3, Global.caseMonth);
             preparedStatement.setString(4, Global.caseNumber);
+            
+            ResultSet caseActivity = preparedStatement.executeQuery();
+            
+            while(caseActivity.next()) {
+                Activity act = new Activity();
+                act.id = caseActivity.getInt("id");
+                act.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
+                act.action = caseActivity.getString("action");
+                act.caseYear = caseActivity.getString("caseYear");
+                act.caseType = caseActivity.getString("caseType");
+                act.caseMonth = caseActivity.getString("caseMonth");
+                act.caseNumber = caseActivity.getString("caseNumber");
+                act.fileName = caseActivity.getString("fileName");
+                activityList.add(act);
+            }
+        } catch (SQLException ex) {
+            if(ex.getCause() instanceof SQLServerException) {
+                loadActivityDocumentsByGlobalCase();
+            } else {
+                SlackNotification.sendNotification(ex);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return activityList;
+    }
+    
+    public static List<Activity> loadActivityDocumentsByGlobalCaseORG() {
+        List<Activity> activityList = new ArrayList<>();
+        
+        Statement stmt = null;
+            
+        try {
+
+            stmt = Database.connectToDB().createStatement();
+            
+            String sql = "SELECT * FROM Activity WHERE "
+                    + "awaitingTimestamp = 0 AND "
+                    + "fileName IS NOT NULL AND "
+                    + "caseType = ? AND "
+                    + "caseNumber = ? "
+                    + " and active = 1";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+
+            preparedStatement.setString(1, Global.caseType);
+            preparedStatement.setString(2, Global.caseNumber);
             
             ResultSet caseActivity = preparedStatement.executeQuery();
             
