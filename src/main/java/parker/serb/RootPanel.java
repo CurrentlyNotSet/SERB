@@ -33,6 +33,7 @@ import parker.serb.MED.MEDLetterDialog;
 import parker.serb.MED.MEDRootPanel;
 import parker.serb.ORG.ORGAllLettersPanel;
 import parker.serb.ORG.ORGHeaderPanel;
+import parker.serb.ORG.ORGLetterDialog;
 import parker.serb.ORG.ORGRootPanel;
 import parker.serb.REP.REPBulkCloseCasesDialog;
 import parker.serb.ULP.ULPBulkCloseCasesDialog;
@@ -560,7 +561,7 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton4.setSize(dim);
                 jButton4.setMinimumSize(dim);
                 jButton4.setMaximumSize(dim);
-                jButton4.setVisible(false);
+                jButton4.setVisible(true);
                 jButton4.setText("Single Letter");
                 
                 jButton5.setSize(dim);
@@ -1838,6 +1839,9 @@ public class RootPanel extends javax.swing.JFrame {
                 break;
             case "CMDS":
                 new CMDSLetterDialog((JFrame) this.getRootPane().getParent(), true);
+                break;
+            case "ORG":
+                new ORGLetterDialog((JFrame) this.getRootPane().getParent(), true);
                 break;
             default:
                 break;

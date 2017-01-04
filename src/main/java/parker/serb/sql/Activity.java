@@ -769,6 +769,53 @@ public class Activity {
         return activityList;
     }
     
+    public static List<Activity> loadActivityDocumentsByGlobalCaseORG() {
+        List<Activity> activityList = new ArrayList<>();
+        
+        Statement stmt = null;
+            
+        try {
+
+            stmt = Database.connectToDB().createStatement();
+            
+            String sql = "SELECT * FROM Activity WHERE "
+                    + "awaitingTimestamp = 0 AND "
+                    + "fileName IS NOT NULL AND "
+                    + "caseType = ? AND "
+                    + "caseNumber = ? "
+                    + " and active = 1";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+
+            preparedStatement.setString(1, Global.caseType);
+            preparedStatement.setString(2, Global.caseNumber);
+            
+            ResultSet caseActivity = preparedStatement.executeQuery();
+            
+            while(caseActivity.next()) {
+                Activity act = new Activity();
+                act.id = caseActivity.getInt("id");
+                act.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
+                act.action = caseActivity.getString("action");
+                act.caseYear = caseActivity.getString("caseYear");
+                act.caseType = caseActivity.getString("caseType");
+                act.caseMonth = caseActivity.getString("caseMonth");
+                act.caseNumber = caseActivity.getString("caseNumber");
+                act.fileName = caseActivity.getString("fileName");
+                activityList.add(act);
+            }
+        } catch (SQLException ex) {
+            if(ex.getCause() instanceof SQLServerException) {
+                loadActivityDocumentsByGlobalCase();
+            } else {
+                SlackNotification.sendNotification(ex);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return activityList;
+    }
+    
     public static List<Activity> loadActivityDocumentsByGlobalCasePublicRecords() {
         List<Activity> activityList = new ArrayList<>();
         
