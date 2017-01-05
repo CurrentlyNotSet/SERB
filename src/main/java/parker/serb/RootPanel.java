@@ -21,7 +21,9 @@ import javax.swing.event.ChangeEvent;
 import parker.serb.CMDS.CMDSHeaderPanel;
 import parker.serb.CMDS.CMDSLetterDialog;
 import parker.serb.CMDS.CMDSRootPanel;
+import parker.serb.CSC.CSCAllLettersPanel;
 import parker.serb.CSC.CSCHeaderPanel;
+import parker.serb.CSC.CSCLetterDialog;
 import parker.serb.CSC.CSCRootPanel;
 import parker.serb.Hearing.HearingHeaderPanel;
 import parker.serb.Hearing.HearingRootPanel;
@@ -622,7 +624,8 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton3.setMinimumSize(dim);
                 jButton3.setMaximumSize(dim);
                 jButton3.setSize(dim);
-                jButton3.setVisible(false);
+                jButton3.setVisible(true);
+                jButton3.setEnabled(true);
                 jButton3.setText("All Org Letters");
                 
                 jButton4.setSize(dim);
@@ -1692,6 +1695,9 @@ public class RootPanel extends javax.swing.JFrame {
             case "ORG":
                 new ORGAllLettersPanel((JFrame) this.getRootPane().getParent(), true);
                 break;
+            case "Civil Service Commission":
+                new CSCAllLettersPanel((JFrame) this.getRootPane().getParent(), true);
+                break;
             default:
                 break;
         }
@@ -1823,6 +1829,9 @@ public class RootPanel extends javax.swing.JFrame {
                 break;
             case "ORG":
                 new ORGLetterDialog((JFrame) this.getRootPane().getParent(), true);
+                break;
+            case "Civil Service Commission":
+                new CSCLetterDialog((JFrame) this.getRootPane().getParent(), true);
                 break;
             default:
                 break;

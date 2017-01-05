@@ -89,11 +89,11 @@ public class FileService {
         }
     }
     
-    public static void openFileWithORGNumber(String orgNumber, String fileName) {
+    public static void openFileWithORGNumber(String caseType, String orgNumber, String fileName) {
         try {
             Desktop.getDesktop().open(new File(Global.activityPath
                     + File.separatorChar
-                    + "ORG"
+                    + caseType
                     + File.separatorChar
                     + orgNumber
                     + File.separatorChar

@@ -31,6 +31,7 @@ import parker.serb.bookmarkProcessing.questionsCMDSModel;
 import parker.serb.bookmarkProcessing.questionsCMDSPanel;
 import parker.serb.sql.Activity;
 import parker.serb.sql.CMDSDocuments;
+import parker.serb.sql.CSCCase;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.EmailOut;
 import parker.serb.sql.EmailOutAttachment;
@@ -56,6 +57,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
     CMDSDocuments CMDSdocToGenerate;
     MEDCase medCaseData;
     ORGCase orgCase;
+    CSCCase cscCase;
     List<Integer> toParties = new ArrayList<>();
     List<Integer> ccParties = new ArrayList<>();
     boolean sendToEmail = false;
@@ -183,7 +185,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
 
         List<CaseParty> partyList = null;
         
-        if (Global.activeSection.equals("ORG")){
+        if (orgCase != null){
             partyList = CaseParty.loadORGPartiesByCase();
             
             orgCase = ORGCase.loadORGInformation();
@@ -198,6 +200,22 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                 "ORG",
                 orgCase.orgName, // NAME
                 orgCase.orgEmail
+            });
+        } else if (cscCase != null){
+            partyList = CaseParty.loadORGPartiesByCase();
+            
+            cscCase = CSCCase.loadCSCInformation();
+            
+            String toCC = "";
+            String emailPostal = "";
+
+            model.addRow(new Object[]{
+                cscCase.cscNumber, // ID
+                toCC, // TO/CC
+                emailPostal, // Email/Postal
+                "CSC",
+                cscCase.name, // NAME
+                cscCase.email
             });
         } else {
             partyList = CaseParty.loadPartiesByCase();
@@ -234,10 +252,16 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
 
         List<Activity> activtyList = null;
         
-        if (Global.activeSection.equals("ORG")){
-            activtyList = Activity.loadActivityDocumentsByGlobalCaseORG();
-        } else {
-            activtyList = Activity.loadActivityDocumentsByGlobalCase();
+        switch (Global.activeSection) {
+            case "ORG":
+                activtyList = Activity.loadActivityDocumentsByGlobalCaseORG();
+                break;
+            case "Civil Service Commission":
+                activtyList = Activity.loadActivityDocumentsByGlobalCaseORG();
+                break;
+            default:
+                activtyList = Activity.loadActivityDocumentsByGlobalCase();
+                break;
         }
         
         for (Activity doc : activtyList) {
@@ -370,10 +394,13 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                 }   docName = generateDocument.generateCMDSdocument(CMDSdocToGenerate, answers, 0, toParties, ccParties);
                 break;
             case "ORG":
-                docName = generateDocument.generateSMDSdocument(SMDSdocToGenerate, 0, toParties, ccParties, orgCase);
+                docName = generateDocument.generateSMDSdocument(SMDSdocToGenerate, 0, toParties, ccParties, orgCase, null);
+                break;
+            case "Civil Service Commission":
+                docName = generateDocument.generateSMDSdocument(SMDSdocToGenerate, 0, toParties, ccParties, null, cscCase);
                 break;
             default:
-                docName = generateDocument.generateSMDSdocument(SMDSdocToGenerate, 0, toParties, ccParties, null);
+                docName = generateDocument.generateSMDSdocument(SMDSdocToGenerate, 0, toParties, ccParties, null, null);
                 break;
         }
 
@@ -384,17 +411,20 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                     Activity.addActivty("Created " + CMDSdocToGenerate.LetterName, docName);
                     break;
                 case "ORG":
-                    Activity.addActivtyORGCase(orgCase.orgNumber ,
+                    Activity.addActivtyORGCase("ORG", orgCase.orgNumber ,
                             "Created " + (SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription)
                             , docName);
                     break;
+                case "Civil Service Commission":
+                    Activity.addActivtyORGCase("CSC", cscCase.cscNumber ,
+                            "Created " + (SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription)
+                            , docName);
+                    break;    
                 default:
                     Activity.addActivty("Created " + (SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription), docName);
                     break;
             }
             
-            
-
             int emailID = 0;
             int postalID = 0;
 
@@ -409,11 +439,14 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                             && (personTable.getValueAt(i, 2).equals("Postal") || personTable.getValueAt(i, 2).equals("Both"))) {
                         
                         boolean org = false;
+                        boolean csc = false;
                         if (personTable.getValueAt(i, 3).equals("ORG")) {
                             org = true;
+                        } else if (personTable.getValueAt(i, 3).equals("CSC")) {
+                            csc = true;
                         }
                         
-                        postalID = insertPostal(personTable.getValueAt(i, 0).toString(), org);
+                        postalID = insertPostal(personTable.getValueAt(i, 0).toString(), org, csc);
                         insertGeneratedAttachementPostal(postalID, docName);
                         postalIDList.add(postalID);
                     }
@@ -422,10 +455,16 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
 
             insertExtraAttachmentsEmail(emailID, postalIDList);
 
-            if (Global.activeSection.equals("ORG")){
-                FileService.openFileWithORGNumber(orgCase.orgNumber, docName);
-            } else { 
-                FileService.openFile(docName);
+            switch (Global.activeSection) {
+                case "ORG":
+                    FileService.openFileWithORGNumber("ORG", orgCase.orgNumber, docName);
+                    break;
+                case "Civil Service Commission":
+                    FileService.openFileWithORGNumber("CSC", cscCase.cscNumber, docName);
+                    break;
+                default:
+                    FileService.openFile(docName);
+                    break;
             }
             
             reloadActivity();
@@ -520,7 +559,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
 
         EmailOut eml = new EmailOut();
 
-        eml.section = Global.activeSection;
+        eml.section = Global.activeSection.equals("Civil Service Commission") ? Global.caseType : Global.activeSection;
         eml.caseYear = Global.caseYear;
         eml.caseType = Global.caseType;
         eml.caseMonth = Global.caseMonth;
@@ -542,7 +581,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         return EmailOut.insertEmail(eml);
     }
 
-    private int insertPostal(String partyID, boolean Org) {
+    private int insertPostal(String partyID, boolean Org, boolean Csc) {
         String name = "";
         String address = "";
         
@@ -558,6 +597,18 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
             name = orgCase.orgName;
             address = StringUtilities.buildAddressBlockWithLineBreaks(orgAddress);
             
+        } else if (Csc){
+            CaseParty orgAddress = new CaseParty();
+        
+            orgAddress.address1 = cscCase.address1;
+            orgAddress.address2 = cscCase.address2;
+            orgAddress.city = cscCase.city;
+            orgAddress.stateCode = cscCase.state;
+            orgAddress.zipcode = cscCase.zipCode; 
+            
+            name = orgCase.orgName;
+            address = StringUtilities.buildAddressBlockWithLineBreaks(orgAddress);
+            
         } else {
             CaseParty party = CaseParty.getCasePartyByID(partyID);
             name = StringUtilities.buildCasePartyName(party);
@@ -566,7 +617,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         
         PostalOut post = new PostalOut();
 
-        post.section = Global.activeSection;
+        post.section = Global.activeSection.equals("Civil Service Commission") ? Global.caseType : Global.activeSection;
         post.caseYear = Global.caseYear;
         post.caseType = Global.caseType;
         post.caseMonth = Global.caseMonth;
@@ -656,7 +707,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
 
                 if (additionalDocsTable.getValueAt(i, 3).toString().toLowerCase().endsWith(".docx")) {
                     SMDSDocuments additionalDoc = SMDSDocuments.findDocumentByID(Integer.valueOf(additionalDocsTable.getValueAt(i, 0).toString()));
-                    docName = generateDocument.generateSMDSdocument(additionalDoc, 0, toParties, ccParties, null);
+                    docName = generateDocument.generateSMDSdocument(additionalDoc, 0, toParties, ccParties, null, null);
                 } else {
                     docName = copyAttachmentToCaseFolder(additionalDocsTable.getValueAt(i, 3).toString());
                 }
@@ -706,11 +757,18 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
     }
 
     private String copyAttachmentToCaseFolder(String fileName) {
-        String docSourcePath = Global.templatePath + File.separator + Global.activeSection + File.separator + fileName;
+        String docSourcePath = Global.templatePath + File.separator 
+                + (Global.activeSection.equals("Civil Service Commission") ? Global.caseType : Global.activeSection) + File.separator + fileName;
 
-        String docDestPath = Global.activityPath + Global.activeSection
+        String docDestPath = "";
+        
+        if (Global.activeSection.equals("Civil Service Commission") || Global.activeSection.equals("ORG")){
+            docDestPath = Global.activityPath + Global.caseType + File.separatorChar + Global.caseNumber + File.separatorChar;
+        } else {
+            docDestPath = Global.activityPath + Global.activeSection
                 + File.separatorChar + Global.caseYear + File.separatorChar
                 + NumberFormatService.generateFullCaseNumber() + File.separatorChar;
+        }
 
         String destFileName = String.valueOf(new java.util.Date().getTime()) + "_" + fileName;
 

@@ -20,7 +20,6 @@ public class processORGbookmarks {
 
     public static Dispatch processDoAORGWordLetter(Dispatch Document, boolean toRep, List<Integer> toParties, List<Integer> ccParties, ORGCase item) {
         //get basic information  
-        
         List<CaseParty> partyList = CaseParty.loadPartiesByCase(null, "ORG", null, item.orgNumber);
 
         String repNames = "";

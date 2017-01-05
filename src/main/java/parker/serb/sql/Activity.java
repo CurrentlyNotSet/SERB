@@ -87,7 +87,7 @@ public class Activity {
         }
     }
     
-    public static void addActivtyORGCase( String orgNumber, String action, String fileName) {
+    public static void addActivtyORGCase( String caseType, String orgNumber, String action, String fileName) {
         Statement stmt = null;
             
         try {
@@ -98,7 +98,7 @@ public class Activity {
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, null);
-            preparedStatement.setString(2, "ORG");
+            preparedStatement.setString(2, caseType);
             preparedStatement.setString(3, null);
             preparedStatement.setString(4, orgNumber);
             preparedStatement.setInt(5, Global.activeUser.id);
@@ -787,7 +787,7 @@ public class Activity {
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
-            preparedStatement.setString(1, Global.caseType);
+            preparedStatement.setString(1, Global.caseType.equals("Civil Service Commission") ? "CSC" : "ORG");
             preparedStatement.setString(2, Global.caseNumber);
             
             ResultSet caseActivity = preparedStatement.executeQuery();

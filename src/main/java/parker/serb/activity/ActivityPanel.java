@@ -99,7 +99,9 @@ public class ActivityPanel extends javax.swing.JPanel {
 
                 if (e.getClickCount() == 2 && !filePath.equals("") && actvityTable.getSelectedColumn() == 4) {
                     if (Global.activeSection.equals("ORG")) {
-                        FileService.openFileWithORGNumber(Global.caseNumber, filePath);
+                        FileService.openFileWithORGNumber("ORG", Global.caseNumber, filePath);
+                    } else if (Global.activeSection.equals("Civil Service Commission")) {
+                        FileService.openFileWithORGNumber("CSC", Global.caseNumber, filePath);
                     } else {
                         FileService.openFile(filePath);
                     }
