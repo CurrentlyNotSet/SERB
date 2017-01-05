@@ -42,6 +42,7 @@ import parker.serb.ULP.ULPLetterDialog;
 import parker.serb.ULP.ULPRootPanel;
 import parker.serb.adminDBMaintenance.AdminMainMenuPanel;
 import parker.serb.admin.SystemMontiorDialog;
+import parker.serb.bookmarkProcessing.AnnualReportTwoDatePanel;
 import parker.serb.letterQueue.LetterQueuePanel;
 import parker.serb.sql.Audit;
 import parker.serb.user.Preferences;
@@ -105,7 +106,6 @@ public class RootPanel extends javax.swing.JFrame {
     public void enableTabs() {
         if(!Global.activeUserRoles.contains("Admin")) {
             jMenuBar1.remove(jMenu2);
-            jMenuBar1.remove(caseManagementMenu);
             for(int i = jTabbedPane1.getTabCount()-1; i >= 0; i--) {
                 if(!Global.activeUserRoles.contains(jTabbedPane1.getTitleAt(i))) {
                     jTabbedPane1.remove(i);
@@ -1084,13 +1084,10 @@ public class RootPanel extends javax.swing.JFrame {
         batchCloseMEDMenuItem = new javax.swing.JMenuItem();
         batchCloseREPMenuItem = new javax.swing.JMenuItem();
         batchCloseULPMenuItem = new javax.swing.JMenuItem();
+        jMenuItem7 = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
-        caseManagementMenu = new javax.swing.JMenu();
-        jMenu4 = new javax.swing.JMenu();
-        MEDSendToBoardToCloseMenuItem = new javax.swing.JMenuItem();
-        MEDSettleCasesMenuItem = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         adminPanelMenuItem = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
@@ -1562,6 +1559,14 @@ public class RootPanel extends javax.swing.JFrame {
         batchCloseCasesSubMenu.add(batchCloseULPMenuItem);
 
         jMenu1.add(batchCloseCasesSubMenu);
+
+        jMenuItem7.setText("Annual Report");
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem7);
         jMenu1.add(jSeparator2);
 
         jMenuItem3.setText("Log Off");
@@ -1581,30 +1586,6 @@ public class RootPanel extends javax.swing.JFrame {
         jMenu1.add(jMenuItem4);
 
         jMenuBar1.add(jMenu1);
-
-        caseManagementMenu.setText("Case Management");
-
-        jMenu4.setText("MED Bulk Edit");
-
-        MEDSendToBoardToCloseMenuItem.setText("Send to Board");
-        MEDSendToBoardToCloseMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MEDSendToBoardToCloseMenuItemActionPerformed(evt);
-            }
-        });
-        jMenu4.add(MEDSendToBoardToCloseMenuItem);
-
-        MEDSettleCasesMenuItem.setText("Settle Cases");
-        MEDSettleCasesMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MEDSettleCasesMenuItemActionPerformed(evt);
-            }
-        });
-        jMenu4.add(MEDSettleCasesMenuItem);
-
-        caseManagementMenu.add(jMenu4);
-
-        jMenuBar1.add(caseManagementMenu);
 
         jMenu2.setText("Admin");
 
@@ -1880,14 +1861,6 @@ public class RootPanel extends javax.swing.JFrame {
         new AdminMainMenuPanel((JFrame) getRootPane().getParent(), true);
     }//GEN-LAST:event_adminPanelMenuItemActionPerformed
 
-    private void MEDSendToBoardToCloseMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MEDSendToBoardToCloseMenuItemActionPerformed
-        new MEDBulkSendToBoardDialog((JFrame) getRootPane().getParent(), true);
-    }//GEN-LAST:event_MEDSendToBoardToCloseMenuItemActionPerformed
-
-    private void MEDSettleCasesMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MEDSettleCasesMenuItemActionPerformed
-        new MEDBulkSettleCasesDialog((JFrame) getRootPane().getParent(), true);
-    }//GEN-LAST:event_MEDSettleCasesMenuItemActionPerformed
-
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         switch(Global.activeSection) {
             case "REP":
@@ -1950,14 +1923,16 @@ public class RootPanel extends javax.swing.JFrame {
         new REPBulkCloseCasesDialog((JFrame) this.getRootPane().getParent(), true);
     }//GEN-LAST:event_batchCloseREPMenuItemActionPerformed
 
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+        new AnnualReportTwoDatePanel((JFrame) this.getRootPane().getParent(), true);
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel CMDS;
     private javax.swing.JPanel CSC;
     private javax.swing.JPanel Docketing;
     private javax.swing.JPanel Hearing;
     private javax.swing.JPanel MED;
-    private javax.swing.JMenuItem MEDSendToBoardToCloseMenuItem;
-    private javax.swing.JMenuItem MEDSettleCasesMenuItem;
     private javax.swing.JPanel ORG;
     private javax.swing.JPanel REP;
     private javax.swing.JPanel ULP;
@@ -1970,7 +1945,6 @@ public class RootPanel extends javax.swing.JFrame {
     private parker.serb.CMDS.CMDSRootPanel cMDSRootPanel1;
     private parker.serb.CSC.CSCHeaderPanel cSCHeaderPanel1;
     private parker.serb.CSC.CSCRootPanel cSCRootPanel1;
-    private javax.swing.JMenu caseManagementMenu;
     private parker.serb.companySearch.companySearchPanel companySearchPanel1;
     private parker.serb.docket.DocketRootPanel docketRootPanel;
     private parker.serb.docket.DocketRootPanel docketRootPanel1;
@@ -1990,7 +1964,6 @@ public class RootPanel extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
@@ -1998,6 +1971,7 @@ public class RootPanel extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;

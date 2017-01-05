@@ -9,6 +9,7 @@ import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.Dispatch;
 import com.jacob.com.Variant;
 import java.io.File;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -121,6 +122,35 @@ public class generateDocument {
                 }
             }
 
+            Dispatch WordBasic = (Dispatch) Dispatch.call(eolWord, "WordBasic").getDispatch();
+            String newFilePath = docPath + File.separator + saveDocName;
+            Dispatch.call(WordBasic, "FileSaveAs", newFilePath, new Variant(16));
+            JacobCOMBridge.setWordActive(false, false, eolWord);
+        }
+
+        return saveDocName;
+    }
+    
+    public static String generateAnnualReport(String startDate, String endDate){
+        File docPath = null;
+        String saveDocName = null;
+        ActiveXComponent eolWord = null;
+        eolWord = JacobCOMBridge.setWordActive(true, false, eolWord);
+        if (eolWord != null){
+            //Setup Document
+            docPath = new File(Global.activityPath + "AnnualReports");
+            docPath.mkdirs();
+
+            saveDocName = "AnnualReport_" + startDate.replaceAll("[^\\d]", "-")
+                    + "_" + endDate.replaceAll("[^\\d]", "-") + "_" 
+                    + String.valueOf(new Date().getTime()) + ".docx";
+
+            Dispatch document = Dispatch.call(eolWord.getProperty("Documents").toDispatch(), "Open",
+                    Global.templatePath + "ALL" + File.separator + "SERBAnnualReport.docx").toDispatch();
+            ActiveXComponent.call(eolWord.getProperty("Selection").toDispatch(), "Find").toDispatch();
+
+            document = processAnnualReport.processAnnualReportTemplate(document, startDate, endDate);
+            
             Dispatch WordBasic = (Dispatch) Dispatch.call(eolWord, "WordBasic").getDispatch();
             String newFilePath = docPath + File.separator + saveDocName;
             Dispatch.call(WordBasic, "FileSaveAs", newFilePath, new Variant(16));
