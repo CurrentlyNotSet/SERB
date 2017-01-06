@@ -45,6 +45,30 @@ public class processBookmark {
         } finally {
             obj = null;
         }
-    }
+    }    
     
+    public static void processSignature(String bookmark, Dispatch Document) {
+        Dispatch image;
+        Dispatch find;
+        
+        try {
+            image = Dispatch.get(Document, "InLineShapes").toDispatch();
+            find = Dispatch.call(Document, "Find").toDispatch();
+            
+            // This Works!  Adds signature After "Thank you, "
+            Dispatch.put(find, "Text", "Thank you, ");
+            Dispatch.call(find, "Execute");
+            Dispatch.call(image, "AddPicture", bookmark);
+        } catch (RuntimeException e) {
+            image = null;
+            find = null;
+        } finally {
+            image = null;
+            find = null;
+        }
+
+
+
+        
+    }
 }
