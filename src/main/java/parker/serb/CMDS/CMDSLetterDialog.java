@@ -209,7 +209,7 @@ public class CMDSLetterDialog extends javax.swing.JDialog {
             if (templateFile.exists()){
                 new LetterGenerationPanel(Global.root, true, null, template);
             } else {
-                WebOptionPane.showMessageDialog(Global.root, "<html><center> Sorry, unable to locate temaplate. <br><br>" + template.Location + "</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
+                WebOptionPane.showMessageDialog(Global.root, "<html><center> Sorry, unable to locate template. <br><br>" + template.Location + "</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
             }
             
         }

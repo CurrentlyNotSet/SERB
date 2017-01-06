@@ -279,7 +279,7 @@ public class CSCAllLettersPanel extends javax.swing.JDialog {
                     }
                 }
             } else {
-                WebOptionPane.showMessageDialog(Global.root, "<html><center> Sorry, unable to locate temaplate. <br><br>" + template.fileName + "</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
+                WebOptionPane.showMessageDialog(Global.root, "<html><center> Sorry, unable to locate template. <br><br>" + template.fileName + "</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
             }
         }
     }

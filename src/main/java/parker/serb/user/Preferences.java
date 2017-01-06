@@ -25,7 +25,6 @@ public class Preferences extends javax.swing.JDialog {
      */
     public Preferences(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        setUndecorated(true);
         initComponents();
         addListeners();
         loadInformation();
