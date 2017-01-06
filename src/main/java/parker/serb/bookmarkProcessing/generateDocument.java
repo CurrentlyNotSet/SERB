@@ -16,6 +16,7 @@ import parker.serb.Global;
 import parker.serb.sql.AdministrationInformation;
 import parker.serb.sql.SMDSDocuments;
 import parker.serb.sql.CMDSDocuments;
+import parker.serb.sql.CSCCase;
 import parker.serb.sql.ORGCase;
 import parker.serb.sql.SystemExecutive;
 import parker.serb.util.JacobCOMBridge;
@@ -28,22 +29,26 @@ import parker.serb.util.StringUtilities;
  */
 public class generateDocument {
     
-    public static String generateSMDSdocument(SMDSDocuments template, int senderID, List<Integer> toParties, List<Integer> ccParties, ORGCase orgCase){
+    public static String generateSMDSdocument(SMDSDocuments template, int senderID, List<Integer> toParties, List<Integer> ccParties, ORGCase orgCase, CSCCase cscCase){
         File docPath = null;
         String saveDocName = null;
         ActiveXComponent eolWord = null;
         eolWord = JacobCOMBridge.setWordActive(true, false, eolWord);
         if (eolWord != null){
             //Setup Document
-            if (orgCase == null){
-            docPath = new File(Global.activityPath
-                    + Global.activeSection + File.separator
-                    + Global.caseYear + File.separator
-                    + NumberFormatService.generateFullCaseNumber());
-            } else {
+            if (orgCase != null){
                 docPath = new File(Global.activityPath
                     + Global.activeSection + File.separator
                     + orgCase.orgNumber);
+            } else if (cscCase != null){
+                docPath = new File(Global.activityPath
+                    + "CSC" + File.separator
+                    + cscCase.cscNumber);
+            } else {
+                docPath = new File(Global.activityPath
+                    + Global.activeSection + File.separator
+                    + Global.caseYear + File.separator
+                    + NumberFormatService.generateFullCaseNumber());
             }
             
             docPath.mkdirs();
@@ -76,7 +81,7 @@ public class generateDocument {
                         break;
                     case "CSC":
                         document = defaultCMDSBookmarks(document);
-                        document = processCSCbookmarks.processDoACSCWordLetter(document, toParties, ccParties);
+                        document = processCSCbookmarks.processDoACSCWordLetter(document, toParties, ccParties, cscCase);
                         break;
                     default:
                         break;
@@ -121,6 +126,35 @@ public class generateDocument {
                 }
             }
 
+            Dispatch WordBasic = (Dispatch) Dispatch.call(eolWord, "WordBasic").getDispatch();
+            String newFilePath = docPath + File.separator + saveDocName;
+            Dispatch.call(WordBasic, "FileSaveAs", newFilePath, new Variant(16));
+            JacobCOMBridge.setWordActive(false, false, eolWord);
+        }
+
+        return saveDocName;
+    }
+    
+    public static String generateAnnualReport(String startDate, String endDate){
+        File docPath = null;
+        String saveDocName = null;
+        ActiveXComponent eolWord = null;
+        eolWord = JacobCOMBridge.setWordActive(true, false, eolWord);
+        if (eolWord != null){
+            //Setup Document
+            docPath = new File(Global.activityPath + "AnnualReports");
+            docPath.mkdirs();
+
+            saveDocName = "AnnualReport_" + startDate.replaceAll("[^\\d]", "-")
+                    + "_" + endDate.replaceAll("[^\\d]", "-") + "_" 
+                    + String.valueOf(new Date().getTime()) + ".docx";
+
+            Dispatch document = Dispatch.call(eolWord.getProperty("Documents").toDispatch(), "Open",
+                    Global.templatePath + "ALL" + File.separator + "SERBAnnualReport.docx").toDispatch();
+            ActiveXComponent.call(eolWord.getProperty("Selection").toDispatch(), "Find").toDispatch();
+
+            document = processAnnualReport.processAnnualReportTemplate(document, startDate, endDate);
+            
             Dispatch WordBasic = (Dispatch) Dispatch.call(eolWord, "WordBasic").getDispatch();
             String newFilePath = docPath + File.separator + saveDocName;
             Dispatch.call(WordBasic, "FileSaveAs", newFilePath, new Variant(16));

@@ -375,7 +375,7 @@ public class CaseParty {
         return parties;
     }
     
-    public static List<CaseParty> loadORGPartiesByCase(String orgNumber) {
+    public static List<CaseParty> loadORGPartiesByCase(String caseType, String orgNumber) {
         List<CaseParty> parties = new ArrayList<>();
         
         Statement stmt = null;
@@ -385,13 +385,14 @@ public class CaseParty {
             
             String sql = "SELECT * FROM CaseParty"
                     + " where caseYear IS NULL "
-                    + " and caseType = 'ORG'"
+                    + " and caseType = ? "
                     + " and caseMonth IS NULL"
                     + " and caseParty.caseNumber = ?"
                     + " order by caseRelation";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, orgNumber);
+            preparedStatement.setString(1, caseType);
+            preparedStatement.setString(2, orgNumber);
             
             ResultSet casePartyRS = preparedStatement.executeQuery();
             
@@ -427,7 +428,7 @@ public class CaseParty {
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                loadORGPartiesByCase(orgNumber);
+                loadORGPartiesByCase(caseType, orgNumber);
             } 
         } finally {
             DbUtils.closeQuietly(stmt);

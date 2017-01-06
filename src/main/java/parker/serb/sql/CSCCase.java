@@ -693,4 +693,53 @@ public class CSCCase {
         }
         return valid;
     }
+    
+    public static List<CSCCase> getCSCCasesAllLettersDefault(){
+        List orgLettersList = new ArrayList<>();
+            
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT * FROM CSCCase WHERE Active = 1 AND valid = 1";
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            ResultSet rs = preparedStatement.executeQuery();
+            
+            while(rs.next()) {
+                CSCCase org = new CSCCase();
+                org.name = rs.getString("name");
+                org.alsoKnownAs = rs.getString("alsoKnownAs");
+                org.type = rs.getString("type");
+                org.cscNumber = rs.getString("cscNumber");
+                org.address1 = rs.getString("address1");
+                org.address2 = rs.getString("address2");
+                org.city = rs.getString("city");
+                org.state = rs.getString("state");
+                org.zipCode = rs.getString("zipCode");
+                org.phone1 = rs.getString("phone1");
+                org.phone2 = rs.getString("phone2");
+                org.fax = rs.getString("fax");
+                org.email = rs.getString("email");
+                org.charter = rs.getBoolean("charter");
+                org.fiscalYearEnding = rs.getString("fiscalYearEnding");
+                org.lastNotification = rs.getString("lastNotification");
+                org.previousFileDate = rs.getTimestamp("previousFileDate");
+                org.activityLastFiled = rs.getTimestamp("activityLastFiled");
+                org.dueDate = rs.getString("dueDate");
+                org.filed = rs.getTimestamp("filed");
+                org.valid = rs.getBoolean("valid");
+                org.county = rs.getString("county");
+                org.statutory = rs.getBoolean("statutory");
+                orgLettersList.add(org);
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getCSCCasesAllLettersDefault();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return orgLettersList;        
+    }
 }
