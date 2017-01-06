@@ -13,7 +13,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.dbutils.DbUtils;
-import static parker.serb.sql.CMDSHearing.addHearing;
 import parker.serb.util.SlackNotification;
 
 /**

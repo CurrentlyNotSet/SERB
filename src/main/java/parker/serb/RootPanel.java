@@ -89,7 +89,6 @@ public class RootPanel extends javax.swing.JFrame {
         letterQueueThread();
         User.updateLogInInformation();
         Global.activeUser.activeLogIn = true;
-        Audit.addAuditEntry("Logged In");
         setLocationRelativeTo(null);
         setVisible(true);        
     }
@@ -420,26 +419,26 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton3.setSize(dim);
                 jButton3.setMinimumSize(dim);
                 jButton3.setMaximumSize(dim);
-                jButton3.setVisible(true);
+                jButton3.setVisible(false);
                 jButton3.setText("Letters");
                 jButton3.setEnabled(false);
                 
                 jButton4.setSize(dim);
                 jButton4.setMinimumSize(dim);
                 jButton4.setMaximumSize(dim);
-                jButton4.setVisible(true);
+                jButton4.setVisible(false);
                 jButton4.setText("Reports");
                 
                 jButton5.setSize(dim);
                 jButton5.setMinimumSize(dim);
                 jButton5.setMaximumSize(dim);
-                jButton5.setVisible(true);
+                jButton5.setVisible(false);
                 jButton5.setText("Queue");
                 
                 jButton6.setSize(dim);
                 jButton6.setMinimumSize(dim);
                 jButton6.setMaximumSize(dim);
-                jButton6.setVisible(true);
+                jButton6.setVisible(false);
                 jButton6.setText("Public Records");
                 
                 jButton7.setSize(dim);

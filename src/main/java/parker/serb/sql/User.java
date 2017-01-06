@@ -389,6 +389,8 @@ public class User {
             preparedStatement.setString(5, Global.activeUser.username);
             
             preparedStatement.executeUpdate();
+            
+            Audit.addAuditEntry("Logged In from " + InetAddress.getLocalHost().getHostName() + " as " + System.getProperty("user.name"));
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
