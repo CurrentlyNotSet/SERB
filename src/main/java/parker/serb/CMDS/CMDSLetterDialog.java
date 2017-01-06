@@ -5,11 +5,15 @@
  */
 package parker.serb.CMDS;
 
+import com.alee.laf.optionpane.WebOptionPane;
 import java.awt.event.ItemEvent;
+import java.io.File;
 import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 import parker.serb.Global;
 import parker.serb.letterGeneration.LetterGenerationPanel;
 import parker.serb.sql.CMDSDocuments;
+import parker.serb.util.Item;
 
 /**
  *
@@ -27,11 +31,20 @@ public class CMDSLetterDialog extends javax.swing.JDialog {
     }
         
     private void addListeners() {
+        
+        DefaultComboBoxModel dt = new DefaultComboBoxModel();
+        BOLettersSubComboBox.setModel(dt);
+        BOLettersSubComboBox.addItem(new Item<>("0", ""));
+        POQuestionsSubComboBox.setModel(dt);
+        POQuestionsSubComboBox.addItem(new Item<>("0", ""));
+        ReportAndRecsSubComboBox.setModel(dt);
+        ReportAndRecsSubComboBox.addItem(new Item<>("0", ""));
+        
         BOLettersMainComboBox.addItemListener((ItemEvent e) -> {
             POQuestionsMainComboBox.setSelectedItem("");
             ReportAndRecsMainComboBox.setSelectedItem("");
-            POQuestionsSubComboBox.setSelectedItem("");
-            ReportAndRecsSubComboBox.setSelectedItem("");
+            POQuestionsSubComboBox.setSelectedItem(new Item<>("0", ""));
+            ReportAndRecsSubComboBox.setSelectedItem(new Item<>("0", ""));
             POQuestionsSubComboBox.setEnabled(false);
             ReportAndRecsSubComboBox.setEnabled(false);
             
@@ -42,8 +55,8 @@ public class CMDSLetterDialog extends javax.swing.JDialog {
         POQuestionsMainComboBox.addItemListener((ItemEvent e) -> {
             ReportAndRecsMainComboBox.setSelectedItem("");
             BOLettersMainComboBox.setSelectedItem("");
-            ReportAndRecsSubComboBox.setSelectedItem("");
-            BOLettersSubComboBox.setSelectedItem("");
+            ReportAndRecsSubComboBox.setSelectedItem(new Item<>("0", ""));
+            BOLettersSubComboBox.setSelectedItem(new Item<>("0", ""));
             ReportAndRecsSubComboBox.setEnabled(false);
             BOLettersSubComboBox.setEnabled(false);
             
@@ -54,8 +67,8 @@ public class CMDSLetterDialog extends javax.swing.JDialog {
         ReportAndRecsMainComboBox.addItemListener((ItemEvent e) -> {
             BOLettersMainComboBox.setSelectedItem("");
             POQuestionsMainComboBox.setSelectedItem("");
-            BOLettersSubComboBox.setSelectedItem("");
-            POQuestionsSubComboBox.setSelectedItem("");
+            BOLettersSubComboBox.setSelectedItem(new Item<>("0", ""));
+            POQuestionsSubComboBox.setSelectedItem(new Item<>("0", ""));
             BOLettersSubComboBox.setEnabled(false);
             POQuestionsSubComboBox.setEnabled(false);
             
@@ -119,14 +132,15 @@ public class CMDSLetterDialog extends javax.swing.JDialog {
     }
     
     private void loadBoardOrderSubDropDown() {
-        BOLettersSubComboBox.removeAllItems();
-        BOLettersSubComboBox.addItem("");
-        List<String> letterNameList =  CMDSDocuments.findDocumentsBySubCategories(BOLettersMainComboBox.getSelectedItem().toString());
+        DefaultComboBoxModel dt = new DefaultComboBoxModel();
+        BOLettersSubComboBox.setModel(dt);
+        BOLettersSubComboBox.addItem(new Item<>("0", ""));
         
-        for (String letter : letterNameList) {
-            BOLettersSubComboBox.addItem(letter);
+        List<CMDSDocuments> letterList = CMDSDocuments.findDocumentsBySubCategories(BOLettersMainComboBox.getSelectedItem().toString());
+        for (CMDSDocuments letter : letterList) {
+            BOLettersSubComboBox.addItem(new Item<>(String.valueOf(letter.ID), letter.LetterName));
         }
-        BOLettersSubComboBox.setSelectedItem("");
+        BOLettersSubComboBox.setSelectedItem(new Item<>("0", ""));
         BOLettersSubComboBox.setEnabled(true);
     }
     
@@ -142,14 +156,15 @@ public class CMDSLetterDialog extends javax.swing.JDialog {
     }
     
     private void loadProceduralOrderSubDropDown() {
-        POQuestionsSubComboBox.removeAllItems();
-        POQuestionsSubComboBox.addItem("");
-        List<String> letterList = CMDSDocuments.findDocumentsBySubCategories(POQuestionsMainComboBox.getSelectedItem().toString());
+        DefaultComboBoxModel dt = new DefaultComboBoxModel();
+        POQuestionsSubComboBox.setModel(dt);
+        POQuestionsSubComboBox.addItem(new Item<>("0", ""));
         
-        for (String letter : letterList) {
-            POQuestionsSubComboBox.addItem(letter);
+        List<CMDSDocuments> letterList = CMDSDocuments.findDocumentsBySubCategories(POQuestionsMainComboBox.getSelectedItem().toString());
+        for (CMDSDocuments letter : letterList) {
+            POQuestionsSubComboBox.addItem(new Item<>(String.valueOf(letter.ID), letter.LetterName));
         }
-        POQuestionsSubComboBox.setSelectedItem("");
+        POQuestionsSubComboBox.setSelectedItem(new Item<>("0", ""));
         POQuestionsSubComboBox.setEnabled(true);
     }
     
@@ -165,14 +180,15 @@ public class CMDSLetterDialog extends javax.swing.JDialog {
     }
     
     private void loadReportRecsSubDropDown() {
-        ReportAndRecsSubComboBox.removeAllItems();
-        ReportAndRecsSubComboBox.addItem("");
-        List<String> subTypeList = CMDSDocuments.findDocumentsBySubCategories(ReportAndRecsMainComboBox.getSelectedItem().toString());
+        DefaultComboBoxModel dt = new DefaultComboBoxModel();
+        ReportAndRecsSubComboBox.setModel(dt);
+        ReportAndRecsSubComboBox.addItem(new Item<>("0", ""));
         
-        for (String subType : subTypeList) {
-            ReportAndRecsSubComboBox.addItem(subType);
+        List<CMDSDocuments> letterList = CMDSDocuments.findDocumentsBySubCategories(ReportAndRecsMainComboBox.getSelectedItem().toString());
+        for (CMDSDocuments letter : letterList) {
+            ReportAndRecsSubComboBox.addItem(new Item<>(String.valueOf(letter.ID), letter.LetterName));
         }
-        ReportAndRecsSubComboBox.setSelectedItem("");
+        ReportAndRecsSubComboBox.setSelectedItem(new Item<>("0", ""));
         ReportAndRecsSubComboBox.setEnabled(true);
     }
 
@@ -186,9 +202,16 @@ public class CMDSLetterDialog extends javax.swing.JDialog {
             selection = ReportAndRecsSubComboBox.getSelectedItem().toString().trim();
         }
 
-        if (!"".equals(selection)) {
+        if (!"".equals(selection)) {            
             CMDSDocuments template = CMDSDocuments.findDocumentByName(selection);
-            new LetterGenerationPanel(Global.root, true, null, template);
+            File templateFile = new File(Global.templatePath + Global.activeSection + File.separator + template.Location);
+            
+            if (templateFile.exists()){
+                new LetterGenerationPanel(Global.root, true, null, template);
+            } else {
+                WebOptionPane.showMessageDialog(Global.root, "<html><center> Sorry, unable to locate temaplate. <br><br>" + template.Location + "</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
+            }
+            
         }
     }
     

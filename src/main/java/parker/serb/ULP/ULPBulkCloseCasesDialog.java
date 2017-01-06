@@ -2,34 +2,33 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package parker.serb.MED;
+package parker.serb.ULP;
 
 import java.util.Date;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
 import parker.serb.report.GenerateReport;
-import parker.serb.sql.MEDCase;
+import parker.serb.sql.Activity;
 import parker.serb.sql.SMDSDocuments;
+import parker.serb.sql.ULPCase;
 import parker.serb.util.NumberFormatService;
 
 /**
  *
  * @author parker.johnston
  */
-public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
+public class ULPBulkCloseCasesDialog extends javax.swing.JFrame {
 
-    String dateForm;
     DefaultTableModel model;
     String startDate = "";
-    String endDate = "";
     
     /**
      * Creates new form MEDsettleCases
      * @param parent
      * @param modal
      */
-    public MEDBulkSendToBoardDialog(java.awt.Frame parent, boolean modal) {
+    public ULPBulkCloseCasesDialog(java.awt.Frame parent, boolean modal) {
         initComponents();
         setActive();
         this.setLocationRelativeTo(parent);
@@ -48,13 +47,6 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
                 checkIfTableIsLoadable();
             }
         });
-        
-        endDateField.addDateSelectionListener((Date date) -> {
-            if (!endDateField.getText().equals(endDate)){
-                endDate = endDateField.getText();
-                checkIfTableIsLoadable();
-            }
-        });
     }
 
     
@@ -64,18 +56,25 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
         caseTable.getColumnModel().getColumn(0).setPreferredWidth(35);
         caseTable.getColumnModel().getColumn(0).setMaxWidth(35);
         
-        //Case Number
-        caseTable.getColumnModel().getColumn(1).setMinWidth(125);
-        caseTable.getColumnModel().getColumn(1).setPreferredWidth(125);
-        caseTable.getColumnModel().getColumn(1).setMaxWidth(125);
-
-        //Filed Date
-        caseTable.getColumnModel().getColumn(3).setMinWidth(80);
-        caseTable.getColumnModel().getColumn(3).setPreferredWidth(80);
-        caseTable.getColumnModel().getColumn(3).setMaxWidth(80);
+        //ID
+        caseTable.getColumnModel().getColumn(1).setMinWidth(0);
+        caseTable.getColumnModel().getColumn(1).setPreferredWidth(0);
+        caseTable.getColumnModel().getColumn(1).setMaxWidth(0);
         
-        //get Table
-        model = (DefaultTableModel) caseTable.getModel();
+//        //Case Number
+//        caseTable.getColumnModel().getColumn(2).setMinWidth(125);
+//        caseTable.getColumnModel().getColumn(2).setPreferredWidth(125);
+//        caseTable.getColumnModel().getColumn(2).setMaxWidth(125);
+//
+//        //Filed Date
+//        caseTable.getColumnModel().getColumn(4).setMinWidth(80);
+//        caseTable.getColumnModel().getColumn(4).setPreferredWidth(80);
+//        caseTable.getColumnModel().getColumn(4).setMaxWidth(80);
+        
+        //Status
+        caseTable.getColumnModel().getColumn(5).setMinWidth(0);
+        caseTable.getColumnModel().getColumn(5).setPreferredWidth(0);
+        caseTable.getColumnModel().getColumn(5).setMaxWidth(0);
     }
 
     private void clearTable() {
@@ -94,7 +93,7 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
     }
     
     private void checkIfTableIsLoadable(){
-        if(!"".equals(startDate) && !"".equals(endDate)){
+        if(!"".equals(startDate)){
             loadTableThread();
         }else{
             clearTable();
@@ -103,19 +102,20 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
     
     private void loadTable(){
         Date start = new Date(NumberFormatService.convertMMDDYYYY(startDateField.getText()));
-        Date end = new Date(NumberFormatService.convertMMDDYYYY(endDateField.getText()));
 
-        List<MEDCase> caseList = MEDCase.getCloseList(start, end);
+        List<ULPCase> caseList = ULPCase.loadULPCasesToClose(start);
 
-        for (MEDCase item : caseList) {
+        for (ULPCase item : caseList) {
             String caseNumber = NumberFormatService.generateFullCaseNumberNonGlobal(
                     item.caseYear, item.caseType, item.caseMonth, item.caseNumber);
-
+            
             model.addRow(new Object[]{
                 false,
+                item.id,
                 caseNumber,
-                item.employerIDNumber,
-                Global.mmddyyyy.format(item.fileDate)
+                item.barginingUnitNo.trim().equals("") ? item.employerIDNumber : item.barginingUnitNo,
+                Global.mmddyyyy.format(item.fileDate),
+                item.currentStatus
             });
         }
         jLayeredPane1.moveToBack(jPanel1);
@@ -125,9 +125,11 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
     private void updateList(){
         for (int i = 0; i < caseTable.getRowCount(); i++) {
             if (caseTable.getValueAt(i, 0).equals(true)) {
-                String caseNumber = caseTable.getValueAt(i, 1).toString();
-                
-                MEDCase.updateClosedCases(caseNumber);
+                int caseNumberID = Integer.valueOf(caseTable.getValueAt(i, 1).toString());
+                String[] caseNumber = caseTable.getValueAt(i, 2).toString().split("-");
+                                
+                ULPCase.updateClosedCases(caseNumberID);
+                Activity.addActivtyFromDocket("Case Closed", "", caseNumber, "", "", "", "", false, false);
             }
         }
     }
@@ -136,13 +138,11 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
         jLayeredPane1.moveToFront(jPanel1);
         
         Thread temp = new Thread(() -> {
-            SMDSDocuments report = SMDSDocuments.findDocumentByFileName("MED Cases to be Closed by Board.jasper");
+            SMDSDocuments report = SMDSDocuments.findDocumentByFileName("ULP Cases Closed.jasper");
             GenerateReport.runReport(report);
             jLayeredPane1.moveToBack(jPanel1);
         });
         temp.start();
-        
-        
     }
         
     /**
@@ -160,14 +160,12 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         countLabel = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
         startDateField = new com.alee.extended.date.WebDateField();
         jLayeredPane1 = new javax.swing.JLayeredPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         caseTable = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
-        endDateField = new com.alee.extended.date.WebDateField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -194,16 +192,13 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Send MED Cases to Board to Close");
+        jLabel1.setText("Bulk Close ULP Cases");
 
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel3.setText("Start Date:");
 
         countLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         countLabel.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel5.setText("End Date:");
 
         startDateField.setEditable(false);
         startDateField.setCaretColor(new java.awt.Color(0, 0, 0));
@@ -217,14 +212,14 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
 
             },
             new String [] {
-                "", "Case Number", "Employer", "File Date"
+                "", "ID", "Case Number", "Employer", "File Date", "Status"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                true, false, false, false
+                true, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -269,11 +264,6 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
 
         jLayeredPane1.add(jPanel1);
 
-        endDateField.setEditable(false);
-        endDateField.setCaretColor(new java.awt.Color(0, 0, 0));
-        endDateField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        endDateField.setDateFormat(Global.mmddyyyy);
-
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -282,17 +272,13 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(layout.createSequentialGroup()
-                        .add(0, 57, Short.MAX_VALUE)
+                        .add(0, 0, 0)
                         .add(jLabel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 64, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                         .add(startDateField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 150, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(63, 63, 63)
-                        .add(jLabel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 64, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(endDateField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 150, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(0, 116, Short.MAX_VALUE))
+                        .add(0, 0, Short.MAX_VALUE))
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, countLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(jLabel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(jLabel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 678, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                         .add(0, 0, Short.MAX_VALUE)
                         .add(printButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 191, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
@@ -315,17 +301,13 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jLabel1)
-                .add(11, 11, 11)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                        .add(jLabel3)
-                        .add(startDateField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                        .add(jLabel5)
-                        .add(endDateField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                .add(18, 18, 18)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel3)
+                    .add(startDateField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(countLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 14, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 471, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 464, Short.MAX_VALUE)
                 .add(printButton)
                 .add(18, 18, 18)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
@@ -339,7 +321,7 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
                     .add(100, 100, 100)))
         );
 
-        layout.linkSize(new java.awt.Component[] {jLabel3, jLabel5, startDateField}, org.jdesktop.layout.GroupLayout.VERTICAL);
+        layout.linkSize(new java.awt.Component[] {jLabel3, startDateField}, org.jdesktop.layout.GroupLayout.VERTICAL);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -361,10 +343,8 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
     private javax.swing.JTable caseTable;
     private javax.swing.JButton closeButton;
     private javax.swing.JLabel countLabel;
-    private com.alee.extended.date.WebDateField endDateField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JPanel jPanel1;

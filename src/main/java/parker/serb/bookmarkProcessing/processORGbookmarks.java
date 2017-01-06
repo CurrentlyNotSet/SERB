@@ -18,10 +18,9 @@ import parker.serb.sql.ORGCase;
  */
 public class processORGbookmarks {
 
-    public static Dispatch processDoAORGWordLetter(Dispatch Document, boolean toRep, List<Integer> toParties, List<Integer> ccParties) {
+    public static Dispatch processDoAORGWordLetter(Dispatch Document, boolean toRep, List<Integer> toParties, List<Integer> ccParties, ORGCase item) {
         //get basic information  
-        ORGCase item = ORGCase.loadORGInformation();
-        List<CaseParty> partyList = CaseParty.loadPartiesByCase(Global.caseYear, Global.caseType, Global.caseMonth, Global.caseNumber);
+        List<CaseParty> partyList = CaseParty.loadPartiesByCase(null, "ORG", null, item.orgNumber);
 
         String repNames = "";
         String officerNames = "";
@@ -29,6 +28,7 @@ public class processORGbookmarks {
         String officerAddressBlock = "";
         String toAddressBlock = "";
         String ccNameBlock = "";
+        String certifiedDate = "";
         
         for (CaseParty party : partyList){
             
@@ -83,12 +83,13 @@ public class processORGbookmarks {
         orgAddress.stateCode = item.orgState;
         orgAddress.zipcode = item.orgZip;
         orgAddressBlock = StringUtilities.buildCasePartyName(orgAddress);
-                
         
-        
+        if (item.certifiedDate != null){
+            certifiedDate = Global.MMMMddyyyy.format(item.certifiedDate);
+        }
+                        
         //ProcessBookmarks
-        for (int i = 0; i < Global.BOOKMARK_LIMIT; i++) {
-            
+        for (int i = 0; i < Global.BOOKMARK_LIMIT; i++) {   
             if (toRep){
                 processBookmark.process("RepName" + (i == 0 ? "" : i), repNames, Document);
                 processBookmark.process("RepSalutation" + (i == 0 ? "" : i), repNames, Document);
@@ -102,41 +103,9 @@ public class processORGbookmarks {
 
             processBookmark.process("OrgName" + (i == 0 ? "" : i), item.orgName, Document);
             processBookmark.process("OrgNum" + (i == 0 ? "" : i), item.orgNumber, Document);
-            processBookmark.process("CertifiedDate" + (i == 0 ? "" : i), Global.MMMMddyyyy.format(item.certifiedDate), Document);
-            
+            processBookmark.process("CertifiedDate" + (i == 0 ? "" : i), certifiedDate, Document);
         }
-        
         return Document;
     }
-    
-    
-    
-    
-
-//        if (toRep) {
-//            processWordReplaceBookmark("RepFirstName", eod.RepFirstName, Document);
-//            processWordReplaceBookmark("RepMiddleName", eod.RepMiddleInitial, Document);
-//            processWordReplaceBookmark("RepLastName", eod.RepLastName, Document);
-//    
-//            processWordReplaceBookmark("OrgAddress1", eod.RepAddress1, Document);
-//            processWordReplaceBookmark("OrgAddress2", eod.RepAddress2, Document);
-//            processWordReplaceBookmark("OrgCity", eod.RepCity, Document);
-//            processWordReplaceBookmark("OrgState", eod.RepState, Document);
-//            processWordReplaceBookmark("OrgZipPlusFive", eod.RepZipPlusFive, Document);
-//
-//            processWordReplaceBookmark("RepSalutation", eod.RepFirstName + " " + eod.RepMiddleInitial + " " + eod.RepLastName, Document);
-//        } else {
-//            processWordReplaceBookmark("RepFirstName", "", Document);
-//            processWordReplaceBookmark("RepMiddleName", "", Document);
-//            processWordReplaceBookmark("RepLastName", "", Document);
-//            
-//            processWordReplaceBookmark("OrgAddress1", eod.OrgAddress1, Document);
-//            processWordReplaceBookmark("OrgAddress2", eod.OrgAddress2, Document);
-//            processWordReplaceBookmark("OrgCity", eod.OrgCity, Document);
-//            processWordReplaceBookmark("OrgState", eod.OrgState, Document);
-//            processWordReplaceBookmark("OrgZipPlusFive", eod.OrgZipPlusFive, Document);
-//
-//            processWordReplaceBookmark("RepSalutation", eod.OrgName, Document);
-//        }
     
 }

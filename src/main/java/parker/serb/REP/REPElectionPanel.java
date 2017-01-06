@@ -98,7 +98,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
                     Date startDate = Global.mmddyyyy.parse(pollingStartDate.getText());
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(startDate);
-                    cal.add(Calendar.DATE, 15);
+                    cal.add(Calendar.DATE, 14);
                     pollingEndDate.setText(Global.mmddyyyy.format(cal.getTime()));
                 } catch (ParseException ex) {
                     pollingEndDate.setText("");
@@ -111,7 +111,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
                     Date startDate = Global.mmddyyyy.parse(pollingStartDate.getText());
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(startDate);
-                    cal.add(Calendar.DATE, 15);
+                    cal.add(Calendar.DATE, 14);
                     pollingEndDate.setText(Global.mmddyyyy.format(cal.getTime()));
                 } catch (ParseException ex) {
                     pollingEndDate.setText("");
@@ -124,7 +124,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
                     Date startDate = Global.mmddyyyy.parse(pollingStartDate.getText());
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(startDate);
-                    cal.add(Calendar.DATE, 15);
+                    cal.add(Calendar.DATE, 14);
                     pollingEndDate.setText(Global.mmddyyyy.format(cal.getTime()));
                 } catch (ParseException ex) {
                     pollingEndDate.setText("");
@@ -1651,10 +1651,11 @@ public class REPElectionPanel extends javax.swing.JPanel {
                             .addComponent(eligibilityListDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel25)
-                            .addComponent(jLabel24, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel23, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel20, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel25)
+                                .addComponent(jLabel24, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel20, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addComponent(jLabel23, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(pollingStartDate, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)

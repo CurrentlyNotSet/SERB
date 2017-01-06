@@ -21,10 +21,13 @@ import javax.swing.event.ChangeEvent;
 import parker.serb.CMDS.CMDSHeaderPanel;
 import parker.serb.CMDS.CMDSLetterDialog;
 import parker.serb.CMDS.CMDSRootPanel;
+import parker.serb.CSC.CSCAllLettersPanel;
 import parker.serb.CSC.CSCHeaderPanel;
+import parker.serb.CSC.CSCLetterDialog;
 import parker.serb.CSC.CSCRootPanel;
 import parker.serb.Hearing.HearingHeaderPanel;
 import parker.serb.Hearing.HearingRootPanel;
+import parker.serb.MED.MEDBulkHandleCases;
 import parker.serb.MED.MEDBulkSendToBoardDialog;
 import parker.serb.MED.MEDBulkSettleCasesDialog;
 import parker.serb.MED.MEDHeaderPanel;
@@ -32,12 +35,16 @@ import parker.serb.MED.MEDLetterDialog;
 import parker.serb.MED.MEDRootPanel;
 import parker.serb.ORG.ORGAllLettersPanel;
 import parker.serb.ORG.ORGHeaderPanel;
+import parker.serb.ORG.ORGLetterDialog;
 import parker.serb.ORG.ORGRootPanel;
+import parker.serb.REP.REPBulkCloseCasesDialog;
+import parker.serb.ULP.ULPBulkCloseCasesDialog;
 import parker.serb.ULP.ULPHeaderPanel;
 import parker.serb.ULP.ULPLetterDialog;
 import parker.serb.ULP.ULPRootPanel;
 import parker.serb.adminDBMaintenance.AdminMainMenuPanel;
 import parker.serb.admin.SystemMontiorDialog;
+import parker.serb.bookmarkProcessing.AnnualReportTwoDatePanel;
 import parker.serb.letterQueue.LetterQueuePanel;
 import parker.serb.sql.Audit;
 import parker.serb.user.Preferences;
@@ -85,7 +92,6 @@ public class RootPanel extends javax.swing.JFrame {
         letterQueueThread();
         User.updateLogInInformation();
         Global.activeUser.activeLogIn = true;
-        Audit.addAuditEntry("Logged In");
         setLocationRelativeTo(null);
         setVisible(true);        
     }
@@ -101,13 +107,30 @@ public class RootPanel extends javax.swing.JFrame {
     public void enableTabs() {
         if(!Global.activeUserRoles.contains("Admin")) {
             jMenuBar1.remove(jMenu2);
-            jMenuBar1.remove(caseManagementMenu);
             for(int i = jTabbedPane1.getTabCount()-1; i >= 0; i--) {
                 if(!Global.activeUserRoles.contains(jTabbedPane1.getTitleAt(i))) {
                     jTabbedPane1.remove(i);
                 }
             }
         }
+        
+        if(!Global.activeUserRoles.contains("REP") && !Global.activeUserRoles.contains("MED") && !Global.activeUserRoles.contains("ULP")) {
+            jMenuBar1.remove(batchCloseCasesSubMenu);
+        }
+        
+        if(!Global.activeUserRoles.contains("REP")) {
+            jMenuBar1.remove(batchCloseREPMenuItem);
+        }
+        
+        if(!Global.activeUserRoles.contains("MED")) {
+            jMenuBar1.remove(batchCloseMEDMenuItem);
+        }
+        
+        if(!Global.activeUserRoles.contains("ULP")) {
+            jMenuBar1.remove(batchCloseULPMenuItem);
+        }
+        
+        
     }
     
     private void setDefaultTab() {
@@ -398,26 +421,26 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton3.setSize(dim);
                 jButton3.setMinimumSize(dim);
                 jButton3.setMaximumSize(dim);
-                jButton3.setVisible(true);
+                jButton3.setVisible(false);
                 jButton3.setText("Letters");
                 jButton3.setEnabled(false);
                 
                 jButton4.setSize(dim);
                 jButton4.setMinimumSize(dim);
                 jButton4.setMaximumSize(dim);
-                jButton4.setVisible(true);
+                jButton4.setVisible(false);
                 jButton4.setText("Reports");
                 
                 jButton5.setSize(dim);
                 jButton5.setMinimumSize(dim);
                 jButton5.setMaximumSize(dim);
-                jButton5.setVisible(true);
+                jButton5.setVisible(false);
                 jButton5.setText("Queue");
                 
                 jButton6.setSize(dim);
                 jButton6.setMinimumSize(dim);
                 jButton6.setMaximumSize(dim);
-                jButton6.setVisible(true);
+                jButton6.setVisible(false);
                 jButton6.setText("Public Records");
                 
                 jButton7.setSize(dim);
@@ -532,13 +555,14 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton3.setMinimumSize(dim);
                 jButton3.setMaximumSize(dim);
                 jButton3.setSize(dim);
-                jButton3.setVisible(false);
+                jButton3.setVisible(true);
+                jButton3.setEnabled(true);
                 jButton3.setText("All Org Letters");
                 
                 jButton4.setSize(dim);
                 jButton4.setMinimumSize(dim);
                 jButton4.setMaximumSize(dim);
-                jButton4.setVisible(false);
+                jButton4.setVisible(true);
                 jButton4.setText("Single Letter");
                 
                 jButton5.setSize(dim);
@@ -599,7 +623,8 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton3.setMinimumSize(dim);
                 jButton3.setMaximumSize(dim);
                 jButton3.setSize(dim);
-                jButton3.setVisible(false);
+                jButton3.setVisible(true);
+                jButton3.setEnabled(true);
                 jButton3.setText("All Org Letters");
                 
                 jButton4.setSize(dim);
@@ -1057,17 +1082,14 @@ public class RootPanel extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
-        jMenu5 = new javax.swing.JMenu();
+        batchCloseCasesSubMenu = new javax.swing.JMenu();
+        batchCloseMEDMenuItem = new javax.swing.JMenuItem();
+        batchCloseREPMenuItem = new javax.swing.JMenuItem();
+        batchCloseULPMenuItem = new javax.swing.JMenuItem();
         jMenuItem7 = new javax.swing.JMenuItem();
-        jMenuItem8 = new javax.swing.JMenuItem();
-        jMenuItem9 = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
-        caseManagementMenu = new javax.swing.JMenu();
-        jMenu4 = new javax.swing.JMenu();
-        MEDSendToBoardToCloseMenuItem = new javax.swing.JMenuItem();
-        MEDSettleCasesMenuItem = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         adminPanelMenuItem = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
@@ -1512,23 +1534,41 @@ public class RootPanel extends javax.swing.JFrame {
         jMenu1.add(jMenuItem1);
         jMenu1.add(jSeparator1);
 
-        jMenu5.setText("Batch Close Cases");
+        batchCloseCasesSubMenu.setText("Batch Handle Cases");
 
-        jMenuItem7.setText("REP");
-        jMenu5.add(jMenuItem7);
-
-        jMenuItem8.setText("ULP");
-        jMenu5.add(jMenuItem8);
-
-        jMenuItem9.setText("MED");
-        jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
+        batchCloseMEDMenuItem.setText("MED");
+        batchCloseMEDMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem9ActionPerformed(evt);
+                batchCloseMEDMenuItemActionPerformed(evt);
             }
         });
-        jMenu5.add(jMenuItem9);
+        batchCloseCasesSubMenu.add(batchCloseMEDMenuItem);
 
-        jMenu1.add(jMenu5);
+        batchCloseREPMenuItem.setText("REP");
+        batchCloseREPMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                batchCloseREPMenuItemActionPerformed(evt);
+            }
+        });
+        batchCloseCasesSubMenu.add(batchCloseREPMenuItem);
+
+        batchCloseULPMenuItem.setText("ULP");
+        batchCloseULPMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                batchCloseULPMenuItemActionPerformed(evt);
+            }
+        });
+        batchCloseCasesSubMenu.add(batchCloseULPMenuItem);
+
+        jMenu1.add(batchCloseCasesSubMenu);
+
+        jMenuItem7.setText("Annual Report");
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem7);
         jMenu1.add(jSeparator2);
 
         jMenuItem3.setText("Log Off");
@@ -1548,30 +1588,6 @@ public class RootPanel extends javax.swing.JFrame {
         jMenu1.add(jMenuItem4);
 
         jMenuBar1.add(jMenu1);
-
-        caseManagementMenu.setText("Case Management");
-
-        jMenu4.setText("MED Bulk Edit");
-
-        MEDSendToBoardToCloseMenuItem.setText("Send to Board");
-        MEDSendToBoardToCloseMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MEDSendToBoardToCloseMenuItemActionPerformed(evt);
-            }
-        });
-        jMenu4.add(MEDSendToBoardToCloseMenuItem);
-
-        MEDSettleCasesMenuItem.setText("Settle Cases");
-        MEDSettleCasesMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MEDSettleCasesMenuItemActionPerformed(evt);
-            }
-        });
-        jMenu4.add(MEDSettleCasesMenuItem);
-
-        caseManagementMenu.add(jMenu4);
-
-        jMenuBar1.add(caseManagementMenu);
 
         jMenu2.setText("Admin");
 
@@ -1677,6 +1693,9 @@ public class RootPanel extends javax.swing.JFrame {
                 break;
             case "ORG":
                 new ORGAllLettersPanel((JFrame) this.getRootPane().getParent(), true);
+                break;
+            case "Civil Service Commission":
+                new CSCAllLettersPanel((JFrame) this.getRootPane().getParent(), true);
                 break;
             default:
                 break;
@@ -1807,6 +1826,12 @@ public class RootPanel extends javax.swing.JFrame {
             case "CMDS":
                 new CMDSLetterDialog((JFrame) this.getRootPane().getParent(), true);
                 break;
+            case "ORG":
+                new ORGLetterDialog((JFrame) this.getRootPane().getParent(), true);
+                break;
+            case "Civil Service Commission":
+                new CSCLetterDialog((JFrame) this.getRootPane().getParent(), true);
+                break;
             default:
                 break;
         }
@@ -1843,14 +1868,6 @@ public class RootPanel extends javax.swing.JFrame {
     private void adminPanelMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adminPanelMenuItemActionPerformed
         new AdminMainMenuPanel((JFrame) getRootPane().getParent(), true);
     }//GEN-LAST:event_adminPanelMenuItemActionPerformed
-
-    private void MEDSendToBoardToCloseMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MEDSendToBoardToCloseMenuItemActionPerformed
-        new MEDBulkSendToBoardDialog((JFrame) getRootPane().getParent(), true);
-    }//GEN-LAST:event_MEDSendToBoardToCloseMenuItemActionPerformed
-
-    private void MEDSettleCasesMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MEDSettleCasesMenuItemActionPerformed
-        new MEDBulkSettleCasesDialog((JFrame) getRootPane().getParent(), true);
-    }//GEN-LAST:event_MEDSettleCasesMenuItemActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         switch(Global.activeSection) {
@@ -1902,9 +1919,21 @@ public class RootPanel extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton8ActionPerformed
 
-    private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem9ActionPerformed
+    private void batchCloseMEDMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_batchCloseMEDMenuItemActionPerformed
+        new MEDBulkHandleCases((JFrame) this.getRootPane().getParent(), true);
+    }//GEN-LAST:event_batchCloseMEDMenuItemActionPerformed
+
+    private void batchCloseULPMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_batchCloseULPMenuItemActionPerformed
+        new ULPBulkCloseCasesDialog((JFrame) this.getRootPane().getParent(), true);
+    }//GEN-LAST:event_batchCloseULPMenuItemActionPerformed
+
+    private void batchCloseREPMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_batchCloseREPMenuItemActionPerformed
+        new REPBulkCloseCasesDialog((JFrame) this.getRootPane().getParent(), true);
+    }//GEN-LAST:event_batchCloseREPMenuItemActionPerformed
+
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+        new AnnualReportTwoDatePanel((JFrame) this.getRootPane().getParent(), true);
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel CMDS;
@@ -1912,17 +1941,18 @@ public class RootPanel extends javax.swing.JFrame {
     private javax.swing.JPanel Docketing;
     private javax.swing.JPanel Hearing;
     private javax.swing.JPanel MED;
-    private javax.swing.JMenuItem MEDSendToBoardToCloseMenuItem;
-    private javax.swing.JMenuItem MEDSettleCasesMenuItem;
     private javax.swing.JPanel ORG;
     private javax.swing.JPanel REP;
     private javax.swing.JPanel ULP;
     private javax.swing.JMenuItem adminPanelMenuItem;
+    private javax.swing.JMenu batchCloseCasesSubMenu;
+    private javax.swing.JMenuItem batchCloseMEDMenuItem;
+    private javax.swing.JMenuItem batchCloseREPMenuItem;
+    private javax.swing.JMenuItem batchCloseULPMenuItem;
     private parker.serb.CMDS.CMDSHeaderPanel cMDSHeaderPanel1;
     private parker.serb.CMDS.CMDSRootPanel cMDSRootPanel1;
     private parker.serb.CSC.CSCHeaderPanel cSCHeaderPanel1;
     private parker.serb.CSC.CSCRootPanel cSCRootPanel1;
-    private javax.swing.JMenu caseManagementMenu;
     private parker.serb.companySearch.companySearchPanel companySearchPanel1;
     private parker.serb.docket.DocketRootPanel docketRootPanel;
     private parker.serb.docket.DocketRootPanel docketRootPanel1;
@@ -1942,8 +1972,6 @@ public class RootPanel extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
-    private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
@@ -1952,8 +1980,6 @@ public class RootPanel extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
-    private javax.swing.JMenuItem jMenuItem8;
-    private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;

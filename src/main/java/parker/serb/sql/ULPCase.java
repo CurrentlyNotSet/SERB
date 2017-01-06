@@ -1143,4 +1143,85 @@ public class ULPCase {
         }
         return ulpCase;
     }
+    
+    public static List<ULPCase> loadULPCasesToClose(Date boardDate) {
+        List<ULPCase> ULPCaseList = new ArrayList<>();
+        List casetypes = CaseType.getCaseTypeBySection("ULP");
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+            
+            String sql = "SELECT ulpcase.id, ulpcase.caseYear, ulpcase.caseType, "
+                    + "ulpcase.caseMonth, ulpcase.caseNumber, ulpcase.employerIDNumber, "
+                    + "ulpcase.barginingUnitNo, ulpcase.fileDate, ulpcase.currentstatus "
+                    + "FROM boardMeeting LEFT JOIN ulpcase ON boardMeeting.caseYear = ulpcase.caseYear "
+                    + "AND boardMeeting.caseType = ulpcase.caseType "
+                    + "AND boardMeeting.caseMonth = ulpcase.caseMonth "
+                    + "AND boardMeeting.caseNumber = ulpcase.caseNumber "
+                    + "WHERE boardMeetingDate = ? ";
+                        
+            if (!casetypes.isEmpty()) {
+                sql += "AND (";
+                
+                for (Object casetype : casetypes) {
+                    
+                    sql += " boardMeeting.caseType = '" + casetype.toString() + "' OR";
+                }
+                
+                sql = sql.substring(0, (sql.length() - 2)) + ")";
+            }
+            
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+
+            preparedStatement.setDate(1, new java.sql.Date(boardDate.getTime()));           
+
+            ResultSet rs = preparedStatement.executeQuery();
+            
+            while(rs.next()) {
+                ULPCase ulpCase = new ULPCase();
+                ulpCase.id = rs.getInt("id");
+                ulpCase.caseYear = rs.getString("caseYear").trim();
+                ulpCase.caseType = rs.getString("caseType").trim();
+                ulpCase.caseMonth = rs.getString("caseMonth").trim();
+                ulpCase.caseNumber = rs.getString("caseNumber").trim();
+                ulpCase.employerIDNumber = rs.getString("employerIDNumber") == null ? "" : rs.getString("employerIDNumber").trim();
+                ulpCase.barginingUnitNo = rs.getString("barginingUnitNo") == null ? "" : rs.getString("barginingUnitNo").trim();
+                ulpCase.currentStatus = rs.getString("currentStatus") == null ? "" : rs.getString("currentStatus").trim();
+                ulpCase.fileDate = rs.getTimestamp("fileDate");
+                ULPCaseList.add(ulpCase);
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadULPCasesToClose(boardDate);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return ULPCaseList;
+    }
+    
+     public static void updateClosedCases(int id) {
+        
+        Statement stmt = null; 
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "UPDATE ulpcase SET "
+                    + "currentstatus = 'Closed' "
+                    + "WHERE id = ? ";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateClosedCases(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+    }
+    
 }

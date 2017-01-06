@@ -89,13 +89,26 @@ public class FileService {
         }
     }
     
-    public static void openFileWithORGNumber(String activeSection, String orgNumber, String fileName) {
+    public static void openFileWithORGNumber(String caseType, String orgNumber, String fileName) {
         try {
             Desktop.getDesktop().open(new File(Global.activityPath
                     + File.separatorChar
-                    + activeSection
+                    + caseType
                     + File.separatorChar
                     + orgNumber
+                    + File.separatorChar
+                    + fileName));
+        } catch (IOException | NullPointerException | IllegalArgumentException ex) {
+            new FileNotFoundDialog((JFrame) Global.root.getRootPane().getParent(), true, fileName);
+            SlackNotification.sendNotification(ex);
+        }
+    }
+    
+    public static void openAnnualReport(String fileName) {
+        try {
+            Desktop.getDesktop().open(new File(Global.activityPath
+                    + File.separatorChar
+                    + "AnnualReports"
                     + File.separatorChar
                     + fileName));
         } catch (IOException | NullPointerException | IllegalArgumentException ex) {

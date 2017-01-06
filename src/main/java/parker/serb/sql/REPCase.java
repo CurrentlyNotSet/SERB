@@ -1940,4 +1940,90 @@ public class REPCase {
         }
         return firstCase;
     }
+    
+    public static List<REPCase> loadREPCasesToClose(Date boardDate) {
+        List<REPCase> REPCaseList = new ArrayList<>();
+        List casetypes = CaseType.getCaseTypeBySection("REP");
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+            
+            String sql = "SELECT repcase.id, repcase.caseYear, repcase.caseType, "
+                    + "repcase.caseMonth, repcase.caseNumber, repcase.employerIDNumber, "
+                    + "repcase.bargainingUnitNumber, repcase.fileDate, repcase.status1, repcase.status2 "
+                    + "FROM boardMeeting LEFT JOIN repcase ON boardMeeting.caseYear = repcase.caseYear "
+                    + "AND boardMeeting.caseType = repcase.caseType "
+                    + "AND boardMeeting.caseMonth = repcase.caseMonth "
+                    + "AND boardMeeting.caseNumber = repcase.caseNumber "
+                    + "WHERE boardMeetingDate = ? ";
+                        
+            if (!casetypes.isEmpty()) {
+                sql += "AND (";
+                
+                for (Object casetype : casetypes) {
+                    
+                    sql += " boardMeeting.caseType = '" + casetype.toString() + "' OR";
+                }
+                
+                sql = sql.substring(0, (sql.length() - 2)) + ")";
+            }
+            
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+
+            preparedStatement.setDate(1, new java.sql.Date(boardDate.getTime()));           
+
+            ResultSet rs = preparedStatement.executeQuery();
+            
+            while(rs.next()) {
+                REPCase repCase = new REPCase();
+                repCase.id = rs.getInt("id");
+                repCase.caseYear = rs.getString("caseYear").trim();
+                repCase.caseType = rs.getString("caseType").trim();
+                repCase.caseMonth = rs.getString("caseMonth").trim();
+                repCase.caseNumber = rs.getString("caseNumber").trim();
+                repCase.employerIDNumber = rs.getString("employerIDNumber") == null ? "" : rs.getString("employerIDNumber").trim();
+                repCase.bargainingUnitNumber = rs.getString("bargainingUnitNumber") == null ? "" : rs.getString("bargainingUnitNumber").trim();
+                repCase.status1 = rs.getString("status1") == null ? "" : rs.getString("status1").trim();
+                repCase.status2 = rs.getString("status2") == null ? "" : rs.getString("status2").trim();
+                repCase.fileDate = rs.getTimestamp("fileDate");
+                REPCaseList.add(repCase);
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadREPCasesToClose(boardDate);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return REPCaseList;
+    }
+    
+     public static void updateClosedCases(int id) {
+        
+        Statement stmt = null; 
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "UPDATE repcase SET "
+                    + "status1 = 'Closed', "
+                    + "actualREPClosedDate = GETDATE(), "
+                    + "REPClosedUser = ? "
+                    + "WHERE id = ? ";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setInt(1, Global.activeUser.id);
+            preparedStatement.setInt(2, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateClosedCases(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+    }
+    
+    
 }

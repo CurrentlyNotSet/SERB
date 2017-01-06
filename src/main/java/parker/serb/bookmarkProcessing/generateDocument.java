@@ -16,6 +16,8 @@ import parker.serb.Global;
 import parker.serb.sql.AdministrationInformation;
 import parker.serb.sql.SMDSDocuments;
 import parker.serb.sql.CMDSDocuments;
+import parker.serb.sql.CSCCase;
+import parker.serb.sql.ORGCase;
 import parker.serb.sql.SystemExecutive;
 import parker.serb.util.JacobCOMBridge;
 import parker.serb.util.NumberFormatService;
@@ -27,16 +29,28 @@ import parker.serb.util.StringUtilities;
  */
 public class generateDocument {
     
-    public static String generateSMDSdocument(SMDSDocuments template, int senderID, List<Integer> toParties, List<Integer> ccParties){
+    public static String generateSMDSdocument(SMDSDocuments template, int senderID, List<Integer> toParties, List<Integer> ccParties, ORGCase orgCase, CSCCase cscCase){
+        File docPath = null;
         String saveDocName = null;
         ActiveXComponent eolWord = null;
         eolWord = JacobCOMBridge.setWordActive(true, false, eolWord);
         if (eolWord != null){
             //Setup Document
-            File docPath = new File(Global.activityPath
+            if (orgCase != null){
+                docPath = new File(Global.activityPath
+                    + Global.activeSection + File.separator
+                    + orgCase.orgNumber);
+            } else if (cscCase != null){
+                docPath = new File(Global.activityPath
+                    + "CSC" + File.separator
+                    + cscCase.cscNumber);
+            } else {
+                docPath = new File(Global.activityPath
                     + Global.activeSection + File.separator
                     + Global.caseYear + File.separator
                     + NumberFormatService.generateFullCaseNumber());
+            }
+            
             docPath.mkdirs();
             saveDocName = String.valueOf(new Date().getTime()) + "_" 
                     + (template.historyFileName == null ? template.description : template.historyFileName)
@@ -63,11 +77,11 @@ public class generateDocument {
                         break;
                     case "ORG":
                         document = defaultSMDSBookmarks(document, template.dueDate);
-                        document = processORGbookmarks.processDoAORGWordLetter(document, true, toParties, ccParties);
+                        document = processORGbookmarks.processDoAORGWordLetter(document, true, toParties, ccParties, orgCase);
                         break;
                     case "CSC":
                         document = defaultCMDSBookmarks(document);
-                        document = processCSCbookmarks.processDoACSCWordLetter(document, toParties, ccParties);
+                        document = processCSCbookmarks.processDoACSCWordLetter(document, toParties, ccParties, cscCase);
                         break;
                     default:
                         break;
@@ -121,6 +135,35 @@ public class generateDocument {
         return saveDocName;
     }
     
+    public static String generateAnnualReport(String startDate, String endDate){
+        File docPath = null;
+        String saveDocName = null;
+        ActiveXComponent eolWord = null;
+        eolWord = JacobCOMBridge.setWordActive(true, false, eolWord);
+        if (eolWord != null){
+            //Setup Document
+            docPath = new File(Global.activityPath + "AnnualReports");
+            docPath.mkdirs();
+
+            saveDocName = "AnnualReport_" + startDate.replaceAll("[^\\d]", "-")
+                    + "_" + endDate.replaceAll("[^\\d]", "-") + "_" 
+                    + String.valueOf(new Date().getTime()) + ".docx";
+
+            Dispatch document = Dispatch.call(eolWord.getProperty("Documents").toDispatch(), "Open",
+                    Global.templatePath + "ALL" + File.separator + "SERBAnnualReport.docx").toDispatch();
+            ActiveXComponent.call(eolWord.getProperty("Selection").toDispatch(), "Find").toDispatch();
+
+            document = processAnnualReport.processAnnualReportTemplate(document, startDate, endDate);
+            
+            Dispatch WordBasic = (Dispatch) Dispatch.call(eolWord, "WordBasic").getDispatch();
+            String newFilePath = docPath + File.separator + saveDocName;
+            Dispatch.call(WordBasic, "FileSaveAs", newFilePath, new Variant(16));
+            JacobCOMBridge.setWordActive(false, false, eolWord);
+        }
+
+        return saveDocName;
+    }
+    
     private static Dispatch defaultSMDSBookmarks(Dispatch Document, int docDue){
         //get basic information
         List<SystemExecutive> execsList = SystemExecutive.loadExecs("SERB");
@@ -135,6 +178,7 @@ public class generateDocument {
         String boardMemberLastName = "";
         String boardMemberFullName = "";
         String executiveDirectorFullName = "";
+        String personnelAddressBlock = "";
         
         for (SystemExecutive exec : execsList){
             if (null != exec.position)switch (exec.position) {
@@ -162,7 +206,7 @@ public class generateDocument {
             serbAddress += sysAdminInfo.Address1.trim();
         }
         if (!sysAdminInfo.Address2.equals("")) {
-            serbAddress += " " + sysAdminInfo.Address2.trim();
+            serbAddress += ", " + sysAdminInfo.Address2.trim();
         }
         if (!sysAdminInfo.City.equals("")) {
             serbCityStateZip += sysAdminInfo.City.trim();
@@ -197,7 +241,29 @@ public class generateDocument {
         c.setTime(today);
         c.add(Calendar.DATE, 21);
         Date twentyOneDayOut = c.getTime();
-                       
+              
+        if (!chairmanFullName.trim().equals("")) {
+            personnelAddressBlock += chairmanFullName + ", Chair";
+        }
+        if (personnelAddressBlock.trim().equals("")) {
+            personnelAddressBlock += "\n";
+        }
+        if (!viceChairmanFullName.trim().equals("")) {
+            personnelAddressBlock += viceChairmanFullName + ", Vice Chair";
+        }
+        if (personnelAddressBlock.trim().equals("")) {
+            personnelAddressBlock += "\n";
+        }
+        if (!boardMemberFullName.trim().equals("")) {
+            personnelAddressBlock += boardMemberFullName + ", Board Member";
+        }
+        if (personnelAddressBlock.trim().equals("")) {
+            personnelAddressBlock += "\n\n";
+        }
+        if (!executiveDirectorFullName.trim().equals("")) {
+            personnelAddressBlock += executiveDirectorFullName + ", Executive Director";
+        }
+        
         //ProcessBookmarks
         for (int i = 0; i < Global.BOOKMARK_LIMIT; i++) {
             //System Executives
@@ -206,21 +272,25 @@ public class generateDocument {
             processBookmark.process("BOARDMEMBERLASTNAME" + (i == 0 ? "" : i), boardMemberLastName, Document);
             processBookmark.process("BOARDCHAIRMANNAME" + (i == 0 ? "" : i), chairmanFullName, Document); 
             
-            processBookmark.process("HeaderChairmanName" + (i == 0 ? "" : i), chairmanFullName, Document);
-            processBookmark.process("HeaderViceChairmanName" + (i == 0 ? "" : i), viceChairmanFullName, Document);
-            processBookmark.process("HeaderBoardMemberName" + (i == 0 ? "" : i), boardMemberFullName, Document);
-            processBookmark.process("HeaderExecutiveDirectorName" + (i == 0 ? "" : i), executiveDirectorFullName, Document);
+            processBookmark.process("HeaderChairmanName" + (i == 0 ? "" : i), chairmanFullName + ", Chair", Document);
+            processBookmark.process("HeaderViceChairmanName" + (i == 0 ? "" : i), viceChairmanFullName + ", Vice Chair", Document);
+            processBookmark.process("HeaderBoardMemberName" + (i == 0 ? "" : i), boardMemberFullName + ", Board Member", Document);
+            processBookmark.process("HeaderExecutiveDirectorName" + (i == 0 ? "" : i), executiveDirectorFullName + ", Executive Director", Document);
+            
+            processBookmark.process("HeaderPersonnelBlock" + (i == 0 ? "" : i), personnelAddressBlock, Document); //No Governor
             
             //System Administration Information
-            processBookmark.process("GovernorName" + (i == 0 ? "" : i), sysAdminInfo.governorName, Document);
+            processBookmark.process("GovernorName" + (i == 0 ? "" : i), sysAdminInfo.governorName + ", Governor", Document);
             processBookmark.process("LtGovernorName" + (i == 0 ? "" : i), sysAdminInfo.LtGovernorName, Document);
             processBookmark.process("SerbAddress" + (i == 0 ? "" : i), serbAddress, Document);
             processBookmark.process("SerbCityStateZip" + (i == 0 ? "" : i), serbCityStateZip, Document);
             processBookmark.process("SerbURL" + (i == 0 ? "" : i), sysAdminInfo.Url, Document);
             
-            processBookmark.process("SerbPhone" + (i == 0 ? "" : i), sysAdminInfo.Phone, Document);
             processBookmark.process("SerbFooter" + (i == 0 ? "" : i), sysAdminInfo.Footer, Document);
-            processBookmark.process("SerbFax" + (i == 0 ? "" : i), sysAdminInfo.Fax, Document);
+            processBookmark.process("SerbPhone" + (i == 0 ? "" : i), sysAdminInfo.Phone == null ? "" 
+                    : "Tel:" + NumberFormatService.convertStringToPhoneNumber(sysAdminInfo.Phone), Document);
+            processBookmark.process("SerbFax" + (i == 0 ? "" : i), sysAdminInfo.Fax == null ? "" 
+                    : "Fax:" + NumberFormatService.convertStringToPhoneNumber(sysAdminInfo.Fax), Document);
             
             //Made up stuff
             processBookmark.process("TODAYSDATE" + (i == 0 ? "" : i), Global.MMMMddyyyy.format(new Date()), Document);
@@ -254,6 +324,7 @@ public class generateDocument {
         String executiveDirectorLastName = "";
         String chiefAdminLawJudgeFullName = "";
         String chiefAdminLawJudgeLastName = "";
+        String personnelAddressBlock = "";
         
         for (SystemExecutive exec : execsList){
             if (null != exec.position)switch (exec.position) {
@@ -315,6 +386,36 @@ public class generateDocument {
         c.add(Calendar.DATE, 21);
         Date twentyOneDayOut = c.getTime();
         
+        
+        if (!chairmanFullName.trim().equals("")) {
+            personnelAddressBlock += chairmanFullName + ", Chair";
+        }
+        if (personnelAddressBlock.trim().equals("")) {
+            personnelAddressBlock += "\n";
+        }
+        if (!viceChairmanFullName.trim().equals("")) {
+            personnelAddressBlock += viceChairmanFullName + ", Vice Chair";
+        }
+        if (personnelAddressBlock.trim().equals("")) {
+            personnelAddressBlock += "\n";
+        }
+        if (!boardMemberFullName.trim().equals("")) {
+            personnelAddressBlock += boardMemberFullName + ", Board Member";
+        }
+        if (personnelAddressBlock.trim().equals("")) {
+            personnelAddressBlock += "\n\n";
+        }
+        if (!executiveDirectorFullName.trim().equals("")) {
+            personnelAddressBlock += executiveDirectorFullName + ", Executive Director";
+        } 
+        if (personnelAddressBlock.trim().equals("")) {
+            personnelAddressBlock += "\n";
+        }
+        if (!chiefAdminLawJudgeFullName.trim().equals("")) {
+            personnelAddressBlock += chiefAdminLawJudgeFullName + ", Chief Administrative Law Judge";
+        }
+        
+        
         //ProcessBookmarks
         for (int i = 0; i < Global.BOOKMARK_LIMIT; i++) {
             //System Executives            
@@ -328,6 +429,8 @@ public class generateDocument {
             processBookmark.process("ExecutativeDirectorLastName" + (i == 0 ? "" : i), executiveDirectorLastName, Document);
             processBookmark.process("ChiefAdminLawJudgeName" + (i == 0 ? "" : i), chiefAdminLawJudgeFullName, Document);
             processBookmark.process("ChiefAdminLawJudgeLastName" + (i == 0 ? "" : i), chiefAdminLawJudgeLastName, Document);
+            
+            processBookmark.process("HeaderPersonnelBlock" + (i == 0 ? "" : i), personnelAddressBlock, Document); //No Governor
             
             //System Administration Information
             processBookmark.process("GovernorName" + (i == 0 ? "" : i), sysAdminInfo.governorName, Document);
