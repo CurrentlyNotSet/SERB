@@ -12,6 +12,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import org.apache.commons.validator.routines.EmailValidator;
 import parker.serb.Global;
+import parker.serb.login.Password;
 import parker.serb.sql.User;
 import parker.serb.sql.UserRole;
 import parker.serb.util.NumberFormatService;
@@ -190,6 +191,17 @@ public class UserAddEditDialog extends javax.swing.JDialog {
                 
         if (ID > 0) {
             User.updateUser(item);
+            
+            if (PasswordResetCheckBox.isEnabled()){
+                long passwordSalt = Password.generatePasswordSalt();
+                String tempPassword = Password.generateTempPassword();
+                
+                User.resetPassword(ID, passwordSalt, tempPassword);
+                
+                WebOptionPane.showMessageDialog(this,
+                        "<html><center>Temporary Password Created:<br><br>" + tempPassword + "</center></html>",
+                        "Temporary Password", WebOptionPane.INFORMATION_MESSAGE);
+            }
             this.dispose();
         } else {
             String[] returnedItems = User.createUser(item);

@@ -601,6 +601,29 @@ public class User {
         }
     }
     
+    public static void resetPassword(int ID, long salt, String password) {
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+            
+            String sql = "Update Users SET passwordSalt = ?, password = ? where id = ?";
+            
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setLong(1, salt);
+            preparedStatement.setString(2, Password.hashPassword(salt, password));
+            preparedStatement.setInt(3, ID);
+            
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updatePassword(salt, password);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+    }
+    
     /**
      * Update the boolean value of the users password reset value
      */
