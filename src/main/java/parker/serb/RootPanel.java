@@ -429,7 +429,7 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton4.setSize(dim);
                 jButton4.setMinimumSize(dim);
                 jButton4.setMaximumSize(dim);
-                jButton4.setVisible(false);
+                jButton4.setVisible(true);
                 jButton4.setText("Reports");
                 
                 jButton5.setSize(dim);
