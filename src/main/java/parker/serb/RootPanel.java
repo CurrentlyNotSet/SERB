@@ -813,13 +813,6 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton9.setVisible(false);
                 break;    
         }
-        
-        jButton3.setEnabled(true);
-        jButton3.setVisible(true);
-        jButton4.setEnabled(true);
-        jButton4.setVisible(true);
-        jButton5.setEnabled(true);
-        jButton5.setVisible(true);
     }
     
     /**
