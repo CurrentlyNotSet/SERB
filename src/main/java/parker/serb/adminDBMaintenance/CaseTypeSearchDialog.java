@@ -65,7 +65,7 @@ public class CaseTypeSearchDialog extends javax.swing.JDialog {
 
         String[] param = searchTextBox.getText().trim().split(" ");
         
-        List<CaseType> databaseList = CaseType.loadAllStatusTypes(param);
+        List<CaseType> databaseList = CaseType.loadAllCaseTypes(param);
 
         for (CaseType item : databaseList) {
             model.addRow(new Object[]{
