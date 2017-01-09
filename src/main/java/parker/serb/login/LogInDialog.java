@@ -12,14 +12,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import javax.swing.JFrame;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import parker.serb.Global;
 import parker.serb.RootPanel;
 import parker.serb.util.FileService;
-import parker.serb.util.ReleaseNotesDialog;
-import parker.serb.util.SingleReleaseNotesDialog;
 
 /**
  *
@@ -38,7 +35,6 @@ public class LogInDialog extends javax.swing.JDialog {
         getRootPane().setDefaultButton(logInButton);
         jLabel4.setForeground(new Color(238, 238, 238));
         jLabel4.setText("Incorrect Username/Password");
-
         setLocationRelativeTo(null);
         setVisible(true);
         toFront();

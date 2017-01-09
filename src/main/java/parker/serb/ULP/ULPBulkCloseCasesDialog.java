@@ -10,6 +10,7 @@ import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
 import parker.serb.report.GenerateReport;
 import parker.serb.sql.Activity;
+import parker.serb.sql.Audit;
 import parker.serb.sql.SMDSDocuments;
 import parker.serb.sql.ULPCase;
 import parker.serb.util.NumberFormatService;
@@ -31,6 +32,7 @@ public class ULPBulkCloseCasesDialog extends javax.swing.JFrame {
     public ULPBulkCloseCasesDialog(java.awt.Frame parent, boolean modal) {
         initComponents();
         setActive();
+        
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }
