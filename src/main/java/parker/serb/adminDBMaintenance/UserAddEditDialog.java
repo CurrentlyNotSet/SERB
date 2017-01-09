@@ -12,7 +12,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import org.apache.commons.validator.routines.EmailValidator;
 import parker.serb.Global;
-import parker.serb.sql.ActiveStatus;
+import parker.serb.login.Password;
 import parker.serb.sql.User;
 import parker.serb.sql.UserRole;
 import parker.serb.util.NumberFormatService;
@@ -79,6 +79,8 @@ public class UserAddEditDialog extends javax.swing.JDialog {
         } else {
             titleLabel.setText("Add User");
             editButton.setText("Add");
+            PasswordResetCheckBox.setEnabled(false);
+            PasswordResetCheckBox.setSelected(true);
             editButton.setEnabled(false);
             item = new User();
         }
@@ -124,19 +126,20 @@ public class UserAddEditDialog extends javax.swing.JDialog {
         PasswordResetCheckBox.setSelected(item.passwordReset);
         InvestigatorCheckBox.setSelected(item.investigator);
         
-        
-//        CMDSDocketingCheckBox.setSelected(item.);
-//        CSCDocketingCheckBox.setSelected(item.);
-//        MEDDocketingCheckBox.setSelected(item.);
-//        ORGDocketingCheckBox.setSelected(item.);
+        //Docketing Permissions
+        CMDSDocketingCheckBox.setSelected(item.CMDSDocketing);
+        CSCDocketingCheckBox.setSelected(item.CSCDocketing);
+        MEDDocketingCheckBox.setSelected(item.MEDDocketing);
+        ORGDocketingCheckBox.setSelected(item.ORGDocketing);
         REPDocketingCheckBox.setSelected(item.REPDocketing);
         ULPDocketingCheckBox.setSelected(item.ULPDocketing);
         
-//        CMDSWorkerCheckBox.setSelected(item.);
-//        CSCWorkerCheckBox.setSelected(item.);
-//        HearingsWorkerCheckBox.setSelected(item.);
-//        MEDWorkerCheckBox.setSelected(item.);
-//        ORGWorkerCheckBox.setSelected(item.);
+        //Case Worker permissions
+        CMDSWorkerCheckBox.setSelected(item.CMDSCaseWorker);
+        CSCWorkerCheckBox.setSelected(item.CSCCaseWorker);
+        HearingsWorkerCheckBox.setSelected(item.HearingsCaseWorker);
+        MEDWorkerCheckBox.setSelected(item.MEDCaseWorker);
+        ORGWorkerCheckBox.setSelected(item.ORGCaseWorker);
         REPWorkerCheckBox.setSelected(item.REPCaseWorker);
         ULPWorkerCheckBox.setSelected(item.ULPCaseWorker);
         loadRolesTable();
@@ -158,17 +161,57 @@ public class UserAddEditDialog extends javax.swing.JDialog {
     }
     
     private void saveInformation() {
+        
+        item.id = ID;
         item.firstName = FirstNameTextField.getText().trim();
         item.middleInitial = MiddleInitialTextField.getText().trim();
         item.lastName = LastNameTextField.getText().trim();
-        item.emailAddress = EmailTextField.getText().trim();
         item.workPhone = NumberFormatService.convertPhoneNumberToString(PhoneTextField.getText().trim());
-        item.id = ID;
-        
+        item.emailAddress = EmailTextField.getText().trim();
+        item.username = UserNameTextField.getText().trim();
+        item.activeLogIn = ActiveLoginCheckBox.isSelected();
+        item.passwordReset = PasswordResetCheckBox.isSelected();
+        item.defaultSection = defaultSectionComboBox.getSelectedItem() == null ? "" : defaultSectionComboBox.getSelectedItem().toString();
+        item.ULPCaseWorker = ULPWorkerCheckBox.isSelected();
+        item.REPCaseWorker = REPWorkerCheckBox.isSelected();
+        item.ULPDocketing = ULPDocketingCheckBox.isSelected();
+        item.REPDocketing = REPDocketingCheckBox.isSelected();
+        item.initials = InitialsTextField.getText().trim();
+        item.investigator = InvestigatorCheckBox.isSelected();
+        item.jobTitle = JobTitleTextField.getText().trim();
+        item.MEDCaseWorker = MEDWorkerCheckBox.isSelected();
+        item.ORGCaseWorker = ORGWorkerCheckBox.isSelected();
+        item.CSCCaseWorker = CSCWorkerCheckBox.isSelected();
+        item.CMDSCaseWorker = CMDSWorkerCheckBox.isSelected();
+        item.HearingsCaseWorker = HearingsWorkerCheckBox.isSelected();
+        item.ORGDocketing = ORGDocketingCheckBox.isSelected();
+        item.MEDDocketing = MEDDocketingCheckBox.isSelected();
+        item.CSCDocketing = CSCDocketingCheckBox.isSelected();
+        item.CMDSDocketing = CMDSDocketingCheckBox.isSelected();
+                
         if (ID > 0) {
-//            User.updateUser(item);
+            User.updateUser(item);
+            
+            if (PasswordResetCheckBox.isEnabled()){
+                long passwordSalt = Password.generatePasswordSalt();
+                String tempPassword = Password.generateTempPassword();
+                
+                User.resetPassword(ID, passwordSalt, tempPassword);
+                
+                WebOptionPane.showMessageDialog(this,
+                        "<html><center>Temporary Password Created:<br><br>" + tempPassword + "</center></html>",
+                        "Temporary Password", WebOptionPane.INFORMATION_MESSAGE);
+            }
+            this.dispose();
         } else {
-//            User.createUser(item);
+            String[] returnedItems = User.createUser(item);
+            ID = Integer.valueOf(returnedItems[0]);
+            setDefaults(ID);
+            if (ID > 0) {
+                WebOptionPane.showMessageDialog(this,
+                        "<html><center>Temporary Password Created:<br><br>" + returnedItems[1] + "</center></html>",
+                        "Temporary Password", WebOptionPane.INFORMATION_MESSAGE);
+            }
         }
     }
 
@@ -377,7 +420,6 @@ public class UserAddEditDialog extends javax.swing.JDialog {
         }
 
         AddAccessButton.setText("Add Access");
-        AddAccessButton.setEnabled(false);
         AddAccessButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 AddAccessButtonActionPerformed(evt);
@@ -588,7 +630,6 @@ public class UserAddEditDialog extends javax.swing.JDialog {
 
     private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
         saveInformation();
-        this.dispose();
     }//GEN-LAST:event_editButtonActionPerformed
 
     private void FirstNameTextFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_FirstNameTextFieldCaretUpdate
@@ -604,8 +645,12 @@ public class UserAddEditDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_UserNameTextFieldCaretUpdate
 
     private void AddAccessButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddAccessButtonActionPerformed
-        new UserAddEditUserRoleDialog(Global.root, true, ID);
-        loadRolesTable();
+        if (ID > 0){
+            new UserAddEditUserRoleDialog(Global.root, true, ID);
+            loadRolesTable();
+        } else {
+            WebOptionPane.showMessageDialog(this, "<html><center> Sorry, unable to add role until user has been created.</center></html>", "Warning", WebOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_AddAccessButtonActionPerformed
 
     private void UserRoleTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_UserRoleTableMouseClicked

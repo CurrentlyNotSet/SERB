@@ -17,7 +17,6 @@ import java.util.List;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.io.FilenameUtils;
 import parker.serb.Global;
-import static parker.serb.sql.ActiveStatus.updateActiveStatus;
 import parker.serb.util.SlackNotification;
 
 /**

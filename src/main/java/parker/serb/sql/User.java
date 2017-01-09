@@ -10,8 +10,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.dbutils.DbUtils;
 import parker.serb.Global;
 import parker.serb.login.Password;
@@ -23,78 +21,149 @@ import parker.serb.util.SlackNotification;
  * @author parkerjohnston
  */
 public class User {
-    public int      id;
-    public boolean  active;
-    public String   firstName;
-    public String   middleInitial;
-    public String   lastName;
-    public String   workPhone;
-    public String   emailAddress;
-    public String   username;
-    public long     passwordSalt;
-    public String   password;
-    public Date     lastLogInDateTime;
-    public String   lastLogInPCName;
-    public boolean  activeLogIn;
-    public boolean  passwordReset;
-    public String   applicationVersion;
-    public String   defaultSection;
-    public boolean  ULPCaseWorker;
-    public boolean  REPCaseWorker;
-    public boolean  ULPDocketing;
-    public boolean  REPDocketing;
-    public String   initials;
-    public boolean  investigator;
-    public String   jobTitle;
-    public String   lastTab;
-    public String   lastCaseYear;
-    public String   lastCaseType;
-    public String   lastCaseMonth;
-    public String   lastCaseNumber;
+    public int     id;
+    public boolean active;
+    public String  firstName;
+    public String  middleInitial;
+    public String  lastName;
+    public String  workPhone;
+    public String  emailAddress;
+    public String  username;
+    public long    passwordSalt;
+    public String  password;
+    public Date    lastLogInDateTime;
+    public String  lastLogInPCName;
+    public boolean activeLogIn;
+    public boolean passwordReset;
+    public String  applicationVersion;
+    public String  defaultSection;
+    public boolean ULPCaseWorker;
+    public boolean REPCaseWorker;
+    public boolean ULPDocketing;
+    public boolean REPDocketing;
+    public String  initials;
+    public boolean investigator;
+    public String  jobTitle;
+    public boolean MEDCaseWorker;
+    public boolean ORGCaseWorker;
+    public boolean CSCCaseWorker;
+    public boolean CMDSCaseWorker;
+    public boolean HearingsCaseWorker;
+    public String  lastTab;
+    public String  lastCaseYear;
+    public String  lastCaseType;
+    public String  lastCaseMonth;
+    public String  lastCaseNumber;
+    public boolean ORGDocketing;
+    public boolean MEDDocketing;
+    public boolean CSCDocketing;
+    public boolean CMDSDocketing;
     
-    public static void createUser(User user) {
+    public static String[] createUser(User item) {
         Statement stmt = null;
-        
+        int returnedKey = -1;
+        String tempPassword = "";
         try {
             long passwordSalt = Password.generatePasswordSalt();
-            String tempPassword = Password.generateTempPassword();
-            
+            tempPassword = Password.generateTempPassword();
+                        
             stmt = Database.connectToDB().createStatement();
-            
-            String sql = "INSERT INTO Users VALUES"
-                    + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-            
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            String sql = "Insert INTO Users("
+                    + "active, "            //01
+                    + "firstName, "         //02
+                    + "middleInitial, "     //03
+                    + "lastName, "          //04
+                    + "workPhone, "         //05
+                    + "emailAddress, "      //06
+                    + "username, "          //07
+                    + "passwordSalt, "      //08
+                    + "password, "          //09
+                    + "lastLogInDateTime, " //10
+                    + "lastLogInPCName, "   //11
+                    + "activeLogIn, "       //12
+                    + "passwordReset, "     //13
+                    + "applicationVersion, "//14
+                    + "defaultSection, "    //15
+                    + "ULPCaseWorker, "     //16
+                    + "REPCaseWorker, "     //17
+                    + "ULPDocketing, "      //18
+                    + "REPDocketing, "      //19
+                    + "initials, "          //20
+                    + "investigator, "      //21
+                    + "jobTitle, "          //22
+                    + "MEDCaseWorker, "     //23
+                    + "ORGCaseWorker, "     //24
+                    + "CSCCaseWorker, "     //25
+                    + "CMDSCaseWorker, "    //26
+                    + "HearingsCaseWorker, "//27
+                    + "lastTab, "           //28
+                    + "lastCaseYear, "      //29
+                    + "lastCaseType, "      //30
+                    + "lastCaseMonth, "     //31
+                    + "lastCaseNumber, "    //32
+                    + "ORGDocketing, "      //33
+                    + "MEDDocketing, "      //34
+                    + "CSCDocketing, "      //35
+                    + "CMDSDocketing "      //36
+                    + ") VALUES (";
+                    for(int i=0; i<35; i++){
+                        sql += "?, ";   //01-35
+                    }
+                     sql += "?)"; //36
+          
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setBoolean(1, true);
-            preparedStatement.setString(2, user.firstName);
-            preparedStatement.setString(3, user.middleInitial);
-            preparedStatement.setString(4, user.lastName);
-            preparedStatement.setString(5, user.workPhone);
-            preparedStatement.setString(6, user.emailAddress);
-            preparedStatement.setString(7, user.username);
-            preparedStatement.setLong(8, passwordSalt);
-            preparedStatement.setString(9, Password.hashPassword(passwordSalt, tempPassword));
+            preparedStatement.setString (2, item.firstName);
+            preparedStatement.setString (3, item.middleInitial);
+            preparedStatement.setString (4, item.lastName);
+            preparedStatement.setString (5, item.workPhone);
+            preparedStatement.setString (6, item.emailAddress);
+            preparedStatement.setString (7, item.username);
+            preparedStatement.setLong   (8, passwordSalt);
+            preparedStatement.setString (9, Password.hashPassword(passwordSalt, tempPassword));
             preparedStatement.setTimestamp(10, null);
-            preparedStatement.setString(11, null);
+            preparedStatement.setString (11, null);
             preparedStatement.setBoolean(12, false);
             preparedStatement.setBoolean(13, true);
-            preparedStatement.setString(14, null);
-            preparedStatement.setString(15, null);
-            preparedStatement.setString(16, null);
-            preparedStatement.setString(17, null);
-            preparedStatement.setString(18, null);
-            preparedStatement.setString(19, null);
-            preparedStatement.setString(20, null);
-            
+            preparedStatement.setString (14, null);
+            preparedStatement.setString (15, item.defaultSection);
+            preparedStatement.setBoolean(16, item.ULPCaseWorker);
+            preparedStatement.setBoolean(17, item.REPCaseWorker);
+            preparedStatement.setBoolean(18, item.ULPDocketing);
+            preparedStatement.setBoolean(19, item.REPDocketing);
+            preparedStatement.setString (20, item.initials);
+            preparedStatement.setBoolean(21, item.investigator);
+            preparedStatement.setString (22, item.jobTitle);
+            preparedStatement.setBoolean(23, item.MEDCaseWorker);
+            preparedStatement.setBoolean(24, item.ORGCaseWorker);
+            preparedStatement.setBoolean(25, item.CSCCaseWorker);
+            preparedStatement.setBoolean(26, item.CMDSCaseWorker);
+            preparedStatement.setBoolean(27, item.HearingsCaseWorker);
+            preparedStatement.setString (28, null);
+            preparedStatement.setString (29, null);
+            preparedStatement.setString (30, null);
+            preparedStatement.setString (31, null);
+            preparedStatement.setString (32, null);
+            preparedStatement.setBoolean(33, item.ORGDocketing);
+            preparedStatement.setBoolean(34, item.MEDDocketing);
+            preparedStatement.setBoolean(35, item.CSCDocketing);
+            preparedStatement.setBoolean(36, item.CMDSDocketing);
             preparedStatement.executeUpdate();
+            
+            ResultSet newRow = preparedStatement.getGeneratedKeys();
+            if (newRow.next()){
+                returnedKey = newRow.getInt(1);
+            } 
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                createUser(user);
+                createUser(item);
             } 
         } finally {
             DbUtils.closeQuietly(stmt);
         }
+        String[] returnedSet = {String.valueOf(returnedKey), tempPassword};
+        return returnedSet;
     }
     
     /**
@@ -167,29 +236,43 @@ public class User {
             ResultSet foundUser = preparedStatement.executeQuery();
             
             if(foundUser.next()) {
-            
                 user.id = foundUser.getInt("id");
                 user.active = foundUser.getBoolean("active");
-                user.activeLogIn = foundUser.getBoolean("activeLogIn");
-                user.emailAddress = foundUser.getString("emailAddress");
                 user.firstName = foundUser.getString("firstName");
-                user.lastName = foundUser.getString("lastName");
-                user.id = foundUser.getInt("id");
-                user.password = foundUser.getString("password");
-                user.passwordSalt = foundUser.getLong("passwordSalt");
-                user.passwordReset = foundUser.getBoolean("passwordReset");
-                user.username = foundUser.getString("username");
-                user.lastLogInPCName = foundUser.getString("lastLogInPCName");
-                user.workPhone = foundUser.getString("workPhone");
                 user.middleInitial = foundUser.getString("middleInitial");
+                user.lastName = foundUser.getString("lastName");
+                user.workPhone = foundUser.getString("workPhone");
+                user.emailAddress = foundUser.getString("emailAddress");
+                user.username = foundUser.getString("username");
+                user.passwordSalt = foundUser.getLong("passwordSalt");
+                user.password = foundUser.getString("password");
+                user.lastLogInDateTime = foundUser.getTimestamp("lastLogInDateTime");
+                user.lastLogInPCName = foundUser.getString("lastLogInPCName");
+                user.activeLogIn = foundUser.getBoolean("activeLogIn");
+                user.passwordReset = foundUser.getBoolean("passwordReset");
                 user.applicationVersion = foundUser.getString("applicationVersion");
                 user.defaultSection = foundUser.getString("defaultSection");
+                user.ULPCaseWorker = foundUser.getBoolean("ULPCaseWorker");
+                user.REPCaseWorker = foundUser.getBoolean("REPCaseWorker");
+                user.ULPDocketing = foundUser.getBoolean("ULPDocketing");
+                user.REPDocketing = foundUser.getBoolean("REPDocketing");
+                user.initials = foundUser.getString("initials");
+                user.investigator = foundUser.getBoolean("investigator");
                 user.jobTitle = foundUser.getString("jobTitle");
+                user.MEDCaseWorker = foundUser.getBoolean("MEDCaseWorker");
+                user.ORGCaseWorker = foundUser.getBoolean("ORGCaseWorker");
+                user.CSCCaseWorker = foundUser.getBoolean("CSCCaseWorker");
+                user.CMDSCaseWorker = foundUser.getBoolean("CMDSCaseWorker");
+                user.HearingsCaseWorker = foundUser.getBoolean("HearingsCaseWorker");
                 user.lastTab = foundUser.getString("lastTab") == null ? "" : foundUser.getString("lastTab");
                 user.lastCaseYear = foundUser.getString("lastCaseYear");
                 user.lastCaseType = foundUser.getString("lastCaseType");
                 user.lastCaseMonth = foundUser.getString("lastCaseMonth");
                 user.lastCaseNumber = foundUser.getString("lastCaseNumber");
+                user.ORGDocketing = foundUser.getBoolean("ORGDocketing");
+                user.MEDDocketing = foundUser.getBoolean("MEDDocketing");
+                user.CSCDocketing = foundUser.getBoolean("CSCDocketing");
+                user.CMDSDocketing = foundUser.getBoolean("CMDSDocketing");
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
@@ -389,6 +472,8 @@ public class User {
             preparedStatement.setString(5, Global.activeUser.username);
             
             preparedStatement.executeUpdate();
+            
+            Audit.addAuditEntry("Logged In from " + InetAddress.getLocalHost().getHostName() + " as " + System.getProperty("user.name"));
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
@@ -504,6 +589,29 @@ public class User {
             preparedStatement.setLong(1, salt);
             preparedStatement.setString(2, Password.hashPassword(salt, password));
             preparedStatement.setString(3, Global.activeUser.username);
+            
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updatePassword(salt, password);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+    }
+    
+    public static void resetPassword(int ID, long salt, String password) {
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+            
+            String sql = "Update Users SET passwordSalt = ?, password = ? where id = ?";
+            
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setLong(1, salt);
+            preparedStatement.setString(2, Password.hashPassword(salt, password));
+            preparedStatement.setInt(3, ID);
             
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
@@ -834,6 +942,77 @@ public class User {
             DbUtils.closeQuietly(stmt);
         }
         return list;
+    }
+    
+    public static void updateUser(User item ){
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "UPDATE Users SET "
+                    + "firstName = ?, "
+                    + "middleInitial = ?, "
+                    + "lastName = ?, "
+                    + "workPhone = ?, "
+                    + "emailAddress = ?, "
+                    + "username = ?, "
+                    + "activeLogIn = ?, "
+                    + "passwordReset = ?, "
+                    + "defaultSection = ?, "
+                    + "ULPCaseWorker = ?, "
+                    + "REPCaseWorker = ?, "
+                    + "ULPDocketing = ?, "
+                    + "REPDocketing = ?, "
+                    + "initials = ?, "
+                    + "investigator = ?, "
+                    + "jobTitle = ?, "
+                    + "MEDCaseWorker = ?, "
+                    + "ORGCaseWorker = ?, "
+                    + "CSCCaseWorker = ?, "
+                    + "CMDSCaseWorker = ?, "
+                    + "HearingsCaseWorker = ?, "
+                    + "ORGDocketing = ?, "
+                    + "MEDDocketing = ?, "
+                    + "CSCDocketing = ?, "
+                    + "CMDSDocketing = ? "
+                    + "where id = ?";
+            PreparedStatement ps = stmt.getConnection().prepareStatement(sql);
+            ps.setString ( 1, item.firstName.equals("") ? null : item.firstName.trim());
+            ps.setString ( 2, item.middleInitial.equals("") ? null : item.middleInitial.trim());
+            ps.setString ( 3, item.lastName.equals("") ? null : item.lastName.trim());
+            ps.setString ( 4, item.workPhone.equals("") ? null : item.workPhone.trim());
+            ps.setString ( 5, item.emailAddress.equals("") ? null : item.emailAddress.trim());
+            ps.setString ( 6, item.username.equals("") ? null : item.username.trim());
+            ps.setBoolean( 7, item.activeLogIn);
+            ps.setBoolean( 8, item.passwordReset);
+            ps.setString ( 9, item.defaultSection.equals("") ? null : item.defaultSection.trim());
+            ps.setBoolean(10, item.ULPCaseWorker);
+            ps.setBoolean(11, item.REPCaseWorker);
+            ps.setBoolean(12, item.ULPDocketing);
+            ps.setBoolean(13, item.REPDocketing);
+            ps.setString (14, item.initials.equals("") ? null : item.initials.trim());
+            ps.setBoolean(15, item.investigator);
+            ps.setString (16, item.jobTitle.equals("") ? null : item.jobTitle.trim());
+            ps.setBoolean(17, item.MEDCaseWorker);
+            ps.setBoolean(18, item.ORGCaseWorker);
+            ps.setBoolean(19, item.CSCCaseWorker);
+            ps.setBoolean(20, item.CMDSCaseWorker);
+            ps.setBoolean(21, item.HearingsCaseWorker);
+            ps.setBoolean(22, item.ORGDocketing);
+            ps.setBoolean(23, item.MEDDocketing);
+            ps.setBoolean(24, item.CSCDocketing);
+            ps.setBoolean(25, item.CMDSDocketing);
+            ps.setInt    (26, item.id);
+            
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateUser(item);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
     }
     
 }

@@ -63,6 +63,7 @@ import parker.serb.sql.ORGCase;
 import parker.serb.sql.REPCase;
 import parker.serb.sql.ULPCase;
 import parker.serb.util.CreateNewCSCDialog;
+import parker.serb.util.CreateNewHearingDialog;
 import parker.serb.util.CreateNewOrgDialog;
 import parker.serb.util.NewCaseLockDialog;
 import parker.serb.util.NumberFormatService;
@@ -91,7 +92,6 @@ public class RootPanel extends javax.swing.JFrame {
         letterQueueThread();
         User.updateLogInInformation();
         Global.activeUser.activeLogIn = true;
-        Audit.addAuditEntry("Logged In");
         setLocationRelativeTo(null);
         setVisible(true);        
     }
@@ -114,7 +114,9 @@ public class RootPanel extends javax.swing.JFrame {
             }
         }
         
-        if(!Global.activeUserRoles.contains("REP") && !Global.activeUserRoles.contains("MED") && !Global.activeUserRoles.contains("ULP")) {
+        if(!Global.activeUserRoles.contains("REP") 
+                && !Global.activeUserRoles.contains("MED") 
+                && !Global.activeUserRoles.contains("ULP")) {
             jMenuBar1.remove(batchCloseCasesSubMenu);
         }
         
@@ -421,7 +423,7 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton3.setSize(dim);
                 jButton3.setMinimumSize(dim);
                 jButton3.setMaximumSize(dim);
-                jButton3.setVisible(true);
+                jButton3.setVisible(false);
                 jButton3.setText("Letters");
                 jButton3.setEnabled(false);
                 
@@ -434,13 +436,13 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton5.setSize(dim);
                 jButton5.setMinimumSize(dim);
                 jButton5.setMaximumSize(dim);
-                jButton5.setVisible(true);
+                jButton5.setVisible(false);
                 jButton5.setText("Queue");
                 
                 jButton6.setSize(dim);
                 jButton6.setMinimumSize(dim);
                 jButton6.setMaximumSize(dim);
-                jButton6.setVisible(true);
+                jButton6.setVisible(false);
                 jButton6.setText("Public Records");
                 
                 jButton7.setSize(dim);
@@ -890,7 +892,6 @@ public class RootPanel extends javax.swing.JFrame {
     /**
      * Enable all tabs after a save action or cancel action has bee completed
      */
-    //TODO: Rename this to enableTabs
     public void enableTabsAfterSave() {
         for(int i = jTabbedPane1.getTabCount()-1; i >= 0; i--) {
             jTabbedPane1.setEnabledAt(i, true);
@@ -1683,18 +1684,23 @@ public class RootPanel extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         switch(Global.activeSection) {
             case "REP":
+                Audit.addAuditEntry("Clicked REP Letter Button");
                 new REPLetterDialog((JFrame) this.getRootPane().getParent(), true);
                 break;
             case "ULP":
+                Audit.addAuditEntry("Clicked ULP Letter Button");
                 new ULPLetterDialog((JFrame) this.getRootPane().getParent(), true);
                 break;
             case "MED":
+                Audit.addAuditEntry("Clicked MED Letter Button");
                 new MEDLetterDialog((JFrame) this.getRootPane().getParent(), true);
                 break;
             case "ORG":
+                Audit.addAuditEntry("Clicked ORG All Letter Button");
                 new ORGAllLettersPanel((JFrame) this.getRootPane().getParent(), true);
                 break;
             case "Civil Service Commission":
+                Audit.addAuditEntry("Clicked CSC All Letters Button");
                 new CSCAllLettersPanel((JFrame) this.getRootPane().getParent(), true);
                 break;
             default:
@@ -1707,9 +1713,11 @@ public class RootPanel extends javax.swing.JFrame {
             case "ORG":
             case "CMDS":
             case "Civil Service Commission":   
+                Audit.addAuditEntry("Clicked " + Global.activeSection + " Letter Button");
                 new LetterQueuePanel((JFrame) this.getRootPane().getParent(), true);
                 break;
             default:
+                Audit.addAuditEntry("Clicked " + Global.activeSection + " Public Records Button");
                 new PublicRecordsMainPanel((JFrame) this.getRootPane().getParent(), true);
                 break;
         }       
@@ -1720,6 +1728,7 @@ public class RootPanel extends javax.swing.JFrame {
         switch(Global.activeSection) {
             
             case "Docketing":
+                Audit.addAuditEntry("Clicked File Button On Docket");
                 docketRootPanel1.displayFileDialog();
                 break;
             case "REP":
@@ -1728,6 +1737,7 @@ public class RootPanel extends javax.swing.JFrame {
                 caseLock = NewCaseLock.checkLock(Global.activeSection);
                 if(caseLock == null) {
                     NewCaseLock.addLock(Global.activeSection);
+                    Audit.addAuditEntry("Clicked " + Global.activeSection + " New Case Button");
                     new CreateNewCaseDialog(Global.root, true);
                     NewCaseLock.removeLock(Global.activeSection);
                 } else {
@@ -1738,6 +1748,7 @@ public class RootPanel extends javax.swing.JFrame {
                 caseLock = NewCaseLock.checkLock(Global.activeSection);
                 if(caseLock == null) {
                     NewCaseLock.addLock(Global.activeSection);
+                    Audit.addAuditEntry("Clicked ORG New ORG Button");
                     new CreateNewOrgDialog(Global.root, true);
                     NewCaseLock.removeLock(Global.activeSection);
                 } else {
@@ -1748,6 +1759,7 @@ public class RootPanel extends javax.swing.JFrame {
                 caseLock = NewCaseLock.checkLock("CSC");
                 if(caseLock == null) {
                     NewCaseLock.addLock("CSC");
+                    Audit.addAuditEntry("Clicked CSC New CSC Button");
                     new CreateNewCSCDialog(Global.root, true);
                     NewCaseLock.removeLock("CSC");
                 } else {
@@ -1758,22 +1770,17 @@ public class RootPanel extends javax.swing.JFrame {
                 caseLock = NewCaseLock.checkLock(Global.activeSection);
                 if(caseLock == null) {
                     NewCaseLock.addLock(Global.activeSection);
+                    Audit.addAuditEntry("Clicked CMDS New Case Button");
                     new CreateNewCaseDialog(Global.root, true);
                     caseLock.removeLock(Global.activeSection);
                 } else {
                     new NewCaseLockDialog(Global.root, true, caseLock);
                 }
                 break;
-//            case "Hearings":
-//                caseLock = NewCaseLock.checkLock(Global.activeSection);
-//                if(caseLock == null) {
-//                    NewCaseLock.addLock(Global.activeSection);
-//                    new CreateNewHearingDialog(Global.root, true);
-//                    NewCaseLock.removeLock(Global.activeSection);
-//                } else {
-//                    new NewCaseLockDialog(Global.root, true, caseLock);
-//                }
-//                break;    
+            case "Hearings":
+                Audit.addAuditEntry("Clicked Hearing New Hearing Button");
+                new CreateNewHearingDialog(Global.root, true);
+                break;    
             default:
                 break;
         }
@@ -1815,21 +1822,27 @@ public class RootPanel extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         switch(Global.activeSection) {
             case "MED":
+                Audit.addAuditEntry("Clicked MED Report Button");
                 new ReportDialog((JFrame) this.getRootPane().getParent(), true, "MED");
                 break;
             case "REP":
+                Audit.addAuditEntry("Clicked REP Report Button");
                 new ReportDialog((JFrame) this.getRootPane().getParent(), true, "REP");
                 break;
             case "ULP":
+                Audit.addAuditEntry("Clicked ULP Report Button");
                 new ReportDialog((JFrame) this.getRootPane().getParent(), true, "ULP");
                 break;
             case "CMDS":
+                Audit.addAuditEntry("Clicked CMDS Letter Button");
                 new CMDSLetterDialog((JFrame) this.getRootPane().getParent(), true);
                 break;
             case "ORG":
+                Audit.addAuditEntry("Clicked ORG Letter Button");
                 new ORGLetterDialog((JFrame) this.getRootPane().getParent(), true);
                 break;
             case "Civil Service Commission":
+                Audit.addAuditEntry("Clicked CSC Letter Button");
                 new CSCLetterDialog((JFrame) this.getRootPane().getParent(), true);
                 break;
             case "Hearings":
@@ -1857,18 +1870,22 @@ public class RootPanel extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        Audit.addAuditEntry("Viewing User Preferences");
         new Preferences((JFrame) getRootPane().getParent(), true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        Audit.addAuditEntry("Viewing System Montior Dialog");
         new SystemMontiorDialog((JFrame) getRootPane().getParent(), true);
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        Audit.addAuditEntry("Viewing Release Notes Dialog");
         new ReleaseNotesDialog((JFrame) getRootPane().getParent(), true);
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     private void adminPanelMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adminPanelMenuItemActionPerformed
+        Audit.addAuditEntry("Viewing Admin Main Panel");
         new AdminMainMenuPanel((JFrame) getRootPane().getParent(), true);
     }//GEN-LAST:event_adminPanelMenuItemActionPerformed
 
@@ -1877,15 +1894,19 @@ public class RootPanel extends javax.swing.JFrame {
             case "REP":
             case "ULP":
             case "MED":    
+                Audit.addAuditEntry("Clicked " + Global.activeSection + " Letters Button");
                 new LetterQueuePanel((JFrame) this.getRootPane().getParent(), true);
                 break;
             case "Hearings":
+                Audit.addAuditEntry("Clicked Hearings Report Button");
                 new ReportDialog((JFrame) this.getRootPane().getParent(), true, "HRG");
                 break;
             case "ORG":
+                Audit.addAuditEntry("Clicked ORG Report Button");
                 new ReportDialog((JFrame) this.getRootPane().getParent(), true, "ORG");
                 break;
             case "CMDS":
+                Audit.addAuditEntry("Clicked CMDS Report Button");
                 new ReportDialog((JFrame) this.getRootPane().getParent(), true, "CMDS");
                 break;
             default:
@@ -1897,12 +1918,14 @@ public class RootPanel extends javax.swing.JFrame {
         switch(Global.activeSection) {
             case "REP":
             case "ULP":
-            case "MED":    
+            case "MED":
+                Audit.addAuditEntry("Clicked " + Global.activeSection + " Mail Log Button");
                 new MailLogViewerPanel((JFrame) this.getRootPane().getParent(), true);
                 break;
             case "ORG":
             case "Civil Service Commission":
-            case "CMDS":    
+            case "CMDS":   
+                Audit.addAuditEntry("Clicked " + Global.activeSection + " Public Records Button");
                 new PublicRecordsMainPanel((JFrame) this.getRootPane().getParent(), true);
                 break;
             default:
@@ -1915,6 +1938,7 @@ public class RootPanel extends javax.swing.JFrame {
             case "ORG":
             case "Civil Service Commission":
             case "CMDS":    
+                Audit.addAuditEntry("Clicked " + Global.activeSection + " Mail Log Button");
                 new MailLogViewerPanel((JFrame) this.getRootPane().getParent(), true);
                 break;
             default:
@@ -1923,18 +1947,22 @@ public class RootPanel extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void batchCloseMEDMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_batchCloseMEDMenuItemActionPerformed
+        Audit.addAuditEntry("Clicked MED Bulk Close Case");
         new MEDBulkHandleCases((JFrame) this.getRootPane().getParent(), true);
     }//GEN-LAST:event_batchCloseMEDMenuItemActionPerformed
 
     private void batchCloseULPMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_batchCloseULPMenuItemActionPerformed
+        Audit.addAuditEntry("Clicked ULP Bulk Close Case");
         new ULPBulkCloseCasesDialog((JFrame) this.getRootPane().getParent(), true);
     }//GEN-LAST:event_batchCloseULPMenuItemActionPerformed
 
     private void batchCloseREPMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_batchCloseREPMenuItemActionPerformed
+        Audit.addAuditEntry("Clicked REP Bulk Close Case");
         new REPBulkCloseCasesDialog((JFrame) this.getRootPane().getParent(), true);
     }//GEN-LAST:event_batchCloseREPMenuItemActionPerformed
 
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+        Audit.addAuditEntry("Clicked Annual Report");
         new AnnualReportTwoDatePanel((JFrame) this.getRootPane().getParent(), true);
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 

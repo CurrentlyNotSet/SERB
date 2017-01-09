@@ -11,7 +11,6 @@ import java.util.Date;
 import java.util.List;
 import org.apache.commons.dbutils.DbUtils;
 import parker.serb.Global;
-import static parker.serb.sql.BargainingUnit.getCertStatus;
 import parker.serb.util.NumberFormatService;
 import parker.serb.util.SlackNotification;
 
