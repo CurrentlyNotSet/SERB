@@ -81,6 +81,13 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         } else if (CMDSdocToGenerate != null) {
             documentLabel.setText("Document: " + CMDSdocToGenerate.LetterName);
         }
+        
+        if (Global.activeSection.equals("ORG")) {
+            orgCase = ORGCase.loadORGInformation();
+        } else if (Global.activeSection.equals("Civil Service Commission")) {
+            cscCase = CSCCase.loadCSCInformation();
+        }
+        
         setColumnWidth();
         loadPartyTable();
         loadActivityDocumentsTable();
@@ -174,11 +181,13 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         // SET TO/CC Listener
         destinationComboBox.addItemListener((ItemEvent e) -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                if (e.getItem().equals("") && personTable.getSelectedColumn() == 2) {
-                    personTable.setValueAt("", personTable.getSelectedRow(), 1);
-                }
-                if (personTable.getValueAt(personTable.getSelectedRow(), 1).equals("")) {
-                    personTable.setValueAt("", personTable.getSelectedRow(), 2);
+                if (personTable.getSelectedRow() > -1){
+                    if (e.getItem().equals("") && personTable.getSelectedColumn() == 2) {
+                        personTable.setValueAt("", personTable.getSelectedRow(), 1);
+                    }
+                    if (personTable.getValueAt(personTable.getSelectedRow(), 1).equals("")) {
+                        personTable.setValueAt("", personTable.getSelectedRow(), 2);
+                    }
                 }
             }
         });
@@ -187,8 +196,6 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         
         if (orgCase != null){
             partyList = CaseParty.loadORGPartiesByCase();
-            
-            orgCase = ORGCase.loadORGInformation();
             
             String toCC = "";
             String emailPostal = "";
@@ -203,8 +210,6 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
             });
         } else if (cscCase != null){
             partyList = CaseParty.loadORGPartiesByCase();
-            
-            cscCase = CSCCase.loadCSCInformation();
             
             String toCC = "";
             String emailPostal = "";
@@ -260,11 +265,12 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         
         switch (Global.activeSection) {
             case "ORG":
-                activtyList = Activity.loadActivityDocumentsByGlobalCaseORG();
-                break;
             case "Civil Service Commission":
                 activtyList = Activity.loadActivityDocumentsByGlobalCaseORG();
                 break;
+            case "Hearings":
+                activtyList = Activity.loadHearingActivity();
+                break;                    
             default:
                 activtyList = Activity.loadActivityDocumentsByGlobalCase();
                 break;

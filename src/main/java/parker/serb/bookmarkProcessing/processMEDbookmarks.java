@@ -21,20 +21,20 @@ import parker.serb.util.StringUtilities;
  * @author User
  */
 public class processMEDbookmarks {
-    
+
     public static Dispatch processDoAMEDWordLetter(Dispatch Document, List<Integer> toParties, List<Integer> ccParties) {
         Mediator stateMediator = null;
         Mediator fmcsMediator = null;
         MEDCase item = MEDCase.loadEntireCaseInformation();
         List<CaseParty> partyList = CaseParty.loadPartiesByCase(Global.caseYear, Global.caseType, Global.caseMonth, Global.caseNumber);
         List<String> relatedCasesList = RelatedCase.loadRelatedCases();
-        if (item.stateMediatorAppointedID != null){
+        if (item.stateMediatorAppointedID != null) {
             stateMediator = Mediator.getMediatorByID(Integer.parseInt(item.stateMediatorAppointedID));
         }
-        if (item.FMCSMediatorAppointedID != null){
+        if (item.FMCSMediatorAppointedID != null) {
             fmcsMediator = Mediator.getMediatorByID(Integer.parseInt(item.FMCSMediatorAppointedID));
         }
-        
+
         String employerNames = "";
         String employerREPNames = "";
         String employeeOrgNames = "";
@@ -53,7 +53,7 @@ public class processMEDbookmarks {
         String deemed = "";
         String mediatorName = "";
         String mediatorEmail = "";
-        String mediatorPhone = "";       
+        String mediatorPhone = "";
         String employerRepSalutation = "";
         String employerRepLastName = "";
         String employerRepPhoneNumber = "";
@@ -64,111 +64,112 @@ public class processMEDbookmarks {
         String employeeOrgRepPhone = "";
         String toAddressBlock = "";
         String ccNameBlock = "";
-        
-                        
-        for (String related: relatedCasesList){
-            if (!relatedCaseNumbers.equals("")){
+
+        for (String related : relatedCasesList) {
+            if (!relatedCaseNumbers.equals("")) {
                 relatedCaseNumbers += ", ";
             }
             relatedCaseNumbers += related;
         }
-        
-        for (CaseParty party : partyList){
-            
-            for (int person : toParties){
+
+        for (CaseParty party : partyList) {
+
+            for (int person : toParties) {
                 if (person == party.id) {
-                     if (!"".equals(toAddressBlock.trim())){
+                    if (!"".equals(toAddressBlock.trim())) {
                         toAddressBlock += "\n\n";
                     }
-                     toAddressBlock += StringUtilities.buildCasePartyAddressBlock(party);
+                    toAddressBlock += StringUtilities.buildCasePartyAddressBlock(party);
                 }
             }
-            
-            for (int person : toParties){
+
+            for (int person : toParties) {
                 if (person == party.id) {
-                     if (!"".equals(ccNameBlock.trim())){
+                    if (!"".equals(ccNameBlock.trim())) {
                         ccNameBlock += ", ";
                     }
-                     ccNameBlock += StringUtilities.buildCasePartyName(party);
+                    ccNameBlock += StringUtilities.buildCasePartyName(party);
                 }
             }
-            
-            if (null != party.caseRelation)switch (party.caseRelation) {
-                case "Employer":
-                    if (!"".equals(employerNames.trim())){
-                        employerNames += ", ";
-                    }
-                    if (!"".equals(employerAddresses.trim())){
-                        employerAddresses += "\n\n";
-                    }
-                    employerAddresses += StringUtilities.buildAddressBlockWithPhoneAndEmail(party);
-                    employerNames += StringUtilities.buildCasePartyName(party);
-                    break;
-                case "Employer REP":
-                    if (!"".equals(employerREPNames.trim())){
-                        employerREPNames += ", ";
-                        employerRepSalutation += ", ";
-                        employerRepLastName += ", ";
-                        employerRepPhoneNumber += ", ";
-                        employerRepEmail += ", ";
-                    }
-                    if (!"".equals(employerREPAddresses.trim())){
-                        employerREPAddresses += "\n\n";
-                    }
-                    employerREPAddresses += StringUtilities.buildAddressBlockWithPhoneAndEmail(party);
-                    employerREPNames += StringUtilities.buildCasePartyName(party);
-                    employerRepSalutation += party.prefix != null ? party.prefix : "";
-                    employerRepLastName += party.lastName != null ? party.lastName : "";
-                    employerRepEmail += party.emailAddress != null ? party.emailAddress : "";
-                    employerRepPhoneNumber += party.phone1 != null ? NumberFormatService.convertStringToPhoneNumber(party.phone1) : "";
-                    employerRepPhoneNumber += party.phone2 != null ? ", " + NumberFormatService.convertStringToPhoneNumber(party.phone2) : "";
-                    
-                    break;
-                case "Employee Organization":
-                    if (!"".equals(employeeOrgNames.trim())){
-                        employeeOrgNames += ", ";
-                    }
-                    if (!"".equals(employeeOrgAddresses.trim())){
-                        employeeOrgAddresses += "\n\n";
-                    }
-                    employeeOrgAddresses += StringUtilities.buildAddressBlockWithPhoneAndEmail(party);
-                    employeeOrgNames += StringUtilities.buildCasePartyName(party);
-                    break;
-                case "Employee Organization REP":
-                    if (!"".equals(employeeOrgREPNames.trim())){
-                        employeeOrgREPNames += ", ";
-                        employeeOrgRepSalutation += ", ";
-                        employeeOrgRepLastName += ", ";
-                        employeeOrgRepEmail += ", ";
-                        employeeOrgRepPhone += ", ";
-                    }
-                    if (!"".equals(employeeOrgREPAddresses.trim())){
-                        employeeOrgREPAddresses += "\n\n";
-                    }
-                    employeeOrgREPAddresses += StringUtilities.buildAddressBlockWithPhoneAndEmail(party);
-                    employeeOrgREPNames += StringUtilities.buildCasePartyName(party);
-                    
-                    employeeOrgRepSalutation += party.prefix != null ? party.prefix : "";
-                    employeeOrgRepLastName += party.lastName != null ? party.lastName : "";
-                    employeeOrgRepEmail += party.emailAddress != null ? party.emailAddress : "";
-                    employeeOrgRepPhone += party.phone1 != null ? NumberFormatService.convertStringToPhoneNumber(party.phone1) : "";
-                    employeeOrgRepPhone += party.phone2 != null ? ", " + NumberFormatService.convertStringToPhoneNumber(party.phone2) : "";
-                    break;
+
+            if (null != party.caseRelation) {
+                switch (party.caseRelation) {
+                    case "Employer":
+                        if (!"".equals(employerNames.trim())) {
+                            employerNames += ", ";
+                        }
+                        if (!"".equals(employerAddresses.trim())) {
+                            employerAddresses += "\n\n";
+                        }
+                        employerAddresses += StringUtilities.buildAddressBlockWithPhoneAndEmail(party);
+                        employerNames += StringUtilities.buildCasePartyName(party);
+                        break;
+                    case "Employer REP":
+                        if (!"".equals(employerREPNames.trim())) {
+                            employerREPNames += ", ";
+                            employerRepSalutation += ", ";
+                            employerRepLastName += ", ";
+                            employerRepPhoneNumber += ", ";
+                            employerRepEmail += ", ";
+                        }
+                        if (!"".equals(employerREPAddresses.trim())) {
+                            employerREPAddresses += "\n\n";
+                        }
+                        employerREPAddresses += StringUtilities.buildAddressBlockWithPhoneAndEmail(party);
+                        employerREPNames += StringUtilities.buildCasePartyName(party);
+                        employerRepSalutation += party.prefix != null ? party.prefix : "";
+                        employerRepLastName += party.lastName != null ? party.lastName : "";
+                        employerRepEmail += party.emailAddress != null ? party.emailAddress : "";
+                        employerRepPhoneNumber += party.phone1 != null ? NumberFormatService.convertStringToPhoneNumber(party.phone1) : "";
+                        employerRepPhoneNumber += party.phone2 != null ? ", " + NumberFormatService.convertStringToPhoneNumber(party.phone2) : "";
+
+                        break;
+                    case "Employee Organization":
+                        if (!"".equals(employeeOrgNames.trim())) {
+                            employeeOrgNames += ", ";
+                        }
+                        if (!"".equals(employeeOrgAddresses.trim())) {
+                            employeeOrgAddresses += "\n\n";
+                        }
+                        employeeOrgAddresses += StringUtilities.buildAddressBlockWithPhoneAndEmail(party);
+                        employeeOrgNames += StringUtilities.buildCasePartyName(party);
+                        break;
+                    case "Employee Organization REP":
+                        if (!"".equals(employeeOrgREPNames.trim())) {
+                            employeeOrgREPNames += ", ";
+                            employeeOrgRepSalutation += ", ";
+                            employeeOrgRepLastName += ", ";
+                            employeeOrgRepEmail += ", ";
+                            employeeOrgRepPhone += ", ";
+                        }
+                        if (!"".equals(employeeOrgREPAddresses.trim())) {
+                            employeeOrgREPAddresses += "\n\n";
+                        }
+                        employeeOrgREPAddresses += StringUtilities.buildAddressBlockWithPhoneAndEmail(party);
+                        employeeOrgREPNames += StringUtilities.buildCasePartyName(party);
+
+                        employeeOrgRepSalutation += party.prefix != null ? party.prefix : "";
+                        employeeOrgRepLastName += party.lastName != null ? party.lastName : "";
+                        employeeOrgRepEmail += party.emailAddress != null ? party.emailAddress : "";
+                        employeeOrgRepPhone += party.phone1 != null ? NumberFormatService.convertStringToPhoneNumber(party.phone1) : "";
+                        employeeOrgRepPhone += party.phone2 != null ? ", " + NumberFormatService.convertStringToPhoneNumber(party.phone2) : "";
+                        break;
+                }
             }
-        } 
+        }
         
         String[] ffName = factFinderSelectionName.split(" ");
-            
-            if (ffName.length == 2){
-                ffFirstName = ffName[0];
-                ffLastName = ffName[1];
-            } else if (ffName.length == 3){
-                ffFirstName = ffName[0];
-                ffLastName = ffName[2];
-            }
-            
-            FactFinder ffDetails = FactFinder.getFactFinderLikeName(ffFirstName, ffLastName);
-            
+
+        if (ffName.length == 2) {
+            ffFirstName = ffName[0];
+            ffLastName = ffName[1];
+        } else if (ffName.length == 3) {
+            ffFirstName = ffName[0];
+            ffLastName = ffName[2];
+        }
+
+        FactFinder ffDetails = FactFinder.getFactFinderLikeName(ffFirstName, ffLastName);
+
         if (ffDetails != null) {
             if (!ffDetails.address1.equals("")) {
                 ffAddress = ffDetails.address1;
@@ -196,7 +197,7 @@ public class processMEDbookmarks {
             }
             ffAddress += ffDetails.city + ", " + ffDetails.state + " " + ffDetails.zip;
         }
-        
+
         if (item.FFRejectedBy.equals("Union")) {
             whoRejected = employeeOrgNames;
         }
@@ -206,7 +207,7 @@ public class processMEDbookmarks {
         if (item.FFRejectedBy.equals("Both")) {
             whoRejected = employeeOrgNames + " and " + employerNames;
         }
-        
+
         if (item.FFAcceptedBy.equals("Union")) {
             accepted = employeeOrgNames;
             deemed = employerNames;
@@ -214,7 +215,7 @@ public class processMEDbookmarks {
             accepted = employerNames;
             deemed = employeeOrgNames;
         }
-        
+
         if (item.stateMediatorAppointedID != null) {
             mediatorName = stateMediator.lastName == null ? "" : StringUtilities.buildFullName(stateMediator.firstName, stateMediator.middleName, stateMediator.lastName);
             mediatorEmail = stateMediator.email == null ? "" : stateMediator.email;
@@ -224,15 +225,14 @@ public class processMEDbookmarks {
             mediatorEmail = fmcsMediator.email == null ? "" : fmcsMediator.email;
             mediatorPhone = fmcsMediator.phone == null ? "" : NumberFormatService.convertStringToPhoneNumber(fmcsMediator.phone);
         }
-        
-        
-        for (int i = 0; i < Global.BOOKMARK_LIMIT; i++) {            
+
+        for (int i = 0; i < Global.BOOKMARK_LIMIT; i++) {
             //Case Number Related Information
             processBookmark.process("CASENUM" + (i == 0 ? "" : i), NumberFormatService.generateFullCaseNumber(), Document);
             processBookmark.process("RELATEDCASENUMBERS" + (i == 0 ? "" : i), relatedCaseNumbers, Document);
-            processBookmark.process("NTNFILEDBY" + (i == 0 ? "" : i), item.NTNFiledBy != null ? item.NTNFiledBy : "" , Document);
-            processBookmark.process("NEGOTIATIONPERIOD" + (i == 0 ? "" : i), item.negotiationPeriod != null ? item.negotiationPeriod : "" , Document);
-                                   
+            processBookmark.process("NTNFILEDBY" + (i == 0 ? "" : i), item.NTNFiledBy != null ? item.NTNFiledBy : "", Document);
+            processBookmark.process("NEGOTIATIONPERIOD" + (i == 0 ? "" : i), item.negotiationPeriod != null ? item.negotiationPeriod : "", Document);
+
             //Party Information
             processBookmark.process("EMREPADDRESSBLOCK" + (i == 0 ? "" : i), employerREPAddresses, Document);
             processBookmark.process("EMPORGREPADDRESSBLOCK" + (i == 0 ? "" : i), employeeOrgREPAddresses, Document);
@@ -248,19 +248,19 @@ public class processMEDbookmarks {
             processBookmark.process("EMPORGREPSAL" + (i == 0 ? "" : i), employeeOrgRepSalutation, Document);
             processBookmark.process("EMPORGREPEMAIL" + (i == 0 ? "" : i), employeeOrgRepEmail, Document);
             processBookmark.process("EMPORGREPPHONE" + (i == 0 ? "" : i), employeeOrgRepPhone, Document);
-                        
+
             //Fact Finder Information
-            processBookmark.process("FACTFINDER1" + (i == 0 ? "" : i), 
+            processBookmark.process("FACTFINDER1" + (i == 0 ? "" : i),
                     (item.FFList2Name1 == null ? item.FFList1Name1 : item.FFList2Name1), Document);
-            processBookmark.process("FACTFINDER2" + (i == 0 ? "" : i), 
+            processBookmark.process("FACTFINDER2" + (i == 0 ? "" : i),
                     (item.FFList2Name2 == null ? item.FFList1Name2 : item.FFList2Name2), Document);
-            processBookmark.process("FACTFINDER3" + (i == 0 ? "" : i), 
+            processBookmark.process("FACTFINDER3" + (i == 0 ? "" : i),
                     (item.FFList2Name3 == null ? item.FFList1Name3 : item.FFList2Name3), Document);
-            processBookmark.process("FACTFINDER4" + (i == 0 ? "" : i), 
+            processBookmark.process("FACTFINDER4" + (i == 0 ? "" : i),
                     (item.FFList2Name4 == null ? item.FFList1Name4 : item.FFList2Name4), Document);
-            processBookmark.process("FACTFINDER5" + (i == 0 ? "" : i), 
+            processBookmark.process("FACTFINDER5" + (i == 0 ? "" : i),
                     (item.FFList2Name5 == null ? item.FFList1Name5 : item.FFList2Name5), Document);
-            processBookmark.process("FACTFINDERSELECTED" + (i == 0 ? "" : i), factFinderSelectionName, Document);  
+            processBookmark.process("FACTFINDERSELECTED" + (i == 0 ? "" : i), factFinderSelectionName, Document);
             if (item.FFList1SelectionDueDate != null || item.FFList2SelectionDueDate != null) {
                 processBookmark.process("FFPANELSELECTIONDUEDATE" + (i == 0 ? "" : i),
                         (item.FFList2SelectionDueDate == null ? Global.mmddyyyy.format(item.FFList1SelectionDueDate) : Global.mmddyyyy.format(item.FFList2SelectionDueDate)), Document);
@@ -272,24 +272,25 @@ public class processMEDbookmarks {
             processBookmark.process("WHOREJECTED" + (i == 0 ? "" : i), whoRejected, Document);
             processBookmark.process("ACCEPTED" + (i == 0 ? "" : i), accepted, Document);
             processBookmark.process("DEEMED" + (i == 0 ? "" : i), deemed, Document);
-            
+
             //Conciliator Information
-            processBookmark.process("CONCILIATOR1" + (i == 0 ? "" : i), 
+            processBookmark.process("CONCILIATOR1" + (i == 0 ? "" : i),
                     (item.concilList2Name1 == null ? item.concilList1Name1 : item.concilList2Name1), Document);
-            processBookmark.process("CONCILIATOR2" + (i == 0 ? "" : i), 
+            processBookmark.process("CONCILIATOR2" + (i == 0 ? "" : i),
                     (item.concilList2Name2 == null ? item.concilList1Name2 : item.concilList2Name2), Document);
-            processBookmark.process("CONCILIATOR3" + (i == 0 ? "" : i), 
+            processBookmark.process("CONCILIATOR3" + (i == 0 ? "" : i),
                     (item.concilList2Name3 == null ? item.concilList1Name3 : item.concilList2Name3), Document);
-            processBookmark.process("CONCILIATOR4" + (i == 0 ? "" : i), 
+            processBookmark.process("CONCILIATOR4" + (i == 0 ? "" : i),
                     (item.concilList2Name4 == null ? item.concilList1Name4 : item.concilList2Name4), Document);
-            processBookmark.process("CONCILIATOR5" + (i == 0 ? "" : i), 
+            processBookmark.process("CONCILIATOR5" + (i == 0 ? "" : i),
                     (item.concilList2Name5 == null ? item.concilList1Name5 : item.concilList2Name5), Document);
-            processBookmark.process("ConciliatorSelection" + (i == 0 ? "" : i), 
+            processBookmark.process("ConciliatorSelection" + (i == 0 ? "" : i),
                     (item.concilSelection == null ? "" : item.concilSelection.trim()), Document);
-            processBookmark.process("ARBITRATORSELECTED" + (i == 0 ? "" : i), 
+            processBookmark.process("ARBITRATORSELECTED" + (i == 0 ? "" : i),
                     (item.concilReplacement == null ? item.concilSelection.trim() : item.concilReplacement.trim()), Document);
-            processBookmark.process("CONCILIATORAPPTDATE" + (i == 0 ? "" : i), 
-                    (item.concilAppointmentDate == null ? Global.mmddyyyy.format(item.concilAppointmentDate) : Global.mmddyyyy.format(item.concilAppointmentDate)), Document);
+            
+            processBookmark.process("CONCILIATORAPPTDATE" + (i == 0 ? "" : i),
+                    (item.concilAppointmentDate == null ? "" : Global.mmddyyyy.format(item.concilAppointmentDate)), Document);
             if (item.concilList1OrderDate != null || item.concilList2OrderDate != null) {
                 processBookmark.process("CONCILIATIONORDERDATE" + (i == 0 ? "" : i),
                         (item.concilList2OrderDate == null ? Global.mmddyyyy.format(item.concilList1OrderDate) : Global.mmddyyyy.format(item.concilList2OrderDate)), Document);
@@ -302,21 +303,21 @@ public class processMEDbookmarks {
             } else {
                 processBookmark.process("CONCILIATIONSELECTIONDUEDATE" + (i == 0 ? "" : i), "", Document);
             }
-            
+
             //Mediators
-            processBookmark.process("STATEMEDIATORAPPT" + (i == 0 ? "" : i), 
+            processBookmark.process("STATEMEDIATORAPPT" + (i == 0 ? "" : i),
                     stateMediator.lastName != null ? StringUtilities.buildFullName(stateMediator.firstName, stateMediator.middleName, stateMediator.lastName) : "", Document);
-            processBookmark.process("STATEMEDIATORPHONE" + (i == 0 ? "" : i), 
-                    stateMediator.phone != null ? NumberFormatService.convertStringToPhoneNumber(stateMediator.phone) : "", Document);            
-            processBookmark.process("FMCSMEDIATORAPPT" + (i == 0 ? "" : i), 
+            processBookmark.process("STATEMEDIATORPHONE" + (i == 0 ? "" : i),
+                    stateMediator.phone != null ? NumberFormatService.convertStringToPhoneNumber(stateMediator.phone) : "", Document);
+            processBookmark.process("FMCSMEDIATORAPPT" + (i == 0 ? "" : i),
                     fmcsMediator.lastName != null ? StringUtilities.buildFullName(fmcsMediator.firstName, fmcsMediator.middleName, fmcsMediator.lastName) : "", Document);
-            processBookmark.process("FMCSPHONE" + (i == 0 ? "" : i), 
+            processBookmark.process("FMCSPHONE" + (i == 0 ? "" : i),
                     fmcsMediator.phone != null ? NumberFormatService.convertStringToPhoneNumber(fmcsMediator.phone) : "", Document);
             processBookmark.process("MEDNAME" + (i == 0 ? "" : i), mediatorName, Document);
             processBookmark.process("MEDEMAIL" + (i == 0 ? "" : i), mediatorEmail, Document);
-            processBookmark.process("MEDPHONE" + (i == 0 ? "" : i), mediatorPhone, Document);            
+            processBookmark.process("MEDPHONE" + (i == 0 ? "" : i), mediatorPhone, Document);
         }
         return Document;
     }
-    
+
 }
