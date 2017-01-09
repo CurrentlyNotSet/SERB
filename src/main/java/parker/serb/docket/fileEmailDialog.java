@@ -85,7 +85,9 @@ public class fileEmailDialog extends javax.swing.JDialog {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if(e.getClickCount() == 2) {
-                    FileService.openEmailBodyFile(id, section);
+                    if(!bodyTextArea.getText().toString().trim().equals("")) {
+                        FileService.openEmailBodyFile(id, section);
+                    }
                 }
             }
 
