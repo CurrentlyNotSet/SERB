@@ -48,7 +48,7 @@ public class SMDSDocuments {
                     + " section = ? AND"
                     + " type = ? AND"
                     + " active = 1"
-                    + " order by cast(description as nvarchar(max))";
+                    + " order by sortOrder, cast(description as nvarchar(max))";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, section);
@@ -133,7 +133,7 @@ public class SMDSDocuments {
                     + " type = ? AND "
                     + " [group] = ? AND "
                     + " active = 1"
-                    + " order by cast(description as nvarchar(max))";
+                    + " order by sortOrder, cast(description as nvarchar(max))";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, section);

@@ -72,6 +72,7 @@ public class CMDSDocuments {
     public boolean PurposeOfExtension;
     public String emailSubject;
     public String emailBody;
+    public double sortOrder;
 
     public static List<CMDSDocuments> loadAllCMDSDocuments(String[] param) {
         List<CMDSDocuments> list = new ArrayList<>();
@@ -187,7 +188,7 @@ public class CMDSDocuments {
                 doc.RequestingPartyC = foundDoc.getBoolean("RequestingPartyC");
                 doc.DateRequested = foundDoc.getBoolean("DateRequested");
                 doc.PurposeOfExtension = foundDoc.getBoolean("PurposeOfExtension");
-
+                doc.sortOrder = foundDoc.getDouble("sortOrder");
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
@@ -266,7 +267,7 @@ public class CMDSDocuments {
                 doc.RequestingPartyC = foundDoc.getBoolean("RequestingPartyC");
                 doc.DateRequested = foundDoc.getBoolean("DateRequested");
                 doc.PurposeOfExtension = foundDoc.getBoolean("PurposeOfExtension");
-
+                doc.sortOrder = foundDoc.getDouble("sortOrder");
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
@@ -462,7 +463,7 @@ public class CMDSDocuments {
             stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM CMDSDocuments WHERE active = 1 "
-                    + "AND subCategory = ? ORDER BY LetterName";
+                    + "AND subCategory = ? ORDER BY sortOrder, LetterName";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             
@@ -547,12 +548,13 @@ public class CMDSDocuments {
                     + "DateRequested, "
                     + "PurposeOfExtension, "
                     + "emailSubject, "
-                    + "emailBody "
+                    + "emailBody, "
+                    + "sortOrder "
                     + ") VALUES (";
-                    for(int i=0; i<49; i++){
-                        sql += "?, ";   //01-49
+                    for(int i=0; i<50; i++){
+                        sql += "?, ";   //01-50
                     }
-                     sql += "?)"; //50
+                     sql += "?)"; //51
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setBoolean( 1, true);
@@ -605,6 +607,7 @@ public class CMDSDocuments {
             preparedStatement.setBoolean(48, item.PurposeOfExtension);
             preparedStatement.setString (49, item.emailSubject.equals("") ? null : item.emailSubject.trim());
             preparedStatement.setString (50, item.emailBody.equals("") ? null : item.emailBody.trim());
+            preparedStatement.setNull   (51, java.sql.Types.DOUBLE);
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
