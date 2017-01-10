@@ -8,6 +8,7 @@ package parker.serb.report;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import parker.serb.Global;
+import parker.serb.sql.ActivityType;
 import parker.serb.sql.SMDSDocuments;
 import parker.serb.sql.User;
 import parker.serb.util.Item;
@@ -49,6 +50,12 @@ public class RequestedInfoDropdownPanel extends javax.swing.JDialog {
             case "UserID":
                 comboBoxLabel.setText("User:");
                 break;
+            case "ActivityType":
+                comboBoxLabel.setText("Activity Type:");
+                break;
+            case "InvestigatorID":
+                comboBoxLabel.setText("Investigator:");
+                break;
             default:
                 break;
         }
@@ -79,6 +86,28 @@ public class RequestedInfoDropdownPanel extends javax.swing.JDialog {
                 }
                 ComboBox.setSelectedItem(new Item<>("0", ""));
                 break;
+            case "ActivityType":
+                comboBoxLabel.setText("Activity Type:");
+                List<ActivityType> typeList = ActivityType.loadAllActivityTypeBySection("CMDS");
+                for (ActivityType item : typeList) {
+                    ComboBox.addItem(new Item<>(
+                            String.valueOf(item.id),
+                            item.descriptionFull)
+                    );
+                }
+                ComboBox.setSelectedItem(new Item<>("0", ""));
+                break;
+            case "InvestigatorID":
+                comboBoxLabel.setText("Investigator:");
+                List<User> investigatorList = User.getEnabledInvestigators();
+                for (User item : investigatorList) {
+                    ComboBox.addItem(new Item<>(
+                            String.valueOf(item.id),
+                            StringUtilities.buildFullName(item.firstName, item.middleInitial, item.lastName))
+                    );
+                }
+                ComboBox.setSelectedItem(new Item<>("0", ""));
+                break;
             default:
                 break;
         }
@@ -98,7 +127,8 @@ public class RequestedInfoDropdownPanel extends javax.swing.JDialog {
                 GenerateReport.generateExactStringReport(ComboBox.getSelectedItem().toString(), report);
                 break;
             case "UserID":
-                comboBoxLabel.setText("User:");
+            case "InvestigatorID":
+            case "ActivityType":
                 Item item = (Item) ComboBox.getSelectedItem();
                 String comboBoxID = item.getValue().toString();
                 GenerateReport.generateIDReport(comboBoxID, report);

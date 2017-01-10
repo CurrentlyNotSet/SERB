@@ -16,7 +16,7 @@ import parker.serb.util.StringUtilities;
  *
  * @author User
  */
-public class RequestedInfoComboBoxStringPanel extends javax.swing.JDialog {
+public class RequestedInfoStringPanel extends javax.swing.JDialog {
 
     SMDSDocuments report;
 
@@ -28,7 +28,7 @@ public class RequestedInfoComboBoxStringPanel extends javax.swing.JDialog {
      * @param reportPassed
      * @param IDType
      */
-    public RequestedInfoComboBoxStringPanel(java.awt.Frame parent, boolean modal, SMDSDocuments reportPassed, String IDType) {
+    public RequestedInfoStringPanel(java.awt.Frame parent, boolean modal, SMDSDocuments reportPassed, String IDType) {
         super(parent, modal);
         report = reportPassed;
         initComponents();
@@ -40,57 +40,22 @@ public class RequestedInfoComboBoxStringPanel extends javax.swing.JDialog {
     private void setActive(String reportName, String IDType) {
         reportLabel.setText(reportName);
         switch (IDType) {
-            case "ActivityType, Year":
-                comboBoxLabel.setText("Activity Type: ");
-                TextFieldLabel.setText("Year: ");
-                break;
-            case "InvestigatorID, Year":
-                comboBoxLabel.setText("Investigator: ");
-                TextFieldLabel.setText("Year: ");
-                break;
+                case "groupNumber":
+                    TextFieldLabel.setText("Group Number: ");
+                    break;
+                case "Year":
+                    TextFieldLabel.setText("Year: ");
+                    break;
+                case "OrgNumber":
+                    TextFieldLabel.setText("Org Number: ");
             default:
                 break;
         }
-        loadCombobox(IDType);
         generateButton();
     }
 
-    private void loadCombobox(String IDType) {
-        List<User> userList = null;
-        
-        DefaultComboBoxModel dt = new DefaultComboBoxModel();
-        ComboBox.setModel(dt);
-        ComboBox.addItem(new Item<>("0", ""));
-
-        switch (IDType) {
-            case "ActivityType, Year":
-                userList = User.getEnabledUsers();
-                for (User item : userList) {
-                    ComboBox.addItem(new Item<>(
-                            String.valueOf(item.id),
-                            StringUtilities.buildFullName(item.firstName, item.middleInitial, item.lastName))
-                    );
-                }
-            case "InvestigatorID, Year":
-                userList = User.getEnabledInvestigators();
-
-                for (User item : userList) {
-                    if (item.investigator) {
-                        ComboBox.addItem(new Item<>(
-                                String.valueOf(item.id),
-                                StringUtilities.buildFullName(item.firstName, item.middleInitial, item.lastName))
-                        );
-                    }
-                }
-                break;
-            default:
-                break;
-        }
-        ComboBox.setSelectedItem(new Item<>("0", ""));
-    }
-    
     private void generateButton() {
-        if (TextField.getText().trim().equals("") || ComboBox.getSelectedIndex() < 1) {
+        if (TextField.getText().trim().equals("")) {
             GenerateReportButton.setEnabled(false);
         } else {
             GenerateReportButton.setEnabled(true);
@@ -107,11 +72,9 @@ public class RequestedInfoComboBoxStringPanel extends javax.swing.JDialog {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        comboBoxLabel = new javax.swing.JLabel();
         GenerateReportButton = new javax.swing.JButton();
         CancelButton = new javax.swing.JButton();
         reportLabel = new javax.swing.JLabel();
-        ComboBox = new javax.swing.JComboBox();
         TextFieldLabel = new javax.swing.JLabel();
         TextField = new javax.swing.JTextField();
 
@@ -122,9 +85,6 @@ public class RequestedInfoComboBoxStringPanel extends javax.swing.JDialog {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Required Report Information");
-
-        comboBoxLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        comboBoxLabel.setText("<<LABEL>>");
 
         GenerateReportButton.setText("Generate Report");
         GenerateReportButton.setEnabled(false);
@@ -144,12 +104,6 @@ public class RequestedInfoComboBoxStringPanel extends javax.swing.JDialog {
         reportLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         reportLabel.setText("<<REPORTNAME>>");
 
-        ComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ComboBoxActionPerformed(evt);
-            }
-        });
-
         TextFieldLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         TextFieldLabel.setText("<<LABEL>>");
 
@@ -167,15 +121,9 @@ public class RequestedInfoComboBoxStringPanel extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(GenerateReportButton, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(comboBoxLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(ComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(TextFieldLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(TextField)))
+                        .addComponent(TextFieldLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -188,20 +136,14 @@ public class RequestedInfoComboBoxStringPanel extends javax.swing.JDialog {
                 .addComponent(reportLabel)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(comboBoxLabel))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(TextFieldLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(TextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(CancelButton)
                     .addComponent(GenerateReportButton))
                 .addContainerGap())
         );
-
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {ComboBox, comboBoxLabel});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -211,21 +153,14 @@ public class RequestedInfoComboBoxStringPanel extends javax.swing.JDialog {
     }//GEN-LAST:event_CancelButtonActionPerformed
 
     private void GenerateReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GenerateReportButtonActionPerformed
-        Item item = (Item) ComboBox.getSelectedItem();
-        GenerateReport.generateIDStringReport(item.getValue().toString(), TextField.getText().trim(), report);
+        GenerateReport.generateExactStringReport(TextField.getText().trim(), report);
     }//GEN-LAST:event_GenerateReportButtonActionPerformed
-
-    private void ComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxActionPerformed
-        generateButton();
-    }//GEN-LAST:event_ComboBoxActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CancelButton;
-    private javax.swing.JComboBox ComboBox;
     private javax.swing.JButton GenerateReportButton;
     private javax.swing.JTextField TextField;
     private javax.swing.JLabel TextFieldLabel;
-    private javax.swing.JLabel comboBoxLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel reportLabel;
     // End of variables declaration//GEN-END:variables
