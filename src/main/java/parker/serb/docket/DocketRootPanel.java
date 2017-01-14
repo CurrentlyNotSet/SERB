@@ -42,6 +42,7 @@ public class DocketRootPanel extends javax.swing.JPanel {
     
     List docs = new ArrayList<>();
     ActionListener actionListener;
+    Thread docketThread = null;
     /**
      * Creates new form DocketRootPanel
      */
@@ -65,7 +66,41 @@ public class DocketRootPanel extends javax.swing.JPanel {
         SectionComboBox.addActionListener(actionListener);
         
         SectionComboBox.setSelectedIndex(0);
+        
+        loadDocketListThread();
     }
+    
+    /**
+     * Thread for letter queue count
+     */
+    public void loadDocketListThread(){
+        if(docketThread == null) {
+            docketThread = new Thread() {
+                @Override
+                public void run() {
+                    threadDocketList();
+                }
+            };
+            docketThread.start(); 
+        }
+    }
+
+    private void threadDocketList() {
+        while (true) {
+            try {
+                docs.clear();
+                loadScanData(SectionComboBox.getSelectedItem().toString());
+                loadEmailData(SectionComboBox.getSelectedItem().toString());
+                loadMediaData(SectionComboBox.getSelectedItem().toString());
+                Collections.sort(docs, new CustomComparator());
+                loadTable();
+                Thread.sleep(30000); //milliseconds  (30 sec)
+            } catch (InterruptedException ex) {
+                System.err.println("Thread Interrupted");
+            }
+        }
+    }
+
     
     private void loadScanData(String section) {
         
