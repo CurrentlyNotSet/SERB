@@ -166,10 +166,10 @@ public class fileEmailDialog extends javax.swing.JDialog {
         boolean enableButton = true;
         
         for (int i = 0; i < attachmentTable.getRowCount(); i++) {
-            String rowEntry = "";
             if(attachmentTable.getValueAt(i, 2) != null) {
                 if(attachmentTable.getValueAt(i, 2).toString().equals("")
                         || attachmentTable.getValueAt(i, 2).toString().equals("-----------")) {
+                    attachmentTable.setValueAt("", i, 2);
                     enableButton = false;
                     break;
                 }
@@ -215,19 +215,6 @@ public class fileEmailDialog extends javax.swing.JDialog {
     
     private void loadToComboBox(String section) {
         List userList = User.loadSectionDropDowns(section);
-        
-//        
-//                
-//        switch (section) {
-//            case "ULP":  userList = User.loadSectionDropDowns("ULP"); break;
-//            case "REP":  userList = User.loadSectionDropDowns("REP"); break;
-//            case "MED":  userList = User.loadSectionDropDowns("MED"); break;
-//            case "ORG":  userList = User.loadSectionDropDowns("ORG"); break;
-//            case "CSC":  userList = User.loadSectionDropDowns("CSC"); break;
-//            case "CMDS":  userList = User.loadSectionDropDowns("CMDS"); break;
-//            case "Hearings":  userList = User.loadSectionDropDowns("Hearings"); break;
-//            default: break;
-//        }
         
         toComboBox.setMaximumRowCount(6);
         toComboBox.removeAllItems();

@@ -9,12 +9,16 @@ import com.alee.extended.date.WebDateField;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import parker.serb.Global;
 import parker.serb.sql.FactFinder;
 import parker.serb.sql.MEDCase;
@@ -38,6 +42,91 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
      */
     public MEDFactFinderPanel() {
         initComponents();
+        addListeners();
+    }
+    
+    private void addListeners() {
+        FF1OrderDate.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                try {
+                    Date startDate = Global.mmddyyyy.parse(FF1OrderDate.getText());
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(startDate);
+                    cal.add(Calendar.DATE, 7);
+                    FF1SelectionDate.setText(Global.mmddyyyy.format(cal.getTime()));
+                } catch (ParseException ex) {
+                    FF1SelectionDate.setText("");
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                try {
+                    Date startDate = Global.mmddyyyy.parse(FF1OrderDate.getText());
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(startDate);
+                    cal.add(Calendar.DATE, 7);
+                    FF1SelectionDate.setText(Global.mmddyyyy.format(cal.getTime()));
+                } catch (ParseException ex) {
+                    FF1SelectionDate.setText("");
+                }
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                try {
+                    Date startDate = Global.mmddyyyy.parse(FF1OrderDate.getText());
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(startDate);
+                    cal.add(Calendar.DATE, 7);
+                    FF1SelectionDate.setText(Global.mmddyyyy.format(cal.getTime()));
+                } catch (ParseException ex) {
+                    FF1SelectionDate.setText("");
+                }
+            }
+        });
+        
+        FF2OrderDateTextBox.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                try {
+                    Date startDate = Global.mmddyyyy.parse(FF2OrderDateTextBox.getText());
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(startDate);
+                    cal.add(Calendar.DATE, 7);
+                    FF2SelectionDateTextBox.setText(Global.mmddyyyy.format(cal.getTime()));
+                } catch (ParseException ex) {
+                    FF2SelectionDateTextBox.setText("");
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                try {
+                    Date startDate = Global.mmddyyyy.parse(FF2OrderDateTextBox.getText());
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(startDate);
+                    cal.add(Calendar.DATE, 7);
+                    FF2SelectionDateTextBox.setText(Global.mmddyyyy.format(cal.getTime()));
+                } catch (ParseException ex) {
+                    FF2SelectionDateTextBox.setText("");
+                }
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                try {
+                    Date startDate = Global.mmddyyyy.parse(FF2OrderDateTextBox.getText());
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(startDate);
+                    cal.add(Calendar.DATE, 7);
+                    FF2SelectionDateTextBox.setText(Global.mmddyyyy.format(cal.getTime()));
+                } catch (ParseException ex) {
+                    FF2SelectionDateTextBox.setText("");
+                }
+            }
+        });
     }
     
     public void enableUpdate() {
