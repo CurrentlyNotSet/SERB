@@ -182,7 +182,6 @@ public class fileEmailDialog extends javax.swing.JDialog {
             }
         }
         
-        
         if(caseNumberTextBox.getText().equals("")) {
             enableButton = false;
         }
@@ -193,7 +192,16 @@ public class fileEmailDialog extends javax.swing.JDialog {
     private void validateCaseNumber() {
         String[] caseNumbers = caseNumberTextBox.getText().split(",");
         
-        String caseNumberFail = CaseNumber.validateULPCaseNumber(caseNumbers);
+        String caseNumberFail = "";
+        
+        switch(emailSection) {
+            case "ULP":
+                caseNumberFail = CaseNumber.validateULPCaseNumber(caseNumbers);
+                break;
+            case "REP":
+                caseNumberFail = CaseNumber.validateREPCaseNumber(caseNumbers);
+                break;
+        }
         
         if(!caseNumberFail.equals("")) {
             new docketingCaseNotFound((JFrame) Global.root.getRootPane().getParent(), true, caseNumberFail);
@@ -202,7 +210,9 @@ public class fileEmailDialog extends javax.swing.JDialog {
         
         if(!caseNumberTextBox.getText().equals("")) {
             switch (emailSection) {
-                case "ULP":  toComboBox.setSelectedItem(ULPCase.ULPDocketTo(caseNumberTextBox.getText()));
+                case "ULP":  
+                    toComboBox.setSelectedItem(ULPCase.ULPDocketTo(caseNumberTextBox.getText()));
+                    break;
             }
         }
     }

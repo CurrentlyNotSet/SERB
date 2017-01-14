@@ -360,7 +360,7 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton3.setSize(dim);
                 jButton3.setMinimumSize(dim);
                 jButton3.setMaximumSize(dim);
-                jButton3.setVisible(false);
+                jButton3.setVisible(true);
                 jButton3.setText("Letters");
                 
                 jButton4.setSize(dim);
@@ -491,7 +491,7 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton3.setSize(dim);
                 jButton3.setMinimumSize(dim);
                 jButton3.setMaximumSize(dim);
-                jButton3.setVisible(false);
+                jButton3.setVisible(true);
                 jButton3.setText("Letters");
                 
                 jButton4.setSize(dim);

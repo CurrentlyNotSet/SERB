@@ -317,4 +317,20 @@ public class CaseNumber {
         }
         return caseNumber;
     }
+    
+    public static String validateREPCaseNumber(String[] caseNumbers) {
+        boolean valid = true;
+        String caseNumber = "";
+        
+        for(int i = 0; i < caseNumbers.length; i++) {
+            valid = REPCase.validateCaseNumber(caseNumbers[i].trim());
+            
+            if(!valid) {
+                valid = false;
+                caseNumber = caseNumbers[i].trim();
+                break;
+            } 
+        }
+        return caseNumber;
+    }
 }
