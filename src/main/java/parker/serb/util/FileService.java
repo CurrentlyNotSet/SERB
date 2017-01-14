@@ -12,11 +12,13 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Date;
+import java.util.List;
 import javax.swing.JFrame;
 import parker.serb.Global;
 import parker.serb.sql.Activity;
 import parker.serb.sql.ActivityType;
 import parker.serb.sql.Audit;
+import parker.serb.sql.CaseType;
 import parker.serb.sql.Email;
 import parker.serb.sql.EmailAttachment;
 import parker.serb.sql.ULPCase;
@@ -122,6 +124,23 @@ public class FileService {
             Desktop.getDesktop().open(new File(Global.activityPath
                     + File.separatorChar
                     + Global.activeSection
+                    + File.separatorChar
+                    + Global.caseYear
+                    + File.separatorChar
+                    + (Global.caseYear + "-" + Global.caseType + "-" + Global.caseMonth + "-" + Global.caseNumber)
+                    + File.separatorChar
+                    + fileName));
+        } catch (IOException | NullPointerException | IllegalArgumentException ex) {
+            new FileNotFoundDialog((JFrame) Global.root.getRootPane().getParent(), true, fileName);
+            SlackNotification.sendNotification(ex);
+        }
+    }
+    
+    public static void openHearingCaseFile(String fileName) {
+        try {
+            Desktop.getDesktop().open(new File(Global.activityPath
+                    + File.separatorChar
+                    + getCaseSectionFolderByCaseType(Global.caseType)
                     + File.separatorChar
                     + Global.caseYear
                     + File.separatorChar
@@ -402,6 +421,20 @@ public class FileService {
                 || image.toLowerCase().endsWith(".gif")
                 || image.toLowerCase().endsWith(".bmp")
                 || image.toLowerCase().endsWith(".png");
+    }
+    
+    public static String getCaseSectionFolderByCaseType(String caseSection){
+        String section = "";
+        
+        List<CaseType> caseTypeList = CaseType.loadAllCaseTypes("".split(" "));
+        
+        for (CaseType item : caseTypeList) {
+            if (item.caseType.equals(caseSection)){
+                return item.section;
+            }
+        }
+        
+        return section;
     }
 
 }

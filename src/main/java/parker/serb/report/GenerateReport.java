@@ -63,15 +63,33 @@ public class GenerateReport {
                 case "begin date, end date, String":
                     new RequestedInfoTwoDateStringPanel(Global.root, true, report, "exact");
                     break;
-                case "String":
-                    new RequestedInfoTwoDateStringPanel(Global.root, true, report, "exact");
-                    break;
                 case "ActivityType, Year":
                     new RequestedInfoComboBoxStringPanel(Global.root, true, report, "ActivityType, Year");
                     break;
-                case "ALJ, Year":
-                    new RequestedInfoComboBoxStringPanel(Global.root, true, report, "ALJ, Year");
+                case "Year, InvestigatorID":
+                    new RequestedInfoComboBoxStringPanel(Global.root, true, report, "InvestigatorID, Year");
                     break;
+                case "ActivityType":
+                    new RequestedInfoDropdownPanel(Global.root, true, report, "ActivityType");
+                    break;
+                case "InvestigatorID":
+                    new RequestedInfoDropdownPanel(Global.root, true, report, "InvestigatorID");
+                    break;
+                case "groupNumber":
+                    new RequestedInfoStringPanel(Global.root, true, report, "groupNumber");
+                    break;
+                case "Month, Year":
+                    new RequestedInfoMonthYearPanel(Global.root, true, report);
+                    break;
+                case "Year":
+                    new RequestedInfoStringPanel(Global.root, true, report, "Year");
+                    break;
+                case "OrgNumber":
+                    new RequestedInfoStringPanel(Global.root, true, report, "OrgNumber");
+                    break;
+                
+                
+                
                 default:
                     HashMap hash = new HashMap();
                     generateReport(report, hash);
@@ -128,6 +146,13 @@ public class GenerateReport {
         HashMap hash = new HashMap();
         hash.put("ID", ID);
         hash.put("string", exact);
+        generateReport(report, hash);
+    }
+    
+    public static void generateMonthYearReport(String month, String year, SMDSDocuments report) {
+        HashMap hash = new HashMap();
+        hash.put("month", month);
+        hash.put("year", year);
         generateReport(report, hash);
     }
     

@@ -226,7 +226,7 @@ public class CSCAllLettersPanel extends javax.swing.JDialog {
 
         if (selection > 0) {
             SMDSDocuments template = SMDSDocuments.findDocumentByID(selection);
-            File templateFile = new File(Global.templatePath + Global.activeSection + File.separator + template.fileName);
+            File templateFile = new File(Global.templatePath + "CSC" + File.separator + template.fileName);
 
             if (templateFile.exists()) {
 
@@ -285,9 +285,9 @@ public class CSCAllLettersPanel extends javax.swing.JDialog {
     }
 
     private String copyAttachmentToCaseFolder(CSCCase item, String fileName) {
-        String docSourcePath = Global.templatePath + File.separator + Global.activeSection + File.separator + fileName;
+        String docSourcePath = Global.templatePath + File.separator + "CSC" + File.separator + fileName;
 
-        String docDestPath = Global.activityPath + Global.activeSection
+        String docDestPath = Global.activityPath + "CSC"
                 + File.separatorChar + item.cscNumber + File.separatorChar;
 
         String destFileName = String.valueOf(new java.util.Date().getTime()) + "_" + fileName;

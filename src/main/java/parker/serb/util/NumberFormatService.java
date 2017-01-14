@@ -123,4 +123,35 @@ public class NumberFormatService {
         }
         return duration.trim();
     }
+    
+    public static String monthNumber(String month){
+        if (month != null){
+            if (       month.startsWith("Jan")){
+                return "01";
+            } else if (month.startsWith("Feb")){
+                return "02";
+            } else if (month.startsWith("Mar")){
+                return "03";
+            } else if (month.startsWith("Apr")){
+                return "04";
+            } else if (month.startsWith("May")){
+                return "05";
+            } else if (month.startsWith("Jun")){
+                return "06";
+            } else if (month.startsWith("Jul")){
+                return "07";
+            } else if (month.startsWith("Aug")){
+                return "08";
+            } else if (month.startsWith("Sep")){
+                return "09";
+            } else if (month.startsWith("Oct")){
+                return "10";
+            } else if (month.startsWith("Nov")){
+                return "11";
+            } else if (month.startsWith("Dec")){
+                return "12";
+            }
+        }
+        return null;
+    }
 }

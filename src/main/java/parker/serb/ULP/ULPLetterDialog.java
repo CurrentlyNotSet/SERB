@@ -34,24 +34,35 @@ public class ULPLetterDialog extends javax.swing.JDialog {
         loadLetters();
         loadDirectives();
         loadAgenda();
+        loadInvestigator();
     }
     
     private void addListeners() {
         letterComboBox.addItemListener((ItemEvent e) -> {
             directiveComboBox.setSelectedItem(new Item<>("0", ""));
             agendaComboBox.setSelectedItem(new Item<>("0", ""));
+            investigatorComboBox.setSelectedItem(new Item<>("0", ""));
             enableGenerateButton();
         });
 
         directiveComboBox.addItemListener((ItemEvent e) -> {
             letterComboBox.setSelectedItem(new Item<>("0", ""));
             agendaComboBox.setSelectedItem(new Item<>("0", ""));
+            investigatorComboBox.setSelectedItem(new Item<>("0", ""));
             enableGenerateButton();
         });
         
         agendaComboBox.addItemListener((ItemEvent e) -> {
             directiveComboBox.setSelectedItem(new Item<>("0", ""));
             letterComboBox.setSelectedItem(new Item<>("0", ""));
+            investigatorComboBox.setSelectedItem(new Item<>("0", ""));
+            enableGenerateButton();
+        });
+        
+        investigatorComboBox.addItemListener((ItemEvent e) -> {
+            directiveComboBox.setSelectedItem(new Item<>("0", ""));
+            letterComboBox.setSelectedItem(new Item<>("0", ""));
+            agendaComboBox.setSelectedItem(new Item<>("0", ""));
             enableGenerateButton();
         });
     }
@@ -59,7 +70,8 @@ public class ULPLetterDialog extends javax.swing.JDialog {
     private void enableGenerateButton() {
         if(letterComboBox.getSelectedItem().toString().equals("") 
                 && directiveComboBox.getSelectedItem().toString().equals("")
-                && agendaComboBox.getSelectedItem().toString().equals("")) {
+                && agendaComboBox.getSelectedItem().toString().equals("")
+                && investigatorComboBox.getSelectedItem().toString().equals("")) {
             generateButton.setEnabled(false);
         } else {
             generateButton.setEnabled(true);
@@ -101,6 +113,18 @@ public class ULPLetterDialog extends javax.swing.JDialog {
         }
         agendaComboBox.setSelectedItem(new Item<>("0", ""));
     }
+    
+    private void loadInvestigator() {
+        DefaultComboBoxModel dt = new DefaultComboBoxModel();
+        investigatorComboBox.setModel(dt);
+        investigatorComboBox.addItem(new Item<>("0", ""));
+        
+        List<SMDSDocuments> letterList = SMDSDocuments.loadDocumentNamesByTypeAndSection("ULP", "Invest");
+        for (SMDSDocuments letter : letterList) {
+            investigatorComboBox.addItem(new Item<>(String.valueOf(letter.id), letter.description));
+        }
+        investigatorComboBox.setSelectedItem(new Item<>("0", ""));
+    }
 
     private void generateDocument() {
         int selection = 0;
@@ -112,6 +136,9 @@ public class ULPLetterDialog extends javax.swing.JDialog {
             selection = Integer.parseInt(item.getValue().toString());
         } else if (!agendaComboBox.getSelectedItem().toString().trim().equals("")) {
             Item item = (Item) agendaComboBox.getSelectedItem();
+            selection = Integer.parseInt(item.getValue().toString());
+        } else if (!investigatorComboBox.getSelectedItem().toString().trim().equals("")) {
+            Item item = (Item) investigatorComboBox.getSelectedItem();
             selection = Integer.parseInt(item.getValue().toString());
         }
 
@@ -140,6 +167,8 @@ public class ULPLetterDialog extends javax.swing.JDialog {
         agendaComboBox = new javax.swing.JComboBox();
         generateButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
+        investigatorComboBox = new javax.swing.JComboBox();
+        jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -168,6 +197,8 @@ public class ULPLetterDialog extends javax.swing.JDialog {
             }
         });
 
+        jLabel6.setText("Investigator Reports:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -187,6 +218,12 @@ public class ULPLetterDialog extends javax.swing.JDialog {
                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(12, 12, 12))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(investigatorComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -205,7 +242,11 @@ public class ULPLetterDialog extends javax.swing.JDialog {
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(agendaComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(investigatorComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(generateButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(cancelButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -228,10 +269,12 @@ public class ULPLetterDialog extends javax.swing.JDialog {
     private javax.swing.JButton cancelButton;
     private javax.swing.JComboBox directiveComboBox;
     private javax.swing.JButton generateButton;
+    private javax.swing.JComboBox investigatorComboBox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JComboBox letterComboBox;
     // End of variables declaration//GEN-END:variables
 }

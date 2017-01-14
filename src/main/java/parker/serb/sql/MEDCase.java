@@ -2111,8 +2111,7 @@ public class MEDCase {
         }
         return firstCase;
     }
-    
-    
+        
     public static List<String> getSettleCaseYears() {
         List<String> yearList = new ArrayList<>();
         
@@ -2373,7 +2372,7 @@ public class MEDCase {
                 med.caseType = rs.getString("caseType");
                 med.caseMonth = rs.getString("caseMonth");
                 med.caseNumber = rs.getString("caseNumber");
-                med.note = rs.getString("note");
+                med.note = rs.getString("note") == null ? "" : rs.getString("note");
                 med.fileDate = rs.getTimestamp("fileDate");
                 med.concilList1OrderDate = rs.getTimestamp("concilList1OrderDate");
                 med.concilList1SelectionDueDate = rs.getTimestamp("concilList1SelectionDueDate");
@@ -2383,10 +2382,10 @@ public class MEDCase {
                 med.concilList1Name4 = rs.getString("concilList1Name4") == null ? "" : rs.getString("concilList1Name4");
                 med.concilList1Name5 = rs.getString("concilList1Name5") == null ? "" : rs.getString("concilList1Name5");
                 med.concilAppointmentDate = rs.getTimestamp("concilAppointmentDate");
-                med.concilType = rs.getString("concilType");
-                med.concilSelection = rs.getString("concilSelection");
-                med.concilReplacement = rs.getString("concilReplacement");
-                med.concilOriginalConciliator = rs.getString("concilOriginalConciliator");
+                med.concilType = rs.getString("concilType") == null ? "" : rs.getString("concilType");
+                med.concilSelection = rs.getString("concilSelection") == null ? "" : rs.getString("concilSelection");
+                med.concilReplacement = rs.getString("concilReplacement") == null ? "" : rs.getString("concilReplacement");
+                med.concilOriginalConciliator = rs.getString("concilOriginalConciliator") == null ? "" : rs.getString("concilOriginalConciliator");
                 med.concilOriginalConcilDate = rs.getTimestamp("concilOriginalConcilDate");
                 med.concilList2OrderDate = rs.getTimestamp("concilList2OrderDate");
                 med.concilList2SelectionDueDate = rs.getTimestamp("concilList2SelectionDueDate");
@@ -2403,10 +2402,10 @@ public class MEDCase {
                 med.FFList1Name4 = rs.getString("FFList1Name4") == null ? "" : rs.getString("FFList1Name4");
                 med.FFList1Name5 = rs.getString("FFList1Name5") == null ? "" : rs.getString("FFList1Name5");
                 med.FFAppointmentDate = rs.getTimestamp("FFAppointmentDate");
-                med.FFType = rs.getString("FFType");
-                med.FFSelection = rs.getString("FFSelection");
-                med.FFReplacement = rs.getString("FFReplacement");
-                med.FFOriginalFactFinder = rs.getString("FFOriginalFactFinder");
+                med.FFType = rs.getString("FFType") == null ? "" : rs.getString("FFType");
+                med.FFSelection = rs.getString("FFSelection") == null ? "" : rs.getString("FFSelection");
+                med.FFReplacement = rs.getString("FFReplacement") == null ? "" : rs.getString("FFReplacement");
+                med.FFOriginalFactFinder = rs.getString("FFOriginalFactFinder") == null ? "" : rs.getString("FFOriginalFactFinder");
                 med.FFOriginalFactFinderDate = rs.getTimestamp("FFOriginalFactFinderDate");
                 med.asAgreedToByParties = rs.getBoolean("asAgreedToByParties");
                 med.FFList2OrderDate = rs.getTimestamp("FFList2OrderDate");
@@ -2416,31 +2415,31 @@ public class MEDCase {
                 med.FFList2Name3 = rs.getString("FFList2Name3") == null ? "" : rs.getString("FFList2Name3");
                 med.FFList2Name4 = rs.getString("FFList2Name4") == null ? "" : rs.getString("FFList2Name4");
                 med.FFList2Name5 = rs.getString("FFList2Name5") == null ? "" : rs.getString("FFList2Name5");
-                med.FFEmployerType = rs.getString("FFEmployerType");
-                med.FFEmployeeType = rs.getString("FFEmployeeType");
+                med.FFEmployerType = rs.getString("FFEmployerType") == null ? "" : rs.getString("FFEmployerType");
+                med.FFEmployeeType = rs.getString("FFEmployeeType") == null ? "" : rs.getString("FFEmployeeType");
                 med.FFReportIssueDate = rs.getTimestamp("FFReportIssueDate");
                 med.FFMediatedSettlement = rs.getBoolean("FFMediatedSettlement");
-                med.FFAcceptedBy = rs.getString("FFAcceptedBy");
-                med.FFDeemedAcceptedBy = rs.getString("FFDeemedAcceptedBy");
-                med.FFRejectedBy = rs.getString("FFRejectedBy");
-                med.FFOverallResult = rs.getString("FFOverallResult");
-                med.FFNote = rs.getString("FFNote");
-                med.employerIDNumber = rs.getString("employerIDNumber");
-                med.bargainingUnitNumber = rs.getString("bargainingUnitNumber");
-                med.approxNumberOfEmployees = rs.getString("approxNumberOfEmployees");
-                med.duplicateCaseNumber = rs.getString("duplicateCaseNumber");
-                med.relatedCaseNumber = rs.getString("relatedCaseNumber");
-                med.negotiationType = rs.getString("negotiationType");
+                med.FFAcceptedBy = rs.getString("FFAcceptedBy") == null ? "" : rs.getString("FFAcceptedBy");
+                med.FFDeemedAcceptedBy = rs.getString("FFDeemedAcceptedBy") == null ? "" : rs.getString("FFDeemedAcceptedBy");
+                med.FFRejectedBy = rs.getString("FFRejectedBy") == null ? "" : rs.getString("FFRejectedBy");
+                med.FFOverallResult = rs.getString("FFOverallResult") == null ? "" : rs.getString("FFOverallResult");
+                med.FFNote = rs.getString("FFNote") == null ? "" : rs.getString("FFNote");
+                med.employerIDNumber = rs.getString("employerIDNumber") == null ? "" : rs.getString("employerIDNumber");
+                med.bargainingUnitNumber = rs.getString("bargainingUnitNumber") == null ? "" : rs.getString("bargainingUnitNumber");
+                med.approxNumberOfEmployees = rs.getString("approxNumberOfEmployees") == null ? "" : rs.getString("approxNumberOfEmployees");
+                med.duplicateCaseNumber = rs.getString("duplicateCaseNumber") == null ? "" : rs.getString("duplicateCaseNumber");
+                med.relatedCaseNumber = rs.getString("relatedCaseNumber") == null ? "" : rs.getString("relatedCaseNumber");
+                med.negotiationType = rs.getString("negotiationType") == null ? "" : rs.getString("negotiationType");
                 med.expirationDate = rs.getTimestamp("expirationDate");
-                med.NTNFiledBy = rs.getString("NTNFiledBy");
-                med.negotiationPeriod = rs.getString("negotiationPeriod");
+                med.NTNFiledBy = rs.getString("NTNFiledBy") == null ? "" : rs.getString("NTNFiledBy");
+                med.negotiationPeriod = rs.getString("negotiationPeriod") == null ? "" : rs.getString("negotiationPeriod");
                 med.multiunitBargainingRequested = rs.getBoolean("multiunitBargainingRequested");
                 med.mediatorAppointedDate = rs.getTimestamp("mediatorAppointedDate");
                 med.mediatorReplacement = rs.getBoolean("mediatorReplacement");
-                med.stateMediatorAppointedID = rs.getString("stateMediatorAppointedID");
-                med.FMCSMediatorAppointedID = rs.getString("FMCSMediatorAppointedID");
+                med.stateMediatorAppointedID = rs.getString("stateMediatorAppointedID") == null ? "0" : rs.getString("stateMediatorAppointedID");
+                med.FMCSMediatorAppointedID = rs.getString("FMCSMediatorAppointedID") == null ? "0" : rs.getString("FMCSMediatorAppointedID");
                 med.settlementDate = rs.getTimestamp("settlementDate");
-                med.caseStatus = rs.getString("caseStatus");
+                med.caseStatus = rs.getString("caseStatus") == null ? "" : rs.getString("caseStatus");
                 med.sendToBoardToClose = rs.getBoolean("sendToBoardToClose");
                 med.boardFinalDate = rs.getTimestamp("boardFinalDate");
                 med.retentionTicklerDate = rs.getTimestamp("retentionTicklerDate");
@@ -2453,8 +2452,8 @@ public class MEDCase {
                 med.motion = rs.getBoolean("motion");
                 med.dismissed = rs.getBoolean("dismissed");
                 med.strikeFileDate = rs.getTimestamp("strikeFileDate");
-                med.description = rs.getString("description");
-                med.unitSize = rs.getString("unitSize");
+                med.description = rs.getString("unitDescription") == null ? "" : rs.getString("unitDescription");
+                med.unitSize = rs.getString("unitSize") == null ? "" : rs.getString("unitSize");
                 med.unauthorizedStrike = rs.getBoolean("unauthorizedStrike");
                 med.noticeOfIntentToStrikeOnly = rs.getBoolean("noticeOfIntentToStrikeOnly");
                 med.intendedDateStrike = rs.getTimestamp("intendedDateStrike");
@@ -2462,13 +2461,13 @@ public class MEDCase {
                 med.intendedDatePicket = rs.getTimestamp("intendedDatePicket");
                 med.informational = rs.getBoolean("informational");
                 med.noticeOfIntentToStrikeAndPicket = rs.getBoolean("noticeOfIntentToStrikeAndPicket");
-                med.strikeOccured = rs.getString("strikeOccured");
-                med.strikeStatus = rs.getString("strikeStatus");
+                med.strikeOccured = rs.getString("strikeOccured") == null ? "" : rs.getString("strikeOccured");
+                med.strikeStatus = rs.getString("strikeStatus") == null ? "" : rs.getString("strikeStatus");
                 med.strikeBegan = rs.getTimestamp("strikeBegan");
                 med.strikeEnded = rs.getTimestamp("strikeEnded");
-                med.totalNumberOfDays = rs.getString("totalNumberOfDays");
-                med.strikeMediatorAppointedID = rs.getString("strikeMediatorAppointedID");
-                med.strikeNotes = rs.getString("strikeNote");
+                med.totalNumberOfDays = rs.getString("totalNumberOfDays") == null ? "" : rs.getString("totalNumberOfDays");
+                med.strikeMediatorAppointedID = rs.getString("strikeMediatorAppointedID") == null ? "" : rs.getString("strikeMediatorAppointedID");
+                med.strikeNotes = rs.getString("strikeNote") == null ? "" : rs.getString("strikeNote");
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);

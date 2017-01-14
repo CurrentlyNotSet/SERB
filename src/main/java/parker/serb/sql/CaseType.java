@@ -138,7 +138,7 @@ public class CaseType {
         return activityList;
     }
     
-    public static List<CaseType> loadAllStatusTypes(String[] param) {
+    public static List<CaseType> loadAllCaseTypes(String[] param) {
         List<CaseType> list = new ArrayList<>();
 
         Statement stmt = null;
@@ -179,7 +179,7 @@ public class CaseType {
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                loadAllStatusTypes(param);
+                loadAllCaseTypes(param);
             } 
         } finally {
             DbUtils.closeQuietly(stmt);

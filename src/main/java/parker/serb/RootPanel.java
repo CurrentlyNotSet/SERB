@@ -27,6 +27,7 @@ import parker.serb.CSC.CSCLetterDialog;
 import parker.serb.CSC.CSCRootPanel;
 import parker.serb.Hearing.HearingHeaderPanel;
 import parker.serb.Hearing.HearingRootPanel;
+import parker.serb.Hearing.HearingsLetterDialog;
 import parker.serb.MED.MEDBulkHandleCases;
 import parker.serb.MED.MEDHeaderPanel;
 import parker.serb.MED.MEDLetterDialog;
@@ -764,7 +765,7 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton4.setMinimumSize(dim);
                 jButton4.setMaximumSize(dim);
                 jButton4.setVisible(false);
-                jButton4.setText("Single Letter");
+                jButton4.setText("Letter");
                 
                 jButton5.setSize(dim);
                 jButton5.setMinimumSize(dim);
@@ -1843,6 +1844,9 @@ public class RootPanel extends javax.swing.JFrame {
             case "Civil Service Commission":
                 Audit.addAuditEntry("Clicked CSC Letter Button");
                 new CSCLetterDialog((JFrame) this.getRootPane().getParent(), true);
+                break;
+            case "Hearings":
+                new HearingsLetterDialog((JFrame) this.getRootPane().getParent(), true);
                 break;
             default:
                 break;
