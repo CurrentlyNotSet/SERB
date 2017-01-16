@@ -6,6 +6,7 @@
 package parker.serb.activity;
 
 import parker.serb.sql.Activity;
+import parker.serb.sql.Audit;
 
 /**
  *
@@ -120,11 +121,13 @@ public class AddActivtyForSMDSDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        Audit.addAuditEntry("Added SMDS Activty Entry: " + jComboBox1.getSelectedItem().toString() + " " + jTextArea1.getText().trim());
         Activity.addActivty(jComboBox1.getSelectedItem().toString() + " " + jTextArea1.getText().trim(), null);
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        Audit.addAuditEntry("Canceled Adding SMDS Activty Entry");
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 

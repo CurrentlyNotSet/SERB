@@ -20,6 +20,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
+import parker.serb.sql.Audit;
 import parker.serb.sql.CMDSCaseSearchData;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.MEDCaseSearchData;
@@ -91,6 +92,7 @@ public class PartiesPanel extends javax.swing.JPanel {
 
             @Override
             public void insertUpdate(DocumentEvent e) {
+                Audit.addAuditEntry("Searched Parties Search: " + jTextField1.getText().trim());
                 if(Global.activeSection.equalsIgnoreCase("ORG")) {
                     loadORGPartySearch(jTextField1.getText().trim());
                 } else if(Global.activeSection.equalsIgnoreCase("Civil Service Commission")) {
@@ -104,6 +106,7 @@ public class PartiesPanel extends javax.swing.JPanel {
 
             @Override
             public void removeUpdate(DocumentEvent e) {
+                Audit.addAuditEntry("Searched Parties Search: " + jTextField1.getText().trim());
                 if(Global.activeSection.equalsIgnoreCase("ORG")) {
                     loadORGPartySearch(jTextField1.getText().trim());
                 } else if(Global.activeSection.equalsIgnoreCase("Civil Service Commission")) {
@@ -117,6 +120,7 @@ public class PartiesPanel extends javax.swing.JPanel {
 
             @Override
             public void changedUpdate(DocumentEvent e) {
+                Audit.addAuditEntry("Searched Parties Search: " + jTextField1.getText().trim());
                 if(Global.activeSection.equalsIgnoreCase("ORG")) {
                     loadORGPartySearch(jTextField1.getText().trim());
                 } else if(Global.activeSection.equalsIgnoreCase("Civil Service Commission")) {
@@ -137,12 +141,14 @@ public class PartiesPanel extends javax.swing.JPanel {
                     if(jTable1.getSelectedColumn() == 5 && e.getClickCount() == 2
                             && !jTable1.getValueAt(jTable1.getSelectedRow(), 5).toString().equals("")) {
                         try {
+                            Audit.addAuditEntry("Generated external email to " + jTable1.getValueAt(jTable1.getSelectedRow(), 5).toString().replace(" ", ""));
                             Desktop.getDesktop().mail(new URI("mailto:" + jTable1.getValueAt(jTable1.getSelectedRow(), 5).toString().replace(" ", "") + "?bcc=" + Global.activeUser.emailAddress));
                         } catch (IOException | URISyntaxException ex) {
                             SlackNotification.sendNotification(ex);
                         }
                     } else {
                         if(!jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().equals("")) {
+                            Audit.addAuditEntry("Viewing detailed information for Party: " + jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString());
                             new ViewUpdateCasePartyPanel(Global.root, true, jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString());
                             if(Global.activeSection.equalsIgnoreCase("ORG")) {
                                 loadORGParties();
@@ -153,7 +159,6 @@ public class PartiesPanel extends javax.swing.JPanel {
                             } else if(Global.activeSection.equalsIgnoreCase("Hearings")) {
                                 loadHearingParties();
                                 loadHearingsPartySearch(jTextField1.getText().trim());
-                                //updateHeader
                             } else {
                                 loadParties();
                                 loadPartySearch(jTextField1.getText().trim());
@@ -3433,11 +3438,7 @@ public class PartiesPanel extends javax.swing.JPanel {
 
     public JTable getjTable1() {
         return jTable1;
-    }
-    
-    
-    
-    
+    }    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -3523,6 +3524,7 @@ public class PartiesPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        Audit.addAuditEntry("Clear Parties Panel Button Clicked");
         jTextField1.setText("");
     }//GEN-LAST:event_jButton1ActionPerformed
 
