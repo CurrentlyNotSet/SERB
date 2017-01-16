@@ -57,8 +57,6 @@ public class Password {
     
     public static String generateTempPassword() {
         String temp = RandomStringUtils.randomAlphanumeric(8).toUpperCase();
-        //Remove this line before shipping
-        System.out.println("Password: " + temp);
         return temp;
     }
 }

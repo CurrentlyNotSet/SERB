@@ -357,8 +357,6 @@ public class REPElectionPanel extends javax.swing.JPanel {
     private void loadWhoPrevailed() {
         List comps = CaseParty.loadPartiesByCase();
         
-        System.out.println(comps.size());
-        
         whoPrevailedComboBox.removeAllItems();
         resultsWhoPrevailed.removeAllItems();
         

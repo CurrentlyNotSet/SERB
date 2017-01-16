@@ -811,11 +811,10 @@ public class MEDConciliationPanel extends javax.swing.JPanel {
     private void conciliation1ListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_conciliation1ListMouseClicked
         if(conciliation1List.isEnabled() && conciliation1List.getSelectedIndex() >= 0) {
             if(evt.getClickCount() == 2) {
-                System.out.println("MORE INFO: " + concilList1Model.get(conciliation1List.getSelectedIndex()));
+//                System.out.println("MORE INFO: " + concilList1Model.get(conciliation1List.getSelectedIndex()));
             } else if(evt.getButton() == MouseEvent.BUTTON3) {
                 MEDRemoveConciliatorDialog remove = new MEDRemoveConciliatorDialog(Global.root, true, concilList1Model.get(conciliation1List.getSelectedIndex()).toString());
                 if(remove.removeConcil) {
-                    System.out.println("REMOVE: " + concilList1Model.get(conciliation1List.getSelectedIndex()));
                     replaceConcilAfterRemoval(conciliation1List.getSelectedIndex(), "list1");
                     conciliation1List.clearSelection();
                 }
@@ -827,11 +826,10 @@ public class MEDConciliationPanel extends javax.swing.JPanel {
     private void conciliation2ListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_conciliation2ListMouseClicked
         if(conciliation2List.isEnabled() && conciliation2List.getSelectedIndex() >= 0) {
             if(evt.getClickCount() == 2) {
-                System.out.println("MORE INFO: " + concilList2Model.get(conciliation2List.getSelectedIndex()));
+//                System.out.println("MORE INFO: " + concilList2Model.get(conciliation2List.getSelectedIndex()));
             } else if(evt.getButton() == MouseEvent.BUTTON3) {
                 MEDRemoveConciliatorDialog remove = new MEDRemoveConciliatorDialog(Global.root, true, concilList2Model.get(conciliation2List.getSelectedIndex()).toString());
                 if(remove.removeConcil) {
-                    System.out.println("REMOVE: " + concilList2Model.get(conciliation2List.getSelectedIndex()));
                     replaceConcilAfterRemoval(conciliation2List.getSelectedIndex(), "list2");
                     conciliation2List.clearSelection();
                 }
