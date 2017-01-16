@@ -12,6 +12,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
+import parker.serb.sql.Audit;
 import parker.serb.sql.ULPCaseSearchData;
 
 /**
@@ -200,6 +201,14 @@ public class ULPCaseSearch extends javax.swing.JDialog {
     
     private void limitCaseList() {
         model.setRowCount(0);
+        
+        Audit.addAuditEntry("Searched ULP Case Search"
+            + " (Year: " + caseYearTextBox.getText() + ","
+            + " Type: " + caseTypeTextBox.getText() + ","
+            + " Month: " + caseMonthTextBox.getText() + ","
+            + " Number: " + caseNumberTextBox.getText()
+            + " Information: " + searchTextBox.getText() + ")"
+        );
         
         for (int i = 0; i<tableData.length; i++)
         {
@@ -418,10 +427,12 @@ public class ULPCaseSearch extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        Audit.addAuditEntry("Closed ULP Case Search Dialog");
         setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        Audit.addAuditEntry("Clicked Refresh Button on ULP Case Search Dialog");
         jButton2.setEnabled(false);
         model.setNumRows(0);
         jLayeredPane1.moveToFront(jPanel1);

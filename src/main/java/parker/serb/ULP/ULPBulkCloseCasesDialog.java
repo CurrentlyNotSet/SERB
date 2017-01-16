@@ -132,6 +132,7 @@ public class ULPBulkCloseCasesDialog extends javax.swing.JFrame {
                                 
                 ULPCase.updateClosedCases(caseNumberID);
                 Activity.addActivtyFromDocket("Case Closed", "", caseNumber, "", "", "", "", false, false);
+                Audit.addAuditEntry("Closed Case: " + caseNumber + " from ULP Bulk Case Close");
             }
         }
     }
@@ -329,10 +330,12 @@ public class ULPBulkCloseCasesDialog extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void printButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printButtonActionPerformed
+        Audit.addAuditEntry("Printed ULP Bulk Close Processed Records");
         printList();
     }//GEN-LAST:event_printButtonActionPerformed
 
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
+        Audit.addAuditEntry("Closed ULP Bulk Case Close");
         this.dispose();
     }//GEN-LAST:event_closeButtonActionPerformed
 

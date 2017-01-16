@@ -8,6 +8,7 @@ package parker.serb.ULP;
 import java.awt.Color;
 import java.util.List;
 import parker.serb.Global;
+import parker.serb.sql.Audit;
 import parker.serb.sql.ULPCase;
 import parker.serb.sql.ULPRecommendation;
 
@@ -82,6 +83,7 @@ public class ULPRecommendationPanel extends javax.swing.JPanel {
     }
     
     public void saveInformation() {
+        Audit.addAuditEntry("Updated ULP Recommendation");
         ULPCase.updateRecommendation(jTextArea1.getText(), orginalRec);
     }
 
@@ -154,6 +156,7 @@ public class ULPRecommendationPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void addRecButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRecButtonActionPerformed
+        Audit.addAuditEntry("Added " + recommendationComboBox.getSelectedItem().toString().substring(recommendationComboBox.getSelectedItem().toString().indexOf("-")+1).trim() + " to ULP Recommendation");
         jTextArea1.setText(recommendationComboBox.getSelectedItem().toString().substring(recommendationComboBox.getSelectedItem().toString().indexOf("-")+1).trim());
     }//GEN-LAST:event_addRecButtonActionPerformed
 

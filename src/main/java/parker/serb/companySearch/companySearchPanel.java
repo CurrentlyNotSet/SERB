@@ -10,6 +10,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
+import parker.serb.sql.Audit;
 import parker.serb.sql.EmployerCaseSearchData;
 
 /**
@@ -117,6 +118,7 @@ public class companySearchPanel extends javax.swing.JPanel {
     
     private void limitCaseList() {
         model.setRowCount(0);
+        Audit.addAuditEntry("Searched Employer Search: " + employerSearchTerm.getText());
         
         for (int i = 0; i<tableData.length; i++)
         {
@@ -141,15 +143,10 @@ public class companySearchPanel extends javax.swing.JPanel {
         }
         employerTable.setModel(model);
     }
-    
-    
 
     public DefaultTableModel getModel() {
         return model;
     }
-    
-    
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -173,12 +170,6 @@ public class companySearchPanel extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
 
         jLabel1.setText("Search:");
-
-        employerSearchTerm.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                employerSearchTermActionPerformed(evt);
-            }
-        });
 
         refreshButton.setText("Refresh");
         refreshButton.addActionListener(new java.awt.event.ActionListener() {
@@ -298,17 +289,14 @@ public class companySearchPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshButtonActionPerformed
+        Audit.addAuditEntry("Clicked Refresh Employer Search Button");
         model.setNumRows(0);
         jLayeredPane1.moveToFront(jPanel1);
         activity();
-        
     }//GEN-LAST:event_refreshButtonActionPerformed
 
-    private void employerSearchTermActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employerSearchTermActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_employerSearchTermActionPerformed
-
     private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
+        Audit.addAuditEntry("Clicked Clear Employer Search Button");
         statusComboBox.setSelectedItem("All");
         employerSearchTerm.setText("");
     }//GEN-LAST:event_clearButtonActionPerformed
@@ -316,7 +304,7 @@ public class companySearchPanel extends javax.swing.JPanel {
     private void employerTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_employerTableMouseClicked
         if(evt.getClickCount() == 2) {
             String caseNumber = employerTable.getValueAt(employerTable.getSelectedRow(), 0).toString();
-            
+            Audit.addAuditEntry("Clicked " + caseNumber + " on Employer Search Table");
             switch(caseNumber.split("-")[1]) {
                 case "MED":
                 case "STK":
@@ -341,6 +329,7 @@ public class companySearchPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_employerTableMouseClicked
 
     private void statusComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statusComboBoxActionPerformed
+        Audit.addAuditEntry("Changed Status Combobox to " + statusComboBox.getSelectedItem().toString() + " on Employer Search");
         limitCaseList();    
     }//GEN-LAST:event_statusComboBoxActionPerformed
 

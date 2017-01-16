@@ -59,9 +59,6 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="employerSearchTerm">
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="employerSearchTermActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="refreshButton">
       <Properties>

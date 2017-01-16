@@ -59,7 +59,6 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
                         Global.root.getuLPRootPanel1().getActivityPanel1().loadAllActivity();
                         Global.root.getjButton9().setVisible(true);
                     }
-                        
                     Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
                 }
             }
@@ -377,6 +376,7 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
     private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
         if(SwingUtilities.isRightMouseButton(evt) || evt.getButton() == MouseEvent.BUTTON3) {
             if(search == null) {
+                Audit.addAuditEntry("Opened ULP Case Search Dialog");
                 search = new ULPCaseSearch((JFrame) getRootPane().getParent(), true);
             } else {
                 search.setVisible(true);
