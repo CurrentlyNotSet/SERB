@@ -87,10 +87,10 @@ public class RootPanel extends javax.swing.JFrame {
         enableTabs();
         setDefaultTab();
         Global.activeSection = jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex());
+        User.updateLogInInformation();
         setHeaderCard();
         enableButtons();
         letterQueueThread();
-        User.updateLogInInformation();
         Global.activeUser.activeLogIn = true;
         setLocationRelativeTo(null);
         setVisible(true);        
