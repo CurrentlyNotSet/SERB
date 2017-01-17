@@ -5,18 +5,16 @@
  */
 package parker.serb.report;
 
-import java.util.List;
-import javax.swing.DefaultComboBoxModel;
+import parker.serb.Global;
 import parker.serb.sql.SMDSDocuments;
-import parker.serb.sql.User;
 import parker.serb.util.Item;
-import parker.serb.util.StringUtilities;
+import parker.serb.util.NumberFormatService;
 
 /**
  *
  * @author User
  */
-public class RequestedInfoComboBoxStringPanel extends javax.swing.JDialog {
+public class RequestedInfoMonthYearPanel extends javax.swing.JDialog {
 
     SMDSDocuments report;
 
@@ -26,71 +24,34 @@ public class RequestedInfoComboBoxStringPanel extends javax.swing.JDialog {
      * @param parent
      * @param modal
      * @param reportPassed
-     * @param IDType
      */
-    public RequestedInfoComboBoxStringPanel(java.awt.Frame parent, boolean modal, SMDSDocuments reportPassed, String IDType) {
+    public RequestedInfoMonthYearPanel(java.awt.Frame parent, boolean modal, SMDSDocuments reportPassed) {
         super(parent, modal);
         report = reportPassed;
         initComponents();
-        setActive(report.fileName, IDType);
+        setActive(report.fileName);
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }
 
-    private void setActive(String reportName, String IDType) {
+    private void setActive(String reportName) {
         reportLabel.setText(reportName);
-        switch (IDType) {
-            case "ActivityType, Year":
-                comboBoxLabel.setText("Activity Type: ");
-                TextFieldLabel.setText("Year: ");
-                break;
-            case "InvestigatorID, Year":
-                comboBoxLabel.setText("Investigator: ");
-                TextFieldLabel.setText("Year: ");
-                break;
-            default:
-                break;
-        }
-        loadCombobox(IDType);
+        comboBoxLabel.setText("Month: ");
+        TextFieldLabel.setText("Year: ");
+        loadCombobox();
         generateButton();
     }
 
-    private void loadCombobox(String IDType) {
-        List<User> userList = null;
-        
-        DefaultComboBoxModel dt = new DefaultComboBoxModel();
-        ComboBox.setModel(dt);
-        ComboBox.addItem(new Item<>("0", ""));
-
-        switch (IDType) {
-            case "ActivityType, Year":
-                userList = User.getEnabledUsers();
-                for (User item : userList) {
-                    ComboBox.addItem(new Item<>(
-                            String.valueOf(item.id),
-                            StringUtilities.buildFullName(item.firstName, item.middleInitial, item.lastName))
-                    );
-                }
-            case "InvestigatorID, Year":
-                userList = User.getEnabledInvestigators();
-
-                for (User item : userList) {
-                    if (item.investigator) {
-                        ComboBox.addItem(new Item<>(
-                                String.valueOf(item.id),
-                                StringUtilities.buildFullName(item.firstName, item.middleInitial, item.lastName))
-                        );
-                    }
-                }
-                break;
-            default:
-                break;
+    private void loadCombobox() {
+        ComboBox.addItem("");
+        for (String month : Global.MONTH_LIST) {
+            ComboBox.addItem(month);
         }
-        ComboBox.setSelectedItem(new Item<>("0", ""));
+        ComboBox.setSelectedItem("");
     }
-    
+
     private void generateButton() {
-        if (TextField.getText().trim().equals("") || ComboBox.getSelectedIndex() < 1) {
+        if (TextField.getText().trim().equals("") || ComboBox.getSelectedItem().toString().equals("")) {
             GenerateReportButton.setEnabled(false);
         } else {
             GenerateReportButton.setEnabled(true);
@@ -211,8 +172,7 @@ public class RequestedInfoComboBoxStringPanel extends javax.swing.JDialog {
     }//GEN-LAST:event_CancelButtonActionPerformed
 
     private void GenerateReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GenerateReportButtonActionPerformed
-        Item item = (Item) ComboBox.getSelectedItem();
-        GenerateReport.generateIDStringReport(item.getValue().toString(), TextField.getText().trim(), report);
+        GenerateReport.generateMonthYearReport(NumberFormatService.monthNumber(ComboBox.getSelectedItem().toString()), TextField.getText().trim(), report);
     }//GEN-LAST:event_GenerateReportButtonActionPerformed
 
     private void ComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxActionPerformed

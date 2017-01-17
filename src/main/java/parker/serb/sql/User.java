@@ -395,6 +395,62 @@ public class User {
         return activeUsers;
     }
     
+    public static List<User> getEnabledInvestigators() {
+        List<User> activeUsers = new ArrayList<>();
+        
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+            
+            String sql = "Select * from Users where active = 1 and investigator = true";
+            
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            
+            ResultSet users = preparedStatement.executeQuery();
+            
+            while(users.next()) {
+                User user = new User();
+                user.id = users.getInt("id");
+                user.active = users.getBoolean("active");
+                user.firstName = users.getString("firstName");
+                user.middleInitial = users.getString("middleInitial");
+                user.lastName = users.getString("lastName");
+                user.workPhone = users.getString("workPhone");
+                user.emailAddress = users.getString("emailAddress");
+                user.username = users.getString("username");
+                user.passwordSalt = users.getLong("passwordSalt");
+                user.password = users.getString("password");
+                user.lastLogInDateTime = users.getTimestamp("lastLogInDateTime");
+                user.lastLogInPCName = users.getString("lastLogInPCName");
+                user.activeLogIn = users.getBoolean("activeLogIn");
+                user.passwordReset = users.getBoolean("passwordReset");
+                user.applicationVersion = users.getString("applicationVersion");
+                user.defaultSection = users.getString("defaultSection");
+                user.ULPCaseWorker = users.getBoolean("ULPCaseWorker");
+                user.REPCaseWorker = users.getBoolean("REPCaseWorker");
+                user.ULPDocketing = users.getBoolean("ULPDocketing");
+                user.REPDocketing = users.getBoolean("REPDocketing");
+                user.initials = users.getString("initials");
+                user.investigator = users.getBoolean("investigator");
+                user.jobTitle = users.getString("jobTitle");
+                user.lastTab = users.getString("lastTab") == null ? "" : users.getString("lastTab");
+                user.lastCaseYear = users.getString("lastCaseYear");
+                user.lastCaseType = users.getString("lastCaseType");
+                user.lastCaseMonth = users.getString("lastCaseMonth");
+                user.lastCaseNumber = users.getString("lastCaseNumber");
+                activeUsers.add(user);
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getEnabledUsers();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return activeUsers;
+    }
+    
     public static List loadSectionDropDowns(String section) {
         String sectionColumnName = "";
         

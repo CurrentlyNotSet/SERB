@@ -81,6 +81,13 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         } else if (CMDSdocToGenerate != null) {
             documentLabel.setText("Document: " + CMDSdocToGenerate.LetterName);
         }
+        
+        if (Global.activeSection.equals("ORG")) {
+            orgCase = ORGCase.loadORGInformation();
+        } else if (Global.activeSection.equals("Civil Service Commission")) {
+            cscCase = CSCCase.loadCSCInformation();
+        }
+        
         setColumnWidth();
         loadPartyTable();
         loadActivityDocumentsTable();
@@ -174,11 +181,13 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         // SET TO/CC Listener
         destinationComboBox.addItemListener((ItemEvent e) -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                if (e.getItem().equals("") && personTable.getSelectedColumn() == 2) {
-                    personTable.setValueAt("", personTable.getSelectedRow(), 1);
-                }
-                if (personTable.getValueAt(personTable.getSelectedRow(), 1).equals("")) {
-                    personTable.setValueAt("", personTable.getSelectedRow(), 2);
+                if (personTable.getSelectedRow() > -1){
+                    if (e.getItem().equals("") && personTable.getSelectedColumn() == 2) {
+                        personTable.setValueAt("", personTable.getSelectedRow(), 1);
+                    }
+                    if (personTable.getValueAt(personTable.getSelectedRow(), 1).equals("")) {
+                        personTable.setValueAt("", personTable.getSelectedRow(), 2);
+                    }
                 }
             }
         });
@@ -187,8 +196,6 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         
         if (orgCase != null){
             partyList = CaseParty.loadORGPartiesByCase();
-            
-            orgCase = ORGCase.loadORGInformation();
             
             String toCC = "";
             String emailPostal = "";
@@ -203,8 +210,6 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
             });
         } else if (cscCase != null){
             partyList = CaseParty.loadORGPartiesByCase();
-            
-            cscCase = CSCCase.loadCSCInformation();
             
             String toCC = "";
             String emailPostal = "";
@@ -224,7 +229,8 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         for (CaseParty party : partyList) {
             String toCC = "";
             String emailPostal = "";
-
+            String caseRelation = party.caseRelation;
+            
             if (Global.activeSection.equals("MED")
                     && (party.caseRelation.equals("Employer REP") || party.caseRelation.equals("Employee Organization REP"))) {
                 if (!party.emailAddress.trim().equals("")) {
@@ -235,11 +241,16 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                 toCC = "TO:";
             }
 
+            if (Global.activeSection.equals("Hearings")){
+                caseRelation = party.caseRelation.replace("Charged", "Respondent").replace("Charging", "Intervenor");
+            }
+            
+            
             model.addRow(new Object[]{
                 party.id, // ID
                 toCC, // TO/CC
                 emailPostal, // Email/Postal
-                party.caseRelation,
+                caseRelation,
                 StringUtilities.buildCasePartyName(party), // NAME
                 party.emailAddress
             });
@@ -254,11 +265,12 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         
         switch (Global.activeSection) {
             case "ORG":
-                activtyList = Activity.loadActivityDocumentsByGlobalCaseORG();
-                break;
             case "Civil Service Commission":
                 activtyList = Activity.loadActivityDocumentsByGlobalCaseORG();
                 break;
+            case "Hearings":
+                activtyList = Activity.loadHearingActivity();
+                break;                    
             default:
                 activtyList = Activity.loadActivityDocumentsByGlobalCase();
                 break;
@@ -278,16 +290,18 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         DefaultTableModel model = (DefaultTableModel) additionalDocsTable.getModel();
         model.setRowCount(0);
         List<SMDSDocuments> documentList = null;
+        List<CMDSDocuments> CMDSdocumentList = null;
         List<FactFinder> ffList = null;
 
         switch (Global.activeSection) {
             case "REP":
-                documentList = SMDSDocuments.loadDocumentNamesByTypeAndSection(Global.caseType, "");
+                documentList = SMDSDocuments.loadDocumentNamesByTypeAndSection(Global.activeSection, "");
                 break;
             case "ULP":
-                documentList = SMDSDocuments.loadDocumentNamesByTypeAndSection(Global.caseType, "Quest");
+                documentList = SMDSDocuments.loadDocumentNamesByTypeAndSection(Global.activeSection, "Quest");
                 break;
             case "ORG":
+                documentList = SMDSDocuments.loadDocumentNamesByTypeAndSection(Global.activeSection, "Quest");
                 break;
             case "MED":
                 additionalDocumentsLabel.setText("Fact Finder / Conciliator Bios:");
@@ -301,38 +315,51 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
             case "CMDS":
                 break;
         }
-        if (documentList != null && !Global.activeSection.equals("MED")) {
-            for (SMDSDocuments doc : documentList) {
-                model.addRow(new Object[]{
-                    doc.id,
-                    false,
-                    doc.description,
-                    doc.fileName
-                });
-            }
-        }
 
-        if (ffList != null && Global.activeSection.equals("MED")) {
-            medCaseData = MEDCase.loadEntireCaseInformation();
+        if (!Global.activeSection.equals("CMDS")) {
+            if (documentList != null && !Global.activeSection.equals("MED")) {
+                for (SMDSDocuments doc : documentList) {
+                    boolean selected = false;
 
-            for (FactFinder ff : ffList) {
-                //Format Name
-                String person = StringUtilities.buildFullName(ff.firstName, ff.middleName, ff.lastName);
+                    if (Global.activeSection.equals("ORG")
+                            && SMDSdocToGenerate.fileName.startsWith("Tickler")
+                            && doc.fileName.equals("EOAR.pdf")) {
+                        selected = true;
+                    }
 
-                //check for checkmark
-                boolean selected = false;
-                if (SMDSdocToGenerate.description.contains("Panel") && medCaseData != null) {
-                    selected = setMEDFFConcCheckMark(person);
+                    model.addRow(new Object[]{
+                        doc.id,
+                        selected,
+                        doc.description,
+                        doc.fileName
+                    });
                 }
-
-                //load table
-                model.addRow(new Object[]{
-                    ff.id,
-                    selected,
-                    person,
-                    ff.bioFileName
-                });
             }
+
+            if (ffList != null && Global.activeSection.equals("MED")) {
+                medCaseData = MEDCase.loadEntireCaseInformation();
+
+                for (FactFinder ff : ffList) {
+                    //Format Name
+                    String person = StringUtilities.buildFullName(ff.firstName, ff.middleName, ff.lastName);
+
+                    //check for checkmark
+                    boolean selected = false;
+                    if (SMDSdocToGenerate.description.contains("Panel") && medCaseData != null) {
+                        selected = setMEDFFConcCheckMark(person);
+                    }
+
+                    //load table
+                    model.addRow(new Object[]{
+                        ff.id,
+                        selected,
+                        person,
+                        ff.bioFileName
+                    });
+                }
+            }
+        } else {
+            //For loading CMDS documents
         }
     }
 
@@ -462,11 +489,14 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                 case "Civil Service Commission":
                     FileService.openFileWithORGNumber("CSC", cscCase.cscNumber, docName);
                     break;
+                case "Hearings":
+                    FileService.openHearingCaseFile(docName);
+                    break;
                 default:
                     FileService.openFile(docName);
                     break;
             }
-            
+
             reloadActivity();
         } else {
             WebOptionPane.showMessageDialog(Global.root,
@@ -543,7 +573,6 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
     }
 
     private int insertEmail() {
-        
         String emailBody = "";
         if (Global.activeSection.equals("CMDS")){
             emailBody = CMDSdocToGenerate.emailBody == null ? "" : CMDSdocToGenerate.emailBody;

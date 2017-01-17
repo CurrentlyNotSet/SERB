@@ -12,6 +12,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
+import parker.serb.sql.Audit;
 import parker.serb.sql.CSCCase;
 
 /**
@@ -288,10 +289,12 @@ public class CSCCaseSearch extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        Audit.addAuditEntry("Closed CSC Case Search Dialog");
         setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        Audit.addAuditEntry("Clicked CSC Case Search Clear Button");
         jButton2.setEnabled(false);
         model.setNumRows(0);
         jLayeredPane1.moveToFront(jPanel1);

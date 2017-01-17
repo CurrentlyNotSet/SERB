@@ -309,10 +309,12 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
 
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
         if(updateButton.getText().equals("Update")) {
+            Audit.addAuditEntry("Clicked Update Button for Activity: " + passedID);
             enableInputs(true);
             updateButton.setText("Save");
             closeButton.setText("Cancel");
         } else if(updateButton.getText().equals("Save")) {
+            Audit.addAuditEntry("Clicked Save Button for Activity: " + passedID);
             updateFileName();
             updateAction();
             enableInputs(false);
@@ -324,11 +326,13 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
 
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
         if(closeButton.getText().equals("Close")) {
+            Audit.addAuditEntry("Closed Detailed Activity Dialog");
             dispose();
         } else if(closeButton.getText().equals("Cancel")) {
             CancelUpdate cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
             if(!cancel.isReset()) {
             } else {
+                Audit.addAuditEntry("Canceled Update of Activity " + passedID);
                 loadInformation(passedID);
                 enableInputs(false);
                 updateButton.setText("Update");
@@ -338,6 +342,7 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_closeButtonActionPerformed
 
     private void viewFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewFileButtonActionPerformed
+        Audit.addAuditEntry("Opened File for Activity: " + passedID);
         FileService.openFile(fileName);
     }//GEN-LAST:event_viewFileButtonActionPerformed
 

@@ -42,6 +42,7 @@ public class DocketRootPanel extends javax.swing.JPanel {
     
     List docs = new ArrayList<>();
     ActionListener actionListener;
+    Thread docketThread = null;
     /**
      * Creates new form DocketRootPanel
      */
@@ -65,7 +66,41 @@ public class DocketRootPanel extends javax.swing.JPanel {
         SectionComboBox.addActionListener(actionListener);
         
         SectionComboBox.setSelectedIndex(0);
+        
+        loadDocketListThread();
     }
+    
+    /**
+     * Thread for letter queue count
+     */
+    public void loadDocketListThread(){
+        if(docketThread == null) {
+            docketThread = new Thread() {
+                @Override
+                public void run() {
+                    threadDocketList();
+                }
+            };
+            docketThread.start(); 
+        }
+    }
+
+    private void threadDocketList() {
+        while (true) {
+            try {
+                docs.clear();
+                loadScanData(SectionComboBox.getSelectedItem().toString());
+                loadEmailData(SectionComboBox.getSelectedItem().toString());
+                loadMediaData(SectionComboBox.getSelectedItem().toString());
+                Collections.sort(docs, new CustomComparator());
+                loadTable();
+                Thread.sleep(30000); //milliseconds  (30 sec)
+            } catch (InterruptedException ex) {
+                System.err.println("Thread Interrupted");
+            }
+        }
+    }
+
     
     private void loadScanData(String section) {
         
@@ -95,28 +130,32 @@ public class DocketRootPanel extends javax.swing.JPanel {
     
     private void loadMediaData(String section) {
         try {
-            Files.walk(Paths.get(Global.mediaPath + section)).forEach(filePath -> {
-                try {
-                    if (Files.isRegularFile(filePath) && !Files.isHidden(filePath) && !filePath.startsWith(".DS_")) {
-                        try {
-                            Path file = filePath;
-                            BasicFileAttributes attr = Files.readAttributes(file, BasicFileAttributes.class);
-                            Email docket = new Email();
-                            docket.id = 0;
-                            docket.attachmentCount = "";
-                            docket.receivedDate = new Date(attr.creationTime().toMillis());
-                            docket.emailFrom = "";
-                            docket.emailSubject = file.getFileName().toString();
-                            docket.type = "Media";
-                            docs.add(docket);
-                        } catch (IOException ex) {
-                            SlackNotification.sendNotification(ex);
+            if(Files.exists(Paths.get(Global.mediaPath + section)) == true) {
+                Files.walk(Paths.get(Global.mediaPath + section)).forEach(filePath -> {
+                    try {
+                        if (Files.isRegularFile(filePath) && !Files.isHidden(filePath) && !filePath.startsWith(".DS_")) {
+                            try {
+                                Path file = filePath;
+                                BasicFileAttributes attr = Files.readAttributes(file, BasicFileAttributes.class);
+                                Email docket = new Email();
+                                docket.id = 0;
+                                docket.attachmentCount = "";
+                                docket.receivedDate = new Date(attr.creationTime().toMillis());
+                                docket.emailFrom = "";
+                                docket.emailSubject = file.getFileName().toString();
+                                docket.type = "Media";
+                                docs.add(docket);
+                            } catch (IOException ex) {
+                                SlackNotification.sendNotification(ex);
+                            }
                         }
+                    } catch (IOException ex) {
+                        SlackNotification.sendNotification(ex);
                     }
-                } catch (IOException ex) {
-                    SlackNotification.sendNotification(ex);
-                }
-            });
+                });
+            } else {
+                new File(Global.mediaPath + section).mkdirs();
+            }
         } catch (IOException ex) {
             SlackNotification.sendNotification(ex);
         }

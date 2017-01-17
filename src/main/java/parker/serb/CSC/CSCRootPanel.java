@@ -12,6 +12,7 @@ import parker.serb.activity.ActivityPanel;
 import parker.serb.Global;
 import parker.serb.activity.RemoveActivityEntryDialog;
 import parker.serb.party.PartySearchDialog;
+import parker.serb.sql.Audit;
 import parker.serb.util.CancelUpdate;
 
 /**
@@ -48,6 +49,7 @@ public class CSCRootPanel extends javax.swing.JPanel {
                 setButtons();
                 loadInformation();
                 currentTab = jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex());
+                Audit.addAuditEntry("Navigated to CSC - " + currentTab);
             }
         });
     }
@@ -81,25 +83,20 @@ public class CSCRootPanel extends javax.swing.JPanel {
     private void setButtons() {
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
             case "Activity":
-                System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
                 Global.root.getjButton2().setText("Update");
                 Global.root.getjButton2().setEnabled(false);
-//                Global.root.getjButton9().setVisible(false);
                 break;
             case "Parties":
-                System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
                 Global.root.getjButton2().setText("Add Party");
                 Global.root.getjButton2().setEnabled(true);
                 Global.root.getjButton9().setVisible(true);
                 break;
             case "CSC Information":
-                System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
                 Global.root.getjButton2().setText("Update");
                 Global.root.getjButton2().setEnabled(true);
                 Global.root.getjButton9().setVisible(false);
                 break;
             case "Notes":
-                System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
                 Global.root.getjButton2().setText("Update");
                 Global.root.getjButton2().setEnabled(true);
                 Global.root.getjButton9().setVisible(false);
@@ -133,29 +130,33 @@ public class CSCRootPanel extends javax.swing.JPanel {
     public void cscUpdate(String buttonText) {
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
             case "Activity":
-                activityPanel1.loadAllActivity();
+//                activityPanel1.loadAllActivity();
                 break;
             case "Parties":
+                Audit.addAuditEntry("Clicked CSC Add Party Button");
                 new PartySearchDialog((JFrame) this.getRootPane().getParent(), true);
                 partiesPanel1.loadCSCParties();
                 break;
             case "CSC Information":
                 if(buttonText.equals("Update")) {
+                    Audit.addAuditEntry("Clicked CSC Update CSC Information Button");
                     disableTabs(jTabbedPane1.getSelectedIndex());
                     cSCInformationPanel1.enableUpdate();
                 } else {
+                    Audit.addAuditEntry("Clicked CSC Save CSC Information Button");
                     enableTabs();
                     Global.root.enableTabsAfterSave();
                     Global.root.enableButtonsAfterCancel();
                     cSCInformationPanel1.disableUpdate(true);
-//                    Global.root.getoRGHeaderPanel2().loadUpdatedHeaderInformation();
                 }
                 break;
             case "Notes":
                 if(buttonText.equals("Update")) {
+                    Audit.addAuditEntry("Clicked CSC Update Notes Button");
                     disableTabs(jTabbedPane1.getSelectedIndex());
                     notesPanel2.enableUpdate();
                 } else {
+                    Audit.addAuditEntry("Clicked CSC Save Notes Button");
                     enableTabs();
                     Global.root.enableTabsAfterSave();
                     Global.root.enableButtonsAfterCancel();
@@ -173,6 +174,7 @@ public class CSCRootPanel extends javax.swing.JPanel {
         CancelUpdate cancel;
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
             case "Activity":
+                Audit.addAuditEntry("Clicked CSC Activity Delete Button");
                 new RemoveActivityEntryDialog(
                     Global.root,
                     true,
@@ -185,6 +187,7 @@ public class CSCRootPanel extends javax.swing.JPanel {
                 activityPanel1.loadAllActivity();
                 break;
             case "Parties":
+                Audit.addAuditEntry("Clicked CSC Party Delete Button");
                 partiesPanel1.removeParty();
                 partiesPanel1.loadCSCParties();
                 break;
@@ -192,6 +195,7 @@ public class CSCRootPanel extends javax.swing.JPanel {
                 cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
                 if(!cancel.isReset()) {
                 } else {
+                    Audit.addAuditEntry("Canceled CSC Informtion Update");
                     Global.root.enableButtonsAfterCancel();
                     Global.root.enableTabsAfterSave();
                     enableTabs();
@@ -202,6 +206,7 @@ public class CSCRootPanel extends javax.swing.JPanel {
                 cancel = new CancelUpdate(Global.root, true);
                 if(!cancel.isReset()) {
                 } else {
+                    Audit.addAuditEntry("Canceled CSC Notes Update");
                     Global.root.enableButtonsAfterCancel();
                     Global.root.enableTabsAfterSave();
                     enableTabs();
@@ -219,7 +224,6 @@ public class CSCRootPanel extends javax.swing.JPanel {
         return activityPanel1;
     }
     
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

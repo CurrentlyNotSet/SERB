@@ -6,6 +6,7 @@
 package parker.serb.party;
 
 import parker.serb.sql.Activity;
+import parker.serb.sql.Audit;
 import parker.serb.sql.CaseParty;
 
 
@@ -113,11 +114,13 @@ public class DeletePartyDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        Audit.addAuditEntry("Canceled Party Removal");
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         CaseParty.removePartyFromCase(id);
+        Audit.addAuditEntry("Removed " + name + " (" + partyType + ")");
         Activity.addActivty("Removed " + name + " (" + partyType + ")", null);
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed

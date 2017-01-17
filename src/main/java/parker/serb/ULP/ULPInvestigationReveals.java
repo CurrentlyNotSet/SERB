@@ -7,6 +7,7 @@ package parker.serb.ULP;
 
 import java.awt.Color;
 import parker.serb.Global;
+import parker.serb.sql.Audit;
 import parker.serb.sql.ULPCase;
 
 /**
@@ -49,6 +50,7 @@ public class ULPInvestigationReveals extends javax.swing.JPanel {
     }
     
     public void saveInformation() {
+        Audit.addAuditEntry("Updated ULP Investigation Reveals");
         ULPCase.updateInvestigationReveals(jTextArea1.getText());
     }
 

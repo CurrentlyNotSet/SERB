@@ -250,9 +250,14 @@ public class questionsCMDSPanel extends JDialog {
         answers.setResponseDueDate(responseDueWebDateField == null ? "" : responseDueWebDateField.getText());
         answers.setGenderAppellant(genderAppellantComboBox == null ? "" : genderAppellantComboBox.getSelectedItem().toString().toLowerCase());
         answers.setActionAppealed(actionAppealedTextField == null ? "" : actionAppealedTextField.getText());
-        answers.setMemorandumContra(
-                actionAppealedTextField == null ? "" : (memorandumContraComboBox.getSelectedItem().toString().equals("Did Not file")
+        
+        if (actionAppealedTextField != null){
+                answers.setMemorandumContra(
+                    memorandumContraComboBox == null ? "" : (memorandumContraComboBox.getSelectedItem().toString().equals("Did Not file")
                         ? "reduction" : memorandumContraComboBox.getSelectedItem().toString().toLowerCase()));
+        } else {
+            answers.setMemorandumContra("");
+        }
         answers.setClassificationTitle(classificationTitleTextField == null ? "" : classificationTitleTextField.getText());
         answers.setBargainingUnit(barganingUnitTextField == null ? "" : barganingUnitTextField.getText());
         answers.setClassificationNumber(classificationNumberTextField == null ? "" : classificationNumberTextField.getText());

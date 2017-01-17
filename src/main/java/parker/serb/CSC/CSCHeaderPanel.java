@@ -55,8 +55,7 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
                     if(Global.root.getcSCRootPanel1().getjTabbedPane1().getSelectedIndex() == 0) {
                         Global.root.getjButton9().setVisible(true);
                         Global.root.getcSCRootPanel1().getActivityPanel1().loadAllActivity();
-                    }
-                        
+                    } 
                     Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
                 }
             }
@@ -122,10 +121,6 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
     public JComboBox getjComboBox2() {
         return caseNumberComboBox;
     }
-    
-    
-    
-    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -222,6 +217,7 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
 
     private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
         if(SwingUtilities.isRightMouseButton(evt) || evt.getButton() == MouseEvent.BUTTON3) {
+            Audit.addAuditEntry("Opened CSC Case Search Dialog");
             if(search == null) {
                 search = new CSCCaseSearch(Global.root, true);
             } else {

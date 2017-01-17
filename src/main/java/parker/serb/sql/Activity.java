@@ -223,7 +223,6 @@ public class Activity {
         Statement stmt = null;
             
         try {
-
             stmt = Database.connectToDB().createStatement();
 
             String sql = "Update Activity set active = 0 where id = ?";
@@ -232,8 +231,6 @@ public class Activity {
             preparedStatement.setString(1, id);
             
             preparedStatement.executeUpdate();
-            
-            Audit.addAuditEntry("Deactivated Activity:" + id);
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
                 disableActivtyByID(id);

@@ -27,6 +27,7 @@ public class CMDSReport {
     public String description;
     public String fileName;
     public String parameters;
+    public double sortOrder;
     
     public static List<CMDSReport> loadAllReports(String[] param) {
         List<CMDSReport> list = new ArrayList<>();
@@ -157,13 +158,15 @@ public class CMDSReport {
                     + "section, "
                     + "description, "
                     + "fileName, "
-                    + "parameters"
+                    + "parameters, "
+                    + "sortOrder "
                     + ") VALUES ("
                     + "1, " // active
                     + "?, " // section
                     + "?, " // description
                     + "?, " // filename
-                    + "? "  // parameters
+                    + "?, " // parameters
+                    + "? "  // sortOrder
                     + ")";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
@@ -171,7 +174,7 @@ public class CMDSReport {
             preparedStatement.setString(2, item.description.equals("") ? null : item.description.trim());
             preparedStatement.setString(3, item.fileName.equals("") ? null : item.fileName.trim());
             preparedStatement.setString(4, item.parameters.equals("") ? null : item.parameters.trim());
-            
+            preparedStatement.setNull  (6, java.sql.Types.DOUBLE);
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);

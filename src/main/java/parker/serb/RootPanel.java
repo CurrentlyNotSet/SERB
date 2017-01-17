@@ -27,6 +27,7 @@ import parker.serb.CSC.CSCLetterDialog;
 import parker.serb.CSC.CSCRootPanel;
 import parker.serb.Hearing.HearingHeaderPanel;
 import parker.serb.Hearing.HearingRootPanel;
+import parker.serb.Hearing.HearingsLetterDialog;
 import parker.serb.MED.MEDBulkHandleCases;
 import parker.serb.MED.MEDHeaderPanel;
 import parker.serb.MED.MEDLetterDialog;
@@ -86,10 +87,10 @@ public class RootPanel extends javax.swing.JFrame {
         enableTabs();
         setDefaultTab();
         Global.activeSection = jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex());
+        User.updateLogInInformation();
         setHeaderCard();
         enableButtons();
         letterQueueThread();
-        User.updateLogInInformation();
         Global.activeUser.activeLogIn = true;
         setLocationRelativeTo(null);
         setVisible(true);        
@@ -151,7 +152,7 @@ public class RootPanel extends javax.swing.JFrame {
         }
         
         if(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()).equals("Docketing")) {
-            docketRootPanel1.loadDocketList();
+            docketRootPanel1.loadDocketListThread();
         }
     }
     
@@ -291,6 +292,7 @@ public class RootPanel extends javax.swing.JFrame {
                 
                 if(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()).equals("Docketing")) {
                     docketRootPanel1.loadDocketList();
+//                    docketRootPanel1.loadDocketListThread();
                 } else if(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()).equals("Employer Search")) {
                     if(companySearchPanel1.getModel() == null) {
                         companySearchPanel1.activity();
@@ -358,7 +360,7 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton3.setSize(dim);
                 jButton3.setMinimumSize(dim);
                 jButton3.setMaximumSize(dim);
-                jButton3.setVisible(false);
+                jButton3.setVisible(true);
                 jButton3.setText("Letters");
                 
                 jButton4.setSize(dim);
@@ -489,7 +491,7 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton3.setSize(dim);
                 jButton3.setMinimumSize(dim);
                 jButton3.setMaximumSize(dim);
-                jButton3.setVisible(false);
+                jButton3.setVisible(true);
                 jButton3.setText("Letters");
                 
                 jButton4.setSize(dim);
@@ -764,7 +766,7 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton4.setMinimumSize(dim);
                 jButton4.setMaximumSize(dim);
                 jButton4.setVisible(false);
-                jButton4.setText("Single Letter");
+                jButton4.setText("Letter");
                 
                 jButton5.setSize(dim);
                 jButton5.setMinimumSize(dim);
@@ -1843,6 +1845,9 @@ public class RootPanel extends javax.swing.JFrame {
             case "Civil Service Commission":
                 Audit.addAuditEntry("Clicked CSC Letter Button");
                 new CSCLetterDialog((JFrame) this.getRootPane().getParent(), true);
+                break;
+            case "Hearings":
+                new HearingsLetterDialog((JFrame) this.getRootPane().getParent(), true);
                 break;
             default:
                 break;

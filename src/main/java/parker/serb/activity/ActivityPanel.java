@@ -98,12 +98,20 @@ public class ActivityPanel extends javax.swing.JPanel {
                 String filePath = actvityTable.getValueAt(actvityTable.getSelectedRow(), 4).toString();
 
                 if (e.getClickCount() == 2 && !filePath.equals("") && actvityTable.getSelectedColumn() == 4) {
-                    if (Global.activeSection.equals("ORG")) {
-                        FileService.openFileWithORGNumber("ORG", Global.caseNumber, filePath);
-                    } else if (Global.activeSection.equals("Civil Service Commission")) {
-                        FileService.openFileWithORGNumber("CSC", Global.caseNumber, filePath);
-                    } else {
-                        FileService.openFile(filePath);
+                    
+                    switch (Global.activeSection) {
+                        case "ORG":
+                            FileService.openFileWithORGNumber("ORG", Global.caseNumber, filePath);
+                            break;
+                        case "Civil Service Commission":
+                            FileService.openFileWithORGNumber("CSC", Global.caseNumber, filePath);
+                            break;
+                        case "Hearings":
+                            FileService.openHearingCaseFile(filePath);
+                            break;
+                        default:
+                            FileService.openFile(filePath);
+                            break;
                     }
                 } else if (e.getClickCount() == 2 && actvityTable.getSelectedColumn() != 4) {
                     Audit.addAuditEntry("Viewing Activty Detail for ID: " + actvityTable.getValueAt(actvityTable.getSelectedRow(), 5).toString());
@@ -152,6 +160,8 @@ public class ActivityPanel extends javax.swing.JPanel {
      * @param searchTerm a string of a value, if blank pass ""
      */
     private void loadActivity(String searchTerm) {
+        
+        Audit.addAuditEntry("Searched Activty for " + searchTerm);
         
         DefaultTableModel model = (DefaultTableModel) actvityTable.getModel();
         model.setRowCount(0);
@@ -229,7 +239,6 @@ public class ActivityPanel extends javax.swing.JPanel {
     public JTable getActvityTable() {
         return actvityTable;
     }
-    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -313,6 +322,7 @@ public class ActivityPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void clearSearchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearSearchButtonActionPerformed
+        Audit.addAuditEntry("Clicked Activity Clear Button");
         searchTextBox.setText("");
     }//GEN-LAST:event_clearSearchButtonActionPerformed
 

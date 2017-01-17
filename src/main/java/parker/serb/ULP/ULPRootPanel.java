@@ -86,49 +86,41 @@ public class ULPRootPanel extends javax.swing.JPanel {
     private void setButtons() {
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
             case "Activity":
-                System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
                 Global.root.getjButton2().setText("Update");
                 Global.root.getjButton2().setEnabled(false);
                 Global.root.getjButton9().setVisible(true);
                 break;
             case "Information":
-                System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
                 Global.root.getjButton2().setText("Update");
                 Global.root.getjButton2().setEnabled(true);
                 Global.root.getjButton9().setVisible(false);
                 break;
             case "Parties":
-                System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
                 Global.root.getjButton2().setText("Add Party");
                 Global.root.getjButton2().setEnabled(true);
                 Global.root.getjButton9().setVisible(true);
                 break;
             case "Status":
-                System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
                 Global.root.getjButton2().setText("Update");
                 Global.root.getjButton2().setEnabled(true);
                 Global.root.getjButton9().setVisible(false);
                 break;
             case "Statement":
-                System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
                 Global.root.getjButton2().setText("Update");
                 Global.root.getjButton2().setEnabled(true);
                 Global.root.getjButton9().setVisible(false);
                 break;
             case "Recommendation":
-                System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
                 Global.root.getjButton2().setText("Update");
                 Global.root.getjButton2().setEnabled(true);
                 Global.root.getjButton9().setVisible(false);
                 break;
             case "Investigation Reveals":
-                System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
                 Global.root.getjButton2().setText("Update");
                 Global.root.getjButton2().setEnabled(true);
                 Global.root.getjButton9().setVisible(false);
                 break;
             case "Notes":
-                System.out.println(jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()));
                 Global.root.getjButton2().setText("Update");
                 Global.root.getjButton2().setEnabled(true);
                 Global.root.getjButton9().setVisible(false);
@@ -157,10 +149,12 @@ public class ULPRootPanel extends javax.swing.JPanel {
     public void ulpUpdate(String buttonText) {
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
             case "Activity":
+                Audit.addAuditEntry("Clicked ULP Add Acitivty Button");
                 new AddActivtyForSMDSDialog(Global.root, true);
                 activityPanel1.loadAllActivity();
                 break;
             case "Parties":
+                Audit.addAuditEntry("Clicked ULP Add Party Button");
                 new PartySearchDialog((JFrame) this.getRootPane().getParent(), true);
                 partiesPanel1.loadParties();
                 Global.root.getuLPHeaderPanel1().loadHeaderInformation();
@@ -169,10 +163,13 @@ public class ULPRootPanel extends javax.swing.JPanel {
                         Global.root.getuLPHeaderPanel1().getChargingPartyTextBox().getText().trim());
                 break;
             case "Status":
+                
                 if(buttonText.equals("Update")) {
+                    Audit.addAuditEntry("Clicked ULP Update Status Button");
                     disableTabs(jTabbedPane1.getSelectedIndex());
                     uLPStatusPanel1.enableUpdate();
                 } else {
+                    Audit.addAuditEntry("Clicked ULP Save Status Button");
                     enableTabs();
                     Global.root.enableTabsAfterSave();
                     Global.root.enableButtonsAfterCancel();
@@ -182,9 +179,11 @@ public class ULPRootPanel extends javax.swing.JPanel {
                 break;
             case "Statement":
                 if(buttonText.equals("Update")) {
+                    Audit.addAuditEntry("Clicked ULP Update Statment Button");
                     disableTabs(jTabbedPane1.getSelectedIndex());
                     uLPStatement1.enableUpdate();
                 } else {
+                    Audit.addAuditEntry("Clicked ULP Save Statment Button");
                     enableTabs();
                     Global.root.enableTabsAfterSave();
                     Global.root.enableButtonsAfterCancel();
@@ -193,9 +192,11 @@ public class ULPRootPanel extends javax.swing.JPanel {
                 break;
             case "Recommendation":
                 if(buttonText.equals("Update")) {
+                    Audit.addAuditEntry("Clicked ULP Update Recommendation Button");
                     disableTabs(jTabbedPane1.getSelectedIndex());
                     uLPRecommendation1.enableUpdate();
                 } else {
+                    Audit.addAuditEntry("Clicked ULP Save Recommendation Button");
                     enableTabs();
                     Global.root.enableTabsAfterSave();
                     Global.root.enableButtonsAfterCancel();
@@ -204,9 +205,11 @@ public class ULPRootPanel extends javax.swing.JPanel {
                 break;
             case "Investigation Reveals":
                 if(buttonText.equals("Update")) {
+                    Audit.addAuditEntry("Clicked ULP Update Investigation Reveals Button");
                     disableTabs(jTabbedPane1.getSelectedIndex());
                     uLPInvestigationReveals1.enableUpdate();
                 } else {
+                    Audit.addAuditEntry("Clicked ULP Save Investigation Reveals Button");
                     enableTabs();
                     Global.root.enableTabsAfterSave();
                     Global.root.enableButtonsAfterCancel();
@@ -215,9 +218,11 @@ public class ULPRootPanel extends javax.swing.JPanel {
                 break;
             case "Notes":
                 if(buttonText.equals("Update")) {
+                    Audit.addAuditEntry("Clicked ULP Update Notes Button");
                     disableTabs(jTabbedPane1.getSelectedIndex());
                     notesPanel2.enableUpdate();
                 } else {
+                    Audit.addAuditEntry("Clicked ULP Save Notes Button");
                     enableTabs();
                     Global.root.enableTabsAfterSave();
                     Global.root.enableButtonsAfterCancel();
@@ -231,6 +236,7 @@ public class ULPRootPanel extends javax.swing.JPanel {
         CancelUpdate cancel;
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
             case "Activity":
+                Audit.addAuditEntry("Clicked ULP Delete Acitivty Button");
                 new RemoveActivityEntryDialog(
                     Global.root,
                     true,
@@ -243,6 +249,7 @@ public class ULPRootPanel extends javax.swing.JPanel {
                 activityPanel1.loadAllActivity();
                 break;
             case "Parties":
+                Audit.addAuditEntry("Clicked ULP Delete Party Button");
                 partiesPanel1.removeParty();
                 Global.root.getuLPHeaderPanel1().loadHeaderInformation();
                 ULPCaseSearchData.updateCaseEntryFromParties(
@@ -250,9 +257,11 @@ public class ULPRootPanel extends javax.swing.JPanel {
                         Global.root.getuLPHeaderPanel1().getChargingPartyTextBox().getText().trim());
                 break;
             case "Status":
+                Audit.addAuditEntry("Clicked ULP Cancel Status Update Button");
                 cancel = new CancelUpdate(Global.root, true);
                 if(!cancel.isReset()) {
                 } else {
+                    Audit.addAuditEntry("Canceled ULP Status Update");
                     Global.root.enableButtonsAfterCancel();
                     Global.root.enableTabsAfterSave();
                     enableTabs();
@@ -260,9 +269,11 @@ public class ULPRootPanel extends javax.swing.JPanel {
                 }
                 break;
             case "Statement":
+                Audit.addAuditEntry("Clicked ULP Cancel Statement Update Button");
                 cancel = new CancelUpdate(Global.root, true);
                 if(!cancel.isReset()) {
                 } else {
+                    Audit.addAuditEntry("Canceled ULP Statement Update");
                     Global.root.enableButtonsAfterCancel();
                     Global.root.enableTabsAfterSave();
                     enableTabs();
@@ -270,9 +281,11 @@ public class ULPRootPanel extends javax.swing.JPanel {
                 }
                 break;
             case "Recommendation":
+                Audit.addAuditEntry("Clicked ULP Cancel Recommendation Update Button");
                 cancel = new CancelUpdate(Global.root, true);
                 if(!cancel.isReset()) {
                 } else {
+                    Audit.addAuditEntry("Canceled ULP Recommendation Update");
                     Global.root.enableButtonsAfterCancel();
                     Global.root.enableTabsAfterSave();
                     enableTabs();
@@ -280,9 +293,11 @@ public class ULPRootPanel extends javax.swing.JPanel {
                 }
                 break;
             case "Investigation Reveals":
+                Audit.addAuditEntry("Clicked ULP Cancel Investigation Reveals Update Button");
                 cancel = new CancelUpdate(Global.root, true);
                 if(!cancel.isReset()) {
                 } else {
+                    Audit.addAuditEntry("Canceled ULP Investgifation Reveals Update");
                     Global.root.enableButtonsAfterCancel();
                     Global.root.enableTabsAfterSave();
                     enableTabs();
@@ -290,9 +305,11 @@ public class ULPRootPanel extends javax.swing.JPanel {
                 }
                 break;
             case "Notes":
+                Audit.addAuditEntry("Clicked ULP Cancel Notes Update Button");
                 cancel = new CancelUpdate(Global.root, true);
                 if(!cancel.isReset()) {
                 } else {
+                    Audit.addAuditEntry("Canceled ULP Notes Update");
                     Global.root.enableButtonsAfterCancel();
                     Global.root.enableTabsAfterSave();
                     enableTabs();

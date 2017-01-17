@@ -27,12 +27,15 @@ public class processREPbookmarks {
     
     public static Dispatch processDoAREPWordLetter(Dispatch Document, int senderID, List<Integer> toParties, List<Integer> ccParties) {
         //get basic information
-        User user = null; //Need to get user by ID
         REPCase caseInfo = REPCase.loadCaseDetails(Global.caseYear, Global.caseType, Global.caseMonth, Global.caseNumber);
         List<CaseParty> partyList = CaseParty.loadPartiesByCase(Global.caseYear, Global.caseType, Global.caseMonth, Global.caseNumber);
         List<String> relatedCasesList = RelatedCase.loadRelatedCases();
         List<REPMediation> mediationList = REPMediation.loadMediationsByCaseNumber();
-
+        User user = null;
+        if (caseInfo.currentOwnerID > 0 ){
+            user = User.findUserByID(caseInfo.currentOwnerID); //Need to get user by ID
+        }
+        
         String relatedCases = "";
         String incumbentEmployeeOrganizationName = "";   //IEO
         String incumbentEmployeeOrganizationRepName = "";//IEOREP
@@ -241,7 +244,7 @@ public class processREPbookmarks {
             processBookmark.process("BALLOTTWO" + (i == 0 ? "" : i), caseInfo.ballotTwo, Document);
             processBookmark.process("BALLOTTHREE" + (i == 0 ? "" : i), caseInfo.ballotThree, Document);
             processBookmark.process("BALLOTFOUR" + (i == 0 ? "" : i), caseInfo.ballotFour, Document);
-            processBookmark.process("ELIGIBILITYDATE" + (i == 0 ? "" : i), Global.MMMMddyyyy.format(caseInfo.eligibilityDate), Document);
+            processBookmark.process("ELIGIBILITYDATE" + (i == 0 ? "" : i), (caseInfo.eligibilityDate == null ? "" : Global.MMMMddyyyy.format(caseInfo.eligibilityDate)), Document);
             processBookmark.process("EXCLUDEDNEWORCURRENTUNIT" + (i == 0 ? "" : i), caseInfo.bargainingUnitExcluded, Document);
             processBookmark.process("PIN" + (i == 0 ? "" : i), caseInfo.professionalIncluded, Document);
             processBookmark.process("PEX" + (i == 0 ? "" : i), caseInfo.professionalExcluded, Document);
@@ -291,8 +294,8 @@ public class processREPbookmarks {
             
             //LRS Worker (Passed from Sender ComboBox)
             if (user != null){
-//                processBookmark.process("NAME" + (i == 0 ? "" : i), user.name, Document);   //not yet setup in the Database
-//                processBookmark.process("TITLE" + (i == 0 ? "" : i), user.title, Document); //not yet setup in the Database
+                processBookmark.process("NAME" + (i == 0 ? "" : i), StringUtilities.buildFullName(user.firstName, user.middleInitial, user.lastName), Document);   //not yet setup in the Database
+                processBookmark.process("TITLE" + (i == 0 ? "" : i), user.jobTitle, Document); //not yet setup in the Database
                 processBookmark.process("PHONE" + (i == 0 ? "" : i), NumberFormatService.convertStringToPhoneNumber(user.workPhone), Document);
                 processBookmark.process("EMAIL" + (i == 0 ? "" : i), user.emailAddress, Document);
             }

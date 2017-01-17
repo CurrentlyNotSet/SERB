@@ -25,6 +25,7 @@ import parker.serb.employer.employerDetail;
 import parker.serb.employer.employerSearch;
 import parker.serb.relatedcase.AddNewRelatedCase;
 import parker.serb.relatedcase.RemoveRelatedCaseDialog;
+import parker.serb.sql.Audit;
 import parker.serb.sql.BoardMeeting;
 import parker.serb.sql.RelatedCase;
 import parker.serb.sql.ULPCase;
@@ -385,7 +386,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
     }
     
     public void saveInformation() {
-        
+        Audit.addAuditEntry("Updated ULP Status Panel ");
         ULPCase newStatusInformation = new ULPCase();
         
         newStatusInformation.employerIDNumber = employerNumberTextBox.getText().trim().equals("") ? null : employerNumberTextBox.getText().trim();
