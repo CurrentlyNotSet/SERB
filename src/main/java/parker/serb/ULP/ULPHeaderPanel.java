@@ -375,8 +375,8 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
 
     private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
         if(SwingUtilities.isRightMouseButton(evt) || evt.getButton() == MouseEvent.BUTTON3) {
+            Audit.addAuditEntry("Opened ULP Case Search Dialog");
             if(search == null) {
-                Audit.addAuditEntry("Opened ULP Case Search Dialog");
                 search = new ULPCaseSearch((JFrame) getRootPane().getParent(), true);
             } else {
                 search.setVisible(true);
