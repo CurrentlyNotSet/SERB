@@ -83,8 +83,8 @@ public class MEDStrikePanel extends javax.swing.JPanel {
                 Date date1 = Global.mmddyyyy.parse(strikeBeganTextBox.getText());
                 Date date2 = Global.mmddyyyy.parse(strikeEndedTextBox.getText());
                 long diffInMillies = date2.getTime() - date1.getTime();
-                int days = (int) (diffInMillies / (1000*60*60*24));
-                totalNumberOfDaysTextBox.setText(Integer.toString(days));
+                int days = (int) ((diffInMillies) / (1000*60*60*24)) ;
+                totalNumberOfDaysTextBox.setText(Integer.toString(days + 1));
             } catch (ParseException ex) {
                 SlackNotification.sendNotification(ex);
             }
