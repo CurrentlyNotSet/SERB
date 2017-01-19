@@ -87,9 +87,9 @@ public class GenerateReport {
                 case "OrgNumber":
                     new RequestedInfoStringPanel(Global.root, true, report, "OrgNumber");
                     break;
-                
-                
-                
+                case "begin date, end date, EmployerType":
+                    new RequestedInfoTwoDateComboBoxPanel(Global.root, true, report, "EmployerType");
+                    break;
                 default:
                     HashMap hash = new HashMap();
                     generateReport(report, hash);
@@ -127,7 +127,7 @@ public class GenerateReport {
         hash.put("ID", ID);
         generateReport(report, hash);
     }
-        
+      
     public static void generateExactStringReport(String exact, SMDSDocuments report) {
         HashMap hash = new HashMap();
         hash.put("string", exact);
