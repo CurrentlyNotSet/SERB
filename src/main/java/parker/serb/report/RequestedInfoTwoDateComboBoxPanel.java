@@ -10,9 +10,6 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import parker.serb.Global;
 import parker.serb.sql.SMDSDocuments;
-import parker.serb.sql.User;
-import parker.serb.util.Item;
-import parker.serb.util.StringUtilities;
 
 /**
  *
