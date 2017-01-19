@@ -32,7 +32,7 @@ public class Role {
         try {
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "SELECT * FROM Role WHERE active = 1";
+            String sql = "SELECT * FROM Role WHERE active = 1 ORDER BY role ASC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             
