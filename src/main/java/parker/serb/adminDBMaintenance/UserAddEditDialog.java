@@ -192,7 +192,7 @@ public class UserAddEditDialog extends javax.swing.JDialog {
         if (ID > 0) {
             User.updateUser(item);
             
-            if (PasswordResetCheckBox.isEnabled()){
+            if (PasswordResetCheckBox.isSelected()){
                 long passwordSalt = Password.generatePasswordSalt();
                 String tempPassword = Password.generateTempPassword();
                 
