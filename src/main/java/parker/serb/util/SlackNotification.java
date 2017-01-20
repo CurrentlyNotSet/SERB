@@ -10,8 +10,6 @@ import in.ashwanthkumar.slack.webhook.SlackMessage;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import parker.serb.Global;
 import parker.serb.sql.SystemError;
 

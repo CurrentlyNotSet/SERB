@@ -57,9 +57,9 @@ public class JacobCOMBridge {
             System.setProperty(LibraryLoader.JACOB_DLL_PATH, dllPath);
             LibraryLoader.loadJacobLibrary();
             return true;
-        } catch (UnsatisfiedLinkError e) {
+        } catch (Exception ex) {
             System.err.println("Missing DLL: " + dllPath);
-//            SlackNotification.sendNotification(ex);
+            SlackNotification.sendNotification(ex);
             return false;
         }
     }
