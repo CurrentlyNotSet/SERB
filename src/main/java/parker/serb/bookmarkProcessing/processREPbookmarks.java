@@ -296,7 +296,7 @@ public class processREPbookmarks {
             if (user != null){
                 processBookmark.process("NAME" + (i == 0 ? "" : i), StringUtilities.buildFullName(user.firstName, user.middleInitial, user.lastName), Document);   //not yet setup in the Database
                 processBookmark.process("TITLE" + (i == 0 ? "" : i), user.jobTitle, Document); //not yet setup in the Database
-                processBookmark.process("PHONE" + (i == 0 ? "" : i), NumberFormatService.convertStringToPhoneNumber(user.workPhone), Document);
+                processBookmark.process("PHONE" + (i == 0 ? "" : i), user.workPhone, Document);
                 processBookmark.process("EMAIL" + (i == 0 ? "" : i), user.emailAddress, Document);
             }
         }

@@ -250,22 +250,25 @@ public class generateDocument {
         if (!chairmanFullName.trim().equals("")) {
             personnelAddressBlock += chairmanFullName + ", Chair";
         }
-        if (personnelAddressBlock.trim().equals("")) {
-            personnelAddressBlock += "\n";
-        }
+
         if (!viceChairmanFullName.trim().equals("")) {
+            if (!personnelAddressBlock.trim().equals("")) {
+                personnelAddressBlock += "\n";
+            }
             personnelAddressBlock += viceChairmanFullName + ", Vice Chair";
         }
-        if (personnelAddressBlock.trim().equals("")) {
-            personnelAddressBlock += "\n";
-        }
+
         if (!boardMemberFullName.trim().equals("")) {
+            if (!personnelAddressBlock.trim().equals("")) {
+                personnelAddressBlock += "\n";
+            }
             personnelAddressBlock += boardMemberFullName + ", Board Member";
         }
-        if (personnelAddressBlock.trim().equals("")) {
-            personnelAddressBlock += "\n\n";
-        }
+
         if (!executiveDirectorFullName.trim().equals("")) {
+            if (!personnelAddressBlock.trim().equals("")) {
+                personnelAddressBlock += "\n\n";
+            }
             personnelAddressBlock += executiveDirectorFullName + ", Executive Director";
         }
 
@@ -293,9 +296,9 @@ public class generateDocument {
 
             processBookmark.process("SerbFooter" + (i == 0 ? "" : i), sysAdminInfo.Footer, Document);
             processBookmark.process("SerbPhone" + (i == 0 ? "" : i), sysAdminInfo.Phone == null ? ""
-                    : "Tel:" + NumberFormatService.convertStringToPhoneNumber(sysAdminInfo.Phone), Document);
+                    : "Tel:" + sysAdminInfo.Phone, Document);
             processBookmark.process("SerbFax" + (i == 0 ? "" : i), sysAdminInfo.Fax == null ? ""
-                    : "Fax:" + NumberFormatService.convertStringToPhoneNumber(sysAdminInfo.Fax), Document);
+                    : "Fax:" + sysAdminInfo.Fax, Document);
 
             //Made up stuff
             processBookmark.process("TODAYSDATE" + (i == 0 ? "" : i), Global.MMMMddyyyy.format(new Date()), Document);
@@ -396,28 +399,32 @@ public class generateDocument {
         if (!chairmanFullName.trim().equals("")) {
             personnelAddressBlock += chairmanFullName + ", Chair";
         }
-        if (personnelAddressBlock.trim().equals("")) {
-            personnelAddressBlock += "\n";
-        }
+       
         if (!viceChairmanFullName.trim().equals("")) {
+            if (!personnelAddressBlock.trim().equals("")) {
+                personnelAddressBlock += "\n";
+            }
             personnelAddressBlock += viceChairmanFullName + ", Vice Chair";
         }
-        if (personnelAddressBlock.trim().equals("")) {
-            personnelAddressBlock += "\n";
-        }
+        
         if (!boardMemberFullName.trim().equals("")) {
+            if (!personnelAddressBlock.trim().equals("")) {
+                personnelAddressBlock += "\n";
+            }
             personnelAddressBlock += boardMemberFullName + ", Board Member";
         }
-        if (personnelAddressBlock.trim().equals("")) {
-            personnelAddressBlock += "\n\n";
-        }
+        
         if (!executiveDirectorFullName.trim().equals("")) {
+            if (!personnelAddressBlock.trim().equals("")) {
+                personnelAddressBlock += "\n\n";
+            }
             personnelAddressBlock += executiveDirectorFullName + ", Executive Director";
         }
-        if (personnelAddressBlock.trim().equals("")) {
-            personnelAddressBlock += "\n";
-        }
+        
         if (!chiefAdminLawJudgeFullName.trim().equals("")) {
+            if (!personnelAddressBlock.trim().equals("")) {
+                personnelAddressBlock += "\n";
+            }
             personnelAddressBlock += chiefAdminLawJudgeFullName + ", Chief Administrative Law Judge";
         }
 

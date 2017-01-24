@@ -59,25 +59,25 @@ public class StringUtilities {
 
         addressBlock += buildCasePartyName(item);
         if (item.address1 != null) {
-            addressBlock += "\n" + item.address1;
+            addressBlock += item.address1.trim().equals("") ? "" : "\n" + item.address1;
         }
         if (item.address2 != null) {
-            addressBlock += "\n" + item.address2;
+            addressBlock += item.address2.trim().equals("") ? "" : "\n" + item.address2;
         }
         if (item.address3 != null) {
-            addressBlock += "\n" + item.address3;
+            addressBlock += item.address3.trim().equals("") ? "" : "\n" + item.address3;
         }
         addressBlock += "\n" + (item.city == null ? "" : item.city) 
                 + ", " + (item.stateCode == null ? "" : item.stateCode) 
                 + " " + (item.zipcode == null ? "" : item.zipcode);
         if (item.phone1 != null){
-            addressBlock += "\n" + NumberFormatService.convertStringToPhoneNumber(item.phone1);
+            addressBlock += item.phone1.trim().equals("") ? "" : "\n" + item.phone1;
         }
         if (item.phone2 != null){
-            addressBlock += "\n" + NumberFormatService.convertStringToPhoneNumber(item.phone2);
+            addressBlock += item.phone2.trim().equals("") ? "" : "\n" + item.phone2;
         }
         if (item.emailAddress != null){
-            addressBlock += "\n" + item.emailAddress;
+            addressBlock += item.emailAddress.trim().equals("") ? "" : "\n" + item.emailAddress;
         }
         return addressBlock.trim();
     }
