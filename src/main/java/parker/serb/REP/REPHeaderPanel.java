@@ -45,17 +45,22 @@ public class REPHeaderPanel extends javax.swing.JPanel {
                 if(caseNumberComboBox.getSelectedItem().toString().trim().equals("")) {
                     Global.root.getjButton9().setVisible(false);
                     if(Global.root != null) {
+                        Global.root.getjButton2().setText("Update");
                         Global.root.getjButton2().setEnabled(false);
+                        Global.root.getjButton3().setEnabled(false);
+                        Global.root.getjButton9().setEnabled(false);
+                        Global.root.getjButton9().setVisible(false);
                         Global.root.getrEPRootPanel1().clearAll();
                     }
                 } else {
                     Global.root.getjButton2().setEnabled(true);
+                    Global.root.getjButton3().setEnabled(true);
                     loadInformation();
-                    if(Global.root.getrEPRootPanel1().getjTabbedPane1().getSelectedIndex() == 0) {
-                        Global.root.getrEPRootPanel1().getActivityPanel1().loadAllActivity();
-                        Global.root.getjButton9().setVisible(true);
+                    if(Global.root.getuLPRootPanel1().getjTabbedPane1().getSelectedIndex() == 0) {
                         Global.root.getjButton2().setText("Add Entry");
                         Global.root.getjButton2().setEnabled(true);
+                        Global.root.getuLPRootPanel1().getActivityPanel1().loadAllActivity();
+                        Global.root.getjButton9().setVisible(true);
                     }
                     Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
                 }

@@ -88,13 +88,17 @@ public class DocketRootPanel extends javax.swing.JPanel {
     private void threadDocketList() {
         while (true) {
             try {
-                docs.clear();
-                loadScanData(SectionComboBox.getSelectedItem().toString());
-                loadEmailData(SectionComboBox.getSelectedItem().toString());
-                loadMediaData(SectionComboBox.getSelectedItem().toString());
-                Collections.sort(docs, new CustomComparator());
-                loadTable();
-                Thread.sleep(30000); //milliseconds  (30 sec)
+                if(Global.activeSection.equals("Docketing")) {
+                    docs.clear();
+                    loadScanData(SectionComboBox.getSelectedItem().toString());
+                    loadEmailData(SectionComboBox.getSelectedItem().toString());
+                    loadMediaData(SectionComboBox.getSelectedItem().toString());
+                    Collections.sort(docs, new CustomComparator());
+                    loadTable();
+                    Thread.sleep(30000); //milliseconds  (30 sec)
+                } else {
+                    docs.clear();
+                }
             } catch (InterruptedException ex) {
                 System.err.println("Thread Interrupted");
             }
@@ -271,12 +275,13 @@ public class DocketRootPanel extends javax.swing.JPanel {
         if(docketTable.getValueAt(docketTable.getSelectedRow(), 2).equals("Scan")) {
             DocketLock docketLock = DocketLock.checkLock(section, docketTable.getValueAt(docketTable.getSelectedRow(), 4).toString());
             if(docketLock == null) {
-                DocketLock.addLock(section, docketTable.getValueAt(docketTable.getSelectedRow(), 4).toString());
+                String value = docketTable.getValueAt(docketTable.getSelectedRow(), 4).toString();
+                DocketLock.addLock(section, value);
                 new scanFileDialog((JFrame) Global.root.getRootPane().getParent(),
                         true,
                         docketTable.getValueAt(docketTable.getSelectedRow(), 4).toString(),section,
                         docketTable.getValueAt(docketTable.getSelectedRow(), 1).toString());
-                DocketLock.removeLock(section, docketTable.getValueAt(docketTable.getSelectedRow(), 4).toString());
+                DocketLock.removeLock(section, value);
                 reloadTableAfterFiling();
             } else {
                 new DocketLockDialog((JFrame) Global.root.getRootPane().getParent(), true, docketLock);
@@ -284,12 +289,13 @@ public class DocketRootPanel extends javax.swing.JPanel {
         } else if(docketTable.getValueAt(docketTable.getSelectedRow(), 2).equals("Email")){
             DocketLock docketLock = DocketLock.checkLock(section, docketTable.getValueAt(docketTable.getSelectedRow(), 0).toString());
             if(docketLock == null) {
-                DocketLock.addLock(section, docketTable.getValueAt(docketTable.getSelectedRow(), 0).toString());
+                String value = docketTable.getValueAt(docketTable.getSelectedRow(), 0).toString();
+                DocketLock.addLock(section, value);
                 new fileEmailDialog((JFrame) Global.root.getRootPane().getParent(),
                         true,
                         docketTable.getValueAt(docketTable.getSelectedRow(), 0).toString(),section,
                         docketTable.getValueAt(docketTable.getSelectedRow(), 1).toString());
-                DocketLock.removeLock(section, docketTable.getValueAt(docketTable.getSelectedRow(), 0).toString());
+                DocketLock.removeLock(section, value);
                 reloadTableAfterFiling();
             } else {
                 new DocketLockDialog((JFrame) Global.root.getRootPane().getParent(), true, docketLock);
@@ -297,17 +303,17 @@ public class DocketRootPanel extends javax.swing.JPanel {
         } else if(docketTable.getValueAt(docketTable.getSelectedRow(), 2).equals("Media")){
             DocketLock docketLock = DocketLock.checkLock(section, docketTable.getValueAt(docketTable.getSelectedRow(), 4).toString());
             if(docketLock == null) {
-                DocketLock.addLock(section, docketTable.getValueAt(docketTable.getSelectedRow(), 4).toString());
+                String value = docketTable.getValueAt(docketTable.getSelectedRow(), 4).toString();
+                DocketLock.addLock(section, value);
                 new mediaFileDialog((JFrame) Global.root.getRootPane().getParent(),
                     true,
                     docketTable.getValueAt(docketTable.getSelectedRow(), 4).toString(),section);
-                DocketLock.removeLock(section, docketTable.getValueAt(docketTable.getSelectedRow(), 4).toString());
+                DocketLock.removeLock(section, value);
                 reloadTableAfterFiling();
             } else {
                 new DocketLockDialog((JFrame) Global.root.getRootPane().getParent(), true, docketLock);
             }
         }
-        
     }
     
     private void reloadTableAfterFiling() {

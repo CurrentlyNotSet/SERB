@@ -349,6 +349,13 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                         selected = setMEDFFConcCheckMark(person);
                     }
 
+                    //Spoof Filename
+                    
+                    String bioFileName = ff.bioFileName;
+                    if (bioFileName == null){
+                        bioFileName = StringUtilities.buildFullName(ff.firstName, ff.middleName, ff.lastName) + ".doc";
+                    }
+                    
                     //load table
                     model.addRow(new Object[]{
                         ff.id,
@@ -708,7 +715,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
 
     private void activityTableAttachmentProcess(int emailID, List<Integer> postalIDList) {
         for (int i = 0; i < activityTable.getRowCount(); i++) {
-            if (activityTable.getValueAt(i, 1).equals(true)) {
+            if (activityTable.getValueAt(i, 1).equals(true) && !activityTable.getValueAt(i, 3).toString().equals("")) {
 
                 if (emailID > 0) {
                     EmailOutAttachment attach = new EmailOutAttachment();
@@ -731,14 +738,16 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
 
     private void additionalDocsTableAttachmentProcess(int emailID, List<Integer> postalIDList) {
         for (int i = 0; i < additionalDocsTable.getRowCount(); i++) {
-            if (additionalDocsTable.getValueAt(i, 1).equals(true)) {
+            if (additionalDocsTable.getValueAt(i, 1).equals(true) && !additionalDocsTable.getValueAt(i, 3).toString().equals("")) {
                 String docName = "";
 
                 if (additionalDocsTable.getValueAt(i, 3).toString().toLowerCase().endsWith(".docx")) {
                     SMDSDocuments additionalDoc = SMDSDocuments.findDocumentByID(Integer.valueOf(additionalDocsTable.getValueAt(i, 0).toString()));
                     docName = generateDocument.generateSMDSdocument(additionalDoc, 0, toParties, ccParties, null, null);
                 } else {
-                    docName = copyAttachmentToCaseFolder(additionalDocsTable.getValueAt(i, 3).toString());
+                    docName = copyAttachmentToCaseFolder(
+                            "Copy of " + additionalDocsTable.getValueAt(i, 2).toString() + " For Generation of " + SMDSdocToGenerate.description, 
+                            additionalDocsTable.getValueAt(i, 3).toString());
                 }
 
                 if (emailID > 0) {
@@ -762,9 +771,11 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
 
     private void additionalDocsTableMEDAttachmentProcess(int emailID, List<Integer> postalIDList) {
         for (int i = 0; i < additionalDocsTable.getRowCount(); i++) {
-            if (additionalDocsTable.getValueAt(i, 1).equals(true)) {
+            if (additionalDocsTable.getValueAt(i, 1).equals(true) && !additionalDocsTable.getValueAt(i, 3).toString().equals("")) {
 
-                String destFileName = copyAttachmentToCaseFolder(additionalDocsTable.getValueAt(i, 3).toString());
+                String destFileName = copyAttachmentToCaseFolder(
+                        "Copy of " + additionalDocsTable.getValueAt(i, 2).toString() + " Bio For Generation of " + SMDSdocToGenerate.description,
+                        additionalDocsTable.getValueAt(i, 3).toString());
 
                 if (emailID > 0) {
                     EmailOutAttachment attach = new EmailOutAttachment();
@@ -785,8 +796,8 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         }
     }
 
-    private String copyAttachmentToCaseFolder(String fileName) {
-        String docSourcePath = Global.templatePath + File.separator 
+    private String copyAttachmentToCaseFolder(String descriptionName, String fileName) {
+        String docSourcePath = Global.templatePath
                 + (Global.activeSection.equals("Civil Service Commission") ? Global.caseType : Global.activeSection) + File.separator + fileName;
 
         String docDestPath = "";
@@ -803,13 +814,64 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
 
         try {
             Files.copy(Paths.get(docSourcePath), Paths.get(docDestPath + destFileName), StandardCopyOption.REPLACE_EXISTING);
+            Activity.addActivty(descriptionName, destFileName);
+            
         } catch (IOException ex) {
             SlackNotification.sendNotification(ex);
             return "";
         }
         return destFileName;
     }
+    
+    private void generateLetterButton() {
+        if (checkActivityTable() && checkAdditionalDocsTable()){
+            processThread();
+            loadingPanel.setVisible(true);
+            jLayeredPane.moveToFront(loadingPanel);
+        } else {
+            WebOptionPane.showMessageDialog(Global.root, "<html><center> Sorry, unable to locate files selected. <br><br>Unable to generate letter.</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private boolean checkActivityTable() {
+        String path = Global.activityPath + File.separatorChar
+                    + Global.activeSection + File.separatorChar
+                    + Global.caseYear + File.separatorChar
+                    + (Global.caseYear + "-" + Global.caseType + "-" + Global.caseMonth + "-" + Global.caseNumber)
+                    + File.separatorChar;
+        
+        
+        for (int i = 0; i < activityTable.getRowCount(); i++) {
+            if (activityTable.getValueAt(i, 1).equals(true)) {
+                File templateFile = new File(path + activityTable.getValueAt(i, 3));
+                if (!templateFile.exists()){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
+    private boolean checkAdditionalDocsTable() {
+        String path = Global.templatePath
+                + (Global.activeSection.equals("Civil Service Commission") 
+                ? Global.caseType : Global.activeSection) + File.separator;
+        
+        for (int i = 0; i < additionalDocsTable.getRowCount(); i++) {
+            if (additionalDocsTable.getValueAt(i, 1).equals(true)) {
+                if (!additionalDocsTable.getValueAt(i, 3).toString().equals("")){
+                    File templateFile = new File(path + additionalDocsTable.getValueAt(i, 3));
+                    if (!templateFile.exists()){
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
     private void processThread() {
         Thread temp = new Thread(() -> {
             generateLetter();
@@ -1101,9 +1163,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
-        processThread();
-        loadingPanel.setVisible(true);
-        jLayeredPane.moveToFront(loadingPanel);
+        generateLetterButton();
     }//GEN-LAST:event_generateButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed

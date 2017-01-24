@@ -18,13 +18,13 @@ public class StringUtilities {
 
     public static String buildFullName(String first, String middle, String last) {
         String fullName = "";
-        if (!first.equals("")) {
+        if (first != null) {
             fullName = fullName.trim() + first.trim();
         }
-        if (!middle.equals("")) {
+        if (middle != null) {
             fullName = fullName.trim() + " " + (middle.trim().length() == 1 ? middle.trim() + "." : middle.trim());
         }
-        if (!last.equals("")) {
+        if (last != null) {
             fullName = fullName.trim() + " "  + last.trim();
         }
         return fullName.trim();

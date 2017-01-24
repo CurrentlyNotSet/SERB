@@ -12,6 +12,7 @@ import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 import parker.serb.Global;
 import parker.serb.sql.AdministrationInformation;
 import parker.serb.sql.SMDSDocuments;
@@ -59,7 +60,7 @@ public class generateDocument {
 
             docPath.mkdirs();
             saveDocName = String.valueOf(new Date().getTime()) + "_"
-                    + (template.historyFileName == null ? template.description : template.historyFileName)
+                    + StringUtils.left(template.historyFileName == null ? template.description : template.historyFileName, 50)
                     + ".docx";
 
             Dispatch document = Dispatch.call(eolWord.getProperty("Documents").toDispatch(), "Open",
@@ -111,7 +112,7 @@ public class generateDocument {
                     + Global.caseYear + File.separator
                     + NumberFormatService.generateFullCaseNumber());
             docPath.mkdirs();
-            saveDocName = String.valueOf(new Date().getTime()) + "_" + template.LetterName + ".docx";
+            saveDocName = String.valueOf(new Date().getTime()) + "_" + StringUtils.left(template.LetterName, 50) + ".docx";
 
             Dispatch document = Dispatch.call(eolWord.getProperty("Documents").toDispatch(), "Open",
                     Global.templatePath + Global.activeSection + File.separator + template.Location).toDispatch();
