@@ -51,7 +51,6 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
                     Global.root.getjButton2().setEnabled(true);
                     Global.root.getjButton6().setEnabled(true);
                     Global.root.getjButton3().setEnabled(true);
-                    Global.root.getjButton9().setVisible(true);
                     loadInformation();
                     if(Global.root.getuLPRootPanel1().getjTabbedPane1().getSelectedIndex() == 0) {
                         Global.root.getjButton2().setText("Add Entry");

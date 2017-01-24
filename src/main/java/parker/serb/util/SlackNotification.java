@@ -10,8 +10,6 @@ import in.ashwanthkumar.slack.webhook.SlackMessage;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import parker.serb.Global;
 import parker.serb.sql.SystemError;
 
@@ -28,7 +26,7 @@ public class SlackNotification {
             message += "Class Name: " + Thread.currentThread().getStackTrace()[2].getClassName() + "\n";
             message += "Method Name: " + Thread.currentThread().getStackTrace()[2].getMethodName() + "\n";
             message += "Exception Type: " + ex.getClass().getSimpleName() + "\n";
-//            message += "Stack Trace: " + convertStackTrace(ex);
+            message += "Stack Trace: " + convertStackTrace(ex);
             
             new Slack(Global.SLACK_HOOK)
                 .icon(Global.SLACK_ICON) // Ref - http://www.emoji-cheat-sheet.com/
