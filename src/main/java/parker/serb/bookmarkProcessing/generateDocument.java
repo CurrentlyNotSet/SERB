@@ -211,7 +211,7 @@ public class generateDocument {
             serbAddress += sysAdminInfo.Address1.trim();
         }
         if (!sysAdminInfo.Address2.equals("")) {
-            serbAddress += ", " + sysAdminInfo.Address2.trim();
+            serbAddress += "\n" + sysAdminInfo.Address2.trim();
         }
         if (!sysAdminInfo.City.equals("")) {
             serbCityStateZip += sysAdminInfo.City.trim();
