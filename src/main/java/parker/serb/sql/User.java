@@ -241,7 +241,7 @@ public class User {
                 user.firstName = foundUser.getString("firstName");
                 user.middleInitial = foundUser.getString("middleInitial");
                 user.lastName = foundUser.getString("lastName");
-                user.workPhone = foundUser.getString("workPhone");
+                user.workPhone = NumberFormatService.convertStringToPhoneNumber(foundUser.getString("workPhone"));
                 user.emailAddress = foundUser.getString("emailAddress");
                 user.username = foundUser.getString("username");
                 user.passwordSalt = foundUser.getLong("passwordSalt");

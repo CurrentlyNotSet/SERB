@@ -120,8 +120,8 @@ public class processMEDbookmarks {
                         employerRepSalutation += party.prefix != null ? party.prefix : "";
                         employerRepLastName += party.lastName != null ? party.lastName : "";
                         employerRepEmail += party.emailAddress != null ? party.emailAddress : "";
-                        employerRepPhoneNumber += party.phone1 != null ? NumberFormatService.convertStringToPhoneNumber(party.phone1) : "";
-                        employerRepPhoneNumber += party.phone2 != null ? ", " + NumberFormatService.convertStringToPhoneNumber(party.phone2) : "";
+                        employerRepPhoneNumber += party.phone1 != null ? party.phone1 : "";
+                        employerRepPhoneNumber += party.phone2 != null ? ", " + party.phone2 : "";
 
                         break;
                     case "Employee Organization":
@@ -151,8 +151,8 @@ public class processMEDbookmarks {
                         employeeOrgRepSalutation += party.prefix != null ? party.prefix : "";
                         employeeOrgRepLastName += party.lastName != null ? party.lastName : "";
                         employeeOrgRepEmail += party.emailAddress != null ? party.emailAddress : "";
-                        employeeOrgRepPhone += party.phone1 != null ? NumberFormatService.convertStringToPhoneNumber(party.phone1) : "";
-                        employeeOrgRepPhone += party.phone2 != null ? ", " + NumberFormatService.convertStringToPhoneNumber(party.phone2) : "";
+                        employeeOrgRepPhone += party.phone1 != null ? party.phone1 : "";
+                        employeeOrgRepPhone += party.phone2 != null ? ", " + party.phone2 : "";
                         break;
                 }
             }
@@ -219,11 +219,11 @@ public class processMEDbookmarks {
         if (item.stateMediatorAppointedID != null) {
             mediatorName = stateMediator.lastName == null ? "" : StringUtilities.buildFullName(stateMediator.firstName, stateMediator.middleName, stateMediator.lastName);
             mediatorEmail = stateMediator.email == null ? "" : stateMediator.email;
-            mediatorPhone = stateMediator.phone == null ? "" : NumberFormatService.convertStringToPhoneNumber(stateMediator.phone);
+            mediatorPhone = stateMediator.phone == null ? "" : stateMediator.phone;
         } else if (item.FMCSMediatorAppointedID != null) {
             mediatorName = fmcsMediator.lastName == null ? "" : StringUtilities.buildFullName(fmcsMediator.firstName, fmcsMediator.middleName, fmcsMediator.lastName);
             mediatorEmail = fmcsMediator.email == null ? "" : fmcsMediator.email;
-            mediatorPhone = fmcsMediator.phone == null ? "" : NumberFormatService.convertStringToPhoneNumber(fmcsMediator.phone);
+            mediatorPhone = fmcsMediator.phone == null ? "" : fmcsMediator.phone;
         }
 
         for (int i = 0; i < Global.BOOKMARK_LIMIT; i++) {
@@ -308,11 +308,11 @@ public class processMEDbookmarks {
             processBookmark.process("STATEMEDIATORAPPT" + (i == 0 ? "" : i),
                     stateMediator.lastName != null ? StringUtilities.buildFullName(stateMediator.firstName, stateMediator.middleName, stateMediator.lastName) : "", Document);
             processBookmark.process("STATEMEDIATORPHONE" + (i == 0 ? "" : i),
-                    stateMediator.phone != null ? NumberFormatService.convertStringToPhoneNumber(stateMediator.phone) : "", Document);
+                    stateMediator.phone != null ? stateMediator.phone : "", Document);
             processBookmark.process("FMCSMEDIATORAPPT" + (i == 0 ? "" : i),
                     fmcsMediator.lastName != null ? StringUtilities.buildFullName(fmcsMediator.firstName, fmcsMediator.middleName, fmcsMediator.lastName) : "", Document);
             processBookmark.process("FMCSPHONE" + (i == 0 ? "" : i),
-                    fmcsMediator.phone != null ? NumberFormatService.convertStringToPhoneNumber(fmcsMediator.phone) : "", Document);
+                    fmcsMediator.phone != null ? fmcsMediator.phone : "", Document);
             processBookmark.process("MEDNAME" + (i == 0 ? "" : i), mediatorName, Document);
             processBookmark.process("MEDEMAIL" + (i == 0 ? "" : i), mediatorEmail, Document);
             processBookmark.process("MEDPHONE" + (i == 0 ? "" : i), mediatorPhone, Document);

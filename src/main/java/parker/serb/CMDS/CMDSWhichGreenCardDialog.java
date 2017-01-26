@@ -84,7 +84,7 @@ public class CMDSWhichGreenCardDialog extends javax.swing.JDialog {
 
         responseDueDateTextBox1.setCaretColor(new java.awt.Color(0, 0, 0));
         responseDueDateTextBox1.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        responseDueDateTextBox.setDateFormat(Global.mmddyyyy);
+        responseDueDateTextBox1.setDateFormat(Global.mmddyyyy);
         responseDueDateTextBox1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 responseDueDateTextBox1MouseClicked(evt);

@@ -146,7 +146,7 @@
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="responseDueDateTextBox1MouseClicked"/>
       </Events>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="responseDueDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="responseDueDateTextBox1.setDateFormat(Global.mmddyyyy);"/>
       </AuxValues>
     </Component>
     <Component class="javax.swing.JButton" name="jButton1">
