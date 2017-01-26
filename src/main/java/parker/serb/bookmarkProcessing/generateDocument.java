@@ -296,9 +296,9 @@ public class generateDocument {
 
             processBookmark.process("SerbFooter" + (i == 0 ? "" : i), sysAdminInfo.Footer, Document);
             processBookmark.process("SerbPhone" + (i == 0 ? "" : i), sysAdminInfo.Phone == null ? ""
-                    : "Tel:" + sysAdminInfo.Phone, Document);
+                    : "Tel: " + sysAdminInfo.Phone, Document);
             processBookmark.process("SerbFax" + (i == 0 ? "" : i), sysAdminInfo.Fax == null ? ""
-                    : "Fax:" + sysAdminInfo.Fax, Document);
+                    : "Fax: " + sysAdminInfo.Fax, Document);
 
             //Made up stuff
             processBookmark.process("TODAYSDATE" + (i == 0 ? "" : i), Global.MMMMddyyyy.format(new Date()), Document);
