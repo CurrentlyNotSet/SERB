@@ -481,6 +481,33 @@ public class CMDSCase {
         }
     }
     
+    public static void updateCaseByTypeCEntry(Date date, String caseNumber) {
+        Statement stmt = null;
+        
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Update CMDSCase"
+                    + " set mailedRR = ?"
+                    + " where caseYear = ?"
+                    + " and caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setTimestamp(1, new Timestamp(date.getTime()));
+            preparedStatement.setString(2, caseNumber.split("-")[0]);
+            preparedStatement.setString(3, caseNumber.split("-")[3]);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateCaseByTypeCEntry(date, caseNumber);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+    }
+    
     public static void updateCaseByTypeDEntry(String result, Timestamp mailBODate, String caseStatus, String caseNumber) {
         Statement stmt = null;
         

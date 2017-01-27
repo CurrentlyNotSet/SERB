@@ -204,6 +204,7 @@ public class CMDSCaseHistoryEntryTypes {
                 
                 if(groupList.isEmpty()) {
                     Activity.addCMDSActivty(activity, filePath, NumberFormatService.generateFullCaseNumber());
+                    CMDSCase.updateCaseByTypeCEntry(date, NumberFormatService.generateFullCaseNumber());
                     CMDSCase.updateCaseInventoryStatusLines(activity, date);
                 }
                 
@@ -214,7 +215,7 @@ public class CMDSCaseHistoryEntryTypes {
                     
                     for(int i = 0; i < groupList.size(); i++) {
                         Activity.addCMDSActivty(activity, filePath, groupList.get(i).toString());
-
+                        CMDSCase.updateCaseByTypeCEntry(date, groupList.get(i).toString());
                         if(updateAllCases) {
                             CMDSCase.updateAllGroupInventoryStatusLines(activity, date);
                         }
@@ -224,9 +225,11 @@ public class CMDSCaseHistoryEntryTypes {
                 List groupList = CMDSCase.getGroupNumberList();
                 
                 if(groupList.isEmpty()) {
+                    CMDSCase.updateCaseByTypeCEntry(date, NumberFormatService.generateFullCaseNumber());
                     Activity.addCMDSActivty(activity, filePath, NumberFormatService.generateFullCaseNumber());
                 } else if (groupList.size() > 0) {
                     for(int i = 0; i < groupList.size(); i++) {
+                        CMDSCase.updateCaseByTypeCEntry(date, groupList.get(i).toString());
                         Activity.addCMDSActivty(activity, filePath, groupList.get(i).toString());
                     }
                 }
