@@ -333,4 +333,68 @@ public class CaseNumber {
         }
         return caseNumber;
     }
+    
+    public static String validateMEDCaseNumber(String[] caseNumbers) {
+        boolean valid = true;
+        String caseNumber = "";
+        
+        for(int i = 0; i < caseNumbers.length; i++) {
+            valid = MEDCase.validateCaseNumber(caseNumbers[i].trim());
+            
+            if(!valid) {
+                valid = false;
+                caseNumber = caseNumbers[i].trim();
+                break;
+            } 
+        }
+        return caseNumber;
+    }
+    
+    public static String validateORGCaseNumber(String[] caseNumbers) {
+        boolean valid = true;
+        String caseNumber = "";
+        
+        for(int i = 0; i < caseNumbers.length; i++) {
+            valid = ORGCase.validateOrg(caseNumbers[i].trim());
+            
+            if(!valid) {
+                valid = false;
+                caseNumber = caseNumbers[i].trim();
+                break;
+            } 
+        }
+        return caseNumber;
+    }
+    
+    public static String validateCMDSCaseNumber(String[] caseNumbers) {
+        boolean valid = true;
+        String caseNumber = "";
+        
+        for(int i = 0; i < caseNumbers.length; i++) {
+            valid = CMDSCase.validateCase(caseNumbers[i].trim());
+            
+            if(!valid) {
+                valid = false;
+                caseNumber = caseNumbers[i].trim();
+                break;
+            } 
+        }
+        return caseNumber;
+    }
+    
+    public static String validateCSCCaseNumber(String[] caseNumbers) {
+        boolean valid = true;
+        String caseNumber = "";
+        
+        for(int i = 0; i < caseNumbers.length; i++) {
+            valid = CSCCase.validateCSC(caseNumbers[i].trim());
+            
+            if(!valid) {
+                valid = false;
+                caseNumber = caseNumbers[i].trim();
+                break;
+            } 
+        }
+        return caseNumber;
+    }
 }

@@ -201,6 +201,18 @@ public class fileEmailDialog extends javax.swing.JDialog {
             case "REP":
                 caseNumberFail = CaseNumber.validateREPCaseNumber(caseNumbers);
                 break;
+            case "MED":
+                caseNumberFail = CaseNumber.validateMEDCaseNumber(caseNumbers);
+                break;
+            case "ORG":
+                caseNumberFail = CaseNumber.validateORGCaseNumber(caseNumbers);
+                break;
+            case "CMDS":
+                caseNumberFail = CaseNumber.validateCMDSCaseNumber(caseNumbers);
+                break;
+            case "CSC":
+                caseNumberFail = CaseNumber.validateCSCCaseNumber(caseNumbers);
+                break;
         }
         
         if(!caseNumberFail.equals("")) {
@@ -213,6 +225,7 @@ public class fileEmailDialog extends javax.swing.JDialog {
                 case "ULP":  
                     toComboBox.setSelectedItem(ULPCase.ULPDocketTo(caseNumberTextBox.getText()));
                     break;
+                
             }
         }
     }
