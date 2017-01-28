@@ -207,7 +207,28 @@ public class scanFileDialog extends javax.swing.JDialog {
     private void validateCaseNumber() {
         String[] caseNumbers = caseNumberTextBox.getText().split(",");
         
-        String caseNumberFail = CaseNumber.validateULPCaseNumber(caseNumbers);
+        String caseNumberFail = "";
+        
+        switch(selectedSection) {
+            case "ULP":
+                caseNumberFail = CaseNumber.validateULPCaseNumber(caseNumbers);
+                break;
+            case "REP":
+                caseNumberFail = CaseNumber.validateREPCaseNumber(caseNumbers);
+                break;
+            case "MED":
+                caseNumberFail = CaseNumber.validateMEDCaseNumber(caseNumbers);
+                break;
+            case "ORG":
+                caseNumberFail = CaseNumber.validateORGCaseNumber(caseNumbers);
+                break;
+            case "CMDS":
+                caseNumberFail = CaseNumber.validateCMDSCaseNumber(caseNumbers);
+                break;
+            case "CSC":
+                caseNumberFail = CaseNumber.validateCSCCaseNumber(caseNumbers);
+                break;
+        }
         
         if(!caseNumberFail.equals("")) {
             new docketingCaseNotFound((JFrame) Global.root.getRootPane().getParent(), true, caseNumberFail);
@@ -218,9 +239,6 @@ public class scanFileDialog extends javax.swing.JDialog {
             switch (selectedSection) {
                 case "ULP":  
                     toComboBox.setSelectedItem(ULPCase.ULPDocketTo(caseNumberTextBox.getText()));
-                    break;
-                case "REP":
-//                    toComboBox.setSelectedItem(REPCase.REPDocketTo(caseNumberTextBox.getText()));
                     break;
             }
         }
