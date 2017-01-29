@@ -470,7 +470,6 @@ public class scanFileDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void fileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileButtonActionPerformed
-        // TODO add your handling code here:
         String[] caseNumbers = caseNumberTextBox.getText().trim().split(",");
         FileService.docketScan(caseNumbers,
                 fileNameTextBox.getText(),
