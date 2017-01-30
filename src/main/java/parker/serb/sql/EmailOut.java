@@ -174,7 +174,7 @@ public class EmailOut {
         try {
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "UPDATE EmailOut SET okToSend = true where id = ?";
+            String sql = "UPDATE EmailOut SET okToSend = 1 where id = ?";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setInt(1, id);
