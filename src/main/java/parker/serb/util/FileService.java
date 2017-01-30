@@ -211,23 +211,50 @@ public class FileService {
         
         if(docketFile.exists()) {
             for (String caseNumber : caseNumbers) {
-                String[] caseNumberParts = caseNumber.trim().split("-");
-                File caseArchiveFile = new File(
+                
+                File caseArchiveFile = null;
+                
+                switch(section) {
+                    case "ORG":
+                    case "CSC":
+                        caseArchiveFile = new File(
+                        Global.activityPath 
+                        + section
+                        + File.separatorChar
+                        + caseNumber.trim());
+                        break;
+                    default:
+                        String[] caseNumberParts = caseNumber.trim().split("-");
+                        caseArchiveFile = new File(
                         Global.activityPath 
                         + section
                         + File.separatorChar
                         + caseNumberParts[0]
                         + File.separatorChar
                         + caseNumber.trim());
+                        break;
+                }
                 
                 caseArchiveFile.mkdirs();
                 
                 String fileDate = String.valueOf(new Date().getTime());
                 
                 FileUtils.copyFile(docketFile, new File(caseArchiveFile + File.separator + fileDate + "_" + typeAbbrv + (redacted ? "_REDACTED.pdf" : ".pdf")));
-                Activity.addActivtyFromDocket("Filed " + typeFull + " from " + from + (redacted ? " (REDACTED)" : ""),
-                        fileDate + "_" + typeAbbrv + (redacted ? "_REDACTED.pdf" : ".pdf"),
-                        caseNumberParts,from, to, typeFull, comment, redacted, false, activityDate);
+                
+                switch(section) {
+                    case "ORG":
+                    case "CSC":
+                        Activity.addActivtyFromDocketORGCSC("Filed " + typeFull + " from " + from,
+                        fileDate + "_" + typeAbbrv + fileName.substring(fileName.lastIndexOf(".")),
+                        caseNumber, from, to, typeFull, comment, false, false, section);
+                        break;
+                    default:
+                        Activity.addActivtyFromDocket("Filed " + typeFull + " from " + from,
+                        fileDate + "_" + typeAbbrv + fileName.substring(fileName.lastIndexOf(".")),
+                        caseNumber.trim().split("-"),from, to, typeFull, comment, false, false);
+                        break;
+                }
+                
                 Audit.addAuditEntry("Filed " + typeFull + " from " + from + (redacted ? " (REDACTED)" : ""));
                 
                 switch(section) {
