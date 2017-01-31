@@ -79,7 +79,7 @@ public class RequestedInfoStringPanel extends javax.swing.JDialog {
         TextField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Reqired Report Information");
+        setTitle("Required Report Information");
         setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N

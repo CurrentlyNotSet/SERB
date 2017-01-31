@@ -56,10 +56,10 @@ public class REPHeaderPanel extends javax.swing.JPanel {
                     Global.root.getjButton2().setEnabled(true);
                     Global.root.getjButton3().setEnabled(true);
                     loadInformation();
-                    if(Global.root.getuLPRootPanel1().getjTabbedPane1().getSelectedIndex() == 0) {
+                    if(Global.root.getrEPRootPanel1().getjTabbedPane1().getSelectedIndex() == 0) {
                         Global.root.getjButton2().setText("Add Entry");
                         Global.root.getjButton2().setEnabled(true);
-                        Global.root.getuLPRootPanel1().getActivityPanel1().loadAllActivity();
+                        Global.root.getrEPRootPanel1().getActivityPanel1().loadAllActivity();
                         Global.root.getjButton9().setVisible(true);
                     }
                     Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
