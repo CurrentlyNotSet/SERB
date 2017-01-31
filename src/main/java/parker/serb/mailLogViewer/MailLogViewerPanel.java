@@ -169,7 +169,7 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
         jTable1 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Reqired Report Information");
+        setTitle("Maillog Viewer");
         setResizable(false);
 
         headerLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N

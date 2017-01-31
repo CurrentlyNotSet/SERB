@@ -155,7 +155,7 @@ public class RequestedInfoDropdownPanel extends javax.swing.JDialog {
         ComboBox = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Reqired Report Information");
+        setTitle("Required Report Information");
         setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
