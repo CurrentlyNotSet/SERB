@@ -1137,8 +1137,6 @@ public class CMDSCaseHistoryEntryTypes {
             
             CMDSWhichGreenCardDialog pullDate = new CMDSWhichGreenCardDialog(dialog, true);
             
-            
-            
             String activity = entryDescription + (extraText.equals("") ? "" : " " + extraText);
             activity += (partyType.equals("") ? "" : " " + partyType);
             activity += (mailType.equals("") ? "" : " " + mailType);
