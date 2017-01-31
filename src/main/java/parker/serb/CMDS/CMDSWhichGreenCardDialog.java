@@ -6,6 +6,9 @@
 package parker.serb.CMDS;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import parker.serb.Global;
 
 /**
@@ -92,6 +95,11 @@ public class CMDSWhichGreenCardDialog extends javax.swing.JDialog {
         });
 
         jButton1.setText("OK");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -146,6 +154,17 @@ public class CMDSWhichGreenCardDialog extends javax.swing.JDialog {
     private void responseDueDateTextBox1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_responseDueDateTextBox1MouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_responseDueDateTextBox1MouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            whichType = jComboBox1.getSelectedItem().toString();
+            signedDate = new Timestamp(Global.mmddyyyy.parse(responseDueDateTextBox.getText()).getTime());
+            pullDate = new Timestamp(Global.mmddyyyy.parse(responseDueDateTextBox1.getText()).getTime());
+            setVisible(false);
+        } catch (ParseException ex) {
+            Logger.getLogger(CMDSWhichGreenCardDialog.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
