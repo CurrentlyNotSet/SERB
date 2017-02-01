@@ -20,7 +20,6 @@ public class ReleaseNotesDialog extends javax.swing.JDialog {
     
     public ReleaseNotesDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        setUndecorated(true);
         initComponents();
         addListeners();
         loadVersions();
