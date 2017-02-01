@@ -990,7 +990,7 @@ public class Activity {
             String sql = "SELECT * FROM Activity WHERE "
                     + "awaitingTimestamp = 0 AND "
                     + "fileName IS NOT NULL AND "
-                    + "active = 1 AND"
+                    + "active = 1 AND "
                     + "redacted = 0 AND "
                     + "action LIKE 'REDACTED - %' ";
             
