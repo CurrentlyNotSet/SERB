@@ -209,7 +209,7 @@ public class CMDSRootPanel extends javax.swing.JPanel {
                         Global.root.getcMDSHeaderPanel1().getAppelleeTextBox().getText());
                 break;
             case "Case Information":
-                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+                cancel = new CancelUpdate(Global.root, true);
                 if(!cancel.isReset()) {
                 } else {
                     Global.root.enableButtonsAfterCancel();

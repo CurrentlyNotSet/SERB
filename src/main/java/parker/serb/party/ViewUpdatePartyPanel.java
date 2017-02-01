@@ -576,7 +576,7 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
 
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
         if(closeButton.getText().equals("Cancel")) {
-            CancelUpdate cancel = new CancelUpdate((JFrame) this.getParent(), true);
+            CancelUpdate cancel = new CancelUpdate(this, true);
             if(!cancel.isReset()) {
             } else {
                 loadInformation(id);

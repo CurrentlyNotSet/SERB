@@ -330,7 +330,7 @@ public class UpdateREPBoardMeeting extends javax.swing.JDialog {
         if(closeButton.getText().equals("Close")) {
             dispose();
         } else if(closeButton.getText().equals("Cancel")) {
-            CancelUpdate cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+            CancelUpdate cancel = new CancelUpdate(Global.root, true);
             if(!cancel.isReset()) {
             } else {
                 updateButton.setText("Update");

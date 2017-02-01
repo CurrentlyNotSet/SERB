@@ -577,7 +577,7 @@ public class employerDetail extends javax.swing.JDialog {
         if(jButton1.getText().equals("Close")) {
             dispose();
         } else {
-            CancelUpdate cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+            CancelUpdate cancel = new CancelUpdate(Global.root, true);
             if(!cancel.isReset()) {
             } else {
                 loadInformation(empIDNumber);

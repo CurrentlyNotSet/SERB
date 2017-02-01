@@ -329,7 +329,7 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
             Audit.addAuditEntry("Closed Detailed Activity Dialog");
             dispose();
         } else if(closeButton.getText().equals("Cancel")) {
-            CancelUpdate cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+            CancelUpdate cancel = new CancelUpdate(Global.root, true);
             if(!cancel.isReset()) {
             } else {
                 Audit.addAuditEntry("Canceled Update of Activity " + passedID);

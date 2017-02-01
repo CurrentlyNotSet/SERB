@@ -233,7 +233,7 @@ public class ORGRootPanel extends javax.swing.JPanel {
                 oRGParentChildPanel1.loadInformation();
                 break;
             case "Org Information":
-                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+                cancel = new CancelUpdate(Global.root, true);
                 if(!cancel.isReset()) {
                 } else {
                     Global.root.enableButtonsAfterCancel();
@@ -241,27 +241,7 @@ public class ORGRootPanel extends javax.swing.JPanel {
                     enableTabs();
                     oRGInformationPanel1.disableUpdate(false);
                 }
-                break;  
-//            case "Conciliation":
-//                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
-//                if(!cancel.isReset()) {
-//                } else {
-//                    Global.root.enableButtonsAfterCancel();
-//                    Global.root.enableTabsAfterSave();
-//                    enableTabs();
-//                    mEDConciliationPanel2.disableUpdate(false);
-//                }
-//                break;
-//            case "Strike":
-//                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
-//                if(!cancel.isReset()) {
-//                } else {
-//                    Global.root.enableButtonsAfterCancel();
-//                    Global.root.enableTabsAfterSave();
-//                    enableTabs();
-//                    mEDStrikePanel1.disableUpdate(false);
-//                }
-//                break;
+                break;
             case "Notes":
                 cancel = new CancelUpdate(Global.root, true);
                 if(!cancel.isReset()) {

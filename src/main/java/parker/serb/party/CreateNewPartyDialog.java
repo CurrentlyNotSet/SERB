@@ -494,7 +494,7 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        CancelUpdate cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+        CancelUpdate cancel = new CancelUpdate(Global.root, true);
             if(!cancel.isReset()) {
             } else {
                 dispose();
