@@ -264,27 +264,29 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
     }
 
     private void reloadActivity() {
-        switch (Global.activeSection) {
-            case "REP":
-                Global.root.getrEPRootPanel1().getActivityPanel1().loadAllActivity();
-                break;
-            case "ULP":
-                Global.root.getuLPRootPanel1().getActivityPanel1().loadAllActivity();
-                break;
-            case "ORG":
-                Global.root.getoRGRootPanel1().getActivityPanel1().loadAllActivity();
-                break;
-            case "MED":
-                Global.root.getmEDRootPanel1().getActivityPanel1().loadAllActivity();
-                break;
-            case "Hearings":
-                break;
-            case "Civil Service Commission":
-                Global.root.getcSCRootPanel1().getActivityPanel1().loadAllActivity();
-                break;
-            case "CMDS":
-                Global.root.getcMDSRootPanel1().getActivityPanel1().loadAllActivity();
-                break;
+        if (Global.caseNumber != null) {
+            switch (Global.activeSection) {
+                case "REP":
+                    Global.root.getrEPRootPanel1().getActivityPanel1().loadAllActivity();
+                    break;
+                case "ULP":
+                    Global.root.getuLPRootPanel1().getActivityPanel1().loadAllActivity();
+                    break;
+                case "ORG":
+                    Global.root.getoRGRootPanel1().getActivityPanel1().loadAllActivity();
+                    break;
+                case "MED":
+                    Global.root.getmEDRootPanel1().getActivityPanel1().loadAllActivity();
+                    break;
+                case "Hearings":
+                    break;
+                case "Civil Service Commission":
+                    Global.root.getcSCRootPanel1().getActivityPanel1().loadAllActivity();
+                    break;
+                case "CMDS":
+                    Global.root.getcMDSRootPanel1().getActivityPanel1().loadAllActivity();
+                    break;
+            }
         }
     }
 

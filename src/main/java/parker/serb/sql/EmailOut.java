@@ -269,20 +269,49 @@ public class EmailOut {
         return 0;
     }
     
-    public static int getEmailCount(String section) {
+    public static int getEmailCount() {
         int count = 0;
+        
+        List<String> casetypes = null;
+        
+        if (Global.activeSection.equals("Hearings")){
+            casetypes = CaseType.getCaseTypeHearings();
+        } else {
+            casetypes = CaseType.getCaseType();
+        }
         
         Statement stmt = null;
         
         try {
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "SELECT COUNT(*) AS [count] FROM emailout WHERE section = ? "
-                    + "UNION ALL SELECT COUNT(*) AS [count] FROM postalOut WHERE section = ?";
+            String sql = "SELECT COUNT(*) AS [count] FROM emailout WHERE ";
+                                        
+                    if (!casetypes.isEmpty()) {
+                        sql += " (";
+
+                        for (String casetype : casetypes) {
+
+                            sql += " Section = '" + casetype + "' OR";
+                        }
+
+                        sql = sql.substring(0, (sql.length() - 2)) + ") ";
+                    }  
+                    
+                    sql += "UNION ALL SELECT COUNT(*) AS [count] FROM postalOut WHERE ";
+                    
+                    if (!casetypes.isEmpty()) {
+                        sql += " (";
+
+                        for (String casetype : casetypes) {
+
+                            sql += " Section = '" + casetype + "' OR";
+                        }
+
+                        sql = sql.substring(0, (sql.length() - 2)) + ") ";
+                    }
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, section);
-            preparedStatement.setString(2, section);
             
             ResultSet emailListRS = preparedStatement.executeQuery();
             
@@ -292,7 +321,7 @@ public class EmailOut {
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                getEmailCount(section);
+                getEmailCount();
             } 
         } finally {
             DbUtils.closeQuietly(stmt);

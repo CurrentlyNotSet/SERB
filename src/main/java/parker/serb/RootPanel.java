@@ -856,7 +856,7 @@ public class RootPanel extends javax.swing.JFrame {
     }
 
     private void updateQueueButtonText(){
-        int count = EmailOut.getEmailCount(Global.activeSection);
+        int count = EmailOut.getEmailCount();
         
         String amount = "";
 //        if (count > 0){
@@ -872,10 +872,9 @@ public class RootPanel extends javax.swing.JFrame {
             case "ORG":
             case "Civil Service Commission":
             case "CMDS":
-                jButton6.setText("Queue" + amount);
-                break;
             case "Hearings":
-                break;    
+                jButton6.setText("Queue" + amount);
+                break; 
             default:
                 break;
         }
