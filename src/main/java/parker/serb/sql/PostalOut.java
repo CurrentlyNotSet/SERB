@@ -35,8 +35,9 @@ public class PostalOut {
     public int attachementCount;
     public String historyDescription;
     
-    public static List<PostalOut> getPostalOutBySection(String section) {
+    public static List<PostalOut> getPostalOutByGlobalSection() {
         List<PostalOut> emailList = new ArrayList<>();
+        List<String> casetypes = CaseType.getCaseType();
         
         Statement stmt = null;
         try {
@@ -47,12 +48,25 @@ public class PostalOut {
                     + "C.historyDescription, COUNT(S.id) AS attachments "
                     + "FROM PostalOut C "
                     + "LEFT JOIN PostalOutAttachment S ON C.id = S.postaloutid "
-                    + "WHERE Section = ? "
-                    + "GROUP BY C.id, C.section, C.caseYear, C.caseType, C.caseMonth, "
+                    + "WHERE ";
+                    
+                    
+                    
+                    if (!casetypes.isEmpty()) {
+                        sql += "(";
+
+                        for (String casetype : casetypes) {
+
+                            sql += " Section = '" + casetype + "' OR";
+                        }
+
+                        sql = sql.substring(0, (sql.length() - 2)) + ") ";
+                    }  
+                    
+                    sql += "GROUP BY C.id, C.section, C.caseYear, C.caseType, C.caseMonth, "
                     + "C.caseNumber, C.person, C.addressBlock, C.userID, C.suggestedSendDate, C.historyDescription";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, section);
 
             ResultSet emailListRS = preparedStatement.executeQuery();
             
@@ -75,7 +89,7 @@ public class PostalOut {
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                getPostalOutBySection(section);
+                getPostalOutByGlobalSection();
             } 
         } finally {
             DbUtils.closeQuietly(stmt);
@@ -192,8 +206,7 @@ public class PostalOut {
         }
         return 0;
     }
-    
-    
+        
     public static void updatePostalOut(PostalOut item) {
         Statement stmt = null;
         try {
@@ -238,4 +251,5 @@ public class PostalOut {
             DbUtils.closeQuietly(stmt);
         }
     }
+    
 }

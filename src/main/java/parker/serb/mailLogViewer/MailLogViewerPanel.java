@@ -127,7 +127,7 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
         doc.section = "ALL";
         doc.fileName = "MailLog.jasper";
         
-        List casetypes = CaseType.getCaseType();
+        List<String> casetypes = CaseType.getCaseType();
         
         String sqlWHERE = " Activity.date >= '" + startDateField.getText() + " 00:00:00.000'  AND Activity.date <= '" + endDateField.getText() + " 23:59:59.999' "
                     + "AND Activity.fileName IS NOT NULL AND Activity.fileName != '' " 
@@ -136,9 +136,9 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
             if (!casetypes.isEmpty()) {
                 sqlWHERE += "AND (";
                 
-                for (Object casetype : casetypes) {
+                for (String casetype : casetypes) {
                     
-                    sqlWHERE += " Activity.caseType = '" + casetype.toString() + "' OR";
+                    sqlWHERE += " Activity.caseType = '" + casetype + "' OR";
                 }
                 
                 sqlWHERE = sqlWHERE.substring(0, (sqlWHERE.length() - 2)) + ")";

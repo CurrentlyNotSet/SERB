@@ -5,11 +5,14 @@
  */
 package parker.serb.letterQueue;
 
+import com.alee.laf.optionpane.WebOptionPane;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
 import parker.serb.sql.EmailOut;
+import parker.serb.sql.EmailOutAttachment;
 import parker.serb.sql.PostalOut;
+import parker.serb.sql.PostalOutAttachment;
 
 /**
  *
@@ -67,8 +70,8 @@ public class LetterQueuePanel extends javax.swing.JDialog {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
         
-        emailList = EmailOut.getEmailOutBySection(Global.activeSection);
-        postalList = PostalOut.getPostalOutBySection(Global.activeSection);
+        emailList = EmailOut.getEmailOutByGlobalSection();
+        postalList = PostalOut.getPostalOutByGlobalSection();
         
         for (EmailOut eml : emailList){
             String fullCaseNumber = eml.caseYear + "-" + eml.caseType + "-" + eml.caseMonth + "-" + eml.caseNumber;
@@ -123,8 +126,10 @@ public class LetterQueuePanel extends javax.swing.JDialog {
     
     private void processTableAction(java.awt.event.MouseEvent evt) { 
         if(evt.getClickCount() == 1) {
+            deleteButton.setEnabled(true);
             sendButton.setEnabled(true);
         } else if(evt.getClickCount() >= 2) {
+            deleteButton.setEnabled(false);
             sendButton.setEnabled(false);
             if (jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().equals("Email")){
                 new DetailedEmailOutPanel(Global.root, true, (int) jTable1.getValueAt(jTable1.getSelectedRow(), 0));
@@ -139,7 +144,22 @@ public class LetterQueuePanel extends javax.swing.JDialog {
         new ConfirmationDialog(Global.root, true, 
                 jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString(), 
                 (int) jTable1.getValueAt(jTable1.getSelectedRow(), 0));
-        
+        loadLetterQueue();
+    }
+    
+    private void processDeleteButton() {
+        int answer = WebOptionPane.showConfirmDialog(this, "Are you sure you wish to remove this message from queue.", "Remove", WebOptionPane.YES_NO_OPTION);
+        if (answer == WebOptionPane.YES_OPTION) {
+            int rowID = (int) jTable1.getValueAt(jTable1.getSelectedRow(), 0);
+            
+            if (jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().equals("Email")){
+                EmailOut.removeEmail(rowID);
+                EmailOutAttachment.removeEmailAttachment(rowID);
+            } else if (jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().equals("Postal")) {
+                PostalOut.removeEntry(rowID);
+                PostalOutAttachment.removeEntry(rowID);                
+            }
+        }
         loadLetterQueue();
     }
     
@@ -155,6 +175,7 @@ public class LetterQueuePanel extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         searchTextBox = new javax.swing.JTextField();
         clearSearchButton = new javax.swing.JButton();
+        deleteButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -215,6 +236,14 @@ public class LetterQueuePanel extends javax.swing.JDialog {
             }
         });
 
+        deleteButton.setText("Delete");
+        deleteButton.setEnabled(false);
+        deleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -226,6 +255,8 @@ public class LetterQueuePanel extends javax.swing.JDialog {
                     .addComponent(headerLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(cancelButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(sendButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
@@ -254,7 +285,8 @@ public class LetterQueuePanel extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(sendButton)
-                    .addComponent(cancelButton))
+                    .addComponent(cancelButton)
+                    .addComponent(deleteButton))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -281,9 +313,14 @@ public class LetterQueuePanel extends javax.swing.JDialog {
         loadLetterQueue();
     }//GEN-LAST:event_searchTextBoxCaretUpdate
 
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
+        processDeleteButton();
+    }//GEN-LAST:event_deleteButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;
     private javax.swing.JButton clearSearchButton;
+    private javax.swing.JButton deleteButton;
     private javax.swing.JLabel headerLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;

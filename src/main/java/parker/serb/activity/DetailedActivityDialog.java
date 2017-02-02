@@ -343,7 +343,20 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
 
     private void viewFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewFileButtonActionPerformed
         Audit.addAuditEntry("Opened File for Activity: " + passedID);
-        FileService.openFile(fileName);
+        switch (Global.activeSection) {
+            case "ORG":
+                FileService.openFileWithORGNumber("ORG", Global.caseNumber, fileName);
+                break;
+            case "Civil Service Commission":
+                FileService.openFileWithORGNumber("CSC", Global.caseNumber, fileName);
+                break;
+            case "Hearings":
+                FileService.openHearingCaseFile(fileName);
+                break;
+            default:
+                FileService.openFile(fileName);
+                break;
+        }
     }//GEN-LAST:event_viewFileButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -372,13 +372,13 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton5.setSize(dim);
                 jButton5.setMinimumSize(dim);
                 jButton5.setMaximumSize(dim);
-                jButton5.setVisible(false);
+                jButton5.setVisible(true);
                 jButton5.setText("Queue");
                 
                 jButton6.setSize(dim);
                 jButton6.setMinimumSize(dim);
                 jButton6.setMaximumSize(dim);
-                jButton6.setVisible(false);
+                jButton6.setVisible(true);
                 jButton6.setText("Public Records");
                 
                 jButton7.setSize(dim);
@@ -443,7 +443,7 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton6.setSize(dim);
                 jButton6.setMinimumSize(dim);
                 jButton6.setMaximumSize(dim);
-                jButton6.setVisible(false);
+                jButton6.setVisible(true);
                 jButton6.setText("Public Records");
                 
                 jButton7.setSize(dim);
@@ -503,14 +503,14 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton5.setSize(dim);
                 jButton5.setMinimumSize(dim);
                 jButton5.setMaximumSize(dim);
-                jButton5.setVisible(false);
+                jButton5.setVisible(true);
                 jButton5.setText("Queue");
                 
                 jButton6.setSize(dim);
                 jButton6.setMinimumSize(dim);
                 jButton6.setMaximumSize(dim);
-                jButton6.setVisible(false);
-                jButton6.setEnabled(false);
+                jButton6.setVisible(true);
+                jButton6.setEnabled(true);
                 jButton6.setText("Public Records");
                 
                 jButton7.setSize(dim);
@@ -566,6 +566,7 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton4.setMinimumSize(dim);
                 jButton4.setMaximumSize(dim);
                 jButton4.setVisible(true);
+                jButton4.setEnabled(false);
                 jButton4.setText("Single Letter");
                 
                 jButton5.setSize(dim);
@@ -633,13 +634,14 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton4.setSize(dim);
                 jButton4.setMinimumSize(dim);
                 jButton4.setMaximumSize(dim);
-                jButton4.setVisible(false);
+                jButton4.setVisible(true);
+                jButton3.setEnabled(false);
                 jButton4.setText("Single Letter");
                 
                 jButton5.setSize(dim);
                 jButton5.setMinimumSize(dim);
                 jButton5.setMaximumSize(dim);
-                jButton5.setVisible(false);
+                jButton5.setVisible(true);
                 jButton5.setText("Reports");
                 
                 jButton6.setSize(dim);
@@ -700,6 +702,7 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton4.setMinimumSize(dim);
                 jButton4.setMaximumSize(dim);
                 jButton4.setVisible(true);
+                jButton4.setEnabled(false);
                 jButton4.setText("Letters");
                 
                 jButton5.setSize(dim);
@@ -765,7 +768,8 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton4.setSize(dim);
                 jButton4.setMinimumSize(dim);
                 jButton4.setMaximumSize(dim);
-                jButton4.setVisible(false);
+                jButton4.setVisible(true);
+                jButton4.setEnabled(false);
                 jButton4.setText("Letter");
                 
                 jButton5.setSize(dim);
@@ -777,19 +781,19 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton6.setSize(dim);
                 jButton6.setMinimumSize(dim);
                 jButton6.setMaximumSize(dim);
-                jButton6.setVisible(false);
+                jButton6.setVisible(true);
                 jButton6.setText("Queue");
                 
                 jButton7.setSize(dim);
                 jButton7.setMinimumSize(dim);
                 jButton7.setMaximumSize(dim);
-                jButton7.setVisible(false);
+                jButton7.setVisible(true);
                 jButton7.setText("Public Records");
                 
                 jButton8.setSize(dim);
                 jButton8.setMinimumSize(dim);
                 jButton8.setMaximumSize(dim);
-                jButton8.setVisible(false);
+                jButton8.setVisible(true);
                 jButton8.setText("Mail Log");
                 
                 jButton9.setMinimumSize(dim);
