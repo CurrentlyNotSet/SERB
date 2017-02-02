@@ -14,6 +14,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.dbutils.DbUtils;
+import parker.serb.Global;
 import parker.serb.util.SlackNotification;
 
 /**
@@ -37,7 +38,13 @@ public class PostalOut {
     
     public static List<PostalOut> getPostalOutByGlobalSection() {
         List<PostalOut> emailList = new ArrayList<>();
-        List<String> casetypes = CaseType.getCaseType();
+        List<String> casetypes = null;
+        
+        if (Global.activeSection.equals("Hearings")){
+            casetypes = CaseType.getCaseTypeHearings();
+        } else {
+            casetypes = CaseType.getCaseType();
+        }
         
         Statement stmt = null;
         try {
@@ -49,8 +56,6 @@ public class PostalOut {
                     + "FROM PostalOut C "
                     + "LEFT JOIN PostalOutAttachment S ON C.id = S.postaloutid "
                     + "WHERE ";
-                    
-                    
                     
                     if (!casetypes.isEmpty()) {
                         sql += "(";

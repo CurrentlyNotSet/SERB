@@ -635,7 +635,6 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton4.setMinimumSize(dim);
                 jButton4.setMaximumSize(dim);
                 jButton4.setVisible(true);
-                jButton3.setEnabled(false);
                 jButton4.setText("Single Letter");
                 
                 jButton5.setSize(dim);
@@ -763,13 +762,19 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton3.setMinimumSize(dim);
                 jButton3.setMaximumSize(dim);
                 jButton3.setVisible(false);
-                jButton3.setText("All Org Letters");
+                jButton3.setText("");
                 
                 jButton4.setSize(dim);
                 jButton4.setMinimumSize(dim);
                 jButton4.setMaximumSize(dim);
                 jButton4.setVisible(true);
-                jButton4.setEnabled(false);
+                if(Global.caseNumber == null) {
+                    jButton4.setText("Letter");
+                    jButton4.setEnabled(false);
+                } else {
+                    jButton4.setText("Letter");
+                    jButton4.setEnabled(true);
+                }
                 jButton4.setText("Letter");
                 
                 jButton5.setSize(dim);
@@ -942,8 +947,32 @@ public class RootPanel extends javax.swing.JFrame {
         return jButton2;
     }
     
+    public JButton getjButton3() {
+        return jButton3;
+    }
+
+    public JButton getjButton4() {
+        return jButton4;
+    }
+
+    public JButton getjButton5() {
+        return jButton5;
+    }
+
     public JButton getjButton6() {
         return jButton6;
+    }
+    
+    public JButton getjButton7() {
+        return jButton7;
+    }
+
+    public JButton getjButton8() {
+        return jButton8;
+    }
+    
+    public JButton getjButton9() {
+        return jButton9;
     }
     
     public REPRootPanel getrEPRootPanel1() {
@@ -952,10 +981,6 @@ public class RootPanel extends javax.swing.JFrame {
 
     public REPHeaderPanel getrEPHeaderPanel1() {
         return rEPHeaderPanel1;
-    }
-
-    public JButton getjButton9() {
-        return jButton9;
     }
 
     public ULPHeaderPanel getuLPHeaderPanel1() {
@@ -1008,10 +1033,6 @@ public class RootPanel extends javax.swing.JFrame {
 
     public CMDSRootPanel getcMDSRootPanel1() {
         return cMDSRootPanel1;
-    }
-
-    public JButton getjButton3() {
-        return jButton3;
     }
 
     public HearingHeaderPanel getHearingHeaderPanel1() {
@@ -1717,7 +1738,8 @@ public class RootPanel extends javax.swing.JFrame {
        switch(Global.activeSection) {
             case "ORG":
             case "CMDS":
-            case "Civil Service Commission":   
+            case "Civil Service Commission":
+            case "Hearings":
                 Audit.addAuditEntry("Clicked " + Global.activeSection + " Letter Button");
                 new LetterQueuePanel((JFrame) this.getRootPane().getParent(), true);
                 break;
@@ -1914,6 +1936,10 @@ public class RootPanel extends javax.swing.JFrame {
                 Audit.addAuditEntry("Clicked CMDS Report Button");
                 new ReportDialog((JFrame) this.getRootPane().getParent(), true, "CMDS");
                 break;
+            case "Civil Service Commission":
+                Audit.addAuditEntry("Clicked Civil Service Commission Report Button");
+                new ReportDialog((JFrame) this.getRootPane().getParent(), true, "CSC");
+                break;
             default:
                 break;
         }
@@ -1929,7 +1955,8 @@ public class RootPanel extends javax.swing.JFrame {
                 break;
             case "ORG":
             case "Civil Service Commission":
-            case "CMDS":   
+            case "CMDS":
+            case "Hearings":
                 Audit.addAuditEntry("Clicked " + Global.activeSection + " Public Records Button");
                 new PublicRecordsMainPanel((JFrame) this.getRootPane().getParent(), true);
                 break;
@@ -1942,7 +1969,8 @@ public class RootPanel extends javax.swing.JFrame {
         switch(Global.activeSection) {
             case "ORG":
             case "Civil Service Commission":
-            case "CMDS":    
+            case "CMDS":
+            case "Hearings":
                 Audit.addAuditEntry("Clicked " + Global.activeSection + " Mail Log Button");
                 new MailLogViewerPanel((JFrame) this.getRootPane().getParent(), true);
                 break;

@@ -45,6 +45,7 @@ public class CMDSHeaderPanel extends javax.swing.JPanel {
                     if(Global.root != null) {
                         Global.root.getjButton2().setText("Update");
                         Global.root.getjButton2().setEnabled(false);
+                        Global.root.getjButton4().setEnabled(false);
                         if(Global.caseNumber == null) {
                             Global.root.getjButton9().setVisible(false);
                             Global.caseNumber = null;
@@ -60,6 +61,8 @@ public class CMDSHeaderPanel extends javax.swing.JPanel {
                         Global.root.getcMDSRootPanel1().getActivityPanel1().loadAllActivity();
                         Global.root.getjButton2().setText("Add Entry");
                         Global.root.getjButton2().setEnabled(true);
+                        Global.root.getjButton4().setText("Letter");
+                        Global.root.getjButton4().setEnabled(true);
                         Global.root.getjButton9().setVisible(false);
                     }
                     Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
