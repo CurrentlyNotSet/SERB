@@ -461,9 +461,9 @@ public class processCMDSbookmarks {
             processBookmark.process("CaseName" + (i == 0 ? "" : i), appellantNames.trim() + " vs. " + appelleeNames.trim(), Document);
             processBookmark.process("NameOfRep" + (i == 0 ? "" : i), appellantRep1Names, Document);
             processBookmark.process("TitleOfRep" + (i == 0 ? "" : i), appellantRep1Title, Document);
-            processBookmark.process("ccList" + (i == 0 ? "" : i), ccNameBlock, Document);
+            processBookmark.process("CCList" + (i == 0 ? "" : i), ccNameBlock, Document);
             processBookmark.process("ccListAddress" + (i == 0 ? "" : i), ccAddressBlock, Document);
-
+            
             //Questions
             processBookmark.process("ActionAppealed" + (i == 0 ? "" : i), answers.getActionAppealed(), Document);
             processBookmark.process("FiledOrDidNotFile" + (i == 0 ? "" : i), answers.getMemorandumContra(), Document);
