@@ -10,6 +10,7 @@ import java.util.List;
 import org.apache.commons.dbutils.DbUtils;
 import parker.serb.util.NumberFormatService;
 import parker.serb.util.SlackNotification;
+import parker.serb.util.StringUtilities;
 
 /**
  *
@@ -52,9 +53,10 @@ public class FactFinder {
             ResultSet factFinderListRS = preparedStatement.executeQuery();
             
             while(factFinderListRS.next()) {
-                String name = factFinderListRS.getString("firstName") == null ? "" : factFinderListRS.getString("firstName");
-                name += factFinderListRS.getString("middleName") == null ? "" : " " + factFinderListRS.getString("middleName");
-                name += factFinderListRS.getString("lastName") == null ? "" : " " + factFinderListRS.getString("lastName");
+                String name = StringUtilities.buildFullName(
+                        factFinderListRS.getString("firstName"), 
+                        factFinderListRS.getString("middleName"),
+                        factFinderListRS.getString("lastName"));
                 factFinderList.add(name);
             }
         } catch (SQLException ex) {
@@ -87,9 +89,11 @@ public class FactFinder {
             ResultSet factFinderListRS = preparedStatement.executeQuery();
             
             while(factFinderListRS.next()) {
-                String name = factFinderListRS.getString("firstName") == null ? "" : factFinderListRS.getString("firstName");
-                name += factFinderListRS.getString("middleName") == null ? "" : " " + factFinderListRS.getString("middleName");
-                name += factFinderListRS.getString("lastName") == null ? "" : " " + factFinderListRS.getString("lastName");
+                String name = StringUtilities.buildFullName(
+                        factFinderListRS.getString("firstName"), 
+                        factFinderListRS.getString("middleName"),
+                        factFinderListRS.getString("lastName"));
+                
                 factFinderList.add(name);
             }
         } catch (SQLException ex) {

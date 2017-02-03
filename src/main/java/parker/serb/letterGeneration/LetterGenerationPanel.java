@@ -346,7 +346,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                     //check for checkmark
                     boolean selected = false;
                     if (SMDSdocToGenerate.description.contains("Panel") && medCaseData != null) {
-                        selected = setMEDFFConcCheckMark(person);
+                        selected = setMEDFFConcCheckMark(person.replaceAll("[^a-zA-Z]", "").toLowerCase());
                     }
 
                     //Spoof Filename
@@ -382,29 +382,29 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
 
     private boolean setMEDFFConcCheckMark(String Name) {
         if (!medCaseData.FFList2Name1.equals("") || !medCaseData.concilList2Name1.equals("")) {
-            if (medCaseData.FFList2Name1.equals(Name)
-                    || medCaseData.FFList2Name2.equals(Name)
-                    || medCaseData.FFList2Name3.equals(Name)
-                    || medCaseData.FFList2Name4.equals(Name)
-                    || medCaseData.FFList2Name5.equals(Name)
-                    || medCaseData.concilList2Name1.equals(Name)
-                    || medCaseData.concilList2Name2.equals(Name)
-                    || medCaseData.concilList2Name3.equals(Name)
-                    || medCaseData.concilList2Name4.equals(Name)
-                    || medCaseData.concilList2Name5.equals(Name)) {
+            if (medCaseData.FFList2Name1.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                    || medCaseData.FFList2Name2.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                    || medCaseData.FFList2Name3.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                    || medCaseData.FFList2Name4.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                    || medCaseData.FFList2Name5.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                    || medCaseData.concilList2Name1.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                    || medCaseData.concilList2Name2.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                    || medCaseData.concilList2Name3.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                    || medCaseData.concilList2Name4.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                    || medCaseData.concilList2Name5.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)) {
                 return true;
             }
         } else {
-            if (medCaseData.FFList1Name1.equals(Name)
-                    || medCaseData.FFList1Name2.equals(Name)
-                    || medCaseData.FFList1Name3.equals(Name)
-                    || medCaseData.FFList1Name4.equals(Name)
-                    || medCaseData.FFList1Name5.equals(Name)
-                    || medCaseData.concilList1Name1.equals(Name)
-                    || medCaseData.concilList1Name2.equals(Name)
-                    || medCaseData.concilList1Name3.equals(Name)
-                    || medCaseData.concilList1Name4.equals(Name)
-                    || medCaseData.concilList1Name5.equals(Name)) {
+            if (medCaseData.FFList1Name1.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                    || medCaseData.FFList1Name2.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                    || medCaseData.FFList1Name3.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                    || medCaseData.FFList1Name4.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                    || medCaseData.FFList1Name5.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                    || medCaseData.concilList1Name1.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                    || medCaseData.concilList1Name2.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                    || medCaseData.concilList1Name3.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                    || medCaseData.concilList1Name4.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                    || medCaseData.concilList1Name5.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)) {
                 return true;
             }
         }
