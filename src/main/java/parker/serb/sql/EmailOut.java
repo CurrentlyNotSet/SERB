@@ -14,6 +14,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.dbutils.DbUtils;
+import parker.serb.Global;
 import parker.serb.util.SlackNotification;
 
 /**
@@ -40,8 +41,15 @@ public class EmailOut {
     public boolean okToSend;
     public String internalNote;
     
-    public static List<EmailOut> getEmailOutBySection(String section) {
+    public static List<EmailOut> getEmailOutByGlobalSection() {
         List<EmailOut> emailList = new ArrayList<>();
+        List<String> casetypes = null;
+        
+        if (Global.activeSection.equals("Hearings")){
+            casetypes = CaseType.getCaseTypeHearings();
+        } else {
+            casetypes = CaseType.getCaseType();
+        }
         
         Statement stmt = null;
         
@@ -54,14 +62,24 @@ public class EmailOut {
                     + "C.okToSend, c.internalNote, COUNT(S.id) AS attachments "
                     + "FROM EmailOut C "
                     + "LEFT JOIN EmailOutAttachment S ON C.id = S.emailoutid "
-                    + "WHERE Section = ? AND C.okToSend = 0 "
-                    + "GROUP BY C.id, C.section, C.caseYear, C.caseType, C.caseMonth, "
+                    + "WHERE C.okToSend = 0 ";
+
+                    if (!casetypes.isEmpty()) {
+                        sql += "AND (";
+
+                        for (String casetype : casetypes) {
+
+                            sql += " Section = '" + casetype + "' OR";
+                        }
+
+                        sql = sql.substring(0, (sql.length() - 2)) + ") ";
+                    }  
+                    
+                    sql += " GROUP BY C.id, C.section, C.caseYear, C.caseType, C.caseMonth, "
                     + "C.caseNumber, C.[to], C.[from], C.cc, C.bcc, C.subject, "
                     + "C.body, C.userID, C.suggestedSendDate, C.okToSend, c.internalNote";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, section);
-
             ResultSet emailListRS = preparedStatement.executeQuery();
             
             while(emailListRS.next()) {
@@ -88,7 +106,7 @@ public class EmailOut {
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                getEmailOutBySection(section);
+                getEmailOutByGlobalSection();
             } 
         } finally {
             DbUtils.closeQuietly(stmt);
@@ -251,20 +269,49 @@ public class EmailOut {
         return 0;
     }
     
-    public static int getEmailCount(String section) {
+    public static int getEmailCount() {
         int count = 0;
+        
+        List<String> casetypes = null;
+        
+        if (Global.activeSection.equals("Hearings")){
+            casetypes = CaseType.getCaseTypeHearings();
+        } else {
+            casetypes = CaseType.getCaseType();
+        }
         
         Statement stmt = null;
         
         try {
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "SELECT COUNT(*) AS [count] FROM emailout WHERE section = ? "
-                    + "UNION ALL SELECT COUNT(*) AS [count] FROM postalOut WHERE section = ?";
+            String sql = "SELECT COUNT(*) AS [count] FROM emailout WHERE ";
+                                        
+                    if (!casetypes.isEmpty()) {
+                        sql += " (";
+
+                        for (String casetype : casetypes) {
+
+                            sql += " Section = '" + casetype + "' OR";
+                        }
+
+                        sql = sql.substring(0, (sql.length() - 2)) + ") ";
+                    }  
+                    
+                    sql += "UNION ALL SELECT COUNT(*) AS [count] FROM postalOut WHERE ";
+                    
+                    if (!casetypes.isEmpty()) {
+                        sql += " (";
+
+                        for (String casetype : casetypes) {
+
+                            sql += " Section = '" + casetype + "' OR";
+                        }
+
+                        sql = sql.substring(0, (sql.length() - 2)) + ") ";
+                    }
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, section);
-            preparedStatement.setString(2, section);
             
             ResultSet emailListRS = preparedStatement.executeQuery();
             
@@ -274,11 +321,35 @@ public class EmailOut {
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                getEmailCount(section);
+                getEmailCount();
             } 
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return count;
     }
+    
+    public static void removeEmail(int id) {
+        Statement stmt = null;
+        
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Delete from EmailOut"
+                    + " where id = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                removeEmail(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+    }
+    
 }

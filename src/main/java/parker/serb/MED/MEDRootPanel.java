@@ -263,7 +263,7 @@ public class MEDRootPanel extends javax.swing.JPanel {
                         Global.root.getmEDHeaderPanel1().getEmployeeOrgTextBox().getText().trim());
                 break;
             case "Status":
-                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+                cancel = new CancelUpdate(Global.root, true);
                 if(!cancel.isReset()) {
                 } else {
                     Global.root.enableButtonsAfterCancel();
@@ -273,7 +273,7 @@ public class MEDRootPanel extends javax.swing.JPanel {
                 }
                 break;
             case "Fact Finder":
-                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+                cancel = new CancelUpdate(Global.root, true);
                 if(!cancel.isReset()) {
                 } else {
                     Global.root.enableButtonsAfterCancel();
@@ -283,7 +283,7 @@ public class MEDRootPanel extends javax.swing.JPanel {
                 }
                 break;  
             case "Conciliation":
-                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+                cancel = new CancelUpdate(Global.root, true);
                 if(!cancel.isReset()) {
                 } else {
                     Global.root.enableButtonsAfterCancel();
@@ -293,7 +293,7 @@ public class MEDRootPanel extends javax.swing.JPanel {
                 }
                 break;
             case "Strike":
-                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+                cancel = new CancelUpdate(Global.root, true);
                 if(!cancel.isReset()) {
                 } else {
                     Global.root.enableButtonsAfterCancel();

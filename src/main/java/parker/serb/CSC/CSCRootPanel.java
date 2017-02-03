@@ -192,7 +192,7 @@ public class CSCRootPanel extends javax.swing.JPanel {
                 partiesPanel1.loadCSCParties();
                 break;
             case "CSC Information":
-                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+                cancel = new CancelUpdate(Global.root, true);
                 if(!cancel.isReset()) {
                 } else {
                     Audit.addAuditEntry("Canceled CSC Informtion Update");

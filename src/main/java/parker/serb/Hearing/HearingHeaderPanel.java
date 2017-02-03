@@ -45,6 +45,7 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
 //                        if(Global.caseNumber == null) {
                             Global.root.getjButton2().setText("Add Entry");
                             Global.root.getjButton2().setEnabled(false);
+                            Global.root.getjButton4().setEnabled(false);
 //                        } else {
 //                            Global.root.getjButton2().setText("Add Entry");
 //                            Global.root.getjButton2().setEnabled(true);
@@ -62,6 +63,8 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
                         Global.root.getHearingRootPanel1().getActivityPanel1().loadAllHearingActivity();
                         Global.root.getjButton2().setText("Add Entry");
                         Global.root.getjButton2().setEnabled(true);
+                        Global.root.getjButton4().setText("Letter");
+                        Global.root.getjButton4().setEnabled(true);
                     }
                     Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
                 }

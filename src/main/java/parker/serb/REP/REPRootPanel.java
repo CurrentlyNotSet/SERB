@@ -300,7 +300,7 @@ public class REPRootPanel extends javax.swing.JPanel {
                 }
                 break;
             case "Elections":
-                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+                cancel = new CancelUpdate(Global.root, true);
                 if(!cancel.isReset()) {
                 } else {
                     Global.root.enableButtonsAfterCancel();
@@ -314,7 +314,7 @@ public class REPRootPanel extends javax.swing.JPanel {
                 rEPMediationPanel1.removeMediation();
                 break;
             case "Notes":
-                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+                cancel = new CancelUpdate(Global.root, true);
                 if(!cancel.isReset()) {
                 } else {
                     Global.root.enableButtonsAfterCancel();

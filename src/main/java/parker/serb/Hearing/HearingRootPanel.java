@@ -200,7 +200,7 @@ public class HearingRootPanel extends javax.swing.JPanel {
                 partiesPanel1.loadHearingParties();
                 break;
             case "Case Information":
-                cancel = new CancelUpdate((JFrame) Global.root.getParent(), true);
+                cancel = new CancelUpdate(Global.root, true);
                 if(!cancel.isReset()) {
                 } else {
                     Global.root.enableButtonsAfterCancel();
