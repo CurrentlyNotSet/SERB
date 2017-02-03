@@ -5,12 +5,7 @@
  */
 package parker.serb.report;
 
-import java.util.List;
-import javax.swing.DefaultComboBoxModel;
 import parker.serb.sql.SMDSDocuments;
-import parker.serb.sql.User;
-import parker.serb.util.Item;
-import parker.serb.util.StringUtilities;
 
 /**
  *
@@ -40,14 +35,14 @@ public class RequestedInfoStringPanel extends javax.swing.JDialog {
     private void setActive(String reportName, String IDType) {
         reportLabel.setText(reportName);
         switch (IDType) {
-                case "groupNumber":
-                    TextFieldLabel.setText("Group Number: ");
-                    break;
-                case "Year":
-                    TextFieldLabel.setText("Year: ");
-                    break;
-                case "OrgNumber":
-                    TextFieldLabel.setText("Org Number: ");
+            case "groupNumber":
+                TextFieldLabel.setText("Group Number: ");
+                break;
+            case "Year":
+                TextFieldLabel.setText("Year: ");
+                break;
+            case "OrgNumber":
+                TextFieldLabel.setText("Org Number: ");
             default:
                 break;
         }

@@ -64,6 +64,7 @@ public class RequestedInfoTwoDateIDPanel extends javax.swing.JDialog {
 
         switch (IDType) {
             case "UserID":
+                ComboBox.addItem(new Item<>("%", "All"));
                 userList = User.getEnabledUsers();
                 for (User item : userList) {
                     ComboBox.addItem(new Item<>(
@@ -72,6 +73,7 @@ public class RequestedInfoTwoDateIDPanel extends javax.swing.JDialog {
                     );
                 }
             case "InvestigatorID":
+                ComboBox.addItem(new Item<>("%", "All"));
                 userList = User.getEnabledUsers();
 
                 for (User item : userList) {
@@ -92,7 +94,7 @@ public class RequestedInfoTwoDateIDPanel extends javax.swing.JDialog {
     private void generateButton() {
         if (startDateField.toString().trim().equals("")
                 || endDateField.toString().trim().equals("")
-                || comboBoxID < 1) {
+                || ComboBox.getSelectedItem().toString().equals("")) {
             GenerateReportButton.setEnabled(false);
         } else {
             GenerateReportButton.setEnabled(true);
@@ -238,7 +240,11 @@ public class RequestedInfoTwoDateIDPanel extends javax.swing.JDialog {
     }//GEN-LAST:event_CancelButtonActionPerformed
 
     private void GenerateReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GenerateReportButtonActionPerformed
-        GenerateReport.generateTwoDatesIDReport(startDateField.getText(), endDateField.getText(), String.valueOf(comboBoxID), report);
+        String comboBoxIDString = String.valueOf(comboBoxID);
+        if (ComboBox.getSelectedItem().toString().equals("All")){
+            comboBoxIDString = "%";
+        }
+        GenerateReport.generateTwoDatesIDReport(startDateField.getText(), endDateField.getText(), comboBoxIDString, report);
     }//GEN-LAST:event_GenerateReportButtonActionPerformed
 
     private void startDateFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startDateFieldActionPerformed
