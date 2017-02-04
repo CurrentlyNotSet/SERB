@@ -83,7 +83,7 @@ public class processMEDbookmarks {
                 }
             }
 
-            for (int person : toParties) {
+            for (int person : ccParties) {
                 if (person == party.id) {
                     if (!"".equals(ccNameBlock.trim())) {
                         ccNameBlock += ", ";
@@ -248,6 +248,7 @@ public class processMEDbookmarks {
             processBookmark.process("EMPORGREPSAL" + (i == 0 ? "" : i), employeeOrgRepSalutation, Document);
             processBookmark.process("EMPORGREPEMAIL" + (i == 0 ? "" : i), employeeOrgRepEmail, Document);
             processBookmark.process("EMPORGREPPHONE" + (i == 0 ? "" : i), employeeOrgRepPhone, Document);
+            processBookmark.process("CCList" + (i == 0 ? "" : i), ccNameBlock, Document);
 
             //Fact Finder Information
             processBookmark.process("FACTFINDER1" + (i == 0 ? "" : i),

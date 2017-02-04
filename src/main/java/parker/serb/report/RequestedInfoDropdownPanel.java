@@ -77,6 +77,7 @@ public class RequestedInfoDropdownPanel extends javax.swing.JDialog {
                 break;
             case "UserID":
                 ComboBox.addItem(new Item<>("0", ""));
+                ComboBox.addItem(new Item<>("%", "All"));
                 List<User> userList = User.getEnabledUsers();
                 for (User item : userList) {
                     ComboBox.addItem(new Item<>(
@@ -88,7 +89,8 @@ public class RequestedInfoDropdownPanel extends javax.swing.JDialog {
                 break;
             case "ActivityType":
                 comboBoxLabel.setText("Activity Type:");
-                List<ActivityType> typeList = ActivityType.loadAllActivityTypeBySection("CMDS");
+                ComboBox.addItem(new Item<>("%", "All"));
+                List<ActivityType> typeList = ActivityType.loadAllActivityTypeBySection(Global.activeSection);
                 for (ActivityType item : typeList) {
                     ComboBox.addItem(new Item<>(
                             String.valueOf(item.id),
@@ -99,6 +101,7 @@ public class RequestedInfoDropdownPanel extends javax.swing.JDialog {
                 break;
             case "InvestigatorID":
                 comboBoxLabel.setText("Investigator:");
+                ComboBox.addItem(new Item<>("%", "All"));
                 List<User> investigatorList = User.getEnabledInvestigators();
                 for (User item : investigatorList) {
                     ComboBox.addItem(new Item<>(
@@ -131,6 +134,9 @@ public class RequestedInfoDropdownPanel extends javax.swing.JDialog {
             case "ActivityType":
                 Item item = (Item) ComboBox.getSelectedItem();
                 String comboBoxID = item.getValue().toString();
+                if (item.getDescription().equals("All")){
+                    comboBoxID = "%";
+                }
                 GenerateReport.generateIDReport(comboBoxID, report);
                 break;
             default:

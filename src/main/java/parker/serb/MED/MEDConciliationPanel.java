@@ -220,7 +220,13 @@ public class MEDConciliationPanel extends javax.swing.JPanel {
         newMEDCaseInformation.concilReplacement = replacementConciliatorComboBox.getSelectedItem() == null || replacementConciliatorComboBox.getSelectedItem().toString().equals("") ? null : replacementConciliatorComboBox.getSelectedItem().toString();
         
         if(concilOriginalConciliator.getText().equals("")) {
-            newMEDCaseInformation.concilOriginalConciliator = conciliatorSelectionComboBox.getSelectedItem().toString().equals("") ? null : conciliatorSelectionComboBox.getSelectedItem().toString();
+            if (conciliatorSelectionComboBox.getSelectedItem() == null){
+                newMEDCaseInformation.concilOriginalConciliator = null;
+            } else {
+                newMEDCaseInformation.concilOriginalConciliator = 
+                        conciliatorSelectionComboBox.getSelectedItem().toString().equals("") 
+                        ? null : conciliatorSelectionComboBox.getSelectedItem().toString();
+            }
         } else if(conciliatorSelectionComboBox.getSelectedItem() == null ||
             conciliatorSelectionComboBox.getSelectedItem().toString().equals("")) {
             newMEDCaseInformation.concilOriginalConciliator = null;

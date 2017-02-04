@@ -41,7 +41,7 @@ public class processORGbookmarks {
                 }
             }
             
-            for (int person : toParties){
+            for (int person : ccParties){
                 if (person == party.id) {
                      if (!"".equals(ccNameBlock.trim())){
                         ccNameBlock += ", ";
@@ -104,6 +104,8 @@ public class processORGbookmarks {
             processBookmark.process("OrgName" + (i == 0 ? "" : i), item.orgName, Document);
             processBookmark.process("OrgNum" + (i == 0 ? "" : i), item.orgNumber, Document);
             processBookmark.process("CertifiedDate" + (i == 0 ? "" : i), certifiedDate, Document);
+            
+            processBookmark.process("CCList" + (i == 0 ? "" : i), ccNameBlock, Document);
         }
         return Document;
     }

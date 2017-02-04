@@ -3030,39 +3030,6 @@ public class PartiesPanel extends javax.swing.JPanel {
             model.addRow(new Object[] {"", "", "", "", "", ""});
         }
         
-        if(officerParties.size() > 0) {
-            model.addRow(new Object[] {"", "<html><b>Officers</b></html>", "", "", "", ""});
-            for(int i = 0; i < officerParties.size(); i++) {
-                CaseParty charginingPartyInformation = officerParties.get(i);
-                
-                if(charginingPartyInformation.firstName.equals("") 
-                        && charginingPartyInformation.lastName.equals("")) {
-                    name = charginingPartyInformation.companyName;
-                } else {
-                    name = (charginingPartyInformation.prefix.equals("") ? "" : (charginingPartyInformation.prefix + " "))
-                        + (charginingPartyInformation.firstName.equals("") ? "" : (charginingPartyInformation.firstName + " "))
-                        + (charginingPartyInformation.middleInitial.equals("") ? "" : (charginingPartyInformation.middleInitial + ". "))
-                        + (charginingPartyInformation.lastName.equals("") ? "" : (charginingPartyInformation.lastName))
-                        + (charginingPartyInformation.suffix.equals("") ? "" : (" " + charginingPartyInformation.suffix))
-                        + (charginingPartyInformation.nameTitle.equals("") ? "" : (", " + charginingPartyInformation.nameTitle));
-                }
-                
-                model.addRow(new Object[] {charginingPartyInformation.id,
-                    name,
-                    charginingPartyInformation.jobTitle, 
-                    charginingPartyInformation.address1
-                    + (charginingPartyInformation.address2.equals("") ? "" : (", " + charginingPartyInformation.address2))
-                    + (charginingPartyInformation.address3.equals("") ? "" : (", " + charginingPartyInformation.address3))
-                    + (charginingPartyInformation.city.equals("") ? "" : (", " + charginingPartyInformation.city))
-                    + (charginingPartyInformation.stateCode.equals("") ? "" : (", " + charginingPartyInformation.stateCode))
-                    + (charginingPartyInformation.zipcode.equals("") ? "" : (", " + charginingPartyInformation.zipcode)),
-                    charginingPartyInformation.phone1, charginingPartyInformation.emailAddress});
-            }
-            model.addRow(new Object[] {"", "", "", "", "", ""});
-        }
-
-        
-        
         //remove blank row
         if(model.getRowCount() > 0) {
             if(model.getValueAt(model.getRowCount()-1, 0).toString().equals("")) {

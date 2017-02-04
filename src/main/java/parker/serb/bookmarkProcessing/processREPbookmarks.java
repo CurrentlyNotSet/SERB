@@ -74,7 +74,7 @@ public class processREPbookmarks {
                 }
             }
             
-            for (int person : toParties){
+            for (int person : ccParties){
                 if (person == party.id) {
                      if (!"".equals(ccNameBlock.trim())){
                         ccNameBlock += ", ";
@@ -285,6 +285,7 @@ public class processREPbookmarks {
                     (!"".equals(rivalEmployeeOrganizationRepName) ? rivalEmployeeOrganizationRepName.trim() : rivalEmployeeOrganizationName.trim()), Document);
             processBookmark.process("EOCONTACT" + (i == 0 ? "" : i), 
                     (!"".equals(employeeOrganizationRepName) ? employeeOrganizationRepName.trim() : employeeOrganizationName.trim()), Document);
+            processBookmark.process("CCList" + (i == 0 ? "" : i), ccNameBlock, Document);
             
             //Latest Mediation
             processBookmark.process("MEDIATEDAY" + (i == 0 ? "" : i), "", Document);

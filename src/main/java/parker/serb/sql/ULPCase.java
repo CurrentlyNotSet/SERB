@@ -460,6 +460,7 @@ public class ULPCase {
             ulp.currentStatus = caseNumberRS.getString("currentStatus");
             ulp.priority = caseNumberRS.getBoolean("priority");
             ulp.assignedDate = caseNumberRS.getTimestamp("assignedDate");
+            ulp.turnInDate = caseNumberRS.getTimestamp("turnInDate");
             ulp.reportDueDate = caseNumberRS.getTimestamp("reportDueDate");
             ulp.dismissalDate = caseNumberRS.getTimestamp("dismissalDate");
             ulp.deferredDate = caseNumberRS.getTimestamp("deferredDate");
@@ -673,6 +674,7 @@ public class ULPCase {
                 + " currentStatus = ?,"
                 + " priority = ?,"
                 + " assignedDate = ?,"
+                + " turnInDate = ?,"
                 + " reportDueDate = ?,"
                 + " dismissalDate = ?,"
                 + " deferredDate = ?,"
@@ -701,24 +703,25 @@ public class ULPCase {
             preparedStatement.setString(6, newCaseInformation.currentStatus);
             preparedStatement.setBoolean(7, newCaseInformation.priority);
             preparedStatement.setTimestamp(8, newCaseInformation.assignedDate);
-            preparedStatement.setTimestamp(9, newCaseInformation.reportDueDate);
-            preparedStatement.setTimestamp(10, newCaseInformation.dismissalDate);
-            preparedStatement.setTimestamp(11, newCaseInformation.deferredDate);
-            preparedStatement.setTimestamp(12, newCaseInformation.appealDateReceived);
-            preparedStatement.setTimestamp(13, newCaseInformation.appealDateSent);
-            preparedStatement.setString(14, newCaseInformation.courtName);
-            preparedStatement.setString(15, newCaseInformation.courtCaseNumber);
-            preparedStatement.setString(16, newCaseInformation.SERBCaseNumber);
-            preparedStatement.setString(17, newCaseInformation.finalDispositionStatus);
-            preparedStatement.setInt(18, newCaseInformation.investigatorID);
-            preparedStatement.setInt(19, newCaseInformation.mediatorAssignedID);
-            preparedStatement.setInt(20, newCaseInformation.aljID);
-            preparedStatement.setTimestamp(21, newCaseInformation.fileDate);
-            preparedStatement.setBoolean(22, newCaseInformation.probableCause);
-            preparedStatement.setString(23, Global.caseYear);
-            preparedStatement.setString(24, Global.caseType);
-            preparedStatement.setString(25, Global.caseMonth);
-            preparedStatement.setString(26, Global.caseNumber);
+            preparedStatement.setTimestamp(9, newCaseInformation.turnInDate);
+            preparedStatement.setTimestamp(10, newCaseInformation.reportDueDate);
+            preparedStatement.setTimestamp(11, newCaseInformation.dismissalDate);
+            preparedStatement.setTimestamp(12, newCaseInformation.deferredDate);
+            preparedStatement.setTimestamp(13, newCaseInformation.appealDateReceived);
+            preparedStatement.setTimestamp(14, newCaseInformation.appealDateSent);
+            preparedStatement.setString(15, newCaseInformation.courtName);
+            preparedStatement.setString(16, newCaseInformation.courtCaseNumber);
+            preparedStatement.setString(17, newCaseInformation.SERBCaseNumber);
+            preparedStatement.setString(18, newCaseInformation.finalDispositionStatus);
+            preparedStatement.setInt(19, newCaseInformation.investigatorID);
+            preparedStatement.setInt(20, newCaseInformation.mediatorAssignedID);
+            preparedStatement.setInt(21, newCaseInformation.aljID);
+            preparedStatement.setTimestamp(22, newCaseInformation.fileDate);
+            preparedStatement.setBoolean(23, newCaseInformation.probableCause);
+            preparedStatement.setString(24, Global.caseYear);
+            preparedStatement.setString(25, Global.caseType);
+            preparedStatement.setString(26, Global.caseMonth);
+            preparedStatement.setString(27, Global.caseNumber);
             
             int success = preparedStatement.executeUpdate();
             
@@ -775,6 +778,16 @@ public class ULPCase {
         } else if(newCaseInformation.assignedDate != null && oldCaseInformation.assignedDate != null) {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.assignedDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.assignedDate.getTime()))))
                 Activity.addActivty("Changed Assigned Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.assignedDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.assignedDate.getTime())), null);
+        }
+        
+        //turn in Date
+        if(newCaseInformation.turnInDate == null && oldCaseInformation.turnInDate != null) {
+            Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.turnInDate.getTime())) + " from Turn In Date", null);
+        } else if(newCaseInformation.turnInDate != null && oldCaseInformation.turnInDate == null) {
+            Activity.addActivty("Set Turn In Date to " + Global.mmddyyyy.format(new Date(newCaseInformation.turnInDate.getTime())), null);
+        } else if(newCaseInformation.turnInDate != null && oldCaseInformation.turnInDate != null) {
+            if(!Global.mmddyyyy.format(new Date(oldCaseInformation.turnInDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.turnInDate.getTime()))))
+                Activity.addActivty("Changed Turn In Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.turnInDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.turnInDate.getTime())), null);
         }
         
         //reportDueDate

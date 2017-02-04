@@ -58,7 +58,7 @@ public class processULPbookmarks {
                 }
             }
             
-            for (int person : toParties){
+            for (int person : ccParties){
                 if (person == party.id) {
                      if (!"".equals(ccNameBlock.trim())){
                         ccNameBlock += ", ";
@@ -174,6 +174,7 @@ public class processULPbookmarks {
             processBookmark.process("CHDADDRESSBLOCK" + (i == 0 ? "" : i), chargedPartyAddressBlock, Document);
             processBookmark.process("CHDREPNAME" + (i == 0 ? "" : i), chargedPartyREPNames, Document);
             processBookmark.process("CHDREPADDRESSBLOCK" + (i == 0 ? "" : i), chargedPartyREPAddressBlock, Document);
+            processBookmark.process("CCList" + (i == 0 ? "" : i), ccNameBlock, Document);
             
             //Latest (by date) board meeting
             processBookmark.process("LONGMEETINGDATE" + (i == 0 ? "" : i), ("".equals(boardMeetingDate) ? "" : boardMeetingDate), Document);
