@@ -843,7 +843,9 @@ public class RootPanel extends javax.swing.JFrame {
             Thread.sleep(1000);
             while (true) {
                 try {
-                    updateQueueButtonText();
+                    if(!Global.activeSection.equals("Docketing")) {
+                        updateQueueButtonText();
+                    }
                     Thread.sleep(30000); //milliseconds  (30 sec)
 
                 } catch (InterruptedException ex) {
