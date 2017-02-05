@@ -411,15 +411,40 @@ public class FileService {
         File docketFile = new File(Global.emailPath + section + File.separatorChar + fileName);
         
         if(docketFile.exists()) {
+            
+            
             for (String caseNumber : caseNumbers) {
-                String[] caseNumberParts = caseNumber.trim().split("-");
-                File caseArchiveFile = new File(
+                File caseArchiveFile;
+                
+                switch(section) {
+                    case "ORG":
+                    case "CSC":
+                        caseArchiveFile = new File(
+                        Global.activityPath 
+                        + section
+                        + File.separatorChar
+                        + caseNumber.trim());
+                        break;
+                    default:
+                        String[] caseNumberParts = caseNumber.trim().split("-");
+                        caseArchiveFile = new File(
                         Global.activityPath 
                         + section
                         + File.separatorChar
                         + caseNumberParts[0]
                         + File.separatorChar
                         + caseNumber.trim());
+                        break;
+                }
+                
+//                String[] caseNumberParts = caseNumber.trim().split("-");
+//                File caseArchiveFile = new File(
+//                        Global.activityPath 
+//                        + section
+//                        + File.separatorChar
+//                        + caseNumberParts[0]
+//                        + File.separatorChar
+//                        + caseNumber.trim());
                 
                 caseArchiveFile.mkdirs();
                 
@@ -430,9 +455,21 @@ public class FileService {
                 String fullType = ActivityType.getFullType(type);
                 
                 FileUtils.copyFile(docketFile, new File(caseArchiveFile + File.separator + fileDate + "_" + type + fileExtenstion));
-                Activity.addActivtyFromDocket("Filed " + fullType + " from " + from,
+                
+                switch(section) {
+                    case "ORG":
+                    case "CSC":
+                        Activity.addActivtyFromDocketORGCSC("Filed " + fullType + " from " + from,
                         fileDate + "_" + type + fileExtenstion,
-                        caseNumberParts, from, to, fullType, comment, false, fileExtenstion.endsWith("pdf"), activityDate);
+                        caseNumber, from, to, fullType, comment, false, fileExtenstion.endsWith("pdf"), fileDate);
+                        break;
+                    default:
+                        Activity.addActivtyFromDocket("Filed " + fullType + " from " + from,
+                        fileDate + "_" + type + fileExtenstion,
+                        caseNumber.trim().split("-"), from, to, fullType, comment, false, fileExtenstion.endsWith("pdf"));
+                        break;
+                }
+                
                 Audit.addAuditEntry("Filed " + fullType + " from " + from);
             }
         }
