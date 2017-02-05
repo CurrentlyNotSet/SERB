@@ -2024,6 +2024,48 @@ public class REPCase {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
-    
+     
+    public static String DocketTo(String caseNumber) {
+        String[] parsedCase = caseNumber.trim().split("-");
+        String to = "";
+        
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select"
+                    + " currentOwnerID,"
+                    + " hearingPersonID"
+                    + " from REPCase"
+                    + " where caseYear = ? "
+                    + " and caseType = ? "
+                    + " and caseMonth = ? "
+                    + " and caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, parsedCase[0]);
+            preparedStatement.setString(2, parsedCase[1]);
+            preparedStatement.setString(3, parsedCase[2]);
+            preparedStatement.setString(4, parsedCase[3]);
+
+            ResultSet caseNumberRS = preparedStatement.executeQuery();
+           
+            if(caseNumberRS.next()) {
+                if(caseNumberRS.getInt("currentOwnerID") != 0) {
+                    to = User.getNameByID(caseNumberRS.getInt("currentOwnerID"));
+                    DocketNotifications.addNotification(caseNumber, "REP", caseNumberRS.getInt("currentOwnerID"));
+                } else if(caseNumberRS.getInt("hearingPersonID") != 0) {
+                    to = User.getNameByID(caseNumberRS.getInt("hearingPersonID"));
+                }
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                DocketTo(caseNumber);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return to;
+    }
 }

@@ -19,6 +19,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import parker.serb.Global;
 import parker.serb.sql.ActivityType;
+import parker.serb.sql.CMDSCase;
 import parker.serb.sql.CaseNumber;
 import parker.serb.sql.REPCase;
 import parker.serb.sql.ULPCase;
@@ -236,10 +237,25 @@ public class scanFileDialog extends javax.swing.JDialog {
         }
         
         if(!caseNumberTextBox.getText().equals("")) {
-            switch (selectedSection) {
-                case "ULP":  
-                    toComboBox.setSelectedItem(ULPCase.ULPDocketTo(caseNumberTextBox.getText()));
-                    break;
+            if(!caseNumberTextBox.getText().equals("")) {
+                
+                switch (selectedSection) {
+                    case "ULP":  
+                        toComboBox.setSelectedItem(ULPCase.DocketTo(caseNumberTextBox.getText()));
+                        break;
+                    case "REP":
+                        toComboBox.setSelectedItem(REPCase.DocketTo(caseNumberTextBox.getText()));
+                        break;
+                    case "MED":
+                        toComboBox.setSelectedItem("Mary Laurent");
+                        break;
+                    case "ORG":
+    //                    toComboBox.setSelectedItem(ORGCase.DocketTo(caseNumberTextBox.getText()));
+                        break;
+                    case "CMDS":
+                        toComboBox.setSelectedItem(CMDSCase.DocketTo(caseNumberTextBox.getText()));
+                        break;
+                }
             }
         }
     }

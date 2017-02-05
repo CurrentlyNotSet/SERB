@@ -325,10 +325,6 @@ public class FileService {
                 }
                 
                 Audit.addAuditEntry("Filed " + typeFull + " from " + from);
-                
-//                switch(section) {
-//                    case "ULP": ULPCase.ULPDocketNotification(caseNumber);
-//                }
             }
         }
         
