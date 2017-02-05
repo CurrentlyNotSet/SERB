@@ -345,28 +345,50 @@ public class FileService {
         
         if(docketFile.exists()) {
             for (String caseNumber : caseNumbers) {
-                String[] caseNumberParts = caseNumber.trim().split("-");
-                File caseArchiveFile = new File(
+                File caseArchiveFile;
+//                String[] caseNumberParts = caseNumber.trim().split("-");
+                
+                switch(section) {
+                    case "ORG":
+                    case "CSC":
+                        caseArchiveFile = new File(
+                        Global.activityPath 
+                        + section
+                        + File.separatorChar
+                        + caseNumber.trim());
+                        break;
+                    default:
+                        String[] caseNumberParts = caseNumber.trim().split("-");
+                        caseArchiveFile = new File(
                         Global.activityPath 
                         + section
                         + File.separatorChar
                         + caseNumberParts[0]
                         + File.separatorChar
                         + caseNumber.trim());
+                        break;
+                }
                 
                 caseArchiveFile.mkdirs();
                 
                 String fileDate = String.valueOf(new Date().getTime());
                 
                 FileUtils.copyFile(docketFile, new File(caseArchiveFile + File.separator + fileDate + "_BODY.pdf"));
-                Activity.addActivtyFromDocket("Filed Email Body from " + from,
-                        fileDate + "_BODY.pdf",
-                        caseNumberParts,from, to, "Email Body", "", false, true, activityDate);
-                Audit.addAuditEntry("Filed Email Body from " + from);
                 
                 switch(section) {
-                    case "ULP": ULPCase.ULPDocketNotification(caseNumber);
+                    case "ORG":
+                    case "CSC":
+                        Activity.addActivtyFromDocketORGCSC("Filed Email Body from " + from,
+                        fileDate + "_BODY.pdf",
+                        caseNumber, from, to, "Email Body", "", false, false, fileDate);
+                        break;
+                    default:
+                        Activity.addActivtyFromDocket("Filed Email Body from " + from,
+                        fileDate + "_BODY.pdf",
+                        caseNumber.trim().split("-"), from, to, "Email Body", "", false, false);
+                        break;
                 }
+                Audit.addAuditEntry("Filed Email Body from " + from);
             }
         }
         docketFile.delete();
