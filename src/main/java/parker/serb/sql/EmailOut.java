@@ -298,7 +298,7 @@ public class EmailOut {
                         sql = sql.substring(0, (sql.length() - 2)) + ") ";
                     }  
                     
-                    sql += "UNION ALL SELECT COUNT(*) AS [count] FROM postalOut WHERE ";
+                    sql += " UNION ALL SELECT COUNT(*) AS [count] FROM postalOut WHERE ";
                     
                     if (!casetypes.isEmpty()) {
                         sql += " (";

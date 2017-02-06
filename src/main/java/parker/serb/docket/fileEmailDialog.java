@@ -27,9 +27,11 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import parker.serb.Global;
 import parker.serb.sql.ActivityType;
+import parker.serb.sql.CMDSCase;
 import parker.serb.sql.CaseNumber;
 import parker.serb.sql.Email;
 import parker.serb.sql.EmailAttachment;
+import parker.serb.sql.REPCase;
 import parker.serb.sql.ULPCase;
 import parker.serb.sql.User;
 import parker.serb.util.FileService;
@@ -222,10 +224,21 @@ public class fileEmailDialog extends javax.swing.JDialog {
         
         if(!caseNumberTextBox.getText().equals("")) {
             switch (emailSection) {
-                case "ULP":  
-                    toComboBox.setSelectedItem(ULPCase.ULPDocketTo(caseNumberTextBox.getText()));
-                    break;
-                
+                    case "ULP":  
+                        toComboBox.setSelectedItem(ULPCase.DocketTo(caseNumberTextBox.getText()));
+                        break;
+                    case "REP":
+                        toComboBox.setSelectedItem(REPCase.DocketTo(caseNumberTextBox.getText()));
+                        break;
+                    case "MED":
+                        toComboBox.setSelectedItem("Mary Laurent");
+                        break;
+                    case "ORG":
+    //                    toComboBox.setSelectedItem(ORGCase.DocketTo(caseNumberTextBox.getText()));
+                        break;
+                    case "CMDS":
+                        toComboBox.setSelectedItem(CMDSCase.DocketTo(caseNumberTextBox.getText()));
+                        break;
             }
         }
     }

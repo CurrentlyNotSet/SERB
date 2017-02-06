@@ -966,7 +966,7 @@ public class ULPCase {
         }
     }
     
-    public static String ULPDocketTo(String caseNumber) {
+    public static String DocketTo(String caseNumber) {
         String[] parsedCase = caseNumber.trim().split("-");
         String to = "";
         
@@ -994,6 +994,7 @@ public class ULPCase {
             if(caseNumberRS.next()) {
                 if(caseNumberRS.getInt("aljID") != 0) {
                     to = User.getNameByID(caseNumberRS.getInt("aljID"));
+                    DocketNotifications.addNotification(caseNumber, "ULP", caseNumberRS.getInt("aljID"));
                 } else if(caseNumberRS.getInt("investigatorID") != 0) {
                     to = User.getNameByID(caseNumberRS.getInt("investigatorID"));
                 }
@@ -1001,7 +1002,7 @@ public class ULPCase {
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                ULPDocketTo(caseNumber);
+                DocketTo(caseNumber);
             } 
         } finally {
             DbUtils.closeQuietly(stmt);
