@@ -380,7 +380,7 @@ public class FileService {
                     case "CSC":
                         Activity.addActivtyFromDocketORGCSC("Filed Email Body from " + from,
                         fileDate + "_BODY.pdf",
-                        caseNumber, from, to, "Email Body", "", false, false, fileDate);
+                        caseNumber, from, to, "Email Body", "", false, false, section);
                         break;
                     default:
                         Activity.addActivtyFromDocket("Filed Email Body from " + from,
