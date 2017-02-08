@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import org.apache.commons.dbutils.DbUtils;
 import parker.serb.Global;
@@ -22,7 +23,7 @@ import parker.serb.util.SlackNotification;
  * @author User
  */
 public class PostalOut {
-    
+
     public int id;
     public String section;
     public String caseYear;
@@ -35,28 +36,29 @@ public class PostalOut {
     public Date suggestedSendDate;
     public int attachementCount;
     public String historyDescription;
-    
+    public Date creationDate;
+
     public static List<PostalOut> getPostalOutByGlobalSection() {
         List<PostalOut> emailList = new ArrayList<>();
         List<String> casetypes = null;
-        
+
         if (Global.activeSection.equals("Hearings")){
             casetypes = CaseType.getCaseTypeHearings();
         } else {
             casetypes = CaseType.getCaseType();
         }
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT C.id, C.section, C.caseYear, C.caseType, "
                     + "C.caseMonth, C.caseNumber, C.person, C.addressBlock, C.userID, C.suggestedSendDate, "
-                    + "C.historyDescription, COUNT(S.id) AS attachments "
+                    + "C.historyDescription, C.creationDate, COUNT(S.id) AS attachments "
                     + "FROM PostalOut C "
                     + "LEFT JOIN PostalOutAttachment S ON C.id = S.postaloutid "
                     + "WHERE ";
-                    
+
                     if (!casetypes.isEmpty()) {
                         sql += "(";
 
@@ -66,15 +68,15 @@ public class PostalOut {
                         }
 
                         sql = sql.substring(0, (sql.length() - 2)) + ") ";
-                    }  
-                    
+                    }
+
                     sql += "GROUP BY C.id, C.section, C.caseYear, C.caseType, C.caseMonth, "
-                    + "C.caseNumber, C.person, C.addressBlock, C.userID, C.suggestedSendDate, C.historyDescription";
-            
+                    + "C.caseNumber, C.person, C.addressBlock, C.userID, C.suggestedSendDate, C.historyDescription, C.creationDate";
+
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
             ResultSet emailListRS = preparedStatement.executeQuery();
-            
+
             while(emailListRS.next()) {
                 PostalOut eml = new PostalOut();
                 eml.id = emailListRS.getInt("id");
@@ -89,33 +91,34 @@ public class PostalOut {
                 eml.suggestedSendDate = emailListRS.getDate("suggestedSendDate");
                 eml.attachementCount = emailListRS.getInt("attachments");
                 eml.historyDescription = emailListRS.getString("historyDescription");
+                eml.creationDate = emailListRS.getDate("creationDate");
                 emailList.add(eml);
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 getPostalOutByGlobalSection();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return emailList;
     }
-    
+
     public static PostalOut getPostalOutByID(int id) {
         PostalOut eml = null;
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
 
             String sql = "select * from PostalOut where id = ?";
-            
+
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setInt(1, id);
 
             ResultSet emailListRS = preparedStatement.executeQuery();
-            
+
             while(emailListRS.next()) {
                 eml = new PostalOut();
                 eml.id = emailListRS.getInt("id");
@@ -134,13 +137,13 @@ public class PostalOut {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 getPostalOutByID(id);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return eml;
     }
-    
+
     public static void markEmailReadyToSend(int id) {
         Statement stmt = null;
         try {
@@ -156,12 +159,12 @@ public class PostalOut {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 markEmailReadyToSend(id);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static int insertPostalOut(PostalOut item) {
         Statement stmt = null;
         try {
@@ -176,14 +179,15 @@ public class PostalOut {
                     + "person, "        //06
                     + "addressBlock, "  //07
                     + "userID, "        //08
-                    + "suggestedSendDate, " //09
-                    + "historyDescription " //10
+                    + "suggestedSendDate, "  //09
+                    + "historyDescription, " //10
+                    + "creationDate "  //10
                     + ") VALUES (";
-                    for(int i=0; i<9; i++){
-                        sql += "?, ";   //01-09
+                    for(int i=0; i<10; i++){
+                        sql += "?, ";   //01-10
                     }
-                     sql += "?)";   //10
-                     
+                     sql += "?)";   //11
+
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString ( 1, item.section);
             preparedStatement.setString ( 2, item.caseYear);
@@ -195,23 +199,24 @@ public class PostalOut {
             preparedStatement.setInt    ( 8, item.userID);
             preparedStatement.setDate   ( 9, item.suggestedSendDate);
             preparedStatement.setString (10, item.historyDescription);
+            preparedStatement.setDate   (11, new java.sql.Date(Calendar.getInstance().getTime().getTime()));
             preparedStatement.executeUpdate();
-            
+
             ResultSet newRow = preparedStatement.getGeneratedKeys();
             if (newRow.next()){
                 return newRow.getInt(1);
-            }            
+            }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 insertPostalOut(item);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return 0;
     }
-        
+
     public static void updatePostalOut(PostalOut item) {
         Statement stmt = null;
         try {
@@ -230,12 +235,12 @@ public class PostalOut {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updatePostalOut(item);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void removeEntry(int id){
         Statement stmt = null;
         try {
@@ -251,10 +256,10 @@ public class PostalOut {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 removeEntry(id);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
 }
