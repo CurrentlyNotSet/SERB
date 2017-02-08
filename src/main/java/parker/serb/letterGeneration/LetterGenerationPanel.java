@@ -295,7 +295,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
 
         switch (Global.activeSection) {
             case "REP":
-                documentList = SMDSDocuments.loadDocumentNamesByTypeAndSection(Global.activeSection, "");
+                documentList = SMDSDocuments.loadDocumentNamesByTypeAndSection(Global.activeSection, "Quest");
                 break;
             case "ULP":
                 documentList = SMDSDocuments.loadDocumentNamesByTypeAndSection(Global.activeSection, "Quest");
