@@ -25,7 +25,7 @@ import parker.serb.sql.User;
 public class ORGHeaderPanel extends javax.swing.JPanel {
 
     ORGCaseSearch search = null;
-    
+
     /**
      * Creates new form REPHeaderPanel
      */
@@ -33,7 +33,7 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
         initComponents();
         addListeners();
     }
-    
+
     private void addListeners() {
         caseNumberComboBox.addActionListener((ActionEvent e) -> {
             if(caseNumberComboBox.getSelectedItem() != null) {
@@ -49,8 +49,8 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
                             Global.caseMonth = null;
                             Global.caseType = null;
                             Global.caseYear = null;
-                            
-                        } 
+
+                        }
                         Global.root.getoRGRootPanel1().clearAll();
                     }
                 } else {
@@ -64,24 +64,24 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
                         Global.root.getjButton9().setVisible(true);
                         Global.root.getoRGRootPanel1().getActivityPanel1().loadAllActivity();
                     }
-                        
+
                     Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
                 }
             }
         });
     }
-    
+
     private void loadInformation() {
         Global.caseYear = null;
         Global.caseType = "ORG";
         Global.caseMonth = null;
         Global.caseNumber = caseNumberComboBox.getSelectedItem().toString().trim();
-        
+
         loadHeaderInformation();
     }
-    
+
     public void loadHeaderInformation() {
-        
+
         if(Global.caseNumber != null) {
             ORGCase org = ORGCase.loadHeaderInformation();
             if(org == null) {
@@ -98,13 +98,13 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
                 financialReportTextBox.setText(org.financialReport != null ? Global.mmddyyyy.format(new Date(org.financialReport.getTime())) : "");
                 registrationReportTextBox.setText(org.registrationReport != null ? Global.mmddyyyy.format(new Date(org.registrationReport.getTime())) : "");
                 constructionAndByLawsTextBox.setText(org.constructionAndByLaws != null ? Global.mmddyyyy.format(new Date(org.constructionAndByLaws.getTime())) : "");
-                filedByParentTextBox.setText("Yes");
+                filedByParentTextBox.setText(org.filedByParent == true ? "Yes" : "No");
             }
         }
     }
-    
+
     public void loadUpdatedHeaderInformation() {
-        
+
         if(Global.caseNumber != null) {
             Global.caseNumber = ORGCase.getORGName();
             ORGCase org = ORGCase.loadHeaderInformation();
@@ -121,24 +121,24 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
                 financialReportTextBox.setText(org.financialReport != null ? Global.mmddyyyy.format(new Date(org.financialReport.getTime())) : "");
                 registrationReportTextBox.setText(org.registrationReport != null ? Global.mmddyyyy.format(new Date(org.registrationReport.getTime())) : "");
                 constructionAndByLawsTextBox.setText(org.constructionAndByLaws != null ? Global.mmddyyyy.format(new Date(org.constructionAndByLaws.getTime())) : "");
-                filedByParentTextBox.setText("Yes");
+                filedByParentTextBox.setText(org.filedByParent == true ? "Yes" : "No");
             }
         }
     }
-    
+
     public void loadCases() {
         caseNumberComboBox.removeAllItems();
         caseNumberComboBox.addItem("");
 
         List caseNumberList = ORGCase.loadORGNames();
-        
+
         caseNumberList.stream().forEach((caseNumber) -> {
             caseNumberComboBox.addItem(caseNumber);
         });
     }
-    
+
     /**
-     * 
+     *
      */
     void clearAll() {
         orgNumberTextBox.setText("");
@@ -154,11 +154,11 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
     public JComboBox getjComboBox2() {
         return caseNumberComboBox;
     }
-    
-    
-    
-    
-    
+
+
+
+
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
