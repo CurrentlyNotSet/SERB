@@ -20,7 +20,6 @@ import parker.serb.util.StringUtilities;
 public class RequestedInfoTwoDateIDPanel extends javax.swing.JDialog {
 
     SMDSDocuments report;
-    int comboBoxID = 0;
 
     /**
      * Creates new form RequestedReportInformationPanel
@@ -57,7 +56,7 @@ public class RequestedInfoTwoDateIDPanel extends javax.swing.JDialog {
 
     private void loadCombobox(String IDType) {
         List<User> userList = null;
-        
+
         DefaultComboBoxModel dt = new DefaultComboBoxModel();
         ComboBox.setModel(dt);
         ComboBox.addItem(new Item<>("0", ""));
@@ -90,7 +89,7 @@ public class RequestedInfoTwoDateIDPanel extends javax.swing.JDialog {
         }
         ComboBox.setSelectedItem(new Item<>("0", ""));
     }
-    
+
     private void generateButton() {
         if (startDateField.toString().trim().equals("")
                 || endDateField.toString().trim().equals("")
@@ -240,11 +239,8 @@ public class RequestedInfoTwoDateIDPanel extends javax.swing.JDialog {
     }//GEN-LAST:event_CancelButtonActionPerformed
 
     private void GenerateReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GenerateReportButtonActionPerformed
-        String comboBoxIDString = String.valueOf(comboBoxID);
-        if (ComboBox.getSelectedItem().toString().equals("All")){
-            comboBoxIDString = "%";
-        }
-        GenerateReport.generateTwoDatesIDReport(startDateField.getText(), endDateField.getText(), comboBoxIDString, report);
+        Item item = (Item) ComboBox.getSelectedItem();
+        GenerateReport.generateTwoDatesIDReport(startDateField.getText(), endDateField.getText(), item.getValue().toString(), report);
     }//GEN-LAST:event_GenerateReportButtonActionPerformed
 
     private void startDateFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startDateFieldActionPerformed
@@ -256,10 +252,6 @@ public class RequestedInfoTwoDateIDPanel extends javax.swing.JDialog {
     }//GEN-LAST:event_endDateFieldActionPerformed
 
     private void ComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxActionPerformed
-        if (!ComboBox.getSelectedItem().toString().equals("")) {
-            Item item = (Item) ComboBox.getSelectedItem();
-            comboBoxID = Integer.parseInt(item.getValue().toString());
-        }
         generateButton();
     }//GEN-LAST:event_ComboBoxActionPerformed
 

@@ -5,6 +5,7 @@
  */
 package parker.serb.login;
 
+import com.alee.laf.optionpane.WebOptionPane;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.event.MouseEvent;
@@ -16,8 +17,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import parker.serb.Global;
 import parker.serb.RootPanel;
-import parker.serb.util.ExceptionHandling;
 import parker.serb.util.FileService;
+import parker.serb.util.SlackNotification;
 
 /**
  *
@@ -51,7 +52,8 @@ public class LogInDialog extends javax.swing.JFrame {
                     try {
                         Desktop.getDesktop().browse(new java.net.URI ("http://www.serb.state.oh.us"));
                     } catch (IOException | URISyntaxException ex) {
-                        new ExceptionHandling(null, "Unable to open URL", ex);
+                        SlackNotification.sendNotification(ex);
+                        WebOptionPane.showMessageDialog(Global.root, "<html><center> Sorry, unable to open URL.</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
                     }
                 }
             }

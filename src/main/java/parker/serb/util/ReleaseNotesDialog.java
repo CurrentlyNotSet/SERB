@@ -9,7 +9,6 @@ import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import org.apache.log4j.lf5.viewer.LogTable;
 import parker.serb.sql.ReleaseNotes;
 
 /**
@@ -17,7 +16,7 @@ import parker.serb.sql.ReleaseNotes;
  * @author parkerjohnston
  */
 public class ReleaseNotesDialog extends javax.swing.JDialog {
-    
+
     public ReleaseNotesDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -26,7 +25,7 @@ public class ReleaseNotesDialog extends javax.swing.JDialog {
         setLocationRelativeTo(parent);
         setVisible(true);
     }
-    
+
     private void addListeners() {
         versionListing.addListSelectionListener(new ListSelectionListener() {
             @Override
@@ -36,28 +35,28 @@ public class ReleaseNotesDialog extends javax.swing.JDialog {
             }
         });
     }
-    
+
     private void loadVersions() {
         List versionList = ReleaseNotes.loadReleasedVersions();
-        
+
         DefaultListModel listModel = new DefaultListModel();
-        
+
         for(Object version : versionList) {
             listModel.addElement(version.toString());
         }
-        
+
         versionListing.setModel(listModel);
         versionListing.setSelectedIndex(0);
     }
-    
+
     private void loadReleaseInformation() {
         ReleaseNotes release = ReleaseNotes.loadReleaseInformation(versionListing.getSelectedValue().toString());
-        
+
         releaseDateTextBox.setText("Release Date: " + release.releaseDate);
         notesPane.setText(release.releaseNotes);
     }
-    
-    
+
+
 
     /**
      * This method is called from within the constructor to initialize the form.
