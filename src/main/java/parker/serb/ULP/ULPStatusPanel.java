@@ -799,7 +799,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
                                     jPanel1Layout.setVerticalGroup(
                                         jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(jPanel1Layout.createSequentialGroup()
-                                            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addContainerGap(12, Short.MAX_VALUE)
                                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                                 .addComponent(jLabel3)
                                                 .addComponent(allegationTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -870,7 +870,6 @@ public class ULPStatusPanel extends javax.swing.JPanel {
                                     );
 
                                     jPanel4.setPreferredSize(new java.awt.Dimension(409, 107));
-                                    jPanel4.setSize(new java.awt.Dimension(409, 107));
 
                                     jLabel2.setText("Related Cases:");
 
@@ -900,7 +899,6 @@ public class ULPStatusPanel extends javax.swing.JPanel {
                                     addRelatedCaseButton.setMaximumSize(new java.awt.Dimension(29, 91));
                                     addRelatedCaseButton.setMinimumSize(new java.awt.Dimension(29, 91));
                                     addRelatedCaseButton.setPreferredSize(new java.awt.Dimension(29, 91));
-                                    addRelatedCaseButton.setSize(new java.awt.Dimension(29, 91));
                                     addRelatedCaseButton.addActionListener(new java.awt.event.ActionListener() {
                                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                             addRelatedCaseButtonActionPerformed(evt);
@@ -925,7 +923,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
                                             .addComponent(jLabel2)
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                             .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(addRelatedCaseButton, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE)
+                                                .addComponent(addRelatedCaseButton, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE)
                                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                                             .addGap(0, 0, 0))
                                     );
@@ -958,7 +956,6 @@ public class ULPStatusPanel extends javax.swing.JPanel {
                                     addCaseHearingButton.setMaximumSize(new java.awt.Dimension(29, 206));
                                     addCaseHearingButton.setMinimumSize(new java.awt.Dimension(29, 206));
                                     addCaseHearingButton.setPreferredSize(new java.awt.Dimension(29, 206));
-                                    addCaseHearingButton.setSize(new java.awt.Dimension(29, 206));
                                     addCaseHearingButton.addActionListener(new java.awt.event.ActionListener() {
                                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                             addCaseHearingButtonActionPerformed(evt);
@@ -994,7 +991,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
                                     jPanel3.setLayout(jPanel3Layout);
                                     jPanel3Layout.setHorizontalGroup(
                                         jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE)
+                                        .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 359, Short.MAX_VALUE)
                                         .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     );
                                     jPanel3Layout.setVerticalGroup(
@@ -1066,7 +1063,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
                                                             .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                            .addComponent(filedDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
+                                                            .addComponent(filedDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
                                                             .addComponent(employerNumberTextBox)
                                                             .addComponent(barginingUnitNoTextBox))
                                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1108,11 +1105,10 @@ public class ULPStatusPanel extends javax.swing.JPanel {
                                         layout.setVerticalGroup(
                                             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 519, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addContainerGap())
                                         );
                                     }// </editor-fold>//GEN-END:initComponents
 
