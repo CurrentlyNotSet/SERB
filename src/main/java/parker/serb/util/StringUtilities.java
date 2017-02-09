@@ -29,14 +29,14 @@ public class StringUtilities {
         }
         return fullName.trim();
     }
-    
+
     public static String buildCasePartyName(CaseParty item) {
         String fullName = "";
         if (item.prefix != null) {
             fullName = fullName.trim() + (item.prefix.equals("") ? "" : item.prefix.trim());
         }
         if (item.firstName != null) {
-            fullName = fullName.trim() + (item.firstName.equals("") ? "" : item.firstName.trim());
+            fullName = fullName.trim() + " " + (item.firstName.equals("") ? "" : item.firstName.trim());
         }
         if (item.middleInitial != null) {
             fullName = fullName.trim() + " " + (item.middleInitial.equals("") ? "" : (item.middleInitial.trim().length() == 1 ? item.middleInitial.trim() + "." : item.middleInitial.trim()));
@@ -48,9 +48,9 @@ public class StringUtilities {
             fullName = fullName.trim() + " " + item.suffix.trim();
         }
         if ("".equals(fullName.trim()) && item.companyName != null){
-            fullName = fullName.trim() + item.companyName.trim();
+            fullName = fullName.trim() + " " +  item.companyName.trim();
         }
-        
+
         return fullName.trim();
     }
 
@@ -67,8 +67,8 @@ public class StringUtilities {
         if (item.address3 != null) {
             addressBlock += item.address3.trim().equals("") ? "" : "\n" + item.address3;
         }
-        addressBlock += "\n" + (item.city == null ? "" : item.city) 
-                + ", " + (item.stateCode == null ? "" : item.stateCode) 
+        addressBlock += "\n" + (item.city == null ? "" : item.city)
+                + ", " + (item.stateCode == null ? "" : item.stateCode)
                 + " " + (item.zipcode == null ? "" : item.zipcode);
         if (item.phone1 != null){
             addressBlock += item.phone1.trim().equals("") ? "" : "\n" + item.phone1;
@@ -81,7 +81,7 @@ public class StringUtilities {
         }
         return addressBlock.trim();
     }
-    
+
     public static String buildAddressBlockWithLineBreaks(CaseParty item) {
         String addressBlock = "";
 
@@ -101,13 +101,13 @@ public class StringUtilities {
                 addressBlock += System.lineSeparator() + item.address3;
             }
         }
-        addressBlock += System.lineSeparator() + (item.city == null ? "" : item.city) 
-                + ", " + (item.stateCode == null ? "" : item.stateCode) 
+        addressBlock += System.lineSeparator() + (item.city == null ? "" : item.city)
+                + ", " + (item.stateCode == null ? "" : item.stateCode)
                 + " " + (item.zipcode == null ? "" : item.zipcode);
 
         return addressBlock.trim();
     }
-    
+
     public static String buildCasePartyAddressBlock(CaseParty item){
         return (item.address1.equals("") ? "" : (item.address1))
                 + (item.address2.equals("") ? "" : (", " + item.address2))
@@ -116,7 +116,7 @@ public class StringUtilities {
                 + (item.stateCode.equals("") ? "" : (", " + item.stateCode))
                 + (item.zipcode.equals("") ? "" : (" " + item.zipcode));
     }
-    
+
     public static String buildAddressBlock(Party item){
         return (item.address1.equals("") ? "" : (item.address1))
                 + (item.address2.equals("") ? "" : (", " + item.address2))
@@ -125,7 +125,7 @@ public class StringUtilities {
                 + (item.stateCode.equals("") ? "" : (", " + item.stateCode))
                 + (item.zipCode.equals("") ? "" : (" " + item.zipCode));
     }
-    
+
     public static String buildFullNameWithTitles(Party item) {
         return (item.prefix.equals("") ? "" : (item.prefix + " "))
                 + (item.firstName.equals("") ? "" : (item.firstName + " "))
@@ -135,7 +135,7 @@ public class StringUtilities {
                 + (item.nameTitle.equals("") ? "" : (", " + item.nameTitle)
                 + (item.jobTitle.equals("") ? "" : (", " + item.jobTitle)));
     }
-    
+
     public static String getDepartment(){
         switch (Global.activeSection) {
             case "REP":
@@ -150,13 +150,13 @@ public class StringUtilities {
         }
         return "";
     }
-    
+
     public static String generateDepartmentAddressBlock(){
         String address = "";
         String dept = StringUtilities.getDepartment();
-                
+
         AdministrationInformation sysAdminInfo = AdministrationInformation.loadAdminInfo(dept);
-                
+
         if (!sysAdminInfo.Address1.equals("")) {
             address += sysAdminInfo.Address1.trim();
         }

@@ -16,7 +16,7 @@ import parker.serb.util.SlackNotification;
  * @author parkerjohnston
  */
 public class Mediator {
-    
+
     public int id;
     public boolean active;
     public String type;
@@ -25,26 +25,26 @@ public class Mediator {
     public String lastName;
     public String phone;
     public String email;
-    
+
     public static List loadMediators(String type) {
         List<Mediator> mediatorList = new ArrayList<Mediator>();
-            
+
         Statement stmt = null;
         try {
 
             stmt = Database.connectToDB().createStatement();
-            
+
             String sql = "select firstName, middleName, lastName"
                     + " from Mediator"
                     + " Where active = 1 and type = ?"
-                    + " ORDER BY lastName ASC ";
+                    + " ORDER BY firstName ASC "; //(ORDER BY firstName T#020 (Beta))
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, type);
-            
+
             ResultSet employerListRS = preparedStatement.executeQuery();
-            
-            
+
+
             while(employerListRS.next()) {
                 Mediator med = new Mediator();
                 med.firstName = employerListRS.getString("firstName") == null ? "" : employerListRS.getString("firstName");
@@ -56,27 +56,27 @@ public class Mediator {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadMediators(type);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return mediatorList;
     }
-    
+
     public static List loadAllMediators() {
         List<Mediator> mediatorList = new ArrayList<Mediator>();
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
-            
+
             String sql = "select firstName, middleName, lastName"
                     + " from Mediator"
                     + " Where active = 1"
-                    + " ORDER BY lastName ASC ";
+                    + " ORDER BY firstName ASC "; //(ORDER BY firstName T#020 (Beta))
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            
+
             ResultSet employerListRS = preparedStatement.executeQuery();
 
             while(employerListRS.next()) {
@@ -90,29 +90,29 @@ public class Mediator {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadAllMediators();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return mediatorList;
     }
-    
+
     public static String getMediatorPhoneNumber(String name) {
         String[] nameParts = name.split(" ");
         String phone = "";
-          
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
 
             String sql = "select phone from mediator where firstName = ? and lastName = ?";
-                    
+
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, nameParts[0]);
             preparedStatement.setString(2, nameParts[1]);
 
             ResultSet caseActivity = preparedStatement.executeQuery();
-            
+
             while(caseActivity.next()) {
                 phone = caseActivity.getString("phone");
             }
@@ -120,27 +120,27 @@ public class Mediator {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 getMediatorPhoneNumber(name);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return phone;
     }
-    
+
     public static String getMediatorNameByID(String id) {
         String name = "";
-            
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
 
             String sql = "select firstName, LastName from mediator where id = ?";
-                    
+
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, id);
 
             ResultSet caseActivity = preparedStatement.executeQuery();
-            
+
             while(caseActivity.next()) {
                 name = caseActivity.getString("firstName") + " ";
                 name += caseActivity.getString("lastName");
@@ -149,27 +149,27 @@ public class Mediator {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 getMediatorNameByID(id);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return name;
     }
-    
+
     public static String getMediatorPhoneByID(String id) {
         String phone = "";
-         
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
 
             String sql = "select phone from mediator where id = ?";
-                    
+
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, id);
 
             ResultSet caseActivity = preparedStatement.executeQuery();
-            
+
             while(caseActivity.next()) {
                 phone = caseActivity.getString("phone");
             }
@@ -177,29 +177,29 @@ public class Mediator {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 getMediatorPhoneByID(id);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return phone;
     }
-    
+
     public static String getMediatorIDByName(String name) {
         String[] nameParts = name.split(" ");
         String id = "";
-            
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
 
             String sql = "select id from mediator where firstName = ? and lastName = ?";
-                    
+
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, nameParts[0]);
             preparedStatement.setString(2, nameParts[1]);
 
             ResultSet caseActivity = preparedStatement.executeQuery();
-            
+
             while(caseActivity.next()) {
                 id = caseActivity.getString("id");
             }
@@ -207,13 +207,13 @@ public class Mediator {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 getMediatorIDByName(name);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return id;
     }
-    
+
     public static List searchMediator(String[] param) {
         List<Mediator> list = new ArrayList<>();
 
@@ -239,7 +239,7 @@ public class Mediator {
             for (int i = 0; i < param.length; i++) {
                 ps.setString((i + 1), "%" + param[i].trim() + "%");
             }
-            
+
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -258,7 +258,7 @@ public class Mediator {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 searchMediator(param);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -293,7 +293,7 @@ public class Mediator {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 getMediatorByID(id);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -332,7 +332,7 @@ public class Mediator {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 createMediator(item);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -368,7 +368,7 @@ public class Mediator {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateMediator(item);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }

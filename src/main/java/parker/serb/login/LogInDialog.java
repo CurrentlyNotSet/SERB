@@ -6,31 +6,32 @@
 package parker.serb.login;
 
 import java.awt.Color;
-import parker.serb.util.ExceptionHandling;
 import java.awt.Desktop;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import javax.swing.ImageIcon;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import parker.serb.Global;
 import parker.serb.RootPanel;
+import parker.serb.util.ExceptionHandling;
 import parker.serb.util.FileService;
 
 /**
  *
  * @author parker
  */
-public class LogInDialog extends javax.swing.JDialog {
+public class LogInDialog extends javax.swing.JFrame {
 
     /**
      * Creates new form LogInDialog
      * @param parent
      */
     public LogInDialog(java.awt.Frame parent) {
-        super(parent, true);
         initComponents();
+        setIconImage( new ImageIcon(getClass().getResource("/SERBSeal.png")).getImage() );
         addListeners();
         getRootPane().setDefaultButton(logInButton);
         jLabel4.setForeground(new Color(238, 238, 238));
@@ -39,9 +40,9 @@ public class LogInDialog extends javax.swing.JDialog {
         setVisible(true);
         toFront();
     }
-    
+
     private void addListeners() {
-        
+
         jLabel1.addMouseListener(new MouseListener() {
 
             @Override
@@ -67,7 +68,7 @@ public class LogInDialog extends javax.swing.JDialog {
             @Override
             public void mousePressed(MouseEvent e) {}
         });
-        
+
         UsernameTextBox.getDocument().addDocumentListener(new DocumentListener() {
 
             @Override
@@ -85,7 +86,7 @@ public class LogInDialog extends javax.swing.JDialog {
                 enableLogInButton();
             }
         });
-        
+
         PasswordTextBox.getDocument().addDocumentListener(new DocumentListener() {
 
             @Override
@@ -104,7 +105,7 @@ public class LogInDialog extends javax.swing.JDialog {
             }
         });
     }
-    
+
     private void enableLogInButton() {
         if(!UsernameTextBox.getText().equals("") && PasswordTextBox.getPassword().length >= 6) {
             logInButton.setEnabled(true);
@@ -112,7 +113,7 @@ public class LogInDialog extends javax.swing.JDialog {
             logInButton.setEnabled(false);
         }
     }
-    
+
     private void completeValidLogIn() {
         dispose();
         if(Global.activeUser.passwordReset) {
@@ -141,6 +142,7 @@ public class LogInDialog extends javax.swing.JDialog {
         jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setIconImage(null);
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -228,7 +230,7 @@ public class LogInDialog extends javax.swing.JDialog {
 
     private void logInButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logInButtonActionPerformed
         Password.validatePassword(UsernameTextBox.getText().trim(), new String(PasswordTextBox.getPassword()));
-        
+
         if(Global.activeUser != null) {
             if(Global.activeUser.activeLogIn) {
                 setVisible(false);

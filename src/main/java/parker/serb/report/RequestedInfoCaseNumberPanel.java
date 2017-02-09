@@ -5,12 +5,14 @@
  */
 package parker.serb.report;
 
+import java.awt.event.MouseEvent;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import parker.serb.Global;
 import parker.serb.sql.CaseValidation;
-import parker.serb.sql.RelatedCase;
 import parker.serb.sql.SMDSDocuments;
-import parker.serb.util.NumberFormatService;
 
 /**
  *
@@ -109,6 +111,11 @@ public class RequestedInfoCaseNumberPanel extends javax.swing.JDialog {
         jLabel2.setText("Please enter the related case number");
 
         caseNumberTextBox.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        caseNumberTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                caseNumberTextBoxMouseClicked(evt);
+            }
+        });
 
         generateReportButton.setText("Generate Report");
         generateReportButton.addActionListener(new java.awt.event.ActionListener() {
@@ -179,6 +186,18 @@ public class RequestedInfoCaseNumberPanel extends javax.swing.JDialog {
     private void generateReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateReportButtonActionPerformed
         GenerateReport.generateCasenumberReport(caseNumberTextBox.getText().trim().toUpperCase(), report);
     }//GEN-LAST:event_generateReportButtonActionPerformed
+
+    private void caseNumberTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_caseNumberTextBoxMouseClicked
+        if (Global.activeSection.equals("ULP")){
+        if(SwingUtilities.isRightMouseButton(evt) || evt.getButton() == MouseEvent.BUTTON3) {
+            ULPCaseSearch search = new ULPCaseSearch(null, true);
+            if (search != null){
+                caseNumberTextBox.setText(search.caseNumber);
+            }
+            search.dispose();
+        }
+        }
+    }//GEN-LAST:event_caseNumberTextBoxMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;

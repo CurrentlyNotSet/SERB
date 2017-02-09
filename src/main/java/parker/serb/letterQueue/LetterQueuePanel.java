@@ -11,6 +11,7 @@ import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
 import parker.serb.sql.EmailOut;
 import parker.serb.sql.EmailOutAttachment;
+import parker.serb.sql.LetterQueue;
 import parker.serb.sql.PostalOut;
 import parker.serb.sql.PostalOutAttachment;
 
@@ -20,111 +21,81 @@ import parker.serb.sql.PostalOutAttachment;
  */
 public class LetterQueuePanel extends javax.swing.JDialog {
 
-    List<EmailOut> emailList;
-    List<PostalOut> postalList;
-    
     public LetterQueuePanel(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         loadPanel();
         setLocationRelativeTo(parent);
-        setVisible(true);   
+        setVisible(true);
     }
-    
+
     private void loadPanel() {
         headerLabel.setText(Global.activeSection + " Letter Queue");
         setColumnWidth();
-        loadLetterQueue();       
+        loadLetterQueue();
     }
-    
+
     private void setColumnWidth() {
         // ID
         jTable1.getColumnModel().getColumn(0).setMinWidth(0);
         jTable1.getColumnModel().getColumn(0).setPreferredWidth(0);
         jTable1.getColumnModel().getColumn(0).setMaxWidth(0);
-        
+
         // Type
         jTable1.getColumnModel().getColumn(1).setMinWidth(60);
         jTable1.getColumnModel().getColumn(1).setPreferredWidth(60);
         jTable1.getColumnModel().getColumn(1).setMaxWidth(60);
-        
+
         // Case Number
         jTable1.getColumnModel().getColumn(2).setMinWidth(125);
         jTable1.getColumnModel().getColumn(2).setPreferredWidth(125);
         jTable1.getColumnModel().getColumn(2).setMaxWidth(125);
-        
+
+        // Creation Date
+        jTable1.getColumnModel().getColumn(3).setMinWidth(100);
+        jTable1.getColumnModel().getColumn(3).setPreferredWidth(100);
+        jTable1.getColumnModel().getColumn(3).setMaxWidth(100);
+
         // Attachment Number
-        jTable1.getColumnModel().getColumn(5).setMinWidth(100);
-        jTable1.getColumnModel().getColumn(5).setPreferredWidth(100);
-        jTable1.getColumnModel().getColumn(5).setMaxWidth(100);
-        
-        // Date
         jTable1.getColumnModel().getColumn(6).setMinWidth(100);
         jTable1.getColumnModel().getColumn(6).setPreferredWidth(100);
         jTable1.getColumnModel().getColumn(6).setMaxWidth(100);
+
+        // Suggested Send Date
+        jTable1.getColumnModel().getColumn(7).setMinWidth(100);
+        jTable1.getColumnModel().getColumn(7).setPreferredWidth(100);
+        jTable1.getColumnModel().getColumn(7).setMaxWidth(100);
     }
 
     private void loadLetterQueue(){
         String searchTerm = searchTextBox.getText().trim();
-        
+
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
-        
-        emailList = EmailOut.getEmailOutByGlobalSection();
-        postalList = PostalOut.getPostalOutByGlobalSection();
-        
-        for (EmailOut eml : emailList){
-            String fullCaseNumber = eml.caseYear + "-" + eml.caseType + "-" + eml.caseMonth + "-" + eml.caseNumber;
-            String sendDate = "";
-            
-            if (eml.suggestedSendDate != null) {
-                sendDate = Global.mmddyyyy.format(eml.suggestedSendDate);
-            }
 
-            if (       "email".contains(searchTerm.toLowerCase())
-                    || fullCaseNumber.toLowerCase().contains(searchTerm.toLowerCase())
-                    || eml.to.toLowerCase().contains(fullCaseNumber.toLowerCase())
+        List<LetterQueue> emailList = LetterQueue.getLetterQueueByGlobalSection();
+
+        for (LetterQueue eml : emailList){
+            if (       eml.type.contains(searchTerm.toLowerCase())
+                    || eml.fullCaseNumber.toLowerCase().contains(searchTerm.toLowerCase())
+                    || eml.to.toLowerCase().contains(searchTerm.toLowerCase())
                     || eml.subject.toLowerCase().contains(searchTerm.toLowerCase())) {
 
                 model.addRow(new Object[]{
                     eml.id, // ID
-                    "Email", // Type
-                    fullCaseNumber, // CaseNumber
+                    eml.type, // Type
+                    eml.fullCaseNumber, // CaseNumber
+                    eml.creationDate, //Date Created
                     eml.to, // To:
                     eml.subject, // Subject
                     eml.attachementCount,// Attachments
-                    sendDate // Suggest Send Date
+                    eml.suggestedSendDate // Suggest Send Date
                 });
             }
         }
-
-        for (PostalOut post : postalList){
-            String fullCaseNumber = post.caseYear + "-" + post.caseType + "-" + post.caseMonth + "-" + post.caseNumber;
-            String sendDate = "";
-            
-            if (post.suggestedSendDate != null) {
-                sendDate = Global.mmddyyyy.format(post.suggestedSendDate);
-            }
-            
-            if (       "postal".contains(searchTerm.toLowerCase())
-                    || fullCaseNumber.toLowerCase().contains(searchTerm.toLowerCase())
-                    || post.person.toLowerCase().contains(searchTerm.toLowerCase())
-                    || post.addressBlock.replaceAll(System.lineSeparator(), " ").toLowerCase().contains(searchTerm.toLowerCase())) {
-            
-                model.addRow(new Object[]{
-                    post.id,              // ID
-                    "Postal",             // Type
-                    fullCaseNumber,       // CaseNumber
-                    post.person,          // To:
-                    post.addressBlock.replaceAll(System.lineSeparator(), " "),    // Subject
-                    post.attachementCount,// Attachments
-                    sendDate              // Suggest Send Date
-                });
-            }
-        }   
     }
-    
-    private void processTableAction(java.awt.event.MouseEvent evt) { 
+
+    private void processTableAction(java.awt.event.MouseEvent evt) {
         if(evt.getClickCount() == 1) {
             deleteButton.setEnabled(true);
             sendButton.setEnabled(true);
@@ -139,30 +110,30 @@ public class LetterQueuePanel extends javax.swing.JDialog {
             loadLetterQueue();
         }
     }
-   
+
     private void processSendButton() {
-        new ConfirmationDialog(Global.root, true, 
-                jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString(), 
+        new ConfirmationDialog(Global.root, true,
+                jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString(),
                 (int) jTable1.getValueAt(jTable1.getSelectedRow(), 0));
         loadLetterQueue();
     }
-    
+
     private void processDeleteButton() {
         int answer = WebOptionPane.showConfirmDialog(this, "Are you sure you wish to remove this message from queue.", "Remove", WebOptionPane.YES_NO_OPTION);
         if (answer == WebOptionPane.YES_OPTION) {
             int rowID = (int) jTable1.getValueAt(jTable1.getSelectedRow(), 0);
-            
+
             if (jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().equals("Email")){
                 EmailOut.removeEmail(rowID);
                 EmailOutAttachment.removeEmailAttachment(rowID);
             } else if (jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().equals("Postal")) {
                 PostalOut.removeEntry(rowID);
-                PostalOutAttachment.removeEntry(rowID);                
+                PostalOutAttachment.removeEntry(rowID);
             }
         }
         loadLetterQueue();
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -203,11 +174,11 @@ public class LetterQueuePanel extends javax.swing.JDialog {
 
             },
             new String [] {
-                "ID", "Type", "Case Number", "To", "Subject", "Attachments", "Send Date"
+                "ID", "Type", "Case Number", "Created", "To", "Subject", "Attachments", "Send Date"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {

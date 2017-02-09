@@ -58,7 +58,7 @@ public class User {
     public boolean MEDDocketing;
     public boolean CSCDocketing;
     public boolean CMDSDocketing;
-    
+
     public static String[] createUser(User item) {
         Statement stmt = null;
         int returnedKey = -1;
@@ -66,7 +66,7 @@ public class User {
         try {
             long passwordSalt = Password.generatePasswordSalt();
             tempPassword = Password.generateTempPassword();
-                        
+
             stmt = Database.connectToDB().createStatement();
             String sql = "Insert INTO Users("
                     + "active, "            //01
@@ -110,7 +110,7 @@ public class User {
                         sql += "?, ";   //01-35
                     }
                      sql += "?)"; //36
-          
+
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setBoolean(1, true);
             preparedStatement.setString (2, item.firstName);
@@ -149,23 +149,23 @@ public class User {
             preparedStatement.setBoolean(35, item.CSCDocketing);
             preparedStatement.setBoolean(36, item.CMDSDocketing);
             preparedStatement.executeUpdate();
-            
+
             ResultSet newRow = preparedStatement.getGeneratedKeys();
             if (newRow.next()){
                 returnedKey = newRow.getInt(1);
-            } 
+            }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 createUser(item);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         String[] returnedSet = {String.valueOf(returnedKey), tempPassword};
         return returnedSet;
     }
-    
+
     /**
      * Locate and load a single user instance by searching based on username
      * @param username the username to be searched
@@ -173,20 +173,20 @@ public class User {
      */
     public static User findUserByUsername(String username) {
         User user = new User();
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
-            
+
             String sql = "Select * from Users where username = ? and active = 1";
-            
+
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, username);
-            
+
             ResultSet foundUser = preparedStatement.executeQuery();
-            
+
             if(foundUser.next()) {
-            
+
                 user.id = foundUser.getInt("id");
                 user.active = foundUser.getBoolean("active");
                 user.activeLogIn = foundUser.getBoolean("activeLogIn");
@@ -214,27 +214,27 @@ public class User {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 findUserByUsername(username);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return user;
     }
-    
+
     public static User findUserByID(int ID) {
         User user = new User();
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
-            
+
             String sql = "Select * from Users where id = ?";
-            
+
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setInt(1, ID);
-            
+
             ResultSet foundUser = preparedStatement.executeQuery();
-            
+
             if(foundUser.next()) {
                 user.id = foundUser.getInt("id");
                 user.active = foundUser.getBoolean("active");
@@ -278,31 +278,31 @@ public class User {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 findUserByID(ID);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
-        } 
+        }
         return user;
     }
-    
+
     /**
      * Load a list of all users currently logged into the application
      * @return a list of user instance
      */
     public static List<User> findActiveUsers() {
         List<User> activeUsers = new ArrayList<>();
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
-            
+
             String sql = "Select * from Users where activeLogIn = ? and active = 1";
-            
+
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setBoolean(1, true);
-            
+
             ResultSet users = preparedStatement.executeQuery();
-            
+
             while(users.next()) {
                 User user = new User();
                 user.id = users.getInt("id");
@@ -332,26 +332,26 @@ public class User {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 findActiveUsers();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return activeUsers;
     }
-    
+
     public static List<User> getEnabledUsers() {
         List<User> activeUsers = new ArrayList<>();
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
-            
+
             String sql = "Select * from Users where active = 1";
-            
+
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            
+
             ResultSet users = preparedStatement.executeQuery();
-            
+
             while(users.next()) {
                 User user = new User();
                 user.id = users.getInt("id");
@@ -388,26 +388,26 @@ public class User {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 getEnabledUsers();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return activeUsers;
     }
-    
+
     public static List<User> getEnabledInvestigators() {
         List<User> activeUsers = new ArrayList<>();
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
-            
+
             String sql = "Select * from Users where active = 1 and investigator = true";
-            
+
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            
+
             ResultSet users = preparedStatement.executeQuery();
-            
+
             while(users.next()) {
                 User user = new User();
                 user.id = users.getInt("id");
@@ -444,16 +444,16 @@ public class User {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 getEnabledUsers();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return activeUsers;
     }
-    
+
     public static List loadSectionDropDowns(String section) {
         String sectionColumnName = "";
-        
+
         switch(section) {
             case "REP":
                 sectionColumnName = "repcaseworker";
@@ -469,7 +469,7 @@ public class User {
                 break;
             case "Hearings":
                 sectionColumnName = "hearingscaseworker";
-                break;    
+                break;
             case "CSC":
                 sectionColumnName = "csccaseworker";
                 break;
@@ -481,18 +481,18 @@ public class User {
                 break;
         }
         List activeUsers = new ArrayList<>();
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
-            
-            String sql = "Select * from Users where " + sectionColumnName + " = ? and active = 1";
-            
+
+            String sql = "Select * from Users where " + sectionColumnName + " = ? and active = 1 ORDER BY firstName"; //(ORDER BY firstName T#020 (Beta))
+
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setBoolean(1, true);
-            
+
             ResultSet users = preparedStatement.executeQuery();
-            
+
             while(users.next()) {
                 activeUsers.add(users.getString("firstName") + " " + users.getString("lastName"));
             }
@@ -500,18 +500,18 @@ public class User {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadSectionDropDowns(section);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return activeUsers;
     }
-    
+
     public static void updateLogInInformation() {
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
-            
+
             String sql = "Update Users"
                     + " SET"
                     + " applicationVersion = ?,"
@@ -519,29 +519,29 @@ public class User {
                     + " lastLogInDateTime = ?,"
                     + " activeLogIn = ?"
                     + " where username = ? and active = 1";
-            
+
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, Global.APPLICATION_VERSION);
             preparedStatement.setString(2, InetAddress.getLocalHost().getHostName());
             preparedStatement.setTimestamp(3, new java.sql.Timestamp(new Date().getTime()));
             preparedStatement.setBoolean(4, !Global.activeUser.activeLogIn);
             preparedStatement.setString(5, Global.activeUser.username);
-            
+
             preparedStatement.executeUpdate();
-            
+
             Audit.addAuditEntry("Logged In from " + InetAddress.getLocalHost().getHostName() + " as " + System.getProperty("user.name"));
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateLogInInformation();
-            } 
+            }
         } catch (UnknownHostException ex) {
             SlackNotification.sendNotification(ex);
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     /**
      * Updates the boolean value of the current active log in
      */
@@ -549,29 +549,29 @@ public class User {
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
-            
+
             String sql = "Update Users SET activeLogIn = ? where username = ? and active = 1";
-            
+
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setBoolean(1, !Global.activeUser.activeLogIn);
             preparedStatement.setString(2, Global.activeUser.username);
-            
+
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateActiveLogIn();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void updateLastTab(String tabName) {
         Statement stmt = null;
         try {
             String tab;
-            
+
             switch(tabName) {
                 case "Civil Service Commission":
                     tab = "CSC";
@@ -581,43 +581,43 @@ public class User {
                     break;
             }
             stmt = Database.connectToDB().createStatement();
-            
+
             String sql = "Update Users SET lastTab = ? where username = ?";
-            
+
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, tab);
             preparedStatement.setString(2, Global.activeUser.username);
-            
+
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateLastTab(tabName);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void updateLastCaseNumber() {
         try {
-            
+
             Statement stmt = Database.connectToDB().createStatement();
-            
+
             String sql = "Update Users SET"
                     + " lastCaseYear = ?,"
                     + " lastCaseType = ?,"
                     + " lastCaseMonth = ?,"
                     + " lastCaseNumber = ?"
                     + " where username = ?";
-            
+
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, Global.caseYear);
             preparedStatement.setString(2, Global.caseType);
             preparedStatement.setString(3, Global.caseMonth);
             preparedStatement.setString(4, Global.caseNumber);
             preparedStatement.setString(5, Global.activeUser.username);
-            
+
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
@@ -628,7 +628,7 @@ public class User {
             }
         }
     }
-    
+
     /**
      * Update the active users password. Hashing occurs in this method
      * @param salt the randomly generated password salt for the new password
@@ -638,48 +638,48 @@ public class User {
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
-            
+
             String sql = "Update Users SET passwordSalt = ?, password = ? where username = ? and active = 1";
-            
+
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setLong(1, salt);
             preparedStatement.setString(2, Password.hashPassword(salt, password));
             preparedStatement.setString(3, Global.activeUser.username);
-            
+
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updatePassword(salt, password);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void resetPassword(int ID, long salt, String password) {
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
-            
+
             String sql = "Update Users SET passwordSalt = ?, password = ? where id = ?";
-            
+
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setLong(1, salt);
             preparedStatement.setString(2, Password.hashPassword(salt, password));
             preparedStatement.setInt(3, ID);
-            
+
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updatePassword(salt, password);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     /**
      * Update the boolean value of the users password reset value
      */
@@ -687,24 +687,24 @@ public class User {
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
-            
+
             String sql = "Update Users SET passwordReset = ? where username = ? and active = 1";
-            
+
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setBoolean(1, !Global.activeUser.passwordReset);
             preparedStatement.setString(2, Global.activeUser.username);
-            
+
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updatePasswordReset();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     /**
      * Find all roles that the user is able to view
      */
@@ -712,40 +712,40 @@ public class User {
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
-            
+
             String sql = "Select Role AS Role from Role " +
             "INNER JOIN UserRole on UserRole.roleID = Role.id " +
             "WHERE UserRole.userID = ? and active = 1";
-            
+
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setInt(1, Global.activeUser.id);
-            
+
             ResultSet foundUser = preparedStatement.executeQuery();
-            
+
             while (foundUser.next()) {
                Global.activeUserRoles.add(foundUser.getString("Role"));
-            } 
+            }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 findAppliedRoles();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     /**
-     * Update the user prefs.  Allowing for the user to update their own 
+     * Update the user prefs.  Allowing for the user to update their own
      * information.  This is not meant for an admin update as the information
      * is scaled down to basic information
-     * @param user 
+     * @param user
      */
     public static void updateUserPrefs(User user) {
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
-            
+
             String sql = "Update Users set"
                     + " firstName = ?,"
                     + " middleInitial = ?,"
@@ -755,7 +755,7 @@ public class User {
                     + " workPhone = ?,"
                     + " defaultSection = ?"
                     + " where id = ? and active = 1";
-            
+
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, user.firstName);
             preparedStatement.setString(2, user.middleInitial);
@@ -765,9 +765,9 @@ public class User {
             preparedStatement.setString(6, user.workPhone);
             preparedStatement.setString(7, user.defaultSection);
             preparedStatement.setInt(8, Global.activeUser.id);
-            
+
             int success = preparedStatement.executeUpdate();
-            
+
             if(success == 1) {
                 Global.activeUser = findUserByUsername(user.username);
             }
@@ -775,26 +775,26 @@ public class User {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateUserPrefs(user);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
-    } 
-    
+    }
+
     public static String getNameByID(int userID) {
         String userName = "";
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
-            
+
             String sql = "Select firstName, lastName from Users where ID = ?";
-            
+
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setInt(1, userID);
-            
+
             ResultSet success = preparedStatement.executeQuery();
-            
+
             while (success.next()) {
                 userName = success.getString("FirstName") + " " + success.getString("LastName");
             }
@@ -802,30 +802,30 @@ public class User {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 getNameByID(userID);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
-        return userName;    
+        return userName;
     }
-    
+
     public static int getUserID(String userName) {
         int userID = 0;
-        
+
         String[] parsedUserName = userName.split(" ");
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
-            
+
             String sql = "Select id from Users where firstName = ? and lastName = ? and active = 1";
-            
+
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, parsedUserName[0]);
             preparedStatement.setString(2, parsedUserName[1]);
-            
+
             ResultSet success = preparedStatement.executeQuery();
-            
+
             while (success.next()) {
                 userID = success.getInt("id");
             }
@@ -833,27 +833,27 @@ public class User {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 getUserID(userName);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
-        return userID;    
+        return userID;
     }
-    
+
     public static String getEmailByID(int id) {
         String userEmail = "";
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
-            
+
             String sql = "Select emailAddress from Users where id = ? and active = 1";
-            
+
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setInt(1, id);
-            
+
             ResultSet success = preparedStatement.executeQuery();
-            
+
             while (success.next()) {
                 userEmail = success.getString("emailAddress");
             }
@@ -861,28 +861,28 @@ public class User {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 getEmailByID(id);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
-        return userEmail;    
+        return userEmail;
     }
-    
+
     public static List getDocketSections() {
         List docketSections = new ArrayList<>();
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
-            
+
             String sql = "Select * from Users where username = ? and active = 1";
-            
+
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, Global.activeUser.username);
-            
+
             ResultSet users = preparedStatement.executeQuery();
-            
-            
+
+
             while(users.next()) {
                 if(users.getBoolean("ULPDocketing") == true) {
                     docketSections.add("ULP");
@@ -907,26 +907,26 @@ public class User {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 getDocketSections();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return docketSections;
     }
-        
-    public static List loadAllUsers() { 
+
+    public static List loadAllUsers() {
         List allUsers = new ArrayList<>();
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
-            
+
             String sql = "SELECT * FROM Users";
-            
+
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            
+
             ResultSet rs = preparedStatement.executeQuery();
-            
+
             while(rs.next()) {
                 User user = new User();
                 user.id = rs.getInt("id");
@@ -941,13 +941,13 @@ public class User {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadAllUsers();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return allUsers;
     }
-    
+
     public static List searchAllUsers(String[] param) {
         List<User> list = new ArrayList<>();
 
@@ -973,7 +973,7 @@ public class User {
             for (int i = 0; i < param.length; i++) {
                 ps.setString((i + 1), "%" + param[i].trim() + "%");
             }
-            
+
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -993,13 +993,13 @@ public class User {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 searchAllUsers(param);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return list;
     }
-    
+
     public static void updateUser(User item ){
         Statement stmt = null;
         try {
@@ -1059,16 +1059,16 @@ public class User {
             ps.setBoolean(24, item.CSCDocketing);
             ps.setBoolean(25, item.CMDSDocketing);
             ps.setInt    (26, item.id);
-            
+
             ps.executeUpdate();
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateUser(item);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
 }

@@ -244,14 +244,14 @@ public class FileService {
                 switch(section) {
                     case "ORG":
                     case "CSC":
-                        Activity.addActivtyFromDocketORGCSC("Filed " + typeFull + " from " + from,
+                        Activity.addScanActivtyFromDocketORGCSC("Filed " + typeFull + " from " + from,
                         fileDate + "_" + typeAbbrv + fileName.substring(fileName.lastIndexOf(".")),
-                        caseNumber, from, to, typeFull, comment, false, false, section);
+                        caseNumber, from, to, typeFull, comment, false, false, section, activityDate);
                         break;
                     default:
-                        Activity.addActivtyFromDocket("Filed " + typeFull + " from " + from,
+                        Activity.addScanActivtyFromDocket("Filed " + typeFull + " from " + from,
                         fileDate + "_" + typeAbbrv + fileName.substring(fileName.lastIndexOf(".")),
-                        caseNumber.trim().split("-"),from, to, typeFull, comment, false, false);
+                        caseNumber.trim().split("-"),from, to, typeFull, comment, false, false, activityDate);
                         break;
                 }
                 

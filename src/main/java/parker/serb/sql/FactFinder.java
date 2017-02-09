@@ -17,7 +17,7 @@ import parker.serb.util.StringUtilities;
  * @author parkerjohnston
  */
 public class FactFinder {
-    
+
     public int id;
     public boolean active;
     public String status;
@@ -36,9 +36,9 @@ public class FactFinder {
 
     public static List loadAllConciliators() {
         List<String> factFinderList = new ArrayList<>();
-        
+
         Statement stmt = null;
-            
+
         try {
 
             stmt = Database.connectToDB().createStatement();
@@ -46,15 +46,15 @@ public class FactFinder {
             String sql = "select * from FactFinder"
                     + " where status = 'C'"
                     + " and active = 1"
-                    + " order by lastName asc";
+                    + " order by firstName asc"; //(ORDER BY firstName T#020 (Beta))
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
             ResultSet factFinderListRS = preparedStatement.executeQuery();
-            
+
             while(factFinderListRS.next()) {
                 String name = StringUtilities.buildFullName(
-                        factFinderListRS.getString("firstName"), 
+                        factFinderListRS.getString("firstName"),
                         factFinderListRS.getString("middleName"),
                         factFinderListRS.getString("lastName"));
                 factFinderList.add(name);
@@ -63,18 +63,18 @@ public class FactFinder {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadAllConciliators();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return factFinderList;
     }
-    
+
     public static List loadAllFF() {
         List<String> factFinderList = new ArrayList<>();
-        
+
         Statement stmt = null;
-            
+
         try {
 
             stmt = Database.connectToDB().createStatement();
@@ -82,36 +82,36 @@ public class FactFinder {
             String sql = "select * from FactFinder"
                     + " where status != 'O'"
                     + " and active = 1"
-                    + " order by lastName asc";
+                    + " order by firstName asc";//(ORDER BY firstName T#020 (Beta))
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
             ResultSet factFinderListRS = preparedStatement.executeQuery();
-            
+
             while(factFinderListRS.next()) {
                 String name = StringUtilities.buildFullName(
-                        factFinderListRS.getString("firstName"), 
+                        factFinderListRS.getString("firstName"),
                         factFinderListRS.getString("middleName"),
                         factFinderListRS.getString("lastName"));
-                
+
                 factFinderList.add(name);
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadAllFF();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return factFinderList;
     }
-        
+
     public static List loadActiveFF() {
         List<FactFinder> factFinderList = new ArrayList<>();
-        
+
         Statement stmt = null;
-            
+
         try {
 
             stmt = Database.connectToDB().createStatement();
@@ -124,7 +124,7 @@ public class FactFinder {
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
             ResultSet rs = preparedStatement.executeQuery();
-            
+
             while(rs.next()) {
                 FactFinder item = new FactFinder();
                 item.id = rs.getInt("id");
@@ -148,19 +148,19 @@ public class FactFinder {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadActiveFF();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return factFinderList;
     }
-    
-    
+
+
     public static List searchFactFinder(String[] param) {
         List<FactFinder> recommendationList = new ArrayList<>();
 
         Statement stmt = null;
-        
+
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -183,7 +183,7 @@ public class FactFinder {
             for (int i = 0; i < param.length; i++) {
                 ps.setString((i + 1), "%" + param[i].trim() + "%");
             }
-            
+
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -209,7 +209,7 @@ public class FactFinder {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 searchFactFinder(param);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -220,7 +220,7 @@ public class FactFinder {
         FactFinder item = new FactFinder();
 
         Statement stmt = null;
-        
+
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -252,7 +252,7 @@ public class FactFinder {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 getFactFinderByID(id);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -263,7 +263,7 @@ public class FactFinder {
         FactFinder item = null;
 
         Statement stmt = null;
-        
+
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -297,16 +297,16 @@ public class FactFinder {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 getFactFinderLikeName(firstName, lastName);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return item;
     }
-    
+
     public static void createFactFinder(FactFinder item) {
         Statement stmt = null;
-        
+
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -351,7 +351,7 @@ public class FactFinder {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 createFactFinder(item);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -359,7 +359,7 @@ public class FactFinder {
 
     public static void updateFactFinder(FactFinder item) {
         Statement stmt = null;
-        
+
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -402,7 +402,7 @@ public class FactFinder {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateFactFinder(item);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
