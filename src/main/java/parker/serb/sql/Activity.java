@@ -300,6 +300,54 @@ public class Activity {
         }
     }
     
+    public static void addScanActivtyFromDocket(String action, String fileName,
+            String[] caseNumber,
+            String from, 
+            String to, 
+            String type, 
+            String comment,
+            boolean redacted,
+            boolean needsTimestamp,
+            Date activtyDate) {
+        Statement stmt = null;
+            
+        try {
+
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, caseNumber[0].trim());
+            preparedStatement.setString(2, caseNumber[1].trim());
+            preparedStatement.setString(3, caseNumber[2].trim());
+            preparedStatement.setString(4, caseNumber[3].trim());
+            preparedStatement.setInt(5, Global.activeUser.id);
+            preparedStatement.setTimestamp(6, new Timestamp(activtyDate.getTime()));
+            preparedStatement.setString(7, action.equals("") ? null : action);
+            preparedStatement.setString(8, fileName.equals("") ? null : fileName);
+            preparedStatement.setString(9, from.equals("") ? null : from);
+            preparedStatement.setString(10, to.equals("") ? null : to);
+            preparedStatement.setString(11, type.equals("") ? null : type);
+            preparedStatement.setString(12, comment.equals("") ? null : comment);
+            preparedStatement.setBoolean(13, redacted);
+            preparedStatement.setBoolean(14, needsTimestamp);
+            preparedStatement.setBoolean(15, true);
+
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException ex) {
+            if(ex.getCause() instanceof SQLServerException) {
+                addActivtyFromDocket(action, fileName, caseNumber, from, to, type, comment, redacted, needsTimestamp);
+            } else {
+                SlackNotification.sendNotification(ex);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+    }
+    
     public static void addActivtyFromDocketORGCSC(String action, String fileName,
             String caseNumber,
             String from, 
@@ -324,6 +372,55 @@ public class Activity {
             preparedStatement.setString(4, caseNumber);
             preparedStatement.setInt(5, Global.activeUser.id);
             preparedStatement.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
+            preparedStatement.setString(7, action.equals("") ? null : action);
+            preparedStatement.setString(8, fileName.equals("") ? null : fileName);
+            preparedStatement.setString(9, from.equals("") ? null : from);
+            preparedStatement.setString(10, to.equals("") ? null : to);
+            preparedStatement.setString(11, type.equals("") ? null : type);
+            preparedStatement.setString(12, comment.equals("") ? null : comment);
+            preparedStatement.setBoolean(13, redacted);
+            preparedStatement.setBoolean(14, needsTimestamp);
+            preparedStatement.setBoolean(15, true);
+
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException ex) {
+            if(ex.getCause() instanceof SQLServerException) {
+                addActivtyFromDocketORGCSC(action, fileName, caseNumber, from, to, type, comment, redacted, needsTimestamp, section);
+            } else {
+                SlackNotification.sendNotification(ex);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+    }
+    
+    public static void addScanActivtyFromDocketORGCSC(String action, String fileName,
+            String caseNumber,
+            String from, 
+            String to, 
+            String type, 
+            String comment,
+            boolean redacted,
+            boolean needsTimestamp,
+            String section,
+            Date activityDate) {
+        Statement stmt = null;
+            
+        try {
+
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, null);
+            preparedStatement.setString(2, section);
+            preparedStatement.setString(3, null);
+            preparedStatement.setString(4, caseNumber);
+            preparedStatement.setInt(5, Global.activeUser.id);
+            preparedStatement.setTimestamp(6, new Timestamp(activityDate.getTime()));
             preparedStatement.setString(7, action.equals("") ? null : action);
             preparedStatement.setString(8, fileName.equals("") ? null : fileName);
             preparedStatement.setString(9, from.equals("") ? null : from);
