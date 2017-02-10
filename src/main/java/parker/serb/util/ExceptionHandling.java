@@ -5,11 +5,6 @@
  */
 package parker.serb.util;
 
-import airbrake.AirbrakeNotice;
-import airbrake.AirbrakeNoticeBuilder;
-import airbrake.AirbrakeNotifier;
-import parker.serb.Global;
-
 /**
  *
  * @author parker
@@ -32,19 +27,20 @@ public class ExceptionHandling extends javax.swing.JDialog {
         sendAirbrakeNotification(exception);
         setVisible(true);
     }
-    
+
+    @Deprecated
     private void sendAirbrakeNotification(Exception ex) {
-        if(Global.errorNotifications) {
-            AirbrakeNotice notice = new AirbrakeNoticeBuilder("8c498ba7119cef6e1563d9807e728679", exceptionToString(ex), "Production").newNotice();
-            AirbrakeNotifier notifier = new AirbrakeNotifier();
-            notifier.notify(notice);
-        }
+//        if(Global.errorNotifications) {
+//            AirbrakeNotice notice = new AirbrakeNoticeBuilder("8c498ba7119cef6e1563d9807e728679", exceptionToString(ex), "Production").newNotice();
+//            AirbrakeNotifier notifier = new AirbrakeNotifier();
+//            notifier.notify(notice);
+//        }
     }
-    
+
     private void setExceptionText(Exception ex) {
         jTextArea1.setText(exceptionToString(ex));
     }
-    
+
     private String exceptionToString(Exception ex) {
         String result = ex.toString() + "\n";
         StackTraceElement[] trace = ex.getStackTrace();
@@ -53,7 +49,7 @@ public class ExceptionHandling extends javax.swing.JDialog {
         }
         return result;
     }
-    
+
     private void setTitleText(String title) {
         jLabel1.setText(title);
     }

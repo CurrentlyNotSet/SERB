@@ -290,10 +290,10 @@ public class EmailOut {
         try {
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "SELECT COUNT(*) AS [count] FROM emailout WHERE ";
+            String sql = "SELECT COUNT(*) AS [count] FROM emailout ";
 
                     if (!casetypes.isEmpty()) {
-                        sql += " (";
+                        sql += " WHERE (";
 
                         for (String casetype : casetypes) {
 
@@ -303,10 +303,10 @@ public class EmailOut {
                         sql = sql.substring(0, (sql.length() - 2)) + ") ";
                     }
 
-                    sql += " UNION ALL SELECT COUNT(*) AS [count] FROM postalOut WHERE ";
+                    sql += " UNION ALL SELECT COUNT(*) AS [count] FROM postalOut ";
 
                     if (!casetypes.isEmpty()) {
-                        sql += " (";
+                        sql += " WHERE (";
 
                         for (String casetype : casetypes) {
 
