@@ -18,9 +18,11 @@ import parker.serb.Global;
 import parker.serb.sql.Activity;
 import parker.serb.sql.ActivityType;
 import parker.serb.sql.Audit;
+import parker.serb.sql.CMDSCase;
 import parker.serb.sql.CaseType;
 import parker.serb.sql.Email;
 import parker.serb.sql.EmailAttachment;
+import parker.serb.sql.REPCase;
 import parker.serb.sql.ULPCase;
 
 /**
@@ -258,7 +260,15 @@ public class FileService {
                 Audit.addAuditEntry("Filed " + typeFull + " from " + from + (redacted ? " (REDACTED)" : ""));
                 
                 switch(section) {
-                    case "ULP": ULPCase.ULPDocketNotification(caseNumber);
+                    case "ULP": 
+                        ULPCase.ULPDocketNotification(caseNumber);
+                        break;
+                    case "REP": 
+                        REPCase.REPDocketNotification(caseNumber);
+                        break;
+                    case "CMDS": 
+                        CMDSCase.CMDSDocketNotification(caseNumber);
+                        break;
                 }
             }
         }
@@ -325,9 +335,20 @@ public class FileService {
                 }
                 
                 Audit.addAuditEntry("Filed " + typeFull + " from " + from);
+                
+                switch(section) {
+                    case "ULP": 
+                        ULPCase.ULPDocketNotification(caseNumber);
+                        break;
+                    case "REP": 
+                        REPCase.REPDocketNotification(caseNumber);
+                        break;
+                    case "CMDS": 
+                        CMDSCase.CMDSDocketNotification(caseNumber);
+                        break;
+                }
             }
         }
-        
         docketFile.delete();
     }
     
@@ -389,6 +410,18 @@ public class FileService {
                         break;
                 }
                 Audit.addAuditEntry("Filed Email Body from " + from);
+                
+                switch(section) {
+                    case "ULP": 
+                        ULPCase.ULPDocketNotification(caseNumber);
+                        break;
+                    case "REP": 
+                        REPCase.REPDocketNotification(caseNumber);
+                        break;
+                    case "CMDS": 
+                        CMDSCase.CMDSDocketNotification(caseNumber);
+                        break;
+                }
             }
         }
         docketFile.delete();
