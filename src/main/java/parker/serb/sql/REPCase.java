@@ -2068,4 +2068,44 @@ public class REPCase {
         }
         return to;
     }
+    
+    public static String REPDocketNotification(String caseNumber) {
+        String[] parsedCase = caseNumber.trim().split("-");
+        String to = "";
+        
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select"
+                    + " hearingPersonID"
+                    + " from REPCase"
+                    + " where caseYear = ? "
+                    + " and caseType = ? "
+                    + " and caseMonth = ? "
+                    + " and caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, parsedCase[0]);
+            preparedStatement.setString(2, parsedCase[1]);
+            preparedStatement.setString(3, parsedCase[2]);
+            preparedStatement.setString(4, parsedCase[3]);
+
+            ResultSet caseNumberRS = preparedStatement.executeQuery();
+           
+            if(caseNumberRS.next()) {
+                if(caseNumberRS.getInt("hearingPersonID") != 0) {
+                    DocketNotifications.addNotification(caseNumber, "REP", caseNumberRS.getInt("hearingPersonID"));
+                } 
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                REPDocketNotification(caseNumber);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return to;
+    }
 }

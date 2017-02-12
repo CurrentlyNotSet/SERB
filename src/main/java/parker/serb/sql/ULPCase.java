@@ -1019,7 +1019,7 @@ public class ULPCase {
             stmt = Database.connectToDB().createStatement();
 
             String sql = "Select"
-                    + " mediatorAssignedID"
+                    + " aljID"
                     + " from ULPCase"
                     + " where caseYear = ? "
                     + " and caseType = ? "
@@ -1035,8 +1035,8 @@ public class ULPCase {
             ResultSet caseNumberRS = preparedStatement.executeQuery();
            
             if(caseNumberRS.next()) {
-                if(caseNumberRS.getInt("mediatorAssignedID") != 0) {
-                    DocketNotifications.addNotification(caseNumber, "ULP", caseNumberRS.getInt("mediatorAssignedID"));
+                if(caseNumberRS.getInt("aljID") != 0) {
+                    DocketNotifications.addNotification(caseNumber, "ULP", caseNumberRS.getInt("aljID"));
                 } 
             }
         } catch (SQLException ex) {

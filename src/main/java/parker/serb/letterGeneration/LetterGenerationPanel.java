@@ -30,6 +30,7 @@ import parker.serb.bookmarkProcessing.generateDocument;
 import parker.serb.bookmarkProcessing.questionsCMDSModel;
 import parker.serb.bookmarkProcessing.questionsCMDSPanel;
 import parker.serb.sql.Activity;
+import parker.serb.sql.Audit;
 import parker.serb.sql.CMDSDocuments;
 import parker.serb.sql.CSCCase;
 import parker.serb.sql.CaseParty;
@@ -425,7 +426,8 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                     questionsCMDSPanel returnInfo = new questionsCMDSPanel(Global.root, true, CMDSdocToGenerate, count);
                     answers = returnInfo.answers;
                     returnInfo.dispose();
-                }   docName = generateDocument.generateCMDSdocument(CMDSdocToGenerate, answers, 0, toParties, ccParties);
+                }   
+                docName = generateDocument.generateCMDSdocument(CMDSdocToGenerate, answers, 0, toParties, ccParties);
                 break;
             case "ORG":
                 docName = generateDocument.generateSMDSdocument(SMDSdocToGenerate, 0, toParties, ccParties, orgCase, null);
@@ -443,19 +445,23 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
             switch (Global.activeSection) {
                 case "CMDS":
                     Activity.addActivty("Created " + CMDSdocToGenerate.LetterName, docName);
+                    Audit.addAuditEntry("Created " + CMDSdocToGenerate.LetterName);
                     break;
                 case "ORG":
                     Activity.addActivtyORGCase("ORG", orgCase.orgNumber ,
                             "Created " + (SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription)
                             , docName);
+                    Audit.addAuditEntry("Created " + SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription);
                     break;
                 case "Civil Service Commission":
                     Activity.addActivtyORGCase("CSC", cscCase.cscNumber ,
                             "Created " + (SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription)
                             , docName);
+                    Audit.addAuditEntry("Created " + SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription);
                     break;    
                 default:
                     Activity.addActivty("Created " + (SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription), docName);
+                    Audit.addAuditEntry("Created " + SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription);
                     break;
             }
             
