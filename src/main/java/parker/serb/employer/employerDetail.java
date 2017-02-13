@@ -7,16 +7,15 @@ package parker.serb.employer;
 
 import java.awt.Color;
 import java.util.List;
-import javax.swing.JFrame;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import org.apache.commons.validator.routines.EmailValidator;
 import parker.serb.Global;
 import parker.serb.sql.County;
 import parker.serb.sql.Employer;
 import parker.serb.sql.Jurisdiction;
 import parker.serb.sql.NamePrefix;
 import parker.serb.util.CancelUpdate;
+import parker.serb.util.EmailValidation;
 
 /**
  *
@@ -42,26 +41,17 @@ public class employerDetail extends javax.swing.JDialog {
         emailAddressTextBox.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                jButton2.setEnabled(
-                    EmailValidator.getInstance().isValid(emailAddressTextBox.getText()) ||
-                    emailAddressTextBox.getText().equals("")
-                );
+                jButton2.setEnabled(EmailValidation.validEmail(emailAddressTextBox.getText().trim()));
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                jButton2.setEnabled(
-                    EmailValidator.getInstance().isValid(emailAddressTextBox.getText()) ||
-                    emailAddressTextBox.getText().equals("")
-                );
+                jButton2.setEnabled(EmailValidation.validEmail(emailAddressTextBox.getText().trim()));
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                jButton2.setEnabled(
-                    EmailValidator.getInstance().isValid(emailAddressTextBox.getText()) ||
-                    emailAddressTextBox.getText().equals("")
-                );
+                jButton2.setEnabled(EmailValidation.validEmail(emailAddressTextBox.getText().trim()));
             }
         });
     }
