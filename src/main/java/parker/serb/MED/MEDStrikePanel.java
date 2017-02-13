@@ -5,7 +5,9 @@
  */
 package parker.serb.MED;
 
+import com.alee.extended.date.WebCalendar;
 import com.alee.extended.date.WebDateField;
+import com.alee.utils.swing.Customizer;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.sql.Timestamp;
@@ -350,306 +352,356 @@ public class MEDStrikePanel extends javax.swing.JPanel {
         strikeFileDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         strikeFileDateTextBox.setEnabled(false);
         strikeFileDateTextBox.setDateFormat(Global.mmddyyyy);
-        strikeFileDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                strikeFileDateTextBoxMouseClicked(evt);
-            }
-        });
 
-        intendedDatePicketTextBox.setEditable(false);
-        intendedDatePicketTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        intendedDatePicketTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
-        intendedDatePicketTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        intendedDatePicketTextBox.setEnabled(false);
-        intendedDatePicketTextBox.setDateFormat(Global.mmddyyyy);
-        intendedDatePicketTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                intendedDatePicketTextBoxMouseClicked(evt);
-            }
-        });
-        intendedDatePicketTextBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                intendedDatePicketTextBoxActionPerformed(evt);
-            }
-        });
+        strikeFileDateTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+            {
+                @Override
+                public void customize ( final WebCalendar calendar )
+                {
+                    calendar.setStartWeekFromSunday ( true );
+                }
+            } );
+            strikeFileDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    strikeFileDateTextBoxMouseClicked(evt);
+                }
+            });
 
-        noticeOfIntentToStrikeAndPicketCheckBox.setEnabled(false);
+            intendedDatePicketTextBox.setEditable(false);
+            intendedDatePicketTextBox.setBackground(new java.awt.Color(238, 238, 238));
+            intendedDatePicketTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+            intendedDatePicketTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+            intendedDatePicketTextBox.setEnabled(false);
+            intendedDatePicketTextBox.setDateFormat(Global.mmddyyyy);
 
-        jLabel9.setText("Informational:");
+            intendedDatePicketTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                {
+                    @Override
+                    public void customize ( final WebCalendar calendar )
+                    {
+                        calendar.setStartWeekFromSunday ( true );
+                    }
+                } );
+                intendedDatePicketTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                    public void mouseClicked(java.awt.event.MouseEvent evt) {
+                        intendedDatePicketTextBoxMouseClicked(evt);
+                    }
+                });
+                intendedDatePicketTextBox.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        intendedDatePicketTextBoxActionPerformed(evt);
+                    }
+                });
 
-        descriptionTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        descriptionTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        descriptionTextBox.setEnabled(false);
+                noticeOfIntentToStrikeAndPicketCheckBox.setEnabled(false);
 
-        intendedDateStrikeTextBox.setEditable(false);
-        intendedDateStrikeTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        intendedDateStrikeTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
-        intendedDateStrikeTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        intendedDateStrikeTextBox.setEnabled(false);
-        intendedDateStrikeTextBox.setDateFormat(Global.mmddyyyy);
-        intendedDateStrikeTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                intendedDateStrikeTextBoxMouseClicked(evt);
-            }
-        });
+                jLabel9.setText("Informational:");
 
-        jLabel10.setText("Notice of Intent to Strike AND Picket:");
+                descriptionTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                descriptionTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                descriptionTextBox.setEnabled(false);
 
-        noticeOfIntentToStrikeOnlyCheckBox.setEnabled(false);
+                intendedDateStrikeTextBox.setEditable(false);
+                intendedDateStrikeTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                intendedDateStrikeTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+                intendedDateStrikeTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                intendedDateStrikeTextBox.setEnabled(false);
+                intendedDateStrikeTextBox.setDateFormat(Global.mmddyyyy);
 
-        unitSizeTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        unitSizeTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        unitSizeTextBox.setEnabled(false);
+                intendedDateStrikeTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                    {
+                        @Override
+                        public void customize ( final WebCalendar calendar )
+                        {
+                            calendar.setStartWeekFromSunday ( true );
+                        }
+                    } );
+                    intendedDateStrikeTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                        public void mouseClicked(java.awt.event.MouseEvent evt) {
+                            intendedDateStrikeTextBoxMouseClicked(evt);
+                        }
+                    });
+                    intendedDateStrikeTextBox.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                            intendedDateStrikeTextBoxActionPerformed(evt);
+                        }
+                    });
 
-        jLabel7.setText("Notice of Intent to Strike Only:");
+                    jLabel10.setText("Notice of Intent to Strike AND Picket:");
 
-        relatedCaseNumberTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        relatedCaseNumberTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        relatedCaseNumberTextBox.setEnabled(false);
-        relatedCaseNumberTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                relatedCaseNumberTextBoxMouseClicked(evt);
-            }
-        });
+                    noticeOfIntentToStrikeOnlyCheckBox.setEnabled(false);
 
-        jLabel8.setText("Notice of Intent to Picket Only:");
+                    unitSizeTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                    unitSizeTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                    unitSizeTextBox.setEnabled(false);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel10)
-                    .addComponent(jLabel9)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(unauthorizedStrikeCheckBox)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(unitSizeTextBox)
-                            .addComponent(strikeFileDateTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(relatedCaseNumberTextBox, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(descriptionTextBox)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
+                    jLabel7.setText("Notice of Intent to Strike Only:");
+
+                    relatedCaseNumberTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                    relatedCaseNumberTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                    relatedCaseNumberTextBox.setEnabled(false);
+                    relatedCaseNumberTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                        public void mouseClicked(java.awt.event.MouseEvent evt) {
+                            relatedCaseNumberTextBoxMouseClicked(evt);
+                        }
+                    });
+
+                    jLabel8.setText("Notice of Intent to Picket Only:");
+
+                    javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+                    jPanel1.setLayout(jPanel1Layout);
+                    jPanel1Layout.setHorizontalGroup(
+                        jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGap(15, 15, 15)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel10)
+                                .addComponent(jLabel9)
+                                .addComponent(jLabel8)
+                                .addComponent(jLabel7)
+                                .addComponent(jLabel6)
+                                .addComponent(jLabel5)
+                                .addComponent(jLabel4)
+                                .addComponent(jLabel2)
+                                .addComponent(jLabel1))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(unauthorizedStrikeCheckBox)
+                                    .addGap(0, 0, Short.MAX_VALUE))
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(unitSizeTextBox)
+                                        .addComponent(strikeFileDateTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(relatedCaseNumberTextBox, javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(descriptionTextBox)
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addComponent(noticeOfIntentToStrikeOnlyCheckBox)
+                                                .addComponent(noticeOfIntentToPicketOnlyCheckBox))
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                                    .addComponent(jLabel12)
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addComponent(intendedDatePicketTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE))
+                                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                                    .addComponent(jLabel11)
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addComponent(intendedDateStrikeTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE))))
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(noticeOfIntentToStrikeAndPicketCheckBox)
+                                                .addComponent(informationCheckBox))
+                                            .addGap(0, 0, Short.MAX_VALUE)))
+                                    .addContainerGap())))
+                    );
+                    jPanel1Layout.setVerticalGroup(
+                        jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel1)
+                                .addComponent(strikeFileDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel2)
+                                .addComponent(relatedCaseNumberTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(descriptionTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel4))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(unitSizeTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel5))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(unauthorizedStrikeCheckBox))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(intendedDateStrikeTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel11))
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(noticeOfIntentToStrikeOnlyCheckBox)
-                                    .addComponent(noticeOfIntentToPicketOnlyCheckBox))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel12)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(intendedDatePicketTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel11)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(intendedDateStrikeTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE))))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(noticeOfIntentToStrikeAndPicketCheckBox)
-                                    .addComponent(informationCheckBox))
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addContainerGap())))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(strikeFileDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(relatedCaseNumberTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(descriptionTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(unitSizeTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(unauthorizedStrikeCheckBox))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(intendedDateStrikeTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel11))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(noticeOfIntentToStrikeOnlyCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel12)
-                        .addComponent(intendedDatePicketTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(noticeOfIntentToPicketOnlyCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(informationCheckBox))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(noticeOfIntentToStrikeAndPicketCheckBox))
-                .addContainerGap(38, Short.MAX_VALUE))
-        );
+                                    .addComponent(noticeOfIntentToStrikeOnlyCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel12)
+                                    .addComponent(intendedDatePicketTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(noticeOfIntentToPicketOnlyCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(informationCheckBox))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(noticeOfIntentToStrikeAndPicketCheckBox))
+                            .addContainerGap(38, Short.MAX_VALUE))
+                    );
 
-        jLabel13.setText("Strike Occured:");
+                    jLabel13.setText("Strike Occured:");
 
-        strikeOccuredComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Yes", "No", " " }));
-        strikeOccuredComboBox.setSelectedIndex(2);
-        strikeOccuredComboBox.setEnabled(false);
+                    strikeOccuredComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Yes", "No", " " }));
+                    strikeOccuredComboBox.setSelectedIndex(2);
+                    strikeOccuredComboBox.setEnabled(false);
 
-        jLabel14.setText("Strike Status:");
+                    jLabel14.setText("Strike Status:");
 
-        strikeStatusComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "TA Reached", "Settlement Reached", "STRIKE", "Negotiations Continued", " " }));
-        strikeStatusComboBox.setSelectedIndex(4);
-        strikeStatusComboBox.setEnabled(false);
+                    strikeStatusComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "TA Reached", "Settlement Reached", "STRIKE", "Negotiations Continued", " " }));
+                    strikeStatusComboBox.setSelectedIndex(4);
+                    strikeStatusComboBox.setEnabled(false);
 
-        jLabel15.setText("Strike Began:");
+                    jLabel15.setText("Strike Began:");
 
-        jLabel16.setText("Strike Ended:");
+                    jLabel16.setText("Strike Ended:");
 
-        jLabel17.setText("Total Number of Days:");
+                    jLabel17.setText("Total Number of Days:");
 
-        jLabel18.setText("Mediator Appointed:");
+                    jLabel18.setText("Mediator Appointed:");
 
-        jLabel19.setText("Notes:");
+                    jLabel19.setText("Notes:");
 
-        strikeNotesTextArea.setBackground(new java.awt.Color(238, 238, 238));
-        strikeNotesTextArea.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        strikeNotesTextArea.setEnabled(false);
-        jScrollPane1.setViewportView(strikeNotesTextArea);
+                    strikeNotesTextArea.setBackground(new java.awt.Color(238, 238, 238));
+                    strikeNotesTextArea.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                    strikeNotesTextArea.setEnabled(false);
+                    jScrollPane1.setViewportView(strikeNotesTextArea);
 
-        strikeBeganTextBox.setEditable(false);
-        strikeBeganTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        strikeBeganTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
-        strikeBeganTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        strikeBeganTextBox.setEnabled(false);
-        strikeBeganTextBox.setDateFormat(Global.mmddyyyy);
-        strikeBeganTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                strikeBeganTextBoxMouseClicked(evt);
-            }
-        });
+                    strikeBeganTextBox.setEditable(false);
+                    strikeBeganTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                    strikeBeganTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+                    strikeBeganTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                    strikeBeganTextBox.setEnabled(false);
+                    strikeBeganTextBox.setDateFormat(Global.mmddyyyy);
 
-        strikeEndedTextBox.setEditable(false);
-        strikeEndedTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        strikeEndedTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
-        strikeEndedTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        strikeEndedTextBox.setEnabled(false);
-        strikeEndedTextBox.setDateFormat(Global.mmddyyyy);
-        strikeEndedTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                strikeEndedTextBoxMouseClicked(evt);
-            }
-        });
+                    strikeBeganTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                        {
+                            @Override
+                            public void customize ( final WebCalendar calendar )
+                            {
+                                calendar.setStartWeekFromSunday ( true );
+                            }
+                        } );
+                        strikeBeganTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                strikeBeganTextBoxMouseClicked(evt);
+                            }
+                        });
 
-        totalNumberOfDaysTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        totalNumberOfDaysTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        totalNumberOfDaysTextBox.setEnabled(false);
+                        strikeEndedTextBox.setEditable(false);
+                        strikeEndedTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                        strikeEndedTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+                        strikeEndedTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                        strikeEndedTextBox.setEnabled(false);
+                        strikeEndedTextBox.setDateFormat(Global.mmddyyyy);
 
-        mediatorAppointedComboBox.setEnabled(false);
+                        strikeEndedTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                            {
+                                @Override
+                                public void customize ( final WebCalendar calendar )
+                                {
+                                    calendar.setStartWeekFromSunday ( true );
+                                }
+                            } );
+                            strikeEndedTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                    strikeEndedTextBoxMouseClicked(evt);
+                                }
+                            });
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel19)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel18)
-                            .addComponent(jLabel17)
-                            .addComponent(jLabel16)
-                            .addComponent(jLabel15)
-                            .addComponent(jLabel14)
-                            .addComponent(jLabel13))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(strikeOccuredComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(strikeStatusComboBox, 0, 372, Short.MAX_VALUE)
-                            .addComponent(strikeBeganTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(strikeEndedTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(totalNumberOfDaysTextBox)
-                            .addComponent(mediatorAppointedComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap())
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(6, 6, 6)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(strikeOccuredComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(strikeStatusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(4, 4, 4)
-                        .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel15)
-                    .addComponent(strikeBeganTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel16)
-                    .addComponent(strikeEndedTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel17)
-                    .addComponent(totalNumberOfDaysTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(mediatorAppointedComboBox)
-                    .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel19)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1))
-        );
+                            totalNumberOfDaysTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                            totalNumberOfDaysTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                            totalNumberOfDaysTextBox.setEnabled(false);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-    }// </editor-fold>//GEN-END:initComponents
+                            mediatorAppointedComboBox.setEnabled(false);
+
+                            javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+                            jPanel2.setLayout(jPanel2Layout);
+                            jPanel2Layout.setHorizontalGroup(
+                                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                    .addContainerGap()
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jScrollPane1)
+                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                            .addComponent(jLabel19)
+                                            .addGap(0, 0, Short.MAX_VALUE))
+                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addComponent(jLabel18)
+                                                .addComponent(jLabel17)
+                                                .addComponent(jLabel16)
+                                                .addComponent(jLabel15)
+                                                .addComponent(jLabel14)
+                                                .addComponent(jLabel13))
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(strikeOccuredComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(strikeStatusComboBox, 0, 372, Short.MAX_VALUE)
+                                                .addComponent(strikeBeganTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(strikeEndedTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(totalNumberOfDaysTextBox)
+                                                .addComponent(mediatorAppointedComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                    .addContainerGap())
+                            );
+                            jPanel2Layout.setVerticalGroup(
+                                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                    .addGap(6, 6, 6)
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(strikeOccuredComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(strikeStatusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                            .addGap(4, 4, 4)
+                                            .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel15)
+                                        .addComponent(strikeBeganTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel16)
+                                        .addComponent(strikeEndedTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel17)
+                                        .addComponent(totalNumberOfDaysTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(mediatorAppointedComboBox)
+                                        .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(jLabel19)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jScrollPane1))
+                            );
+
+                            javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+                            this.setLayout(layout);
+                            layout.setHorizontalGroup(
+                                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            );
+                            layout.setVerticalGroup(
+                                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            );
+                        }// </editor-fold>//GEN-END:initComponents
 
     private void strikeFileDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_strikeFileDateTextBoxMouseClicked
         clearDate(strikeFileDateTextBox, evt);
@@ -690,6 +742,10 @@ public class MEDStrikePanel extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_relatedCaseNumberTextBoxMouseClicked
+
+    private void intendedDateStrikeTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_intendedDateStrikeTextBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_intendedDateStrikeTextBoxActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

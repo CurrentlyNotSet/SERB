@@ -205,7 +205,7 @@ public class CaseParty {
                     + " where caseYear = ?"
                     + " and caseType = ?"
                     + " and caseMonth = ?"
-                    + " and caseParty.caseNumber = ?"
+                    + " and caseNumber = ?"
                     + " order by caseRelation";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);

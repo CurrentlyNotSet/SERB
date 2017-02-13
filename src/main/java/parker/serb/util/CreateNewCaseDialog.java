@@ -205,6 +205,15 @@ public class CreateNewCaseDialog extends javax.swing.JDialog {
             case "ULP": 
                 Global.root.getuLPHeaderPanel1().loadHeaderInformation();
                 break;
+            case "MED": 
+                Global.root.getmEDHeaderPanel1().loadHeaderInformation();
+                break;
+            case "REP": 
+                Global.root.getrEPHeaderPanel1().loadHeaderInformation();
+                break;
+            case "CMDS": 
+                Global.root.getcMDSHeaderPanel1().loadHeaderInformation();
+                break;
             default:
                 break;
         }

@@ -166,7 +166,7 @@
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="openDateTextBoxMouseClicked"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="openDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="openDateTextBox.setDateFormat(Global.mmddyyyy);&#xa;&#xa;openDateTextBox.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
               </AuxValues>
             </Component>
             <Component class="com.alee.extended.date.WebDateField" name="closeDateTextBox">
@@ -187,7 +187,7 @@
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="closeDateTextBoxMouseClicked"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="closeDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="closeDateTextBox.setDateFormat(Global.mmddyyyy);&#xa;&#xa;closeDateTextBox.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JComboBox" name="aljComboBox">
