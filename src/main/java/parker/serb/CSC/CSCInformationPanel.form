@@ -554,7 +554,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="activitiesLastFiledTextBoxActionPerformed"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="activitiesLastFiledTextBox.setDateFormat(Global.mmddyyyy);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="activitiesLastFiledTextBox.setDateFormat(Global.mmddyyyy);&#xa;&#xa;activitiesLastFiledTextBox.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
           </AuxValues>
         </Component>
         <Component class="com.alee.extended.date.WebDateField" name="dateFiledTextBox">
@@ -575,7 +575,7 @@
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="dateFiledTextBoxMouseClicked"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="dateFiledTextBox.setDateFormat(Global.mmddyyyy);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="dateFiledTextBox.setDateFormat(Global.mmddyyyy);&#xa;&#xa;dateFiledTextBox.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JCheckBox" name="statutoryCheckBox">
@@ -650,7 +650,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="previousFileDateTextBoxActionPerformed"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="previousFileDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="previousFileDateTextBox.setDateFormat(Global.mmddyyyy);&#xa;&#xa;previousFileDateTextBox.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JCheckBox" name="charterCheckBox">
