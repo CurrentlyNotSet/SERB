@@ -3,21 +3,23 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package parker.serb.CSC;
+package parker.serb.ORG;
 
+import parker.serb.CSC.*;
 import parker.serb.Global;
 import parker.serb.sql.CSCCase;
+import parker.serb.sql.ORGCase;
 
 /**
  *
  * @author parkerjohnston
  */
-public class CSCNumberSearchDialog extends javax.swing.JDialog {
+public class ORGNumberSearchDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form CSCNumberSearchDialog
      */
-    public CSCNumberSearchDialog(java.awt.Frame parent, boolean modal) {
+    public ORGNumberSearchDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(parent);
@@ -44,10 +46,10 @@ public class CSCNumberSearchDialog extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("CSC Number Search");
+        jLabel1.setText("Org Number Search");
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Enter Civil Service Commission number below:");
+        jLabel2.setText("Enter Organization number below:");
 
         jTextField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
@@ -111,8 +113,8 @@ public class CSCNumberSearchDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if(CSCCase.validateCSC(jTextField1.getText().trim())) {
-            Global.root.getcSCHeaderPanel1().getjComboBox2().setSelectedItem(CSCCase.getCSCName(jTextField1.getText().trim()));
+        if(ORGCase.validateOrg(jTextField1.getText().trim())) {
+            Global.root.getoRGHeaderPanel2().getjComboBox2().setSelectedItem(ORGCase.getORGName(jTextField1.getText().trim()));
             dispose();
         } else {
             jLabel3.setText("Invalid Number Entered");

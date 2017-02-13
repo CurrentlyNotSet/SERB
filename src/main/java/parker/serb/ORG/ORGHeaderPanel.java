@@ -208,6 +208,11 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
 
         orgNumberTextBox.setEditable(false);
         orgNumberTextBox.setBackground(new java.awt.Color(238, 238, 238));
+        orgNumberTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                orgNumberTextBoxMouseClicked(evt);
+            }
+        });
         orgNumberTextBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 orgNumberTextBoxActionPerformed(evt);
@@ -365,6 +370,13 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_jLabel11MouseClicked
+
+    private void orgNumberTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_orgNumberTextBoxMouseClicked
+        if(SwingUtilities.isRightMouseButton(evt) || evt.getButton() == MouseEvent.BUTTON3) {
+            Audit.addAuditEntry("Opened ORG Case Search Dialog");
+            new ORGNumberSearchDialog(Global.root, true);
+        }
+    }//GEN-LAST:event_orgNumberTextBoxMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
