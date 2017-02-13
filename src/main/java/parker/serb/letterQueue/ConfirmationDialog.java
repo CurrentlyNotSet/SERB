@@ -136,7 +136,6 @@ public class ConfirmationDialog extends javax.swing.JDialog {
 
         jLayeredPane.add(InfoPanel);
 
-        loadingPanel.setBackground(new java.awt.Color(238, 238, 238));
         loadingPanel.setMaximumSize(new java.awt.Dimension(340, 300));
         loadingPanel.setMinimumSize(new java.awt.Dimension(340, 300));
         loadingPanel.setPreferredSize(new java.awt.Dimension(340, 300));
