@@ -11,12 +11,16 @@ import com.alee.utils.swing.Customizer;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import parker.serb.Global;
 import parker.serb.sql.FactFinder;
 import parker.serb.sql.MEDCase;
@@ -40,6 +44,124 @@ public class MEDConciliationPanel extends javax.swing.JPanel {
      */
     public MEDConciliationPanel() {
         initComponents();
+        addListeners();
+    }
+    
+    private void addListeners() {
+        
+        conciliation1OrderDate.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                try {
+                    Date startDate = Global.mmddyyyy.parse(conciliation1OrderDate.getText());
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(startDate);
+                    cal.add(Calendar.DATE, 4);
+                    if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+                        cal.add(Calendar.DATE, 2);
+                    } 
+                    if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+                        cal.add(Calendar.DATE, 1);
+                    } 
+                    conciliation1SelectionDate.setText(Global.mmddyyyy.format(cal.getTime()));
+                } catch (ParseException ex) {
+                    conciliation1SelectionDate.setText("");
+                }            
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                try {
+                    Date startDate = Global.mmddyyyy.parse(conciliation1OrderDate.getText());
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(startDate);
+                    cal.add(Calendar.DATE, 4);
+                    if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+                        cal.add(Calendar.DATE, 2);
+                    } else if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+                        cal.add(Calendar.DATE, 1);
+                    } 
+                    conciliation1SelectionDate.setText(Global.mmddyyyy.format(cal.getTime()));
+                } catch (ParseException ex) {
+                    conciliation1SelectionDate.setText("");
+                }  
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                try {
+                    Date startDate = Global.mmddyyyy.parse(conciliation1OrderDate.getText());
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(startDate);
+                    cal.add(Calendar.DATE, 4);
+                    if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+                        cal.add(Calendar.DATE, 2);
+                    } else if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+                        cal.add(Calendar.DATE, 1);
+                    } 
+                    conciliation1SelectionDate.setText(Global.mmddyyyy.format(cal.getTime()));
+                } catch (ParseException ex) {
+                    conciliation1SelectionDate.setText("");
+                }  
+            }
+        });
+        
+        conciliation2OrderDateTextBox.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                try {
+                    Date startDate = Global.mmddyyyy.parse(conciliation2OrderDateTextBox.getText());
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(startDate);
+                    cal.add(Calendar.DATE, 4);
+                    if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+                        cal.add(Calendar.DATE, 2);
+                    } 
+                    if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+                        cal.add(Calendar.DATE, 1);
+                    } 
+                    conciliation2SelectionDateTextBox.setText(Global.mmddyyyy.format(cal.getTime()));
+                } catch (ParseException ex) {
+                    conciliation2SelectionDateTextBox.setText("");
+                }            
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                try {
+                    Date startDate = Global.mmddyyyy.parse(conciliation2OrderDateTextBox.getText());
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(startDate);
+                    cal.add(Calendar.DATE, 4);
+                    if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+                        cal.add(Calendar.DATE, 2);
+                    } else if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+                        cal.add(Calendar.DATE, 1);
+                    } 
+                    conciliation2SelectionDateTextBox.setText(Global.mmddyyyy.format(cal.getTime()));
+                } catch (ParseException ex) {
+                    conciliation2SelectionDateTextBox.setText("");
+                }  
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                try {
+                    Date startDate = Global.mmddyyyy.parse(conciliation2OrderDateTextBox.getText());
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(startDate);
+                    cal.add(Calendar.DATE, 4);
+                    if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+                        cal.add(Calendar.DATE, 2);
+                    } else if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+                        cal.add(Calendar.DATE, 1);
+                    } 
+                    conciliation2SelectionDateTextBox.setText(Global.mmddyyyy.format(cal.getTime()));
+                } catch (ParseException ex) {
+                    conciliation2SelectionDateTextBox.setText("");
+                }  
+            }
+        });
     }
     
     public void enableUpdate() {
