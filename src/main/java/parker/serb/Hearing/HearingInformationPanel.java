@@ -5,7 +5,9 @@
  */
 package parker.serb.Hearing;
 
+import com.alee.extended.date.WebCalendar;
 import com.alee.extended.date.WebDateField;
+import com.alee.utils.swing.Customizer;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.sql.Timestamp;
@@ -391,532 +393,663 @@ public class HearingInformationPanel extends javax.swing.JPanel {
         boardActionPCDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         boardActionPCDateTextBox.setEnabled(false);
         boardActionPCDateTextBox.setDateFormat(Global.mmddyyyy);
-        boardActionPCDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                boardActionPCDateTextBoxMouseClicked(evt);
-            }
-        });
 
-        boardActionPreDDateTextBox.setEditable(false);
-        boardActionPreDDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        boardActionPreDDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
-        boardActionPreDDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        boardActionPreDDateTextBox.setEnabled(false);
-        boardActionPreDDateTextBox.setDateFormat(Global.mmddyyyy);
-        boardActionPreDDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                boardActionPreDDateTextBoxMouseClicked(evt);
-            }
-        });
+        boardActionPCDateTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+            {
+                @Override
+                public void customize ( final WebCalendar calendar )
+                {
+                    calendar.setStartWeekFromSunday ( true );
+                }
+            } );
+            boardActionPCDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    boardActionPCDateTextBoxMouseClicked(evt);
+                }
+            });
 
-        jLabel13.setText("Complaint Due Date:");
+            boardActionPreDDateTextBox.setEditable(false);
+            boardActionPreDDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+            boardActionPreDDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+            boardActionPreDDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+            boardActionPreDDateTextBox.setEnabled(false);
+            boardActionPreDDateTextBox.setDateFormat(Global.mmddyyyy);
 
-        jLabel26.setText("Draft Complaint to Hearing:");
+            boardActionPreDDateTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                {
+                    @Override
+                    public void customize ( final WebCalendar calendar )
+                    {
+                        calendar.setStartWeekFromSunday ( true );
+                    }
+                } );
+                boardActionPreDDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                    public void mouseClicked(java.awt.event.MouseEvent evt) {
+                        boardActionPreDDateTextBoxMouseClicked(evt);
+                    }
+                });
 
-        jLabel27.setText("Proposed Rec Due:");
+                jLabel13.setText("Complaint Due Date:");
 
-        jLabel28.setText("Prehearing Date:");
+                jLabel26.setText("Draft Complaint to Hearing:");
 
-        jLabel29.setText("Exceptions Date:");
+                jLabel27.setText("Proposed Rec Due:");
 
-        directiveIssuedDateTextBox.setEditable(false);
-        directiveIssuedDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        directiveIssuedDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
-        directiveIssuedDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        directiveIssuedDateTextBox.setEnabled(false);
-        directiveIssuedDateTextBox.setDateFormat(Global.mmddyyyy);
-        directiveIssuedDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                directiveIssuedDateTextBoxMouseClicked(evt);
-            }
-        });
+                jLabel28.setText("Prehearing Date:");
 
-        complaintDueDateTextBox.setEditable(false);
-        complaintDueDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        complaintDueDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
-        complaintDueDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        complaintDueDateTextBox.setEnabled(false);
-        complaintDueDateTextBox.setDateFormat(Global.mmddyyyy);
-        complaintDueDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                complaintDueDateTextBoxMouseClicked(evt);
-            }
-        });
+                jLabel29.setText("Exceptions Date:");
 
-        draftComplaintToHearingTextBox.setEditable(false);
-        draftComplaintToHearingTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        draftComplaintToHearingTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
-        draftComplaintToHearingTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        draftComplaintToHearingTextBox.setEnabled(false);
-        draftComplaintToHearingTextBox.setDateFormat(Global.mmddyyyy);
-        draftComplaintToHearingTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                draftComplaintToHearingTextBoxMouseClicked(evt);
-            }
-        });
+                directiveIssuedDateTextBox.setEditable(false);
+                directiveIssuedDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                directiveIssuedDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+                directiveIssuedDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                directiveIssuedDateTextBox.setEnabled(false);
+                directiveIssuedDateTextBox.setDateFormat(Global.mmddyyyy);
 
-        preHearingDateTextBox.setEditable(false);
-        preHearingDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        preHearingDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
-        preHearingDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        preHearingDateTextBox.setEnabled(false);
-        preHearingDateTextBox.setDateFormat(Global.mmddyyyy);
-        preHearingDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                preHearingDateTextBoxMouseClicked(evt);
-            }
-        });
+                directiveIssuedDateTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                    {
+                        @Override
+                        public void customize ( final WebCalendar calendar )
+                        {
+                            calendar.setStartWeekFromSunday ( true );
+                        }
+                    } );
+                    directiveIssuedDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                        public void mouseClicked(java.awt.event.MouseEvent evt) {
+                            directiveIssuedDateTextBoxMouseClicked(evt);
+                        }
+                    });
 
-        proposedRecDueDateTextBox.setEditable(false);
-        proposedRecDueDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        proposedRecDueDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
-        proposedRecDueDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        proposedRecDueDateTextBox.setEnabled(false);
-        proposedRecDueDateTextBox.setDateFormat(Global.mmddyyyy);
-        proposedRecDueDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                proposedRecDueDateTextBoxMouseClicked(evt);
-            }
-        });
+                    complaintDueDateTextBox.setEditable(false);
+                    complaintDueDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                    complaintDueDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+                    complaintDueDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                    complaintDueDateTextBox.setEnabled(false);
+                    complaintDueDateTextBox.setDateFormat(Global.mmddyyyy);
 
-        exceptionsDateTextBox.setEditable(false);
-        exceptionsDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        exceptionsDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
-        exceptionsDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        exceptionsDateTextBox.setEnabled(false);
-        exceptionsDateTextBox.setDateFormat(Global.mmddyyyy);
-        exceptionsDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                exceptionsDateTextBoxMouseClicked(evt);
-            }
-        });
+                    complaintDueDateTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                        {
+                            @Override
+                            public void customize ( final WebCalendar calendar )
+                            {
+                                calendar.setStartWeekFromSunday ( true );
+                            }
+                        } );
+                        complaintDueDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                complaintDueDateTextBoxMouseClicked(evt);
+                            }
+                        });
 
-        expeditedComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "No", "Yes" }));
-        expeditedComboBox.setEnabled(false);
+                        draftComplaintToHearingTextBox.setEditable(false);
+                        draftComplaintToHearingTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                        draftComplaintToHearingTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+                        draftComplaintToHearingTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                        draftComplaintToHearingTextBox.setEnabled(false);
+                        draftComplaintToHearingTextBox.setDateFormat(Global.mmddyyyy);
 
-        openClosedComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Open", "Closed" }));
-        openClosedComboBox.setEnabled(false);
+                        draftComplaintToHearingTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                            {
+                                @Override
+                                public void customize ( final WebCalendar calendar )
+                                {
+                                    calendar.setStartWeekFromSunday ( true );
+                                }
+                            } );
+                            draftComplaintToHearingTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                    draftComplaintToHearingTextBoxMouseClicked(evt);
+                                }
+                            });
+                            draftComplaintToHearingTextBox.addActionListener(new java.awt.event.ActionListener() {
+                                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                    draftComplaintToHearingTextBoxActionPerformed(evt);
+                                }
+                            });
 
-        caseTypeTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        caseTypeTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        caseTypeTextBox.setEnabled(false);
+                            preHearingDateTextBox.setEditable(false);
+                            preHearingDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                            preHearingDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+                            preHearingDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                            preHearingDateTextBox.setEnabled(false);
+                            preHearingDateTextBox.setDateFormat(Global.mmddyyyy);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel29)
-                    .addComponent(jLabel27)
-                    .addComponent(jLabel28)
-                    .addComponent(jLabel13)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(directiveIssuedDateTextBox, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(boardActionPreDDateTextBox, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(boardActionPCDateTextBox, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(complaintDueDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(draftComplaintToHearingTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(preHearingDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(proposedRecDueDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(exceptionsDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(expeditedComboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, 291, Short.MAX_VALUE)
-                    .addComponent(caseTypeTextBox, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(openClosedComboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(openClosedComboBox)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(caseTypeTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(boardActionPCDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(boardActionPreDDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(directiveIssuedDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(expeditedComboBox))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel13)
-                    .addComponent(complaintDueDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel26)
-                    .addComponent(draftComplaintToHearingTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel28)
-                    .addComponent(preHearingDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel27)
-                    .addComponent(proposedRecDueDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel29)
-                    .addComponent(exceptionsDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
-        );
+                            preHearingDateTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                                {
+                                    @Override
+                                    public void customize ( final WebCalendar calendar )
+                                    {
+                                        calendar.setStartWeekFromSunday ( true );
+                                    }
+                                } );
+                                preHearingDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                                    public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                        preHearingDateTextBoxMouseClicked(evt);
+                                    }
+                                });
 
-        jLabel7.setText("Board Action Date:");
+                                proposedRecDueDateTextBox.setEditable(false);
+                                proposedRecDueDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                                proposedRecDueDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+                                proposedRecDueDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                                proposedRecDueDateTextBox.setEnabled(false);
+                                proposedRecDueDateTextBox.setDateFormat(Global.mmddyyyy);
 
-        jLabel8.setText("Other:");
+                                proposedRecDueDateTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                                    {
+                                        @Override
+                                        public void customize ( final WebCalendar calendar )
+                                        {
+                                            calendar.setStartWeekFromSunday ( true );
+                                        }
+                                    } );
+                                    proposedRecDueDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                                        public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                            proposedRecDueDateTextBoxMouseClicked(evt);
+                                        }
+                                    });
 
-        jLabel9.setText("ALJ Assigned:");
+                                    exceptionsDateTextBox.setEditable(false);
+                                    exceptionsDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                                    exceptionsDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+                                    exceptionsDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                                    exceptionsDateTextBox.setEnabled(false);
+                                    exceptionsDateTextBox.setDateFormat(Global.mmddyyyy);
 
-        aljComboBox.setEnabled(false);
+                                    exceptionsDateTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                                        {
+                                            @Override
+                                            public void customize ( final WebCalendar calendar )
+                                            {
+                                                calendar.setStartWeekFromSunday ( true );
+                                            }
+                                        } );
+                                        exceptionsDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                                            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                                exceptionsDateTextBoxMouseClicked(evt);
+                                            }
+                                        });
 
-        jLabel11.setText("Complaint Issued Date:");
+                                        expeditedComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "No", "Yes" }));
+                                        expeditedComboBox.setEnabled(false);
 
-        jLabel10.setText("Hearing Date:");
+                                        openClosedComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Open", "Closed" }));
+                                        openClosedComboBox.setEnabled(false);
 
-        jLabel12.setText("Proposed Rec Issued:");
+                                        caseTypeTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                                        caseTypeTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                                        caseTypeTextBox.setEnabled(false);
 
-        jLabel16.setText("Response Filing Date:");
+                                        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+                                        jPanel1.setLayout(jPanel1Layout);
+                                        jPanel1Layout.setHorizontalGroup(
+                                            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addContainerGap()
+                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                    .addComponent(jLabel29)
+                                                    .addComponent(jLabel27)
+                                                    .addComponent(jLabel28)
+                                                    .addComponent(jLabel13)
+                                                    .addComponent(jLabel2)
+                                                    .addComponent(jLabel3)
+                                                    .addComponent(jLabel4)
+                                                    .addComponent(jLabel5)
+                                                    .addComponent(jLabel6)
+                                                    .addComponent(jLabel1)
+                                                    .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                    .addComponent(directiveIssuedDateTextBox, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(boardActionPreDDateTextBox, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(boardActionPCDateTextBox, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(complaintDueDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(draftComplaintToHearingTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(preHearingDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(proposedRecDueDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(exceptionsDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(expeditedComboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, 291, Short.MAX_VALUE)
+                                                    .addComponent(caseTypeTextBox, javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(openClosedComboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                .addContainerGap())
+                                        );
+                                        jPanel1Layout.setVerticalGroup(
+                                            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addContainerGap()
+                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(openClosedComboBox)
+                                                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(caseTypeTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                    .addComponent(jLabel3)
+                                                    .addComponent(boardActionPCDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                    .addComponent(jLabel4)
+                                                    .addComponent(boardActionPreDDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                    .addComponent(jLabel5)
+                                                    .addComponent(directiveIssuedDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(expeditedComboBox))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                    .addComponent(jLabel13)
+                                                    .addComponent(complaintDueDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                    .addComponent(jLabel26)
+                                                    .addComponent(draftComplaintToHearingTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                    .addComponent(jLabel28)
+                                                    .addComponent(preHearingDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                    .addComponent(jLabel27)
+                                                    .addComponent(proposedRecDueDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                    .addComponent(jLabel29)
+                                                    .addComponent(exceptionsDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addContainerGap())
+                                        );
 
-        jLabel17.setText("Issuance of OP / Dir. Date:");
+                                        jLabel7.setText("Board Action Date:");
 
-        jLabel18.setText("Final Result:");
+                                        jLabel8.setText("Other:");
 
-        jLabel19.setText("Opinion:");
+                                        jLabel9.setText("ALJ Assigned:");
 
-        jLabel20.setText("Companion Cases:");
+                                        aljComboBox.setEnabled(false);
 
-        companionCasesTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        companionCasesTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        companionCasesTextBox.setEnabled(false);
+                                        jLabel11.setText("Complaint Issued Date:");
 
-        boardActionDateTextBox.setEditable(false);
-        boardActionDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        boardActionDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
-        boardActionDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        boardActionDateTextBox.setEnabled(false);
-        boardActionDateTextBox.setDateFormat(Global.mmddyyyy);
-        boardActionDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                boardActionDateTextBoxMouseClicked(evt);
-            }
-        });
+                                        jLabel10.setText("Hearing Date:");
 
-        complaintIssuedDateTextBox.setEditable(false);
-        complaintIssuedDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        complaintIssuedDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
-        complaintIssuedDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        complaintIssuedDateTextBox.setEnabled(false);
-        complaintIssuedDateTextBox.setDateFormat(Global.mmddyyyy);
-        complaintIssuedDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                complaintIssuedDateTextBoxMouseClicked(evt);
-            }
-        });
+                                        jLabel12.setText("Proposed Rec Issued:");
 
-        hearingDateTextBox.setEditable(false);
-        hearingDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        hearingDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
-        hearingDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        hearingDateTextBox.setEnabled(false);
-        hearingDateTextBox.setDateFormat(Global.mmddyyyy);
-        hearingDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                hearingDateTextBoxMouseClicked(evt);
-            }
-        });
+                                        jLabel16.setText("Response Filing Date:");
 
-        opinionTextBox.setEditable(false);
-        opinionTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        opinionTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
-        opinionTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        opinionTextBox.setEnabled(false);
-        opinionTextBox.setDateFormat(Global.mmddyyyy);
-        opinionTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                opinionTextBoxMouseClicked(evt);
-            }
-        });
+                                        jLabel17.setText("Issuance of OP / Dir. Date:");
 
-        proposedRecIssuedTextBox.setEditable(false);
-        proposedRecIssuedTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        proposedRecIssuedTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
-        proposedRecIssuedTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        proposedRecIssuedTextBox.setEnabled(false);
-        proposedRecIssuedTextBox.setDateFormat(Global.mmddyyyy);
-        proposedRecIssuedTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                proposedRecIssuedTextBoxMouseClicked(evt);
-            }
-        });
+                                        jLabel18.setText("Final Result:");
 
-        responseFilingDateTextBox.setEditable(false);
-        responseFilingDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        responseFilingDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
-        responseFilingDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        responseFilingDateTextBox.setEnabled(false);
-        responseFilingDateTextBox.setDateFormat(Global.mmddyyyy);
-        responseFilingDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                responseFilingDateTextBoxMouseClicked(evt);
-            }
-        });
+                                        jLabel19.setText("Opinion:");
 
-        issuanceOfOPDirDateTextBox.setEditable(false);
-        issuanceOfOPDirDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        issuanceOfOPDirDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
-        issuanceOfOPDirDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        issuanceOfOPDirDateTextBox.setEnabled(false);
-        issuanceOfOPDirDateTextBox.setDateFormat(Global.mmddyyyy);
-        issuanceOfOPDirDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                issuanceOfOPDirDateTextBoxMouseClicked(evt);
-            }
-        });
+                                        jLabel20.setText("Companion Cases:");
 
-        finalResultComboBox.setEnabled(false);
+                                        companionCasesTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                                        companionCasesTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                                        companionCasesTextBox.setEnabled(false);
 
-        otherTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        otherTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        otherTextBox.setEnabled(false);
+                                        boardActionDateTextBox.setEditable(false);
+                                        boardActionDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                                        boardActionDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+                                        boardActionDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                                        boardActionDateTextBox.setEnabled(false);
+                                        boardActionDateTextBox.setDateFormat(Global.mmddyyyy);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel20)
-                    .addComponent(jLabel19)
-                    .addComponent(jLabel18)
-                    .addComponent(jLabel17)
-                    .addComponent(jLabel16)
-                    .addComponent(jLabel12)
-                    .addComponent(jLabel9)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel11)
-                    .addComponent(jLabel10))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(companionCasesTextBox, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(boardActionDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(aljComboBox, 0, 292, Short.MAX_VALUE)
-                    .addComponent(complaintIssuedDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(hearingDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(opinionTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(proposedRecIssuedTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(responseFilingDateTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(issuanceOfOPDirDateTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(finalResultComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(otherTextBox, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addContainerGap())
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(boardActionDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(otherTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(aljComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(4, 4, 4)
-                        .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(complaintIssuedDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(hearingDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel12)
-                    .addComponent(proposedRecIssuedTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel16)
-                    .addComponent(responseFilingDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel17)
-                    .addComponent(issuanceOfOPDirDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(finalResultComboBox)
-                    .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel19)
-                    .addComponent(opinionTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel20)
-                    .addComponent(companionCasesTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+                                        boardActionDateTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                                            {
+                                                @Override
+                                                public void customize ( final WebCalendar calendar )
+                                                {
+                                                    calendar.setStartWeekFromSunday ( true );
+                                                }
+                                            } );
+                                            boardActionDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                                                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                                    boardActionDateTextBoxMouseClicked(evt);
+                                                }
+                                            });
 
-        jLabel14.setText("Case Status Notes:");
+                                            complaintIssuedDateTextBox.setEditable(false);
+                                            complaintIssuedDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                                            complaintIssuedDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+                                            complaintIssuedDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                                            complaintIssuedDateTextBox.setEnabled(false);
+                                            complaintIssuedDateTextBox.setDateFormat(Global.mmddyyyy);
 
-        caseStatusNotesTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        caseStatusNotesTextBox.setColumns(20);
-        caseStatusNotesTextBox.setLineWrap(true);
-        caseStatusNotesTextBox.setRows(5);
-        caseStatusNotesTextBox.setWrapStyleWord(true);
-        caseStatusNotesTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        caseStatusNotesTextBox.setEnabled(false);
-        jScrollPane1.setViewportView(caseStatusNotesTextBox);
+                                            complaintIssuedDateTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                                                {
+                                                    @Override
+                                                    public void customize ( final WebCalendar calendar )
+                                                    {
+                                                        calendar.setStartWeekFromSunday ( true );
+                                                    }
+                                                } );
+                                                complaintIssuedDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                                                    public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                                        complaintIssuedDateTextBoxMouseClicked(evt);
+                                                    }
+                                                });
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(jLabel14)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1)
-                        .addContainerGap())
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel14)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
+                                                hearingDateTextBox.setEditable(false);
+                                                hearingDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                                                hearingDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+                                                hearingDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                                                hearingDateTextBox.setEnabled(false);
+                                                hearingDateTextBox.setDateFormat(Global.mmddyyyy);
 
-        jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel21.setText("Mediation Information");
+                                                hearingDateTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                                                    {
+                                                        @Override
+                                                        public void customize ( final WebCalendar calendar )
+                                                        {
+                                                            calendar.setStartWeekFromSunday ( true );
+                                                        }
+                                                    } );
+                                                    hearingDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                                                        public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                                            hearingDateTextBoxMouseClicked(evt);
+                                                        }
+                                                    });
 
-        mediationTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+                                                    opinionTextBox.setEditable(false);
+                                                    opinionTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                                                    opinionTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+                                                    opinionTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                                                    opinionTextBox.setEnabled(false);
+                                                    opinionTextBox.setDateFormat(Global.mmddyyyy);
 
-            },
-            new String [] {
-                "id", "PC / Pre-D", "Mediator", "Date Assigned", "Mediation Date", "Outcome"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
-            };
+                                                    opinionTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                                                        {
+                                                            @Override
+                                                            public void customize ( final WebCalendar calendar )
+                                                            {
+                                                                calendar.setStartWeekFromSunday ( true );
+                                                            }
+                                                        } );
+                                                        opinionTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                                                            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                                                opinionTextBoxMouseClicked(evt);
+                                                            }
+                                                        });
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
+                                                        proposedRecIssuedTextBox.setEditable(false);
+                                                        proposedRecIssuedTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                                                        proposedRecIssuedTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+                                                        proposedRecIssuedTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                                                        proposedRecIssuedTextBox.setEnabled(false);
+                                                        proposedRecIssuedTextBox.setDateFormat(Global.mmddyyyy);
+                                                        proposedRecIssuedTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                                                            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                                                proposedRecIssuedTextBoxMouseClicked(evt);
+                                                            }
+                                                        });
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        mediationTable.setRequestFocusEnabled(false);
-        mediationTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                mediationTableMouseClicked(evt);
-            }
-        });
-        jScrollPane2.setViewportView(mediationTable);
-        if (mediationTable.getColumnModel().getColumnCount() > 0) {
-            mediationTable.getColumnModel().getColumn(0).setResizable(false);
-        }
+                                                        responseFilingDateTextBox.setEditable(false);
+                                                        responseFilingDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                                                        responseFilingDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+                                                        responseFilingDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                                                        responseFilingDateTextBox.setEnabled(false);
+                                                        responseFilingDateTextBox.setDateFormat(Global.mmddyyyy);
 
-        jButton1.setText("+");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
+                                                        responseFilingDateTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                                                            {
+                                                                @Override
+                                                                public void customize ( final WebCalendar calendar )
+                                                                {
+                                                                    calendar.setStartWeekFromSunday ( true );
+                                                                }
+                                                            } );
+                                                            responseFilingDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                                                                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                                                    responseFilingDateTextBoxMouseClicked(evt);
+                                                                }
+                                                            });
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel21, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 915, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))))
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jLabel21)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addContainerGap())
-        );
+                                                            issuanceOfOPDirDateTextBox.setEditable(false);
+                                                            issuanceOfOPDirDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                                                            issuanceOfOPDirDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+                                                            issuanceOfOPDirDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                                                            issuanceOfOPDirDateTextBox.setEnabled(false);
+                                                            issuanceOfOPDirDateTextBox.setDateFormat(Global.mmddyyyy);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-    }// </editor-fold>//GEN-END:initComponents
+                                                            issuanceOfOPDirDateTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                                                                {
+                                                                    @Override
+                                                                    public void customize ( final WebCalendar calendar )
+                                                                    {
+                                                                        calendar.setStartWeekFromSunday ( true );
+                                                                    }
+                                                                } );
+                                                                issuanceOfOPDirDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                                                                    public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                                                        issuanceOfOPDirDateTextBoxMouseClicked(evt);
+                                                                    }
+                                                                });
+
+                                                                finalResultComboBox.setEnabled(false);
+
+                                                                otherTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                                                                otherTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                                                                otherTextBox.setEnabled(false);
+
+                                                                javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+                                                                jPanel2.setLayout(jPanel2Layout);
+                                                                jPanel2Layout.setHorizontalGroup(
+                                                                    jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                                            .addComponent(jLabel20)
+                                                                            .addComponent(jLabel19)
+                                                                            .addComponent(jLabel18)
+                                                                            .addComponent(jLabel17)
+                                                                            .addComponent(jLabel16)
+                                                                            .addComponent(jLabel12)
+                                                                            .addComponent(jLabel9)
+                                                                            .addComponent(jLabel7)
+                                                                            .addComponent(jLabel8)
+                                                                            .addComponent(jLabel11)
+                                                                            .addComponent(jLabel10))
+                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                            .addComponent(companionCasesTextBox, javax.swing.GroupLayout.Alignment.TRAILING)
+                                                                            .addComponent(boardActionDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                            .addComponent(aljComboBox, 0, 292, Short.MAX_VALUE)
+                                                                            .addComponent(complaintIssuedDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                            .addComponent(hearingDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                            .addComponent(opinionTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                            .addComponent(proposedRecIssuedTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                            .addComponent(responseFilingDateTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                            .addComponent(issuanceOfOPDirDateTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                            .addComponent(finalResultComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                            .addComponent(otherTextBox, javax.swing.GroupLayout.Alignment.TRAILING))
+                                                                        .addContainerGap())
+                                                                );
+                                                                jPanel2Layout.setVerticalGroup(
+                                                                    jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                                                        .addContainerGap()
+                                                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                            .addComponent(jLabel7)
+                                                                            .addComponent(boardActionDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                            .addComponent(otherTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                                            .addComponent(aljComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                                                                .addGap(4, 4, 4)
+                                                                                .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                            .addComponent(complaintIssuedDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                            .addComponent(hearingDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                            .addComponent(jLabel12)
+                                                                            .addComponent(proposedRecIssuedTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                            .addComponent(jLabel16)
+                                                                            .addComponent(responseFilingDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                            .addComponent(jLabel17)
+                                                                            .addComponent(issuanceOfOPDirDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                                            .addComponent(finalResultComboBox)
+                                                                            .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                            .addComponent(jLabel19)
+                                                                            .addComponent(opinionTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                            .addComponent(jLabel20)
+                                                                            .addComponent(companionCasesTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                                );
+
+                                                                jLabel14.setText("Case Status Notes:");
+
+                                                                caseStatusNotesTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                                                                caseStatusNotesTextBox.setColumns(20);
+                                                                caseStatusNotesTextBox.setLineWrap(true);
+                                                                caseStatusNotesTextBox.setRows(5);
+                                                                caseStatusNotesTextBox.setWrapStyleWord(true);
+                                                                caseStatusNotesTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                                                                caseStatusNotesTextBox.setEnabled(false);
+                                                                jScrollPane1.setViewportView(caseStatusNotesTextBox);
+
+                                                                javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+                                                                jPanel3.setLayout(jPanel3Layout);
+                                                                jPanel3Layout.setHorizontalGroup(
+                                                                    jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                                                        .addContainerGap()
+                                                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                                                                .addGap(6, 6, 6)
+                                                                                .addComponent(jLabel14)
+                                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                                .addComponent(jScrollPane1)
+                                                                                .addContainerGap())
+                                                                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                                                                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                                                );
+                                                                jPanel3Layout.setVerticalGroup(
+                                                                    jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                        .addGap(10, 10, 10)
+                                                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE)
+                                                                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                                                                .addComponent(jLabel14)
+                                                                                .addGap(0, 0, Short.MAX_VALUE)))
+                                                                        .addContainerGap())
+                                                                );
+
+                                                                jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+                                                                jLabel21.setText("Mediation Information");
+
+                                                                mediationTable.setModel(new javax.swing.table.DefaultTableModel(
+                                                                    new Object [][] {
+
+                                                                    },
+                                                                    new String [] {
+                                                                        "id", "PC / Pre-D", "Mediator", "Date Assigned", "Mediation Date", "Outcome"
+                                                                    }
+                                                                ) {
+                                                                    Class[] types = new Class [] {
+                                                                        java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                                                                    };
+                                                                    boolean[] canEdit = new boolean [] {
+                                                                        false, false, false, false, false, false
+                                                                    };
+
+                                                                    public Class getColumnClass(int columnIndex) {
+                                                                        return types [columnIndex];
+                                                                    }
+
+                                                                    public boolean isCellEditable(int rowIndex, int columnIndex) {
+                                                                        return canEdit [columnIndex];
+                                                                    }
+                                                                });
+                                                                mediationTable.setRequestFocusEnabled(false);
+                                                                mediationTable.addMouseListener(new java.awt.event.MouseAdapter() {
+                                                                    public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                                                        mediationTableMouseClicked(evt);
+                                                                    }
+                                                                });
+                                                                jScrollPane2.setViewportView(mediationTable);
+                                                                if (mediationTable.getColumnModel().getColumnCount() > 0) {
+                                                                    mediationTable.getColumnModel().getColumn(0).setResizable(false);
+                                                                }
+
+                                                                jButton1.setText("+");
+                                                                jButton1.addActionListener(new java.awt.event.ActionListener() {
+                                                                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                                                        jButton1ActionPerformed(evt);
+                                                                    }
+                                                                });
+
+                                                                javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+                                                                jPanel4.setLayout(jPanel4Layout);
+                                                                jPanel4Layout.setHorizontalGroup(
+                                                                    jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                    .addGroup(jPanel4Layout.createSequentialGroup()
+                                                                        .addContainerGap()
+                                                                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                                                                .addComponent(jLabel21, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                                .addContainerGap())
+                                                                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                                                                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 915, Short.MAX_VALUE)
+                                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                                                );
+                                                                jPanel4Layout.setVerticalGroup(
+                                                                    jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                    .addGroup(jPanel4Layout.createSequentialGroup()
+                                                                        .addComponent(jLabel21)
+                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
+                                                                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                                                                        .addContainerGap())
+                                                                );
+
+                                                                javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+                                                                this.setLayout(layout);
+                                                                layout.setHorizontalGroup(
+                                                                    layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                    .addGroup(layout.createSequentialGroup()
+                                                                        .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                        .addContainerGap())
+                                                                );
+                                                                layout.setVerticalGroup(
+                                                                    layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                    .addGroup(layout.createSequentialGroup()
+                                                                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                        .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                                );
+                                                            }// </editor-fold>//GEN-END:initComponents
 
     private void boardActionPCDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_boardActionPCDateTextBoxMouseClicked
         clearDate(boardActionPCDateTextBox, evt);
@@ -1006,6 +1139,10 @@ public class HearingInformationPanel extends javax.swing.JPanel {
     private void issuanceOfOPDirDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_issuanceOfOPDirDateTextBoxMouseClicked
         clearDate(issuanceOfOPDirDateTextBox, evt);
     }//GEN-LAST:event_issuanceOfOPDirDateTextBoxMouseClicked
+
+    private void draftComplaintToHearingTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_draftComplaintToHearingTextBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_draftComplaintToHearingTextBoxActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
