@@ -106,7 +106,7 @@
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="responseDueDateTextBoxMouseClicked"/>
       </Events>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="responseDueDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="responseDueDateTextBox.setDateFormat(Global.mmddyyyy);&#xa;&#xa;responseDueDateTextBox.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
       </AuxValues>
     </Component>
   </SubComponents>
