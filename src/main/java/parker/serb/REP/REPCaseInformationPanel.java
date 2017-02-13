@@ -5,7 +5,9 @@
  */
 package parker.serb.REP;
 
+import com.alee.extended.date.WebCalendar;
 import com.alee.extended.date.WebDateField;
+import com.alee.utils.swing.Customizer;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.sql.Timestamp;
@@ -749,255 +751,368 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         fileDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         fileDateTextBox.setEnabled(false);
         fileDateTextBox.setDateFormat(Global.mmddyyyy);
-        fileDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                fileDateTextBoxMouseClicked(evt);
-            }
-        });
 
-        amendedFilingDateTextBox.setEditable(false);
-        amendedFilingDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        amendedFilingDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        amendedFilingDateTextBox.setEnabled(false);
-        amendedFilingDateTextBox.setDateFormat(Global.mmddyyyy);
-        amendedFilingDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                amendedFilingDateTextBoxMouseClicked(evt);
-            }
-        });
+        fileDateTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+            {
+                @Override
+                public void customize ( final WebCalendar calendar )
+                {
+                    calendar.setStartWeekFromSunday ( true );
+                }
+            } );
+            fileDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    fileDateTextBoxMouseClicked(evt);
+                }
+            });
 
-        finalBoardDateTextBox.setEditable(false);
-        finalBoardDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        finalBoardDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        finalBoardDateTextBox.setEnabled(false);
-        finalBoardDateTextBox.setDateFormat(Global.mmddyyyy);
-        finalBoardDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                finalBoardDateTextBoxMouseClicked(evt);
-            }
-        });
+            amendedFilingDateTextBox.setEditable(false);
+            amendedFilingDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+            amendedFilingDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+            amendedFilingDateTextBox.setEnabled(false);
+            amendedFilingDateTextBox.setDateFormat(Global.mmddyyyy);
 
-        registrationLetterSentTextBox.setEditable(false);
-        registrationLetterSentTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        registrationLetterSentTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        registrationLetterSentTextBox.setEnabled(false);
-        registrationLetterSentTextBox.setDateFormat(Global.mmddyyyy);
-        registrationLetterSentTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                registrationLetterSentTextBoxMouseClicked(evt);
-            }
-        });
+            amendedFilingDateTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                {
+                    @Override
+                    public void customize ( final WebCalendar calendar )
+                    {
+                        calendar.setStartWeekFromSunday ( true );
+                    }
+                } );
+                amendedFilingDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                    public void mouseClicked(java.awt.event.MouseEvent evt) {
+                        amendedFilingDateTextBoxMouseClicked(evt);
+                    }
+                });
 
-        dateOfAppealTextBox.setEditable(false);
-        dateOfAppealTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        dateOfAppealTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        dateOfAppealTextBox.setEnabled(false);
-        dateOfAppealTextBox.setDateFormat(Global.mmddyyyy);
-        dateOfAppealTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                dateOfAppealTextBoxMouseClicked(evt);
-            }
-        });
+                finalBoardDateTextBox.setEditable(false);
+                finalBoardDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                finalBoardDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                finalBoardDateTextBox.setEnabled(false);
+                finalBoardDateTextBox.setDateFormat(Global.mmddyyyy);
 
-        courtClosedDateTextBox.setEditable(false);
-        courtClosedDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        courtClosedDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        courtClosedDateTextBox.setEnabled(false);
-        courtClosedDateTextBox.setDateFormat(Global.mmddyyyy);
-        courtClosedDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                courtClosedDateTextBoxMouseClicked(evt);
-            }
-        });
+                finalBoardDateTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                    {
+                        @Override
+                        public void customize ( final WebCalendar calendar )
+                        {
+                            calendar.setStartWeekFromSunday ( true );
+                        }
+                    } );
+                    finalBoardDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                        public void mouseClicked(java.awt.event.MouseEvent evt) {
+                            finalBoardDateTextBoxMouseClicked(evt);
+                        }
+                    });
 
-        returnSOIDueDateTextBox.setEditable(false);
-        returnSOIDueDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        returnSOIDueDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        returnSOIDueDateTextBox.setEnabled(false);
-        returnSOIDueDateTextBox.setDateFormat(Global.mmddyyyy);
-        returnSOIDueDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                returnSOIDueDateTextBoxMouseClicked(evt);
-            }
-        });
+                    registrationLetterSentTextBox.setEditable(false);
+                    registrationLetterSentTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                    registrationLetterSentTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                    registrationLetterSentTextBox.setEnabled(false);
+                    registrationLetterSentTextBox.setDateFormat(Global.mmddyyyy);
 
-        actualSOIReturnDateTextBox.setEditable(false);
-        actualSOIReturnDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        actualSOIReturnDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        actualSOIReturnDateTextBox.setEnabled(false);
-        actualSOIReturnDateTextBox.setDateFormat(Global.mmddyyyy);
-        actualSOIReturnDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                actualSOIReturnDateTextBoxMouseClicked(evt);
-            }
-        });
+                    registrationLetterSentTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                        {
+                            @Override
+                            public void customize ( final WebCalendar calendar )
+                            {
+                                calendar.setStartWeekFromSunday ( true );
+                            }
+                        } );
+                        registrationLetterSentTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                registrationLetterSentTextBoxMouseClicked(evt);
+                            }
+                        });
 
-        REPClosedCaseDueDateTextBox.setEditable(false);
-        REPClosedCaseDueDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        REPClosedCaseDueDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        REPClosedCaseDueDateTextBox.setEnabled(false);
-        REPClosedCaseDueDateTextBox.setDateFormat(Global.mmddyyyy);
-        REPClosedCaseDueDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                REPClosedCaseDueDateTextBoxMouseClicked(evt);
-            }
-        });
+                        dateOfAppealTextBox.setEditable(false);
+                        dateOfAppealTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                        dateOfAppealTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                        dateOfAppealTextBox.setEnabled(false);
+                        dateOfAppealTextBox.setDateFormat(Global.mmddyyyy);
 
-        actualREPClosedDateTextBox.setEditable(false);
-        actualREPClosedDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        actualREPClosedDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        actualREPClosedDateTextBox.setEnabled(false);
-        actualREPClosedDateTextBox.setDateFormat(Global.mmddyyyy);
-        actualREPClosedDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                actualREPClosedDateTextBoxMouseClicked(evt);
-            }
-        });
+                        dateOfAppealTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                            {
+                                @Override
+                                public void customize ( final WebCalendar calendar )
+                                {
+                                    calendar.setStartWeekFromSunday ( true );
+                                }
+                            } );
+                            dateOfAppealTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                    dateOfAppealTextBoxMouseClicked(evt);
+                                }
+                            });
 
-        jLabel22.setText("REP Closed By:");
+                            courtClosedDateTextBox.setEditable(false);
+                            courtClosedDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                            courtClosedDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                            courtClosedDateTextBox.setEnabled(false);
+                            courtClosedDateTextBox.setDateFormat(Global.mmddyyyy);
 
-        jLabel23.setText("Actual Clerks Closed Date:");
+                            courtClosedDateTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                                {
+                                    @Override
+                                    public void customize ( final WebCalendar calendar )
+                                    {
+                                        calendar.setStartWeekFromSunday ( true );
+                                    }
+                                } );
+                                courtClosedDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                                    public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                        courtClosedDateTextBoxMouseClicked(evt);
+                                    }
+                                });
+                                courtClosedDateTextBox.addActionListener(new java.awt.event.ActionListener() {
+                                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                        courtClosedDateTextBoxActionPerformed(evt);
+                                    }
+                                });
 
-        actualClerksClosedDate.setEditable(false);
-        actualClerksClosedDate.setBackground(new java.awt.Color(238, 238, 238));
-        actualClerksClosedDate.setCaretColor(new java.awt.Color(0, 0, 0));
-        actualClerksClosedDate.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        actualClerksClosedDate.setEnabled(false);
-        actualClerksClosedDate.setDateFormat(Global.mmddyyyy);
-        actualClerksClosedDate.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                actualClerksClosedDateMouseClicked(evt);
-            }
-        });
+                                returnSOIDueDateTextBox.setEditable(false);
+                                returnSOIDueDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                                returnSOIDueDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                                returnSOIDueDateTextBox.setEnabled(false);
+                                returnSOIDueDateTextBox.setDateFormat(Global.mmddyyyy);
 
-        jLabel1.setText("Alpha List Receipt Date:");
+                                returnSOIDueDateTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                                    {
+                                        @Override
+                                        public void customize ( final WebCalendar calendar )
+                                        {
+                                            calendar.setStartWeekFromSunday ( true );
+                                        }
+                                    } );
+                                    returnSOIDueDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                                        public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                            returnSOIDueDateTextBoxMouseClicked(evt);
+                                        }
+                                    });
 
-        alphaListRecepitDateTextBox.setEditable(false);
-        alphaListRecepitDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        alphaListRecepitDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        alphaListRecepitDateTextBox.setEnabled(false);
-        alphaListRecepitDateTextBox.setDateFormat(Global.mmddyyyy);
-        alphaListRecepitDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                alphaListRecepitDateTextBoxMouseClicked(evt);
-            }
-        });
+                                    actualSOIReturnDateTextBox.setEditable(false);
+                                    actualSOIReturnDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                                    actualSOIReturnDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                                    actualSOIReturnDateTextBox.setEnabled(false);
+                                    actualSOIReturnDateTextBox.setDateFormat(Global.mmddyyyy);
 
-        repClosedUser.setEnabled(false);
+                                    actualSOIReturnDateTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                                        {
+                                            @Override
+                                            public void customize ( final WebCalendar calendar )
+                                            {
+                                                calendar.setStartWeekFromSunday ( true );
+                                            }
+                                        } );
+                                        actualSOIReturnDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                                            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                                actualSOIReturnDateTextBoxMouseClicked(evt);
+                                            }
+                                        });
 
-        clerksClosedUser.setEnabled(false);
+                                        REPClosedCaseDueDateTextBox.setEditable(false);
+                                        REPClosedCaseDueDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                                        REPClosedCaseDueDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                                        REPClosedCaseDueDateTextBox.setEnabled(false);
+                                        REPClosedCaseDueDateTextBox.setDateFormat(Global.mmddyyyy);
 
-        SOIReturnInitials.setEnabled(false);
+                                        REPClosedCaseDueDateTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                                            {
+                                                @Override
+                                                public void customize ( final WebCalendar calendar )
+                                                {
+                                                    calendar.setStartWeekFromSunday ( true );
+                                                }
+                                            } );
+                                            REPClosedCaseDueDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                                                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                                    REPClosedCaseDueDateTextBoxMouseClicked(evt);
+                                                }
+                                            });
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel23)
-                    .addComponent(jLabel22)
-                    .addComponent(jLabel21)
-                    .addComponent(jLabel20)
-                    .addComponent(jLabel19)
-                    .addComponent(jLabel18)
-                    .addComponent(jLabel17)
-                    .addComponent(jLabel16)
-                    .addComponent(jLabel15)
-                    .addComponent(jLabel14)
-                    .addComponent(jLabel13)
-                    .addComponent(jLabel12)
-                    .addComponent(jLabel11)
-                    .addComponent(jLabel10))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(fileDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(amendedFilingDateTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
-                    .addComponent(finalBoardDateTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
-                    .addComponent(registrationLetterSentTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
-                    .addComponent(dateOfAppealTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
-                    .addComponent(courtClosedDateTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
-                    .addComponent(returnSOIDueDateTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
-                    .addComponent(actualSOIReturnDateTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
-                    .addComponent(REPClosedCaseDueDateTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
-                    .addComponent(actualREPClosedDateTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
-                    .addComponent(actualClerksClosedDate, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
-                    .addComponent(alphaListRecepitDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
-                    .addComponent(repClosedUser, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(clerksClosedUser, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(SOIReturnInitials, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
-                    .addComponent(fileDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel11)
-                    .addComponent(amendedFilingDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(alphaListRecepitDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel12)
-                    .addComponent(finalBoardDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel13)
-                    .addComponent(registrationLetterSentTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel14)
-                    .addComponent(dateOfAppealTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel15)
-                    .addComponent(courtClosedDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel16)
-                    .addComponent(returnSOIDueDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel17)
-                    .addComponent(actualSOIReturnDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(SOIReturnInitials)
-                    .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel19)
-                    .addComponent(REPClosedCaseDueDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel20)
-                    .addComponent(actualREPClosedDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(repClosedUser)
-                    .addComponent(jLabel22, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(actualClerksClosedDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel23))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(clerksClosedUser)
-                    .addComponent(jLabel21, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(20, Short.MAX_VALUE))
-        );
+                                            actualREPClosedDateTextBox.setEditable(false);
+                                            actualREPClosedDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                                            actualREPClosedDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                                            actualREPClosedDateTextBox.setEnabled(false);
+                                            actualREPClosedDateTextBox.setDateFormat(Global.mmddyyyy);
 
-        add(jPanel2);
-    }// </editor-fold>//GEN-END:initComponents
+                                            actualREPClosedDateTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                                                {
+                                                    @Override
+                                                    public void customize ( final WebCalendar calendar )
+                                                    {
+                                                        calendar.setStartWeekFromSunday ( true );
+                                                    }
+                                                } );
+                                                actualREPClosedDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                                                    public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                                        actualREPClosedDateTextBoxMouseClicked(evt);
+                                                    }
+                                                });
+
+                                                jLabel22.setText("REP Closed By:");
+
+                                                jLabel23.setText("Actual Clerks Closed Date:");
+
+                                                actualClerksClosedDate.setEditable(false);
+                                                actualClerksClosedDate.setBackground(new java.awt.Color(238, 238, 238));
+                                                actualClerksClosedDate.setCaretColor(new java.awt.Color(0, 0, 0));
+                                                actualClerksClosedDate.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                                                actualClerksClosedDate.setEnabled(false);
+                                                actualClerksClosedDate.setDateFormat(Global.mmddyyyy);
+
+                                                actualClerksClosedDate.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                                                    {
+                                                        @Override
+                                                        public void customize ( final WebCalendar calendar )
+                                                        {
+                                                            calendar.setStartWeekFromSunday ( true );
+                                                        }
+                                                    } );
+                                                    actualClerksClosedDate.addMouseListener(new java.awt.event.MouseAdapter() {
+                                                        public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                                            actualClerksClosedDateMouseClicked(evt);
+                                                        }
+                                                    });
+
+                                                    jLabel1.setText("Alpha List Receipt Date:");
+
+                                                    alphaListRecepitDateTextBox.setEditable(false);
+                                                    alphaListRecepitDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                                                    alphaListRecepitDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                                                    alphaListRecepitDateTextBox.setEnabled(false);
+                                                    alphaListRecepitDateTextBox.setDateFormat(Global.mmddyyyy);
+
+                                                    alphaListRecepitDateTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                                                        {
+                                                            @Override
+                                                            public void customize ( final WebCalendar calendar )
+                                                            {
+                                                                calendar.setStartWeekFromSunday ( true );
+                                                            }
+                                                        } );
+                                                        alphaListRecepitDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                                                            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                                                alphaListRecepitDateTextBoxMouseClicked(evt);
+                                                            }
+                                                        });
+
+                                                        repClosedUser.setEnabled(false);
+
+                                                        clerksClosedUser.setEnabled(false);
+
+                                                        SOIReturnInitials.setEnabled(false);
+
+                                                        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+                                                        jPanel2.setLayout(jPanel2Layout);
+                                                        jPanel2Layout.setHorizontalGroup(
+                                                            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                                                .addGap(10, 10, 10)
+                                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                                    .addComponent(jLabel1)
+                                                                    .addComponent(jLabel23)
+                                                                    .addComponent(jLabel22)
+                                                                    .addComponent(jLabel21)
+                                                                    .addComponent(jLabel20)
+                                                                    .addComponent(jLabel19)
+                                                                    .addComponent(jLabel18)
+                                                                    .addComponent(jLabel17)
+                                                                    .addComponent(jLabel16)
+                                                                    .addComponent(jLabel15)
+                                                                    .addComponent(jLabel14)
+                                                                    .addComponent(jLabel13)
+                                                                    .addComponent(jLabel12)
+                                                                    .addComponent(jLabel11)
+                                                                    .addComponent(jLabel10))
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                    .addComponent(fileDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                    .addComponent(amendedFilingDateTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
+                                                                    .addComponent(finalBoardDateTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
+                                                                    .addComponent(registrationLetterSentTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
+                                                                    .addComponent(dateOfAppealTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
+                                                                    .addComponent(courtClosedDateTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
+                                                                    .addComponent(returnSOIDueDateTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
+                                                                    .addComponent(actualSOIReturnDateTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
+                                                                    .addComponent(REPClosedCaseDueDateTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
+                                                                    .addComponent(actualREPClosedDateTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
+                                                                    .addComponent(actualClerksClosedDate, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
+                                                                    .addComponent(alphaListRecepitDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
+                                                                    .addComponent(repClosedUser, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                    .addComponent(clerksClosedUser, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                    .addComponent(SOIReturnInitials, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                                .addContainerGap())
+                                                        );
+                                                        jPanel2Layout.setVerticalGroup(
+                                                            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                                                .addContainerGap()
+                                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                    .addComponent(jLabel10)
+                                                                    .addComponent(fileDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                    .addComponent(jLabel11)
+                                                                    .addComponent(amendedFilingDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                    .addComponent(jLabel1)
+                                                                    .addComponent(alphaListRecepitDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                    .addComponent(jLabel12)
+                                                                    .addComponent(finalBoardDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                    .addComponent(jLabel13)
+                                                                    .addComponent(registrationLetterSentTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                    .addComponent(jLabel14)
+                                                                    .addComponent(dateOfAppealTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                    .addComponent(jLabel15)
+                                                                    .addComponent(courtClosedDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                    .addComponent(jLabel16)
+                                                                    .addComponent(returnSOIDueDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                    .addComponent(jLabel17)
+                                                                    .addComponent(actualSOIReturnDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                                    .addComponent(SOIReturnInitials)
+                                                                    .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                    .addComponent(jLabel19)
+                                                                    .addComponent(REPClosedCaseDueDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                    .addComponent(jLabel20)
+                                                                    .addComponent(actualREPClosedDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                                    .addComponent(repClosedUser)
+                                                                    .addComponent(jLabel22, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                    .addComponent(actualClerksClosedDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                    .addComponent(jLabel23))
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                                    .addComponent(clerksClosedUser)
+                                                                    .addComponent(jLabel21, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                                .addContainerGap(20, Short.MAX_VALUE))
+                                                        );
+
+                                                        add(jPanel2);
+                                                    }// </editor-fold>//GEN-END:initComponents
 
     private void boardCertifiedCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boardCertifiedCheckBoxActionPerformed
         // TODO add your handling code here:
@@ -1113,6 +1228,10 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
             Global.root.getrEPRootPanel1().getjTabbedPane1().setSelectedIndex(Global.root.getrEPRootPanel1().getjTabbedPane1().indexOfTab("Notes"));
         }
     }//GEN-LAST:event_notesTextAreaMouseClicked
+
+    private void courtClosedDateTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_courtClosedDateTextBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_courtClosedDateTextBoxActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
