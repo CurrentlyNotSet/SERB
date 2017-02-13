@@ -351,7 +351,7 @@
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="filingDateTextBoxMouseClicked"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="filingDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="filingDateTextBox.setDateFormat(Global.mmddyyyy);&#xa;&#xa;filingDateTextBox.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
           </AuxValues>
         </Component>
       </SubComponents>
@@ -703,7 +703,7 @@
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="expirationDateTextBoxMouseClicked"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="expirationDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="expirationDateTextBox.setDateFormat(Global.mmddyyyy);&#xa;&#xa;expirationDateTextBox.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JComboBox" name="NTNFiledByComboBox">
@@ -753,7 +753,7 @@
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="mediatorAppointedDateTextBoxMouseClicked"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="mediatorAppointedDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="mediatorAppointedDateTextBox.setDateFormat(Global.mmddyyyy);&#xa;&#xa;mediatorAppointedDateTextBox.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JComboBox" name="stateMediatorAppointedComboBox">
@@ -799,7 +799,7 @@
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="settlementDateTextBoxMouseClicked"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="settlementDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="settlementDateTextBox.setDateFormat(Global.mmddyyyy);&#xa;&#xa;settlementDateTextBox.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
           </AuxValues>
         </Component>
         <Component class="com.alee.extended.date.WebDateField" name="boardFinalDateTextBox">
@@ -817,7 +817,7 @@
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="boardFinalDateTextBoxMouseClicked"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="boardFinalDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="boardFinalDateTextBox.setDateFormat(Global.mmddyyyy);&#xa;&#xa;boardFinalDateTextBox.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
           </AuxValues>
         </Component>
         <Component class="com.alee.extended.date.WebDateField" name="retentionTicklerDateTextBox">
@@ -836,7 +836,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="retentionTicklerDateTextBoxActionPerformed"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="retentionTicklerDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="retentionTicklerDateTextBox.setDateFormat(Global.mmddyyyy);&#xa;&#xa;retentionTicklerDateTextBox.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JComboBox" name="statusComboBox">
