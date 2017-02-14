@@ -32,7 +32,7 @@ public class Audit {
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
             preparedStatement.setInt(2, Global.activeUser.id);
-            preparedStatement.setString(3, StringUtils.left(action, 255));
+            preparedStatement.setString(3, action == null ? "MISSING ACTION" : StringUtils.left(action, 255));
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {

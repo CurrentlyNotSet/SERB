@@ -92,7 +92,7 @@ public class processCMDSbookmarks {
                     if (!"".equals(ccNameBlock.trim())) {
                         ccNameBlock += ", ";
                     }
-                    ccNameBlock += StringUtilities.buildCasePartyName(party);
+                    ccNameBlock += StringUtilities.buildCasePartyNameNoPreFix(party);
                     if (!"".equals(ccAddressBlock.trim())) {
                         ccAddressBlock += "\n\n";
                     }
@@ -109,7 +109,7 @@ public class processCMDSbookmarks {
                         if (!"".equals(appellantAddressBlock.trim())) {
                             appellantAddressBlock += "\n\n";
                         }
-                        appellantNames += StringUtilities.buildCasePartyName(party);
+                        appellantNames += StringUtilities.buildCasePartyNameNoPreFix(party);
                         appellantAddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
                         break;
                     case "Appellant Rep 1":
@@ -119,7 +119,7 @@ public class processCMDSbookmarks {
                         if (!"".equals(appellantRep1AddressBlock.trim())) {
                             appellantRep1AddressBlock += "\n\n";
                         }
-                        appellantRep1Names += StringUtilities.buildCasePartyName(party);
+                        appellantRep1Names += StringUtilities.buildCasePartyNameNoPreFix(party);
                         appellantRep1Title += party.jobTitle;
                         appellantRep1AddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
                         break;
@@ -130,7 +130,7 @@ public class processCMDSbookmarks {
                         if (!"".equals(appellantRep2AddressBlock.trim())) {
                             appellantRep2AddressBlock += "\n\n";
                         }
-                        appellantRep2Names += StringUtilities.buildCasePartyName(party);
+                        appellantRep2Names += StringUtilities.buildCasePartyNameNoPreFix(party);
                         appellantRep2AddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
                         break;
                     case "Appellee":
@@ -140,7 +140,7 @@ public class processCMDSbookmarks {
                         if (!"".equals(appelleeAddressBlock.trim())) {
                             appelleeAddressBlock += "\n\n";
                         }
-                        appelleeNames += StringUtilities.buildCasePartyName(party);
+                        appelleeNames += StringUtilities.buildCasePartyNameNoPreFix(party);
                         appelleeAddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
                         break;
                     case "Appellee Rep 1":
@@ -150,7 +150,7 @@ public class processCMDSbookmarks {
                         if (!"".equals(appelleeRep1AddressBlock.trim())) {
                             appelleeRep1AddressBlock += "\n\n";
                         }
-                        appelleeRep1Names += StringUtilities.buildCasePartyName(party);
+                        appelleeRep1Names += StringUtilities.buildCasePartyNameNoPreFix(party);
                         appelleeRep1AddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
                         break;
                     case "Appellee Rep 2":
@@ -160,7 +160,7 @@ public class processCMDSbookmarks {
                         if (!"".equals(appelleeRep2AddressBlock.trim())) {
                             appelleeRep2AddressBlock += "\n\n";
                         }
-                        appelleeRep2Names += StringUtilities.buildCasePartyName(party);
+                        appelleeRep2Names += StringUtilities.buildCasePartyNameNoPreFix(party);
                         appelleeRep2AddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
                         break;
                     case "Appellee 2":
@@ -170,7 +170,7 @@ public class processCMDSbookmarks {
                         if (!"".equals(appellee2AddressBlock.trim())) {
                             appellee2AddressBlock += "\n\n";
                         }
-                        appellee2Names += StringUtilities.buildCasePartyName(party);
+                        appellee2Names += StringUtilities.buildCasePartyNameNoPreFix(party);
                         appellee2AddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
                         break;
                     case "Appellee 2 Rep 1":
@@ -180,7 +180,7 @@ public class processCMDSbookmarks {
                         if (!"".equals(appellee2Rep1AddressBlock.trim())) {
                             appellee2Rep1AddressBlock += "\n\n";
                         }
-                        appellee2Rep1Names += StringUtilities.buildCasePartyName(party);
+                        appellee2Rep1Names += StringUtilities.buildCasePartyNameNoPreFix(party);
                         appellee2Rep1AddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
                         break;
                     case "Appellee 2 Rep 2":
@@ -190,7 +190,7 @@ public class processCMDSbookmarks {
                         if (!"".equals(appellee2Rep2AddressBlock.trim())) {
                             appellee2Rep2AddressBlock += "\n\n";
                         }
-                        appellee2Rep2Names += StringUtilities.buildCasePartyName(party);
+                        appellee2Rep2Names += StringUtilities.buildCasePartyNameNoPreFix(party);
                         appellee2Rep2AddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
                         break;
                     case "Courtesy Copy 1":
@@ -200,7 +200,7 @@ public class processCMDSbookmarks {
                         if (!"".equals(courtesyCopy1AddressBlock.trim())) {
                             courtesyCopy1AddressBlock += "\n\n";
                         }
-                        courtesyCopy1Names += StringUtilities.buildCasePartyName(party);
+                        courtesyCopy1Names += StringUtilities.buildCasePartyNameNoPreFix(party);
                         courtesyCopy1AddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
                         break;
                     case "Courtesy Copy 2":
@@ -210,7 +210,7 @@ public class processCMDSbookmarks {
                         if (!"".equals(courtesyCopy2AddressBlock.trim())) {
                             courtesyCopy2AddressBlock += "\n\n";
                         }
-                        courtesyCopy2Names += StringUtilities.buildCasePartyName(party);
+                        courtesyCopy2Names += StringUtilities.buildCasePartyNameNoPreFix(party);
                         courtesyCopy2AddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
                         break;
                     case "Courtesy Copy 3":
@@ -220,7 +220,7 @@ public class processCMDSbookmarks {
                         if (!"".equals(courtesyCopy3AddressBlock.trim())) {
                             courtesyCopy3AddressBlock += "\n\n";
                         }
-                        courtesyCopy3Names += StringUtilities.buildCasePartyName(party);
+                        courtesyCopy3Names += StringUtilities.buildCasePartyNameNoPreFix(party);
                         courtesyCopy3AddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
                         break;
                     case "Courtesy Copy 4":
@@ -230,7 +230,7 @@ public class processCMDSbookmarks {
                         if (!"".equals(courtesyCopy4AddressBlock.trim())) {
                             courtesyCopy4AddressBlock += "\n\n";
                         }
-                        courtesyCopy4Names += StringUtilities.buildCasePartyName(party);
+                        courtesyCopy4Names += StringUtilities.buildCasePartyNameNoPreFix(party);
                         courtesyCopy4AddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
                         break;
                     case "Other Interested Parties":
@@ -240,7 +240,7 @@ public class processCMDSbookmarks {
                         if (!"".equals(otherInterestedPartiesAddressBlock.trim())) {
                             otherInterestedPartiesAddressBlock += "\n\n";
                         }
-                        otherInterestedPartiesNames += StringUtilities.buildCasePartyName(party);
+                        otherInterestedPartiesNames += StringUtilities.buildCasePartyNameNoPreFix(party);
                         otherInterestedPartiesAddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
                         break;
                 }

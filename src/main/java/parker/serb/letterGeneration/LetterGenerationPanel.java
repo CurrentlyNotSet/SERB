@@ -254,7 +254,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                 toCC, // TO/CC
                 emailPostal, // Email/Postal
                 caseRelation,
-                StringUtilities.buildCasePartyName(party), // NAME
+                StringUtilities.buildCasePartyNameNoPreFix(party), // NAME
                 party.emailAddress
             });
         }
@@ -384,31 +384,42 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
     }
 
     private boolean setMEDFFConcCheckMark(String Name) {
-        if (!medCaseData.FFList2Name1.equals("") || !medCaseData.concilList2Name1.equals("")) {
-            if (medCaseData.FFList2Name1.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                    || medCaseData.FFList2Name2.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                    || medCaseData.FFList2Name3.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                    || medCaseData.FFList2Name4.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                    || medCaseData.FFList2Name5.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                    || medCaseData.concilList2Name1.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                    || medCaseData.concilList2Name2.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                    || medCaseData.concilList2Name3.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                    || medCaseData.concilList2Name4.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                    || medCaseData.concilList2Name5.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)) {
-                return true;
+        if (SMDSdocToGenerate.description.contains("Fact Finder") && medCaseData != null) {
+            if (!medCaseData.FFList2Name1.equals("")) {
+                if (medCaseData.FFList2Name1.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                        || medCaseData.FFList2Name2.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                        || medCaseData.FFList2Name3.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                        || medCaseData.FFList2Name4.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                        || medCaseData.FFList2Name5.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)) {
+                    return true;
+                }
+            } else {
+                if (medCaseData.FFList1Name1.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                        || medCaseData.FFList1Name2.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                        || medCaseData.FFList1Name3.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                        || medCaseData.FFList1Name4.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                        || medCaseData.FFList1Name5.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)) {
+                    return true;
+                }
             }
-        } else {
-            if (medCaseData.FFList1Name1.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                    || medCaseData.FFList1Name2.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                    || medCaseData.FFList1Name3.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                    || medCaseData.FFList1Name4.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                    || medCaseData.FFList1Name5.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                    || medCaseData.concilList1Name1.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                    || medCaseData.concilList1Name2.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                    || medCaseData.concilList1Name3.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                    || medCaseData.concilList1Name4.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                    || medCaseData.concilList1Name5.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)) {
-                return true;
+
+        } else if ((SMDSdocToGenerate.description.contains("Conciliation") || SMDSdocToGenerate.description.contains("Conciliator")) && medCaseData != null) {
+            if (!medCaseData.concilList2Name1.equals("")) {
+                if (medCaseData.concilList2Name1.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                        || medCaseData.concilList2Name2.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                        || medCaseData.concilList2Name3.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                        || medCaseData.concilList2Name4.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                        || medCaseData.concilList2Name5.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)) {
+                    return true;
+                }
+            } else {
+                if (medCaseData.concilList1Name1.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                        || medCaseData.concilList1Name2.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                        || medCaseData.concilList1Name3.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                        || medCaseData.concilList1Name4.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                        || medCaseData.concilList1Name5.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)) {
+                    return true;
+                }
             }
         }
         return false;
@@ -613,9 +624,15 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         eml.cc = ccEmail.trim().equals("") ? null : ccEmail.trim();
         eml.bcc = null;
         if (Global.activeSection.equals("CMDS")){
-            eml.subject = NumberFormatService.generateFullCaseNumber() + (CMDSdocToGenerate.emailSubject == null ? "" : " " + CMDSdocToGenerate.emailSubject);
+            eml.subject = NumberFormatService.generateFullCaseNumber() +
+                    (CMDSdocToGenerate.emailSubject == null
+                    ? (CMDSdocToGenerate.LetterName == null ? "" : " " + CMDSdocToGenerate.LetterName)
+                    : " " + CMDSdocToGenerate.emailSubject);
         } else {
-            eml.subject = NumberFormatService.generateFullCaseNumber() + (SMDSdocToGenerate.emailSubject == null ? "" : " " + SMDSdocToGenerate.emailSubject);
+            eml.subject = NumberFormatService.generateFullCaseNumber() +
+                    (SMDSdocToGenerate.emailSubject == null
+                    ? (SMDSdocToGenerate.description == null ? "" : " " + SMDSdocToGenerate.description)
+                    : " " + SMDSdocToGenerate.emailSubject);
         }
         eml.body = emailBody;
         eml.userID = Global.activeUser.id;
@@ -655,7 +672,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
 
         } else {
             CaseParty party = CaseParty.getCasePartyByID(partyID);
-            name = StringUtilities.buildCasePartyName(party);
+            name = StringUtilities.buildCasePartyNameNoPreFix(party);
             address = StringUtilities.buildAddressBlockWithLineBreaks(party);
         }
 

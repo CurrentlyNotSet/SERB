@@ -138,6 +138,59 @@ public class generateDocument {
         return saveDocName;
     }
 
+    public static void generateSMDSAgenda(SMDSDocuments template, Date boarddate) {
+        File docPath = null;
+        String saveDocName = null;
+        ActiveXComponent eolWord = null;
+
+        if (boarddate != null){
+            eolWord = JacobCOMBridge.setWordActive(true, false, eolWord);
+            if (eolWord != null) {
+                String section = Global.activeSection;
+                if (Global.activeSection.equals("Hearings")) {
+                    section = FileService.getCaseSectionFolderByCaseType(Global.caseType);
+                }
+
+                //Setup Document
+
+                    docPath = new File(Global.activityPath
+                            + section + File.separator
+                            + "Agenda");
+
+                docPath.mkdirs();
+                saveDocName = String.valueOf(new Date().getTime()) + "_"
+                        + StringUtils.left(template.historyFileName == null ? template.description : template.historyFileName, 50)
+                        + ".docx";
+
+                Dispatch document = Dispatch.call(eolWord.getProperty("Documents").toDispatch(), "Open",
+                        Global.templatePath + template.section.replace("HRG", "Hearings") + File.separator + template.fileName).toDispatch();
+                ActiveXComponent.call(eolWord.getProperty("Selection").toDispatch(), "Find").toDispatch();
+
+                //section
+                switch (section) {
+                    case "ULP":
+                        document = defaultSMDSBookmarks(document, template.dueDate);
+                        document = processULPbookmarks.processDoAULPAgenda(document, boarddate);
+                        break;
+                    case "REP":
+                        document = defaultSMDSBookmarks(document, template.dueDate);
+                        document = processREPbookmarks.processDoAREPAgenda(document, boarddate);
+                        break;
+                    default:
+                        break;
+                }
+
+                Dispatch WordBasic = (Dispatch) Dispatch.call(eolWord, "WordBasic").getDispatch();
+                String newFilePath = docPath + File.separator + saveDocName;
+                Dispatch.call(WordBasic, "FileSaveAs", newFilePath, new Variant(16));
+                JacobCOMBridge.setWordActive(false, false, eolWord);
+            }
+        }
+        if (saveDocName != null) {
+            FileService.openAgenda(saveDocName);
+        }
+    }
+
     public static String generateAnnualReport(String startDate, String endDate) {
         File docPath = null;
         String saveDocName = null;
