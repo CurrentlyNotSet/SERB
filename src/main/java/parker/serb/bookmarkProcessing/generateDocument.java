@@ -174,7 +174,7 @@ public class generateDocument {
                         break;
                     case "REP":
                         document = defaultSMDSBookmarks(document, template.dueDate);
-    //                    document = processREPbookmarks.processDoAREPWordLetter(document, senderID, toParties, ccParties);
+                        document = processREPbookmarks.processDoAREPAgenda(document, boarddate);
                         break;
                     default:
                         break;

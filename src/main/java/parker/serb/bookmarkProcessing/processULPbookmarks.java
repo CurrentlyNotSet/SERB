@@ -251,8 +251,6 @@ public class processULPbookmarks {
                 }
             }
 
-
-
             //SHORT AND LONG AGENDA
             processBookmark.process("AgendaItem" + (i + 1), item.agendaItemNumber.trim() + ".", Document);
             processBookmark.process("CaseNumber" + (i + 1),
@@ -283,6 +281,7 @@ public class processULPbookmarks {
             processBookmark.process("ECHDREPEMAIL" + (i + 1), chargedPartyREPEmails.trim(), Document);
         }
 
+        //Blank out the rest of the rows
         for (int i = caseList.size(); i < 50; i++) {
             processBookmark.process("AgendaItem" + (i + 1), "", Document);
             processBookmark.process("CaseNumber" + (i + 1), "", Document);
@@ -296,7 +295,6 @@ public class processULPbookmarks {
             processBookmark.process("MRATIONAL" + (i + 1), "", Document);
             processBookmark.process("MRECOMMENDATION" + (i + 1), "", Document);
         }
-
         return Document;
     }
 
