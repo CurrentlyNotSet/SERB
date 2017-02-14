@@ -27,19 +27,19 @@ public class CSCLetterDialog extends javax.swing.JDialog {
         loadDropDowns();
         addListeners();
         setLocationRelativeTo(parent);
-        setVisible(true);   
+        setVisible(true);
     }
-    
+
     private void loadDropDowns() {
         loadLetters();
     }
-    
+
     private void addListeners() {
         letterComboBox.addItemListener((ItemEvent e) -> {
             enableGenerateButton();
         });
     }
-    
+
     private void enableGenerateButton() {
         if(letterComboBox.getSelectedItem().toString().equals("") ) {
             generateButton.setEnabled(false);
@@ -47,12 +47,12 @@ public class CSCLetterDialog extends javax.swing.JDialog {
             generateButton.setEnabled(true);
         }
     }
-    
+
     private void loadLetters() {
         DefaultComboBoxModel dt = new DefaultComboBoxModel();
         letterComboBox.setModel(dt);
         letterComboBox.addItem(new Item<>("0", ""));
-        
+
         List<SMDSDocuments> letterList = SMDSDocuments.loadDocumentNamesByTypeAndSection("CSC", "Letter");
         for (SMDSDocuments letter : letterList) {
             letterComboBox.addItem(new Item<>(String.valueOf(letter.id), letter.description));
@@ -70,7 +70,7 @@ public class CSCLetterDialog extends javax.swing.JDialog {
         if (selection > 0) {
             SMDSDocuments template = SMDSDocuments.findDocumentByID(selection);
             File templateFile = new File(Global.templatePath + Global.activeSection + File.separator + template.fileName);
-            
+
             if (templateFile.exists()){
                 new LetterGenerationPanel(Global.root, true, template, null);
             } else {
@@ -120,7 +120,7 @@ public class CSCLetterDialog extends javax.swing.JDialog {
                 .addGap(12, 12, 12)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(letterComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 498, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(cancelButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)

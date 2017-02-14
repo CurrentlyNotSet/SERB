@@ -18,14 +18,14 @@ import parker.serb.util.SlackNotification;
  * @author parkerjohnston
  */
 public class HearingCase {
-    
+
     public int id;
     public String caseYear;
     public String caseType;
     public String caseMonth;
     public String caseNumber;
     public String openClose;
-    
+
     public String caseStatusNotes;
     public Timestamp boardActionPCDate;
     public Timestamp boardActionPreDDate;
@@ -36,7 +36,7 @@ public class HearingCase {
     public Timestamp preHearingDate;
     public Timestamp proposedRecDueDate;
     public Timestamp exceptionFilingDate;
-    
+
     public Timestamp boardActionDate;
     public String otherAction;
     public int aljID;
@@ -48,12 +48,12 @@ public class HearingCase {
     public String FinalResult;
     public Timestamp opinion;
     public String companionCases;
-    
+
     public static List loadHearingCaseNumbers() {
         List caseNumberList = new ArrayList<>();
-        
+
         Statement stmt = null;
-            
+
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -64,12 +64,13 @@ public class HearingCase {
                     + " caseNumber"
                     + " from HearingCase"
                     + " Order By CaseYear DESC,"
+                    + " caseMonth DESC, "
                     + " CaseNumber DESC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
             ResultSet caseNumberRS = preparedStatement.executeQuery();
-            
+
             while(caseNumberRS.next()) {
                 String createdCaseNumber = caseNumberRS.getString("caseYear")
                         + "-" +
@@ -78,32 +79,32 @@ public class HearingCase {
                         caseNumberRS.getString("caseMonth")
                         + "-" +
                         caseNumberRS.getString("caseNumber");
-                        
+
                 caseNumberList.add(createdCaseNumber);
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadHearingCaseNumbers();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return caseNumberList;
     }
-    
+
     public static Timestamp getBoardActionPCDate() {
         Timestamp boardActionPCDate = null;
-        
+
         Statement stmt = null;
-           
+
         try {
             stmt = Database.connectToDB().createStatement();
-            
+
             String sql = "Select boardActionPCDate from HearingCase"
-                    + " where caseYear = ?" 
+                    + " where caseYear = ?"
                     + " and caseType = ?"
-                    + " and caseMonth = ?" 
+                    + " and caseMonth = ?"
                     + " and caseNumber = ?";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
@@ -111,9 +112,9 @@ public class HearingCase {
             preparedStatement.setString(2, Global.caseType);
             preparedStatement.setString(3, Global.caseMonth);
             preparedStatement.setString(4, Global.caseNumber);
-            
+
             ResultSet caseNumberRS = preparedStatement.executeQuery();
-            
+
             while(caseNumberRS.next()) {
                 boardActionPCDate = caseNumberRS.getTimestamp("boardActionPCDate");
             }
@@ -121,7 +122,7 @@ public class HearingCase {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 getBoardActionPCDate();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -130,7 +131,7 @@ public class HearingCase {
 
     public static void createCase(String caseNumber) {
         Statement stmt = null;
-        
+
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -152,7 +153,7 @@ public class HearingCase {
             preparedStatement.setString(4, caseNumber.split("-")[3]);
 
             int success = preparedStatement.executeUpdate();
-            
+
             if(success == 1) {
                 String fullCaseNumber = caseNumber.split("-")[0]
                         + "-"
@@ -161,7 +162,7 @@ public class HearingCase {
                         + caseNumber.split("-")[2]
                         + "-"
                         + caseNumber.split("-")[3];
-                        
+
                 HearingCaseSearchData.createNewCaseEntry(
                         caseNumber.split("-")[0],
                         caseNumber.split("-")[1],
@@ -169,18 +170,18 @@ public class HearingCase {
                         caseNumber.split("-")[3]);
                 HearingCaseSearchData.updateCaseEntryFromParties(caseNumber);
                 Global.root.getHearingHeaderPanel1().loadCases();
-                Global.root.getHearingHeaderPanel1().getjComboBox2().setSelectedItem(fullCaseNumber); 
+                Global.root.getHearingHeaderPanel1().getjComboBox2().setSelectedItem(fullCaseNumber);
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 createCase(caseNumber);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static HearingCase loadHeaderInformation() {
         Statement stmt = null;
         HearingCase hearings = null;
@@ -204,7 +205,7 @@ public class HearingCase {
             preparedStatement.setString(4, Global.caseNumber);
 
             ResultSet caseHeader = preparedStatement.executeQuery();
-            
+
             if(caseHeader.next()) {
                 hearings = new HearingCase();
                 hearings.aljID = caseHeader.getInt("aljID");
@@ -216,18 +217,18 @@ public class HearingCase {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadHeaderInformation();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return hearings;
     }
-    
+
     public static void updateHearingCaseInformation(HearingCase newCaseInformation, HearingCase caseInformation) {
         Statement stmt = null;
-        
+
         try {
-            stmt = Database.connectToDB().createStatement(); 
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Update HearingCase"
                 + " set caseStatusNotes = ?,"
@@ -269,7 +270,7 @@ public class HearingCase {
             preparedStatement.setTimestamp(9, newCaseInformation.preHearingDate);
             preparedStatement.setTimestamp(10, newCaseInformation.proposedRecDueDate);
             preparedStatement.setTimestamp(11, newCaseInformation.exceptionFilingDate);
-            
+
             preparedStatement.setTimestamp(12, newCaseInformation.boardActionDate);
             preparedStatement.setString(13, newCaseInformation.otherAction);
             preparedStatement.setInt(14, newCaseInformation.aljID);
@@ -281,14 +282,14 @@ public class HearingCase {
             preparedStatement.setString(20, newCaseInformation.FinalResult);
             preparedStatement.setTimestamp(21, newCaseInformation.opinion);
             preparedStatement.setString(22, newCaseInformation.companionCases);
-            
+
             preparedStatement.setString(23, Global.caseYear);
             preparedStatement.setString(24, Global.caseType);
             preparedStatement.setString(25, Global.caseMonth);
             preparedStatement.setString(26, Global.caseNumber);
-            
+
             int success = preparedStatement.executeUpdate();
-            
+
             if(success == 1) {
                 detailedCaseInformationSaveInformation(newCaseInformation, caseInformation);
                 HearingCaseSearchData.updateCaseEntryFromCaseInformation(
@@ -297,17 +298,17 @@ public class HearingCase {
                     newCaseInformation.boardActionDate,
                     newCaseInformation.openClose
                 );
-            } 
+            }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateHearingCaseInformation(newCaseInformation, caseInformation);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     private static void detailedCaseInformationSaveInformation(HearingCase newCaseInformation, HearingCase oldCaseInformation) {
 //      caseStatusNotes
         if(newCaseInformation.caseStatusNotes == null && oldCaseInformation.caseStatusNotes != null) {
@@ -315,10 +316,10 @@ public class HearingCase {
         } else if(newCaseInformation.caseStatusNotes != null && oldCaseInformation.caseStatusNotes == null) {
             Activity.addActivty("Update Case Status Notes", null);
         } else if(newCaseInformation.caseStatusNotes != null && oldCaseInformation.caseStatusNotes != null) {
-            if(!newCaseInformation.caseStatusNotes.equals(oldCaseInformation.caseStatusNotes)) 
+            if(!newCaseInformation.caseStatusNotes.equals(oldCaseInformation.caseStatusNotes))
                 Activity.addActivty("Update Case Status Notes", null);
         }
-        
+
         //boardActionPCDate
         if(newCaseInformation.boardActionPCDate == null && oldCaseInformation.boardActionPCDate != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.boardActionPCDate.getTime())) + " from Board Action PC Date", null);
@@ -328,7 +329,7 @@ public class HearingCase {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.boardActionPCDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.boardActionPCDate.getTime()))))
                 Activity.addActivty("Changed Board Action PC Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.boardActionPCDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.boardActionPCDate.getTime())), null);
         }
-        
+
         //boardActionPreDDate
         if(newCaseInformation.boardActionPreDDate == null && oldCaseInformation.boardActionPreDDate != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.boardActionPreDDate.getTime())) + " from Board Action Pre-D Date", null);
@@ -338,7 +339,7 @@ public class HearingCase {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.boardActionPreDDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.boardActionPreDDate.getTime()))))
                 Activity.addActivty("Changed Board Action Pre-D Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.boardActionPreDDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.boardActionPreDDate.getTime())), null);
         }
-        
+
         //directIssuedDate
         if(newCaseInformation.directiveIssuedDate == null && oldCaseInformation.directiveIssuedDate != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.directiveIssuedDate.getTime())) + " from Directive Issued Date", null);
@@ -348,14 +349,14 @@ public class HearingCase {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.directiveIssuedDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.directiveIssuedDate.getTime()))))
                 Activity.addActivty("Changed Directive Issued Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.directiveIssuedDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.directiveIssuedDate.getTime())), null);
         }
-        
+
         //expedited
         if(newCaseInformation.expedited != false && oldCaseInformation.expedited == false) {
             Activity.addActivty("Set Expedited to Yes", null);
         } else if(newCaseInformation.expedited == false && oldCaseInformation.expedited != false) {
             Activity.addActivty("Set Expedited to No", null);
         }
-        
+
         //complaintDueDate
         if(newCaseInformation.complaintDueDate == null && oldCaseInformation.complaintDueDate != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.complaintDueDate.getTime())) + " from Complaint Due Date", null);
@@ -365,7 +366,7 @@ public class HearingCase {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.complaintDueDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.complaintDueDate.getTime()))))
                 Activity.addActivty("Changed Complaint Due Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.complaintDueDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.complaintDueDate.getTime())), null);
         }
-        
+
         //draftComplaintToHearing
         if(newCaseInformation.draftComplaintToHearingDate == null && oldCaseInformation.draftComplaintToHearingDate != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.draftComplaintToHearingDate.getTime())) + " from Draft Complaint to Hearing Date", null);
@@ -375,7 +376,7 @@ public class HearingCase {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.draftComplaintToHearingDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.draftComplaintToHearingDate.getTime()))))
                 Activity.addActivty("Changed Draft Complaint to Hearing Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.draftComplaintToHearingDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.draftComplaintToHearingDate.getTime())), null);
         }
-        
+
         //prehearingDate
         if(newCaseInformation.preHearingDate == null && oldCaseInformation.preHearingDate != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.preHearingDate.getTime())) + " from Pre-Hearing Date", null);
@@ -385,7 +386,7 @@ public class HearingCase {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.preHearingDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.preHearingDate.getTime()))))
                 Activity.addActivty("Changed Pre-Hearing Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.preHearingDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.preHearingDate.getTime())), null);
         }
-        
+
         //proposedRecDate
         if(newCaseInformation.proposedRecDueDate == null && oldCaseInformation.proposedRecDueDate != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.proposedRecDueDate.getTime())) + " from Proposed Rec Due Date", null);
@@ -395,7 +396,7 @@ public class HearingCase {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.proposedRecDueDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.proposedRecDueDate.getTime()))))
                 Activity.addActivty("Changed Proposed Rec Due Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.proposedRecDueDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.proposedRecDueDate.getTime())), null);
         }
-        
+
         //exceptionsDate
         if(newCaseInformation.exceptionFilingDate == null && oldCaseInformation.exceptionFilingDate != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.exceptionFilingDate.getTime())) + " from Exception Filing Date", null);
@@ -405,7 +406,7 @@ public class HearingCase {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.exceptionFilingDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.exceptionFilingDate.getTime()))))
                 Activity.addActivty("Changed Exception Filing Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.exceptionFilingDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.exceptionFilingDate.getTime())), null);
         }
-        
+
         //boardActionDate
         if(newCaseInformation.boardActionDate == null && oldCaseInformation.boardActionDate != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.boardActionDate.getTime())) + " from Board Action Date", null);
@@ -415,27 +416,27 @@ public class HearingCase {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.boardActionDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.boardActionDate.getTime()))))
                 Activity.addActivty("Changed Board Action Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.boardActionDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.boardActionDate.getTime())), null);
         }
-        
+
         //otherAction
         if(newCaseInformation.otherAction == null && oldCaseInformation.otherAction != null) {
             Activity.addActivty("Removed " + oldCaseInformation.otherAction + " from Other Action", null);
         } else if(newCaseInformation.otherAction != null && oldCaseInformation.otherAction == null) {
             Activity.addActivty("Set Other Action to " + newCaseInformation.otherAction, null);
         } else if(newCaseInformation.otherAction != null && oldCaseInformation.otherAction != null) {
-            if(!newCaseInformation.otherAction.equals(oldCaseInformation.otherAction)) 
+            if(!newCaseInformation.otherAction.equals(oldCaseInformation.otherAction))
                 Activity.addActivty("Changed Other Action from " + oldCaseInformation.otherAction + " to " + newCaseInformation.otherAction, null);
         }
-        
+
         //alj
         if(newCaseInformation.aljID == 0 && oldCaseInformation.aljID != 0) {
             Activity.addActivty("Removed " + User.getNameByID(oldCaseInformation.aljID) + " from ALJ", null);
         } else if(newCaseInformation.aljID != 0 && oldCaseInformation.aljID == 0) {
             Activity.addActivty("Set ALJ to " + User.getNameByID(newCaseInformation.aljID), null);
         } else if(newCaseInformation.aljID != 0 && oldCaseInformation.aljID != 0) {
-            if(newCaseInformation.aljID != oldCaseInformation.aljID) 
+            if(newCaseInformation.aljID != oldCaseInformation.aljID)
                 Activity.addActivty("Changed ALJ from " + User.getNameByID(oldCaseInformation.aljID) + " to " + User.getNameByID(newCaseInformation.aljID), null);
         }
-        
+
         //complaintIssuedDate
         if(newCaseInformation.complaintIssuedDate == null && oldCaseInformation.complaintIssuedDate != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.complaintIssuedDate.getTime())) + " from Complaint Issued Date", null);
@@ -445,7 +446,7 @@ public class HearingCase {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.complaintIssuedDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.complaintIssuedDate.getTime()))))
                 Activity.addActivty("Changed Complaint Issued Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.complaintIssuedDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.complaintIssuedDate.getTime())), null);
         }
-        
+
         //hearingDate
         if(newCaseInformation.hearingDate == null && oldCaseInformation.hearingDate != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.hearingDate.getTime())) + " from Hearing Date", null);
@@ -455,7 +456,7 @@ public class HearingCase {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.hearingDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.hearingDate.getTime()))))
                 Activity.addActivty("Changed Hearing Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.hearingDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.hearingDate.getTime())), null);
         }
-        
+
         //proposedRecIssuedDate
         if(newCaseInformation.proposedRecIssuedDate == null && oldCaseInformation.proposedRecIssuedDate != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.proposedRecIssuedDate.getTime())) + " from Proposed Rec Issued Date", null);
@@ -465,7 +466,7 @@ public class HearingCase {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.proposedRecIssuedDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.proposedRecIssuedDate.getTime()))))
                 Activity.addActivty("Changed Proposed Rec Issued Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.proposedRecIssuedDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.proposedRecIssuedDate.getTime())), null);
         }
-        
+
         //responseFilingDate
         if(newCaseInformation.responseFilingDate == null && oldCaseInformation.responseFilingDate != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.responseFilingDate.getTime())) + " from Response Filing Date", null);
@@ -475,7 +476,7 @@ public class HearingCase {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.responseFilingDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.responseFilingDate.getTime()))))
                 Activity.addActivty("Changed Response Filing Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.responseFilingDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.responseFilingDate.getTime())), null);
         }
-        
+
         //issuanceOfOptionOrDirectiveDate
         if(newCaseInformation.IssuanceOfOptionOrDirectiveDate == null && oldCaseInformation.IssuanceOfOptionOrDirectiveDate != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.IssuanceOfOptionOrDirectiveDate.getTime())) + " from Issuance Of Option Or Directive Date", null);
@@ -485,17 +486,17 @@ public class HearingCase {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.IssuanceOfOptionOrDirectiveDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.IssuanceOfOptionOrDirectiveDate.getTime()))))
                 Activity.addActivty("Changed Issuance Of Option Or Directive Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.IssuanceOfOptionOrDirectiveDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.IssuanceOfOptionOrDirectiveDate.getTime())), null);
         }
-        
+
         //finalResult
         if(newCaseInformation.FinalResult == null && oldCaseInformation.FinalResult != null) {
             Activity.addActivty("Removed " + oldCaseInformation.FinalResult + " from Final Result", null);
         } else if(newCaseInformation.FinalResult != null && oldCaseInformation.FinalResult == null) {
             Activity.addActivty("Set Final Result to " + newCaseInformation.FinalResult, null);
         } else if(newCaseInformation.FinalResult != null && oldCaseInformation.FinalResult != null) {
-            if(!newCaseInformation.FinalResult.equals(oldCaseInformation.FinalResult)) 
+            if(!newCaseInformation.FinalResult.equals(oldCaseInformation.FinalResult))
                 Activity.addActivty("Changed Final Result from " + oldCaseInformation.FinalResult + " to " + newCaseInformation.FinalResult, null);
         }
-        
+
         //opinion
         if(newCaseInformation.opinion == null && oldCaseInformation.opinion != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.opinion.getTime())) + " from Opinion Date", null);
@@ -505,26 +506,26 @@ public class HearingCase {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.opinion.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.opinion.getTime()))))
                 Activity.addActivty("Changed Opinion Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.opinion.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.opinion.getTime())), null);
         }
-        
+
         //companionCases
         if(newCaseInformation.companionCases == null && oldCaseInformation.companionCases != null) {
             Activity.addActivty("Removed " + oldCaseInformation.companionCases + " from Companion Case", null);
         } else if(newCaseInformation.companionCases != null && oldCaseInformation.companionCases == null) {
             Activity.addActivty("Set Companion Case to " + newCaseInformation.companionCases, null);
         } else if(newCaseInformation.companionCases != null && oldCaseInformation.companionCases != null) {
-            if(!newCaseInformation.companionCases.equals(oldCaseInformation.companionCases)) 
+            if(!newCaseInformation.companionCases.equals(oldCaseInformation.companionCases))
                 Activity.addActivty("Changed Companion Case from " + oldCaseInformation.companionCases + " to " + newCaseInformation.companionCases, null);
         }
     }
-    
+
     public static HearingCase loadHearingCaseInformation() {
         HearingCase hearingCase = new HearingCase();
-        
+
         Statement stmt = null;
-            
+
         try {
             stmt = Database.connectToDB().createStatement();
-            
+
             String sql = "Select caseStatusNotes,"
                     + " openClose,"
                     + " boardActionPCDate,"
@@ -558,9 +559,9 @@ public class HearingCase {
             preparedStatement.setString(2, Global.caseType);
             preparedStatement.setString(3, Global.caseMonth);
             preparedStatement.setString(4, Global.caseNumber);
-            
+
             ResultSet rs = preparedStatement.executeQuery();
-            
+
             if(rs.first()) {
                 hearingCase.openClose = rs.getString("openClose");
                 hearingCase.caseStatusNotes = rs.getString("caseStatusNotes");
@@ -573,7 +574,7 @@ public class HearingCase {
                 hearingCase.preHearingDate = rs.getTimestamp("preHearingDate");
                 hearingCase.proposedRecDueDate = rs.getTimestamp("proposedRecDueDate");
                 hearingCase.exceptionFilingDate = rs.getTimestamp("exceptionFilingDate");
-                
+
                 hearingCase.boardActionDate = rs.getTimestamp("boardActionDate");
                 hearingCase.otherAction = rs.getString("otherAction");
                 hearingCase.aljID = rs.getInt("aljID");
@@ -590,16 +591,16 @@ public class HearingCase {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadHearingCaseInformation();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return hearingCase;
     }
-    
+
     public static String getALJemail() {
         String email = "";
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
@@ -615,7 +616,7 @@ public class HearingCase {
             preparedStatement.setString(2, Global.caseNumber);
 
             ResultSet caseNumberRS = preparedStatement.executeQuery();
-           
+
             if(caseNumberRS.next()) {
                 email = caseNumberRS.getString("emailAddress");
             }
@@ -624,23 +625,23 @@ public class HearingCase {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 getALJemail();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return email;
     }
-    
+
     public static boolean validateCaseNumber(String fullCaseNumber) {
         String[] caseNumberParts = fullCaseNumber.split("-");
         boolean valid = false;
-        
+
         Statement stmt = null;
-        
+
         if(caseNumberParts.length != 4) {
             return false;
         }
-        
+
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -656,17 +657,17 @@ public class HearingCase {
             preparedStatement.setString(2, caseNumberParts[1]);
             preparedStatement.setString(3, caseNumberParts[2]);
             preparedStatement.setString(4, caseNumberParts[3]);
-            
+
             ResultSet validRS = preparedStatement.executeQuery();
-            
+
             validRS.next();
-            
+
             valid = validRS.getInt("results") > 0;
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 validateCaseNumber(fullCaseNumber);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }

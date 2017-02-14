@@ -339,7 +339,7 @@ public class CSCAllLettersPanel extends javax.swing.JDialog {
         post.caseType = "CSC";
         post.caseMonth = null;
         post.caseNumber = orgNumber;
-        post.person = StringUtilities.buildCasePartyName(party);
+        post.person = StringUtilities.buildCasePartyNameNoPreFix(party);
         post.addressBlock = StringUtilities.buildAddressBlockWithLineBreaks(party);
         post.userID = Global.activeUser.id;
         post.suggestedSendDate = null;

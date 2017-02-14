@@ -27,11 +27,11 @@ public class CMDSLetterDialog extends javax.swing.JDialog {
         loadDropDowns();
         addListeners();
         setLocationRelativeTo(parent);
-        setVisible(true);   
+        setVisible(true);
     }
-        
+
     private void addListeners() {
-        
+
         DefaultComboBoxModel dt = new DefaultComboBoxModel();
         BOLettersSubComboBox.setModel(dt);
         BOLettersSubComboBox.addItem(new Item<>("0", ""));
@@ -39,7 +39,7 @@ public class CMDSLetterDialog extends javax.swing.JDialog {
         POQuestionsSubComboBox.addItem(new Item<>("0", ""));
         ReportAndRecsSubComboBox.setModel(dt);
         ReportAndRecsSubComboBox.addItem(new Item<>("0", ""));
-        
+
         BOLettersMainComboBox.addItemListener((ItemEvent e) -> {
             POQuestionsMainComboBox.setSelectedItem("");
             ReportAndRecsMainComboBox.setSelectedItem("");
@@ -47,7 +47,7 @@ public class CMDSLetterDialog extends javax.swing.JDialog {
             ReportAndRecsSubComboBox.setSelectedItem(new Item<>("0", ""));
             POQuestionsSubComboBox.setEnabled(false);
             ReportAndRecsSubComboBox.setEnabled(false);
-            
+
             loadBoardOrderSubDropDown();
             generateButton.setEnabled(false);
         });
@@ -59,11 +59,11 @@ public class CMDSLetterDialog extends javax.swing.JDialog {
             BOLettersSubComboBox.setSelectedItem(new Item<>("0", ""));
             ReportAndRecsSubComboBox.setEnabled(false);
             BOLettersSubComboBox.setEnabled(false);
-            
+
             loadProceduralOrderSubDropDown();
             generateButton.setEnabled(false);
         });
-        
+
         ReportAndRecsMainComboBox.addItemListener((ItemEvent e) -> {
             BOLettersMainComboBox.setSelectedItem("");
             POQuestionsMainComboBox.setSelectedItem("");
@@ -71,7 +71,7 @@ public class CMDSLetterDialog extends javax.swing.JDialog {
             POQuestionsSubComboBox.setSelectedItem(new Item<>("0", ""));
             BOLettersSubComboBox.setEnabled(false);
             POQuestionsSubComboBox.setEnabled(false);
-            
+
             loadReportRecsSubDropDown();
             generateButton.setEnabled(false);
         });
@@ -117,25 +117,25 @@ public class CMDSLetterDialog extends javax.swing.JDialog {
         loadBoardOrderMainDropDown();
         loadProceduralOrderMainDropDown();
         loadReportRecsMainDropDown();
-        
+
     }
-        
+
     private void loadBoardOrderMainDropDown() {
         BOLettersMainComboBox.removeAllItems();
         BOLettersMainComboBox.addItem("");
         List<String> subTypeList = CMDSDocuments.findSubCategoriesByMainCategory("General");
-                
+
         for (String subType : subTypeList) {
             BOLettersMainComboBox.addItem(subType);
         }
         BOLettersMainComboBox.setSelectedItem("");
     }
-    
+
     private void loadBoardOrderSubDropDown() {
         DefaultComboBoxModel dt = new DefaultComboBoxModel();
         BOLettersSubComboBox.setModel(dt);
         BOLettersSubComboBox.addItem(new Item<>("0", ""));
-        
+
         List<CMDSDocuments> letterList = CMDSDocuments.findDocumentsBySubCategories(BOLettersMainComboBox.getSelectedItem().toString());
         for (CMDSDocuments letter : letterList) {
             BOLettersSubComboBox.addItem(new Item<>(String.valueOf(letter.ID), letter.LetterName));
@@ -143,23 +143,23 @@ public class CMDSLetterDialog extends javax.swing.JDialog {
         BOLettersSubComboBox.setSelectedItem(new Item<>("0", ""));
         BOLettersSubComboBox.setEnabled(true);
     }
-    
+
     private void loadProceduralOrderMainDropDown() {
         POQuestionsMainComboBox.removeAllItems();
         POQuestionsMainComboBox.addItem("");
         List<String> subTypeList = CMDSDocuments.findSubCategoriesByMainCategory("Procedural");
-        
+
         for (String subType : subTypeList) {
             POQuestionsMainComboBox.addItem(subType);
         }
         POQuestionsMainComboBox.setSelectedItem("");
     }
-    
+
     private void loadProceduralOrderSubDropDown() {
         DefaultComboBoxModel dt = new DefaultComboBoxModel();
         POQuestionsSubComboBox.setModel(dt);
         POQuestionsSubComboBox.addItem(new Item<>("0", ""));
-        
+
         List<CMDSDocuments> letterList = CMDSDocuments.findDocumentsBySubCategories(POQuestionsMainComboBox.getSelectedItem().toString());
         for (CMDSDocuments letter : letterList) {
             POQuestionsSubComboBox.addItem(new Item<>(String.valueOf(letter.ID), letter.LetterName));
@@ -167,23 +167,23 @@ public class CMDSLetterDialog extends javax.swing.JDialog {
         POQuestionsSubComboBox.setSelectedItem(new Item<>("0", ""));
         POQuestionsSubComboBox.setEnabled(true);
     }
-    
+
     private void loadReportRecsMainDropDown() {
         ReportAndRecsMainComboBox.removeAllItems();
         ReportAndRecsMainComboBox.addItem("");
         List<String> letterList = CMDSDocuments.findSubCategoriesByMainCategory("Report");
-        
+
         for (String letter : letterList) {
             ReportAndRecsMainComboBox.addItem(letter);
         }
         ReportAndRecsMainComboBox.setSelectedItem("");
     }
-    
+
     private void loadReportRecsSubDropDown() {
         DefaultComboBoxModel dt = new DefaultComboBoxModel();
         ReportAndRecsSubComboBox.setModel(dt);
         ReportAndRecsSubComboBox.addItem(new Item<>("0", ""));
-        
+
         List<CMDSDocuments> letterList = CMDSDocuments.findDocumentsBySubCategories(ReportAndRecsMainComboBox.getSelectedItem().toString());
         for (CMDSDocuments letter : letterList) {
             ReportAndRecsSubComboBox.addItem(new Item<>(String.valueOf(letter.ID), letter.LetterName));
@@ -202,19 +202,19 @@ public class CMDSLetterDialog extends javax.swing.JDialog {
             selection = ReportAndRecsSubComboBox.getSelectedItem().toString().trim();
         }
 
-        if (!"".equals(selection)) {            
+        if (!"".equals(selection)) {
             CMDSDocuments template = CMDSDocuments.findDocumentByName(selection);
             File templateFile = new File(Global.templatePath + Global.activeSection + File.separator + template.Location);
-            
+
             if (templateFile.exists()){
                 new LetterGenerationPanel(Global.root, true, null, template);
             } else {
                 WebOptionPane.showMessageDialog(Global.root, "<html><center> Sorry, unable to locate template. <br><br>" + template.Location + "</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
             }
-            
+
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -274,7 +274,7 @@ public class CMDSLetterDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(BOLettersMainComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 572, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 636, Short.MAX_VALUE)
                     .addComponent(POQuestionsMainComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(ReportAndRecsMainComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()

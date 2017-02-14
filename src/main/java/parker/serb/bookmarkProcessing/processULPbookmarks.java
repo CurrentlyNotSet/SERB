@@ -6,15 +6,16 @@
 package parker.serb.bookmarkProcessing;
 
 import com.jacob.com.Dispatch;
+import java.util.Date;
 import java.util.List;
 import parker.serb.Global;
 import parker.serb.sql.BoardMeeting;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.RelatedCase;
-import parker.serb.util.StringUtilities;
 import parker.serb.sql.ULPCase;
 import parker.serb.sql.User;
 import parker.serb.util.NumberFormatService;
+import parker.serb.util.StringUtilities;
 
 /**
  *
@@ -24,7 +25,7 @@ public class processULPbookmarks {
 
     public static Dispatch processDoAULPWordLetter(Dispatch Document, List<Integer> toParties, List<Integer> ccParties) {
         //get basic information
-        List<User> userList = User.loadAllUsers();   
+        List<User> userList = User.loadAllUsers();
         ULPCase item = ULPCase.loadULPCaseDetails(Global.caseYear, Global.caseType, Global.caseMonth, Global.caseNumber);
         List<CaseParty> partyList = CaseParty.loadPartiesByCase(Global.caseYear, Global.caseType, Global.caseMonth, Global.caseNumber);
         List<String> relatedCasesList = RelatedCase.loadRelatedCases();
@@ -46,9 +47,9 @@ public class processULPbookmarks {
         String chargedPartyREPAddressBlock = "";
         String toAddressBlock = "";
         String ccNameBlock = "";
-        
+
         for (CaseParty party : partyList){
-            
+
             for (int person : toParties){
                 if (person == party.id) {
                      if (!"".equals(toAddressBlock.trim())){
@@ -57,16 +58,16 @@ public class processULPbookmarks {
                      toAddressBlock += StringUtilities.buildCasePartyAddressBlock(party);
                 }
             }
-            
+
             for (int person : ccParties){
                 if (person == party.id) {
                      if (!"".equals(ccNameBlock.trim())){
                         ccNameBlock += ", ";
                     }
-                     ccNameBlock += StringUtilities.buildCasePartyName(party);
+                     ccNameBlock += StringUtilities.buildCasePartyNameNoPreFix(party);
                 }
             }
-                        
+
             if (null != party.caseRelation)switch (party.caseRelation) {
                 case "Charging Party":
                     if (!"".equals(chargingPartyNames.trim())){
@@ -76,7 +77,7 @@ public class processULPbookmarks {
                         chargingPartyAddressBlock += "\n\n";
                     }
                     chargingPartyAddressBlock += StringUtilities.buildAddressBlockWithPhoneAndEmail(party);
-                    chargingPartyNames += StringUtilities.buildCasePartyName(party);
+                    chargingPartyNames += StringUtilities.buildCasePartyNameNoPreFix(party);
                     break;
                 case "Charging Party REP":
                     if (!"".equals(chargingPartyREPNames.trim())){
@@ -86,7 +87,7 @@ public class processULPbookmarks {
                         chargingPartyREPAddressBlock += "\n\n";
                     }
                     chargingPartyREPAddressBlock += StringUtilities.buildAddressBlockWithPhoneAndEmail(party);
-                    chargingPartyREPNames += StringUtilities.buildCasePartyName(party);
+                    chargingPartyREPNames += StringUtilities.buildCasePartyNameNoPreFix(party);
                     break;
                 case "Charged Party":
                     if (!"".equals(chargedPartyNames.trim())){
@@ -96,7 +97,7 @@ public class processULPbookmarks {
                         chargedPartyAddressBlock += "\n\n";
                     }
                     chargedPartyAddressBlock += StringUtilities.buildAddressBlockWithPhoneAndEmail(party);
-                    chargedPartyNames += StringUtilities.buildCasePartyName(party);
+                    chargedPartyNames += StringUtilities.buildCasePartyNameNoPreFix(party);
                     break;
                 case "Charged Party REP":
                     if (!"".equals(chargedPartyREPNames.trim())){
@@ -106,10 +107,10 @@ public class processULPbookmarks {
                         chargedPartyREPAddressBlock += "\n\n";
                     }
                     chargedPartyREPAddressBlock += StringUtilities.buildAddressBlockWithPhoneAndEmail(party);
-                    chargedPartyREPNames += StringUtilities.buildCasePartyName(party);
+                    chargedPartyREPNames += StringUtilities.buildCasePartyNameNoPreFix(party);
                     break;
             }
-        }        
+        }
 
         for (User user : userList){
             if (user.id == item.investigatorID){
@@ -120,22 +121,22 @@ public class processULPbookmarks {
                 mediatorName = StringUtilities.buildFullName(user.firstName, "", user.lastName);
             }
         }
-        
+
         for (String relatedCase : relatedCasesList){
             if ("".equals(relatedCases)){
                 relatedCases = ", " + relatedCase;
             } else {
                 relatedCases = relatedCase;
             }
-        }   
-        
+        }
+
         for (BoardMeeting bm: boardMeetingList){
             boardMeetingDate = bm.boardMeetingDate;
             boardMeetingAgendaItem = bm.agendaItemNumber;
             break;
-        } 
+        }
 
-                
+
         //ProcessBookmarks
         for (int i = 0; i < Global.BOOKMARK_LIMIT; i++) {
             //CaseNumber Related Information
@@ -164,7 +165,7 @@ public class processULPbookmarks {
             processBookmark.process("LRSPHONE" + (i == 0 ? "" : i), investigatorPhone, Document);
             processBookmark.process("MEDIATOR" + (i == 0 ? "" : i), mediatorName, Document);
             processBookmark.process("RELATEDCASES" + (i == 0 ? "" : i), relatedCases, Document);
-            
+
             //Parties List
             processBookmark.process("CPNAME" + (i == 0 ? "" : i), chargingPartyNames, Document);
             processBookmark.process("CPADDRESSBLOCK" + (i == 0 ? "" : i), chargingPartyAddressBlock, Document);
@@ -175,14 +176,128 @@ public class processULPbookmarks {
             processBookmark.process("CHDREPNAME" + (i == 0 ? "" : i), chargedPartyREPNames, Document);
             processBookmark.process("CHDREPADDRESSBLOCK" + (i == 0 ? "" : i), chargedPartyREPAddressBlock, Document);
             processBookmark.process("CCList" + (i == 0 ? "" : i), ccNameBlock, Document);
-            
+
             //Latest (by date) board meeting
             processBookmark.process("LONGMEETINGDATE" + (i == 0 ? "" : i), ("".equals(boardMeetingDate) ? "" : boardMeetingDate), Document);
             processBookmark.process("BOARDMEETINGDATE" + (i == 0 ? "" : i), ("".equals(boardMeetingDate) ? "" : boardMeetingDate), Document);
             processBookmark.process("AGENDAITEM" + (i == 0 ? "" : i), boardMeetingAgendaItem, Document);
         }
-        
+
         return Document;
     }
-    
+
+    public static Dispatch processDoAULPAgenda(Dispatch Document, Date boardMeetingDate) {
+        //get basic information
+        List<ULPCase> caseList = ULPCase.loadULPCaseDetailsForAgendas(boardMeetingDate);
+
+        //ProcessBookmarks
+        for (int i = 0; i < caseList.size(); i++) {
+            ULPCase item = caseList.get(i);
+            List<CaseParty> partyList = CaseParty.loadPartiesByCase(item.caseYear, item.caseType, item.caseMonth, item.caseNumber);
+
+            String chargingPartyNames = "";
+            String chargingPartyREPNames = "";
+            String chargedPartyNames = "";
+            String chargedPartyREPNames = "";
+            String chargingPartyEmails = "";
+            String chargingPartyREPEmails = "";
+            String chargedPartyEmails = "";
+            String chargedPartyREPEmails = "";
+
+            for (CaseParty party : partyList) {
+                if (null != party.caseRelation) {
+                    switch (party.caseRelation) {
+                        case "Charging Party":
+                            if (!"".equals(chargingPartyNames.trim())) {
+                                chargingPartyNames += ", ";
+                            }
+                            if (!"".equals(chargingPartyEmails.trim())) {
+                                chargingPartyEmails += ", ";
+                            }
+                            chargingPartyEmails += party.emailAddress == null ? "" : party.emailAddress.trim();
+                            chargingPartyNames += StringUtilities.buildCasePartyNameNoPreFix(party);
+                            break;
+                        case "Charging Party REP":
+                            if (!"".equals(chargingPartyREPNames.trim())) {
+                                chargingPartyREPNames += ", ";
+                            }
+                            if (!"".equals(chargingPartyREPEmails.trim())) {
+                                chargingPartyREPEmails += ", ";
+                            }
+                            chargingPartyREPEmails += party.emailAddress == null ? "" : party.emailAddress.trim();
+                            chargingPartyREPNames += StringUtilities.buildCasePartyNameNoPreFix(party);
+                            break;
+                        case "Charged Party":
+                            if (!"".equals(chargedPartyNames.trim())) {
+                                chargedPartyNames += ", ";
+                            }
+                            if (!"".equals(chargedPartyEmails.trim())) {
+                                chargedPartyEmails += ", ";
+                            }
+                            chargedPartyEmails += party.emailAddress == null ? "" : party.emailAddress.trim();
+                            chargedPartyNames += StringUtilities.buildCasePartyNameNoPreFix(party);
+                            break;
+                        case "Charged Party REP":
+                            if (!"".equals(chargedPartyREPNames.trim())) {
+                                chargedPartyREPNames += ", ";
+                            }
+                            if (!"".equals(chargedPartyREPEmails.trim())) {
+                                chargedPartyREPEmails += ", ";
+                            }
+                            chargedPartyREPEmails += party.emailAddress == null ? "" : party.emailAddress.trim();
+                            chargedPartyREPNames += StringUtilities.buildCasePartyNameNoPreFix(party);
+                            break;
+                    }
+                }
+            }
+
+
+
+            //SHORT AND LONG AGENDA
+            processBookmark.process("AgendaItem" + (i + 1), item.agendaItemNumber.trim() + ".", Document);
+            processBookmark.process("CaseNumber" + (i + 1),
+                    NumberFormatService.generateFullCaseNumberNonGlobal(item.caseYear, item.caseType, item.caseMonth, item.caseNumber), Document);
+            processBookmark.process("CPName" + (i + 1), chargingPartyNames.trim() + " v.", Document);
+            processBookmark.process("CHDName" + (i + 1), chargedPartyNames.trim(), Document);
+            processBookmark.process("Recommendation" + (i + 1), "Recommendation: " + item.recommendation.trim(), Document);
+
+            //MINUTES
+            processBookmark.process("MAI" + (i + 1), item.agendaItemNumber.trim() + ".", Document);
+            processBookmark.process("MCASENUMBER" + (i + 1),
+                    "Case " + NumberFormatService.generateFullCaseNumberNonGlobal(item.caseYear, item.caseType, item.caseMonth, item.caseNumber), Document);
+            processBookmark.process("MINFORMATION" + (i + 1), chargingPartyNames.trim() + " v. " + chargedPartyNames.trim(), Document);
+            processBookmark.process("MSENTENCE" + (i + 1), "The unfair labor practice charge alleged that Charged Party violated Ohio Revised Code §4117.11 " + item.allegation.trim() + " by " + item.statement.trim(), Document);
+            processBookmark.process("MRATIONAL" + (i + 1), "Information gathered during the investigation revealed " + item.investigationReveals.trim(), Document);
+            processBookmark.process("MRECOMMENDATION" + (i + 1), item.recommendation.trim(), Document);
+
+            //EMAIL DIRECTIVE
+            processBookmark.process("LONGBOARDMEETINGDATE", Global.MMMMddyyyy.format(boardMeetingDate), Document);
+            processBookmark.process("EAI" + (i + 1), item.agendaItemNumber.trim(), Document);
+            processBookmark.process("ECASENUMBER" + (i + 1),
+                    NumberFormatService.generateFullCaseNumberNonGlobal(item.caseYear, item.caseType, item.caseMonth, item.caseNumber), Document);
+            processBookmark.process("ECPNAME" + (i + 1), chargingPartyNames.trim() + " v.", Document);
+            processBookmark.process("ECHDNAME" + (i + 1), chargedPartyNames.trim(), Document);
+            processBookmark.process("ECPREPNAME" + (i + 1), chargingPartyREPNames.trim(), Document);
+            processBookmark.process("ECPREPEMAIL" + (i + 1), chargingPartyREPEmails.trim(), Document);
+            processBookmark.process("ECHDREPNAME" + (i + 1), chargedPartyREPNames.trim(), Document);
+            processBookmark.process("ECHDREPEMAIL" + (i + 1), chargedPartyREPEmails.trim(), Document);
+        }
+
+        for (int i = caseList.size(); i < 50; i++) {
+            processBookmark.process("AgendaItem" + (i + 1), "", Document);
+            processBookmark.process("CaseNumber" + (i + 1), "", Document);
+            processBookmark.process("CPName" + (i + 1), "", Document);
+            processBookmark.process("CHDName" + (i + 1), "", Document);
+            processBookmark.process("Recommendation" + (i + 1), "", Document);
+            processBookmark.process("MAI" + (i + 1), "", Document);
+            processBookmark.process("MCASENUMBER" + (i + 1), "", Document);
+            processBookmark.process("MINFORMATION" + (i + 1), "", Document);
+            processBookmark.process("MSENTENCE" + (i + 1), "", Document);
+            processBookmark.process("MRATIONAL" + (i + 1), "", Document);
+            processBookmark.process("MRECOMMENDATION" + (i + 1), "", Document);
+        }
+
+        return Document;
+    }
+
 }

@@ -27,15 +27,15 @@ public class MEDLetterDialog extends javax.swing.JDialog {
         loadDropDowns();
         addListeners();
         setLocationRelativeTo(parent);
-        setVisible(true);   
+        setVisible(true);
     }
-    
+
     private void loadDropDowns() {
         loadLetters();
         loadDirectives();
         loadAgenda();
     }
-    
+
     private void addListeners() {
         letterComboBox.addItemListener((ItemEvent e) -> {
             directiveComboBox.setSelectedItem(new Item<>("0", ""));
@@ -48,16 +48,16 @@ public class MEDLetterDialog extends javax.swing.JDialog {
             memoComboBox.setSelectedItem(new Item<>("0", ""));
             enableGenerateButton();
         });
-        
+
         memoComboBox.addItemListener((ItemEvent e) -> {
             directiveComboBox.setSelectedItem(new Item<>("0", ""));
             letterComboBox.setSelectedItem(new Item<>("0", ""));
             enableGenerateButton();
         });
     }
-    
+
     private void enableGenerateButton() {
-        if(letterComboBox.getSelectedItem().toString().equals("") 
+        if(letterComboBox.getSelectedItem().toString().equals("")
                 && directiveComboBox.getSelectedItem().toString().equals("")
                 && memoComboBox.getSelectedItem().toString().equals("")) {
             generateButton.setEnabled(false);
@@ -65,44 +65,44 @@ public class MEDLetterDialog extends javax.swing.JDialog {
             generateButton.setEnabled(true);
         }
     }
-    
+
     private void loadLetters() {
         DefaultComboBoxModel dt = new DefaultComboBoxModel();
         letterComboBox.setModel(dt);
         letterComboBox.addItem(new Item<>("0", ""));
-        
+
         List<SMDSDocuments> letterList = SMDSDocuments.loadDocumentNamesByTypeAndSection("MED", "Letter");
         for (SMDSDocuments letter : letterList) {
             letterComboBox.addItem(new Item<>(String.valueOf(letter.id), letter.description));
         }
         letterComboBox.setSelectedItem(new Item<>("0", ""));
     }
-    
+
     private void loadDirectives() {
         DefaultComboBoxModel dt = new DefaultComboBoxModel();
         directiveComboBox.setModel(dt);
         directiveComboBox.addItem(new Item<>("0", ""));
-        
+
         List<SMDSDocuments> letterList = SMDSDocuments.loadDocumentNamesByTypeAndSection("MED", "Directive");
         for (SMDSDocuments letter : letterList) {
             directiveComboBox.addItem(new Item<>(String.valueOf(letter.id), letter.description));
         }
         directiveComboBox.setSelectedItem(new Item<>("0", ""));
     }
-    
+
     private void loadAgenda() {
         DefaultComboBoxModel dt = new DefaultComboBoxModel();
         memoComboBox.setModel(dt);
         memoComboBox.addItem(new Item<>("0", ""));
-        
+
         List<SMDSDocuments> letterList = SMDSDocuments.loadDocumentNamesByTypeAndSection("MED", "Memo");
         for (SMDSDocuments letter : letterList) {
             memoComboBox.addItem(new Item<>(String.valueOf(letter.id), letter.description));
         }
         memoComboBox.setSelectedItem(new Item<>("0", ""));
     }
-    
-    
+
+
     private void generateDocument() {
         int selection = 0;
         if (!letterComboBox.getSelectedItem().toString().trim().equals("")) {
@@ -119,7 +119,7 @@ public class MEDLetterDialog extends javax.swing.JDialog {
         if (selection > 0) {
             SMDSDocuments template = SMDSDocuments.findDocumentByID(selection);
             File templateFile = new File(Global.templatePath + Global.activeSection + File.separator + template.fileName);
-            
+
             if (templateFile.exists()){
                 new LetterGenerationPanel(Global.root, true, template, null);
             } else {
@@ -177,7 +177,7 @@ public class MEDLetterDialog extends javax.swing.JDialog {
                 .addGap(12, 12, 12)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(letterComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 443, Short.MAX_VALUE)
                     .addComponent(directiveComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(memoComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
