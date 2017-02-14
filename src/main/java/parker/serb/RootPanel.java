@@ -2011,7 +2011,7 @@ public class RootPanel extends javax.swing.JFrame {
 
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
         Audit.addAuditEntry("Clicked BU Information");
-        new BUInformationUpdateDialog((JFrame) this.getRootPane().getParent(), true);
+//        new BUInformationUpdateDialog((JFrame) this.getRootPane().getParent(), true);
     }//GEN-LAST:event_jMenuItem8ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
