@@ -99,6 +99,8 @@ public class ReportDialog extends javax.swing.JDialog {
             default:
                 break;
         }
+        
+        
     }
 
     private void enableGenerateButton() {

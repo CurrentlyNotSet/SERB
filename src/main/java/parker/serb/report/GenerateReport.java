@@ -17,11 +17,13 @@ import net.sf.jasperreports.engine.JasperPrint;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.lang3.StringUtils;
 import parker.serb.Global;
+import parker.serb.sql.Audit;
 import parker.serb.sql.CaseType;
 import parker.serb.sql.Database;
 import parker.serb.sql.SMDSDocuments;
 import parker.serb.util.FileService;
 import parker.serb.util.NumberFormatService;
+import parker.serb.util.SlackNotification;
 import parker.serb.util.StringUtilities;
 
 /**
@@ -251,6 +253,7 @@ public class GenerateReport {
                 JasperPrint jprint = (JasperPrint) JasperFillManager.fillReport(jasperFileName, hash, conn);
                 try {
                     JasperExportManager.exportReportToPdfFile(jprint, pdfFileName);
+                    Audit.addAuditEntry("Generetated Report: " + report.fileName);
                 } catch(JRException e){
                     WebOptionPane.showMessageDialog(Global.root, "<html><center>An old version of this report is currently open elsewhere. "
                             + "<br>Please ensure it is closed before continuing.</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
@@ -262,7 +265,7 @@ public class GenerateReport {
                     System.out.println("Report Generation Time: " + NumberFormatService.convertLongToTime(lEndTime - lStartTime));                    
                 }
             } catch (JRException ex) {
-                ex.printStackTrace();
+                SlackNotification.sendNotification(ex);
             } finally {
                 DbUtils.closeQuietly(conn);
             }

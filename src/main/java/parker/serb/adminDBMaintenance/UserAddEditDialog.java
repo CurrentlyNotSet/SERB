@@ -10,11 +10,11 @@ import java.util.List;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
-import org.apache.commons.validator.routines.EmailValidator;
 import parker.serb.Global;
 import parker.serb.login.Password;
 import parker.serb.sql.User;
 import parker.serb.sql.UserRole;
+import parker.serb.util.EmailValidation;
 import parker.serb.util.NumberFormatService;
 
 /**
@@ -43,26 +43,17 @@ public class UserAddEditDialog extends javax.swing.JDialog {
         EmailTextField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                editButton.setEnabled(
-                    EmailValidator.getInstance().isValid(EmailTextField.getText()) ||
-                    EmailTextField.getText().equals("")
-                );
+                editButton.setEnabled(EmailValidation.validEmail(EmailTextField.getText().trim()));
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                editButton.setEnabled(
-                    EmailValidator.getInstance().isValid(EmailTextField.getText()) ||
-                    EmailTextField.getText().equals("")
-                );
+                editButton.setEnabled(EmailValidation.validEmail(EmailTextField.getText().trim()));
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                editButton.setEnabled(
-                    EmailValidator.getInstance().isValid(EmailTextField.getText()) ||
-                    EmailTextField.getText().equals("")
-                );
+                editButton.setEnabled(EmailValidation.validEmail(EmailTextField.getText().trim()));
             }
         });
     }

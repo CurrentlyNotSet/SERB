@@ -163,6 +163,11 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
         CSCNumberTextBox.setEditable(false);
         CSCNumberTextBox.setBackground(new java.awt.Color(238, 238, 238));
         CSCNumberTextBox.setFocusable(false);
+        CSCNumberTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                CSCNumberTextBoxMouseClicked(evt);
+            }
+        });
         CSCNumberTextBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 CSCNumberTextBoxActionPerformed(evt);
@@ -230,6 +235,13 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_jLabel11MouseClicked
+
+    private void CSCNumberTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CSCNumberTextBoxMouseClicked
+         if(SwingUtilities.isRightMouseButton(evt) || evt.getButton() == MouseEvent.BUTTON3) {
+            Audit.addAuditEntry("Opened CSC Case Search Dialog");
+            new CSCNumberSearchDialog(Global.root, true);
+        }
+    }//GEN-LAST:event_CSCNumberTextBoxMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

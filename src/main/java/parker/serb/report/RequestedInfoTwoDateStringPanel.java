@@ -5,6 +5,8 @@
  */
 package parker.serb.report;
 
+import com.alee.extended.date.WebCalendar;
+import com.alee.utils.swing.Customizer;
 import parker.serb.Global;
 import parker.serb.sql.SMDSDocuments;
 
@@ -84,112 +86,130 @@ public class RequestedInfoTwoDateStringPanel extends javax.swing.JDialog {
 
         startDateField.setEditable(false);
         startDateField.setDateFormat(Global.mmddyyyy);
-        startDateField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                startDateFieldActionPerformed(evt);
-            }
-        });
 
-        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel7.setText("Start Date:");
+        startDateField.setCalendarCustomizer(new Customizer<WebCalendar> ()
+            {
+                @Override
+                public void customize ( final WebCalendar calendar )
+                {
+                    calendar.setStartWeekFromSunday ( true );
+                }
+            } );
+            startDateField.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    startDateFieldActionPerformed(evt);
+                }
+            });
 
-        endDateField.setEditable(false);
-        endDateField.setDateFormat(Global.mmddyyyy);
-        endDateField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                endDateFieldActionPerformed(evt);
-            }
-        });
+            jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+            jLabel7.setText("Start Date:");
 
-        textBoxLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        textBoxLabel.setText("<<TYPE>>");
+            endDateField.setEditable(false);
+            endDateField.setDateFormat(Global.mmddyyyy);
 
-        GenerateReportButton.setText("Generate Report");
-        GenerateReportButton.setEnabled(false);
-        GenerateReportButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                GenerateReportButtonActionPerformed(evt);
-            }
-        });
+            endDateField.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                {
+                    @Override
+                    public void customize ( final WebCalendar calendar )
+                    {
+                        calendar.setStartWeekFromSunday ( true );
+                    }
+                } );
+                endDateField.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        endDateFieldActionPerformed(evt);
+                    }
+                });
 
-        CancelButton.setText("Cancel");
-        CancelButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CancelButtonActionPerformed(evt);
-            }
-        });
+                textBoxLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+                textBoxLabel.setText("<<TYPE>>");
 
-        reportLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        reportLabel.setText("<<REPORTNAME>>");
+                GenerateReportButton.setText("Generate Report");
+                GenerateReportButton.setEnabled(false);
+                GenerateReportButton.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        GenerateReportButtonActionPerformed(evt);
+                    }
+                });
 
-        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel9.setText("End Date:");
+                CancelButton.setText("Cancel");
+                CancelButton.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        CancelButtonActionPerformed(evt);
+                    }
+                });
 
-        likeTextField.addCaretListener(new javax.swing.event.CaretListener() {
-            public void caretUpdate(javax.swing.event.CaretEvent evt) {
-                likeTextFieldCaretUpdate(evt);
-            }
-        });
+                reportLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+                reportLabel.setText("<<REPORTNAME>>");
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 357, Short.MAX_VALUE)
-                    .addComponent(reportLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+                jLabel9.setText("End Date:");
+
+                likeTextField.addCaretListener(new javax.swing.event.CaretListener() {
+                    public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                        likeTextFieldCaretUpdate(evt);
+                    }
+                });
+
+                javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+                getContentPane().setLayout(layout);
+                layout.setHorizontalGroup(
+                    layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(CancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(GenerateReportButton, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 357, Short.MAX_VALUE)
+                            .addComponent(reportLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(CancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(GenerateReportButton, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(textBoxLabel)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
+                                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(endDateField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(startDateField, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+                                    .addComponent(likeTextField))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())
+                );
+
+                layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel7, jLabel9, textBoxLabel});
+
+                layout.setVerticalGroup(
+                    layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addContainerGap()
+                        .addComponent(jLabel1)
+                        .addGap(18, 18, 18)
+                        .addComponent(reportLabel)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(startDateField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7))
+                        .addGap(20, 20, 20)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(endDateField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel9))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(textBoxLabel)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
-                            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(endDateField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(startDateField, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
-                            .addComponent(likeTextField))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
+                            .addComponent(likeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(CancelButton)
+                            .addComponent(GenerateReportButton))
+                        .addContainerGap())
+                );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel7, jLabel9, textBoxLabel});
+                layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {endDateField, jLabel7, jLabel9, startDateField, textBoxLabel});
 
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(reportLabel)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(startDateField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7))
-                .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(endDateField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(textBoxLabel)
-                    .addComponent(likeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(CancelButton)
-                    .addComponent(GenerateReportButton))
-                .addContainerGap())
-        );
-
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {endDateField, jLabel7, jLabel9, startDateField, textBoxLabel});
-
-        pack();
-    }// </editor-fold>//GEN-END:initComponents
+                pack();
+            }// </editor-fold>//GEN-END:initComponents
 
     private void CancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelButtonActionPerformed
         this.dispose();

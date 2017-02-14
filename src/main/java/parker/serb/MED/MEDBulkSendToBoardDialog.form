@@ -160,7 +160,7 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="startDateField.setDateFormat(Global.mmddyyyy);"/>
+        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="startDateField.setDateFormat(Global.mmddyyyy);&#xa;&#xa;startDateField.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
       </AuxValues>
     </Component>
     <Container class="javax.swing.JLayeredPane" name="jLayeredPane1">
@@ -277,7 +277,7 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="endDateField.setDateFormat(Global.mmddyyyy);"/>
+        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="endDateField.setDateFormat(Global.mmddyyyy);&#xa;&#xa;endDateField.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
       </AuxValues>
     </Component>
   </SubComponents>

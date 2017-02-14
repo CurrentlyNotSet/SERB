@@ -91,8 +91,7 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
         if(Global.caseNumber != null) {
             MEDCase med = MEDCase.loadHeaderInformation();
             if(med == null) {
-//                new MEDCaseNotFound((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
-//                caseNumberComboBox.setSelectedItem(Global.caseNumber);
+                new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
             } else {
                 fileDateTextBox.setText(med.fileDate != null ? Global.mmddyyyy.format(new Date(med.fileDate.getTime())) : "");
                 if(med.FMCSMediatorAppointedID == null &&
@@ -108,8 +107,6 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
                     mediatorPhoneNumber.setText("");  
                 }
                 statusTextBox.setText(med.caseStatus != null ? med.caseStatus : "");
-
-                
                 
                 List caseParties = CaseParty.loadPartiesByCase();
 
@@ -127,10 +124,7 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
                         + (partyInformation.lastName.equals("") ? "" : (partyInformation.lastName))
                         + (partyInformation.suffix.equals("") ? "" : (" " + partyInformation.suffix))
                         + (partyInformation.nameTitle.equals("") ? "" : (", " + partyInformation.nameTitle));
-                    }
-
-                    
-                            
+                    }       
 
                     switch (partyInformation.caseRelation) {
                         case "Employer":

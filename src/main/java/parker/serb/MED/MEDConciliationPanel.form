@@ -215,7 +215,7 @@
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="appointmentDateTextBoxMouseClicked"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="appointmentDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="appointmentDateTextBox.setDateFormat(Global.mmddyyyy);&#xa;&#xa;appointmentDateTextBox.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
           </AuxValues>
         </Component>
         <Component class="com.alee.extended.date.WebDateField" name="originalConciliationDateTextBox">
@@ -236,7 +236,7 @@
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="originalConciliationDateTextBoxMouseClicked"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="originalConciliationDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="originalConciliationDateTextBox.setDateFormat(Global.mmddyyyy);&#xa;&#xa;originalConciliationDateTextBox.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
           </AuxValues>
         </Component>
       </SubComponents>
@@ -360,7 +360,7 @@
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="conciliation1OrderDateMouseClicked"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="conciliation1OrderDate.setDateFormat(Global.mmddyyyy);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="conciliation1OrderDate.setDateFormat(Global.mmddyyyy);&#xa;&#xa;conciliation1OrderDate.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
           </AuxValues>
         </Component>
         <Component class="com.alee.extended.date.WebDateField" name="conciliation1SelectionDate">
@@ -381,7 +381,7 @@
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="conciliation1SelectionDateMouseClicked"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="conciliation1SelectionDate.setDateFormat(Global.mmddyyyy);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="conciliation1SelectionDate.setDateFormat(Global.mmddyyyy);&#xa;&#xa;conciliation1SelectionDate.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
           </AuxValues>
         </Component>
       </SubComponents>
@@ -505,7 +505,7 @@
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="conciliation2OrderDateTextBoxMouseClicked"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="conciliation2OrderDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="conciliation2OrderDateTextBox.setDateFormat(Global.mmddyyyy);&#xa;&#xa;conciliation2OrderDateTextBox.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
           </AuxValues>
         </Component>
         <Component class="com.alee.extended.date.WebDateField" name="conciliation2SelectionDateTextBox">
@@ -526,7 +526,7 @@
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="conciliation2SelectionDateTextBoxMouseClicked"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="conciliation2SelectionDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="conciliation2SelectionDateTextBox.setDateFormat(Global.mmddyyyy);&#xa;&#xa;conciliation2SelectionDateTextBox.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
           </AuxValues>
         </Component>
       </SubComponents>

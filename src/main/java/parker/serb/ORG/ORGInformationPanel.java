@@ -5,7 +5,9 @@
  */
 package parker.serb.ORG;
 
+import com.alee.extended.date.WebCalendar;
 import com.alee.extended.date.WebDateField;
+import com.alee.utils.swing.Customizer;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.sql.Timestamp;
@@ -14,7 +16,6 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import org.apache.commons.validator.routines.EmailValidator;
 import parker.serb.Global;
 import parker.serb.employer.employerDetail;
 import parker.serb.employer.employerSearch;
@@ -22,6 +23,7 @@ import parker.serb.sql.County;
 import parker.serb.sql.Employer;
 import parker.serb.sql.ORGCase;
 import parker.serb.util.ClearDateDialog;
+import parker.serb.util.EmailValidation;
 import parker.serb.util.NumberFormatService;
 
 /**
@@ -47,26 +49,17 @@ public class ORGInformationPanel extends javax.swing.JPanel {
         orgEmailTextBox.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                Global.root.getjButton2().setEnabled(
-                    EmailValidator.getInstance().isValid(orgEmailTextBox.getText()) ||
-                    orgEmailTextBox.getText().equals("")
-                );
+                Global.root.getjButton2().setEnabled(EmailValidation.validEmail(orgEmailTextBox.getText().trim()));
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                Global.root.getjButton2().setEnabled(
-                    EmailValidator.getInstance().isValid(orgEmailTextBox.getText()) ||
-                    orgEmailTextBox.getText().equals("")
-                );
+                Global.root.getjButton2().setEnabled(EmailValidation.validEmail(orgEmailTextBox.getText().trim()));
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                Global.root.getjButton2().setEnabled(
-                    EmailValidator.getInstance().isValid(orgEmailTextBox.getText()) ||
-                    orgEmailTextBox.getText().equals("")
-                );
+                Global.root.getjButton2().setEnabled(EmailValidation.validEmail(orgEmailTextBox.getText().trim()));
             }
         });
     }
@@ -721,275 +714,338 @@ public class ORGInformationPanel extends javax.swing.JPanel {
         annualReportLastFiledTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         annualReportLastFiledTextBox.setEnabled(false);
         annualReportLastFiledTextBox.setDateFormat(Global.mmddyyyy);
-        annualReportLastFiledTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                annualReportLastFiledTextBoxMouseClicked(evt);
-            }
-        });
-        annualReportLastFiledTextBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                annualReportLastFiledTextBoxActionPerformed(evt);
-            }
-        });
 
-        financialStatementLastFiledTextBox.setEditable(false);
-        financialStatementLastFiledTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        financialStatementLastFiledTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
-        financialStatementLastFiledTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        financialStatementLastFiledTextBox.setEnabled(false);
-        financialStatementLastFiledTextBox.setDateFormat(Global.mmddyyyy);
-        financialStatementLastFiledTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                financialStatementLastFiledTextBoxMouseClicked(evt);
-            }
-        });
+        annualReportLastFiledTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+            {
+                @Override
+                public void customize ( final WebCalendar calendar )
+                {
+                    calendar.setStartWeekFromSunday ( true );
+                }
+            } );
+            annualReportLastFiledTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    annualReportLastFiledTextBoxMouseClicked(evt);
+                }
+            });
+            annualReportLastFiledTextBox.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    annualReportLastFiledTextBoxActionPerformed(evt);
+                }
+            });
 
-        regiestionReportLastFiledTextBox.setEditable(false);
-        regiestionReportLastFiledTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        regiestionReportLastFiledTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
-        regiestionReportLastFiledTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        regiestionReportLastFiledTextBox.setEnabled(false);
-        regiestionReportLastFiledTextBox.setDateFormat(Global.mmddyyyy);
-        regiestionReportLastFiledTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                regiestionReportLastFiledTextBoxMouseClicked(evt);
-            }
-        });
+            financialStatementLastFiledTextBox.setEditable(false);
+            financialStatementLastFiledTextBox.setBackground(new java.awt.Color(238, 238, 238));
+            financialStatementLastFiledTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+            financialStatementLastFiledTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+            financialStatementLastFiledTextBox.setEnabled(false);
+            financialStatementLastFiledTextBox.setDateFormat(Global.mmddyyyy);
 
-        constrctionAndByLawsFiledTextBox.setEditable(false);
-        constrctionAndByLawsFiledTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        constrctionAndByLawsFiledTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
-        constrctionAndByLawsFiledTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        constrctionAndByLawsFiledTextBox.setEnabled(false);
-        constrctionAndByLawsFiledTextBox.setDateFormat(Global.mmddyyyy);
-        constrctionAndByLawsFiledTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                constrctionAndByLawsFiledTextBoxMouseClicked(evt);
-            }
-        });
+            financialStatementLastFiledTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                {
+                    @Override
+                    public void customize ( final WebCalendar calendar )
+                    {
+                        calendar.setStartWeekFromSunday ( true );
+                    }
+                } );
+                financialStatementLastFiledTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                    public void mouseClicked(java.awt.event.MouseEvent evt) {
+                        financialStatementLastFiledTextBoxMouseClicked(evt);
+                    }
+                });
 
-        parent1TextBox.setBackground(new java.awt.Color(238, 238, 238));
-        parent1TextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        parent1TextBox.setEnabled(false);
+                regiestionReportLastFiledTextBox.setEditable(false);
+                regiestionReportLastFiledTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                regiestionReportLastFiledTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+                regiestionReportLastFiledTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                regiestionReportLastFiledTextBox.setEnabled(false);
+                regiestionReportLastFiledTextBox.setDateFormat(Global.mmddyyyy);
 
-        parent2TextBox.setBackground(new java.awt.Color(238, 238, 238));
-        parent2TextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        parent2TextBox.setEnabled(false);
+                regiestionReportLastFiledTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                    {
+                        @Override
+                        public void customize ( final WebCalendar calendar )
+                        {
+                            calendar.setStartWeekFromSunday ( true );
+                        }
+                    } );
+                    regiestionReportLastFiledTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                        public void mouseClicked(java.awt.event.MouseEvent evt) {
+                            regiestionReportLastFiledTextBoxMouseClicked(evt);
+                        }
+                    });
 
-        caseTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        caseTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        caseTextBox.setEnabled(false);
+                    constrctionAndByLawsFiledTextBox.setEditable(false);
+                    constrctionAndByLawsFiledTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                    constrctionAndByLawsFiledTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+                    constrctionAndByLawsFiledTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                    constrctionAndByLawsFiledTextBox.setEnabled(false);
+                    constrctionAndByLawsFiledTextBox.setDateFormat(Global.mmddyyyy);
 
-        dateFiledTextBox.setEditable(false);
-        dateFiledTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        dateFiledTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
-        dateFiledTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        dateFiledTextBox.setEnabled(false);
-        dateFiledTextBox.setDateFormat(Global.mmddyyyy);
-        dateFiledTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                dateFiledTextBoxMouseClicked(evt);
-            }
-        });
+                    constrctionAndByLawsFiledTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                        {
+                            @Override
+                            public void customize ( final WebCalendar calendar )
+                            {
+                                calendar.setStartWeekFromSunday ( true );
+                            }
+                        } );
+                        constrctionAndByLawsFiledTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                constrctionAndByLawsFiledTextBoxMouseClicked(evt);
+                            }
+                        });
 
-        registrationLetterSentTextBox.setEditable(false);
-        registrationLetterSentTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        registrationLetterSentTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
-        registrationLetterSentTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        registrationLetterSentTextBox.setEnabled(false);
-        registrationLetterSentTextBox.setDateFormat(Global.mmddyyyy);
-        registrationLetterSentTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                registrationLetterSentTextBoxMouseClicked(evt);
-            }
-        });
+                        parent1TextBox.setBackground(new java.awt.Color(238, 238, 238));
+                        parent1TextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                        parent1TextBox.setEnabled(false);
 
-        extensionDateTextBox.setEditable(false);
-        extensionDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        extensionDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
-        extensionDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        extensionDateTextBox.setEnabled(false);
-        extensionDateTextBox.setDateFormat(Global.mmddyyyy);
-        extensionDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                extensionDateTextBoxMouseClicked(evt);
-            }
-        });
+                        parent2TextBox.setBackground(new java.awt.Color(238, 238, 238));
+                        parent2TextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                        parent2TextBox.setEnabled(false);
 
-        deemedCertifiedCheckBox.setText("Deemed Certified");
-        deemedCertifiedCheckBox.setEnabled(false);
-        deemedCertifiedCheckBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deemedCertifiedCheckBoxActionPerformed(evt);
-            }
-        });
+                        caseTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                        caseTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                        caseTextBox.setEnabled(false);
 
-        boardCertifiedCheckBox.setText("Board Certified");
-        boardCertifiedCheckBox.setEnabled(false);
-        boardCertifiedCheckBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                boardCertifiedCheckBoxActionPerformed(evt);
-            }
-        });
+                        dateFiledTextBox.setEditable(false);
+                        dateFiledTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                        dateFiledTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+                        dateFiledTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                        dateFiledTextBox.setEnabled(false);
+                        dateFiledTextBox.setDateFormat(Global.mmddyyyy);
 
-        filedByParentCheckBox.setText("Filed By Parent");
-        filedByParentCheckBox.setEnabled(false);
-        filedByParentCheckBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                filedByParentCheckBoxActionPerformed(evt);
-            }
-        });
+                        dateFiledTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                            {
+                                @Override
+                                public void customize ( final WebCalendar calendar )
+                                {
+                                    calendar.setStartWeekFromSunday ( true );
+                                }
+                            } );
+                            dateFiledTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                    dateFiledTextBoxMouseClicked(evt);
+                                }
+                            });
 
-        validCheckBox.setText("Valid");
-        validCheckBox.setEnabled(false);
-        validCheckBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                validCheckBoxActionPerformed(evt);
-            }
-        });
+                            registrationLetterSentTextBox.setEditable(false);
+                            registrationLetterSentTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                            registrationLetterSentTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+                            registrationLetterSentTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                            registrationLetterSentTextBox.setEnabled(false);
+                            registrationLetterSentTextBox.setDateFormat(Global.mmddyyyy);
 
-        lastNotificationTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        lastNotificationTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        lastNotificationTextBox.setEnabled(false);
+                            registrationLetterSentTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                                {
+                                    @Override
+                                    public void customize ( final WebCalendar calendar )
+                                    {
+                                        calendar.setStartWeekFromSunday ( true );
+                                    }
+                                } );
+                                registrationLetterSentTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                                    public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                        registrationLetterSentTextBoxMouseClicked(evt);
+                                    }
+                                });
 
-        dueDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        dueDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        dueDateTextBox.setEnabled(false);
+                                extensionDateTextBox.setEditable(false);
+                                extensionDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                                extensionDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+                                extensionDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                                extensionDateTextBox.setEnabled(false);
+                                extensionDateTextBox.setDateFormat(Global.mmddyyyy);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel31)
-                    .addComponent(jLabel30)
-                    .addComponent(jLabel28)
-                    .addComponent(jLabel27)
-                    .addComponent(jLabel26)
-                    .addComponent(jLabel25)
-                    .addComponent(jLabel24)
-                    .addComponent(jLabel21)
-                    .addComponent(jLabel20)
-                    .addComponent(jLabel19)
-                    .addComponent(jLabel18)
-                    .addComponent(jLabel17)
-                    .addComponent(jLabel16)
-                    .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(annualReportLastFiledTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(financialStatementLastFiledTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(regiestionReportLastFiledTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(constrctionAndByLawsFiledTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(parent1TextBox)
-                    .addComponent(parent2TextBox, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(caseTextBox, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(registrationLetterSentTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(extensionDateTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lastNotificationTextBox)
-                    .addComponent(fiscalYearEndingComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(dueDateTextBox, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(dateFiledTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(deemedCertifiedCheckBox)
-                            .addComponent(filedByParentCheckBox))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(validCheckBox)
-                            .addComponent(boardCertifiedCheckBox))
-                        .addGap(0, 23, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(fiscalYearEndingComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(dueDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel27))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel28)
-                            .addComponent(dateFiledTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(annualReportLastFiledTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel17))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(financialStatementLastFiledTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel18))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(regiestionReportLastFiledTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel19))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel20)
-                            .addComponent(constrctionAndByLawsFiledTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel31)
-                            .addComponent(extensionDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel21)
-                            .addComponent(lastNotificationTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(deemedCertifiedCheckBox)
-                        .addComponent(boardCertifiedCheckBox)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(validCheckBox)
-                        .addComponent(filedByParentCheckBox))
-                    .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel24)
-                    .addComponent(parent1TextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(parent2TextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel25))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel26)
-                    .addComponent(caseTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel30)
-                    .addComponent(registrationLetterSentTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+                                extensionDateTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                                    {
+                                        @Override
+                                        public void customize ( final WebCalendar calendar )
+                                        {
+                                            calendar.setStartWeekFromSunday ( true );
+                                        }
+                                    } );
+                                    extensionDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                                        public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                            extensionDateTextBoxMouseClicked(evt);
+                                        }
+                                    });
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-    }// </editor-fold>//GEN-END:initComponents
+                                    deemedCertifiedCheckBox.setText("Deemed Certified");
+                                    deemedCertifiedCheckBox.setEnabled(false);
+                                    deemedCertifiedCheckBox.addActionListener(new java.awt.event.ActionListener() {
+                                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                            deemedCertifiedCheckBoxActionPerformed(evt);
+                                        }
+                                    });
+
+                                    boardCertifiedCheckBox.setText("Board Certified");
+                                    boardCertifiedCheckBox.setEnabled(false);
+                                    boardCertifiedCheckBox.addActionListener(new java.awt.event.ActionListener() {
+                                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                            boardCertifiedCheckBoxActionPerformed(evt);
+                                        }
+                                    });
+
+                                    filedByParentCheckBox.setText("Filed By Parent");
+                                    filedByParentCheckBox.setEnabled(false);
+                                    filedByParentCheckBox.addActionListener(new java.awt.event.ActionListener() {
+                                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                            filedByParentCheckBoxActionPerformed(evt);
+                                        }
+                                    });
+
+                                    validCheckBox.setText("Valid");
+                                    validCheckBox.setEnabled(false);
+                                    validCheckBox.addActionListener(new java.awt.event.ActionListener() {
+                                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                            validCheckBoxActionPerformed(evt);
+                                        }
+                                    });
+
+                                    lastNotificationTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                                    lastNotificationTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                                    lastNotificationTextBox.setEnabled(false);
+
+                                    dueDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                                    dueDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                                    dueDateTextBox.setEnabled(false);
+
+                                    javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+                                    jPanel2.setLayout(jPanel2Layout);
+                                    jPanel2Layout.setHorizontalGroup(
+                                        jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                            .addContainerGap()
+                                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addComponent(jLabel31)
+                                                .addComponent(jLabel30)
+                                                .addComponent(jLabel28)
+                                                .addComponent(jLabel27)
+                                                .addComponent(jLabel26)
+                                                .addComponent(jLabel25)
+                                                .addComponent(jLabel24)
+                                                .addComponent(jLabel21)
+                                                .addComponent(jLabel20)
+                                                .addComponent(jLabel19)
+                                                .addComponent(jLabel18)
+                                                .addComponent(jLabel17)
+                                                .addComponent(jLabel16)
+                                                .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(annualReportLastFiledTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(financialStatementLastFiledTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(regiestionReportLastFiledTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(constrctionAndByLawsFiledTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(parent1TextBox)
+                                                .addComponent(parent2TextBox, javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addComponent(caseTextBox, javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addComponent(registrationLetterSentTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(extensionDateTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(lastNotificationTextBox)
+                                                .addComponent(fiscalYearEndingComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(dueDateTextBox, javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addComponent(dateFiledTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(deemedCertifiedCheckBox)
+                                                        .addComponent(filedByParentCheckBox))
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(validCheckBox)
+                                                        .addComponent(boardCertifiedCheckBox))
+                                                    .addGap(0, 23, Short.MAX_VALUE)))
+                                            .addContainerGap())
+                                    );
+                                    jPanel2Layout.setVerticalGroup(
+                                        jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                            .addContainerGap()
+                                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                        .addComponent(fiscalYearEndingComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(dueDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(jLabel27))
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(jLabel28)
+                                                        .addComponent(dateFiledTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(annualReportLastFiledTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(jLabel17))
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(financialStatementLastFiledTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(jLabel18))
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(regiestionReportLastFiledTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(jLabel19))
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(jLabel20)
+                                                        .addComponent(constrctionAndByLawsFiledTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(jLabel31)
+                                                        .addComponent(extensionDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(jLabel21)
+                                                        .addComponent(lastNotificationTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                    .addComponent(deemedCertifiedCheckBox)
+                                                    .addComponent(boardCertifiedCheckBox)))
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                    .addComponent(validCheckBox)
+                                                    .addComponent(filedByParentCheckBox))
+                                                .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addComponent(jLabel24)
+                                                .addComponent(parent1TextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addComponent(parent2TextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jLabel25))
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addComponent(jLabel26)
+                                                .addComponent(caseTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addComponent(jLabel30)
+                                                .addComponent(registrationLetterSentTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    );
+
+                                    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+                                    this.setLayout(layout);
+                                    layout.setHorizontalGroup(
+                                        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    );
+                                    layout.setVerticalGroup(
+                                        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    );
+                                }// </editor-fold>//GEN-END:initComponents
 
     private void annualReportLastFiledTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_annualReportLastFiledTextBoxMouseClicked
         clearDate(annualReportLastFiledTextBox, evt);

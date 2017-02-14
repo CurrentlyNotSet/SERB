@@ -165,7 +165,7 @@
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="entryDateTextBoxMouseClicked"/>
       </Events>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="entryDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="entryDateTextBox.setDateFormat(Global.mmddyyyy);&#xa;&#xa;entryDateTextBox.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
       </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">

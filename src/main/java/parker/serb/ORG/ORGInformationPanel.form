@@ -687,7 +687,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="annualReportLastFiledTextBoxActionPerformed"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="annualReportLastFiledTextBox.setDateFormat(Global.mmddyyyy);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="annualReportLastFiledTextBox.setDateFormat(Global.mmddyyyy);&#xa;&#xa;annualReportLastFiledTextBox.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
           </AuxValues>
         </Component>
         <Component class="com.alee.extended.date.WebDateField" name="financialStatementLastFiledTextBox">
@@ -708,7 +708,7 @@
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="financialStatementLastFiledTextBoxMouseClicked"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="financialStatementLastFiledTextBox.setDateFormat(Global.mmddyyyy);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="financialStatementLastFiledTextBox.setDateFormat(Global.mmddyyyy);&#xa;&#xa;financialStatementLastFiledTextBox.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
           </AuxValues>
         </Component>
         <Component class="com.alee.extended.date.WebDateField" name="regiestionReportLastFiledTextBox">
@@ -729,7 +729,7 @@
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="regiestionReportLastFiledTextBoxMouseClicked"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="regiestionReportLastFiledTextBox.setDateFormat(Global.mmddyyyy);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="regiestionReportLastFiledTextBox.setDateFormat(Global.mmddyyyy);&#xa;&#xa;regiestionReportLastFiledTextBox.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
           </AuxValues>
         </Component>
         <Component class="com.alee.extended.date.WebDateField" name="constrctionAndByLawsFiledTextBox">
@@ -750,7 +750,7 @@
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="constrctionAndByLawsFiledTextBoxMouseClicked"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="constrctionAndByLawsFiledTextBox.setDateFormat(Global.mmddyyyy);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="constrctionAndByLawsFiledTextBox.setDateFormat(Global.mmddyyyy);&#xa;&#xa;constrctionAndByLawsFiledTextBox.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JTextField" name="parent1TextBox">
@@ -804,7 +804,7 @@
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="dateFiledTextBoxMouseClicked"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="dateFiledTextBox.setDateFormat(Global.mmddyyyy);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="dateFiledTextBox.setDateFormat(Global.mmddyyyy);&#xa;&#xa;dateFiledTextBox.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
           </AuxValues>
         </Component>
         <Component class="com.alee.extended.date.WebDateField" name="registrationLetterSentTextBox">
@@ -825,7 +825,7 @@
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="registrationLetterSentTextBoxMouseClicked"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="registrationLetterSentTextBox.setDateFormat(Global.mmddyyyy);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="registrationLetterSentTextBox.setDateFormat(Global.mmddyyyy);&#xa;&#xa;registrationLetterSentTextBox.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
           </AuxValues>
         </Component>
         <Component class="com.alee.extended.date.WebDateField" name="extensionDateTextBox">
@@ -846,7 +846,7 @@
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="extensionDateTextBoxMouseClicked"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="extensionDateTextBox.setDateFormat(Global.mmddyyyy);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="extensionDateTextBox.setDateFormat(Global.mmddyyyy);&#xa;&#xa;extensionDateTextBox.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JCheckBox" name="deemedCertifiedCheckBox">

@@ -249,6 +249,36 @@ public class ORGCase {
         return name;
     }
     
+    public static String getORGName(String number) {
+        String name = null;
+            
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select orgName"
+                    + " from ORGCase"
+                    + " where orgNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, number);
+
+            ResultSet caseNumberRS = preparedStatement.executeQuery();
+            
+            caseNumberRS.next();
+            
+            name = caseNumberRS.getString("orgName");
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getORGName(number);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return name;
+    }
+    
     /**
      * Updates the note that is related to the case number
      * @param note the new note value to be stored

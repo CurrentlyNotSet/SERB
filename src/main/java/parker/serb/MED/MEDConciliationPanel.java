@@ -5,16 +5,22 @@
  */
 package parker.serb.MED;
 
+import com.alee.extended.date.WebCalendar;
 import com.alee.extended.date.WebDateField;
+import com.alee.utils.swing.Customizer;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import parker.serb.Global;
 import parker.serb.sql.FactFinder;
 import parker.serb.sql.MEDCase;
@@ -38,6 +44,124 @@ public class MEDConciliationPanel extends javax.swing.JPanel {
      */
     public MEDConciliationPanel() {
         initComponents();
+        addListeners();
+    }
+    
+    private void addListeners() {
+        
+        conciliation1OrderDate.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                try {
+                    Date startDate = Global.mmddyyyy.parse(conciliation1OrderDate.getText());
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(startDate);
+                    cal.add(Calendar.DATE, 4);
+                    if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+                        cal.add(Calendar.DATE, 2);
+                    } 
+                    if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+                        cal.add(Calendar.DATE, 1);
+                    } 
+                    conciliation1SelectionDate.setText(Global.mmddyyyy.format(cal.getTime()));
+                } catch (ParseException ex) {
+                    conciliation1SelectionDate.setText("");
+                }            
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                try {
+                    Date startDate = Global.mmddyyyy.parse(conciliation1OrderDate.getText());
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(startDate);
+                    cal.add(Calendar.DATE, 4);
+                    if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+                        cal.add(Calendar.DATE, 2);
+                    } else if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+                        cal.add(Calendar.DATE, 1);
+                    } 
+                    conciliation1SelectionDate.setText(Global.mmddyyyy.format(cal.getTime()));
+                } catch (ParseException ex) {
+                    conciliation1SelectionDate.setText("");
+                }  
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                try {
+                    Date startDate = Global.mmddyyyy.parse(conciliation1OrderDate.getText());
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(startDate);
+                    cal.add(Calendar.DATE, 4);
+                    if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+                        cal.add(Calendar.DATE, 2);
+                    } else if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+                        cal.add(Calendar.DATE, 1);
+                    } 
+                    conciliation1SelectionDate.setText(Global.mmddyyyy.format(cal.getTime()));
+                } catch (ParseException ex) {
+                    conciliation1SelectionDate.setText("");
+                }  
+            }
+        });
+        
+        conciliation2OrderDateTextBox.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                try {
+                    Date startDate = Global.mmddyyyy.parse(conciliation2OrderDateTextBox.getText());
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(startDate);
+                    cal.add(Calendar.DATE, 4);
+                    if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+                        cal.add(Calendar.DATE, 2);
+                    } 
+                    if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+                        cal.add(Calendar.DATE, 1);
+                    } 
+                    conciliation2SelectionDateTextBox.setText(Global.mmddyyyy.format(cal.getTime()));
+                } catch (ParseException ex) {
+                    conciliation2SelectionDateTextBox.setText("");
+                }            
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                try {
+                    Date startDate = Global.mmddyyyy.parse(conciliation2OrderDateTextBox.getText());
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(startDate);
+                    cal.add(Calendar.DATE, 4);
+                    if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+                        cal.add(Calendar.DATE, 2);
+                    } else if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+                        cal.add(Calendar.DATE, 1);
+                    } 
+                    conciliation2SelectionDateTextBox.setText(Global.mmddyyyy.format(cal.getTime()));
+                } catch (ParseException ex) {
+                    conciliation2SelectionDateTextBox.setText("");
+                }  
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                try {
+                    Date startDate = Global.mmddyyyy.parse(conciliation2OrderDateTextBox.getText());
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(startDate);
+                    cal.add(Calendar.DATE, 4);
+                    if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+                        cal.add(Calendar.DATE, 2);
+                    } else if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+                        cal.add(Calendar.DATE, 1);
+                    } 
+                    conciliation2SelectionDateTextBox.setText(Global.mmddyyyy.format(cal.getTime()));
+                } catch (ParseException ex) {
+                    conciliation2SelectionDateTextBox.setText("");
+                }  
+            }
+        });
     }
     
     public void enableUpdate() {
@@ -511,276 +635,330 @@ public class MEDConciliationPanel extends javax.swing.JPanel {
         appointmentDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         appointmentDateTextBox.setEnabled(false);
         appointmentDateTextBox.setDateFormat(Global.mmddyyyy);
-        appointmentDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                appointmentDateTextBoxMouseClicked(evt);
-            }
-        });
 
-        originalConciliationDateTextBox.setEditable(false);
-        originalConciliationDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        originalConciliationDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
-        originalConciliationDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        originalConciliationDateTextBox.setEnabled(false);
-        originalConciliationDateTextBox.setDateFormat(Global.mmddyyyy);
-        originalConciliationDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                originalConciliationDateTextBoxMouseClicked(evt);
-            }
-        });
+        appointmentDateTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+            {
+                @Override
+                public void customize ( final WebCalendar calendar )
+                {
+                    calendar.setStartWeekFromSunday ( true );
+                }
+            } );
+            appointmentDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    appointmentDateTextBoxMouseClicked(evt);
+                }
+            });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel12)
-                    .addComponent(jLabel11)
-                    .addComponent(jLabel10)
-                    .addComponent(jLabel9)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(conciliationTypeComboBox, 0, 0, Short.MAX_VALUE)
-                    .addComponent(conciliatorSelectionComboBox, 0, 162, Short.MAX_VALUE)
-                    .addComponent(replacementConciliatorComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(concilOriginalConciliator)
-                    .addComponent(appointmentDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(originalConciliationDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(appointmentDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(conciliationTypeComboBox)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(conciliatorSelectionComboBox)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(replacementConciliatorComboBox)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel11)
-                    .addComponent(concilOriginalConciliator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(originalConciliationDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+            originalConciliationDateTextBox.setEditable(false);
+            originalConciliationDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+            originalConciliationDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+            originalConciliationDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+            originalConciliationDateTextBox.setEnabled(false);
+            originalConciliationDateTextBox.setDateFormat(Global.mmddyyyy);
 
-        conciliation1List.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        conciliation1List.setEnabled(false);
-        conciliation1List.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                conciliation1ListMouseClicked(evt);
-            }
-        });
-        jScrollPane1.setViewportView(conciliation1List);
+            originalConciliationDateTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                {
+                    @Override
+                    public void customize ( final WebCalendar calendar )
+                    {
+                        calendar.setStartWeekFromSunday ( true );
+                    }
+                } );
+                originalConciliationDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                    public void mouseClicked(java.awt.event.MouseEvent evt) {
+                        originalConciliationDateTextBoxMouseClicked(evt);
+                    }
+                });
 
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Conciliator List");
-
-        conciliation1GenerateButton.setText("Generate List");
-        conciliation1GenerateButton.setEnabled(false);
-        conciliation1GenerateButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                conciliation1GenerateButtonActionPerformed(evt);
-            }
-        });
-
-        jLabel3.setText("Order Date:");
-
-        jLabel4.setText("Selection Due Date:");
-
-        conciliation1OrderDate.setEditable(false);
-        conciliation1OrderDate.setBackground(new java.awt.Color(238, 238, 238));
-        conciliation1OrderDate.setCaretColor(new java.awt.Color(0, 0, 0));
-        conciliation1OrderDate.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        conciliation1OrderDate.setEnabled(false);
-        conciliation1OrderDate.setDateFormat(Global.mmddyyyy);
-        conciliation1OrderDate.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                conciliation1OrderDateMouseClicked(evt);
-            }
-        });
-
-        conciliation1SelectionDate.setEditable(false);
-        conciliation1SelectionDate.setBackground(new java.awt.Color(238, 238, 238));
-        conciliation1SelectionDate.setCaretColor(new java.awt.Color(0, 0, 0));
-        conciliation1SelectionDate.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        conciliation1SelectionDate.setEnabled(false);
-        conciliation1SelectionDate.setDateFormat(Global.mmddyyyy);
-        conciliation1SelectionDate.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                conciliation1SelectionDateMouseClicked(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE)
-                    .addComponent(conciliation1GenerateButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel3))
+                javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+                jPanel1.setLayout(jPanel1Layout);
+                jPanel1Layout.setHorizontalGroup(
+                    jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel12)
+                            .addComponent(jLabel11)
+                            .addComponent(jLabel10)
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel7))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(conciliation1OrderDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(conciliation1SelectionDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(conciliation1OrderDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(conciliation1SelectionDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(conciliation1GenerateButton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        conciliation2List.setEnabled(false);
-        conciliation2List.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                conciliation2ListMouseClicked(evt);
-            }
-        });
-        jScrollPane2.setViewportView(conciliation2List);
-
-        conciliation2GenerateButton.setText("Generate List");
-        conciliation2GenerateButton.setEnabled(false);
-        conciliation2GenerateButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                conciliation2GenerateButtonActionPerformed(evt);
-            }
-        });
-
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Conciliator List #2");
-
-        jLabel5.setText("Order Date:");
-
-        jLabel6.setText("Selection Due Date:");
-
-        conciliation2OrderDateTextBox.setEditable(false);
-        conciliation2OrderDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        conciliation2OrderDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
-        conciliation2OrderDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        conciliation2OrderDateTextBox.setEnabled(false);
-        conciliation2OrderDateTextBox.setDateFormat(Global.mmddyyyy);
-        conciliation2OrderDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                conciliation2OrderDateTextBoxMouseClicked(evt);
-            }
-        });
-
-        conciliation2SelectionDateTextBox.setEditable(false);
-        conciliation2SelectionDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        conciliation2SelectionDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
-        conciliation2SelectionDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        conciliation2SelectionDateTextBox.setEnabled(false);
-        conciliation2SelectionDateTextBox.setDateFormat(Global.mmddyyyy);
-        conciliation2SelectionDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                conciliation2SelectionDateTextBoxMouseClicked(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(conciliation2GenerateButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel5))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(conciliationTypeComboBox, 0, 0, Short.MAX_VALUE)
+                            .addComponent(conciliatorSelectionComboBox, 0, 162, Short.MAX_VALUE)
+                            .addComponent(replacementConciliatorComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(concilOriginalConciliator)
+                            .addComponent(appointmentDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(originalConciliationDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap())
+                );
+                jPanel1Layout.setVerticalGroup(
+                    jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(appointmentDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(conciliation2SelectionDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)
-                            .addComponent(conciliation2OrderDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap())
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(conciliation2OrderDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(conciliation2SelectionDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(conciliation2GenerateButton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(conciliationTypeComboBox)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(conciliatorSelectionComboBox)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(replacementConciliatorComboBox)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel11)
+                            .addComponent(concilOriginalConciliator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(originalConciliationDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))))
-        );
-    }// </editor-fold>//GEN-END:initComponents
+                conciliation1List.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+                conciliation1List.setEnabled(false);
+                conciliation1List.addMouseListener(new java.awt.event.MouseAdapter() {
+                    public void mouseClicked(java.awt.event.MouseEvent evt) {
+                        conciliation1ListMouseClicked(evt);
+                    }
+                });
+                jScrollPane1.setViewportView(conciliation1List);
+
+                jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+                jLabel1.setText("Conciliator List");
+
+                conciliation1GenerateButton.setText("Generate List");
+                conciliation1GenerateButton.setEnabled(false);
+                conciliation1GenerateButton.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        conciliation1GenerateButtonActionPerformed(evt);
+                    }
+                });
+
+                jLabel3.setText("Order Date:");
+
+                jLabel4.setText("Selection Due Date:");
+
+                conciliation1OrderDate.setEditable(false);
+                conciliation1OrderDate.setBackground(new java.awt.Color(238, 238, 238));
+                conciliation1OrderDate.setCaretColor(new java.awt.Color(0, 0, 0));
+                conciliation1OrderDate.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                conciliation1OrderDate.setEnabled(false);
+                conciliation1OrderDate.setDateFormat(Global.mmddyyyy);
+
+                conciliation1OrderDate.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                    {
+                        @Override
+                        public void customize ( final WebCalendar calendar )
+                        {
+                            calendar.setStartWeekFromSunday ( true );
+                        }
+                    } );
+                    conciliation1OrderDate.addMouseListener(new java.awt.event.MouseAdapter() {
+                        public void mouseClicked(java.awt.event.MouseEvent evt) {
+                            conciliation1OrderDateMouseClicked(evt);
+                        }
+                    });
+
+                    conciliation1SelectionDate.setEditable(false);
+                    conciliation1SelectionDate.setBackground(new java.awt.Color(238, 238, 238));
+                    conciliation1SelectionDate.setCaretColor(new java.awt.Color(0, 0, 0));
+                    conciliation1SelectionDate.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                    conciliation1SelectionDate.setEnabled(false);
+                    conciliation1SelectionDate.setDateFormat(Global.mmddyyyy);
+
+                    conciliation1SelectionDate.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                        {
+                            @Override
+                            public void customize ( final WebCalendar calendar )
+                            {
+                                calendar.setStartWeekFromSunday ( true );
+                            }
+                        } );
+                        conciliation1SelectionDate.addMouseListener(new java.awt.event.MouseAdapter() {
+                            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                conciliation1SelectionDateMouseClicked(evt);
+                            }
+                        });
+
+                        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+                        jPanel2.setLayout(jPanel2Layout);
+                        jPanel2Layout.setHorizontalGroup(
+                            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE)
+                                    .addComponent(conciliation1GenerateButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabel4)
+                                            .addComponent(jLabel3))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(conciliation1OrderDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(conciliation1SelectionDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addContainerGap())
+                        );
+                        jPanel2Layout.setVerticalGroup(
+                            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel3)
+                                    .addComponent(conciliation1OrderDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel4)
+                                    .addComponent(conciliation1SelectionDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(conciliation1GenerateButton)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        );
+
+                        conciliation2List.setEnabled(false);
+                        conciliation2List.addMouseListener(new java.awt.event.MouseAdapter() {
+                            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                conciliation2ListMouseClicked(evt);
+                            }
+                        });
+                        jScrollPane2.setViewportView(conciliation2List);
+
+                        conciliation2GenerateButton.setText("Generate List");
+                        conciliation2GenerateButton.setEnabled(false);
+                        conciliation2GenerateButton.addActionListener(new java.awt.event.ActionListener() {
+                            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                conciliation2GenerateButtonActionPerformed(evt);
+                            }
+                        });
+
+                        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+                        jLabel2.setText("Conciliator List #2");
+
+                        jLabel5.setText("Order Date:");
+
+                        jLabel6.setText("Selection Due Date:");
+
+                        conciliation2OrderDateTextBox.setEditable(false);
+                        conciliation2OrderDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                        conciliation2OrderDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+                        conciliation2OrderDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                        conciliation2OrderDateTextBox.setEnabled(false);
+                        conciliation2OrderDateTextBox.setDateFormat(Global.mmddyyyy);
+
+                        conciliation2OrderDateTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                            {
+                                @Override
+                                public void customize ( final WebCalendar calendar )
+                                {
+                                    calendar.setStartWeekFromSunday ( true );
+                                }
+                            } );
+                            conciliation2OrderDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                    conciliation2OrderDateTextBoxMouseClicked(evt);
+                                }
+                            });
+
+                            conciliation2SelectionDateTextBox.setEditable(false);
+                            conciliation2SelectionDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                            conciliation2SelectionDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+                            conciliation2SelectionDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                            conciliation2SelectionDateTextBox.setEnabled(false);
+                            conciliation2SelectionDateTextBox.setDateFormat(Global.mmddyyyy);
+
+                            conciliation2SelectionDateTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                                {
+                                    @Override
+                                    public void customize ( final WebCalendar calendar )
+                                    {
+                                        calendar.setStartWeekFromSunday ( true );
+                                    }
+                                } );
+                                conciliation2SelectionDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                                    public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                        conciliation2SelectionDateTextBoxMouseClicked(evt);
+                                    }
+                                });
+
+                                javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+                                jPanel3.setLayout(jPanel3Layout);
+                                jPanel3Layout.setHorizontalGroup(
+                                    jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                        .addContainerGap()
+                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(conciliation2GenerateButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                                .addGap(0, 0, Short.MAX_VALUE)
+                                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                    .addComponent(jLabel6)
+                                                    .addComponent(jLabel5))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                    .addComponent(conciliation2SelectionDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)
+                                                    .addComponent(conciliation2OrderDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                        .addContainerGap())
+                                );
+                                jPanel3Layout.setVerticalGroup(
+                                    jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addContainerGap()
+                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(jLabel5)
+                                            .addComponent(conciliation2OrderDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(jLabel6)
+                                            .addComponent(conciliation2SelectionDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jLabel2)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(conciliation2GenerateButton)
+                                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                );
+
+                                javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+                                this.setLayout(layout);
+                                layout.setHorizontalGroup(
+                                    layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                );
+                                layout.setVerticalGroup(
+                                    layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addContainerGap()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGap(0, 0, Short.MAX_VALUE))))
+                                );
+                            }// </editor-fold>//GEN-END:initComponents
 
     private void appointmentDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_appointmentDateTextBoxMouseClicked
         clearDate(appointmentDateTextBox, evt);

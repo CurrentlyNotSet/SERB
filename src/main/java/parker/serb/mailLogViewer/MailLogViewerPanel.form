@@ -87,7 +87,7 @@
     </Component>
     <Component class="com.alee.extended.date.WebDateField" name="startDateField">
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="startDateField.setDateFormat(Global.mmddyyyy);"/>
+        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="startDateField.setDateFormat(Global.mmddyyyy);&#xa;&#xa;startDateField.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
       </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel7">
@@ -98,7 +98,7 @@
     </Component>
     <Component class="com.alee.extended.date.WebDateField" name="endDateField">
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="endDateField.setDateFormat(Global.mmddyyyy);"/>
+        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="endDateField.setDateFormat(Global.mmddyyyy);&#xa;&#xa;endDateField.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
       </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel8">
