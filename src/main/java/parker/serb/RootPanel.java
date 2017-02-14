@@ -43,6 +43,7 @@ import parker.serb.ULP.ULPRootPanel;
 import parker.serb.admin.SystemMontiorDialog;
 import parker.serb.adminDBMaintenance.AdminMainMenuPanel;
 import parker.serb.bookmarkProcessing.AnnualReportTwoDatePanel;
+import parker.serb.bunumber.BUInformationUpdateDialog;
 import parker.serb.letterQueue.LetterQueuePanel;
 import parker.serb.login.ExitVerification;
 import parker.serb.mailLogViewer.MailLogViewerPanel;
@@ -1114,6 +1115,7 @@ public class RootPanel extends javax.swing.JFrame {
         batchCloseREPMenuItem = new javax.swing.JMenuItem();
         batchCloseULPMenuItem = new javax.swing.JMenuItem();
         jMenuItem7 = new javax.swing.JMenuItem();
+        jMenuItem8 = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
@@ -1596,6 +1598,14 @@ public class RootPanel extends javax.swing.JFrame {
             }
         });
         jMenu1.add(jMenuItem7);
+
+        jMenuItem8.setText("BU Information");
+        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem8ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem8);
         jMenu1.add(jSeparator2);
 
         jMenuItem3.setText("Log Off");
@@ -1999,6 +2009,11 @@ public class RootPanel extends javax.swing.JFrame {
         new AnnualReportTwoDatePanel((JFrame) this.getRootPane().getParent(), true);
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
+    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+        Audit.addAuditEntry("Clicked BU Information");
+        new BUInformationUpdateDialog((JFrame) this.getRootPane().getParent(), true);
+    }//GEN-LAST:event_jMenuItem8ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel CMDS;
     private javax.swing.JPanel CSC;
@@ -2044,6 +2059,7 @@ public class RootPanel extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
+    private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
