@@ -8,9 +8,9 @@ package parker.serb.adminDBMaintenance;
 import com.alee.laf.optionpane.WebOptionPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import org.apache.commons.validator.routines.EmailValidator;
 import parker.serb.Global;
 import parker.serb.sql.FactFinder;
+import parker.serb.util.EmailValidation;
 
 /**
  *
@@ -38,26 +38,17 @@ public class FactFinderConciliatorAddEdidDialog extends javax.swing.JDialog {
         EmailTextBox.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                Global.root.getjButton2().setEnabled(
-                    EmailValidator.getInstance().isValid(EmailTextBox.getText()) ||
-                    EmailTextBox.getText().equals("")
-                );
+                Global.root.getjButton2().setEnabled(EmailValidation.validEmail(EmailTextBox.getText().trim()));
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                Global.root.getjButton2().setEnabled(
-                    EmailValidator.getInstance().isValid(EmailTextBox.getText()) ||
-                    EmailTextBox.getText().equals("")
-                );
+                Global.root.getjButton2().setEnabled(EmailValidation.validEmail(EmailTextBox.getText().trim()));
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                Global.root.getjButton2().setEnabled(
-                    EmailValidator.getInstance().isValid(EmailTextBox.getText()) ||
-                    EmailTextBox.getText().equals("")
-                );
+                Global.root.getjButton2().setEnabled(EmailValidation.validEmail(EmailTextBox.getText().trim()));
             }
         });
     }

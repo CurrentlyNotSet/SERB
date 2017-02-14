@@ -8,9 +8,9 @@ package parker.serb.adminDBMaintenance;
 import com.alee.laf.optionpane.WebOptionPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import org.apache.commons.validator.routines.EmailValidator;
 import parker.serb.Global;
 import parker.serb.sql.SystemExecutive;
+import parker.serb.util.EmailValidation;
 
 /**
  *
@@ -39,26 +39,17 @@ public class BoardExecAddEdidDialog extends javax.swing.JDialog {
         EmailTextBox.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                editButton.setEnabled(
-                    EmailValidator.getInstance().isValid(EmailTextBox.getText()) ||
-                    EmailTextBox.getText().equals("")
-                );
+                editButton.setEnabled(EmailValidation.validEmail(EmailTextBox.getText().trim()));
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                editButton.setEnabled(
-                    EmailValidator.getInstance().isValid(EmailTextBox.getText()) ||
-                    EmailTextBox.getText().equals("")
-                );
+                editButton.setEnabled(EmailValidation.validEmail(EmailTextBox.getText().trim()));
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                editButton.setEnabled(
-                    EmailValidator.getInstance().isValid(EmailTextBox.getText()) ||
-                    EmailTextBox.getText().equals("")
-                );
+                editButton.setEnabled(EmailValidation.validEmail(EmailTextBox.getText().trim()));
             }
         });
     }

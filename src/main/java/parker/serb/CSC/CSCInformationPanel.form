@@ -39,44 +39,39 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="jLabel15" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel14" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel13" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel12" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="cscNameTextBox" max="32767" attributes="0"/>
-                              <Component id="cscNumberTextBox" max="32767" attributes="0"/>
-                              <Component id="cscTypeComboBox" alignment="0" pref="422" max="32767" attributes="0"/>
-                              <Component id="cscPhone1TextBox" alignment="1" max="32767" attributes="0"/>
-                              <Component id="cscPhone2TextBox" alignment="1" max="32767" attributes="0"/>
-                              <Component id="cscFaxTextBox" alignment="1" max="32767" attributes="0"/>
-                              <Component id="cscAddress1TextBox" alignment="1" max="32767" attributes="0"/>
-                              <Component id="cscCityTextBox" alignment="0" max="32767" attributes="0"/>
-                              <Component id="cscStateComboBox" alignment="0" max="32767" attributes="0"/>
-                              <Component id="cscZipTextBox" alignment="0" max="32767" attributes="0"/>
-                              <Component id="cscEmailTextBox" alignment="0" max="32767" attributes="0"/>
-                              <Component id="alsoKnownAsTextBox" alignment="0" max="32767" attributes="0"/>
-                              <Component id="cscCountyComboBox" alignment="0" max="32767" attributes="0"/>
-                          </Group>
+                      <Group type="103" alignment="0" groupAlignment="1" attributes="0">
+                          <Component id="jLabel15" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel14" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel13" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel12" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
-                          <Component id="cscAddress2TextBox" max="32767" attributes="0"/>
-                      </Group>
+                      <Component id="jLabel9" alignment="0" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="cscAddress2TextBox" max="32767" attributes="0"/>
+                      <Component id="cscNameTextBox" max="32767" attributes="0"/>
+                      <Component id="cscNumberTextBox" max="32767" attributes="0"/>
+                      <Component id="cscTypeComboBox" alignment="0" pref="422" max="32767" attributes="0"/>
+                      <Component id="cscPhone1TextBox" alignment="1" max="32767" attributes="0"/>
+                      <Component id="cscPhone2TextBox" alignment="1" max="32767" attributes="0"/>
+                      <Component id="cscFaxTextBox" alignment="1" max="32767" attributes="0"/>
+                      <Component id="cscAddress1TextBox" alignment="1" max="32767" attributes="0"/>
+                      <Component id="cscCityTextBox" alignment="0" max="32767" attributes="0"/>
+                      <Component id="cscStateComboBox" alignment="0" max="32767" attributes="0"/>
+                      <Component id="cscZipTextBox" alignment="0" max="32767" attributes="0"/>
+                      <Component id="cscEmailTextBox" alignment="0" max="32767" attributes="0"/>
+                      <Component id="alsoKnownAsTextBox" alignment="0" max="32767" attributes="0"/>
+                      <Component id="cscCountyComboBox" alignment="0" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>

@@ -17,10 +17,10 @@ import javax.swing.JFrame;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import parker.serb.Global;
-import org.apache.commons.validator.routines.EmailValidator;
 import parker.serb.sql.CSCCase;
 import parker.serb.sql.County;
 import parker.serb.util.ClearDateDialog;
+import parker.serb.util.EmailValidation;
 import parker.serb.util.NumberFormatService;
 
 /**
@@ -46,26 +46,17 @@ public class CSCInformationPanel extends javax.swing.JPanel {
         cscEmailTextBox.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                Global.root.getjButton2().setEnabled(
-                    EmailValidator.getInstance().isValid(cscEmailTextBox.getText()) ||
-                    cscEmailTextBox.getText().equals("")
-                );
+                Global.root.getjButton2().setEnabled(EmailValidation.validEmail(cscEmailTextBox.getText().trim()));
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                Global.root.getjButton2().setEnabled(
-                    EmailValidator.getInstance().isValid(cscEmailTextBox.getText()) ||
-                    cscEmailTextBox.getText().equals("")
-                );
+                Global.root.getjButton2().setEnabled(EmailValidation.validEmail(cscEmailTextBox.getText().trim()));
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                Global.root.getjButton2().setEnabled(
-                    EmailValidator.getInstance().isValid(cscEmailTextBox.getText()) ||
-                    cscEmailTextBox.getText().equals("")
-                );
+                Global.root.getjButton2().setEnabled(EmailValidation.validEmail(cscEmailTextBox.getText().trim()));
             }
         });
     }
@@ -481,40 +472,37 @@ public class CSCInformationPanel extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel15)
-                            .addComponent(jLabel14)
-                            .addComponent(jLabel13)
-                            .addComponent(jLabel12)
-                            .addComponent(jLabel11)
-                            .addComponent(jLabel10)
-                            .addComponent(jLabel8)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cscNameTextBox)
-                            .addComponent(cscNumberTextBox)
-                            .addComponent(cscTypeComboBox, 0, 422, Short.MAX_VALUE)
-                            .addComponent(cscPhone1TextBox, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(cscPhone2TextBox, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(cscFaxTextBox, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(cscAddress1TextBox, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(cscCityTextBox)
-                            .addComponent(cscStateComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cscZipTextBox)
-                            .addComponent(cscEmailTextBox)
-                            .addComponent(alsoKnownAsTextBox)
-                            .addComponent(cscCountyComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel9)
-                        .addGap(8, 8, 8)
-                        .addComponent(cscAddress2TextBox)))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jLabel15)
+                        .addComponent(jLabel14)
+                        .addComponent(jLabel13)
+                        .addComponent(jLabel12)
+                        .addComponent(jLabel11)
+                        .addComponent(jLabel10)
+                        .addComponent(jLabel8)
+                        .addComponent(jLabel6)
+                        .addComponent(jLabel5)
+                        .addComponent(jLabel4)
+                        .addComponent(jLabel3)
+                        .addComponent(jLabel2)
+                        .addComponent(jLabel1))
+                    .addComponent(jLabel9))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cscAddress2TextBox)
+                    .addComponent(cscNameTextBox)
+                    .addComponent(cscNumberTextBox)
+                    .addComponent(cscTypeComboBox, 0, 422, Short.MAX_VALUE)
+                    .addComponent(cscPhone1TextBox, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(cscPhone2TextBox, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(cscFaxTextBox, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(cscAddress1TextBox, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(cscCityTextBox)
+                    .addComponent(cscStateComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cscZipTextBox)
+                    .addComponent(cscEmailTextBox)
+                    .addComponent(alsoKnownAsTextBox)
+                    .addComponent(cscCountyComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(

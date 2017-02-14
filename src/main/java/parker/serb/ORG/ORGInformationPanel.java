@@ -16,7 +16,6 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import org.apache.commons.validator.routines.EmailValidator;
 import parker.serb.Global;
 import parker.serb.employer.employerDetail;
 import parker.serb.employer.employerSearch;
@@ -24,6 +23,7 @@ import parker.serb.sql.County;
 import parker.serb.sql.Employer;
 import parker.serb.sql.ORGCase;
 import parker.serb.util.ClearDateDialog;
+import parker.serb.util.EmailValidation;
 import parker.serb.util.NumberFormatService;
 
 /**
@@ -49,26 +49,17 @@ public class ORGInformationPanel extends javax.swing.JPanel {
         orgEmailTextBox.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                Global.root.getjButton2().setEnabled(
-                    EmailValidator.getInstance().isValid(orgEmailTextBox.getText()) ||
-                    orgEmailTextBox.getText().equals("")
-                );
+                Global.root.getjButton2().setEnabled(EmailValidation.validEmail(orgEmailTextBox.getText().trim()));
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                Global.root.getjButton2().setEnabled(
-                    EmailValidator.getInstance().isValid(orgEmailTextBox.getText()) ||
-                    orgEmailTextBox.getText().equals("")
-                );
+                Global.root.getjButton2().setEnabled(EmailValidation.validEmail(orgEmailTextBox.getText().trim()));
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                Global.root.getjButton2().setEnabled(
-                    EmailValidator.getInstance().isValid(orgEmailTextBox.getText()) ||
-                    orgEmailTextBox.getText().equals("")
-                );
+                Global.root.getjButton2().setEnabled(EmailValidation.validEmail(orgEmailTextBox.getText().trim()));
             }
         });
     }

@@ -8,9 +8,9 @@ package parker.serb.adminDBMaintenance;
 import com.alee.laf.optionpane.WebOptionPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import org.apache.commons.validator.routines.EmailValidator;
 import parker.serb.Global;
 import parker.serb.sql.HearingRoom;
+import parker.serb.util.EmailValidation;
 
 /**
  *
@@ -38,26 +38,17 @@ public class HearingRoomAddEditDialog extends javax.swing.JDialog {
         emailTextField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                editButton.setEnabled(
-                    EmailValidator.getInstance().isValid(emailTextField.getText()) ||
-                    emailTextField.getText().equals("")
-                );
+                editButton.setEnabled(EmailValidation.validEmail(emailTextField.getText().trim()));
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                editButton.setEnabled(
-                    EmailValidator.getInstance().isValid(emailTextField.getText()) ||
-                    emailTextField.getText().equals("")
-                );
+                editButton.setEnabled(EmailValidation.validEmail(emailTextField.getText().trim()));
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                editButton.setEnabled(
-                    EmailValidator.getInstance().isValid(emailTextField.getText()) ||
-                    emailTextField.getText().equals("")
-                );
+                editButton.setEnabled(EmailValidation.validEmail(emailTextField.getText().trim()));
             }
         });
     }

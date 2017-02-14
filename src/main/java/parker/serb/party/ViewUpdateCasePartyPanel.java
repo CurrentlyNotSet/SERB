@@ -19,14 +19,13 @@ import java.util.List;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import org.apache.commons.validator.routines.EmailValidator;
 import parker.serb.Global;
 import parker.serb.bookmarkProcessing.processMailingAddressBookmarks;
-import parker.serb.fileOperations.WordToPDF;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.NamePrefix;
 import parker.serb.sql.PartyType;
 import parker.serb.util.CancelUpdate;
+import parker.serb.util.EmailValidation;
 import parker.serb.util.SlackNotification;
 
 //TODO: Allow for a party to be updated from this panel
@@ -64,26 +63,17 @@ public class ViewUpdateCasePartyPanel extends javax.swing.JDialog {
         emailAddressTextBox.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                jButton2.setEnabled(
-                    EmailValidator.getInstance().isValid(emailAddressTextBox.getText()) ||
-                    emailAddressTextBox.getText().equals("")
-                );
+                jButton2.setEnabled(EmailValidation.validEmail(emailAddressTextBox.getText().trim()));
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                jButton2.setEnabled(
-                    EmailValidator.getInstance().isValid(emailAddressTextBox.getText()) ||
-                    emailAddressTextBox.getText().equals("")
-                );
+                jButton2.setEnabled(EmailValidation.validEmail(emailAddressTextBox.getText().trim()));
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                jButton2.setEnabled(
-                    EmailValidator.getInstance().isValid(emailAddressTextBox.getText()) ||
-                    emailAddressTextBox.getText().equals("")
-                );
+                jButton2.setEnabled(EmailValidation.validEmail(emailAddressTextBox.getText().trim()));
             }
         });
         
