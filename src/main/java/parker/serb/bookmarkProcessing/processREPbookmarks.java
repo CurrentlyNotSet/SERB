@@ -11,8 +11,10 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import parker.serb.Global;
+import parker.serb.sql.BoardMeeting;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.REPCase;
+import parker.serb.sql.REPElectionMultiCase;
 import parker.serb.sql.REPMediation;
 import parker.serb.sql.RelatedCase;
 import parker.serb.sql.User;
@@ -32,6 +34,9 @@ public class processREPbookmarks {
         List<CaseParty> partyList = CaseParty.loadPartiesByCase(Global.caseYear, Global.caseType, Global.caseMonth, Global.caseNumber);
         List<String> relatedCasesList = RelatedCase.loadRelatedCases();
         List<REPMediation> mediationList = REPMediation.loadMediationsByCaseNumber();
+        BoardMeeting meeting = BoardMeeting.loadLatestREPBoardMeeting();
+        List multicaseElection = REPElectionMultiCase.loadMultiCaseNumber();
+
         User user = null;
         if (caseInfo.currentOwnerID > 0) {
             user = User.findUserByID(caseInfo.currentOwnerID); //Need to get user by ID
@@ -63,6 +68,9 @@ public class processREPbookmarks {
         String mediationCC = "";
         String toAddressBlock = "";
         String ccNameBlock = "";
+        String DIRECCBlock = "";
+        String polling = "";
+        String multiCaseElection = "";
 
         for (CaseParty party : partyList) {
 
@@ -83,6 +91,13 @@ public class processREPbookmarks {
                     ccNameBlock += StringUtilities.buildCasePartyNameNoPreFix(party);
                 }
             }
+
+            if (!DIRECCBlock.trim().equals("")){
+                DIRECCBlock += "\n";
+            }
+            DIRECCBlock += StringUtilities.buildCasePartyNameNoPreFix(party);
+            DIRECCBlock += party.emailAddress == null ? "" : ", " + party.emailAddress.trim();
+
 
             if (null != party.caseRelation) {
                 switch (party.caseRelation) {
@@ -236,6 +251,20 @@ public class processREPbookmarks {
             }
         }
 
+        //Polling information
+        if (caseInfo.pollingEndDate != null && caseInfo.pollingStartDate != null) {
+                polling = Global.mmddyyyy.format(caseInfo.pollingStartDate);
+                polling += " through " + Global.mmddyyyy.format(caseInfo.pollingEndDate);
+            }
+
+        //MultiCase Election
+        for (Object relatedCase : multicaseElection) {
+            if (!multiCaseElection.trim().equals("")){
+                multiCaseElection += ", ";
+            }
+            multiCaseElection += relatedCase.toString();
+        }
+
         //ProcessBookmarks
         for (int i = 0; i < Global.BOOKMARK_LIMIT; i++) {
             //Case Number Related Information
@@ -287,6 +316,7 @@ public class processREPbookmarks {
             processBookmark.process("EOCONTACT" + (i == 0 ? "" : i),
                     (!"".equals(employeeOrganizationRepName) ? employeeOrganizationRepName.trim() : employeeOrganizationName.trim()), Document);
             processBookmark.process("CCList" + (i == 0 ? "" : i), ccNameBlock, Document);
+            processBookmark.process("DIRECCList" + (i == 0 ? "" : i), DIRECCBlock, Document);
 
             //Latest Mediation
             processBookmark.process("MEDIATEDAY" + (i == 0 ? "" : i), "", Document);
@@ -301,8 +331,71 @@ public class processREPbookmarks {
                 processBookmark.process("PHONE" + (i == 0 ? "" : i), user.workPhone, Document);
                 processBookmark.process("EMAIL" + (i == 0 ? "" : i), user.emailAddress, Document);
             }
-        }
 
+            //Directives Information
+            processBookmark.process("REFLECT" + (i == 0 ? "" : i), caseInfo.toReflect, Document);
+            processBookmark.process("MULTICASEELECTIONCASE2" + (i == 0 ? "" : i), multiCaseElection, Document);
+            processBookmark.process("MULTICASEELECTIONCASE3" + (i == 0 ? "" : i), multiCaseElection, Document);
+            processBookmark.process("WHOFILED" + (i == 0 ? "" : i), caseInfo.fileBy, Document);
+            processBookmark.process("BDMEETDATE" + (i == 0 ? "" : i), meeting.boardMeetingDate, Document);
+            processBookmark.process("EMPLOYEEORGANIZATIONNAMECHANGEFROM" + (i == 0 ? "" : i), caseInfo.EEONameChangeFrom, Document);
+            processBookmark.process("EMPLOYERNAMECHANGEFROM" + (i == 0 ? "" : i), caseInfo.ERNameChangeFrom, Document);
+            processBookmark.process("SECONDCASENUMBER" + (i == 0 ? "" : i), multiCaseElection, Document);
+            processBookmark.process("BOARDORDEEMED" + (i == 0 ? "" : i), caseInfo.boardCertified ? "Board" : "Deemed", Document);
+            processBookmark.process("INCLUDEDPROPOSEDFORAMENDMENTSOROPT" + (i == 0 ? "" : i), caseInfo.optInIncluded, Document);
+            processBookmark.process("INCLUDEDNEWORCURRENTUNIT" + (i == 0 ? "" : i), caseInfo.bargainingUnitIncluded, Document);
+            processBookmark.process("EXCLUDEDPROPOSEDFORAMENDMENTSOROPT", caseInfo.bargainingUnitExcluded, Document);
+            processBookmark.process("EXCLUDEDNEWORCURRENTUNIT" + (i == 0 ? "" : i), caseInfo.bargainingUnitExcluded, Document);
+            processBookmark.process("CASE2INCLUDED" + (i == 0 ? "" : i), caseInfo.bargainingUnitIncluded, Document);
+            processBookmark.process("CASE2EXCLUDED" + (i == 0 ? "" : i), caseInfo.bargainingUnitExcluded, Document);
+            processBookmark.process("CASE3INCLUDED" + (i == 0 ? "" : i), caseInfo.bargainingUnitIncluded, Document);
+            processBookmark.process("CASE3EXCLUDED" + (i == 0 ? "" : i), caseInfo.bargainingUnitExcluded, Document);
+            processBookmark.process("POLLINGPERIOD" + (i == 0 ? "" : i), polling.trim(), Document);
+            processBookmark.process("WHOPREVAILED" + (i == 0 ? "" : i), caseInfo.resultWHoPrevailed, Document);
+
+
+            if (caseInfo.type.equals("AC")) {
+                processBookmark.process("CASETYPE" + (i == 0 ? "" : i), "PETITION FOR REPRESENTATION", Document);
+            } else if (caseInfo.type.equals("RC")) {
+                processBookmark.process("CASETYPE" + (i == 0 ? "" : i), "PETITION FOR AMENDMENT OF CERTIFICATION", Document);
+            }
+
+            processBookmark.process("RIVALVOTES" + (i == 0 ? "" : i),
+                        caseInfo.resultVotesCastForRivalEEO1 == null ? "0"
+                                : NumberFormatService.convert(Long.parseLong(caseInfo.resultVotesCastForRivalEEO1)) + "(" + caseInfo.resultVotesCastForRivalEEO1 + ")", Document);
+
+            processBookmark.process("RIVALVOTES2" + (i == 0 ? "" : i),
+                        caseInfo.resultVotesCastForRivalEEO2 == null ? "0"
+                                : NumberFormatService.convert(Long.parseLong(caseInfo.resultVotesCastForRivalEEO2)) + "(" + caseInfo.resultVotesCastForRivalEEO2 + ")", Document);
+
+            processBookmark.process("RIVALVOTES3" + (i == 0 ? "" : i),
+                        caseInfo.resultVotesCastForRivalEEO3 == null ? "0"
+                                : NumberFormatService.convert(Long.parseLong(caseInfo.resultVotesCastForRivalEEO3)) + "(" + caseInfo.resultVotesCastForRivalEEO3 + ")", Document);
+
+            processBookmark.process("EOVOTES" + (i == 0 ? "" : i),
+                    caseInfo.resultVotesCastForEEO == null ? "0"
+                            : NumberFormatService.convert(Long.parseLong(caseInfo.resultVotesCastForEEO)) + "(" + caseInfo.resultVotesCastForEEO + ")", Document);
+
+            processBookmark.process("NOREPVOTES" + (i == 0 ? "" : i),
+                    caseInfo.resultVotesCastForNoRepresentative == null ? "0"
+                            : NumberFormatService.convert(Long.parseLong(caseInfo.resultVotesCastForNoRepresentative)) + "(" + caseInfo.resultVotesCastForNoRepresentative + ")", Document);
+
+            processBookmark.process("VOIDBALLOTS" + (i == 0 ? "" : i),
+                    caseInfo.resultVoidBallots == null ? "0"
+                            : NumberFormatService.convert(Long.parseLong(caseInfo.resultVoidBallots)) + "(" + caseInfo.resultVoidBallots + ")", Document);
+
+            processBookmark.process("LINE7" + (i == 0 ? "" : i),
+                    caseInfo.resultChallengedBallots == null ? "0"
+                            : NumberFormatService.convert(Long.parseLong(caseInfo.resultChallengedBallots)) + "(" + caseInfo.resultChallengedBallots + ")", Document);
+
+            processBookmark.process("LINE6" + (i == 0 ? "" : i),
+                    caseInfo.resultValidVotesCounted == null ? "0"
+                            : NumberFormatService.convert(Long.parseLong(caseInfo.resultValidVotesCounted)) + "(" + caseInfo.resultValidVotesCounted + ")", Document);
+
+            processBookmark.process("INCUMBENTVOTES" + (i == 0 ? "" : i),
+                    caseInfo.resultVotesCastForIncumbentEEO == null ? "0"
+                            : NumberFormatService.convert(Long.parseLong(caseInfo.resultVotesCastForIncumbentEEO)) + "(" + caseInfo.resultVotesCastForIncumbentEEO + ")", Document);
+        }
         return Document;
     }
 
