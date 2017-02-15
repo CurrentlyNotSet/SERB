@@ -63,7 +63,7 @@ public class CMDSHeaderPanel extends javax.swing.JPanel {
                         Global.root.getjButton2().setEnabled(true);
                         Global.root.getjButton4().setText("Letter");
                         Global.root.getjButton4().setEnabled(true);
-                        Global.root.getjButton9().setVisible(false);
+                        Global.root.getjButton9().setVisible(true);
                     }
                     Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
                 }

@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import parker.serb.Global;
 import parker.serb.sql.BargainingUnit;
 import parker.serb.sql.County;
+import parker.serb.util.CancelUpdate;
 import parker.serb.util.ClearDateDialog;
 import parker.serb.util.NumberFormatService;
 
@@ -23,45 +24,40 @@ import parker.serb.util.NumberFormatService;
  *
  * @author parkerjohnston
  */
-public class BUInformationUpdateDialog extends javax.swing.JDialog {
+public class BUInformationNewDialog extends javax.swing.JDialog {
 
-    String id;
     /**
      * Creates new form BUInformationUpdateDialog
      */
-    public BUInformationUpdateDialog(java.awt.Frame parent, boolean modal, String passedBUID) {
+    public BUInformationNewDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        id = passedBUID;
         setLocationRelativeTo(parent);
-        disableAll();
+        enableAll();
         loadDropdowns();
-        loadData(passedBUID);
-        updateButton.setVisible(Global.activeUser.REPCaseWorker);
-        deleteButton.setVisible(Global.activeUser.REPCaseWorker);
         setVisible(true);
     }
     
-    private void loadData(String id) {
-        BargainingUnit bu = BargainingUnit.getBUbyID(id);
-        
-        employerNumberTextBox.setText(bu.employerNumber);
-        employerNameTextBox.setText(bu.buEmployerName);
-        unionTextBox.setText(bu.lUnion);
-        localTextBox.setText(bu.local);
-        countyComboBox.setSelectedItem(bu.county);
-        CertStatusComboBox.setSelectedItem(bu.cert);
-        activeCheckBox.setSelected(bu.enabled);
-        unitDescriptionTextArea.setText(bu.unitDescription);
-        
-        unitNumberTextBox.setText(bu.unitNumber);
-        certificationDateTextBox.setText(bu.certDate == null ? "" : Global.mmddyyyy.format(bu.certDate));
-        caseReferenceTextBox.setText(bu.caseRefSequence == null ? "" : bu.caseRefYear + "-" + bu.caseRefSection + "-" + bu.caseRefMonth + "-" + bu.caseRefSequence);
-        jurisdictionTextBox.setText(bu.jurisdiction);
-        buCodeTextBox.setText(bu.lGroup);
-        strikeCheckBox.setSelected(false);
-        notesTextArea.setText(bu.notes);
-    }
+//    private void loadData(String id) {
+//        BargainingUnit bu = BargainingUnit.getBUbyID(id);
+//        
+//        employerNumberTextBox.setText(bu.employerNumber);
+//        employerNameTextBox.setText(bu.buEmployerName);
+//        unionTextBox.setText(bu.lUnion);
+//        localTextBox.setText(bu.local);
+//        countyComboBox.setSelectedItem(bu.county);
+//        CertStatusComboBox.setSelectedItem(bu.cert);
+//        activeCheckBox.setSelected(bu.enabled);
+//        unitDescriptionTextArea.setText(bu.unitDescription);
+//        
+//        unitNumberTextBox.setText(bu.unitNumber);
+//        certificationDateTextBox.setText(bu.certDate == null ? "" : Global.mmddyyyy.format(bu.certDate));
+//        caseReferenceTextBox.setText(bu.caseRefSequence == null ? "" : bu.caseRefYear + "-" + bu.caseRefSection + "-" + bu.caseRefMonth + "-" + bu.caseRefSequence);
+//        jurisdictionTextBox.setText(bu.jurisdiction);
+//        buCodeTextBox.setText(bu.lGroup);
+//        strikeCheckBox.setSelected(false);
+//        notesTextArea.setText(bu.notes);
+//    }
     
     private void disableAll() {
         employerNumberTextBox.setEnabled(false);
@@ -149,7 +145,6 @@ public class BUInformationUpdateDialog extends javax.swing.JDialog {
     private void saveInformation() {
         BargainingUnit buUpdate = new BargainingUnit();
         
-        buUpdate.id = Integer.valueOf(id);
         buUpdate.employerNumber = employerNumberTextBox.getText();
         buUpdate.buEmployerName = employerNameTextBox.getText();
         buUpdate.lUnion = unionTextBox.getText();
@@ -179,7 +174,7 @@ public class BUInformationUpdateDialog extends javax.swing.JDialog {
         buUpdate.strike = strikeCheckBox.isSelected();
         buUpdate.notes = notesTextArea.getText().trim();
         
-        BargainingUnit.updateBUByID(buUpdate);
+        BargainingUnit.createBU(buUpdate);
         
     }
     
@@ -240,7 +235,6 @@ public class BUInformationUpdateDialog extends javax.swing.JDialog {
         strikeCheckBox = new javax.swing.JCheckBox();
         updateButton = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        deleteButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -281,31 +275,29 @@ public class BUInformationUpdateDialog extends javax.swing.JDialog {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel8))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(employerNumberTextBox)
+                            .addComponent(employerNameTextBox)
+                            .addComponent(unionTextBox)
+                            .addComponent(localTextBox)
+                            .addComponent(countyComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(CertStatusComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel9)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel7)
-                                    .addComponent(jLabel8))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(employerNumberTextBox)
-                                    .addComponent(employerNameTextBox)
-                                    .addComponent(unionTextBox)
-                                    .addComponent(localTextBox)
-                                    .addComponent(countyComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(CertStatusComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(jPanel4Layout.createSequentialGroup()
-                                        .addComponent(activeCheckBox)
-                                        .addGap(0, 0, Short.MAX_VALUE)))))
-                        .addContainerGap())))
+                                .addComponent(activeCheckBox)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
+                .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -412,7 +404,7 @@ public class BUInformationUpdateDialog extends javax.swing.JDialog {
                                     .addComponent(strikeCheckBox)
                                     .addGap(0, 0, Short.MAX_VALUE))))
                         .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE))
                     .addContainerGap())
             );
             jPanel5Layout.setVerticalGroup(
@@ -448,24 +440,17 @@ public class BUInformationUpdateDialog extends javax.swing.JDialog {
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
             );
 
-            updateButton.setText("Update");
+            updateButton.setText("Save");
             updateButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     updateButtonActionPerformed(evt);
                 }
             });
 
-            jButton2.setText("Close");
+            jButton2.setText("Cancel");
             jButton2.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     jButton2ActionPerformed(evt);
-                }
-            });
-
-            deleteButton.setText("Delete");
-            deleteButton.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    deleteButtonActionPerformed(evt);
                 }
             });
 
@@ -479,15 +464,15 @@ public class BUInformationUpdateDialog extends javax.swing.JDialog {
                         .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createSequentialGroup()
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(jPanel2Layout.createSequentialGroup()
-                                    .addGap(153, 153, 153)
-                                    .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
+                                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(0, 0, Short.MAX_VALUE))
+                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                    .addGap(271, 271, 271)
                                     .addComponent(updateButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                     .addContainerGap())
             );
@@ -503,8 +488,7 @@ public class BUInformationUpdateDialog extends javax.swing.JDialog {
                     .addGap(18, 18, 18)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(updateButton)
-                        .addComponent(jButton2)
-                        .addComponent(deleteButton))
+                        .addComponent(jButton2))
                     .addContainerGap())
             );
 
@@ -516,7 +500,7 @@ public class BUInformationUpdateDialog extends javax.swing.JDialog {
             );
             layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             );
 
             pack();
@@ -527,39 +511,15 @@ public class BUInformationUpdateDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_certificationDateTextBoxMouseClicked
 
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
-        if(updateButton.getText().equals("Update")) {
-            updateButton.setText("Save");
-            jButton2.setText("Cancel");
-            enableAll();
-        } else if(updateButton.getText().equals("Save")) {
-            updateButton.setText("Update");
-            jButton2.setText("Close");
-            saveInformation();
-            disableAll();
-        }
+        saveInformation();
+        disableAll();
+        dispose();
     }//GEN-LAST:event_updateButtonActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        if(jButton2.getText().equals("Close")) {
-            dispose();
-        } else if(jButton2.getText().equals("Cancel")) {
-            loadData(id);
-            disableAll();
-            jButton2.setText("Close");
-            updateButton.setText("Update");
-        }
+        disableAll();
+        dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
-        //confirm delete --> active -> 0
-        RemoveBUDialog inactiveBU = new RemoveBUDialog((JFrame) Global.root.getParent(), true, id);
-        if(inactiveBU.isRemoved()) {
-            inactiveBU.dispose();
-            dispose();
-        } else {
-            inactiveBU.dispose();
-        }
-    }//GEN-LAST:event_deleteButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> CertStatusComboBox;
@@ -568,7 +528,6 @@ public class BUInformationUpdateDialog extends javax.swing.JDialog {
     private javax.swing.JTextField caseReferenceTextBox;
     private com.alee.extended.date.WebDateField certificationDateTextBox;
     private javax.swing.JComboBox<String> countyComboBox;
-    private javax.swing.JButton deleteButton;
     private javax.swing.JTextField employerNameTextBox;
     private javax.swing.JTextField employerNumberTextBox;
     private javax.swing.JButton jButton2;

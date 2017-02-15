@@ -44,6 +44,7 @@ import parker.serb.admin.SystemMontiorDialog;
 import parker.serb.adminDBMaintenance.AdminMainMenuPanel;
 import parker.serb.bookmarkProcessing.AnnualReportTwoDatePanel;
 import parker.serb.bunumber.BUInformationUpdateDialog;
+import parker.serb.bunumber.BUNumberFileAddUpdateDeleteDialog;
 import parker.serb.letterQueue.LetterQueuePanel;
 import parker.serb.login.ExitVerification;
 import parker.serb.mailLogViewer.MailLogViewerPanel;
@@ -2011,6 +2012,7 @@ public class RootPanel extends javax.swing.JFrame {
 
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
         Audit.addAuditEntry("Clicked BU Information");
+        new BUNumberFileAddUpdateDeleteDialog((JFrame) this.getRootPane().getParent(), true);
 //        new BUInformationUpdateDialog((JFrame) this.getRootPane().getParent(), true);
     }//GEN-LAST:event_jMenuItem8ActionPerformed
 

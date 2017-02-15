@@ -1153,7 +1153,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
     private void barginingUnitNoTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_barginingUnitNoTextBoxMouseClicked
         if(evt.getClickCount() == 2 && evt.getButton() != MouseEvent.BUTTON3) {
             if(barginingUnitNoTextBox.isEnabled()) {
-                buNumberSearch search = new buNumberSearch((JFrame) Global.root.getRootPane().getParent(), true, employerNumberTextBox.getText().trim(), barginingUnitNoTextBox.getText().trim());
+                buNumberSearch search = new buNumberSearch((JFrame) Global.root.getRootPane().getParent(), true, employerNumberTextBox.getText().trim(), barginingUnitNoTextBox.getText().trim(), "");
                 barginingUnitNoTextBox.setText(search.getBuNumber());
                 barginingUnitNoTextBox.setCaretPosition(0);
                 if(employerNumberTextBox.getText().equals("")) {
@@ -1161,9 +1161,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
                 }
                 search.dispose();
             }
-        } else {
-            clearData(barginingUnitNoTextBox, evt);
-        }
+        } 
     }//GEN-LAST:event_barginingUnitNoTextBoxMouseClicked
 
     private void turnInDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_turnInDateTextBoxMouseClicked

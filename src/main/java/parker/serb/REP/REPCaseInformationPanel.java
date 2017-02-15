@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
 import parker.serb.bunumber.buNumberSearch;
@@ -29,6 +30,7 @@ import parker.serb.sql.REPCaseStatus;
 import parker.serb.sql.REPCaseType;
 import parker.serb.sql.RelatedCase;
 import parker.serb.sql.User;
+import parker.serb.util.ClearDataDialog;
 import parker.serb.util.ClearDateDialog;
 import parker.serb.util.NumberFormatService;
 
@@ -1199,9 +1201,9 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_actualClerksClosedDateMouseClicked
 
     private void bargainingUnitNumberTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bargainingUnitNumberTextBoxMouseClicked
-        if(evt.getClickCount() == 2) {
+        if(evt.getClickCount() == 2 && evt.getButton() == MouseEvent.BUTTON3) {
             if(bargainingUnitNumberTextBox.isEnabled()) {
-                buNumberSearch search = new buNumberSearch((JFrame) Global.root.getRootPane().getParent(), true, employerIDNumberTextBox.getText().trim(), bargainingUnitNumberTextBox.getText().trim());
+                buNumberSearch search = new buNumberSearch((JFrame) Global.root.getRootPane().getParent(), true, employerIDNumberTextBox.getText().trim(), bargainingUnitNumberTextBox.getText().trim(), bargainingUnitNameTextBox.getText().trim());
                 bargainingUnitNumberTextBox.setText(search.getBuNumber());
                 bargainingUnitNameTextBox.setText(search.getUnitDesc());
                 bargainingUnitNameTextBox.setCaretPosition(0);
@@ -1211,7 +1213,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
                 }
                 search.dispose();
             } 
-        }
+        } 
     }//GEN-LAST:event_bargainingUnitNumberTextBoxMouseClicked
 
     private void bargainingUnitNumberTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bargainingUnitNumberTextBoxActionPerformed

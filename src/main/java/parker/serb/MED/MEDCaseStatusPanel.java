@@ -1082,7 +1082,7 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
     private void bargainingUnitTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bargainingUnitTextBoxMouseClicked
         if(evt.getClickCount() == 2) {
             if(bargainingUnitTextBox.isEnabled()) {
-                buNumberSearch search = new buNumberSearch((JFrame) Global.root.getRootPane().getParent(), true, employerIDNumberTextBox.getText().trim(), bargainingUnitTextBox.getText().trim());
+                buNumberSearch search = new buNumberSearch((JFrame) Global.root.getRootPane().getParent(), true, employerIDNumberTextBox.getText().trim(), bargainingUnitTextBox.getText().trim(), "");
                 bargainingUnitTextBox.setText(search.getBuNumber());
                 setBUNumberCheckBoxes(search.getCertStatus() != null ? search.getCertStatus() : "");
                 if(employerIDNumberTextBox.getText().equals("")) {
