@@ -40,19 +40,14 @@ public class REPLetterDialog extends javax.swing.JDialog {
     private void loadDropDowns() {
         loadLetters();
         loadDirectives();
-        loadMemos1();
+        loadMemos2();
         loadAgendas();
         loadMiscDocs();
-
-        DefaultComboBoxModel dt = new DefaultComboBoxModel();
-        memosComboBox2.setModel(dt);
-        memosComboBox2.addItem(new Item<>("0", ""));
     }
 
     private void addListeners() {
         lettersComboBox.addItemListener((ItemEvent e) -> {
             directivesComboBox.setSelectedItem(new Item<>("0", ""));
-            memosComboBox1.setSelectedItem("");
             memosComboBox2.setSelectedItem(new Item<>("0", ""));
             agendaComboBox.setSelectedItem(new Item<>("0", ""));
             miscComboBox.setSelectedItem(new Item<>("0", ""));
@@ -61,7 +56,6 @@ public class REPLetterDialog extends javax.swing.JDialog {
 
         directivesComboBox.addItemListener((ItemEvent e) -> {
             lettersComboBox.setSelectedItem(new Item<>("0", ""));
-            memosComboBox1.setSelectedItem("");
             memosComboBox2.setSelectedItem(new Item<>("0", ""));
             agendaComboBox.setSelectedItem(new Item<>("0", ""));
             miscComboBox.setSelectedItem(new Item<>("0", ""));
@@ -89,7 +83,6 @@ public class REPLetterDialog extends javax.swing.JDialog {
         agendaComboBox.addItemListener((ItemEvent e) -> {
             lettersComboBox.setSelectedItem(new Item<>("0", ""));
             directivesComboBox.setSelectedItem(new Item<>("0", ""));
-            memosComboBox1.setSelectedItem("");
             memosComboBox2.setSelectedItem(new Item<>("0", ""));
             miscComboBox.setSelectedItem(new Item<>("0", ""));
             enableGenerateButton();
@@ -99,7 +92,6 @@ public class REPLetterDialog extends javax.swing.JDialog {
             agendaComboBox.setSelectedItem(new Item<>("0", ""));
             lettersComboBox.setSelectedItem(new Item<>("0", ""));
             directivesComboBox.setSelectedItem(new Item<>("0", ""));
-            memosComboBox1.setSelectedItem("");
             memosComboBox2.setSelectedItem(new Item<>("0", ""));
             enableGenerateButton();
         });
@@ -129,6 +121,7 @@ public class REPLetterDialog extends javax.swing.JDialog {
         directivesComboBox.setSelectedItem(new Item<>("0", ""));
     }
 
+    @Deprecated
     private void loadMemos1() {
         memosComboBox1.removeAllItems();
         memosComboBox1.addItem("");
@@ -144,8 +137,10 @@ public class REPLetterDialog extends javax.swing.JDialog {
         DefaultComboBoxModel dt = new DefaultComboBoxModel();
         memosComboBox2.setModel(dt);
         memosComboBox2.addItem(new Item<>("0", ""));
+        List<SMDSDocuments> letterList = null;
 
-        List<SMDSDocuments> letterList = SMDSDocuments.loadDocumentNamesByTypeSectionGroup("REP", "Memo", memosComboBox1.getSelectedItem().toString());
+        letterList = SMDSDocuments.loadRepMemos(memosComboBox1.getSelectedItem().toString().trim());
+
         for (SMDSDocuments letter : letterList) {
             memosComboBox2.addItem(new Item<>(String.valueOf(letter.id), letter.description));
         }
@@ -256,9 +251,12 @@ public class REPLetterDialog extends javax.swing.JDialog {
 
         jLabel4.setText("Memos");
 
+        memosComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "AC", "All Types", "Mail Ballot", "JTAC", "On-Site", "RBT", "RC", "RD", "REVOKE", "UC", "VR" }));
+
         jLabel5.setText("Agenda");
 
         generateButton.setText("Generate");
+        generateButton.setEnabled(false);
         generateButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 generateButtonActionPerformed(evt);

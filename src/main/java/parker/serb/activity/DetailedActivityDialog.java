@@ -6,7 +6,6 @@
 package parker.serb.activity;
 
 import java.util.List;
-import javax.swing.JFrame;
 import parker.serb.Global;
 import parker.serb.sql.Activity;
 import parker.serb.sql.ActivityType;
@@ -32,27 +31,27 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         passedID = id;
-        displayUpdateButton();
+        //displayUpdateButton();
         loadComboBoxes();
         loadInformation(id);
         setLocationRelativeTo(parent);
         setVisible(true);
     }
-    
+
     private void displayUpdateButton() {
         if(!Global.activeUserRoles.contains("Admin")) {
             updateButton.setVisible(false);
         }
     }
-    
+
     private void loadComboBoxes() {
         loadToComboBox();
         loadTypeComboBox();
     }
-    
+
     private void loadToComboBox() {
         List userList = null;
-                
+
         switch (Global.activeSection) {
             case "ULP":  userList = User.loadSectionDropDowns("ULP"); break;
             case "REP":  userList = User.loadSectionDropDowns("REP"); break;
@@ -63,55 +62,55 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
             case "Hearings":  userList = User.loadSectionDropDowns("Hearings"); break;
             default: break;
         }
-        
+
         toComboBox.setMaximumRowCount(6);
-        
+
         toComboBox.removeAllItems();
-        
+
         toComboBox.addItem("");
-        
+
         for(int i = 0; i < userList.size(); i++) {
             toComboBox.addItem(userList.get(i).toString());
         }
     }
-    
+
     private void loadTypeComboBox() {
         List typeList = ActivityType.loadAllActivityTypeBySection(Global.activeSection);
-        
+
         typeComboBox.setMaximumRowCount(10);
-        
+
         typeComboBox.removeAllItems();
-        
+
         typeComboBox.addItem("");
-        
+
         for(int i = 0; i < typeList.size(); i++) {
             ActivityType item = (ActivityType) typeList.get(i);
             typeComboBox.addItem(item.descriptionFull);
         }
     }
-    
+
     private void loadInformation(String id) {
         orgActivity = Activity.loadActivityByID(id);
-        
+
         dateTextBox.setText(orgActivity.date);
         actionTextBox.setText(orgActivity.action);
         fromTextBox.setText(orgActivity.from);
         toComboBox.setSelectedItem(orgActivity.to);
         typeComboBox.setSelectedItem(orgActivity.type);
         commentTextArea.setText(orgActivity.comment);
-        
+
         if(orgActivity.fileName == null) {
             viewFileButton.setVisible(false);
         } else {
             fileName = orgActivity.fileName;
         }
     }
-    
+
     private void enableInputs(boolean value) {
         typeComboBox.setEnabled(value);
         commentTextArea.setEditable(value);
     }
-    
+
     private void updateAction() {
         updatedActivity.id = orgActivity.id;
         updatedActivity.action = actionTextBox.getText().trim();
@@ -119,12 +118,12 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
         updatedActivity.from = fromTextBox.getText();
         updatedActivity.to = toComboBox.getSelectedItem() == null ? "" : toComboBox.getSelectedItem().toString();
         updatedActivity.type = typeComboBox.getSelectedItem().toString();
-        
+
         Activity.updateActivtyEntry(updatedActivity);
     }
-    
+
     private void updateFileName() {
-        if(orgActivity.type != null) 
+        if(orgActivity.type != null)
         {
             if(!orgActivity.type.equals(typeComboBox.getSelectedItem().toString())) {
                 if(orgActivity.fileName != null) {
