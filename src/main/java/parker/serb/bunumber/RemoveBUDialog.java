@@ -18,6 +18,7 @@ public class RemoveBUDialog extends javax.swing.JDialog {
 
     String id;
     boolean removed = false;
+    
     /**
      * Creates new form RemoveActivityEntryDialog
      */
@@ -32,8 +33,6 @@ public class RemoveBUDialog extends javax.swing.JDialog {
     public boolean isRemoved() {
         return removed;
     }
-    
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -122,7 +121,6 @@ public class RemoveBUDialog extends javax.swing.JDialog {
         removed = true;
         setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
