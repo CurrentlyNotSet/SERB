@@ -48,8 +48,6 @@ public class AnnualReportTwoDatePanel extends javax.swing.JDialog {
             FileService.openAnnualReport(docName);
             long lEndTime = System.currentTimeMillis();
             System.out.println("Report Generation Time: " + NumberFormatService.convertLongToTime(lEndTime - lStartTime));
-        } else {
-            
         }
     }
 

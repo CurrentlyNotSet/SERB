@@ -19,11 +19,11 @@ import parker.serb.util.SlackNotification;
  * @author parkerjohnston
  */
 public class REPCase {
-    
+
     public int id;
     public boolean active;
     public String caseYear;
-    public String caseType; 
+    public String caseType;
     public String caseMonth;
     public String caseNumber;
     public String type;
@@ -75,7 +75,7 @@ public class REPCase {
     public int hearingPersonID;
     public String boardStatusNote;
     public String boardStatusBlurb;
-    
+
     //electionData
     public boolean multicaseElection;
     public String electionType1;
@@ -95,7 +95,7 @@ public class REPCase {
     public Timestamp eligibilityListDate;
     public Timestamp preElectionConfDate;
     public String selfReleasing;
-    
+
     //results
     public String resultApproxNumberEligibleVotes;
     public String resultVoidBallots;
@@ -109,7 +109,7 @@ public class REPCase {
     public String resultChallengedBallots;
     public String resultTotalBallotsCast;
     public String resultWHoPrevailed;
-    
+
     //professional
     public String professionalApproxNumberEligible;
     public String professionalYES;
@@ -126,7 +126,7 @@ public class REPCase {
     public String professionalVotesCastForRivalEEO1;
     public String professionalVotesCastForRivalEEO2;
     public String professionalVotesCastForRivalEEO3;
-    
+
     //nonprofessional
     public String nonprofessionalApproxNumberEligible;
     public String nonprofessionalYES;
@@ -143,7 +143,7 @@ public class REPCase {
     public String nonprofessionalVotesCastForRivalEEO1;
     public String nonprofessionalVotesCastForRivalEEO2;
     public String nonprofessionalVotesCastForRivalEEO3;
-    
+
     //combined
     public String combinedApproxNumberEligible;
     public String combinedYES;
@@ -160,8 +160,13 @@ public class REPCase {
     public String combinedVotesCastForRivalEEO1;
     public String combinedVotesCastForRivalEEO2;
     public String combinedVotesCastForRivalEEO3;
-    
-    
+
+    //Board Meeting Info
+    public String agendaItemNumber;
+    public String boardMeetingRecommendation;
+    public Date boardMeetingMemoDate;
+
+
     /**
      * Load a list of the most recent 250 REP case numbers
      * @return list of rep case numbers
@@ -179,12 +184,12 @@ public class REPCase {
                     + " caseMonth,"
                     + " caseNumber"
                     + " from REPCase"
-                    + " Order By FileDate DESC";
+                    + " Order By FileDate DESC, caseYear DESC, caseMonth DESC, caseNumber DESC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
             ResultSet caseNumberRS = preparedStatement.executeQuery();
-            
+
             while(caseNumberRS.next()) {
                 String createdCaseNumber = caseNumberRS.getString("caseYear")
                         + "-" +
@@ -193,28 +198,28 @@ public class REPCase {
                         caseNumberRS.getString("caseMonth")
                         + "-" +
                         caseNumberRS.getString("caseNumber");
-                        
+
                 caseNumberList.add(createdCaseNumber);
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadREPCaseNumbers();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return caseNumberList;
     }
-    
+
     public static boolean validateCaseNumber(String fullCaseNumber) {
         String[] caseNumberParts = fullCaseNumber.split("-");
         boolean valid = false;
-        
+
         if(caseNumberParts.length != 4) {
             return false;
         }
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
@@ -231,31 +236,31 @@ public class REPCase {
             preparedStatement.setString(2, caseNumberParts[1]);
             preparedStatement.setString(3, caseNumberParts[2]);
             preparedStatement.setString(4, caseNumberParts[3]);
-            
+
             ResultSet validRS = preparedStatement.executeQuery();
-            
+
             validRS.next();
-            
+
             valid = validRS.getInt("results") > 0;
-            
+
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 validateCaseNumber(fullCaseNumber);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return valid;
     }
-    
+
     /**
      * Loads the notes that are related to the case
      * @return a stringified note
      */
     public static String loadNote() {
         String note = null;
-          
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
@@ -274,22 +279,22 @@ public class REPCase {
             preparedStatement.setString(4, Global.caseNumber);
 
             ResultSet caseNumberRS = preparedStatement.executeQuery();
-            
+
             caseNumberRS.next();
-            
+
             note = caseNumberRS.getString("note");
 
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadNote();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return note;
     }
-    
+
     /**
      * Updates the note that is related to the case number
      * @param note the new note value to be stored
@@ -314,22 +319,22 @@ public class REPCase {
             preparedStatement.setString(5, Global.caseNumber);
 
             preparedStatement.executeUpdate();
-            
+
             Audit.addAuditEntry("Updated Note for " + NumberFormatService.generateFullCaseNumber());
             Activity.addActivty("Updated Note", null);
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateNote(note);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     /**
      * Creates a new REPCase entry
-     * @param caseNumber the case number to be created 
+     * @param caseNumber the case number to be created
      */
     public static void createCase(String caseYear, String caseType, String caseMonth, String caseNumber) {
         Statement stmt = null;
@@ -346,7 +351,7 @@ public class REPCase {
             preparedStatement.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
 
             int success = preparedStatement.executeUpdate();
-            
+
             if(success == 1) {
                 String fullCaseNumber = caseYear
                         + "-"
@@ -355,23 +360,23 @@ public class REPCase {
                         + caseMonth
                         + "-"
                         + caseNumber;
-                        
+
                 CaseNumber.updateNextCaseNumber(caseYear, caseType, String.valueOf(Integer.valueOf(caseNumber) + 1));
                 Audit.addAuditEntry("Created Case: " + fullCaseNumber);
                 Activity.addNewCaseActivty(fullCaseNumber, "Case was Filed and Started");
                 Global.root.getrEPHeaderPanel1().loadCases();
-                Global.root.getrEPHeaderPanel1().getjComboBox2().setSelectedItem(fullCaseNumber); 
+                Global.root.getrEPHeaderPanel1().getjComboBox2().setSelectedItem(fullCaseNumber);
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 createCase(caseYear, caseType, caseMonth, caseNumber);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     /**
      * Load information that is to be displayed in the header.  Dates are
      * formatted before being returned
@@ -379,7 +384,7 @@ public class REPCase {
      */
     public static REPCase loadHeaderInformation() {
         REPCase rep = null;
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
@@ -401,7 +406,7 @@ public class REPCase {
             preparedStatement.setString(4, Global.caseNumber);
 
             ResultSet caseHeader = preparedStatement.executeQuery();
-            
+
             if(caseHeader.next()) {
                 rep = new REPCase();
                 rep.fileDate = caseHeader.getTimestamp("fileDate");
@@ -414,16 +419,16 @@ public class REPCase {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadHeaderInformation();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return rep;
     }
-    
+
     public static REPCase loadCaseInformation() {
         REPCase rep = null;
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
@@ -468,7 +473,7 @@ public class REPCase {
             preparedStatement.setString(4, Global.caseNumber);
 
             ResultSet caseInformation = preparedStatement.executeQuery();
-            
+
             if(caseInformation.next()) {
                 rep = new REPCase();
                 rep.type = caseInformation.getString("type");
@@ -482,9 +487,9 @@ public class REPCase {
                 rep.boardCertified = caseInformation.getBoolean("boardCertified");
                 rep.deemedCertified = caseInformation.getBoolean("deemedCertified");
                 rep.certificationRevoked = caseInformation.getBoolean("certificationRevoked");
-                
+
                 rep.note = caseInformation.getString("note");
-                
+
                 rep.fileDate = caseInformation.getTimestamp("fileDate");
                 rep.amendedFiliingDate = caseInformation.getTimestamp("amendedFilingDate");
                 rep.alphaListDate = caseInformation.getTimestamp("alphaListDate");
@@ -505,16 +510,16 @@ public class REPCase {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadCaseInformation();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return rep;
     }
-    
+
     public static REPCase loadCaseDetails(String caseYear, String caseType, String caseMonth, String caseNumber) {
         REPCase rep = null;
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
@@ -532,13 +537,13 @@ public class REPCase {
             preparedStatement.setString(4, caseNumber);
 
             ResultSet caseInformation = preparedStatement.executeQuery();
-            
+
             if(caseInformation.next()) {
                 rep = new REPCase();
                 rep.id =  caseInformation.getInt("id");
                 rep.active = caseInformation.getBoolean("active");
                 rep.caseYear = caseInformation.getString("caseYear");
-                rep.caseType = caseInformation.getString("caseType"); 
+                rep.caseType = caseInformation.getString("caseType");
                 rep.caseMonth = caseInformation.getString("caseMonth");
                 rep.caseNumber = caseInformation.getString("caseNumber");
                 rep.type = caseInformation.getString("type");
@@ -567,7 +572,7 @@ public class REPCase {
                 rep.actualREPClosedDate = caseInformation.getTimestamp("actualREPClosedDate");
                 rep.REPClosedUser = caseInformation.getInt("REPClosedUser");
                 rep.actualClerksClosedDate = caseInformation.getTimestamp("actualClerksClosedDate");
-                rep.clerksClosedUser = caseInformation.getInt("clerksClosedUser");                
+                rep.clerksClosedUser = caseInformation.getInt("clerksClosedUser");
                 rep.fileBy = caseInformation.getString("fileBy");
                 rep.bargainingUnitIncluded = caseInformation.getString("bargainingUnitIncluded");
                 rep.bargainingUnitExcluded = caseInformation.getString("bargainingUnitExcluded");
@@ -641,7 +646,7 @@ public class REPCase {
                 rep.professionalVotesCastForRivalEEO1 = caseInformation.getString("professionalVotesCastForRivalEEO1");
                 rep.professionalVotesCastForRivalEEO2 = caseInformation.getString("professionalVotesCastForRivalEEO2");
                 rep.professionalVotesCastForRivalEEO3 = caseInformation.getString("professionalVotesCastForRivalEEO3");
-            
+
                 //Non-Professional
                 rep.nonprofessionalApproxNumberEligible = caseInformation.getString("nonprofessionalApproxNumberEligible");
                 rep.nonprofessionalYES = caseInformation.getString("nonprofessionalYES");
@@ -680,16 +685,200 @@ public class REPCase {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadCaseDetails(caseYear, caseType, caseMonth, caseNumber);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return rep;
     }
-    
+
+    public static List<REPCase> loadCaseDetailsForAgenda(Date boardMeetingDate) {
+        List<REPCase> REPCaseList = new ArrayList<>();
+
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT REPCase.*, BoardMeeting.boardMeetingDate, BoardMeeting.agendaItemNumber, "
+                    + "BoardMeeting.recommendation AS boardMeetingRecommendation, "
+                    + "BoardMeeting.memoDate "
+                    + "FROM REPCase LEFT JOIN BoardMeeting ON "
+                    + "REPCase.caseYear = BoardMeeting.caseYear AND "
+                    + "REPCase.caseType = BoardMeeting.caseType AND "
+                    + "REPCase.caseMonth = BoardMeeting.caseMonth AND "
+                    + "REPCase.caseNumber = BoardMeeting.caseNumber "
+                    + "WHERE BoardMeeting.boardMeetingDate =  ? "
+                    + "ORDER BY ABS(BoardMeeting.agendaItemNumber) ASC, "
+                    + "REPCase.caseYear ASC, REPCase.caseMonth ASC, REPCase.caseNumber ASC";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+
+            preparedStatement.setDate(1, new java.sql.Date(boardMeetingDate.getTime()));
+
+            ResultSet caseInformation = preparedStatement.executeQuery();
+
+            while(caseInformation.next()) {
+                REPCase rep = new REPCase();
+                rep.id =  caseInformation.getInt("id");
+                rep.active = caseInformation.getBoolean("active");
+                rep.caseYear = caseInformation.getString("caseYear");
+                rep.caseType = caseInformation.getString("caseType");
+                rep.caseMonth = caseInformation.getString("caseMonth");
+                rep.caseNumber = caseInformation.getString("caseNumber");
+                rep.type = caseInformation.getString("type");
+                rep.status1 = caseInformation.getString("status1");
+                rep.status2 = caseInformation.getString("status2");
+                rep.currentOwnerID = caseInformation.getInt("currentOwnerID");
+                rep.county = caseInformation.getString("county");
+                rep.employerIDNumber = caseInformation.getString("employerIDNumber");
+                rep.deptInState = caseInformation.getString("deptInState");
+                rep.bargainingUnitNumber = caseInformation.getString("bargainingUnitNumber");
+                rep.boardCertified = caseInformation.getBoolean("boardCertified");
+                rep.deemedCertified = caseInformation.getBoolean("deemedCertified");
+                rep.certificationRevoked = caseInformation.getBoolean("certificationRevoked");
+                rep.note = caseInformation.getString("note");
+                rep.fileDate = caseInformation.getTimestamp("fileDate");
+                rep.amendedFiliingDate = caseInformation.getTimestamp("amendedFilingDate");
+                rep.alphaListDate = caseInformation.getTimestamp("alphaListDate");
+                rep.finalBoardDate = caseInformation.getTimestamp("finalBoardDate");
+                rep.registrationLetterSent = caseInformation.getTimestamp("registrationLetterSent");
+                rep.dateOfAppeal = caseInformation.getTimestamp("dateOfAppeal");
+                rep.courtClosedDate = caseInformation.getTimestamp("courtClosedDate");
+                rep.returnSOIDueDate = caseInformation.getTimestamp("returnSOIDueDate");
+                rep.actualSOIReturnDate = caseInformation.getTimestamp("actualSOIReturnDate");
+                rep.SOIReturnInitials = caseInformation.getInt("SOIReturnIntials");
+                rep.REPClosedCaseDueDate = caseInformation.getTimestamp("REPClosedCaseDueDate");
+                rep.actualREPClosedDate = caseInformation.getTimestamp("actualREPClosedDate");
+                rep.REPClosedUser = caseInformation.getInt("REPClosedUser");
+                rep.actualClerksClosedDate = caseInformation.getTimestamp("actualClerksClosedDate");
+                rep.clerksClosedUser = caseInformation.getInt("clerksClosedUser");
+                rep.fileBy = caseInformation.getString("fileBy");
+                rep.bargainingUnitIncluded = caseInformation.getString("bargainingUnitIncluded");
+                rep.bargainingUnitExcluded = caseInformation.getString("bargainingUnitExcluded");
+                rep.optInIncluded = caseInformation.getString("optInIncluded");
+                rep.professionalNonProfessional = caseInformation.getBoolean("professionalNonProfessional");
+                rep.professionalIncluded = caseInformation.getString("professionalIncluded");
+                rep.professionalExcluded = caseInformation.getString("professionalExcluded");
+                rep.nonProfessionalIncluded = caseInformation.getString("nonProfessionalIncluded");
+                rep.nonProfessionalExcluded = caseInformation.getString("nonProfessionalExcluded");
+                rep.toReflect = caseInformation.getString("toReflect");
+                rep.typeFiledBy = caseInformation.getString("typeFiledBy");
+                rep.typeFiledVia = caseInformation.getString("typeFiledVia");
+                rep.positionStatementFiledBy = caseInformation.getString("positionStatementFiledBy");
+                rep.EEONameChangeFrom = caseInformation.getString("EEONameChangeFrom");
+                rep.EEONameChangeTo = caseInformation.getString("EEONameChangeTo");
+                rep.ERNameChangeFrom = caseInformation.getString("ERNameChangeFrom");
+                rep.ERNameChangeTo = caseInformation.getString("ERNameChangeTo");
+                rep.boardActionType = caseInformation.getString("boardActionType");
+                rep.boardActionDate = caseInformation.getTimestamp("boardActionDate");
+                rep.hearingPersonID = caseInformation.getInt("hearingPersonID");
+                rep.boardStatusNote = caseInformation.getString("boardStatusNote");
+                rep.boardStatusBlurb = caseInformation.getString("boardStatusBlurb");
+
+                //electionData
+                rep.multicaseElection = caseInformation.getBoolean("multicaseElection");
+                rep.electionType1 = caseInformation.getString("electionType1");
+                rep.electionType2 = caseInformation.getString("electionType2");
+                rep.electionType3 = caseInformation.getString("electionType3");
+                rep.eligibilityDate = caseInformation.getTimestamp("eligibilityDate");
+                rep.ballotOne = caseInformation.getString("ballotOne");
+                rep.ballotTwo = caseInformation.getString("ballotTwo");
+                rep.ballotThree = caseInformation.getString("ballotThree");
+                rep.ballotFour = caseInformation.getString("ballotFour");
+                rep.mailKitDate = caseInformation.getTimestamp("mailKitDate");
+                rep.pollingStartDate = caseInformation.getTimestamp("pollingStartDate");
+                rep.pollingEndDate = caseInformation.getTimestamp("pollingEndDate");
+                rep.ballotsCountDay = caseInformation.getString("ballotsCountDay");
+                rep.ballotsCountDate = caseInformation.getTimestamp("ballotsCountDate");
+                rep.ballotsCountTime = caseInformation.getTimestamp("ballotsCountTime");
+                rep.eligibilityListDate = caseInformation.getTimestamp("eligibilityListDate");
+                rep.preElectionConfDate = caseInformation.getTimestamp("preElectionConfDate");
+                rep.selfReleasing = caseInformation.getString("selfReleasing");
+
+                //Results
+                rep.resultApproxNumberEligibleVotes = caseInformation.getString("resultApproxNumberEligibleVoters");
+                rep.resultVoidBallots = caseInformation.getString("resultVoidBallots");
+                rep.resultVotesCastForEEO = caseInformation.getString("resultVotesCastForEEO");
+                rep.resultVotesCastForIncumbentEEO = caseInformation.getString("resultVotesCastForIncumbentEEO");
+                rep.resultVotesCastForRivalEEO1 = caseInformation.getString("resultVotesCastForRivalEEO1");
+                rep.resultVotesCastForRivalEEO2 = caseInformation.getString("resultVotesCastForRivalEEO2");
+                rep.resultVotesCastForRivalEEO3 = caseInformation.getString("resultVotesCastForRivalEEO3");
+                rep.resultVotesCastForNoRepresentative = caseInformation.getString("resultVotesCastForNoRepresentative");
+                rep.resultValidVotesCounted = caseInformation.getString("resultValidVotesCounted");
+                rep.resultChallengedBallots = caseInformation.getString("resultChallengedBallots");
+                rep.resultTotalBallotsCast = caseInformation.getString("resultTotalBallotsCast");
+                rep.resultWHoPrevailed = caseInformation.getObject("resultWHoPrevailed") == null ? "" : CaseParty.getCasePartyByIDForElection(caseInformation.getInt("resultWHoPrevailed"));
+
+                //Professional
+                rep.professionalApproxNumberEligible = caseInformation.getString("professionalApproxNumberEligible");
+                rep.professionalYES = caseInformation.getString("professionalYES");
+                rep.professionalNO = caseInformation.getString("professionalNO");
+                rep.professionalChallenged = caseInformation.getString("professionalChallenged");
+                rep.professionalTotalVotes = caseInformation.getString("professionalTotalVotes");
+                rep.professionalOutcome = caseInformation.getString("professionalOutcome");
+                rep.professionalWhoPrevailed = caseInformation.getObject("professionalWHoPrevailed") == null ? "" : CaseParty.getCasePartyByIDForElection(caseInformation.getInt("professionalWhoPrevailed"));
+                rep.professionalVoidBallots = caseInformation.getString("professionalVoidBallots");
+                rep.professionalValidVotes = caseInformation.getString("professionalValidVotes");
+                rep.professionalVotesCastForNoRepresentative = caseInformation.getString("professionalVotesCastForNoRepresentative");
+                rep.professionalVotesCastForEEO = caseInformation.getString("professionalVotesCastForEEO");
+                rep.professionalVotesCastForIncumbentEEO = caseInformation.getString("professionalVotesCastForIncumbentEEO");
+                rep.professionalVotesCastForRivalEEO1 = caseInformation.getString("professionalVotesCastForRivalEEO1");
+                rep.professionalVotesCastForRivalEEO2 = caseInformation.getString("professionalVotesCastForRivalEEO2");
+                rep.professionalVotesCastForRivalEEO3 = caseInformation.getString("professionalVotesCastForRivalEEO3");
+
+                //Non-Professional
+                rep.nonprofessionalApproxNumberEligible = caseInformation.getString("nonprofessionalApproxNumberEligible");
+                rep.nonprofessionalYES = caseInformation.getString("nonprofessionalYES");
+                rep.nonprofessionalNO = caseInformation.getString("nonprofessionalNO");
+                rep.nonprofessionalChallenged = caseInformation.getString("nonprofessionalChallenged");
+                rep.nonprofessionalTotalVotes = caseInformation.getString("nonprofessionalTotalVotes");
+                rep.nonprofessionalOutcome = caseInformation.getString("nonprofessionalOutcome");
+                rep.nonprofessionalWhoPrevailed = caseInformation.getObject("nonprofessionalWhoPrevailed") == null ? "" : CaseParty.getCasePartyByIDForElection(caseInformation.getInt("nonprofessionalWHoPrevailed"));
+                rep.nonprofessionalVoidBallots = caseInformation.getString("nonprofessionalVoidBallots");
+                rep.nonprofessionalValidVotes = caseInformation.getString("nonprofessionalValidVotes");
+                rep.nonprofessionalVotesCastForNoRepresentative = caseInformation.getString("nonprofessionalVotesCastForNoRepresentative");
+                rep.nonprofessionalVotesCastForEEO = caseInformation.getString("nonprofessionalVotesCastForEEO");
+                rep.nonprofessionalVotesCastForIncumbentEEO = caseInformation.getString("nonprofessionalVotesCastForIncumbentEEO");
+                rep.nonprofessionalVotesCastForRivalEEO1 = caseInformation.getString("nonprofessionalVotesCastForRivalEEO1");
+                rep.nonprofessionalVotesCastForRivalEEO2 = caseInformation.getString("nonprofessionalVotesCastForRivalEEO2");
+                rep.nonprofessionalVotesCastForRivalEEO3 = caseInformation.getString("nonprofessionalVotesCastForRivalEEO3");
+
+                //Combined
+                rep.combinedApproxNumberEligible = caseInformation.getString("combinedApproxNumberEligible");
+                rep.combinedYES = caseInformation.getString("combinedYES");
+                rep.combinedlNO = caseInformation.getString("combinedNO");
+                rep.combinedChallenged = caseInformation.getString("combinedChallenged");
+                rep.combinedTotalVotes = caseInformation.getString("combinedTotalVotes");
+                rep.combinedOutcome = caseInformation.getString("combinedOutcome");
+                rep.combinedWhoPrevailed = caseInformation.getObject("combinedWhoPrevailed") == null ? "" : CaseParty.getCasePartyByIDForElection(caseInformation.getInt("combinedWHoPrevailed"));
+                rep.combinedVoidBallots = caseInformation.getString("combinedVoidBallots");
+                rep.combinedValidVotes = caseInformation.getString("combinedValidVotes");
+                rep.combinedVotesCastForNoRepresentative = caseInformation.getString("combinedVotesCastForNoRepresentative");
+                rep.combinedVotesCastForEEO = caseInformation.getString("combinedVotesCastForEEO");
+                rep.combinedVotesCastForIncumbentEEO = caseInformation.getString("combinedVotesCastForIncumbentEEO");
+                rep.combinedVotesCastForRivalEEO1 = caseInformation.getString("combinedVotesCastForRivalEEO1");
+                rep.combinedVotesCastForRivalEEO2 = caseInformation.getString("combinedVotesCastForRivalEEO2");
+                rep.combinedVotesCastForRivalEEO3 = caseInformation.getString("combinedVotesCastForRivalEEO3");
+
+                rep.agendaItemNumber = caseInformation.getString("agendaItemNumber") == null ? "" : caseInformation.getString("agendaItemNumber").trim();
+                rep.boardMeetingRecommendation = caseInformation.getString("boardMeetingRecommendation") == null ? "" : caseInformation.getString("boardMeetingRecommendation").trim();
+                rep.boardMeetingMemoDate = caseInformation.getTimestamp("memoDate");
+                REPCaseList.add(rep);
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadCaseDetailsForAgenda(boardMeetingDate);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return REPCaseList;
+    }
+
     public static REPCase loadCaseDetails() {
         REPCase rep = null;
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
@@ -725,7 +914,7 @@ public class REPCase {
             preparedStatement.setString(4, Global.caseNumber);
 
             ResultSet caseInformation = preparedStatement.executeQuery();
-            
+
             if(caseInformation.next()) {
                 rep = new REPCase();
                 rep.type = caseInformation.getString("type");
@@ -751,16 +940,16 @@ public class REPCase {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadCaseDetails();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return rep;
     }
-    
+
     public static REPCase loadBoardStatus() {
         REPCase rep = null;
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
@@ -783,7 +972,7 @@ public class REPCase {
             preparedStatement.setString(4, Global.caseNumber);
 
             ResultSet caseInformation = preparedStatement.executeQuery();
-            
+
             if(caseInformation.next()) {
                 rep = new REPCase();
                 rep.boardActionType = caseInformation.getString("boardActionType");
@@ -796,16 +985,16 @@ public class REPCase {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadBoardStatus();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return rep;
     }
-    
+
     public static REPCase loadElectionInformation() {
         REPCase rep = null;
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
@@ -856,7 +1045,7 @@ public class REPCase {
                     + " professionalVotesCastForRivalEEO1,"
                     + " professionalVotesCastForRivalEEO2,"
                     + " professionalVotesCastForRivalEEO3,"
-                    
+
                     + " nonprofessionalApproxNumberEligible,"
                     + " nonprofessionalYES,"
                     + " nonprofessionalNO,"
@@ -872,7 +1061,7 @@ public class REPCase {
                     + " nonprofessionalVotesCastForRivalEEO1,"
                     + " nonprofessionalVotesCastForRivalEEO2,"
                     + " nonprofessionalVotesCastForRivalEEO3,"
-                    
+
                     + " combinedApproxNumberEligible,"
                     + " combinedYES,"
                     + " combinedNO,"
@@ -888,7 +1077,7 @@ public class REPCase {
                     + " combinedVotesCastForRivalEEO1,"
                     + " combinedVotesCastForRivalEEO2,"
                     + " combinedVotesCastForRivalEEO3"
-                    
+
                     + " from REPCase where caseYear = ? "
                     + " AND caseType = ? "
                     + " AND caseMonth = ? "
@@ -901,7 +1090,7 @@ public class REPCase {
             preparedStatement.setString(4, Global.caseNumber);
 
             ResultSet caseInformation = preparedStatement.executeQuery();
-            
+
             if(caseInformation.next()) {
                 rep = new REPCase();
                 rep.multicaseElection = caseInformation.getBoolean("multicaseElection");
@@ -922,7 +1111,7 @@ public class REPCase {
                 rep.eligibilityListDate = caseInformation.getTimestamp("eligibilityListDate");
                 rep.preElectionConfDate = caseInformation.getTimestamp("preElectionConfDate");
                 rep.selfReleasing = caseInformation.getString("selfReleasing");
-                
+
                 rep.resultApproxNumberEligibleVotes = caseInformation.getString("resultApproxNumberEligibleVoters");
                 rep.resultVoidBallots = caseInformation.getString("resultVoidBallots");
                 rep.resultVotesCastForEEO = caseInformation.getString("resultVotesCastForEEO");
@@ -935,7 +1124,7 @@ public class REPCase {
                 rep.resultChallengedBallots = caseInformation.getString("resultChallengedBallots");
                 rep.resultTotalBallotsCast = caseInformation.getString("resultTotalBallotsCast");
                 rep.resultWHoPrevailed = caseInformation.getObject("resultWHoPrevailed") == null ? "" : CaseParty.getCasePartyByIDForElection(caseInformation.getInt("resultWHoPrevailed"));
-                
+
                 rep.professionalApproxNumberEligible = caseInformation.getString("professionalApproxNumberEligible");
                 rep.professionalYES = caseInformation.getString("professionalYES");
                 rep.professionalNO = caseInformation.getString("professionalNO");
@@ -951,7 +1140,7 @@ public class REPCase {
                 rep.professionalVotesCastForRivalEEO1 = caseInformation.getString("professionalVotesCastForRivalEEO1");
                 rep.professionalVotesCastForRivalEEO2 = caseInformation.getString("professionalVotesCastForRivalEEO2");
                 rep.professionalVotesCastForRivalEEO3 = caseInformation.getString("professionalVotesCastForRivalEEO3");
-            
+
                 rep.nonprofessionalApproxNumberEligible = caseInformation.getString("nonprofessionalApproxNumberEligible");
                 rep.nonprofessionalYES = caseInformation.getString("nonprofessionalYES");
                 rep.nonprofessionalNO = caseInformation.getString("nonprofessionalNO");
@@ -989,16 +1178,16 @@ public class REPCase {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadElectionInformation();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return rep;
     }
-    
+
     public static void updateBoardStatus(REPCase newCaseInformation, REPCase caseInformation) {
         REPCase rep = null;
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
@@ -1026,7 +1215,7 @@ public class REPCase {
             preparedStatement.setString(9, Global.caseNumber);
 
             int success = preparedStatement.executeUpdate();
-            
+
             if(success == 1) {
                 detailedBoardStatusDetailsSaveInformation(newCaseInformation, caseInformation);
             }
@@ -1034,15 +1223,15 @@ public class REPCase {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateBoardStatus(newCaseInformation, caseInformation);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void updateElectionInformation(REPCase newCaseInformation, REPCase caseInformation, String[] professional, String[] nonprofessional, String[] combined) {
         REPCase rep = null;
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
@@ -1078,7 +1267,7 @@ public class REPCase {
                     + " resultChallengedBallots = ?,"
                     + " resultTotalBallotsCast = ?,"
                     + " resultWhoPrevailed = ?,"
-                    
+
                     + " professionalApproxNumberEligible = ?,"
                     + " professionalYES = ?,"
                     + " professionalNO = ?,"
@@ -1094,7 +1283,7 @@ public class REPCase {
                     + " professionalVotesCastForRivalEEO1 = ?,"
                     + " professionalVotesCastForRivalEEO2 = ?,"
                     + " professionalVotesCastForRivalEEO3 = ?,"
-                    
+
                     + " nonprofessionalApproxNumberEligible = ?,"
                     + " nonprofessionalYES = ?,"
                     + " nonprofessionalNO = ?,"
@@ -1110,7 +1299,7 @@ public class REPCase {
                     + " nonprofessionalVotesCastForRivalEEO1 = ?,"
                     + " nonprofessionalVotesCastForRivalEEO2 = ?,"
                     + " nonprofessionalVotesCastForRivalEEO3 = ?,"
-                    
+
                     + " combinedApproxNumberEligible = ?,"
                     + " combinedYES = ?,"
                     + " combinedNO = ?,"
@@ -1135,22 +1324,22 @@ public class REPCase {
             preparedStatement.setBoolean(1, newCaseInformation.multicaseElection);
             preparedStatement.setString(2, newCaseInformation.electionType1);
             preparedStatement.setString(3, newCaseInformation.electionType2);
-            preparedStatement.setString(4, newCaseInformation.electionType3);   
-            preparedStatement.setTimestamp(5, newCaseInformation.eligibilityDate);  
-            preparedStatement.setString(6, newCaseInformation.ballotOne);  
-            preparedStatement.setString(7, newCaseInformation.ballotTwo);  
-            preparedStatement.setString(8, newCaseInformation.ballotThree);  
-            preparedStatement.setString(9, newCaseInformation.ballotFour);  
-            preparedStatement.setTimestamp(10, newCaseInformation.mailKitDate);  
-            preparedStatement.setTimestamp(11, newCaseInformation.pollingStartDate);  
-            preparedStatement.setTimestamp(12, newCaseInformation.pollingEndDate);  
-            preparedStatement.setString(13, newCaseInformation.ballotsCountDay);  
-            preparedStatement.setTimestamp(14, newCaseInformation.ballotsCountDate);  
-            preparedStatement.setTimestamp(15, newCaseInformation.ballotsCountTime);  
-            preparedStatement.setTimestamp(16, newCaseInformation.eligibilityListDate);  
+            preparedStatement.setString(4, newCaseInformation.electionType3);
+            preparedStatement.setTimestamp(5, newCaseInformation.eligibilityDate);
+            preparedStatement.setString(6, newCaseInformation.ballotOne);
+            preparedStatement.setString(7, newCaseInformation.ballotTwo);
+            preparedStatement.setString(8, newCaseInformation.ballotThree);
+            preparedStatement.setString(9, newCaseInformation.ballotFour);
+            preparedStatement.setTimestamp(10, newCaseInformation.mailKitDate);
+            preparedStatement.setTimestamp(11, newCaseInformation.pollingStartDate);
+            preparedStatement.setTimestamp(12, newCaseInformation.pollingEndDate);
+            preparedStatement.setString(13, newCaseInformation.ballotsCountDay);
+            preparedStatement.setTimestamp(14, newCaseInformation.ballotsCountDate);
+            preparedStatement.setTimestamp(15, newCaseInformation.ballotsCountTime);
+            preparedStatement.setTimestamp(16, newCaseInformation.eligibilityListDate);
             preparedStatement.setTimestamp(17, newCaseInformation.preElectionConfDate);
-            preparedStatement.setObject(18, newCaseInformation.selfReleasing); 
-            preparedStatement.setObject(19, newCaseInformation.resultApproxNumberEligibleVotes); 
+            preparedStatement.setObject(18, newCaseInformation.selfReleasing);
+            preparedStatement.setObject(19, newCaseInformation.resultApproxNumberEligibleVotes);
             preparedStatement.setObject(20, newCaseInformation.resultVoidBallots);
             preparedStatement.setObject(21, newCaseInformation.resultVotesCastForEEO);
             preparedStatement.setObject(22, newCaseInformation.resultVotesCastForIncumbentEEO);
@@ -1177,7 +1366,7 @@ public class REPCase {
             preparedStatement.setObject(43, professional[12].equals("") ? null : Integer.valueOf(professional[12]));
             preparedStatement.setObject(44, professional[13].equals("") ? null : Integer.valueOf(professional[13]));
             preparedStatement.setObject(45, professional[14].equals("") ? null : Integer.valueOf(professional[14]));
-            
+
             preparedStatement.setObject(46, nonprofessional[0].equals("") ? null : Integer.valueOf(nonprofessional[0]));
             preparedStatement.setObject(47, nonprofessional[1].equals("") ? null : Integer.valueOf(nonprofessional[1]));
             preparedStatement.setObject(48, nonprofessional[2].equals("") ? null : Integer.valueOf(nonprofessional[2]));
@@ -1193,7 +1382,7 @@ public class REPCase {
             preparedStatement.setObject(58, nonprofessional[12].equals("") ? null : Integer.valueOf(nonprofessional[12]));
             preparedStatement.setObject(59, nonprofessional[13].equals("") ? null : Integer.valueOf(nonprofessional[13]));
             preparedStatement.setObject(60, nonprofessional[14].equals("") ? null : Integer.valueOf(nonprofessional[14]));
-            
+
             preparedStatement.setObject(61, combined[0].equals("") ? null : Integer.valueOf(combined[0]));
             preparedStatement.setObject(62, combined[1].equals("") ? null : Integer.valueOf(combined[1]));
             preparedStatement.setObject(63, combined[2].equals("") ? null : Integer.valueOf(combined[2]));
@@ -1209,14 +1398,14 @@ public class REPCase {
             preparedStatement.setObject(73, combined[12].equals("") ? null : Integer.valueOf(combined[12]));
             preparedStatement.setObject(74, combined[13].equals("") ? null : Integer.valueOf(combined[13]));
             preparedStatement.setObject(75, combined[14].equals("") ? null : Integer.valueOf(combined[14]));
-            
+
             preparedStatement.setString(76, Global.caseYear);
             preparedStatement.setString(77, Global.caseType);
             preparedStatement.setString(78, Global.caseMonth);
             preparedStatement.setString(79, Global.caseNumber);
 
             int success = preparedStatement.executeUpdate();
-            
+
             if(success == 1) {
                 Activity.addActivty("Updated Election Information", null);
             }
@@ -1224,15 +1413,15 @@ public class REPCase {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateElectionInformation(newCaseInformation, caseInformation, professional, nonprofessional, combined);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void updateCaseDetails(REPCase newCaseInformation, REPCase caseInformation) {
         REPCase rep = null;
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
@@ -1284,7 +1473,7 @@ public class REPCase {
             preparedStatement.setString(21, Global.caseNumber);
 
             int success = preparedStatement.executeUpdate();
-            
+
             if(success == 1) {
                 detailedCaseDetailsSaveInformation(newCaseInformation, caseInformation);
             }
@@ -1292,12 +1481,12 @@ public class REPCase {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateCaseDetails(newCaseInformation, caseInformation);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void updateCaseInformation(REPCase newCaseInformation, REPCase caseInformation) {
         Statement stmt = null;
         try {
@@ -1370,7 +1559,7 @@ public class REPCase {
             preparedStatement.setString(31, Global.caseNumber);
 
             int success = preparedStatement.executeUpdate();
-            
+
             if(success == 1) {
                 detailedCaseInformationSaveInformation(newCaseInformation, caseInformation);
                 REPCaseSearchData.updateCaseEntryFromCaseInformation(
@@ -1383,17 +1572,17 @@ public class REPCase {
                         newCaseInformation.status1);
                 EmployerCaseSearchData.updateEmployer(
                         newCaseInformation.employerIDNumber);
-            } 
+            }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateCaseInformation(newCaseInformation, caseInformation);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     private static String getCertificationText(REPCase newCase) {
         if(newCase.boardCertified) {
             return "Board";
@@ -1405,7 +1594,7 @@ public class REPCase {
             return "";
         }
     }
-    
+
     private static void detailedCaseInformationSaveInformation(REPCase newCaseInformation, REPCase oldCaseInformation) {
         //caseType
         if(newCaseInformation.type == null && oldCaseInformation.type != null) {
@@ -1413,80 +1602,80 @@ public class REPCase {
         } else if(newCaseInformation.type != null && oldCaseInformation.type == null) {
             Activity.addActivty("Set Case Type to " + newCaseInformation.type, null);
         } else if(newCaseInformation.type != null && oldCaseInformation.type != null) {
-            if(!newCaseInformation.type.equals(oldCaseInformation.type)) 
+            if(!newCaseInformation.type.equals(oldCaseInformation.type))
                 Activity.addActivty("Changed Case Type from " + oldCaseInformation.type + " to " + newCaseInformation.type, null);
         }
-        
+
         //status1
         if(newCaseInformation.status1 == null && oldCaseInformation.status1 != null) {
             Activity.addActivty("Removed " + oldCaseInformation.status1 + " from Status 1", null);
         } else if(newCaseInformation.status1 != null && oldCaseInformation.status1 == null) {
             Activity.addActivty("Set Status 1 to " + newCaseInformation.status1, null);
         } else if(newCaseInformation.status1 != null && oldCaseInformation.status1 != null) {
-            if(!newCaseInformation.status1.equals(oldCaseInformation.status1)) 
+            if(!newCaseInformation.status1.equals(oldCaseInformation.status1))
                 Activity.addActivty("Changed Status 1 from " + oldCaseInformation.status1 + " to " + newCaseInformation.status1, null);
         }
-        
+
         //satus2
         if(newCaseInformation.status2 == null && oldCaseInformation.status2 != null) {
             Activity.addActivty("Removed " + oldCaseInformation.status2 + " from Status 2", null);
         } else if(newCaseInformation.status2 != null && oldCaseInformation.status2 == null) {
             Activity.addActivty("Set Status 2 to " + newCaseInformation.status2, null);
         } else if(newCaseInformation.status2 != null && oldCaseInformation.status2 != null) {
-            if(!newCaseInformation.status2.equals(oldCaseInformation.status2)) 
+            if(!newCaseInformation.status2.equals(oldCaseInformation.status2))
                 Activity.addActivty("Changed Status 2 from " + oldCaseInformation.status2 + " to " + newCaseInformation.status2, null);
         }
-        
+
         //currentOwner
         if(newCaseInformation.currentOwnerID == 0 && oldCaseInformation.currentOwnerID != 0) {
             Activity.addActivty("Removed " + User.getNameByID(oldCaseInformation.currentOwnerID) + " from Current Owner", null);
         } else if(newCaseInformation.currentOwnerID != 0 && oldCaseInformation.currentOwnerID == 0) {
             Activity.addActivty("Set Current Owner to " + User.getNameByID(newCaseInformation.currentOwnerID), null);
         } else if(newCaseInformation.currentOwnerID != 0 && oldCaseInformation.currentOwnerID != 0) {
-            if(newCaseInformation.currentOwnerID != oldCaseInformation.currentOwnerID) 
+            if(newCaseInformation.currentOwnerID != oldCaseInformation.currentOwnerID)
                 Activity.addActivty("Changed Current Owner from " + User.getNameByID(oldCaseInformation.currentOwnerID) + " to " + User.getNameByID(newCaseInformation.currentOwnerID), null);
         }
-        
+
         //county
         if(newCaseInformation.county == null && oldCaseInformation.county != null) {
             Activity.addActivty("Removed " + oldCaseInformation.county + " from County", null);
         } else if(newCaseInformation.county != null && oldCaseInformation.county == null) {
             Activity.addActivty("Set County to " + newCaseInformation.county, null);
         } else if(newCaseInformation.county != null && oldCaseInformation.county != null) {
-            if(!newCaseInformation.county.equals(oldCaseInformation.county)) 
+            if(!newCaseInformation.county.equals(oldCaseInformation.county))
                 Activity.addActivty("Changed County from " + oldCaseInformation.county + " to " + newCaseInformation.county, null);
         }
-        
+
         //employerIDNumber
         if(newCaseInformation.employerIDNumber == null && oldCaseInformation.employerIDNumber != null) {
             Activity.addActivty("Removed " + oldCaseInformation.employerIDNumber + " from Employer ID Number", null);
         } else if(newCaseInformation.employerIDNumber != null && oldCaseInformation.employerIDNumber == null) {
             Activity.addActivty("Set Employer ID Number to " + newCaseInformation.employerIDNumber, null);
         } else if(newCaseInformation.employerIDNumber != null && oldCaseInformation.employerIDNumber != null) {
-            if(!newCaseInformation.employerIDNumber.equals(oldCaseInformation.employerIDNumber)) 
+            if(!newCaseInformation.employerIDNumber.equals(oldCaseInformation.employerIDNumber))
                 Activity.addActivty("Changed Employer ID Number from " + oldCaseInformation.employerIDNumber + " to " + newCaseInformation.employerIDNumber, null);
         }
-        
+
         //bargUnitNumber
         if(newCaseInformation.bargainingUnitNumber == null && oldCaseInformation.bargainingUnitNumber != null) {
             Activity.addActivty("Removed " + oldCaseInformation.bargainingUnitNumber + " from Bargaining Unit", null);
         } else if(newCaseInformation.bargainingUnitNumber != null && oldCaseInformation.bargainingUnitNumber == null) {
             Activity.addActivty("Set Bargaining Unit to " + newCaseInformation.bargainingUnitNumber, null);
         } else if(newCaseInformation.bargainingUnitNumber != null && oldCaseInformation.bargainingUnitNumber != null) {
-            if(!newCaseInformation.bargainingUnitNumber.equals(oldCaseInformation.bargainingUnitNumber)) 
+            if(!newCaseInformation.bargainingUnitNumber.equals(oldCaseInformation.bargainingUnitNumber))
                 Activity.addActivty("Changed Bargaining Unit from " + oldCaseInformation.bargainingUnitNumber + " to " + newCaseInformation.bargainingUnitNumber, null);
         }
-        
+
         //note
         if(newCaseInformation.note == null && oldCaseInformation.note != null) {
             Activity.addActivty("Updated Note", null);
         } else if(newCaseInformation.note != null && oldCaseInformation.note == null) {
             Activity.addActivty("Updated Note", null);
         } else if(newCaseInformation.note != null && oldCaseInformation.note != null) {
-            if(!newCaseInformation.note.equals(oldCaseInformation.note)) 
+            if(!newCaseInformation.note.equals(oldCaseInformation.note))
                 Activity.addActivty("Updated Note", null);
         }
-        
+
         //file date
         if(newCaseInformation.fileDate == null && oldCaseInformation.fileDate != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.fileDate.getTime())) + " from File Date", null);
@@ -1496,7 +1685,7 @@ public class REPCase {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.fileDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.fileDate.getTime()))))
                 Activity.addActivty("Changed File Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.fileDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.fileDate.getTime())), null);
         }
-        
+
         //amendedFilingDate
         if(newCaseInformation.amendedFiliingDate == null && oldCaseInformation.amendedFiliingDate != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.amendedFiliingDate.getTime())) + " from Amended Filing Date", null);
@@ -1506,7 +1695,7 @@ public class REPCase {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.amendedFiliingDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.amendedFiliingDate.getTime()))))
                 Activity.addActivty("Changed Amended Filing Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.amendedFiliingDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.amendedFiliingDate.getTime())), null);
         }
-        
+
         //Final Board Date
         if(newCaseInformation.finalBoardDate == null && oldCaseInformation.finalBoardDate != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.finalBoardDate.getTime())) + " from Final Board Date", null);
@@ -1516,7 +1705,7 @@ public class REPCase {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.finalBoardDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.finalBoardDate.getTime()))))
                 Activity.addActivty("Changed Final Board Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.finalBoardDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.finalBoardDate.getTime())), null);
         }
-        
+
         //Registration Letter Sent
         if(newCaseInformation.registrationLetterSent == null && oldCaseInformation.registrationLetterSent != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.registrationLetterSent.getTime())) + " from Registration Letter Sent", null);
@@ -1526,7 +1715,7 @@ public class REPCase {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.registrationLetterSent.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.registrationLetterSent.getTime()))))
                 Activity.addActivty("Changed Registration Letter Sent from " + Global.mmddyyyy.format(new Date(oldCaseInformation.registrationLetterSent.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.registrationLetterSent.getTime())), null);
         }
-        
+
         //Date of Appeal
         if(newCaseInformation.dateOfAppeal == null && oldCaseInformation.dateOfAppeal != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.dateOfAppeal.getTime())) + " from Date of Appeal", null);
@@ -1536,7 +1725,7 @@ public class REPCase {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.dateOfAppeal.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.dateOfAppeal.getTime()))))
                 Activity.addActivty("Changed Date of Appeal from " + Global.mmddyyyy.format(new Date(oldCaseInformation.dateOfAppeal.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.dateOfAppeal.getTime())), null);
         }
-        
+
         //Court Closed Date
         if(newCaseInformation.courtClosedDate == null && oldCaseInformation.courtClosedDate != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.courtClosedDate.getTime())) + " from Court Closed Date", null);
@@ -1546,7 +1735,7 @@ public class REPCase {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.courtClosedDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.courtClosedDate.getTime()))))
                 Activity.addActivty("Changed Court Closed Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.courtClosedDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.courtClosedDate.getTime())), null);
         }
-        
+
         //Return SOI Due Date
         if(newCaseInformation.returnSOIDueDate == null && oldCaseInformation.returnSOIDueDate != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.returnSOIDueDate.getTime())) + " from Return SOI Due Date", null);
@@ -1556,7 +1745,7 @@ public class REPCase {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.returnSOIDueDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.returnSOIDueDate.getTime()))))
                 Activity.addActivty("Changed Return SOI Due Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.returnSOIDueDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.returnSOIDueDate.getTime())), null);
         }
-        
+
         //Actual SOI return Date
         if(newCaseInformation.actualSOIReturnDate == null && oldCaseInformation.actualSOIReturnDate != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.actualSOIReturnDate.getTime())) + " from Actual SOI Return Date", null);
@@ -1566,17 +1755,17 @@ public class REPCase {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.actualSOIReturnDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.actualSOIReturnDate.getTime()))))
                 Activity.addActivty("Changed Actual SOI Return Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.actualSOIReturnDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.actualSOIReturnDate.getTime())), null);
         }
-        
+
         //SOI Return Initials
         if(newCaseInformation.SOIReturnInitials == 0 && oldCaseInformation.SOIReturnInitials != 0) {
             Activity.addActivty("Removed " + User.getNameByID(oldCaseInformation.SOIReturnInitials) + " from SOI Return Initials", null);
         } else if(newCaseInformation.SOIReturnInitials != 0 && oldCaseInformation.SOIReturnInitials == 0) {
             Activity.addActivty("Set SOI Return Initials to " + User.getNameByID(newCaseInformation.SOIReturnInitials), null);
         } else if(newCaseInformation.SOIReturnInitials != 0 && oldCaseInformation.SOIReturnInitials != 0) {
-            if(newCaseInformation.SOIReturnInitials != oldCaseInformation.SOIReturnInitials) 
+            if(newCaseInformation.SOIReturnInitials != oldCaseInformation.SOIReturnInitials)
                 Activity.addActivty("Changed SOI Return Initials from " + User.getNameByID(oldCaseInformation.SOIReturnInitials) + " to " + User.getNameByID(newCaseInformation.REPClosedUser), null);
         }
-        
+
         //REPClsed Case Due Date
         if(newCaseInformation.REPClosedCaseDueDate == null && oldCaseInformation.REPClosedCaseDueDate != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.REPClosedCaseDueDate.getTime())) + " from REP Closed Case Due Date", null);
@@ -1586,7 +1775,7 @@ public class REPCase {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.REPClosedCaseDueDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.REPClosedCaseDueDate.getTime()))))
                 Activity.addActivty("Changed REP Closed Case Due Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.REPClosedCaseDueDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.REPClosedCaseDueDate.getTime())), null);
         }
-        
+
         //Actual REP Closed Date
         if(newCaseInformation.actualREPClosedDate == null && oldCaseInformation.actualREPClosedDate != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.actualREPClosedDate.getTime())) + " from Actual REP Closed Date", null);
@@ -1596,17 +1785,17 @@ public class REPCase {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.actualREPClosedDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.actualREPClosedDate.getTime()))))
                 Activity.addActivty("Changed Actual REP Closed Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.actualREPClosedDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.actualREPClosedDate.getTime())), null);
         }
-        
+
         //REP Closed User
         if(newCaseInformation.REPClosedUser == 0 && oldCaseInformation.REPClosedUser != 0) {
             Activity.addActivty("Removed " + User.getNameByID(oldCaseInformation.REPClosedUser) + " from REP Closed By", null);
         } else if(newCaseInformation.REPClosedUser != 0 && oldCaseInformation.REPClosedUser == 0) {
             Activity.addActivty("Set REP Closed By to " + User.getNameByID(newCaseInformation.REPClosedUser), null);
         } else if(newCaseInformation.REPClosedUser != 0 && oldCaseInformation.REPClosedUser != 0) {
-            if(newCaseInformation.REPClosedUser != oldCaseInformation.REPClosedUser) 
+            if(newCaseInformation.REPClosedUser != oldCaseInformation.REPClosedUser)
                 Activity.addActivty("Changed REP Closed By from " + User.getNameByID(oldCaseInformation.REPClosedUser) + " to " + User.getNameByID(newCaseInformation.REPClosedUser), null);
         }
-        
+
         //Actual Clerks Closed Date
         if(newCaseInformation.actualClerksClosedDate == null && oldCaseInformation.actualClerksClosedDate != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.actualClerksClosedDate.getTime())) + " from Actual Clerks Closed Date", null);
@@ -1616,17 +1805,17 @@ public class REPCase {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.actualClerksClosedDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.actualClerksClosedDate.getTime()))))
                 Activity.addActivty("Changed Actual Clerks Closed Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.actualClerksClosedDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.actualClerksClosedDate.getTime())), null);
         }
-        
+
         //Clerks Closed User
         if(newCaseInformation.clerksClosedUser == 0 && oldCaseInformation.clerksClosedUser != 0) {
             Activity.addActivty("Removed " + User.getNameByID(oldCaseInformation.clerksClosedUser) + " from Clerks Closed By", null);
         } else if(newCaseInformation.clerksClosedUser != 0 && oldCaseInformation.clerksClosedUser == 0) {
             Activity.addActivty("Set Clerks Closed By to " + User.getNameByID(newCaseInformation.clerksClosedUser), null);
         } else if(newCaseInformation.clerksClosedUser != 0 && oldCaseInformation.clerksClosedUser != 0) {
-            if(newCaseInformation.clerksClosedUser != oldCaseInformation.currentOwnerID) 
+            if(newCaseInformation.clerksClosedUser != oldCaseInformation.currentOwnerID)
                 Activity.addActivty("Changed Clerks Closed By from " + User.getNameByID(oldCaseInformation.clerksClosedUser) + " to " + User.getNameByID(newCaseInformation.clerksClosedUser), null);
         }
-        
+
         //Alpha List Date
         if(newCaseInformation.alphaListDate == null && oldCaseInformation.alphaListDate != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.alphaListDate.getTime())) + " from Alpha List Receipt Date", null);
@@ -1637,7 +1826,7 @@ public class REPCase {
                 Activity.addActivty("Changed Alpha List Receipt Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.alphaListDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.alphaListDate.getTime())), null);
         }
     }
-    
+
     private static void detailedCaseDetailsSaveInformation(REPCase newCaseInformation, REPCase oldCaseInformation) {
         //filedBy
         if(newCaseInformation.fileBy == null && oldCaseInformation.fileBy != null) {
@@ -1645,174 +1834,174 @@ public class REPCase {
         } else if(newCaseInformation.fileBy != null && oldCaseInformation.fileBy == null) {
             Activity.addActivty("Set Filed By to " + newCaseInformation.fileBy, null);
         } else if(newCaseInformation.fileBy != null && oldCaseInformation.fileBy != null) {
-            if(!newCaseInformation.fileBy.equals(oldCaseInformation.fileBy)) 
+            if(!newCaseInformation.fileBy.equals(oldCaseInformation.fileBy))
                 Activity.addActivty("Changed Filed By from " + oldCaseInformation.fileBy + " to " + newCaseInformation.fileBy, null);
         }
-        
+
         //bargainingUnitIncluded
         if(newCaseInformation.bargainingUnitIncluded == null && oldCaseInformation.bargainingUnitIncluded != null) {
             Activity.addActivty("Removed Bargaining Unit Included", null);
         } else if(newCaseInformation.bargainingUnitIncluded != null && oldCaseInformation.bargainingUnitIncluded == null) {
             Activity.addActivty("Set Bargaining Unit Included", null);
         } else if(newCaseInformation.bargainingUnitIncluded != null && oldCaseInformation.bargainingUnitIncluded != null) {
-            if(!newCaseInformation.bargainingUnitIncluded.equals(oldCaseInformation.bargainingUnitIncluded)) 
+            if(!newCaseInformation.bargainingUnitIncluded.equals(oldCaseInformation.bargainingUnitIncluded))
                 Activity.addActivty("Changed Bargaining Unit Included", null);
         }
-        
+
         //bargainingUnitExcluded
         if(newCaseInformation.bargainingUnitExcluded == null && oldCaseInformation.bargainingUnitExcluded != null) {
             Activity.addActivty("Removed Bargaining Unit Excluded", null);
         } else if(newCaseInformation.bargainingUnitExcluded != null && oldCaseInformation.bargainingUnitExcluded == null) {
             Activity.addActivty("Set Bargaining Unit Excluded", null);
         } else if(newCaseInformation.bargainingUnitExcluded != null && oldCaseInformation.bargainingUnitExcluded != null) {
-            if(!newCaseInformation.bargainingUnitExcluded.equals(oldCaseInformation.bargainingUnitExcluded)) 
+            if(!newCaseInformation.bargainingUnitExcluded.equals(oldCaseInformation.bargainingUnitExcluded))
                 Activity.addActivty("Changed Bargaining Unit Excluded", null);
         }
-        
+
         //opt in included
         if(newCaseInformation.optInIncluded == null && oldCaseInformation.optInIncluded != null) {
             Activity.addActivty("Removed Opt-In Included", null);
         } else if(newCaseInformation.optInIncluded != null && oldCaseInformation.optInIncluded == null) {
             Activity.addActivty("Set Opt-In Included", null);
         } else if(newCaseInformation.optInIncluded != null && oldCaseInformation.optInIncluded != null) {
-            if(!newCaseInformation.optInIncluded.equals(oldCaseInformation.optInIncluded)) 
+            if(!newCaseInformation.optInIncluded.equals(oldCaseInformation.optInIncluded))
                 Activity.addActivty("Changed Opt-In Included", null);
         }
-        
+
         //professional non professional
         if(newCaseInformation.professionalNonProfessional == false && oldCaseInformation.professionalNonProfessional != false) {
             Activity.addActivty("Unset Professional/Non-Professional", null);
         } else if(newCaseInformation.professionalNonProfessional != false && oldCaseInformation.professionalNonProfessional == false) {
             Activity.addActivty("Set Professional/Non-Professional", null);
-        } 
-        
+        }
+
         //professional included
         if(newCaseInformation.professionalIncluded == null && oldCaseInformation.professionalIncluded != null) {
             Activity.addActivty("Removed Professional Included", null);
         } else if(newCaseInformation.professionalIncluded != null && oldCaseInformation.professionalIncluded == null) {
             Activity.addActivty("Set Professional Included", null);
         } else if(newCaseInformation.professionalIncluded != null && oldCaseInformation.professionalIncluded != null) {
-            if(!newCaseInformation.professionalIncluded.equals(oldCaseInformation.professionalIncluded)) 
+            if(!newCaseInformation.professionalIncluded.equals(oldCaseInformation.professionalIncluded))
                 Activity.addActivty("Changed Professional Included", null);
         }
-        
+
         //professional excluded
         if(newCaseInformation.professionalExcluded == null && oldCaseInformation.professionalExcluded != null) {
             Activity.addActivty("Removed Professional Excluded", null);
         } else if(newCaseInformation.professionalExcluded != null && oldCaseInformation.professionalExcluded == null) {
             Activity.addActivty("Set Professional Excluded", null);
         } else if(newCaseInformation.professionalExcluded != null && oldCaseInformation.professionalExcluded != null) {
-            if(!newCaseInformation.professionalExcluded.equals(oldCaseInformation.professionalExcluded)) 
+            if(!newCaseInformation.professionalExcluded.equals(oldCaseInformation.professionalExcluded))
                 Activity.addActivty("Changed Professional Excluded", null);
         }
-        
+
         //nonprofessional included
         if(newCaseInformation.nonProfessionalIncluded == null && oldCaseInformation.nonProfessionalIncluded != null) {
             Activity.addActivty("Removed Non-Professional Included", null);
         } else if(newCaseInformation.nonProfessionalIncluded != null && oldCaseInformation.nonProfessionalIncluded == null) {
             Activity.addActivty("Set Non-Professional Included", null);
         } else if(newCaseInformation.nonProfessionalIncluded != null && oldCaseInformation.nonProfessionalIncluded != null) {
-            if(!newCaseInformation.nonProfessionalIncluded.equals(oldCaseInformation.nonProfessionalIncluded)) 
+            if(!newCaseInformation.nonProfessionalIncluded.equals(oldCaseInformation.nonProfessionalIncluded))
                 Activity.addActivty("Changed Non-Professional Included", null);
         }
-        
+
         //nonprofessional excluded
         if(newCaseInformation.nonProfessionalExcluded == null && oldCaseInformation.nonProfessionalExcluded != null) {
             Activity.addActivty("Removed Non-Professional Excluded", null);
         } else if(newCaseInformation.nonProfessionalExcluded != null && oldCaseInformation.nonProfessionalExcluded == null) {
             Activity.addActivty("Set Non-Professional Excluded", null);
         } else if(newCaseInformation.nonProfessionalExcluded != null && oldCaseInformation.nonProfessionalExcluded != null) {
-            if(!newCaseInformation.nonProfessionalExcluded.equals(oldCaseInformation.nonProfessionalExcluded)) 
+            if(!newCaseInformation.nonProfessionalExcluded.equals(oldCaseInformation.nonProfessionalExcluded))
                 Activity.addActivty("Changed Non-Professional Excluded", null);
         }
-        
+
         //toReflect
         if(newCaseInformation.toReflect == null && oldCaseInformation.toReflect != null) {
             Activity.addActivty("Removed " + oldCaseInformation.toReflect + " from To Reflect", null);
         } else if(newCaseInformation.toReflect != null && oldCaseInformation.toReflect == null) {
             Activity.addActivty("Set To Reflect to " + newCaseInformation.toReflect, null);
         } else if(newCaseInformation.toReflect != null && oldCaseInformation.toReflect != null) {
-            if(!newCaseInformation.toReflect.equals(oldCaseInformation.toReflect)) 
+            if(!newCaseInformation.toReflect.equals(oldCaseInformation.toReflect))
                 Activity.addActivty("Changed To Reflect from " + oldCaseInformation.toReflect + " to " + newCaseInformation.toReflect, null);
         }
-        
+
         //toReflect
         if(newCaseInformation.toReflect == null && oldCaseInformation.toReflect != null) {
             Activity.addActivty("Removed " + oldCaseInformation.toReflect + " from To Reflect", null);
         } else if(newCaseInformation.toReflect != null && oldCaseInformation.toReflect == null) {
             Activity.addActivty("Set To Reflect to " + newCaseInformation.toReflect, null);
         } else if(newCaseInformation.toReflect != null && oldCaseInformation.toReflect != null) {
-            if(!newCaseInformation.toReflect.equals(oldCaseInformation.toReflect)) 
+            if(!newCaseInformation.toReflect.equals(oldCaseInformation.toReflect))
                 Activity.addActivty("Changed To Reflect from " + oldCaseInformation.toReflect + " to " + newCaseInformation.toReflect, null);
         }
-        
+
         //typeFiledBy
         if(newCaseInformation.typeFiledBy == null && oldCaseInformation.typeFiledBy != null) {
             Activity.addActivty("Removed " + oldCaseInformation.typeFiledBy + " from Type Filed By", null);
         } else if(newCaseInformation.typeFiledBy != null && oldCaseInformation.typeFiledBy == null) {
             Activity.addActivty("Set Type Filed By to " + newCaseInformation.typeFiledBy, null);
         } else if(newCaseInformation.typeFiledBy != null && oldCaseInformation.typeFiledBy != null) {
-            if(!newCaseInformation.typeFiledBy.equals(oldCaseInformation.typeFiledBy)) 
+            if(!newCaseInformation.typeFiledBy.equals(oldCaseInformation.typeFiledBy))
                 Activity.addActivty("Changed Type Filed By from " + oldCaseInformation.typeFiledBy + " to " + newCaseInformation.typeFiledBy, null);
         }
-        
+
         //typeFiledVia
         if(newCaseInformation.typeFiledVia == null && oldCaseInformation.typeFiledVia != null) {
             Activity.addActivty("Removed " + oldCaseInformation.typeFiledVia + " from Type Filed Via", null);
         } else if(newCaseInformation.typeFiledVia != null && oldCaseInformation.typeFiledVia == null) {
             Activity.addActivty("Set Type Filed Via to " + newCaseInformation.typeFiledVia, null);
         } else if(newCaseInformation.typeFiledVia != null && oldCaseInformation.typeFiledVia != null) {
-            if(!newCaseInformation.typeFiledVia.equals(oldCaseInformation.typeFiledVia)) 
+            if(!newCaseInformation.typeFiledVia.equals(oldCaseInformation.typeFiledVia))
                 Activity.addActivty("Changed Type Filed Via from " + oldCaseInformation.typeFiledVia + " to " + newCaseInformation.typeFiledVia, null);
         }
-        
+
         //positionStatementFiledBy
         if(newCaseInformation.positionStatementFiledBy == null && oldCaseInformation.positionStatementFiledBy != null) {
             Activity.addActivty("Removed " + oldCaseInformation.positionStatementFiledBy + " from Position Statement Filed By", null);
         } else if(newCaseInformation.positionStatementFiledBy != null && oldCaseInformation.positionStatementFiledBy == null) {
             Activity.addActivty("Set Position Statement Filed By to " + newCaseInformation.positionStatementFiledBy, null);
         } else if(newCaseInformation.positionStatementFiledBy != null && oldCaseInformation.positionStatementFiledBy != null) {
-            if(!newCaseInformation.positionStatementFiledBy.equals(oldCaseInformation.positionStatementFiledBy)) 
+            if(!newCaseInformation.positionStatementFiledBy.equals(oldCaseInformation.positionStatementFiledBy))
                 Activity.addActivty("Changed Position Statement Filed By from " + oldCaseInformation.positionStatementFiledBy + " to " + newCaseInformation.positionStatementFiledBy, null);
         }
-        
+
         //EEO Name Change From
         if(newCaseInformation.EEONameChangeFrom == null && oldCaseInformation.EEONameChangeFrom != null) {
             Activity.addActivty("Removed " + oldCaseInformation.EEONameChangeFrom + " from EEO Name Change From", null);
         } else if(newCaseInformation.EEONameChangeFrom != null && oldCaseInformation.EEONameChangeFrom == null) {
             Activity.addActivty("Set EEO Name Change From to " + newCaseInformation.EEONameChangeFrom, null);
         } else if(newCaseInformation.EEONameChangeFrom != null && oldCaseInformation.EEONameChangeFrom != null) {
-            if(!newCaseInformation.EEONameChangeFrom.equals(oldCaseInformation.EEONameChangeFrom)) 
+            if(!newCaseInformation.EEONameChangeFrom.equals(oldCaseInformation.EEONameChangeFrom))
                 Activity.addActivty("Changed EEO Name Change From from " + oldCaseInformation.EEONameChangeFrom + " to " + newCaseInformation.EEONameChangeFrom, null);
         }
-        
+
         //EEO Name Change To
         if(newCaseInformation.EEONameChangeTo == null && oldCaseInformation.EEONameChangeTo != null) {
             Activity.addActivty("Removed " + oldCaseInformation.EEONameChangeTo + " from EEO Name Change To", null);
         } else if(newCaseInformation.EEONameChangeTo != null && oldCaseInformation.EEONameChangeTo == null) {
             Activity.addActivty("Set EEO Name Change To to " + newCaseInformation.EEONameChangeTo, null);
         } else if(newCaseInformation.EEONameChangeTo != null && oldCaseInformation.EEONameChangeTo != null) {
-            if(!newCaseInformation.EEONameChangeTo.equals(oldCaseInformation.EEONameChangeTo)) 
+            if(!newCaseInformation.EEONameChangeTo.equals(oldCaseInformation.EEONameChangeTo))
                 Activity.addActivty("Changed EEO Name Change To from " + oldCaseInformation.EEONameChangeTo + " to " + newCaseInformation.EEONameChangeTo, null);
         }
-        
+
         //ER Name Change From
         if(newCaseInformation.ERNameChangeFrom == null && oldCaseInformation.ERNameChangeFrom != null) {
             Activity.addActivty("Removed " + oldCaseInformation.ERNameChangeFrom + " from ER Name Change From", null);
         } else if(newCaseInformation.ERNameChangeFrom != null && oldCaseInformation.ERNameChangeFrom == null) {
             Activity.addActivty("Set ER Name Change From to " + newCaseInformation.ERNameChangeFrom, null);
         } else if(newCaseInformation.ERNameChangeFrom != null && oldCaseInformation.ERNameChangeFrom != null) {
-            if(!newCaseInformation.ERNameChangeFrom.equals(oldCaseInformation.ERNameChangeFrom)) 
+            if(!newCaseInformation.ERNameChangeFrom.equals(oldCaseInformation.ERNameChangeFrom))
                 Activity.addActivty("Changed ER Name Change From from " + oldCaseInformation.ERNameChangeFrom + " to " + newCaseInformation.ERNameChangeFrom, null);
         }
-        
+
         //ER Name Change To
         if(newCaseInformation.ERNameChangeTo == null && oldCaseInformation.ERNameChangeTo != null) {
             Activity.addActivty("Removed " + oldCaseInformation.ERNameChangeTo + " from ER Name Change To", null);
         } else if(newCaseInformation.ERNameChangeTo != null && oldCaseInformation.ERNameChangeTo == null) {
             Activity.addActivty("Set ER Name Change To to " + newCaseInformation.ERNameChangeTo, null);
         } else if(newCaseInformation.ERNameChangeTo != null && oldCaseInformation.ERNameChangeTo != null) {
-            if(!newCaseInformation.ERNameChangeTo.equals(oldCaseInformation.ERNameChangeTo)) 
+            if(!newCaseInformation.ERNameChangeTo.equals(oldCaseInformation.ERNameChangeTo))
                 Activity.addActivty("Changed ER Name Change To from " + oldCaseInformation.ERNameChangeTo + " to " + newCaseInformation.ERNameChangeTo, null);
         }
     }
@@ -1825,10 +2014,10 @@ public class REPCase {
         } else if(newCaseInformation.boardActionType != null && oldCaseInformation.boardActionType == null) {
             Activity.addActivty("Set Board Action Type to " + newCaseInformation.boardActionType, null);
         } else if(newCaseInformation.boardActionType != null && oldCaseInformation.boardActionType != null) {
-            if(!newCaseInformation.boardActionType.equals(oldCaseInformation.boardActionType)) 
+            if(!newCaseInformation.boardActionType.equals(oldCaseInformation.boardActionType))
                 Activity.addActivty("Changed Board Action Type from " + oldCaseInformation.boardActionType + " to " + newCaseInformation.boardActionType, null);
         }
-        
+
         //boardactionDate
         if(newCaseInformation.boardActionDate == null && oldCaseInformation.boardActionDate != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.boardActionDate.getTime())) + " from Board Action Date", null);
@@ -1838,55 +2027,55 @@ public class REPCase {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.boardActionDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.boardActionDate.getTime()))))
                 Activity.addActivty("Changed Board Action Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.boardActionDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.boardActionDate.getTime())), null);
         }
-        
+
         //hearingPerson
         if(newCaseInformation.hearingPersonID == 0 && oldCaseInformation.hearingPersonID != 0) {
             Activity.addActivty("Removed " + User.getNameByID(oldCaseInformation.hearingPersonID) + " from Hearing Person", null);
         } else if(newCaseInformation.hearingPersonID != 0 && oldCaseInformation.hearingPersonID == 0) {
             Activity.addActivty("Set Hearing Person to " + User.getNameByID(newCaseInformation.hearingPersonID), null);
         } else if(newCaseInformation.hearingPersonID != 0 && oldCaseInformation.hearingPersonID != 0) {
-            if(newCaseInformation.hearingPersonID != oldCaseInformation.hearingPersonID) 
+            if(newCaseInformation.hearingPersonID != oldCaseInformation.hearingPersonID)
                 Activity.addActivty("Changed Hearing Person from " + User.getNameByID(oldCaseInformation.hearingPersonID) + " to " + User.getNameByID(newCaseInformation.hearingPersonID), null);
         }
-        
+
         //note
         if(newCaseInformation.boardStatusNote == null && oldCaseInformation.boardStatusNote != null) {
             Activity.addActivty("Removed Board Status Note", null);
         } else if(newCaseInformation.boardStatusNote != null && oldCaseInformation.boardStatusNote == null) {
             Activity.addActivty("Set Board Status Note", null);
         } else if(newCaseInformation.boardStatusNote != null && oldCaseInformation.boardStatusNote != null) {
-            if(!newCaseInformation.boardStatusNote.equals(oldCaseInformation.boardStatusNote)) 
+            if(!newCaseInformation.boardStatusNote.equals(oldCaseInformation.boardStatusNote))
                 Activity.addActivty("Changed Board Status Note", null);
         }
-        
+
         //blurb
         if(newCaseInformation.boardStatusBlurb == null && oldCaseInformation.boardStatusBlurb != null) {
             Activity.addActivty("Removed Board Status Blurb", null);
         } else if(newCaseInformation.boardStatusBlurb != null && oldCaseInformation.boardStatusBlurb == null) {
             Activity.addActivty("Set Board Status Blurb", null);
         } else if(newCaseInformation.boardStatusBlurb != null && oldCaseInformation.boardStatusBlurb != null) {
-            if(!newCaseInformation.boardStatusBlurb.equals(oldCaseInformation.boardStatusBlurb)) 
+            if(!newCaseInformation.boardStatusBlurb.equals(oldCaseInformation.boardStatusBlurb))
                 Activity.addActivty("Changed Board Status Blurb", null);
         }
     }
-    
+
     public static List<String> loadRelatedCases() {
         List<String> caseNumberList = new ArrayList<>();
-        
+
         Statement stmt = null;
-            
+
         try {
             stmt = Database.connectToDB().createStatement();
-            
+
             String sql = "Select caseYear, caseType, caseMonth, caseNumber from REPCase  where fileDate between DateAdd(DD,-7,GETDATE()) and GETDATE() Order By caseYear DESC, caseNumber DESC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            
+
             ResultSet caseNumberRS = preparedStatement.executeQuery();
-            
+
             while(caseNumberRS.next()) {
                 caseNumberList.add(caseNumberRS.getString("caseYear") + "-"
-                    + caseNumberRS.getString("caseType") + "-" 
+                    + caseNumberRS.getString("caseType") + "-"
                     + caseNumberRS.getString("caseMonth") + "-"
                     + caseNumberRS.getString("caseNumber"));
             }
@@ -1894,16 +2083,16 @@ public class REPCase {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadRelatedCases();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return caseNumberList;
     }
-    
+
     public static boolean checkIfFristCaseOfMonth(String year, String type, String month) {
         boolean firstCase = false;
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
@@ -1921,7 +2110,7 @@ public class REPCase {
             preparedStatement.setString(3, month);
 
             ResultSet caseNumberRS = preparedStatement.executeQuery();
-           
+
             if(caseNumberRS.next()) {
                  if(caseNumberRS.getInt("CasesThisMonth") > 0) {
                      firstCase = false;
@@ -1934,20 +2123,20 @@ public class REPCase {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 checkIfFristCaseOfMonth(year, type, month);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return firstCase;
     }
-    
+
     public static List<REPCase> loadREPCasesToClose(Date boardDate) {
         List<REPCase> REPCaseList = new ArrayList<>();
         List casetypes = CaseType.getCaseTypeBySection("REP");
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
-            
+
             String sql = "SELECT repcase.id, repcase.caseYear, repcase.caseType, "
                     + "repcase.caseMonth, repcase.caseNumber, repcase.employerIDNumber, "
                     + "repcase.bargainingUnitNumber, repcase.fileDate, repcase.status1, repcase.status2 "
@@ -1956,24 +2145,24 @@ public class REPCase {
                     + "AND boardMeeting.caseMonth = repcase.caseMonth "
                     + "AND boardMeeting.caseNumber = repcase.caseNumber "
                     + "WHERE boardMeetingDate = ? ";
-                        
+
             if (!casetypes.isEmpty()) {
                 sql += "AND (";
-                
+
                 for (Object casetype : casetypes) {
-                    
+
                     sql += " boardMeeting.caseType = '" + casetype.toString() + "' OR";
                 }
-                
+
                 sql = sql.substring(0, (sql.length() - 2)) + ")";
             }
-            
+
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
-            preparedStatement.setDate(1, new java.sql.Date(boardDate.getTime()));           
+            preparedStatement.setDate(1, new java.sql.Date(boardDate.getTime()));
 
             ResultSet rs = preparedStatement.executeQuery();
-            
+
             while(rs.next()) {
                 REPCase repCase = new REPCase();
                 repCase.id = rs.getInt("id");
@@ -1992,16 +2181,16 @@ public class REPCase {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadREPCasesToClose(boardDate);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return REPCaseList;
     }
-    
+
      public static void updateClosedCases(int id) {
-        
-        Statement stmt = null; 
+
+        Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -2019,16 +2208,16 @@ public class REPCase {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateClosedCases(id);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-     
+
     public static String DocketTo(String caseNumber) {
         String[] parsedCase = caseNumber.trim().split("-");
         String to = "";
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
@@ -2049,7 +2238,7 @@ public class REPCase {
             preparedStatement.setString(4, parsedCase[3]);
 
             ResultSet caseNumberRS = preparedStatement.executeQuery();
-           
+
             if(caseNumberRS.next()) {
                 if(caseNumberRS.getInt("currentOwnerID") != 0) {
                     to = User.getNameByID(caseNumberRS.getInt("currentOwnerID"));
@@ -2062,17 +2251,17 @@ public class REPCase {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 DocketTo(caseNumber);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return to;
     }
-    
+
     public static String REPDocketNotification(String caseNumber) {
         String[] parsedCase = caseNumber.trim().split("-");
         String to = "";
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
@@ -2092,17 +2281,17 @@ public class REPCase {
             preparedStatement.setString(4, parsedCase[3]);
 
             ResultSet caseNumberRS = preparedStatement.executeQuery();
-           
+
             if(caseNumberRS.next()) {
                 if(caseNumberRS.getInt("hearingPersonID") != 0) {
                     DocketNotifications.addNotification(caseNumber, "REP", caseNumberRS.getInt("hearingPersonID"));
-                } 
+                }
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 REPDocketNotification(caseNumber);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }

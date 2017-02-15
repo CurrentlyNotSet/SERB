@@ -19,7 +19,7 @@ import parker.serb.util.SlackNotification;
  * @author parkerjohnston
  */
 public class ULPCase {
-    
+
     public int id;
     public String caseYear;
     public String caseType;
@@ -52,10 +52,16 @@ public class ULPCase {
     public String recommendation;
     public String investigationReveals;
     public String note;
-    
+
+    //BoardMeeting information
+    public String agendaItemNumber;
+    public String boardMeetingRecommendation;
+    public Timestamp boardMeetingMemoDate;
+
+
     public static List loadULPCaseNumbers() {
         List caseNumberList = new ArrayList<>();
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
@@ -66,12 +72,12 @@ public class ULPCase {
                     + " caseMonth,"
                     + " caseNumber"
                     + " from ULPCase"
-                    + " Order By fileDate DESC";
+                    + " Order By fileDate DESC, caseYear DESC, caseMonth DESC, caseNumber DESC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
             ResultSet caseNumberRS = preparedStatement.executeQuery();
-            
+
             while(caseNumberRS.next()) {
                 String createdCaseNumber = caseNumberRS.getString("caseYear")
                         + "-" +
@@ -80,33 +86,33 @@ public class ULPCase {
                         caseNumberRS.getString("caseMonth")
                         + "-" +
                         caseNumberRS.getString("caseNumber");
-                        
+
                 caseNumberList.add(createdCaseNumber);
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadULPCaseNumbers();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
-        } 
+        }
         return caseNumberList;
     }
-    
+
     public static List loadULPCases() {
         List caseNumberList = new ArrayList<>();
-        
-        Statement stmt = null;    
+
+        Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
-            
+
             String sql = "Select TOP 50 caseYear, caseType, caseMonth, caseNumber, employerIDNumber, barginingUnitNo from ULPCase Order By caseYear DESC, caseNumber DESC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            
+
             ResultSet caseNumberRS = preparedStatement.executeQuery();
-            
+
             while(caseNumberRS.next()) {
                 ULPCase ulpCase = new ULPCase();
                 ulpCase.caseYear = caseNumberRS.getString("caseYear");
@@ -122,29 +128,29 @@ public class ULPCase {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadULPCases();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return caseNumberList;
     }
-    
+
     public static List<String> loadRelatedCases() {
         List<String> caseNumberList = new ArrayList<>();
-        
-        Statement stmt =null;  
+
+        Statement stmt =null;
         try {
             stmt = Database.connectToDB().createStatement();
-            
+
             String sql = "Select caseYear, caseType, caseMonth, caseNumber from ULPCase  where fileDate between DateAdd(DD,-7,GETDATE()) and GETDATE() Order By caseYear DESC, caseNumber DESC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            
+
             ResultSet caseNumberRS = preparedStatement.executeQuery();
-            
+
             while(caseNumberRS.next()) {
                 caseNumberList.add(caseNumberRS.getString("caseYear") + "-"
-                    + caseNumberRS.getString("caseType") + "-" 
+                    + caseNumberRS.getString("caseType") + "-"
                     + caseNumberRS.getString("caseMonth") + "-"
                     + caseNumberRS.getString("caseNumber"));
             }
@@ -152,16 +158,16 @@ public class ULPCase {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadRelatedCases();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return caseNumberList;
     }
-    
+
     public static String loadNote() {
         String note = null;
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
@@ -180,15 +186,15 @@ public class ULPCase {
             preparedStatement.setString(4, Global.caseNumber);
 
             ResultSet caseNumberRS = preparedStatement.executeQuery();
-            
+
             caseNumberRS.next();
-            
+
             note = caseNumberRS.getString("note");
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadNote();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -215,22 +221,22 @@ public class ULPCase {
             preparedStatement.setString(5, Global.caseNumber);
 
             preparedStatement.executeUpdate();
-            
+
             Audit.addAuditEntry("Updated Note for " + NumberFormatService.generateFullCaseNumber());
             Activity.addActivty("Updated Note", null);
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateNote(note);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static String loadInvestigationReveals() {
         String investigationReveals = null;
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
@@ -249,15 +255,15 @@ public class ULPCase {
             preparedStatement.setString(4, Global.caseNumber);
 
             ResultSet caseNumberRS = preparedStatement.executeQuery();
-            
+
             caseNumberRS.next();
-            
+
             investigationReveals = caseNumberRS.getString("investigationReveals");
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadInvestigationReveals();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -284,22 +290,22 @@ public class ULPCase {
             preparedStatement.setString(5, Global.caseNumber);
 
             preparedStatement.executeUpdate();
-            
+
             Audit.addAuditEntry("Updated Investigation Reveals for " + NumberFormatService.generateFullCaseNumber());
             Activity.addActivty("Updated Investigation Reveals", null);
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateInvestigationReveals(note);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static String loadRecommendation() {
         String recommendation = null;
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
@@ -318,15 +324,15 @@ public class ULPCase {
             preparedStatement.setString(4, Global.caseNumber);
 
             ResultSet caseNumberRS = preparedStatement.executeQuery();
-            
+
             caseNumberRS.next();
-            
+
             recommendation = caseNumberRS.getString("recommendation");
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadRecommendation();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -362,15 +368,15 @@ public class ULPCase {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateRecommendation(note, orginal);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static String loadStatement() {
         String recommendation = null;
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
@@ -389,25 +395,25 @@ public class ULPCase {
             preparedStatement.setString(4, Global.caseNumber);
 
             ResultSet caseNumberRS = preparedStatement.executeQuery();
-            
+
             caseNumberRS.next();
-            
+
             recommendation = caseNumberRS.getString("statement");
 
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadStatement();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return recommendation;
     }
-    
+
     public static ULPCase loadStatus() {
         ULPCase ulp = new ULPCase();
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
@@ -449,9 +455,9 @@ public class ULPCase {
             preparedStatement.setString(4, Global.caseNumber);
 
             ResultSet caseNumberRS = preparedStatement.executeQuery();
-           
+
             caseNumberRS.next();
-            
+
             ulp.employerIDNumber = caseNumberRS.getString("employerIDNumber");
             ulp.deptInState = caseNumberRS.getString("deptInState");
             ulp.barginingUnitNo = caseNumberRS.getString("barginingUnitNo");
@@ -475,13 +481,13 @@ public class ULPCase {
             ulp.aljID = caseNumberRS.getInt("aljID");
             ulp.fileDate = caseNumberRS.getTimestamp("fileDate");
             ulp.probableCause = caseNumberRS.getBoolean("probableCause");
-            
+
             stmt.close();
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadStatus();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -508,27 +514,27 @@ public class ULPCase {
             preparedStatement.setString(5, Global.caseNumber);
 
             preparedStatement.executeUpdate();
-            
+
             Audit.addAuditEntry("Updated Statement for " + NumberFormatService.generateFullCaseNumber());
             Activity.addActivty("Updated Statement", null);
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateStatement(note);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static boolean validateCaseNumber(String fullCaseNumber) {
         String[] caseNumberParts = fullCaseNumber.split("-");
         boolean valid = false;
-        
+
         if(caseNumberParts.length != 4) {
             return false;
         }
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
@@ -545,27 +551,27 @@ public class ULPCase {
             preparedStatement.setString(2, caseNumberParts[1]);
             preparedStatement.setString(3, caseNumberParts[2]);
             preparedStatement.setString(4, caseNumberParts[3]);
-            
+
             ResultSet validRS = preparedStatement.executeQuery();
-            
+
             validRS.next();
-            
+
             valid = validRS.getInt("results") > 0;
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 validateCaseNumber(fullCaseNumber);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return valid;
     }
 
-    public static void createCase(String caseYear, 
-            String caseType, 
-            String caseMonth, 
-            String caseNumber) 
+    public static void createCase(String caseYear,
+            String caseType,
+            String caseMonth,
+            String caseNumber)
     {
         Statement stmt = null;
         try {
@@ -592,7 +598,7 @@ public class ULPCase {
             preparedStatement.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
 
             int success = preparedStatement.executeUpdate();
-            
+
             if(success == 1) {
                 String fullCaseNumber = caseYear
                         + "-"
@@ -601,27 +607,27 @@ public class ULPCase {
                         + caseMonth
                         + "-"
                         + caseNumber;
-                        
+
                 CaseNumber.updateNextCaseNumber(caseYear, caseType, String.valueOf(Integer.valueOf(caseNumber) + 1));
                 Audit.addAuditEntry("Created Case: " + fullCaseNumber);
                 Activity.addNewCaseActivty(fullCaseNumber, "Case was Received and Started");
                 Activity.addNewCaseActivty(fullCaseNumber, "Case was Filed");
                 Global.root.getuLPHeaderPanel1().loadCases();
-                Global.root.getuLPHeaderPanel1().getjComboBox2().setSelectedItem(fullCaseNumber); 
+                Global.root.getuLPHeaderPanel1().getjComboBox2().setSelectedItem(fullCaseNumber);
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 createCase(caseYear, caseType, caseMonth, caseNumber);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static ULPCase loadHeaderInformation() {
         ULPCase ulp = null;
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
@@ -640,30 +646,30 @@ public class ULPCase {
             preparedStatement.setString(4, Global.caseNumber);
 
             ResultSet caseHeader = preparedStatement.executeQuery();
-            
+
             if(caseHeader.next()) {
                 ulp = new ULPCase();
                 ulp.fileDate = caseHeader.getTimestamp("fileDate");
                 ulp.currentStatus = caseHeader.getString("currentStatus");
                 ulp.investigatorID = caseHeader.getInt("investigatorID");
                 ulp.aljID = caseHeader.getInt("aljID");
-                
+
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadHeaderInformation();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return ulp;
     }
-    
+
     public static void updateCaseStatusInformation(ULPCase newCaseInformation, ULPCase caseInformation) {
         Statement stmt = null;
         try {
-            stmt = Database.connectToDB().createStatement(); 
+            stmt = Database.connectToDB().createStatement();
 
             String sql = "Update ULPCase"
                 + " set employerIDNumber = ?,"
@@ -722,9 +728,9 @@ public class ULPCase {
             preparedStatement.setString(25, Global.caseType);
             preparedStatement.setString(26, Global.caseMonth);
             preparedStatement.setString(27, Global.caseNumber);
-            
+
             int success = preparedStatement.executeUpdate();
-            
+
             if(success == 1) {
                 detailedCaseInformationSaveInformation(newCaseInformation, caseInformation);
                 EmployerCaseSearchData.updateFileDate(
@@ -733,17 +739,17 @@ public class ULPCase {
                         newCaseInformation.currentStatus);
                 EmployerCaseSearchData.updateEmployer(
                         newCaseInformation.employerIDNumber);
-            } 
+            }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateCaseStatusInformation(newCaseInformation, caseInformation);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     private static void detailedCaseInformationSaveInformation(ULPCase newCaseInformation, ULPCase oldCaseInformation) {
         //allegation
         if(newCaseInformation.allegation == null && oldCaseInformation.allegation != null) {
@@ -751,25 +757,25 @@ public class ULPCase {
         } else if(newCaseInformation.allegation != null && oldCaseInformation.allegation == null) {
             Activity.addActivty("Set Allegation to " + newCaseInformation.allegation, null);
         } else if(newCaseInformation.allegation != null && oldCaseInformation.allegation != null) {
-            if(!newCaseInformation.allegation.equals(oldCaseInformation.allegation)) 
+            if(!newCaseInformation.allegation.equals(oldCaseInformation.allegation))
                 Activity.addActivty("Changed Allegation from " + oldCaseInformation.allegation + " to " + newCaseInformation.allegation, null);
         }
-        
+
         //currentStatus
         if(newCaseInformation.currentStatus == null && oldCaseInformation.currentStatus != null) {
             Activity.addActivty("Removed " + oldCaseInformation.currentStatus + " from Current Status", null);
         } else if(newCaseInformation.currentStatus != null && oldCaseInformation.currentStatus == null) {
             Activity.addActivty("Set Current Status to " + newCaseInformation.currentStatus, null);
         } else if(newCaseInformation.currentStatus != null && oldCaseInformation.currentStatus != null) {
-            if(!newCaseInformation.currentStatus.equals(oldCaseInformation.currentStatus)) 
+            if(!newCaseInformation.currentStatus.equals(oldCaseInformation.currentStatus))
                 Activity.addActivty("Changed Current Status from " + oldCaseInformation.currentStatus + " to " + newCaseInformation.currentStatus, null);
         }
-        
+
         //priority
         if(newCaseInformation.priority != oldCaseInformation.priority) {
             Activity.addActivty("Changed Priority from " + (oldCaseInformation.priority ? "Yes" : "No") + " to " + (newCaseInformation.priority ? "Yes" : "No"), null);
         }
-        
+
         //assigned Date
         if(newCaseInformation.assignedDate == null && oldCaseInformation.assignedDate != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.assignedDate.getTime())) + " from Assigned Date", null);
@@ -779,7 +785,7 @@ public class ULPCase {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.assignedDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.assignedDate.getTime()))))
                 Activity.addActivty("Changed Assigned Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.assignedDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.assignedDate.getTime())), null);
         }
-        
+
         //turn in Date
         if(newCaseInformation.turnInDate == null && oldCaseInformation.turnInDate != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.turnInDate.getTime())) + " from Turn In Date", null);
@@ -789,7 +795,7 @@ public class ULPCase {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.turnInDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.turnInDate.getTime()))))
                 Activity.addActivty("Changed Turn In Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.turnInDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.turnInDate.getTime())), null);
         }
-        
+
         //reportDueDate
         if(newCaseInformation.reportDueDate == null && oldCaseInformation.reportDueDate != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.reportDueDate.getTime())) + " from Report Due Date", null);
@@ -799,7 +805,7 @@ public class ULPCase {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.reportDueDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.reportDueDate.getTime()))))
                 Activity.addActivty("Changed Report Due Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.reportDueDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.reportDueDate.getTime())), null);
         }
-        
+
         //dismissalDate
         if(newCaseInformation.dismissalDate == null && oldCaseInformation.dismissalDate != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.dismissalDate.getTime())) + " from Dismissal Date", null);
@@ -809,7 +815,7 @@ public class ULPCase {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.dismissalDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.dismissalDate.getTime()))))
                 Activity.addActivty("Changed Dismissal Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.dismissalDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.dismissalDate.getTime())), null);
         }
-        
+
         //deferredDate
         if(newCaseInformation.deferredDate == null && oldCaseInformation.deferredDate != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.deferredDate.getTime())) + " from Deffered Date", null);
@@ -819,7 +825,7 @@ public class ULPCase {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.deferredDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.deferredDate.getTime()))))
                 Activity.addActivty("Changed Deferred Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.deferredDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.deferredDate.getTime())), null);
         }
-        
+
         //appealDateReceived
         if(newCaseInformation.appealDateReceived == null && oldCaseInformation.appealDateReceived != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.appealDateReceived.getTime())) + " from Appeal Received", null);
@@ -829,7 +835,7 @@ public class ULPCase {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.appealDateReceived.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.appealDateReceived.getTime()))))
                 Activity.addActivty("Changed Appeal Received from " + Global.mmddyyyy.format(new Date(oldCaseInformation.appealDateReceived.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.appealDateReceived.getTime())), null);
         }
-                
+
         //appealDateSent
         if(newCaseInformation.appealDateSent == null && oldCaseInformation.appealDateSent != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.appealDateSent.getTime())) + " from Appeal Sent", null);
@@ -838,78 +844,78 @@ public class ULPCase {
         } else if(newCaseInformation.appealDateSent != null && oldCaseInformation.appealDateSent != null) {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.appealDateSent.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.appealDateSent.getTime()))))
                 Activity.addActivty("Changed Appeal Sent from " + Global.mmddyyyy.format(new Date(oldCaseInformation.appealDateSent.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.appealDateSent.getTime())), null);
-        }   
-        
+        }
+
         //cournt name
         if(newCaseInformation.courtName == null && oldCaseInformation.courtName != null) {
             Activity.addActivty("Removed " + oldCaseInformation.courtName + " from Court Name", null);
         } else if(newCaseInformation.courtName != null && oldCaseInformation.courtName == null) {
             Activity.addActivty("Set Court Name to " + newCaseInformation.courtName, null);
         } else if(newCaseInformation.courtName != null && oldCaseInformation.courtName != null) {
-            if(!newCaseInformation.courtName.equals(oldCaseInformation.courtName)) 
+            if(!newCaseInformation.courtName.equals(oldCaseInformation.courtName))
                 Activity.addActivty("Changed Court Name from " + oldCaseInformation.courtName + " to " + newCaseInformation.courtName, null);
         }
-                
+
         //courtCaseNumber
         if(newCaseInformation.courtCaseNumber == null && oldCaseInformation.courtCaseNumber != null) {
             Activity.addActivty("Removed " + oldCaseInformation.courtCaseNumber + " from Court Case Number", null);
         } else if(newCaseInformation.courtCaseNumber != null && oldCaseInformation.courtCaseNumber == null) {
             Activity.addActivty("Set Court Case Number to " + newCaseInformation.courtCaseNumber, null);
         } else if(newCaseInformation.courtCaseNumber != null && oldCaseInformation.courtCaseNumber != null) {
-            if(!newCaseInformation.courtCaseNumber.equals(oldCaseInformation.courtCaseNumber)) 
+            if(!newCaseInformation.courtCaseNumber.equals(oldCaseInformation.courtCaseNumber))
                 Activity.addActivty("Changed Court Case Number from " + oldCaseInformation.courtCaseNumber + " to " + newCaseInformation.courtCaseNumber, null);
         }
-        
+
         //serbCaseNumber
         if(newCaseInformation.SERBCaseNumber == null && oldCaseInformation.SERBCaseNumber != null) {
             Activity.addActivty("Removed " + oldCaseInformation.SERBCaseNumber + " from SERB Case Number", null);
         } else if(newCaseInformation.SERBCaseNumber != null && oldCaseInformation.SERBCaseNumber == null) {
             Activity.addActivty("Set SERB Case Number to " + newCaseInformation.SERBCaseNumber, null);
         } else if(newCaseInformation.SERBCaseNumber != null && oldCaseInformation.SERBCaseNumber != null) {
-            if(!newCaseInformation.SERBCaseNumber.equals(oldCaseInformation.SERBCaseNumber)) 
+            if(!newCaseInformation.SERBCaseNumber.equals(oldCaseInformation.SERBCaseNumber))
                 Activity.addActivty("Changed SERB Case Number from " + oldCaseInformation.SERBCaseNumber + " to " + newCaseInformation.SERBCaseNumber, null);
         }
-        
+
         //finalDispositionStatus
         if(newCaseInformation.finalDispositionStatus == null && oldCaseInformation.finalDispositionStatus != null) {
             Activity.addActivty("Removed " + oldCaseInformation.finalDispositionStatus + " from Final Disposition Status", null);
         } else if(newCaseInformation.finalDispositionStatus != null && oldCaseInformation.finalDispositionStatus == null) {
             Activity.addActivty("Set Final Disposition Status to " + newCaseInformation.finalDispositionStatus, null);
         } else if(newCaseInformation.finalDispositionStatus != null && oldCaseInformation.finalDispositionStatus != null) {
-            if(!newCaseInformation.finalDispositionStatus.equals(oldCaseInformation.finalDispositionStatus)) 
+            if(!newCaseInformation.finalDispositionStatus.equals(oldCaseInformation.finalDispositionStatus))
                 Activity.addActivty("Changed Final Disposition Status from " + oldCaseInformation.finalDispositionStatus + " to " + newCaseInformation.finalDispositionStatus, null);
         }
-        
+
         //investigatorID
         if(newCaseInformation.investigatorID == 0 && oldCaseInformation.investigatorID != 0) {
             Activity.addActivty("Removed " + User.getNameByID(oldCaseInformation.investigatorID) + " from Investigator", null);
         } else if(newCaseInformation.investigatorID != 0 && oldCaseInformation.investigatorID == 0) {
             Activity.addActivty("Set Investigator to " + User.getNameByID(newCaseInformation.investigatorID), null);
         } else if(newCaseInformation.investigatorID != 0 && oldCaseInformation.investigatorID != 0) {
-            if(newCaseInformation.investigatorID != oldCaseInformation.investigatorID) 
+            if(newCaseInformation.investigatorID != oldCaseInformation.investigatorID)
                 Activity.addActivty("Changed Investigator from " + User.getNameByID(oldCaseInformation.investigatorID) + " to " + User.getNameByID(newCaseInformation.investigatorID), null);
         }
-        
+
         //mediatorAssignedID
         if(newCaseInformation.mediatorAssignedID == 0 && oldCaseInformation.mediatorAssignedID != 0) {
             Activity.addActivty("Removed " + User.getNameByID(oldCaseInformation.mediatorAssignedID) + " from Mediator", null);
         } else if(newCaseInformation.mediatorAssignedID != 0 && oldCaseInformation.mediatorAssignedID == 0) {
             Activity.addActivty("Set Mediator to " + User.getNameByID(newCaseInformation.mediatorAssignedID), null);
         } else if(newCaseInformation.mediatorAssignedID != 0 && oldCaseInformation.mediatorAssignedID != 0) {
-            if(newCaseInformation.mediatorAssignedID != oldCaseInformation.mediatorAssignedID) 
+            if(newCaseInformation.mediatorAssignedID != oldCaseInformation.mediatorAssignedID)
                 Activity.addActivty("Changed Mediator from " + User.getNameByID(oldCaseInformation.mediatorAssignedID) + " to " + User.getNameByID(newCaseInformation.mediatorAssignedID), null);
         }
-        
+
         //aljID
         if(newCaseInformation.aljID == 0 && oldCaseInformation.aljID != 0) {
             Activity.addActivty("Removed " + User.getNameByID(oldCaseInformation.aljID) + " from ALJ", null);
         } else if(newCaseInformation.aljID != 0 && oldCaseInformation.aljID == 0) {
             Activity.addActivty("Set ALJ to " + User.getNameByID(newCaseInformation.aljID), null);
         } else if(newCaseInformation.aljID != 0 && oldCaseInformation.aljID != 0) {
-            if(newCaseInformation.aljID != oldCaseInformation.aljID) 
+            if(newCaseInformation.aljID != oldCaseInformation.aljID)
                 Activity.addActivty("Changed ALJ from " + User.getNameByID(oldCaseInformation.aljID) + " to " + User.getNameByID(newCaseInformation.aljID), null);
         }
-        
+
         //fileDate
         if(newCaseInformation.fileDate == null && oldCaseInformation.fileDate != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.fileDate.getTime())) + " from File Date", null);
@@ -918,58 +924,58 @@ public class ULPCase {
         } else if(newCaseInformation.fileDate != null && oldCaseInformation.fileDate != null) {
             if(!Global.mmddyyyy.format(new Date(oldCaseInformation.fileDate.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.fileDate.getTime()))))
                 Activity.addActivty("Changed File Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.fileDate.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.fileDate.getTime())), null);
-        } 
-        
+        }
+
         //probableCause
         if(newCaseInformation.probableCause != oldCaseInformation.probableCause) {
             Activity.addActivty("Changed Probable Cause from " + (oldCaseInformation.probableCause ? "Yes" : "No") + " to " + (newCaseInformation.probableCause ? "Yes" : "No"), "");
         }
-        
+
         //employer Number
         if(newCaseInformation.employerIDNumber == null && oldCaseInformation.employerIDNumber != null) {
             Activity.addActivty("Removed " + oldCaseInformation.employerIDNumber + " from Employer ID Number", null);
         } else if(newCaseInformation.employerIDNumber != null && oldCaseInformation.employerIDNumber == null) {
             Activity.addActivty("Set Employer ID Number to " + newCaseInformation.employerIDNumber, null);
         } else if(newCaseInformation.employerIDNumber != null && oldCaseInformation.employerIDNumber != null) {
-            if(!newCaseInformation.employerIDNumber.equals(oldCaseInformation.employerIDNumber)) 
+            if(!newCaseInformation.employerIDNumber.equals(oldCaseInformation.employerIDNumber))
                 Activity.addActivty("Changed Employer ID Number from " + oldCaseInformation.employerIDNumber + " to " + newCaseInformation.employerIDNumber, null);
         }
-        
+
         //union number
         if(newCaseInformation.barginingUnitNo == null && oldCaseInformation.barginingUnitNo != null) {
             Activity.addActivty("Removed " + oldCaseInformation.barginingUnitNo + " from Union Number", null);
         } else if(newCaseInformation.barginingUnitNo != null && oldCaseInformation.barginingUnitNo == null) {
             Activity.addActivty("Set Union Number to " + newCaseInformation.barginingUnitNo, null);
         } else if(newCaseInformation.barginingUnitNo != null && oldCaseInformation.barginingUnitNo != null) {
-            if(!newCaseInformation.barginingUnitNo.equals(oldCaseInformation.barginingUnitNo)) 
+            if(!newCaseInformation.barginingUnitNo.equals(oldCaseInformation.barginingUnitNo))
                 Activity.addActivty("Changed Union Number from " + oldCaseInformation.barginingUnitNo + " to " + newCaseInformation.barginingUnitNo, null);
         }
-        
+
         //eo number
         if(newCaseInformation.EONumber == null && oldCaseInformation.EONumber != null) {
             Activity.addActivty("Removed " + oldCaseInformation.EONumber + " from EO Number", null);
         } else if(newCaseInformation.EONumber != null && oldCaseInformation.EONumber == null) {
             Activity.addActivty("Set EO Number to " + newCaseInformation.EONumber, null);
         } else if(newCaseInformation.EONumber != null && oldCaseInformation.EONumber != null) {
-            if(!newCaseInformation.EONumber.equals(oldCaseInformation.EONumber)) 
+            if(!newCaseInformation.EONumber.equals(oldCaseInformation.EONumber))
                 Activity.addActivty("Changed EO Number from " + oldCaseInformation.EONumber + " to " + newCaseInformation.EONumber, null);
         }
-        
+
         //dept in state
         if(newCaseInformation.deptInState == null && oldCaseInformation.deptInState != null) {
             Activity.addActivty("Removed " + oldCaseInformation.deptInState + " from Department In State", null);
         } else if(newCaseInformation.deptInState != null && oldCaseInformation.deptInState == null) {
             Activity.addActivty("Set Department In State to " + newCaseInformation.deptInState, null);
         } else if(newCaseInformation.deptInState != null && oldCaseInformation.deptInState != null) {
-            if(!newCaseInformation.deptInState.equals(oldCaseInformation.deptInState)) 
+            if(!newCaseInformation.deptInState.equals(oldCaseInformation.deptInState))
                 Activity.addActivty("Changed Department In State from " + oldCaseInformation.deptInState + " to " + newCaseInformation.deptInState, null);
         }
     }
-    
+
     public static String DocketTo(String caseNumber) {
         String[] parsedCase = caseNumber.trim().split("-");
         String to = "";
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
@@ -990,7 +996,7 @@ public class ULPCase {
             preparedStatement.setString(4, parsedCase[3]);
 
             ResultSet caseNumberRS = preparedStatement.executeQuery();
-           
+
             if(caseNumberRS.next()) {
                 if(caseNumberRS.getInt("aljID") != 0) {
                     to = User.getNameByID(caseNumberRS.getInt("aljID"));
@@ -1003,17 +1009,17 @@ public class ULPCase {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 DocketTo(caseNumber);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return to;
     }
-    
+
     public static String ULPDocketNotification(String caseNumber) {
         String[] parsedCase = caseNumber.trim().split("-");
         String to = "";
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
@@ -1033,26 +1039,26 @@ public class ULPCase {
             preparedStatement.setString(4, parsedCase[3]);
 
             ResultSet caseNumberRS = preparedStatement.executeQuery();
-           
+
             if(caseNumberRS.next()) {
                 if(caseNumberRS.getInt("aljID") != 0) {
                     DocketNotifications.addNotification(caseNumber, "ULP", caseNumberRS.getInt("aljID"));
-                } 
+                }
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 ULPDocketNotification(caseNumber);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return to;
     }
-    
+
     public static boolean checkIfFristCaseOfMonth(String year, String type, String month) {
         boolean firstCase = false;
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
@@ -1070,7 +1076,7 @@ public class ULPCase {
             preparedStatement.setString(3, month);
 
             ResultSet caseNumberRS = preparedStatement.executeQuery();
-           
+
             if(caseNumberRS.next()) {
                  if(caseNumberRS.getInt("CasesThisMonth") > 0) {
                      firstCase = false;
@@ -1082,24 +1088,24 @@ public class ULPCase {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 checkIfFristCaseOfMonth(year, type, month);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return firstCase;
     }
-    
+
     public static ULPCase loadULPCaseDetails(String caseYear,
             String caseType,
             String caseMonth,
-            String caseNumber) 
+            String caseNumber)
     {
         ULPCase ulpCase = new ULPCase();
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
-            
+
             String sql = "Select *"
                     + " from ULPCase"
                     + " where caseYear = ?"
@@ -1112,9 +1118,9 @@ public class ULPCase {
             preparedStatement.setString(2, caseType);
             preparedStatement.setString(3, caseMonth);
             preparedStatement.setString(4, caseNumber);
-            
+
             ResultSet rs = preparedStatement.executeQuery();
-            
+
             if(rs.first()) {
                 ulpCase.id = rs.getInt("id");
                 ulpCase.caseYear = rs.getString("caseYear").trim();
@@ -1151,20 +1157,20 @@ public class ULPCase {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadULPCaseDetails(caseYear, caseType, caseMonth, caseNumber);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return ulpCase;
     }
-    
+
     public static List<ULPCase> loadULPCasesToClose(Date boardDate) {
         List<ULPCase> ULPCaseList = new ArrayList<>();
         List casetypes = CaseType.getCaseTypeBySection("ULP");
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
-            
+
             String sql = "SELECT ulpcase.id, ulpcase.caseYear, ulpcase.caseType, "
                     + "ulpcase.caseMonth, ulpcase.caseNumber, ulpcase.employerIDNumber, "
                     + "ulpcase.barginingUnitNo, ulpcase.fileDate, ulpcase.currentstatus "
@@ -1173,24 +1179,24 @@ public class ULPCase {
                     + "AND boardMeeting.caseMonth = ulpcase.caseMonth "
                     + "AND boardMeeting.caseNumber = ulpcase.caseNumber "
                     + "WHERE boardMeetingDate = ? ";
-                        
+
             if (!casetypes.isEmpty()) {
                 sql += "AND (";
-                
+
                 for (Object casetype : casetypes) {
-                    
+
                     sql += " boardMeeting.caseType = '" + casetype.toString() + "' OR";
                 }
-                
+
                 sql = sql.substring(0, (sql.length() - 2)) + ")";
             }
-            
+
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
-            preparedStatement.setDate(1, new java.sql.Date(boardDate.getTime()));           
+            preparedStatement.setDate(1, new java.sql.Date(boardDate.getTime()));
 
             ResultSet rs = preparedStatement.executeQuery();
-            
+
             while(rs.next()) {
                 ULPCase ulpCase = new ULPCase();
                 ulpCase.id = rs.getInt("id");
@@ -1208,16 +1214,16 @@ public class ULPCase {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadULPCasesToClose(boardDate);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return ULPCaseList;
     }
-    
+
      public static void updateClosedCases(int id) {
-        
-        Statement stmt = null; 
+
+        Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -1232,10 +1238,83 @@ public class ULPCase {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateClosedCases(id);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
+     public static List<ULPCase> loadULPCaseDetailsForAgendas(Date boardMeetingDate) {
+        List<ULPCase> ULPCaseList = new ArrayList<>();
+
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT ULPCase.*, BoardMeeting.boardMeetingDate, BoardMeeting.agendaItemNumber, "
+                    + "BoardMeeting.recommendation AS boardMeetingRecommendation, "
+                    + "BoardMeeting.memoDate "
+                    + "FROM ULPCase LEFT JOIN BoardMeeting ON "
+                    + "ULPCase.caseYear = BoardMeeting.caseYear AND "
+                    + "ULPCase.caseType = BoardMeeting.caseType AND "
+                    + "ULPCase.caseMonth = BoardMeeting.caseMonth AND "
+                    + "ULPCase.caseNumber = BoardMeeting.caseNumber "
+                    + "WHERE BoardMeeting.boardMeetingDate =  ? "
+                    + "ORDER BY ABS(BoardMeeting.agendaItemNumber) ASC, "
+                    + "ULPCase.caseYear ASC, ULPCase.caseMonth ASC, ULPCase.caseNumber ASC";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+
+            preparedStatement.setDate(1, new java.sql.Date(boardMeetingDate.getTime()));
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while(rs.next()) {
+                ULPCase ulpCase = new ULPCase();
+                ulpCase.id = rs.getInt("id");
+                ulpCase.caseYear = rs.getString("caseYear").trim();
+                ulpCase.caseType = rs.getString("caseType").trim();
+                ulpCase.caseMonth = rs.getString("caseMonth").trim();
+                ulpCase.caseNumber = rs.getString("caseNumber").trim();
+                ulpCase.employerIDNumber = rs.getString("employerIDNumber") == null ? "" : rs.getString("employerIDNumber").trim();
+                ulpCase.deptInState = rs.getString("deptInState") == null ? "" : rs.getString("deptInState").trim();
+                ulpCase.barginingUnitNo = rs.getString("barginingUnitNo") == null ? "" : rs.getString("barginingUnitNo").trim();
+                ulpCase.EONumber = rs.getString("EONumber") == null ? "" : rs.getString("EONumber").trim();
+                ulpCase.allegation = rs.getString("allegation") == null ? "" : rs.getString("allegation").trim();
+                ulpCase.currentStatus = rs.getString("currentStatus") == null ? "" : rs.getString("currentStatus").trim();
+                ulpCase.priority = rs.getBoolean("priority");
+                ulpCase.assignedDate = rs.getTimestamp("assignedDate");
+                ulpCase.turnInDate = rs.getTimestamp("turnInDate");
+                ulpCase.reportDueDate = rs.getTimestamp("reportDueDate");
+                ulpCase.fileDate = rs.getTimestamp("fileDate");
+                ulpCase.probableCause = rs.getBoolean("probableCause");
+                ulpCase.appealDateReceived = rs.getTimestamp("appealDateReceived");
+                ulpCase.appealDateSent = rs.getTimestamp("appealDateSent");
+                ulpCase.courtName = rs.getString("courtName") == null ? "" : rs.getString("courtName").trim();
+                ulpCase.courtCaseNumber = rs.getString("courtCaseNumber") == null ? "" : rs.getString("courtCaseNumber").trim();
+                ulpCase.SERBCaseNumber = rs.getString("SERBCaseNumber") == null ? "" : rs.getString("SERBCaseNumber").trim();
+                ulpCase.finalDispositionStatus = rs.getString("finalDispositionStatus") == null ? "" : rs.getString("finalDispositionStatus").trim();
+                ulpCase.investigatorID = rs.getInt("investigatorID");
+                ulpCase.mediatorAssignedID = rs.getInt("mediatorAssignedID");
+                ulpCase.aljID = rs.getInt("aljID");
+                ulpCase.statement = rs.getString("statement") == null ? "" : rs.getString("statement").trim();
+                ulpCase.recommendation = rs.getString("recommendation") == null ? "" : rs.getString("recommendation").trim();
+                ulpCase.investigationReveals = rs.getString("investigationReveals") == null ? "" : rs.getString("investigationReveals").trim();
+                ulpCase.note = rs.getString("note") == null ? "" : rs.getString("note").trim();
+                ulpCase.agendaItemNumber = rs.getString("agendaItemNumber") == null ? "" : rs.getString("agendaItemNumber").trim();
+                ulpCase.boardMeetingRecommendation = rs.getString("boardMeetingRecommendation") == null ? "" : rs.getString("boardMeetingRecommendation").trim();
+                ulpCase.boardMeetingMemoDate = rs.getTimestamp("memoDate");
+                ULPCaseList.add(ulpCase);
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadULPCaseDetailsForAgendas(boardMeetingDate);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return ULPCaseList;
+    }
+
 }

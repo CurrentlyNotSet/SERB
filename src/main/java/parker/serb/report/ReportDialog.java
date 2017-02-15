@@ -7,9 +7,13 @@ package parker.serb.report;
 
 //TODO: Load all REP Reports
 
+import com.alee.laf.optionpane.WebOptionPane;
+import java.awt.event.ItemEvent;
+import java.io.File;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import parker.serb.Global;
+import parker.serb.bookmarkProcessing.RequestedBoardDatePanel;
 import parker.serb.sql.CMDSReport;
 import parker.serb.sql.SMDSDocuments;
 import parker.serb.util.Item;
@@ -21,7 +25,7 @@ import parker.serb.util.Item;
 public class ReportDialog extends javax.swing.JDialog {
 
     String section;
-    
+
     /**
      * Creates new form REPReportDialog
      * @param parent
@@ -31,17 +35,55 @@ public class ReportDialog extends javax.swing.JDialog {
     public ReportDialog(java.awt.Frame parent, boolean modal, String sectionPassed) {
         super(parent, modal);
         initComponents();
-        section = sectionPassed;
-        loadReports();
+        setDefaults(sectionPassed);
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }
-    
+
+    private void setDefaults(String sectionPassed){
+        section = sectionPassed;
+
+        loadReports();
+        switch (section) {
+            case "REP":
+            case "ULP":
+                loadAgendas();
+                Agendalabel.setVisible(true);
+                AgendaComboBox.setVisible(true);
+                break;
+            case "MED":
+            case "ORG":
+            case "Hearings":
+            case "Civil Service Commission":
+            case "CMDS":
+                Agendalabel.setVisible(false);
+                AgendaComboBox.setVisible(false);
+                break;
+            default:
+                break;
+        }
+
+        addListeners();
+        this.pack();
+    }
+
+    private void addListeners() {
+        ReportComboBox.addItemListener((ItemEvent e) -> {
+            AgendaComboBox.setSelectedItem(new Item<>("0", ""));
+            enableGenerateButton();
+        });
+
+        AgendaComboBox.addItemListener((ItemEvent e) -> {
+            ReportComboBox.setSelectedItem(new Item<>("0", ""));
+            enableGenerateButton();
+        });
+    }
+
     private void loadReports() {
         DefaultComboBoxModel dt = new DefaultComboBoxModel();
         ReportComboBox.setModel(dt);
         ReportComboBox.addItem(new Item<>("0", ""));
-        
+
         switch (Global.activeSection) {
             case "REP":
             case "ULP":
@@ -49,7 +91,7 @@ public class ReportDialog extends javax.swing.JDialog {
             case "ORG":
             case "Hearings":
                 List<SMDSDocuments> smdsletterList = SMDSDocuments.loadDocumentNamesByTypeAndSection(section, "Report");
-                
+
                 for (SMDSDocuments letter : smdsletterList) {
                     ReportComboBox.addItem(new Item<>(String.valueOf(letter.id), letter.description));
                 }
@@ -68,13 +110,24 @@ public class ReportDialog extends javax.swing.JDialog {
             default:
                 break;
         }
+    }
 
+    private void loadAgendas(){
+        DefaultComboBoxModel dt = new DefaultComboBoxModel();
+        AgendaComboBox.setModel(dt);
+        AgendaComboBox.addItem(new Item<>("0", ""));
+
+        List<SMDSDocuments> letterList = SMDSDocuments.loadDocumentNamesByTypeAndSection(Global.activeSection, "Agenda");
+        for (SMDSDocuments letter : letterList) {
+            AgendaComboBox.addItem(new Item<>(String.valueOf(letter.id), letter.description));
+        }
+        AgendaComboBox.setSelectedItem(new Item<>("0", ""));
     }
 
     private void generateReport() {
         Item item = (Item) ReportComboBox.getSelectedItem();
         int id = Integer.parseInt(item.getValue().toString());
-        
+
         switch (Global.activeSection) {
             case "REP":
             case "ULP":
@@ -87,7 +140,7 @@ public class ReportDialog extends javax.swing.JDialog {
             case "Civil Service Commission":
             case "CMDS":
                 CMDSReport cmdsreport = CMDSReport.getReportByID(id);
-        
+
                 SMDSDocuments SMDSreport = new SMDSDocuments();
                 SMDSreport.section = cmdsreport.section;
                 SMDSreport.description = cmdsreport.description;
@@ -99,18 +152,37 @@ public class ReportDialog extends javax.swing.JDialog {
             default:
                 break;
         }
-        
-        
+    }
+
+    private void generateAgenda() {
+        Item item = (Item) AgendaComboBox.getSelectedItem();
+        int id = Integer.parseInt(item.getValue().toString());
+
+        SMDSDocuments report = SMDSDocuments.findDocumentByID(id);
+        File templateFile = new File(Global.templatePath + Global.activeSection + File.separator + report.fileName);
+        if (templateFile.exists()) {
+            new RequestedBoardDatePanel(Global.root, true, report);
+        } else {
+            WebOptionPane.showMessageDialog(Global.root, "<html><center> Sorry, unable to locate files selected. <br><br>Unable to generate letter.</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void enableGenerateButton() {
-        if(ReportComboBox.getSelectedItem().toString().equals("")) {
-            GenerateButton.setEnabled(false);
+        if (AgendaComboBox.isVisible()){
+            if(ReportComboBox.getSelectedItem().toString().equals("") && AgendaComboBox.getSelectedItem().toString().equals("")) {
+                GenerateButton.setEnabled(false);
+            } else {
+                GenerateButton.setEnabled(true);
+            }
         } else {
-            GenerateButton.setEnabled(true);
+            if(ReportComboBox.getSelectedItem().toString().equals("")) {
+                GenerateButton.setEnabled(false);
+            } else {
+                GenerateButton.setEnabled(true);
+            }
         }
     }
-        
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -126,6 +198,9 @@ public class ReportDialog extends javax.swing.JDialog {
         ReportComboBox = new javax.swing.JComboBox();
         GenerateButton = new javax.swing.JButton();
         CancelButton = new javax.swing.JButton();
+        AgendaComboBox = new javax.swing.JComboBox();
+        jLabel3 = new javax.swing.JLabel();
+        Agendalabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -156,6 +231,16 @@ public class ReportDialog extends javax.swing.JDialog {
             }
         });
 
+        AgendaComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AgendaComboBoxActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Report:");
+
+        Agendalabel.setText("Agenda:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -163,7 +248,6 @@ public class ReportDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGap(12, 12, 12)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(ReportComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(CancelButton)
@@ -171,6 +255,22 @@ public class ReportDialog extends javax.swing.JDialog {
                         .addComponent(GenerateButton))
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(12, 12, 12))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(AgendaComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(ReportComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(Agendalabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -179,9 +279,15 @@ public class ReportDialog extends javax.swing.JDialog {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(ReportComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(Agendalabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(AgendaComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(GenerateButton)
                     .addComponent(CancelButton))
@@ -192,7 +298,11 @@ public class ReportDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void GenerateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GenerateButtonActionPerformed
-        generateReport();
+        if(ReportComboBox.getSelectedItem().toString().equals("")) {
+                generateAgenda();
+            } else {
+                generateReport();
+            }
     }//GEN-LAST:event_GenerateButtonActionPerformed
 
     private void CancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelButtonActionPerformed
@@ -200,15 +310,22 @@ public class ReportDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_CancelButtonActionPerformed
 
     private void ReportComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReportComboBoxActionPerformed
-        enableGenerateButton();
+
     }//GEN-LAST:event_ReportComboBoxActionPerformed
 
+    private void AgendaComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AgendaComboBoxActionPerformed
+
+    }//GEN-LAST:event_AgendaComboBoxActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox AgendaComboBox;
+    private javax.swing.JLabel Agendalabel;
     private javax.swing.JButton CancelButton;
     private javax.swing.JButton GenerateButton;
     private javax.swing.JComboBox ReportComboBox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JSeparator jSeparator4;
     // End of variables declaration//GEN-END:variables
 }

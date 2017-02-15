@@ -30,7 +30,7 @@ import parker.serb.sql.ULPCase;
  * @author parkerjohnston
  */
 public class FileService {
-    
+
     public static void setFilePath() {
         try {
             switch(InetAddress.getLocalHost().getHostName()) {
@@ -61,7 +61,7 @@ public class FileService {
 //                    Global.mediaPath = "C:\\Users\\johnp10\\Desktop\\SERB\\Media\\";
 //                    Global.templatePath = "C:\\Users\\johnp10\\Desktop\\SERB\\Template\\";
 //                    Global.reportingPath = "C:\\Users\\johnp10\\Desktop\\SERB\\Reporting\\";
-//                    break;    
+//                    break;
                 default: //SERB LOCATION
                     Global.scanPath = "G:\\SERB\\Scan\\";
                     Global.emailPath = "G:\\SERB\\Email\\";
@@ -69,13 +69,13 @@ public class FileService {
                     Global.mediaPath = "G:\\SERB\\Media\\";
                     Global.templatePath = "G:\\SERB\\Template\\";
                     Global.reportingPath = "G:\\SERB\\Reporting\\";
-                    break;    
+                    break;
             }
         } catch (UnknownHostException ex) {
             SlackNotification.sendNotification(ex);
         }
     }
-    
+
     public static void openFileWithCaseNumber(String activeSection, String caseYear, String caseType, String caseMonth, String caseNumber, String fileName) {
         try {
             Audit.addAuditEntry("Opend " + fileName + " from Activity Table");
@@ -93,7 +93,7 @@ public class FileService {
             SlackNotification.sendNotification(ex);
         }
     }
-    
+
     public static void openFileWithORGNumber(String caseType, String orgNumber, String fileName) {
         try {
             Audit.addAuditEntry("Opend " + fileName);
@@ -109,7 +109,7 @@ public class FileService {
             SlackNotification.sendNotification(ex);
         }
     }
-    
+
     public static void openAnnualReport(String fileName) {
         try {
             Desktop.getDesktop().open(new File(Global.activityPath
@@ -122,7 +122,22 @@ public class FileService {
             SlackNotification.sendNotification(ex);
         }
     }
-    
+
+    public static void openAgenda(String fileName) {
+        try {
+            Desktop.getDesktop().open(new File(Global.activityPath
+                    + File.separatorChar
+                    + Global.activeSection
+                    + File.separatorChar
+                    + "Agenda"
+                    + File.separatorChar
+                    + fileName));
+        } catch (IOException | NullPointerException | IllegalArgumentException ex) {
+            new FileNotFoundDialog((JFrame) Global.root.getRootPane().getParent(), true, fileName);
+            SlackNotification.sendNotification(ex);
+        }
+    }
+
     public static void openFile(String fileName) {
         try {
             Audit.addAuditEntry("Opend " + fileName);
@@ -140,7 +155,7 @@ public class FileService {
             SlackNotification.sendNotification(ex);
         }
     }
-    
+
     public static void openHearingCaseFile(String fileName) {
         try {
             Audit.addAuditEntry("Opend " + fileName);
@@ -158,7 +173,7 @@ public class FileService {
             SlackNotification.sendNotification(ex);
         }
     }
-    
+
     public static void openScanFile(String fileName, String section) {
         try {
             Desktop.getDesktop().open(new File(Global.scanPath
@@ -171,7 +186,7 @@ public class FileService {
             SlackNotification.sendNotification(ex);
         }
     }
-    
+
     public static void openAttachmentFile(String id, String section) {
         try {
             Desktop.getDesktop().open(new File(Global.emailPath
@@ -184,7 +199,7 @@ public class FileService {
             SlackNotification.sendNotification(ex);
         }
     }
-    
+
     public static void openEmailBodyFile(String id, String section) {
         try {
             Desktop.getDesktop().open(new File(Global.emailPath
@@ -197,30 +212,30 @@ public class FileService {
             SlackNotification.sendNotification(ex);
         }
     }
-    
+
     public static void docketScan(String[] caseNumbers,
             String fileName,
             String section,
             String typeAbbrv,
             String typeFull,
-            String from, 
+            String from,
             String to,
             String comment,
             boolean redacted,
             Date activityDate) {
-        
+
         File docketFile = new File(Global.scanPath + section + File.separatorChar + fileName);
-        
+
         if(docketFile.exists()) {
             for (String caseNumber : caseNumbers) {
-                
+
                 File caseArchiveFile = null;
-                
+
                 switch(section) {
                     case "ORG":
                     case "CSC":
                         caseArchiveFile = new File(
-                        Global.activityPath 
+                        Global.activityPath
                         + section
                         + File.separatorChar
                         + caseNumber.trim());
@@ -228,7 +243,7 @@ public class FileService {
                     default:
                         String[] caseNumberParts = caseNumber.trim().split("-");
                         caseArchiveFile = new File(
-                        Global.activityPath 
+                        Global.activityPath
                         + section
                         + File.separatorChar
                         + caseNumberParts[0]
@@ -236,13 +251,13 @@ public class FileService {
                         + caseNumber.trim());
                         break;
                 }
-                
+
                 caseArchiveFile.mkdirs();
-                
+
                 String fileDate = String.valueOf(new Date().getTime());
-                
+
                 FileUtils.copyFile(docketFile, new File(caseArchiveFile + File.separator + fileDate + "_" + typeAbbrv + (redacted ? "_REDACTED.pdf" : ".pdf")));
-                
+
                 switch(section) {
                     case "ORG":
                     case "CSC":
@@ -256,48 +271,48 @@ public class FileService {
                         caseNumber.trim().split("-"),from, to, typeFull, comment, false, false, activityDate);
                         break;
                 }
-                
+
                 Audit.addAuditEntry("Filed " + typeFull + " from " + from + (redacted ? " (REDACTED)" : ""));
-                
+
                 switch(section) {
-                    case "ULP": 
+                    case "ULP":
                         ULPCase.ULPDocketNotification(caseNumber);
                         break;
-                    case "REP": 
+                    case "REP":
                         REPCase.REPDocketNotification(caseNumber);
                         break;
-                    case "CMDS": 
+                    case "CMDS":
                         CMDSCase.CMDSDocketNotification(caseNumber);
                         break;
                 }
             }
         }
-        
+
         docketFile.delete();
     }
-    
+
     //docketMedia
     public static void docketMedia(String[] caseNumbers,
             String fileName,
             String section,
             String typeAbbrv,
             String typeFull,
-            String from, 
+            String from,
             String to,
             String comment) {
-        
+
         File docketFile = new File(Global.mediaPath + section + File.separatorChar + fileName);
-        
+
         if(docketFile.exists()) {
             for (String caseNumber : caseNumbers) {
-                
+
                 File caseArchiveFile = null;
-                
+
                 switch(section) {
                     case "ORG":
                     case "CSC":
                         caseArchiveFile = new File(
-                        Global.activityPath 
+                        Global.activityPath
                         + section
                         + File.separatorChar
                         + caseNumber.trim());
@@ -305,7 +320,7 @@ public class FileService {
                     default:
                         String[] caseNumberParts = caseNumber.trim().split("-");
                         caseArchiveFile = new File(
-                        Global.activityPath 
+                        Global.activityPath
                         + section
                         + File.separatorChar
                         + caseNumberParts[0]
@@ -313,13 +328,13 @@ public class FileService {
                         + caseNumber.trim());
                         break;
                 }
-                
+
                 caseArchiveFile.mkdirs();
-                
+
                 String fileDate = String.valueOf(new Date().getTime());
-                
+
                 FileUtils.copyFile(docketFile, new File(caseArchiveFile + File.separator + fileDate + "_" + typeAbbrv + fileName.substring(fileName.lastIndexOf("."))));
-                
+
                 switch(section) {
                     case "ORG":
                     case "CSC":
@@ -333,17 +348,17 @@ public class FileService {
                         caseNumber.trim().split("-"),from, to, typeFull, comment, false, false);
                         break;
                 }
-                
+
                 Audit.addAuditEntry("Filed " + typeFull + " from " + from);
-                
+
                 switch(section) {
-                    case "ULP": 
+                    case "ULP":
                         ULPCase.ULPDocketNotification(caseNumber);
                         break;
-                    case "REP": 
+                    case "REP":
                         REPCase.REPDocketNotification(caseNumber);
                         break;
-                    case "CMDS": 
+                    case "CMDS":
                         CMDSCase.CMDSDocketNotification(caseNumber);
                         break;
                 }
@@ -351,29 +366,29 @@ public class FileService {
         }
         docketFile.delete();
     }
-    
+
     public static void docketEmailBody(String[] caseNumbers,
             String emailID,
             String section,
-            String from, 
+            String from,
             String to,
             String subject,
             Date activityDate) {
-        
+
         String fileName = Email.getEmailBodyFileByID(emailID);
-        
+
         File docketFile = new File(Global.emailPath + section + File.separatorChar + fileName);
-        
+
         if(docketFile.exists()) {
             for (String caseNumber : caseNumbers) {
                 File caseArchiveFile;
 //                String[] caseNumberParts = caseNumber.trim().split("-");
-                
+
                 switch(section) {
                     case "ORG":
                     case "CSC":
                         caseArchiveFile = new File(
-                        Global.activityPath 
+                        Global.activityPath
                         + section
                         + File.separatorChar
                         + caseNumber.trim());
@@ -381,7 +396,7 @@ public class FileService {
                     default:
                         String[] caseNumberParts = caseNumber.trim().split("-");
                         caseArchiveFile = new File(
-                        Global.activityPath 
+                        Global.activityPath
                         + section
                         + File.separatorChar
                         + caseNumberParts[0]
@@ -389,13 +404,13 @@ public class FileService {
                         + caseNumber.trim());
                         break;
                 }
-                
+
                 caseArchiveFile.mkdirs();
-                
+
                 String fileDate = String.valueOf(new Date().getTime());
-                
+
                 FileUtils.copyFile(docketFile, new File(caseArchiveFile + File.separator + fileDate + "_BODY.pdf"));
-                
+
                 switch(section) {
                     case "ORG":
                     case "CSC":
@@ -410,50 +425,50 @@ public class FileService {
                         break;
                 }
                 Audit.addAuditEntry("Filed Email Body from " + from);
-                
+
                 switch(section) {
-                    case "ULP": 
+                    case "ULP":
                         ULPCase.ULPDocketNotification(caseNumber);
                         break;
-                    case "REP": 
+                    case "REP":
                         REPCase.REPDocketNotification(caseNumber);
                         break;
-                    case "CMDS": 
+                    case "CMDS":
                         CMDSCase.CMDSDocketNotification(caseNumber);
                         break;
                 }
             }
         }
         docketFile.delete();
-        
-       
+
+
     }
-    
+
     public static void docketEmailAttachment(String[] caseNumbers,
             String atachmentID,
             String emailID,
             String section,
-            String from, 
+            String from,
             String to,
             String subject,
             String fileName,
             String type,
             String comment,
             Date activityDate) {
-        
+
         File docketFile = new File(Global.emailPath + section + File.separatorChar + fileName);
-        
+
         if(docketFile.exists()) {
-            
-            
+
+
             for (String caseNumber : caseNumbers) {
                 File caseArchiveFile;
-                
+
                 switch(section) {
                     case "ORG":
                     case "CSC":
                         caseArchiveFile = new File(
-                        Global.activityPath 
+                        Global.activityPath
                         + section
                         + File.separatorChar
                         + caseNumber.trim());
@@ -461,7 +476,7 @@ public class FileService {
                     default:
                         String[] caseNumberParts = caseNumber.trim().split("-");
                         caseArchiveFile = new File(
-                        Global.activityPath 
+                        Global.activityPath
                         + section
                         + File.separatorChar
                         + caseNumberParts[0]
@@ -469,26 +484,26 @@ public class FileService {
                         + caseNumber.trim());
                         break;
                 }
-                
+
 //                String[] caseNumberParts = caseNumber.trim().split("-");
 //                File caseArchiveFile = new File(
-//                        Global.activityPath 
+//                        Global.activityPath
 //                        + section
 //                        + File.separatorChar
 //                        + caseNumberParts[0]
 //                        + File.separatorChar
 //                        + caseNumber.trim());
-                
+
                 caseArchiveFile.mkdirs();
-                
+
                 String fileDate = String.valueOf(new Date().getTime());
-                
+
                 String fileExtenstion = fileName.substring(fileName.lastIndexOf(".")); //. included
-                
+
                 String fullType = ActivityType.getFullType(type);
-                
+
                 FileUtils.copyFile(docketFile, new File(caseArchiveFile + File.separator + fileDate + "_" + type + fileExtenstion));
-                
+
                 switch(section) {
                     case "ORG":
                     case "CSC":
@@ -502,16 +517,16 @@ public class FileService {
                         caseNumber.trim().split("-"), from, to, fullType, comment, false, fileExtenstion.endsWith("pdf"));
                         break;
                 }
-                
+
                 Audit.addAuditEntry("Filed " + fullType + " from " + from);
             }
         }
         docketFile.delete();
     }
-    
+
     public static void renameActivtyFile(String fileName, String updatedType) {
-        
-        FileUtils.copyFile(new File(Global.activityPath + Global.activeSection 
+
+        FileUtils.copyFile(new File(Global.activityPath + Global.activeSection
                 + File.separator + Global.caseYear
                 + File.separator + Global.caseYear + "-" + Global.caseType
                 + "-" + Global.caseMonth + "-" + Global.caseNumber
@@ -521,8 +536,8 @@ public class FileService {
                 + "-" + Global.caseMonth + "-" + Global.caseNumber
                 + File.separator + fileName.split("_")[0] + "_"
                 + ActivityType.getTypeAbbrv(updatedType).replace(" ", "_") + "." + fileName.split("\\.")[1]));
-        
-        new File(Global.activityPath + Global.activeSection 
+
+        new File(Global.activityPath + Global.activeSection
                 + File.separator + Global.caseYear
                 + File.separator + Global.caseYear + "-" + Global.caseType
                 + "-" + Global.caseMonth + "-" + Global.caseNumber
@@ -537,7 +552,7 @@ public class FileService {
         } else {
             newFileName = "REDACTED-" + fileName;
         }
-        
+
         File oldFile = new File(Global.activityPath + Global.activeSection
                 + File.separator + Global.caseYear
                 + File.separator + Global.caseYear + "-" + Global.caseType + "-" + Global.caseMonth + "-" + Global.caseNumber
@@ -561,25 +576,25 @@ public class FileService {
             SlackNotification.sendNotification(ex);
         }
     }
-    
+
     public static boolean isImageFormat(String image) {
         return image.toLowerCase().endsWith(".jpg")
                 || image.toLowerCase().endsWith(".gif")
                 || image.toLowerCase().endsWith(".bmp")
                 || image.toLowerCase().endsWith(".png");
     }
-    
+
     public static String getCaseSectionFolderByCaseType(String caseSection){
         String section = "";
-        
+
         List<CaseType> caseTypeList = CaseType.loadAllCaseTypes("".split(" "));
-        
+
         for (CaseType item : caseTypeList) {
             if (item.caseType.equals(caseSection)){
                 return item.section;
             }
         }
-        
+
         return section;
     }
 

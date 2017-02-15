@@ -5,19 +5,22 @@
  */
 package parker.serb.bunumber;
 
+import java.awt.Frame;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
+import javax.swing.JFrame;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
+import parker.serb.Global;
 import parker.serb.sql.BargainingUnit;
 
 /**
  *
  * @author parkerjohnston
  */
-public class buNumberSearch extends javax.swing.JDialog {
+public class BUNumberFileAddUpdateDeleteDialog extends javax.swing.JDialog {
 
     String buNumber;
     String unitDesc;
@@ -26,20 +29,24 @@ public class buNumberSearch extends javax.swing.JDialog {
     /**
      * Creates new form employerSearch
      */
-    public buNumberSearch(java.awt.Frame parent, boolean modal, String empNumber, String passedBUNumber, String passedDesciption) {
+    public BUNumberFileAddUpdateDeleteDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         addListeners();
-        
-        loadInformation(passedBUNumber.equals("") ? empNumber : passedBUNumber, passedDesciption);
-        
+        setColumnWidth();
+        jButton2.setVisible(Global.activeUser.REPCaseWorker);
+        loadInformation();
         setLocationRelativeTo(parent);
         setVisible(true);
     }
     
-    private void loadInformation(String number, String desc) {
-        buNumber = number;
-        unitDesc = desc;
+    private void setColumnWidth() {
+        buTable.getColumnModel().getColumn(0).setPreferredWidth(0);
+        buTable.getColumnModel().getColumn(0).setMinWidth(0);
+        buTable.getColumnModel().getColumn(0).setMaxWidth(0);
+    }
+    
+    private void loadInformation() {
         bu = BargainingUnit.loadBUList();
         
         DefaultTableModel model = (DefaultTableModel) buTable.getModel();
@@ -47,7 +54,8 @@ public class buNumberSearch extends javax.swing.JDialog {
         
         for (Object singleBU : bu) {
             BargainingUnit buInfo = (BargainingUnit) singleBU;
-            model.addRow(new Object[] {buInfo.employerNumber + "-" + buInfo.unitNumber,
+            model.addRow(new Object[] {buInfo.id,
+                buInfo.employerNumber + "-" + buInfo.unitNumber,
                 buInfo.buEmployerName,
                 buInfo.lUnion,
                 buInfo.county,
@@ -57,8 +65,6 @@ public class buNumberSearch extends javax.swing.JDialog {
                 buInfo.local,
                 buInfo.cert});
         }
-        
-        searchTextBox.setText(number);
     }
     
     private void addListeners() {
@@ -67,10 +73,8 @@ public class buNumberSearch extends javax.swing.JDialog {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if(e.getClickCount() == 2) {
-                   buNumber = buTable.getValueAt(buTable.getSelectedRow(), 0).toString().trim();
-                   unitDesc = buTable.getValueAt(buTable.getSelectedRow(), 4).toString().trim();
-                   certStatus = buTable.getValueAt(buTable.getSelectedRow(), 8).toString().trim();
-                   setVisible(false);
+                   new BUInformationUpdateDialog((JFrame) Global.root.getParent(), true, buTable.getValueAt(buTable.getSelectedRow(), 0).toString().trim());
+                   loadInformation();
                 } 
             }
 
@@ -114,7 +118,8 @@ public class buNumberSearch extends javax.swing.JDialog {
             if((buInfo.employerNumber + "-" + buInfo.unitNumber).contains(searchTextBox.getText().trim()) ||
                 buInfo.buEmployerName.toLowerCase().contains(searchTextBox.getText().trim().toLowerCase()))
             {
-                model.addRow(new Object[] {buInfo.employerNumber + "-" + buInfo.unitNumber,
+                model.addRow(new Object[] {buInfo.id,
+                    buInfo.employerNumber + "-" + buInfo.unitNumber,
                     buInfo.buEmployerName,
                     buInfo.lUnion,
                     buInfo.county,
@@ -154,6 +159,7 @@ public class buNumberSearch extends javax.swing.JDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         buTable = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -174,11 +180,11 @@ public class buNumberSearch extends javax.swing.JDialog {
 
             },
             new String [] {
-                "BU Number", "Employer Name", "International Org.", "County", "Unit Desc.", "Case Ref. ", "Notes", "Local", "Cert. Status"
+                "id", "BU Number", "Employer Name", "International Org.", "County", "Unit Desc.", "Case Ref. ", "Notes", "Local", "Cert. Status"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -187,11 +193,21 @@ public class buNumberSearch extends javax.swing.JDialog {
         });
         buTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(buTable);
+        if (buTable.getColumnModel().getColumnCount() > 0) {
+            buTable.getColumnModel().getColumn(0).setResizable(false);
+        }
 
         jButton1.setText("Close");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Create New");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
             }
         });
 
@@ -202,12 +218,14 @@ public class buNumberSearch extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1116, Short.MAX_VALUE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(searchTextBox))
+                        .addComponent(searchTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 954, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                        .addComponent(jButton2))
+                    .addComponent(jScrollPane1)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -219,9 +237,10 @@ public class buNumberSearch extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(searchTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(searchTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 295, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 292, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1)
                 .addContainerGap())
@@ -231,7 +250,6 @@ public class buNumberSearch extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
         setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -239,9 +257,14 @@ public class buNumberSearch extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_searchTextBoxActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        new BUInformationNewDialog((Frame) Global.root.getParent(), true);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable buTable;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;

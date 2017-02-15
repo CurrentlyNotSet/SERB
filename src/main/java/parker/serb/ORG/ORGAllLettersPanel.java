@@ -338,7 +338,7 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
         post.caseType = "ORG";
         post.caseMonth = null;
         post.caseNumber = orgNumber;
-        post.person = StringUtilities.buildCasePartyName(party);
+        post.person = StringUtilities.buildCasePartyNameNoPreFix(party);
         post.addressBlock = StringUtilities.buildAddressBlockWithLineBreaks(party);
         post.userID = Global.activeUser.id;
         post.suggestedSendDate = null;
