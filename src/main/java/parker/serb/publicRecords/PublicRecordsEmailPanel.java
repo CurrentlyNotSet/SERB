@@ -27,26 +27,37 @@ import parker.serb.util.StringUtilities;
  * @author parker
  */
 public class PublicRecordsEmailPanel extends javax.swing.JDialog {
-    
+
     public PublicRecordsEmailPanel(java.awt.Frame parent, boolean modal, List<Activity> docsList) {
         super(parent, modal);
         initComponents();
         loadPanel(docsList);
         setLocationRelativeTo(parent);
-        setVisible(true);   
+        setVisible(true);
     }
-    
+
     private void loadPanel(List<Activity> docsList) {
+        setSubjectLine();
         setColumnWidth();
-        loadAttachments(docsList);       
+        loadAttachments(docsList);
     }
-    
+
+    private void setSubjectLine() {
+        if (Global.activeSection.equals("ORG") ||
+                Global.activeSection.equals("Civil Service Commission") ||
+                Global.activeSection.equals("CSC")){
+            subjectTextbox.setText("Public Records Request");
+        } else {
+            subjectTextbox.setText("Public Records Request for case #" + NumberFormatService.generateFullCaseNumber());
+        }
+    }
+
     private void setColumnWidth() {
         // ID
         jTable1.getColumnModel().getColumn(0).setMinWidth(0);
         jTable1.getColumnModel().getColumn(0).setPreferredWidth(0);
         jTable1.getColumnModel().getColumn(0).setMaxWidth(0);
-        
+
         // FileName
         jTable1.getColumnModel().getColumn(1).setMinWidth(0);
         jTable1.getColumnModel().getColumn(1).setPreferredWidth(0);
@@ -56,35 +67,35 @@ public class PublicRecordsEmailPanel extends javax.swing.JDialog {
     private void loadAttachments(List<Activity> docsList){
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
-        
+
         for (Activity item : docsList){
             model.addRow(new Object[]{
                 item.id,
                 item.fileName,
                 item.action
             });
-        }   
+        }
     }
 
     private void saveInfo(){
         int emailID = insertEmail();
-        
+
         for (int i = 0; i < jTable1.getRowCount(); i++) {
             insertGeneratedAttachementEmail(emailID, jTable1.getValueAt(i, 1).toString());
         }
     }
-    
-    private int insertEmail() { 
+
+    private int insertEmail() {
         String emailBody = emailBodyTextArea.getText();
-        
-        emailBody += System.lineSeparator() + System.lineSeparator() 
+
+        emailBody += System.lineSeparator() + System.lineSeparator()
                 + StringUtilities.buildFullName(Global.activeUser.firstName, Global.activeUser.middleInitial, Global.activeUser.lastName)
                 + System.lineSeparator() + (Global.activeUser.jobTitle == null ? "" : Global.activeUser.jobTitle + System.lineSeparator())
-                + StringUtilities.generateDepartmentAddressBlock() + System.lineSeparator() 
+                + StringUtilities.generateDepartmentAddressBlock() + System.lineSeparator()
                 + (Global.activeUser.workPhone == null ? "" :  "Telephone: " + NumberFormatService.convertStringToPhoneNumber(Global.activeUser.workPhone));
-                
+
         EmailOut eml = new EmailOut();
-        
+
         eml.section = Global.activeSection;
         eml.caseYear = Global.caseYear;
         eml.caseType = Global.caseType;
@@ -100,21 +111,21 @@ public class PublicRecordsEmailPanel extends javax.swing.JDialog {
         eml.suggestedSendDate = suggestedSendDatePicker.getText().equals("") ? null : new Date(NumberFormatService.convertMMDDYYYY(suggestedSendDatePicker.getText()));
         eml.okToSend = false;
         eml.internalNote = internalNotesTextArea.getText().trim().equals("") ? null : internalNotesTextArea.getText().trim();
-        
+
         return EmailOut.insertEmail(eml);
     }
-    
+
     private void insertGeneratedAttachementEmail(int emailID, String docName){
         if (emailID > 0){
             EmailOutAttachment attach = new EmailOutAttachment();
-        
+
             attach.emailOutID = emailID;
             attach.fileName = docName;
             attach.primaryAttachment = true;
             EmailOutAttachment.insertAttachment(attach);
         }
-    }    
-    
+    }
+
     private void clearDate(WebDateField dateField, MouseEvent evt) {
         if(evt.getButton() == MouseEvent.BUTTON3 && dateField.isEnabled()) {
             ClearDateDialog dialog = new ClearDateDialog((JFrame) Global.root, true);
@@ -124,7 +135,7 @@ public class PublicRecordsEmailPanel extends javax.swing.JDialog {
             dialog.dispose();
         }
     }
-        
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -345,7 +356,7 @@ public class PublicRecordsEmailPanel extends javax.swing.JDialog {
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         if (evt.getClickCount() > 1){
-            String filePath = jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString(); 
+            String filePath = jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString();
             FileService.openFileWithCaseNumber(Global.activeSection, Global.caseYear, Global.caseType, Global.caseMonth, Global.caseNumber, filePath);
         }
     }//GEN-LAST:event_jTable1MouseClicked
