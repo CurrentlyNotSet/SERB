@@ -1201,11 +1201,20 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
     private void bargainingUnitNumberTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bargainingUnitNumberTextBoxMouseClicked
         if(evt.getClickCount() == 2 && evt.getButton() == MouseEvent.BUTTON3) {
             if(bargainingUnitNumberTextBox.isEnabled()) {
-                buNumberSearch search = new buNumberSearch((JFrame) Global.root.getRootPane().getParent(), true, employerIDNumberTextBox.getText().trim(), bargainingUnitNumberTextBox.getText().trim(), bargainingUnitNameTextBox.getText().trim());
+                buNumberSearch search = new buNumberSearch(
+                        (JFrame) Global.root.getRootPane().getParent(),
+                        true,
+                        employerIDNumberTextBox.getText().trim(),
+                        bargainingUnitNumberTextBox.getText().trim(),
+                        bargainingUnitNameTextBox.getText().trim());
                 bargainingUnitNumberTextBox.setText(search.getBuNumber());
                 bargainingUnitNameTextBox.setText(search.getUnitDesc());
                 bargainingUnitNameTextBox.setCaretPosition(0);
-                setBUNumberCheckBoxes(search.getCertStatus());
+                if(search.getCertStatus() != null) {
+                    setBUNumberCheckBoxes(search.getCertStatus());
+                } else {
+                    setBUNumberCheckBoxes("");
+                }
                 if(employerIDNumberTextBox.getText().equals("")) {
                     employerIDNumberTextBox.setText(search.getBuNumber().split("-")[0]);
                 }

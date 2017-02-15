@@ -7,6 +7,7 @@ package parker.serb;
 
 import java.awt.CardLayout;
 import java.awt.Dimension;
+import java.awt.Frame;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -43,7 +44,6 @@ import parker.serb.ULP.ULPRootPanel;
 import parker.serb.admin.SystemMontiorDialog;
 import parker.serb.adminDBMaintenance.AdminMainMenuPanel;
 import parker.serb.bookmarkProcessing.AnnualReportTwoDatePanel;
-import parker.serb.bunumber.BUInformationUpdateDialog;
 import parker.serb.bunumber.BUNumberFileAddUpdateDeleteDialog;
 import parker.serb.letterQueue.LetterQueuePanel;
 import parker.serb.login.ExitVerification;
@@ -68,11 +68,13 @@ import parker.serb.util.CreateNewCaseDialog;
 import parker.serb.util.CreateNewHearingDialog;
 import parker.serb.util.CreateNewOrgDialog;
 import parker.serb.util.NewCaseLockDialog;
+import parker.serb.util.NoAppliedRolesDialog;
 import parker.serb.util.NumberFormatService;
 import parker.serb.util.ReleaseNotesDialog;
 
 /**
- *
+ * The main panel of the application
+ * 
  * @author parker
  */
 public class RootPanel extends javax.swing.JFrame {
@@ -107,6 +109,11 @@ public class RootPanel extends javax.swing.JFrame {
      * etc
      */
     public void enableTabs() {
+        if(Global.activeUserRoles.isEmpty()) {
+            new NoAppliedRolesDialog(Global.root, true);
+            System.exit(0);
+        }
+        
         if(!Global.activeUserRoles.contains("Admin")) {
             jMenuBar1.remove(jMenu2);
             for(int i = jTabbedPane1.getTabCount()-1; i >= 0; i--) {
