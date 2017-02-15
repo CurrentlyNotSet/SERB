@@ -19,7 +19,7 @@ import parker.serb.util.SlackNotification;
  * @author parkerjohnston
  */
 public class BoardMeeting {
-    
+
     public int id;
     public String caseYear;
     public String caseType;
@@ -29,10 +29,10 @@ public class BoardMeeting {
     public String agendaItemNumber;
     public String recommendation;
     public String memoDate;
-    
+
     public static void addULPBoardMeeting(String meetingDate, String agendaItem, String recommendation) {
         Statement stmt = null;
-            
+
         try {
 
             stmt = Database.connectToDB().createStatement();
@@ -57,25 +57,25 @@ public class BoardMeeting {
             preparedStatement.setString(7, recommendation);
 
             preparedStatement.executeUpdate();
-            
+
             Activity.addActivty("Added New Board Meeting Information", null);
 
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 addULPBoardMeeting(meetingDate, agendaItem, recommendation);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void addREPBoardMeeting(String meetingDate,
             String agendaItem,
             String recommendation,
             String memoDate) {
         Statement stmt = null;
-            
+
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -101,23 +101,23 @@ public class BoardMeeting {
             preparedStatement.setTimestamp(8, new Timestamp(NumberFormatService.convertMMDDYYYY(meetingDate)));
 
             preparedStatement.executeUpdate();
-            
+
             Activity.addActivty("Added New Board Meeting Information", null);
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 addREPBoardMeeting(meetingDate, agendaItem, recommendation, memoDate);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static List loadULPBoardMeetings() {
         List<BoardMeeting> boardMeetingList = new ArrayList<>();
-        
+
         Statement stmt = null;
-        
+
         try {
 
             stmt = Database.connectToDB().createStatement();
@@ -136,7 +136,7 @@ public class BoardMeeting {
             preparedStatement.setString(4, Global.caseNumber);
 
             ResultSet boardMeetingRS = preparedStatement.executeQuery();
-            
+
             while(boardMeetingRS.next()) {
                 BoardMeeting meeting = new BoardMeeting();
                 meeting.id = boardMeetingRS.getInt("id");
@@ -149,18 +149,18 @@ public class BoardMeeting {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadULPBoardMeetings();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return boardMeetingList;
     }
-    
+
     public static List loadREPBoardMeetings() {
         List<BoardMeeting> boardMeetingList = new ArrayList<>();
-         
+
         Statement stmt = null;
-        
+
         try {
 
             stmt = Database.connectToDB().createStatement();
@@ -179,7 +179,7 @@ public class BoardMeeting {
             preparedStatement.setString(4, Global.caseNumber);
 
             ResultSet boardMeetingRS = preparedStatement.executeQuery();
-            
+
             while(boardMeetingRS.next()) {
                 BoardMeeting meeting = new BoardMeeting();
                 meeting.id = boardMeetingRS.getInt("id");
@@ -193,16 +193,59 @@ public class BoardMeeting {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadREPBoardMeetings();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return boardMeetingList;
     }
-    
+
+    public static BoardMeeting loadLatestREPBoardMeeting() {
+        BoardMeeting meeting = new BoardMeeting();
+        Statement stmt = null;
+
+        try {
+
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "select * from BoardMeeting where"
+                    + " caseYear = ? AND"
+                    + " caseType = ? AND"
+                    + " caseMonth = ? AND"
+                    + " caseNumber = ?"
+                    + " order by boardmeetingdate desc";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            preparedStatement.setString(1, Global.caseYear);
+            preparedStatement.setString(2, Global.caseType);
+            preparedStatement.setString(3, Global.caseMonth);
+            preparedStatement.setString(4, Global.caseNumber);
+
+            ResultSet boardMeetingRS = preparedStatement.executeQuery();
+
+            if(boardMeetingRS.first()) {
+
+                meeting.id = boardMeetingRS.getInt("id");
+                meeting.boardMeetingDate = boardMeetingRS.getTimestamp("boardmeetingdate") == null ? "" : Global.mmddyyyy.format(new Date(boardMeetingRS.getTimestamp("boardmeetingdate").getTime()));
+                meeting.agendaItemNumber = boardMeetingRS.getString("agendaItemNumber");
+                meeting.recommendation = boardMeetingRS.getString("recommendation");
+                meeting.memoDate = boardMeetingRS.getTimestamp("memoDate") == null ? "" : Global.mmddyyyy.format(new Date(boardMeetingRS.getTimestamp("memoDate").getTime()));
+                return meeting;
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadREPBoardMeetings();
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return meeting;
+    }
+
     public static void updateULPBoardMeeting(String id, String date, String agenda, String rec) {
         Statement stmt = null;
-        
+
         try {
 
             stmt = Database.connectToDB().createStatement();
@@ -225,15 +268,15 @@ public class BoardMeeting {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateULPBoardMeeting(id, date, agenda, rec);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void updateREPBoardMeeting(String id, String date, String agenda, String rec, String memoDate) {
         Statement stmt = null;
-        
+
         try {
 
             stmt = Database.connectToDB().createStatement();
@@ -258,15 +301,15 @@ public class BoardMeeting {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateREPBoardMeeting(id, date, agenda, rec, memoDate);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void removeBoardMeeting(String id) {
         Statement stmt = null;
-        
+
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -282,7 +325,7 @@ public class BoardMeeting {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 removeBoardMeeting(id);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }

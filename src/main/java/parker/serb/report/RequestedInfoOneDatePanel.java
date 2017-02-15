@@ -40,7 +40,7 @@ public class RequestedInfoOneDatePanel extends javax.swing.JDialog {
     }
 
     private void generateButton() {
-        if (startDateField.toString().trim().equals("")) {
+        if (startDateField.getText().trim().equals("")) {
             GenerateReportButton.setEnabled(false);
         } else {
             GenerateReportButton.setEnabled(true);

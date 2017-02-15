@@ -27,7 +27,7 @@
               <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="letterComboBox" max="32767" attributes="0"/>
-                  <Component id="jLabel1" pref="325" max="32767" attributes="0"/>
+                  <Component id="jLabel1" pref="443" max="32767" attributes="0"/>
                   <Component id="directiveComboBox" max="32767" attributes="0"/>
                   <Component id="memoComboBox" alignment="0" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">

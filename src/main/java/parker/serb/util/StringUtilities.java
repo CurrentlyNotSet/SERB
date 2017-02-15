@@ -30,6 +30,26 @@ public class StringUtilities {
         return fullName.trim();
     }
 
+    public static String buildCasePartyNameNoPreFix(CaseParty item) {
+        String fullName = "";
+        if (item.firstName != null) {
+            fullName = fullName.trim() + " " + (item.firstName.equals("") ? "" : item.firstName.trim());
+        }
+        if (item.middleInitial != null) {
+            fullName = fullName.trim() + " " + (item.middleInitial.equals("") ? "" : (item.middleInitial.trim().length() == 1 ? item.middleInitial.trim() + "." : item.middleInitial.trim()));
+        }
+        if (item.lastName != null) {
+            fullName = fullName.trim() + " " + item.lastName.trim();
+        }
+        if (item.suffix != null) {
+            fullName = fullName.trim() + " " + item.suffix.trim();
+        }
+        if ("".equals(fullName.trim()) && item.companyName != null){
+            fullName = fullName.trim() + " " +  item.companyName.trim();
+        }
+        return fullName.trim();
+    }
+
     public static String buildCasePartyName(CaseParty item) {
         String fullName = "";
         if (item.prefix != null) {
@@ -50,14 +70,13 @@ public class StringUtilities {
         if ("".equals(fullName.trim()) && item.companyName != null){
             fullName = fullName.trim() + " " +  item.companyName.trim();
         }
-
         return fullName.trim();
     }
 
     public static String buildAddressBlockWithPhoneAndEmail(CaseParty item) {
         String addressBlock = "";
 
-        addressBlock += buildCasePartyName(item);
+        addressBlock += buildCasePartyNameNoPreFix(item);
         if (item.address1 != null) {
             addressBlock += item.address1.trim().equals("") ? "" : "\n" + item.address1;
         }
@@ -85,7 +104,7 @@ public class StringUtilities {
     public static String buildAddressBlockWithLineBreaks(CaseParty item) {
         String addressBlock = "";
 
-        addressBlock += buildCasePartyName(item);
+        addressBlock += buildCasePartyNameNoPreFix(item);
         if (item.address1 != null) {
             if (!item.address1.equals("")) {
                 addressBlock += System.lineSeparator() + item.address1;

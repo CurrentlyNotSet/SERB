@@ -46,7 +46,7 @@ public class processORGbookmarks {
                      if (!"".equals(ccNameBlock.trim())){
                         ccNameBlock += ", ";
                     }
-                     ccNameBlock += StringUtilities.buildCasePartyName(party);
+                     ccNameBlock += StringUtilities.buildCasePartyNameNoPreFix(party);
                 }
             }
             
@@ -59,7 +59,7 @@ public class processORGbookmarks {
                         repAddressBlock += "\n\n";
                     }
                     repAddressBlock += StringUtilities.buildCasePartyAddressBlock(party);
-                    repNames += StringUtilities.buildCasePartyName(party);
+                    repNames += StringUtilities.buildCasePartyNameNoPreFix(party);
                     break;
                 case "Officer":
                     if (!"".equals(officerNames.trim())){
@@ -69,7 +69,7 @@ public class processORGbookmarks {
                         officerAddressBlock += "\n\n";
                     }
                     officerAddressBlock += StringUtilities.buildCasePartyAddressBlock(party);
-                    officerNames += StringUtilities.buildCasePartyName(party);
+                    officerNames += StringUtilities.buildCasePartyNameNoPreFix(party);
                     break;
             }
         }
@@ -82,7 +82,7 @@ public class processORGbookmarks {
         orgAddress.city = item.orgCity;
         orgAddress.stateCode = item.orgState;
         orgAddress.zipcode = item.orgZip;
-        orgAddressBlock = StringUtilities.buildCasePartyName(orgAddress);
+        orgAddressBlock = StringUtilities.buildCasePartyNameNoPreFix(orgAddress);
         
         if (item.certifiedDate != null){
             certifiedDate = Global.MMMMddyyyy.format(item.certifiedDate);

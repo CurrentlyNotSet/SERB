@@ -38,7 +38,7 @@ public class processCSCbookmarks {
                         repAddressBlock += "\n\n";
                     }
                     repAddressBlock += StringUtilities.buildCasePartyAddressBlock(party);
-                    repNames += StringUtilities.buildCasePartyName(party);
+                    repNames += StringUtilities.buildCasePartyNameNoPreFix(party);
                     break;
                 case "Chairman":
                     if (!"".equals(officerNames.trim())){
@@ -48,7 +48,7 @@ public class processCSCbookmarks {
                         officerAddressBlock += "\n\n";
                     }
                     officerAddressBlock += StringUtilities.buildCasePartyAddressBlock(party);
-                    officerNames += StringUtilities.buildCasePartyName(party);
+                    officerNames += StringUtilities.buildCasePartyNameNoPreFix(party);
                     break;
             }
         }
@@ -61,7 +61,7 @@ public class processCSCbookmarks {
         cscAddress.city = item.city;
         cscAddress.stateCode = item.state;
         cscAddress.zipcode = item.zipCode;
-        orgAddressBlock = StringUtilities.buildCasePartyName(cscAddress);
+        orgAddressBlock = StringUtilities.buildCasePartyNameNoPreFix(cscAddress);
                 
         
         

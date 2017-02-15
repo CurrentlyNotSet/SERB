@@ -84,13 +84,13 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         } else if (CMDSdocToGenerate != null) {
             documentLabel.setText("Document: " + CMDSdocToGenerate.LetterName);
         }
-        
+
         if (Global.activeSection.equals("ORG")) {
             orgCase = ORGCase.loadORGInformation();
         } else if (Global.activeSection.equals("Civil Service Commission")) {
             cscCase = CSCCase.loadCSCInformation();
         }
-        
+
         setColumnWidth();
         loadPartyTable();
         loadActivityDocumentsTable();
@@ -196,10 +196,10 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         });
 
         List<CaseParty> partyList = null;
-        
+
         if (orgCase != null){
             partyList = CaseParty.loadORGPartiesByCase();
-            
+
             String toCC = "";
             String emailPostal = "";
 
@@ -213,7 +213,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
             });
         } else if (cscCase != null){
             partyList = CaseParty.loadORGPartiesByCase();
-            
+
             String toCC = "";
             String emailPostal = "";
 
@@ -228,12 +228,12 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         } else {
             partyList = CaseParty.loadPartiesByCase();
         }
-                
+
         for (CaseParty party : partyList) {
             String toCC = "";
             String emailPostal = "";
             String caseRelation = party.caseRelation;
-            
+
             if (Global.activeSection.equals("MED")
                     && (party.caseRelation.equals("Employer REP") || party.caseRelation.equals("Employee Organization REP"))) {
                 if (!party.emailAddress.trim().equals("")) {
@@ -247,14 +247,14 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
             if (Global.activeSection.equals("Hearings")){
                 caseRelation = party.caseRelation.replace("Charged", "Respondent").replace("Charging", "Intervenor");
             }
-            
-            
+
+
             model.addRow(new Object[]{
                 party.id, // ID
                 toCC, // TO/CC
                 emailPostal, // Email/Postal
                 caseRelation,
-                StringUtilities.buildCasePartyName(party), // NAME
+                StringUtilities.buildCasePartyNameNoPreFix(party), // NAME
                 party.emailAddress
             });
         }
@@ -265,7 +265,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         model.setRowCount(0);
 
         List<Activity> activtyList = null;
-        
+
         switch (Global.activeSection) {
             case "ORG":
             case "Civil Service Commission":
@@ -273,12 +273,12 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                 break;
             case "Hearings":
                 activtyList = Activity.loadHearingActivity();
-                break;                    
+                break;
             default:
                 activtyList = Activity.loadActivityDocumentsByGlobalCase();
                 break;
         }
-        
+
         for (Activity doc : activtyList) {
             model.addRow(new Object[]{
                 doc.id,
@@ -353,12 +353,12 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                     }
 
                     //Spoof Filename
-                    
+
                     String bioFileName = ff.bioFileName;
                     if (bioFileName == null){
                         bioFileName = StringUtilities.buildFullName(ff.firstName, ff.middleName, ff.lastName) + ".doc";
                     }
-                    
+
                     //load table
                     model.addRow(new Object[]{
                         ff.id,
@@ -384,31 +384,42 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
     }
 
     private boolean setMEDFFConcCheckMark(String Name) {
-        if (!medCaseData.FFList2Name1.equals("") || !medCaseData.concilList2Name1.equals("")) {
-            if (medCaseData.FFList2Name1.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                    || medCaseData.FFList2Name2.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                    || medCaseData.FFList2Name3.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                    || medCaseData.FFList2Name4.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                    || medCaseData.FFList2Name5.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                    || medCaseData.concilList2Name1.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                    || medCaseData.concilList2Name2.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                    || medCaseData.concilList2Name3.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                    || medCaseData.concilList2Name4.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                    || medCaseData.concilList2Name5.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)) {
-                return true;
+        if (SMDSdocToGenerate.description.contains("Fact Finder") && medCaseData != null) {
+            if (!medCaseData.FFList2Name1.equals("")) {
+                if (medCaseData.FFList2Name1.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                        || medCaseData.FFList2Name2.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                        || medCaseData.FFList2Name3.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                        || medCaseData.FFList2Name4.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                        || medCaseData.FFList2Name5.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)) {
+                    return true;
+                }
+            } else {
+                if (medCaseData.FFList1Name1.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                        || medCaseData.FFList1Name2.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                        || medCaseData.FFList1Name3.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                        || medCaseData.FFList1Name4.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                        || medCaseData.FFList1Name5.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)) {
+                    return true;
+                }
             }
-        } else {
-            if (medCaseData.FFList1Name1.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                    || medCaseData.FFList1Name2.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                    || medCaseData.FFList1Name3.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                    || medCaseData.FFList1Name4.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                    || medCaseData.FFList1Name5.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                    || medCaseData.concilList1Name1.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                    || medCaseData.concilList1Name2.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                    || medCaseData.concilList1Name3.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                    || medCaseData.concilList1Name4.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                    || medCaseData.concilList1Name5.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)) {
-                return true;
+
+        } else if ((SMDSdocToGenerate.description.contains("Conciliation") || SMDSdocToGenerate.description.contains("Conciliator")) && medCaseData != null) {
+            if (!medCaseData.concilList2Name1.equals("")) {
+                if (medCaseData.concilList2Name1.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                        || medCaseData.concilList2Name2.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                        || medCaseData.concilList2Name3.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                        || medCaseData.concilList2Name4.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                        || medCaseData.concilList2Name5.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)) {
+                    return true;
+                }
+            } else {
+                if (medCaseData.concilList1Name1.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                        || medCaseData.concilList1Name2.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                        || medCaseData.concilList1Name3.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                        || medCaseData.concilList1Name4.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                        || medCaseData.concilList1Name5.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)) {
+                    return true;
+                }
             }
         }
         return false;
@@ -428,7 +439,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                     questionsCMDSPanel returnInfo = new questionsCMDSPanel(Global.root, true, CMDSdocToGenerate, count);
                     answers = returnInfo.answers;
                     returnInfo.dispose();
-                }   
+                }
                 docName = generateDocument.generateCMDSdocument(CMDSdocToGenerate, answers, 0, toParties, ccParties);
                 break;
             case "ORG":
@@ -443,7 +454,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         }
 
         if (docName != null) {
-            
+
             switch (Global.activeSection) {
                 case "CMDS":
                     Activity.addActivty("Created " + CMDSdocToGenerate.LetterName, docName);
@@ -460,13 +471,13 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                             "Created " + (SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription)
                             , docName);
                     Audit.addAuditEntry("Created " + SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription);
-                    break;    
+                    break;
                 default:
                     Activity.addActivty("Created " + (SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription), docName);
                     Audit.addAuditEntry("Created " + SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription);
                     break;
             }
-            
+
             int emailID = 0;
             int postalID = 0;
 
@@ -479,7 +490,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                 for (int i = 0; i < personTable.getRowCount(); i++) {
                     if (!personTable.getValueAt(i, 1).equals("")
                             && (personTable.getValueAt(i, 2).equals("Postal") || personTable.getValueAt(i, 2).equals("Both"))) {
-                        
+
                         boolean org = false;
                         boolean csc = false;
                         if (personTable.getValueAt(i, 3).equals("ORG")) {
@@ -487,7 +498,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                         } else if (personTable.getValueAt(i, 3).equals("CSC")) {
                             csc = true;
                         }
-                        
+
                         postalID = insertPostal(personTable.getValueAt(i, 0).toString(), org, csc);
                         insertGeneratedAttachementPostal(postalID, docName);
                         postalIDList.add(postalID);
@@ -613,9 +624,15 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         eml.cc = ccEmail.trim().equals("") ? null : ccEmail.trim();
         eml.bcc = null;
         if (Global.activeSection.equals("CMDS")){
-            eml.subject = NumberFormatService.generateFullCaseNumber() + (CMDSdocToGenerate.emailSubject == null ? "" : " " + CMDSdocToGenerate.emailSubject);
-        } else {        
-            eml.subject = NumberFormatService.generateFullCaseNumber() + (SMDSdocToGenerate.emailSubject == null ? "" : " " + SMDSdocToGenerate.emailSubject);
+            eml.subject = NumberFormatService.generateFullCaseNumber() +
+                    (CMDSdocToGenerate.emailSubject == null
+                    ? (CMDSdocToGenerate.LetterName == null ? "" : " " + CMDSdocToGenerate.LetterName)
+                    : " " + CMDSdocToGenerate.emailSubject);
+        } else {
+            eml.subject = NumberFormatService.generateFullCaseNumber() +
+                    (SMDSdocToGenerate.emailSubject == null
+                    ? (SMDSdocToGenerate.description == null ? "" : " " + SMDSdocToGenerate.description)
+                    : " " + SMDSdocToGenerate.emailSubject);
         }
         eml.body = emailBody;
         eml.userID = Global.activeUser.id;
@@ -628,37 +645,37 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
     private int insertPostal(String partyID, boolean Org, boolean Csc) {
         String name = "";
         String address = "";
-        
+
         if (Org){
             CaseParty orgAddress = new CaseParty();
-        
+
             orgAddress.address1 = orgCase.orgAddress1;
             orgAddress.address2 = orgCase.orgAddress2;
             orgAddress.city = orgCase.orgCity;
             orgAddress.stateCode = orgCase.orgState;
-            orgAddress.zipcode = orgCase.orgZip; 
-            
+            orgAddress.zipcode = orgCase.orgZip;
+
             name = orgCase.orgName;
             address = StringUtilities.buildAddressBlockWithLineBreaks(orgAddress);
-            
+
         } else if (Csc){
             CaseParty orgAddress = new CaseParty();
-        
+
             orgAddress.address1 = cscCase.address1;
             orgAddress.address2 = cscCase.address2;
             orgAddress.city = cscCase.city;
             orgAddress.stateCode = cscCase.state;
-            orgAddress.zipcode = cscCase.zipCode; 
-            
+            orgAddress.zipcode = cscCase.zipCode;
+
             name = orgCase.orgName;
             address = StringUtilities.buildAddressBlockWithLineBreaks(orgAddress);
-            
+
         } else {
             CaseParty party = CaseParty.getCasePartyByID(partyID);
-            name = StringUtilities.buildCasePartyName(party);
+            name = StringUtilities.buildCasePartyNameNoPreFix(party);
             address = StringUtilities.buildAddressBlockWithLineBreaks(party);
         }
-        
+
         PostalOut post = new PostalOut();
 
         post.section = Global.activeSection.equals("Civil Service Commission") ? Global.caseType : Global.activeSection;
@@ -670,14 +687,12 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         post.addressBlock = address;
         post.userID = Global.activeUser.id;
         post.suggestedSendDate = suggestedSendDatePicker.getText().equals("") ? null : new Date(NumberFormatService.convertMMDDYYYY(suggestedSendDatePicker.getText()));
-        
+
         if (Global.activeSection.equals("CMDS")){
             post.historyDescription = CMDSdocToGenerate.LetterName == null ? "" : CMDSdocToGenerate.LetterName;
         } else {
             post.historyDescription = SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription;
         }
-        
-
         return PostalOut.insertPostalOut(post);
     }
 
@@ -754,7 +769,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                     docName = generateDocument.generateSMDSdocument(additionalDoc, 0, toParties, ccParties, null, null);
                 } else {
                     docName = copyAttachmentToCaseFolder(
-                            "Copy of " + additionalDocsTable.getValueAt(i, 2).toString() + " For Generation of " + SMDSdocToGenerate.description, 
+                            "Copy of " + additionalDocsTable.getValueAt(i, 2).toString() + " For Generation of " + SMDSdocToGenerate.description,
                             additionalDocsTable.getValueAt(i, 3).toString());
                 }
 
@@ -809,7 +824,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                 + (Global.activeSection.equals("Civil Service Commission") ? Global.caseType : Global.activeSection) + File.separator + fileName;
 
         String docDestPath = "";
-        
+
         if (Global.activeSection.equals("Civil Service Commission") || Global.activeSection.equals("ORG")){
             docDestPath = Global.activityPath + Global.caseType + File.separatorChar + Global.caseNumber + File.separatorChar;
         } else {
@@ -823,14 +838,14 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         try {
             Files.copy(Paths.get(docSourcePath), Paths.get(docDestPath + destFileName), StandardCopyOption.REPLACE_EXISTING);
             Activity.addActivty(descriptionName, destFileName);
-            
+
         } catch (IOException ex) {
             SlackNotification.sendNotification(ex);
             return "";
         }
         return destFileName;
     }
-    
+
     private void generateLetterButton() {
         if (checkActivityTable() && checkAdditionalDocsTable()){
             processThread();
@@ -840,15 +855,15 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
             WebOptionPane.showMessageDialog(Global.root, "<html><center> Sorry, unable to locate files selected. <br><br>Unable to generate letter.</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
         }
     }
-    
+
     private boolean checkActivityTable() {
         String path = Global.activityPath + File.separatorChar
                     + Global.activeSection + File.separatorChar
                     + Global.caseYear + File.separatorChar
                     + (Global.caseYear + "-" + Global.caseType + "-" + Global.caseMonth + "-" + Global.caseNumber)
                     + File.separatorChar;
-        
-        
+
+
         for (int i = 0; i < activityTable.getRowCount(); i++) {
             if (activityTable.getValueAt(i, 1).equals(true)) {
                 File templateFile = new File(path + activityTable.getValueAt(i, 3));
@@ -862,9 +877,9 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
 
     private boolean checkAdditionalDocsTable() {
         String path = Global.templatePath
-                + (Global.activeSection.equals("Civil Service Commission") 
+                + (Global.activeSection.equals("Civil Service Commission")
                 ? Global.caseType : Global.activeSection) + File.separator;
-        
+
         for (int i = 0; i < additionalDocsTable.getRowCount(); i++) {
             if (additionalDocsTable.getValueAt(i, 1).equals(true)) {
                 if (!additionalDocsTable.getValueAt(i, 3).toString().equals("")){
@@ -879,7 +894,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         }
         return true;
     }
-    
+
     private void processThread() {
         Thread temp = new Thread(() -> {
             generateLetter();

@@ -15,10 +15,10 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import parker.serb.Global;
 import parker.serb.sql.AdministrationInformation;
-import parker.serb.sql.SMDSDocuments;
 import parker.serb.sql.CMDSDocuments;
 import parker.serb.sql.CSCCase;
 import parker.serb.sql.ORGCase;
+import parker.serb.sql.SMDSDocuments;
 import parker.serb.sql.SystemExecutive;
 import parker.serb.util.FileService;
 import parker.serb.util.JacobCOMBridge;
@@ -136,6 +136,59 @@ public class generateDocument {
             JacobCOMBridge.setWordActive(false, false, eolWord);
         }
         return saveDocName;
+    }
+
+    public static void generateSMDSAgenda(SMDSDocuments template, Date boarddate) {
+        File docPath = null;
+        String saveDocName = null;
+        ActiveXComponent eolWord = null;
+
+        if (boarddate != null){
+            eolWord = JacobCOMBridge.setWordActive(true, false, eolWord);
+            if (eolWord != null) {
+                String section = Global.activeSection;
+                if (Global.activeSection.equals("Hearings")) {
+                    section = FileService.getCaseSectionFolderByCaseType(Global.caseType);
+                }
+
+                //Setup Document
+
+                    docPath = new File(Global.activityPath
+                            + section + File.separator
+                            + "Agenda");
+
+                docPath.mkdirs();
+                saveDocName = String.valueOf(new Date().getTime()) + "_"
+                        + StringUtils.left(template.historyFileName == null ? template.description : template.historyFileName, 50)
+                        + ".docx";
+
+                Dispatch document = Dispatch.call(eolWord.getProperty("Documents").toDispatch(), "Open",
+                        Global.templatePath + template.section.replace("HRG", "Hearings") + File.separator + template.fileName).toDispatch();
+                ActiveXComponent.call(eolWord.getProperty("Selection").toDispatch(), "Find").toDispatch();
+
+                //section
+                switch (section) {
+                    case "ULP":
+                        document = defaultSMDSBookmarks(document, template.dueDate);
+                        document = processULPbookmarks.processDoAULPAgenda(document, boarddate);
+                        break;
+                    case "REP":
+                        document = defaultSMDSBookmarks(document, template.dueDate);
+                        document = processREPbookmarks.processDoAREPAgenda(document, boarddate);
+                        break;
+                    default:
+                        break;
+                }
+
+                Dispatch WordBasic = (Dispatch) Dispatch.call(eolWord, "WordBasic").getDispatch();
+                String newFilePath = docPath + File.separator + saveDocName;
+                Dispatch.call(WordBasic, "FileSaveAs", newFilePath, new Variant(16));
+                JacobCOMBridge.setWordActive(false, false, eolWord);
+            }
+        }
+        if (saveDocName != null) {
+            FileService.openAgenda(saveDocName);
+        }
     }
 
     public static String generateAnnualReport(String startDate, String endDate) {
@@ -367,7 +420,7 @@ public class generateDocument {
             pbrAddress += sysAdminInfo.Address1.trim();
         }
         if (!sysAdminInfo.Address2.equals("")) {
-            pbrAddress += " " + sysAdminInfo.Address2.trim();
+            pbrAddress += "\n" + sysAdminInfo.Address2.trim();
         }
         if (!sysAdminInfo.City.equals("")) {
             pbrCityStateZip += sysAdminInfo.City.trim();
@@ -399,28 +452,28 @@ public class generateDocument {
         if (!chairmanFullName.trim().equals("")) {
             personnelAddressBlock += chairmanFullName + ", Chair";
         }
-       
+
         if (!viceChairmanFullName.trim().equals("")) {
             if (!personnelAddressBlock.trim().equals("")) {
                 personnelAddressBlock += "\n";
             }
             personnelAddressBlock += viceChairmanFullName + ", Vice Chair";
         }
-        
+
         if (!boardMemberFullName.trim().equals("")) {
             if (!personnelAddressBlock.trim().equals("")) {
                 personnelAddressBlock += "\n";
             }
             personnelAddressBlock += boardMemberFullName + ", Board Member";
         }
-        
+
         if (!executiveDirectorFullName.trim().equals("")) {
             if (!personnelAddressBlock.trim().equals("")) {
                 personnelAddressBlock += "\n\n";
             }
             personnelAddressBlock += executiveDirectorFullName + ", Executive Director";
         }
-        
+
         if (!chiefAdminLawJudgeFullName.trim().equals("")) {
             if (!personnelAddressBlock.trim().equals("")) {
                 personnelAddressBlock += "\n";
@@ -430,7 +483,7 @@ public class generateDocument {
 
         //ProcessBookmarks
         for (int i = 0; i < Global.BOOKMARK_LIMIT; i++) {
-            //System Executives            
+            //System Executives
             processBookmark.process("ChairmanName" + (i == 0 ? "" : i), chairmanFullName, Document);
             processBookmark.process("ChairmanLastName" + (i == 0 ? "" : i), chairmanLastName, Document);
             processBookmark.process("ViceChairmanName" + (i == 0 ? "" : i), viceChairmanFullName, Document);

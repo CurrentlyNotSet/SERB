@@ -11,7 +11,6 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import parker.serb.Global;
 import parker.serb.letterGeneration.LetterGenerationPanel;
-import parker.serb.sql.CMDSReport;
 import parker.serb.sql.SMDSDocuments;
 import parker.serb.util.Item;
 
@@ -22,7 +21,7 @@ import parker.serb.util.Item;
 public class HearingsLetterDialog extends javax.swing.JDialog {
 
     String section;
-    
+
     /**
      * Creates new form REPReportDialog
      * @param parent
@@ -35,7 +34,7 @@ public class HearingsLetterDialog extends javax.swing.JDialog {
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }
-    
+
     private void loadReports() {
         DefaultComboBoxModel dt = new DefaultComboBoxModel();
         LetterComboBox.setModel(dt);
@@ -53,11 +52,11 @@ public class HearingsLetterDialog extends javax.swing.JDialog {
     private void generateLetter() {
         Item item = (Item) LetterComboBox.getSelectedItem();
         int selection = Integer.parseInt(item.getValue().toString());
-        
+
         if (selection > 0) {
             SMDSDocuments template = SMDSDocuments.findDocumentByID(selection);
             File templateFile = new File(Global.templatePath + Global.activeSection + File.separator + template.fileName);
-            
+
             if (templateFile.exists()){
                 new LetterGenerationPanel(Global.root, true, template, null);
             } else {
@@ -73,7 +72,7 @@ public class HearingsLetterDialog extends javax.swing.JDialog {
             GenerateButton.setEnabled(true);
         }
     }
-        
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -130,7 +129,7 @@ public class HearingsLetterDialog extends javax.swing.JDialog {
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(CancelButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 299, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 359, Short.MAX_VALUE)
                         .addComponent(GenerateButton))
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(12, 12, 12))

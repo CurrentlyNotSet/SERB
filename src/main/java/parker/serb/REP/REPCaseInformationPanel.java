@@ -42,7 +42,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
 
     REPCase caseInformation;
     DefaultTableModel relatedCaseModel;
-    
+
     /**
      * Creates new form REPCaseInformationPanel
      */
@@ -51,12 +51,12 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         relatedCaseModel = (DefaultTableModel) relatedCaseTable.getModel();
         addRelatedCaseButton.setVisible(false);
     }
-    
+
     void enableUpdate() {
         Global.root.getjButton2().setText("Save");
-        
+
         Global.root.getjButton9().setVisible(true);
-        
+
         //Information
         caseTypeComboBox.setEnabled(true);
         caseTypeComboBox.setBackground(Color.WHITE);
@@ -66,22 +66,22 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         status2ComboBox.setBackground(Color.WHITE);
         currentOwnerComboBox.setEnabled(true);
         currentOwnerComboBox.setBackground(Color.WHITE);
-        
+
         countyComboBox.setEnabled(true);
         employerIDNumberTextBox.setEnabled(true);
         employerIDNumberTextBox.setBackground(Color.WHITE);
         bargainingUnitNumberTextBox.setEnabled(true);
         bargainingUnitNumberTextBox.setBackground(Color.WHITE);
-        
+
         boardCertifiedCheckBox.setEnabled(true);
         deemedCertifiedCheckBox.setEnabled(true);
         certificationRevokedCheckBox.setEnabled(true);
-        
+
         notesTextArea.setEnabled(true);
         notesTextArea.setBackground(Color.WHITE);
-        
+
         addRelatedCaseButton.setVisible(true);
-        
+
         //Dates
         fileDateTextBox.setEnabled(true);
         fileDateTextBox.setBackground(Color.WHITE);
@@ -113,12 +113,12 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         clerksClosedUser.setEnabled(true);
         clerksClosedUser.setBackground(Color.WHITE);
     }
-    
+
     void disableUpdate(boolean runSave) {
         Global.root.getjButton2().setText("Update");
-        
+
         Global.root.getjButton9().setVisible(false);
-        
+
         caseTypeComboBox.setEnabled(false);
         caseTypeComboBox.setBackground(new Color(238,238,238));
         status1ComboBox.setEnabled(false);
@@ -127,22 +127,22 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         status2ComboBox.setBackground(new Color(238,238,238));
         currentOwnerComboBox.setEnabled(false);
         currentOwnerComboBox.setBackground(new Color(238,238,238));
-        
+
         countyComboBox.setEnabled(false);
         employerIDNumberTextBox.setEnabled(false);
         employerIDNumberTextBox.setBackground(new Color(238,238,238));
         bargainingUnitNumberTextBox.setEnabled(false);
         bargainingUnitNumberTextBox.setBackground(new Color(238,238,238));
-        
+
         boardCertifiedCheckBox.setEnabled(false);
         deemedCertifiedCheckBox.setEnabled(false);
         certificationRevokedCheckBox.setEnabled(false);
-        
+
         notesTextArea.setEnabled(false);
         notesTextArea.setBackground(new Color(238,238,238));
-        
+
         addRelatedCaseButton.setVisible(false);
-        
+
         fileDateTextBox.setEnabled(false);
         fileDateTextBox.setBackground(new Color(238,238,238));
         amendedFilingDateTextBox.setEnabled(false);
@@ -172,11 +172,11 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         actualClerksClosedDate.setBackground(new Color(238,238,238));
         clerksClosedUser.setEnabled(false);
         clerksClosedUser.setBackground(new Color(238,238,238));
-        
+
         if(runSave)
             saveInformation();
     }
-    
+
     void clearAll() {
         caseTypeComboBox.setSelectedItem("");
         status1ComboBox.setSelectedItem("");
@@ -207,7 +207,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         clerksClosedUser.setSelectedItem("");
         relatedCaseModel.setRowCount(0);
     }
-    
+
     void loadInformation() {
         loadCaseTypes();
         loadStatus();
@@ -218,28 +218,28 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         loadRelatedCasesTable();
         loadCaseInformation();
     }
-    
+
     public void loadCaseTypes() {
         caseTypeComboBox.removeAllItems();
         caseTypeComboBox.addItem("");
-        
+
         List repCaseTypeList = REPCaseType.loadAllREPCaseTypes();
-        
+
         for (Object repCaseTypes : repCaseTypeList) {
             REPCaseType caseType = (REPCaseType) repCaseTypes;
             caseTypeComboBox.addItem(caseType.typeAbbrevation);
         }
     }
-    
+
     public void loadStatus() {
         status1ComboBox.removeAllItems();
         status2ComboBox.removeAllItems();
-        
+
         status1ComboBox.addItem("");
         status2ComboBox.addItem("");
-        
+
         List caseStatusList = REPCaseStatus.loadAll();
-        
+
         for (Object caseStatus : caseStatusList) {
             REPCaseStatus status = (REPCaseStatus) caseStatus;
             if(status.statusType.equals("1")) {
@@ -249,61 +249,61 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
             }
         }
     }
-    
+
     public void loadCountyComboBox() {
         List<String> countyList = County.loadCountyList();
-        
+
         countyComboBox.removeAllItems();
         countyComboBox.addItem("");
-        
+
         for (Object singleCounty : countyList) {
             County county = (County) singleCounty;
             countyComboBox.addItem(county.countyName);
         }
     }
-    
+
     public void loadCurrentOwner() {
         currentOwnerComboBox.removeAllItems();
-        
+
         currentOwnerComboBox.addItem("");
-        
+
         List currentOwnerList = User.loadSectionDropDowns("REP");
-        
+
         for (Object currentOwners : currentOwnerList) {
             currentOwnerComboBox.addItem(currentOwners.toString());
         }
     }
-    
+
     public void loadREPClosedByComboBox() {
         repClosedUser.removeAllItems();
         SOIReturnInitials.removeAllItems();
-        
+
         repClosedUser.addItem("");
         SOIReturnInitials.addItem("");
-        
+
         List currentOwnerList = User.loadSectionDropDowns("REP");
-        
+
         for (Object currentOwners : currentOwnerList) {
             repClosedUser.addItem(currentOwners.toString());
             SOIReturnInitials.addItem(currentOwners.toString());
         }
     }
-    
+
     public void loadClerksClosedByComboBox() {
         clerksClosedUser.removeAllItems();
-        
+
         clerksClosedUser.addItem("");
-        
+
         List currentOwnerList = User.loadSectionDropDowns("REP");
-        
+
         for (Object currentOwners : currentOwnerList) {
             clerksClosedUser.addItem(currentOwners.toString());
         }
     }
-    
+
     public void loadCaseInformation() {
         caseInformation = REPCase.loadCaseInformation();
-        
+
         caseTypeComboBox.setSelectedItem(caseInformation.type == null ? "" : caseInformation.type);
         status1ComboBox.setSelectedItem(caseInformation.status1 == null ? "" : caseInformation.status1);
         status2ComboBox.setSelectedItem(caseInformation.status2 == null ? "" : caseInformation.status2);
@@ -319,29 +319,29 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         boardCertifiedCheckBox.setSelected(caseInformation.boardCertified == true);
         deemedCertifiedCheckBox.setSelected(caseInformation.deemedCertified == true);
         certificationRevokedCheckBox.setSelected(caseInformation.certificationRevoked == true);
-        
+
         notesTextArea.setText(caseInformation.note == null ? "" : caseInformation.note);
-        
-        fileDateTextBox.setText(caseInformation.fileDate != null ? Global.mmddyyyy.format(new Date(caseInformation.fileDate.getTime())) : ""); 
+
+        fileDateTextBox.setText(caseInformation.fileDate != null ? Global.mmddyyyy.format(new Date(caseInformation.fileDate.getTime())) : "");
         amendedFilingDateTextBox.setText(caseInformation.amendedFiliingDate != null ? Global.mmddyyyy.format(new Date(caseInformation.amendedFiliingDate.getTime())) : "");
         alphaListRecepitDateTextBox.setText(caseInformation.alphaListDate != null ? Global.mmddyyyy.format(new Date(caseInformation.alphaListDate.getTime())) : "");
-        finalBoardDateTextBox.setText(caseInformation.finalBoardDate != null ? Global.mmddyyyy.format(new Date(caseInformation.finalBoardDate.getTime())) : "");        
-        registrationLetterSentTextBox.setText(caseInformation.registrationLetterSent != null ? Global.mmddyyyy.format(new Date(caseInformation.registrationLetterSent.getTime())) : "");  
-        dateOfAppealTextBox.setText(caseInformation.dateOfAppeal != null ? Global.mmddyyyy.format(new Date(caseInformation.dateOfAppeal.getTime())) : "");  
-        courtClosedDateTextBox.setText(caseInformation.courtClosedDate != null ? Global.mmddyyyy.format(new Date(caseInformation.courtClosedDate.getTime())) : "");  
-        returnSOIDueDateTextBox.setText(caseInformation.returnSOIDueDate != null ? Global.mmddyyyy.format(new Date(caseInformation.returnSOIDueDate.getTime())) : "");  
-        actualSOIReturnDateTextBox.setText(caseInformation.actualSOIReturnDate != null ? Global.mmddyyyy.format(new Date(caseInformation.actualSOIReturnDate.getTime())) : "");  
-        SOIReturnInitials.setSelectedItem(caseInformation.SOIReturnInitials == 0 ? "" : User.getNameByID(caseInformation.SOIReturnInitials));  
-        REPClosedCaseDueDateTextBox.setText(caseInformation.REPClosedCaseDueDate != null ? Global.mmddyyyy.format(new Date(caseInformation.REPClosedCaseDueDate.getTime())) : "");  
-        actualREPClosedDateTextBox.setText(caseInformation.actualREPClosedDate != null ? Global.mmddyyyy.format(new Date(caseInformation.actualREPClosedDate.getTime())) : "");  
+        finalBoardDateTextBox.setText(caseInformation.finalBoardDate != null ? Global.mmddyyyy.format(new Date(caseInformation.finalBoardDate.getTime())) : "");
+        registrationLetterSentTextBox.setText(caseInformation.registrationLetterSent != null ? Global.mmddyyyy.format(new Date(caseInformation.registrationLetterSent.getTime())) : "");
+        dateOfAppealTextBox.setText(caseInformation.dateOfAppeal != null ? Global.mmddyyyy.format(new Date(caseInformation.dateOfAppeal.getTime())) : "");
+        courtClosedDateTextBox.setText(caseInformation.courtClosedDate != null ? Global.mmddyyyy.format(new Date(caseInformation.courtClosedDate.getTime())) : "");
+        returnSOIDueDateTextBox.setText(caseInformation.returnSOIDueDate != null ? Global.mmddyyyy.format(new Date(caseInformation.returnSOIDueDate.getTime())) : "");
+        actualSOIReturnDateTextBox.setText(caseInformation.actualSOIReturnDate != null ? Global.mmddyyyy.format(new Date(caseInformation.actualSOIReturnDate.getTime())) : "");
+        SOIReturnInitials.setSelectedItem(caseInformation.SOIReturnInitials == 0 ? "" : User.getNameByID(caseInformation.SOIReturnInitials));
+        REPClosedCaseDueDateTextBox.setText(caseInformation.REPClosedCaseDueDate != null ? Global.mmddyyyy.format(new Date(caseInformation.REPClosedCaseDueDate.getTime())) : "");
+        actualREPClosedDateTextBox.setText(caseInformation.actualREPClosedDate != null ? Global.mmddyyyy.format(new Date(caseInformation.actualREPClosedDate.getTime())) : "");
         repClosedUser.setSelectedItem(caseInformation.REPClosedUser == 0 ? "" : User.getNameByID(caseInformation.REPClosedUser));
         actualClerksClosedDate.setText(caseInformation.actualClerksClosedDate != null ? Global.mmddyyyy.format(new Date(caseInformation.actualClerksClosedDate.getTime())) : "");
-        clerksClosedUser.setSelectedItem(caseInformation.clerksClosedUser == 0 ? "" : User.getNameByID(caseInformation.clerksClosedUser));  
+        clerksClosedUser.setSelectedItem(caseInformation.clerksClosedUser == 0 ? "" : User.getNameByID(caseInformation.clerksClosedUser));
     }
-    
+
     void saveInformation() {
         REPCase newCaseInformation = new REPCase();
-        
+
         newCaseInformation.type = caseTypeComboBox.getSelectedItem() == "" ? null : caseTypeComboBox.getSelectedItem().toString();
         newCaseInformation.status1 = status1ComboBox.getSelectedItem() == "" ? null : status1ComboBox.getSelectedItem().toString();
         newCaseInformation.status2 = status2ComboBox.getSelectedItem() == "" ? null : status2ComboBox.getSelectedItem().toString();
@@ -352,9 +352,9 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         newCaseInformation.boardCertified = boardCertifiedCheckBox.isSelected();
         newCaseInformation.deemedCertified = deemedCertifiedCheckBox.isSelected();
         newCaseInformation.certificationRevoked = certificationRevokedCheckBox.isSelected();
-        
+
         newCaseInformation.note = notesTextArea.getText().equals("") ? null : notesTextArea.getText();
-        
+
         newCaseInformation.fileDate = fileDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(fileDateTextBox.getText()));
         newCaseInformation.amendedFiliingDate = amendedFilingDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(amendedFilingDateTextBox.getText()));
         newCaseInformation.alphaListDate = alphaListRecepitDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(alphaListRecepitDateTextBox.getText()));
@@ -371,23 +371,23 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         newCaseInformation.REPClosedUser = repClosedUser.getSelectedItem().equals("") ? 0 : User.getUserID(repClosedUser.getSelectedItem().toString());
         newCaseInformation.actualClerksClosedDate = actualClerksClosedDate.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(actualClerksClosedDate.getText()));
         newCaseInformation.clerksClosedUser = clerksClosedUser.getSelectedItem().equals("") ? 0 : User.getUserID(clerksClosedUser.getSelectedItem().toString());
-        
+
         REPCase.updateCaseInformation(newCaseInformation, caseInformation);
         caseInformation = REPCase.loadCaseInformation();
     }
-    
+
     public void loadRelatedCasesTable() {
-        
+
         relatedCaseModel.setRowCount(0);
-        
+
         List relatedCases = RelatedCase.loadRelatedCases();
-        
+
         for (Object relatedCase : relatedCases) {
             relatedCaseModel.addRow(new Object[] {relatedCase});
         }
         relatedCaseTable.clearSelection();
     }
-    
+
     private void clearDate(WebDateField dateField, MouseEvent evt) {
         if(evt.getButton() == MouseEvent.BUTTON3 && dateField.isEnabled()) {
             ClearDateDialog dialog = new ClearDateDialog((JFrame) Global.root, true);
@@ -397,7 +397,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
             dialog.dispose();
         }
     }
-    
+
     private void setBUNumberCheckBoxes(String certStatus) {
         switch(certStatus) {
             case "B":
@@ -534,7 +534,6 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
 
         jLabel9.setText("Related Cases:");
 
-        caseTypeComboBox.setBackground(new java.awt.Color(255, 255, 255));
         caseTypeComboBox.setEnabled(false);
 
         status1ComboBox.setEnabled(false);
@@ -598,7 +597,6 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         addRelatedCaseButton.setMaximumSize(new java.awt.Dimension(29, 91));
         addRelatedCaseButton.setMinimumSize(new java.awt.Dimension(29, 91));
         addRelatedCaseButton.setPreferredSize(new java.awt.Dimension(29, 91));
-        addRelatedCaseButton.setSize(new java.awt.Dimension(29, 91));
         addRelatedCaseButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addRelatedCaseButtonActionPerformed(evt);
@@ -740,7 +738,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
 
         jLabel17.setText("Actual SOI Return Date:");
 
-        jLabel18.setText("SOI Return Initials:");
+        jLabel18.setText("SOI Return By:");
 
         jLabel19.setText("REP Closed Case Due Date:");
 
@@ -1225,7 +1223,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_alphaListRecepitDateTextBoxMouseClicked
 
     private void notesTextAreaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_notesTextAreaMouseClicked
-        if(evt.getClickCount() == 2 && !notesTextArea.getText().equals("")) 
+        if(evt.getClickCount() == 2 && !notesTextArea.getText().equals(""))
         {
             Global.root.getrEPRootPanel1().getjTabbedPane1().setSelectedIndex(Global.root.getrEPRootPanel1().getjTabbedPane1().indexOfTab("Notes"));
         }
