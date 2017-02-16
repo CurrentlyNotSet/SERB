@@ -43,6 +43,7 @@ public class SERB {
         //install weblaf look and feel
         WebLookAndFeel.install();
         
+        //display the log in dialog
         new LogInDialog(null);
     }
 }

@@ -12,7 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Stores all of often used values through out the application
+ * 
  * @author parker
  */
 public class Global {
