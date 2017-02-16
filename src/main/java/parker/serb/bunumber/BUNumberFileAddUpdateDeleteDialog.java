@@ -169,12 +169,6 @@ public class BUNumberFileAddUpdateDeleteDialog extends javax.swing.JDialog {
 
         jLabel2.setText("Search:");
 
-        searchTextBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                searchTextBoxActionPerformed(evt);
-            }
-        });
-
         buTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -252,10 +246,6 @@ public class BUNumberFileAddUpdateDeleteDialog extends javax.swing.JDialog {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void searchTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_searchTextBoxActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         new BUInformationNewDialog((Frame) Global.root.getParent(), true);

@@ -551,7 +551,6 @@ public class BUInformationUpdateDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
-        //confirm delete --> active -> 0
         RemoveBUDialog inactiveBU = new RemoveBUDialog((JFrame) Global.root.getParent(), true, id);
         if(inactiveBU.isRemoved()) {
             inactiveBU.dispose();

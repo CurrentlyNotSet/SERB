@@ -78,7 +78,7 @@ public class FileService {
 
     public static void openFileWithCaseNumber(String activeSection, String caseYear, String caseType, String caseMonth, String caseNumber, String fileName) {
         try {
-            Audit.addAuditEntry("Opend " + fileName + " from Activity Table");
+            Audit.addAuditEntry("Opened " + fileName + " from Activity Table");
             Desktop.getDesktop().open(new File(Global.activityPath
                     + File.separatorChar
                     + activeSection
@@ -96,7 +96,7 @@ public class FileService {
 
     public static void openFileWithORGNumber(String caseType, String orgNumber, String fileName) {
         try {
-            Audit.addAuditEntry("Opend " + fileName);
+            Audit.addAuditEntry("Opened " + fileName);
             Desktop.getDesktop().open(new File(Global.activityPath
                     + File.separatorChar
                     + caseType
@@ -140,7 +140,7 @@ public class FileService {
 
     public static void openFile(String fileName) {
         try {
-            Audit.addAuditEntry("Opend " + fileName);
+            Audit.addAuditEntry("Opened " + fileName);
             Desktop.getDesktop().open(new File(Global.activityPath
                     + File.separatorChar
                     + Global.activeSection
@@ -158,7 +158,7 @@ public class FileService {
 
     public static void openHearingCaseFile(String fileName) {
         try {
-            Audit.addAuditEntry("Opend " + fileName);
+            Audit.addAuditEntry("Opened " + fileName);
             Desktop.getDesktop().open(new File(Global.activityPath
                     + File.separatorChar
                     + getCaseSectionFolderByCaseType(Global.caseType)

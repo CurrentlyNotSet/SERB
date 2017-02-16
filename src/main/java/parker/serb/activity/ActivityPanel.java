@@ -95,30 +95,32 @@ public class ActivityPanel extends javax.swing.JPanel {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                String filePath = actvityTable.getValueAt(actvityTable.getSelectedRow(), 4).toString();
+                if(actvityTable.getSelectedRow() >= 0) {
+                    String filePath = actvityTable.getValueAt(actvityTable.getSelectedRow(), 4).toString();
 
-                if (e.getClickCount() == 2 && !filePath.equals("") && actvityTable.getSelectedColumn() == 4) {
-                    
-                    switch (Global.activeSection) {
-                        case "ORG":
-                            FileService.openFileWithORGNumber("ORG", Global.caseNumber, filePath);
-                            break;
-                        case "Civil Service Commission":
-                            FileService.openFileWithORGNumber("CSC", Global.caseNumber, filePath);
-                            break;
-                        case "Hearings":
-                            FileService.openHearingCaseFile(filePath);
-                            break;
-                        default:
-                            FileService.openFile(filePath);
-                            break;
+                    if (e.getClickCount() == 2 && !filePath.equals("") && actvityTable.getSelectedColumn() == 4 && e.getButton() == MouseEvent.BUTTON1) {
+
+                        switch (Global.activeSection) {
+                            case "ORG":
+                                FileService.openFileWithORGNumber("ORG", Global.caseNumber, filePath);
+                                break;
+                            case "Civil Service Commission":
+                                FileService.openFileWithORGNumber("CSC", Global.caseNumber, filePath);
+                                break;
+                            case "Hearings":
+                                FileService.openHearingCaseFile(filePath);
+                                break;
+                            default:
+                                FileService.openFile(filePath);
+                                break;
+                        }
+                    } else if (e.getClickCount() == 2 && actvityTable.getSelectedColumn() != 4 && e.getButton() == MouseEvent.BUTTON1) {
+                        Audit.addAuditEntry("Viewing Activty Detail for ID: " + actvityTable.getValueAt(actvityTable.getSelectedRow(), 5).toString());
+                        new DetailedActivityDialog((JFrame) Global.root.getRootPane().getParent(),
+                                true,
+                                actvityTable.getValueAt(actvityTable.getSelectedRow(), 5).toString());
+                        loadAllActivity();
                     }
-                } else if (e.getClickCount() == 2 && actvityTable.getSelectedColumn() != 4) {
-                    Audit.addAuditEntry("Viewing Activty Detail for ID: " + actvityTable.getValueAt(actvityTable.getSelectedRow(), 5).toString());
-                    new DetailedActivityDialog((JFrame) Global.root.getRootPane().getParent(),
-                            true,
-                            actvityTable.getValueAt(actvityTable.getSelectedRow(), 5).toString());
-                    loadAllActivity();
                 }
             }
 

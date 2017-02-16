@@ -38,27 +38,6 @@ public class BUInformationNewDialog extends javax.swing.JDialog {
         setVisible(true);
     }
     
-//    private void loadData(String id) {
-//        BargainingUnit bu = BargainingUnit.getBUbyID(id);
-//        
-//        employerNumberTextBox.setText(bu.employerNumber);
-//        employerNameTextBox.setText(bu.buEmployerName);
-//        unionTextBox.setText(bu.lUnion);
-//        localTextBox.setText(bu.local);
-//        countyComboBox.setSelectedItem(bu.county);
-//        CertStatusComboBox.setSelectedItem(bu.cert);
-//        activeCheckBox.setSelected(bu.enabled);
-//        unitDescriptionTextArea.setText(bu.unitDescription);
-//        
-//        unitNumberTextBox.setText(bu.unitNumber);
-//        certificationDateTextBox.setText(bu.certDate == null ? "" : Global.mmddyyyy.format(bu.certDate));
-//        caseReferenceTextBox.setText(bu.caseRefSequence == null ? "" : bu.caseRefYear + "-" + bu.caseRefSection + "-" + bu.caseRefMonth + "-" + bu.caseRefSequence);
-//        jurisdictionTextBox.setText(bu.jurisdiction);
-//        buCodeTextBox.setText(bu.lGroup);
-//        strikeCheckBox.setSelected(false);
-//        notesTextArea.setText(bu.notes);
-//    }
-    
     private void disableAll() {
         employerNumberTextBox.setEnabled(false);
         employerNumberTextBox.setBackground(new Color(238,238,238));

@@ -23,6 +23,7 @@ public class buNumberSearch extends javax.swing.JDialog {
     String unitDesc;
     String certStatus;
     List bu;
+    
     /**
      * Creates new form employerSearch
      */
@@ -40,6 +41,7 @@ public class buNumberSearch extends javax.swing.JDialog {
     private void loadInformation(String number, String desc) {
         buNumber = number;
         unitDesc = desc;
+        certStatus = BargainingUnit.getCertStatus(number);
         bu = BargainingUnit.loadBUList();
         
         DefaultTableModel model = (DefaultTableModel) buTable.getModel();
@@ -163,12 +165,6 @@ public class buNumberSearch extends javax.swing.JDialog {
 
         jLabel2.setText("Search:");
 
-        searchTextBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                searchTextBoxActionPerformed(evt);
-            }
-        });
-
         buTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -231,13 +227,8 @@ public class buNumberSearch extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
-        setVisible(false);
+         setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void searchTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_searchTextBoxActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable buTable;
