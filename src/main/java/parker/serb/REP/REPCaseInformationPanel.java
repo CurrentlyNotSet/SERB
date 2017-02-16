@@ -15,7 +15,6 @@ import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
-import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
 import parker.serb.bunumber.buNumberSearch;
@@ -30,7 +29,6 @@ import parker.serb.sql.REPCaseStatus;
 import parker.serb.sql.REPCaseType;
 import parker.serb.sql.RelatedCase;
 import parker.serb.sql.User;
-import parker.serb.util.ClearDataDialog;
 import parker.serb.util.ClearDateDialog;
 import parker.serb.util.NumberFormatService;
 
@@ -738,7 +736,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
 
         jLabel17.setText("Actual SOI Return Date:");
 
-        jLabel18.setText("SOI Return By:");
+        jLabel18.setText("SOI Returned By:");
 
         jLabel19.setText("REP Closed Case Due Date:");
 
@@ -1210,8 +1208,8 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
                     employerIDNumberTextBox.setText(search.getBuNumber().split("-")[0]);
                 }
                 search.dispose();
-            } 
-        } 
+            }
+        }
     }//GEN-LAST:event_bargainingUnitNumberTextBoxMouseClicked
 
     private void bargainingUnitNumberTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bargainingUnitNumberTextBoxActionPerformed

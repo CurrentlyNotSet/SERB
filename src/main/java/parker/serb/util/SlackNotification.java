@@ -18,22 +18,22 @@ import parker.serb.sql.SystemError;
  * @author parkerjohnston
  */
 public class SlackNotification {
-    
+
     public static void sendNotification(Exception ex) {
-        
+
         try {
             String message = "User: " + (Global.activeUser != null ? Global.activeUser.username : "NO USER") + "\n" ;
             message += "Class Name: " + Thread.currentThread().getStackTrace()[2].getClassName() + "\n";
             message += "Method Name: " + Thread.currentThread().getStackTrace()[2].getMethodName() + "\n";
             message += "Exception Type: " + ex.getClass().getSimpleName() + "\n";
             message += "Stack Trace: " + convertStackTrace(ex);
-            
+
             new Slack(Global.SLACK_HOOK)
                 .icon(Global.SLACK_ICON) // Ref - http://www.emoji-cheat-sheet.com/
                 .sendToChannel(Global.SLACK_CHANNEL)
                 .displayName(Global.SLACK_USER)
-                .push(new SlackMessage(message)); 
-            
+                .push(new SlackMessage(message));
+
             SystemError.addSystemErrorEntry
             (
                     Thread.currentThread().getStackTrace()[2].getClassName(),
@@ -46,7 +46,7 @@ public class SlackNotification {
             //leave blank
         }
     }
-    
+
     private static String convertStackTrace(Exception ex) {
         StringWriter sw = new StringWriter();
         ex.printStackTrace(new PrintWriter(sw));

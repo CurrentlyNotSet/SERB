@@ -1,10 +1,10 @@
 package parker.serb.sql;
 
-import static java.nio.file.StandardCopyOption.*;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import static java.nio.file.StandardCopyOption.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,8 +14,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.io.FilenameUtils;
 import parker.serb.Global;
@@ -26,7 +24,7 @@ import parker.serb.util.SlackNotification;
  * @author parkerjohnston
  */
 public class Activity {
-    
+
     public int id;
     public String caseYear;
     public String caseType;
@@ -42,7 +40,9 @@ public class Activity {
     public String comment;
     public boolean redacted;
     public boolean awaitingScan;
-    
+    public boolean active;
+    public boolean mailLog;
+
     /**
      * Add an activity to the activity table, pulls the case number from the
      * current selected case
@@ -51,12 +51,12 @@ public class Activity {
      */
     public static void addActivty(String action, String fileName) {
         Statement stmt = null;
-            
+
         try {
 
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, Global.caseYear);
@@ -67,13 +67,14 @@ public class Activity {
             preparedStatement.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
             preparedStatement.setString(7, action.equals("") ? null : action);
             preparedStatement.setString(8, fileName == null ? null : fileName);
-            preparedStatement.setString(9, null);
-            preparedStatement.setString(10, null);
-            preparedStatement.setString(11, null);
-            preparedStatement.setString(12, null);
-            preparedStatement.setBoolean(13, false);
-            preparedStatement.setBoolean(14, false);
-            preparedStatement.setBoolean(15, true);
+            preparedStatement.setString(9, null); //from
+            preparedStatement.setString(10, null); //to
+            preparedStatement.setString(11, null); //type
+            preparedStatement.setString(12, null); //comment
+            preparedStatement.setBoolean(13, false); //redacted
+            preparedStatement.setBoolean(14, false); //awaiting timestamp
+            preparedStatement.setBoolean(15, true); //active
+            preparedStatement.setBoolean(16, false); //mailLog
 
             preparedStatement.executeUpdate();
 
@@ -87,15 +88,15 @@ public class Activity {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void addActivtyORGCase( String caseType, String orgNumber, String action, String fileName) {
         Statement stmt = null;
-            
+
         try {
 
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, null);
@@ -113,6 +114,7 @@ public class Activity {
             preparedStatement.setBoolean(13, false);
             preparedStatement.setBoolean(14, false);
             preparedStatement.setBoolean(15, true);
+            preparedStatement.setBoolean(16, false); //mailLog
 
             preparedStatement.executeUpdate();
 
@@ -126,22 +128,22 @@ public class Activity {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void addCMDSActivty(String action, String fileName, Date date, String caseNumber) {
         try {
             Statement stmt = null;
-            
+
             String timeString = Global.mmddyyyyhhmma.format(new Date()).substring(10); // 10 is the beginIndex of time here
             String startUserDateString = Global.mmddyyyy.format(date);
             startUserDateString = startUserDateString+" "+timeString;
             date = Global.mmddyyyyhhmma.parse(startUserDateString);
-            
+
             try {
-                
+
                 stmt = Database.connectToDB().createStatement();
-                
-                String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-                
+
+                String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
                 PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
                 preparedStatement.setString(1, caseNumber.split("-")[0]);
                 preparedStatement.setString(2, caseNumber.split("-")[1]);
@@ -158,9 +160,10 @@ public class Activity {
                 preparedStatement.setBoolean(13, false);
                 preparedStatement.setBoolean(14, false);
                 preparedStatement.setBoolean(15, true);
-                
+                preparedStatement.setBoolean(16, false); //mailLog
+
                 preparedStatement.executeUpdate();
-                
+
                 if(fileName != null && !fileName.equals("")) {
                     File src = new File(fileName);
                     File dst = new File(Global.activityPath + File.separator + "CMDS" + File.separator + caseNumber.split("-")[0] + File.separator + caseNumber + fileName.substring(fileName.lastIndexOf(File.separator)));
@@ -182,15 +185,15 @@ public class Activity {
             SlackNotification.sendNotification(ex);
         }
     }
-    
+
     public static void addHearingActivty(String action, String fileName, String caseNumber) {
         Statement stmt = null;
-            
+
         try {
 
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, caseNumber.split("-")[0]);
@@ -207,10 +210,11 @@ public class Activity {
             preparedStatement.setString(12, null);
             preparedStatement.setBoolean(13, false);
             preparedStatement.setBoolean(14, false);
-            preparedStatement.setBoolean(15, false);
+            preparedStatement.setBoolean(15, true);
+            preparedStatement.setBoolean(16, false); //mailLog
 
             preparedStatement.executeUpdate();
-            
+
             if(fileName != null && !fileName.equals("")) {
                 File src = new File(fileName);
                 File dst = new File(Global.activityPath + File.separator + "CMDS" + File.separator + caseNumber.split("-")[0] + File.separator + caseNumber + fileName.substring(fileName.lastIndexOf(File.separator)));
@@ -229,10 +233,10 @@ public class Activity {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void disableActivtyByID(String id) {
         Statement stmt = null;
-            
+
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -240,7 +244,7 @@ public class Activity {
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, id);
-            
+
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
@@ -252,22 +256,22 @@ public class Activity {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void addActivtyFromDocket(String action, String fileName,
             String[] caseNumber,
-            String from, 
-            String to, 
-            String type, 
+            String from,
+            String to,
+            String type,
             String comment,
             boolean redacted,
             boolean needsTimestamp) {
         Statement stmt = null;
-            
+
         try {
 
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, caseNumber[0].trim());
@@ -285,7 +289,7 @@ public class Activity {
             preparedStatement.setBoolean(13, redacted);
             preparedStatement.setBoolean(14, needsTimestamp);
             preparedStatement.setBoolean(15, true);
-
+            preparedStatement.setBoolean(16, true); //mailLog
 
             preparedStatement.executeUpdate();
 
@@ -299,23 +303,23 @@ public class Activity {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void addScanActivtyFromDocket(String action, String fileName,
             String[] caseNumber,
-            String from, 
-            String to, 
-            String type, 
+            String from,
+            String to,
+            String type,
             String comment,
             boolean redacted,
             boolean needsTimestamp,
             Date activtyDate) {
         Statement stmt = null;
-            
+
         try {
 
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, caseNumber[0].trim());
@@ -333,7 +337,7 @@ public class Activity {
             preparedStatement.setBoolean(13, redacted);
             preparedStatement.setBoolean(14, needsTimestamp);
             preparedStatement.setBoolean(15, true);
-
+            preparedStatement.setBoolean(16, true); //mailLog
 
             preparedStatement.executeUpdate();
 
@@ -347,23 +351,23 @@ public class Activity {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void addActivtyFromDocketORGCSC(String action, String fileName,
             String caseNumber,
-            String from, 
-            String to, 
-            String type, 
+            String from,
+            String to,
+            String type,
             String comment,
             boolean redacted,
             boolean needsTimestamp,
             String section) {
         Statement stmt = null;
-            
+
         try {
 
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, null);
@@ -381,7 +385,7 @@ public class Activity {
             preparedStatement.setBoolean(13, redacted);
             preparedStatement.setBoolean(14, needsTimestamp);
             preparedStatement.setBoolean(15, true);
-
+            preparedStatement.setBoolean(16, true); //mailLog
 
             preparedStatement.executeUpdate();
 
@@ -395,24 +399,24 @@ public class Activity {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void addScanActivtyFromDocketORGCSC(String action, String fileName,
             String caseNumber,
-            String from, 
-            String to, 
-            String type, 
+            String from,
+            String to,
+            String type,
             String comment,
             boolean redacted,
             boolean needsTimestamp,
             String section,
             Date activityDate) {
         Statement stmt = null;
-            
+
         try {
 
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, null);
@@ -430,7 +434,7 @@ public class Activity {
             preparedStatement.setBoolean(13, redacted);
             preparedStatement.setBoolean(14, needsTimestamp);
             preparedStatement.setBoolean(15, true);
-
+            preparedStatement.setBoolean(16, true); //mailLog
 
             preparedStatement.executeUpdate();
 
@@ -444,23 +448,23 @@ public class Activity {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void addActivtyFromDocket(String action, String fileName,
             String[] caseNumber,
-            String from, 
-            String to, 
-            String type, 
+            String from,
+            String to,
+            String type,
             String comment,
             boolean redacted,
             boolean needsTimestamp,
             Date activityDate) {
         Statement stmt = null;
-            
+
         try {
 
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, caseNumber[0].trim());
@@ -478,6 +482,7 @@ public class Activity {
             preparedStatement.setBoolean(13, redacted);
             preparedStatement.setBoolean(14, needsTimestamp);
             preparedStatement.setBoolean(15, true);
+            preparedStatement.setBoolean(16, true); //mailLog
 
             preparedStatement.executeUpdate();
 
@@ -491,7 +496,7 @@ public class Activity {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     /**
      * Creates activity entry when new cases are created
      * @param caseNumber the new case number
@@ -499,12 +504,12 @@ public class Activity {
      */
     public static void addNewCaseActivty(String caseNumber, String message) {
         Statement stmt = null;
-            
+
         try {
 
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             String[] parsedCaseNumber = caseNumber.split("-");
@@ -523,6 +528,7 @@ public class Activity {
             preparedStatement.setBoolean(13, false);
             preparedStatement.setBoolean(14, false);
             preparedStatement.setBoolean(15, true);
+            preparedStatement.setBoolean(16, false); //mailLog
 
             preparedStatement.executeUpdate();
 
@@ -536,7 +542,7 @@ public class Activity {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     /**
      * Loads all activity for a specified case number, pulls the case number
      * from global
@@ -545,9 +551,9 @@ public class Activity {
      */
     public static List loadCaseNumberActivity(String searchTerm) {
         List<Activity> activityList = new ArrayList<>();
-        
+
         Statement stmt = null;
-            
+
         try {
             PreparedStatement preparedStatement;
 
@@ -561,7 +567,7 @@ public class Activity {
                     + " caseNumber,"
                     + " date,"
                     + " action,"
-                    + " comment,"    
+                    + " comment,"
                     + " firstName,"
                     + " lastName,"
                     + " fileName"
@@ -591,7 +597,7 @@ public class Activity {
                     + " caseNumber,"
                     + " date,"
                     + " action,"
-                    + " comment,"    
+                    + " comment,"
                     + " firstName,"
                     + " lastName,"
                     + " fileName"
@@ -619,16 +625,16 @@ public class Activity {
             }
 
             ResultSet caseActivity = preparedStatement.executeQuery();
-            
+
             while(caseActivity.next()) {
                 Activity act = new Activity();
-                
+
                 if(caseActivity.getString("firstName") == null && caseActivity.getString("lastName") == null) {
                     act.user = "SYSTEM";
                 } else {
                     act.user = caseActivity.getString("firstName") + " " + caseActivity.getString("lastName");
                 }
-                
+
                 act.id = caseActivity.getInt("id");
                 act.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
                 act.action = caseActivity.getString("action");
@@ -647,16 +653,16 @@ public class Activity {
         }
         return activityList;
     }
-    
+
     public static List loadAllActivity() {
         List<Activity> activityList = new ArrayList<>();
-        
+
         Statement stmt = null;
-            
+
         try {
 
             stmt = Database.connectToDB().createStatement();
-            
+
             String sql = "select TOP 50 Activity.id,"
                     + " caseYear,"
                     + " caseType,"
@@ -677,7 +683,7 @@ public class Activity {
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
             ResultSet caseActivity = preparedStatement.executeQuery();
-            
+
             while(caseActivity.next()) {
                 Activity act = new Activity();
                 act.id = caseActivity.getInt("id");
@@ -703,16 +709,16 @@ public class Activity {
         }
         return activityList;
     }
-    
+
     public static List loadHearingActivity() {
         List<Activity> activityList = new ArrayList<>();
-        
+
         Statement stmt = null;
-            
+
         try {
 
             stmt = Database.connectToDB().createStatement();
-            
+
             String sql = "select Activity.id,"
                     + " caseYear,"
                     + " caseType,"
@@ -743,7 +749,7 @@ public class Activity {
             preparedStatement.setString(5, Global.caseNumber);
 
             ResultSet caseActivity = preparedStatement.executeQuery();
-            
+
             while(caseActivity.next()) {
                 Activity act = new Activity();
                 act.id = caseActivity.getInt("id");
@@ -769,12 +775,12 @@ public class Activity {
         }
         return activityList;
     }
-    
+
     public static Activity loadActivityByID(String id) {
         Activity activity = new Activity();
-        
+
         Statement stmt = null;
-            
+
         try {
 
             stmt = Database.connectToDB().createStatement();
@@ -798,13 +804,13 @@ public class Activity {
                     + " ON Activity.userID = Users.id"
                     + " Where Activity.id = ?"
                     + " and Activity.active = 1";
-            
+
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setInt(1, Integer.parseInt(id));
 
             ResultSet caseActivity = preparedStatement.executeQuery();
-            
+
             while(caseActivity.next()) {
                 activity.id = caseActivity.getInt("id");
                 activity.user = caseActivity.getString("firstName") + " " + caseActivity.getString("lastName");
@@ -819,7 +825,7 @@ public class Activity {
                 activity.type = caseActivity.getString("type");
                 activity.comment = caseActivity.getString("comment");
                 activity.from = caseActivity.getString("from");
-                
+
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
@@ -832,10 +838,10 @@ public class Activity {
         }
         return activity;
     }
-    
+
     public static void updateActivtyEntry(Activity activty) {
         Statement stmt = null;
-        
+
         try {
 
             stmt = Database.connectToDB().createStatement();
@@ -869,16 +875,16 @@ public class Activity {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static List<Activity> loadActivityDocumentsByGlobalCase() {
         List<Activity> activityList = new ArrayList<>();
-        
+
         Statement stmt = null;
-            
+
         try {
 
             stmt = Database.connectToDB().createStatement();
-            
+
             String sql = "SELECT * FROM Activity WHERE "
                     + "awaitingTimestamp = 0 AND "
                     + "fileName IS NOT NULL AND "
@@ -894,9 +900,9 @@ public class Activity {
             preparedStatement.setString(2, Global.caseType);
             preparedStatement.setString(3, Global.caseMonth);
             preparedStatement.setString(4, Global.caseNumber);
-            
+
             ResultSet caseActivity = preparedStatement.executeQuery();
-            
+
             while(caseActivity.next()) {
                 Activity act = new Activity();
                 act.id = caseActivity.getInt("id");
@@ -920,16 +926,16 @@ public class Activity {
         }
         return activityList;
     }
-    
+
     public static List<Activity> loadActivityDocumentsByGlobalCaseORG() {
         List<Activity> activityList = new ArrayList<>();
-        
+
         Statement stmt = null;
-            
+
         try {
 
             stmt = Database.connectToDB().createStatement();
-            
+
             String sql = "SELECT * FROM Activity WHERE "
                     + "awaitingTimestamp = 0 AND "
                     + "fileName IS NOT NULL AND "
@@ -941,9 +947,9 @@ public class Activity {
 
             preparedStatement.setString(1, Global.caseType.equals("Civil Service Commission") ? "CSC" : "ORG");
             preparedStatement.setString(2, Global.caseNumber);
-            
+
             ResultSet caseActivity = preparedStatement.executeQuery();
-            
+
             while(caseActivity.next()) {
                 Activity act = new Activity();
                 act.id = caseActivity.getInt("id");
@@ -967,16 +973,16 @@ public class Activity {
         }
         return activityList;
     }
-    
+
     public static List<Activity> loadActivityDocumentsByGlobalCasePublicRecords() {
         List<Activity> activityList = new ArrayList<>();
-        
+
         Statement stmt = null;
-            
+
         try {
 
             stmt = Database.connectToDB().createStatement();
-            
+
             String sql = "SELECT * FROM Activity WHERE "
                     + "awaitingTimestamp = 0 AND "
                     + "fileName IS NOT NULL AND fileName <>'' AND "
@@ -993,10 +999,10 @@ public class Activity {
             preparedStatement.setString(1, Global.caseYear);
             preparedStatement.setString(2, Global.caseType);
             preparedStatement.setString(3, Global.caseMonth);
-            preparedStatement.setString(4, Global.caseNumber); 
-            
+            preparedStatement.setString(4, Global.caseNumber);
+
             ResultSet caseActivity = preparedStatement.executeQuery();
-            
+
             while(caseActivity.next()) {
                 Activity act = new Activity();
                 act.id = caseActivity.getInt("id");
@@ -1021,16 +1027,16 @@ public class Activity {
         }
         return activityList;
     }
-    
+
     public static List<Activity> loadActivityDocumentsByGlobalCaseORGCSCPublicRecords() {
         List<Activity> activityList = new ArrayList<>();
-        
+
         Statement stmt = null;
-            
+
         try {
 
             stmt = Database.connectToDB().createStatement();
-            
+
             String sql = "SELECT * FROM Activity WHERE "
                     + "awaitingTimestamp = 0 AND "
                     + "fileName IS NOT NULL AND fileName <>'' AND "
@@ -1045,10 +1051,10 @@ public class Activity {
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
             preparedStatement.setString(1, Global.caseType);
-            preparedStatement.setString(2, Global.caseNumber); 
-            
+            preparedStatement.setString(2, Global.caseNumber);
+
             ResultSet caseActivity = preparedStatement.executeQuery();
-            
+
             while(caseActivity.next()) {
                 Activity act = new Activity();
                 act.id = caseActivity.getInt("id");
@@ -1073,35 +1079,35 @@ public class Activity {
         }
         return activityList;
     }
-    
+
     public static List<Activity> loadDocumentsBySectionAwaitingRedaction() {
         Statement stmt = null;
-        
+
         List casetypes = CaseType.getCaseType();
         List<Activity> activityList = new ArrayList<>();
-                    
+
         try {
             int i = 0;
             stmt = Database.connectToDB().createStatement();
-            
+
             String sql = "SELECT * FROM Activity WHERE "
                     + "awaitingTimestamp = 0 AND "
                     + "fileName IS NOT NULL AND "
                     + "active = 1 AND "
                     + "redacted = 0 AND "
                     + "action LIKE 'REDACTED - %' ";
-            
+
             if (!casetypes.isEmpty()) {
                 sql += "AND (";
-                
+
                 while(i < casetypes.size()) {
                     sql += " Activity.caseType = ? OR";
                     i++;
                 }
-                
+
                 sql = sql.substring(0, (sql.length() - 2)) + ")";
             }
-            
+
             sql += " ORDER BY Activity.CaseYear DESC, Activity.caseMonth DESC, Activity.caseNumber DESC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
@@ -1111,9 +1117,9 @@ public class Activity {
                 count = count + 1;
                 preparedStatement.setString(count, casetype.toString());
             }
-            
+
             ResultSet caseActivity = preparedStatement.executeQuery();
-            
+
             while(caseActivity.next()) {
                 Activity act = new Activity();
                 act.id = caseActivity.getInt("id");
@@ -1136,37 +1142,37 @@ public class Activity {
             DbUtils.closeQuietly(stmt);
         }
         return activityList;
-    }    
-    
+    }
+
     public static List<Activity> loadMailLogBySection(String startDate, String endDate) {
         List casetypes = CaseType.getCaseType();
 
         List<Activity> activityList = new ArrayList<>();
-        
+
         Statement stmt = null;
-            
+
         try {
             int i = 0;
             stmt = Database.connectToDB().createStatement();
-            
+
             String sql = "SELECT * FROM Activity WHERE Activity.date >= ?  AND Activity.date <= ? "
-                    + "AND Activity.fileName IS NOT NULL AND Activity.fileName != '' " 
+                    + "AND Activity.fileName IS NOT NULL AND Activity.fileName != '' "
                     + "AND (Activity.action LIKE 'IN -%' OR Activity.action LIKE 'OUT -%') "
-                    + " and Activity.active = 1";
-            
+                    + " and Activity.active = 1 AND Activity.mailLog = 1 ";
+
             if (!casetypes.isEmpty()) {
                 sql += "AND (";
-                
+
                 while(i < casetypes.size()) {
                     sql += " Activity.caseType = ? OR";
                     i++;
                 }
-                
+
                 sql = sql.substring(0, (sql.length() - 2)) + ")";
             }
-            
+
             sql += " ORDER BY Activity.CaseYear DESC, Activity.caseMonth DESC, Activity.caseNumber DESC, activity.id DESC";
-            
+
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
@@ -1177,9 +1183,9 @@ public class Activity {
                 count = count + 1;
                 preparedStatement.setString(count, casetype.toString());
             }
-            
+
             ResultSet caseActivity = preparedStatement.executeQuery();
-            
+
             while(caseActivity.next()) {
                 Activity activity = new Activity();
                 activity.id = caseActivity.getInt("id");
@@ -1207,10 +1213,10 @@ public class Activity {
         }
         return activityList;
     }
-    
+
     public static void updateRedactedStatus(boolean redacted, int id) {
         Statement stmt = null;
-        
+
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -1219,21 +1225,21 @@ public class Activity {
             PreparedStatement ps = stmt.getConnection().prepareStatement(sql);
             ps.setBoolean(1, redacted);
             ps.setInt(2, id);
-            
+
             ps.executeUpdate();
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateRedactedStatus(redacted, id);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void updateUnRedactedAction(String action, int id) {
         Statement stmt = null;
-        
+
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -1242,23 +1248,23 @@ public class Activity {
             PreparedStatement ps = stmt.getConnection().prepareStatement(sql);
             ps.setString(1, action);
             ps.setInt(2, id);
-            
+
             ps.executeUpdate();
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateUnRedactedAction(action, id);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static Activity getFULLActivityByID(int id) {
         Activity activity = new Activity();
-        
+
         Statement stmt = null;
-            
+
         try {
 
             stmt = Database.connectToDB().createStatement();
@@ -1269,7 +1275,7 @@ public class Activity {
             preparedStatement.setInt(1, id);
 
             ResultSet caseActivity = preparedStatement.executeQuery();
-            
+
             while(caseActivity.next()) {
                 activity.id = caseActivity.getInt("id");
                 activity.caseYear = caseActivity.getString("caseYear");
@@ -1286,18 +1292,20 @@ public class Activity {
                 activity.comment = caseActivity.getString("comment");
                 activity.redacted = caseActivity.getBoolean("redacted");
                 activity.awaitingScan = caseActivity.getBoolean("awaitingTimestamp");
+                activity.active = caseActivity.getBoolean("awaitingTimestamp");
+                activity.mailLog = caseActivity.getBoolean("mailLog");
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 getFULLActivityByID(id);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return activity;
     }
-    
+
     public static void duplicatePublicRecordActivty(Activity item) {
         Timestamp time = null;
 
@@ -1308,31 +1316,33 @@ public class Activity {
         }
 
         Statement stmt = null;
-            
+
         try {
 
             stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert INTO Activity ("
-                    + "caseYear, "        //01
-                    + "caseType, "        //02
-                    + "caseMonth, "       //03
-                    + "caseNumber, "      //04
-                    + "userID, "          //05
-                    + "date, "            //06
-                    + "action, "          //07
-                    + "fileName, "        //08
-                    + "[from], "          //09
-                    + "[to], "            //10
-                    + "type, "            //11
-                    + "comment, "         //12
-                    + "redacted, "        //13
-                    + "awaitingTimeStamp "//14
+                    + "caseYear, "         //01
+                    + "caseType, "         //02
+                    + "caseMonth, "        //03
+                    + "caseNumber, "       //04
+                    + "userID, "           //05
+                    + "date, "             //06
+                    + "action, "           //07
+                    + "fileName, "         //08
+                    + "[from], "           //09
+                    + "[to], "             //10
+                    + "type, "             //11
+                    + "comment, "          //12
+                    + "redacted, "         //13
+                    + "awaitingTimeStamp, "//14
+                    + "active, "           //15
+                    + "mailLog "           //16
                     + ") VALUES (";
-                    for(int i=0; i<13; i++){
-                        sql += "?, ";   //01-13
+                    for(int i=0; i<15; i++){
+                        sql += "?, ";   //01-15
                     }
-                     sql += "?)"; //14
+                     sql += "?)"; //16
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
@@ -1350,6 +1360,8 @@ public class Activity {
             preparedStatement.setString(12, item.comment);
             preparedStatement.setBoolean(13, item.redacted);
             preparedStatement.setBoolean(14, item.awaitingScan);
+            preparedStatement.setBoolean(16, true); //active
+            preparedStatement.setBoolean(16, false); //mailLog
 
             preparedStatement.executeUpdate();
 
@@ -1357,9 +1369,9 @@ public class Activity {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 duplicatePublicRecordActivty(item);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
-    }  
+    }
 }
