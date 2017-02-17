@@ -16,7 +16,7 @@ import parker.serb.util.SlackNotification;
  * @author parkerjohnston
  */
 public class REPCaseSearchData {
-    
+
     public int id;
     public String caseYear;
     public String caseType;
@@ -29,20 +29,20 @@ public class REPCaseSearchData {
     public String boardDeemed;
     public String employeeOrg;
     public String incumbent;
-    
+
     public static List loadREPCaseList() {
         List<REPCaseSearchData> ulpCaseList = new ArrayList<>();
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "select * from REPCaseSearch ORDER BY id DESC";
+            String sql = "select * from REPCaseSearch ORDER BY caseYear DESC, caseMonth DESC, caseNumber DESC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
             ResultSet caseActivity = preparedStatement.executeQuery();
-            
+
             while(caseActivity.next()) {
                 REPCaseSearchData repCase = new REPCaseSearchData();
                 repCase.id = caseActivity.getInt("id");
@@ -63,15 +63,15 @@ public class REPCaseSearchData {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadREPCaseList();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return ulpCaseList;
     }
-    
+
     public static void createNewCaseEntry(String year, String type, String month, String number) {
-        Statement stmt = null;   
+        Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -88,14 +88,14 @@ public class REPCaseSearchData {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 createNewCaseEntry(year, type, month, number);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void updateCaseEntryFromParties(String employer, String employeeOrg, String incumbent) {
-        Statement stmt = null;    
+        Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -122,15 +122,15 @@ public class REPCaseSearchData {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateCaseEntryFromParties(employer, employeeOrg, incumbent);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void updateCaseEntryFromCaseInformation(
             String bunnumber, String county, String boarddeemed)
-    {    
+    {
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
@@ -160,7 +160,7 @@ public class REPCaseSearchData {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateCaseEntryFromCaseInformation(bunnumber, county, boarddeemed);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }

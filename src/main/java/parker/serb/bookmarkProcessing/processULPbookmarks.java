@@ -62,7 +62,7 @@ public class processULPbookmarks {
             for (int person : ccParties){
                 if (person == party.id) {
                      if (!"".equals(ccNameBlock.trim())){
-                        ccNameBlock += ", ";
+                        ccNameBlock += ",\n";
                     }
                      ccNameBlock += StringUtilities.buildCasePartyNameNoPreFix(party);
                 }
@@ -119,6 +119,22 @@ public class processULPbookmarks {
             }
             if (user.id == item.mediatorAssignedID){
                 mediatorName = StringUtilities.buildFullName(user.firstName, "", user.lastName);
+            }
+        }
+
+        if (relatedCasesList.size() == 2) {
+            for (String relatedCase : relatedCasesList) {
+                relatedCases += ("".equals(relatedCases) ? relatedCase : " and " + relatedCase);
+            }
+        } else {
+            int i = 0;
+            for (String relatedCase : relatedCasesList) {
+                i++;
+                if (i == relatedCasesList.size()) {
+                    relatedCases += ("".equals(relatedCases) ? relatedCase : "; and " + relatedCase);
+                } else {
+                    relatedCases += ("".equals(relatedCases) ? relatedCase : "; " + relatedCase);
+                }
             }
         }
 

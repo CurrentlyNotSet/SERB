@@ -16,7 +16,7 @@ import parker.serb.util.SlackNotification;
  * @author parkerjohnston
  */
 public class MEDCaseSearchData {
-    
+
     public int id;
     public String caseYear;
     public String caseType;
@@ -27,20 +27,20 @@ public class MEDCaseSearchData {
     public String county;
     public String employerID;
     public String bunNumber;
-    
+
     public static List loadMEDCaseList() {
         List<MEDCaseSearchData> ulpCaseList = new ArrayList<>();
-            
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "select * from MEDCaseSearch ORDER BY id DESC";
+            String sql = "select * from MEDCaseSearch ORDER BY caseYear DESC, caseMonth DESC, caseNumber DESC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
             ResultSet caseActivity = preparedStatement.executeQuery();
-            
+
             while(caseActivity.next()) {
                 MEDCaseSearchData repCase = new MEDCaseSearchData();
                 repCase.id = caseActivity.getInt("id");
@@ -59,15 +59,15 @@ public class MEDCaseSearchData {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadMEDCaseList();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return ulpCaseList;
     }
-    
+
     public static void createNewCaseEntry(String year, String type, String month, String number) {
-        Statement stmt = null; 
+        Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -84,14 +84,14 @@ public class MEDCaseSearchData {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 createNewCaseEntry(year, type, month, number);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void updateCaseEntryFromParties(String employer, String unionName) {
-        Statement stmt = null;  
+        Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -116,14 +116,14 @@ public class MEDCaseSearchData {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateCaseEntryFromParties(employer, unionName);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void updateCaseEntryFromCaseStatus(
-            String employerID, String bunnumber) 
+            String employerID, String bunnumber)
     {
         Statement stmt = null;
         try {
@@ -146,13 +146,13 @@ public class MEDCaseSearchData {
             preparedStatement.setString(5, Global.caseType);
             preparedStatement.setString(6, Global.caseMonth);
             preparedStatement.setString(7, Global.caseNumber);
-            
+
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateCaseEntryFromCaseStatus(employerID, bunnumber);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
