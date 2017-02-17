@@ -41,7 +41,6 @@ public class REPLetterDialog extends javax.swing.JDialog {
         loadLetters();
         loadDirectives();
         loadMemos2();
-        loadAgendas();
         loadMiscDocs();
     }
 
@@ -49,7 +48,6 @@ public class REPLetterDialog extends javax.swing.JDialog {
         lettersComboBox.addItemListener((ItemEvent e) -> {
             directivesComboBox.setSelectedItem(new Item<>("0", ""));
             memosComboBox2.setSelectedItem(new Item<>("0", ""));
-            agendaComboBox.setSelectedItem(new Item<>("0", ""));
             miscComboBox.setSelectedItem(new Item<>("0", ""));
             enableGenerateButton();
         });
@@ -57,7 +55,6 @@ public class REPLetterDialog extends javax.swing.JDialog {
         directivesComboBox.addItemListener((ItemEvent e) -> {
             lettersComboBox.setSelectedItem(new Item<>("0", ""));
             memosComboBox2.setSelectedItem(new Item<>("0", ""));
-            agendaComboBox.setSelectedItem(new Item<>("0", ""));
             miscComboBox.setSelectedItem(new Item<>("0", ""));
             enableGenerateButton();
         });
@@ -66,7 +63,6 @@ public class REPLetterDialog extends javax.swing.JDialog {
             lettersComboBox.setSelectedItem(new Item<>("0", ""));
             directivesComboBox.setSelectedItem(new Item<>("0", ""));
             memosComboBox2.setSelectedItem(new Item<>("0", ""));
-            agendaComboBox.setSelectedItem(new Item<>("0", ""));
             miscComboBox.setSelectedItem(new Item<>("0", ""));
             loadMemos2();
             enableGenerateButton();
@@ -75,21 +71,11 @@ public class REPLetterDialog extends javax.swing.JDialog {
         memosComboBox2.addItemListener((ItemEvent e) -> {
             lettersComboBox.setSelectedItem(new Item<>("0", ""));
             directivesComboBox.setSelectedItem(new Item<>("0", ""));
-            agendaComboBox.setSelectedItem(new Item<>("0", ""));
-            miscComboBox.setSelectedItem(new Item<>("0", ""));
-            enableGenerateButton();
-        });
-
-        agendaComboBox.addItemListener((ItemEvent e) -> {
-            lettersComboBox.setSelectedItem(new Item<>("0", ""));
-            directivesComboBox.setSelectedItem(new Item<>("0", ""));
-            memosComboBox2.setSelectedItem(new Item<>("0", ""));
             miscComboBox.setSelectedItem(new Item<>("0", ""));
             enableGenerateButton();
         });
 
         miscComboBox.addItemListener((ItemEvent e) -> {
-            agendaComboBox.setSelectedItem(new Item<>("0", ""));
             lettersComboBox.setSelectedItem(new Item<>("0", ""));
             directivesComboBox.setSelectedItem(new Item<>("0", ""));
             memosComboBox2.setSelectedItem(new Item<>("0", ""));
@@ -147,18 +133,6 @@ public class REPLetterDialog extends javax.swing.JDialog {
         memosComboBox2.setSelectedItem(new Item<>("0", ""));
     }
 
-    private void loadAgendas() {
-        DefaultComboBoxModel dt = new DefaultComboBoxModel();
-        agendaComboBox.setModel(dt);
-        agendaComboBox.addItem(new Item<>("0", ""));
-
-        List<SMDSDocuments> letterList = SMDSDocuments.loadDocumentNamesByTypeAndSection("REP", "Agenda");
-        for (SMDSDocuments letter : letterList) {
-            agendaComboBox.addItem(new Item<>(String.valueOf(letter.id), letter.description));
-        }
-        agendaComboBox.setSelectedItem(new Item<>("0", ""));
-    }
-
     private void loadMiscDocs() {
         DefaultComboBoxModel dt = new DefaultComboBoxModel();
         miscComboBox.setModel(dt);
@@ -175,7 +149,6 @@ public class REPLetterDialog extends javax.swing.JDialog {
         if(lettersComboBox.getSelectedItem().toString().equals("")
                 && directivesComboBox.getSelectedItem().toString().equals("")
                 && memosComboBox2.getSelectedItem().toString().equals("")
-                && agendaComboBox.getSelectedItem().toString().equals("")
                 && miscComboBox.getSelectedItem().toString().equals("")) {
             generateButton.setEnabled(false);
         } else {
@@ -193,9 +166,6 @@ public class REPLetterDialog extends javax.swing.JDialog {
             selection = Integer.parseInt(item.getValue().toString());
         } else if (!memosComboBox2.getSelectedItem().toString().equals("")) {
             Item item = (Item) memosComboBox2.getSelectedItem();
-            selection = Integer.parseInt(item.getValue().toString());
-        } else if (!agendaComboBox.getSelectedItem().toString().equals("")) {
-            Item item = (Item) agendaComboBox.getSelectedItem();
             selection = Integer.parseInt(item.getValue().toString());
         } else if (!miscComboBox.getSelectedItem().toString().equals("")) {
             Item item = (Item) miscComboBox.getSelectedItem();
@@ -232,8 +202,6 @@ public class REPLetterDialog extends javax.swing.JDialog {
         jLabel4 = new javax.swing.JLabel();
         memosComboBox1 = new javax.swing.JComboBox();
         memosComboBox2 = new javax.swing.JComboBox();
-        jLabel5 = new javax.swing.JLabel();
-        agendaComboBox = new javax.swing.JComboBox();
         generateButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
         miscComboBox = new javax.swing.JComboBox();
@@ -252,8 +220,6 @@ public class REPLetterDialog extends javax.swing.JDialog {
         jLabel4.setText("Memos");
 
         memosComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "AC", "All Types", "Mail Ballot", "JTAC", "On-Site", "RBT", "RC", "RD", "REVOKE", "UC", "VR" }));
-
-        jLabel5.setText("Agenda");
 
         generateButton.setText("Generate");
         generateButton.setEnabled(false);
@@ -284,14 +250,12 @@ public class REPLetterDialog extends javax.swing.JDialog {
                     .addComponent(directivesComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(memosComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(memosComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(agendaComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(cancelButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 368, Short.MAX_VALUE)
                         .addComponent(generateButton))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
                             .addComponent(jLabel4)
                             .addComponent(jLabel2)
                             .addComponent(jLabel3))
@@ -325,15 +289,11 @@ public class REPLetterDialog extends javax.swing.JDialog {
                 .addComponent(memosComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(memosComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(agendaComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(miscComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(generateButton)
                     .addComponent(cancelButton))
@@ -352,7 +312,6 @@ public class REPLetterDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox agendaComboBox;
     private javax.swing.JButton cancelButton;
     private javax.swing.JComboBox directivesComboBox;
     private javax.swing.JButton generateButton;
@@ -360,7 +319,6 @@ public class REPLetterDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JComboBox lettersComboBox;

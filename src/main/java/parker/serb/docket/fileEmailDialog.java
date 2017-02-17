@@ -56,10 +56,25 @@ public class fileEmailDialog extends javax.swing.JDialog {
         emailSection = section;
         passedTime = time;
         addListeners(section, id);
+        setCaseNumberTitle(section);
         loadData(section, id);
         setColumnWidth();
         setLocationRelativeTo(parent);
         setVisible(true);
+    }
+    
+    private void setCaseNumberTitle(String section) {
+        switch(section) {
+            case "ORG":
+                jLabel2.setText("ORG Number(s):");
+                break;
+            case "CSC":
+                jLabel2.setText("CSC Number(s):");
+                break;
+            default:
+                jLabel2.setText("Case Number(s):");
+                break;
+        }
     }
     
     private void setColumnWidth() {

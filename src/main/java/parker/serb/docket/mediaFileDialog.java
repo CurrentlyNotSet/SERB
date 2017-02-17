@@ -39,10 +39,25 @@ public class mediaFileDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         selectedSection = section;
+        setCaseNumberTitle(section);
         loadData(section, file);
         addListeners();
         setLocationRelativeTo(parent);
         setVisible(true); 
+    }
+    
+    private void setCaseNumberTitle(String section) {
+        switch(section) {
+            case "ORG":
+                jLabel8.setText("ORG Number(s):");
+                break;
+            case "CSC":
+                jLabel8.setText("CSC Number(s):");
+                break;
+            default:
+                jLabel8.setText("Case Number(s):");
+                break;
+        }
     }
     
     private void loadData(String section, String file) {
