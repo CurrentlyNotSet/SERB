@@ -40,13 +40,13 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
 
     private void setDefaults() {
         headerLabel.setText(Global.activeSection + " Mail Log Viewer");
-        
+
         if(Global.activeSection.equals("ORG") || Global.activeSection.equals("Civil Service Commission")){
             jTable1.getColumnModel().getColumn(2).setHeaderValue("Org Number");
         } else if (Global.activeSection.equals("CMDS")){
             jTable1.getColumnModel().getColumn(3).setHeaderValue("ALJ");
         }
-        
+
         jTable1.getTableHeader().repaint();
         startDateField.setDate(new Date());
         endDateField.setDate(new Date());
@@ -60,23 +60,23 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
             endDateField.setDate(date);
             loadTable();
         });
-        
+
         endDateField.addDateSelectionListener((Date date) -> {
             loadTable();
         });
     }
-    
-    private void setColumnSize() {        
+
+    private void setColumnSize() {
         //ID
         jTable1.getColumnModel().getColumn(0).setMinWidth(0);
         jTable1.getColumnModel().getColumn(0).setPreferredWidth(0);
         jTable1.getColumnModel().getColumn(0).setMaxWidth(0);
-        
+
         //Date Time
         jTable1.getColumnModel().getColumn(1).setMinWidth(150);
         jTable1.getColumnModel().getColumn(1).setPreferredWidth(150);
         jTable1.getColumnModel().getColumn(1).setMaxWidth(150);
-        
+
         //Case Number
         if (Global.activeSection.equals("ORG") || Global.activeSection.equals("Civil Service Commission")){
             jTable1.getColumnModel().getColumn(2).setMinWidth(90);
@@ -87,7 +87,7 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
             jTable1.getColumnModel().getColumn(2).setPreferredWidth(125);
             jTable1.getColumnModel().getColumn(2).setMaxWidth(125);
         }
-        
+
         //FROM
         if (Global.activeSection.equals("CMDS")){
             jTable1.getColumnModel().getColumn(4).setMinWidth(0);
@@ -95,11 +95,11 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
             jTable1.getColumnModel().getColumn(4).setMaxWidth(0);
         }
     }
-    
+
     private void loadTable(){
         List<Activity> activityList = Activity.loadMailLogBySection(
                 Global.SQLDateFormat.format(startDateField.getDate()), Global.SQLDateFormat.format(endDateField.getDate()));
-        
+
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
 
@@ -110,7 +110,7 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
             } else {
                 number = NumberFormatService.generateFullCaseNumberNonGlobal(item.caseYear, item.caseType, item.caseMonth, item.caseNumber);
             }
-                        
+
             model.addRow(new Object[]{
                 item.id,
                 item.date,
@@ -120,7 +120,7 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
                 item.action,
                 item.fileName
             });
-        }        
+        }
         PrintButton.setEnabled(jTable1.getRowCount() > 0);
     }
 
@@ -128,26 +128,26 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
         SMDSDocuments doc = new SMDSDocuments();
         doc.section = "ALL";
         doc.fileName = "MailLog.jasper";
-        
+
         List<String> casetypes = CaseType.getCaseType();
-        
+
         String sqlWHERE = " Activity.date >= '" + startDateField.getText() + " 00:00:00.000'  AND Activity.date <= '" + endDateField.getText() + " 23:59:59.999' "
-                    + "AND Activity.fileName IS NOT NULL AND Activity.fileName != '' " 
+                    + "AND Activity.fileName IS NOT NULL AND Activity.fileName != '' AND mailLog = 1 "
                     + "AND (Activity.action LIKE 'IN -%' OR Activity.action LIKE 'OUT -%') ";
-            
+
             if (!casetypes.isEmpty()) {
                 sqlWHERE += "AND (";
-                
+
                 for (String casetype : casetypes) {
-                    
+
                     sqlWHERE += " Activity.caseType = '" + casetype + "' OR";
                 }
-                
+
                 sqlWHERE = sqlWHERE.substring(0, (sqlWHERE.length() - 2)) + ")";
             }
-            
+
             sqlWHERE += " ORDER BY Activity.CaseYear DESC, Activity.caseMonth DESC, Activity.caseNumber DESC, activity.id DESC";
-        
+
         GenerateReport.generateExactStringReport(sqlWHERE, doc);
     }
 
@@ -312,7 +312,7 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         String fileName = jTable1.getValueAt(jTable1.getSelectedRow(), 6).toString();
         String[] caseNumber = jTable1.getValueAt(jTable1.getSelectedRow(), 6).toString().trim().split("-");
-                
+
         if(evt.getClickCount() == 2 && !fileName.equals("")) {
             switch (Global.activeSection) {
                 case "ORG":
@@ -320,7 +320,7 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
                     break;
                 case "Civil Service Commission":
                     FileService.openFileWithORGNumber("CSC", jTable1.getValueAt(jTable1.getSelectedRow(), 6).toString(), fileName);
-                    break;    
+                    break;
                 default:
                     FileService.openFileWithCaseNumber(Global.activeSection, caseNumber[0], caseNumber[1], caseNumber[2], caseNumber[3], fileName);
                     break;

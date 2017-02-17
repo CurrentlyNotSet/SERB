@@ -542,7 +542,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel18">
           <Properties>
-            <Property name="text" type="java.lang.String" value="SOI Return By:"/>
+            <Property name="text" type="java.lang.String" value="SOI Returned By:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel19">
