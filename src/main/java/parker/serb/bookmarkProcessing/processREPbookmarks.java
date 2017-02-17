@@ -277,10 +277,12 @@ public class processREPbookmarks {
         }
 
         //BoardMeeting
-        try {
-            longMeetDate = Global.MMMMMdyyyy.format(Global.mmddyyyy.parse(meeting.boardMeetingDate));
-                    } catch (ParseException ex) {
-            Logger.getLogger(processREPbookmarks.class.getName()).log(Level.SEVERE, null, ex);
+        if (meeting.boardMeetingDate == null ? false : !meeting.boardMeetingDate.equals("")){
+            try {
+                longMeetDate = Global.MMMMMdyyyy.format(Global.mmddyyyy.parse(meeting.boardMeetingDate));
+                        } catch (ParseException ex) {
+                Logger.getLogger(processREPbookmarks.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
         //ProcessBookmarks
@@ -292,8 +294,8 @@ public class processREPbookmarks {
             processBookmark.process("BALLOTTWO" + (i == 0 ? "" : i), caseInfo.ballotTwo, Document);
             processBookmark.process("BALLOTTHREE" + (i == 0 ? "" : i), caseInfo.ballotThree, Document);
             processBookmark.process("BALLOTFOUR" + (i == 0 ? "" : i), caseInfo.ballotFour, Document);
-            processBookmark.process("BallotsCountDate" + (i == 0 ? "" : i), Global.mmddyyyy.format(caseInfo.ballotsCountDate), Document);
-            processBookmark.process("BallotsCountTime" + (i == 0 ? "" : i), Global.hmma.format(caseInfo.ballotsCountTime), Document);
+            processBookmark.process("BallotsCountDate" + (i == 0 ? "" : i), caseInfo.ballotsCountDate == null ? "" : Global.mmddyyyy.format(caseInfo.ballotsCountDate), Document);
+            processBookmark.process("BallotsCountTime" + (i == 0 ? "" : i), caseInfo.ballotsCountTime == null ? "" : Global.hmma.format(caseInfo.ballotsCountTime), Document);
             processBookmark.process("ELIGIBILITYDATE" + (i == 0 ? "" : i), (caseInfo.eligibilityDate == null ? "" : Global.MMMMddyyyy.format(caseInfo.eligibilityDate)), Document);
             processBookmark.process("EXCLUDEDNEWORCURRENTUNIT" + (i == 0 ? "" : i), caseInfo.bargainingUnitExcluded, Document);
             processBookmark.process("PIN" + (i == 0 ? "" : i), caseInfo.professionalIncluded, Document);
@@ -322,10 +324,12 @@ public class processREPbookmarks {
             processBookmark.process("POLLINGPERIOD" + (i == 0 ? "" : i), polling.trim(), Document);
             processBookmark.process("WHOPREVAILED" + (i == 0 ? "" : i), caseInfo.resultWHoPrevailed, Document);
 
-            if (caseInfo.type.equals("AC")) {
-                processBookmark.process("CASETYPE" + (i == 0 ? "" : i), "PETITION FOR REPRESENTATION", Document);
-            } else if (caseInfo.type.equals("RC")) {
-                processBookmark.process("CASETYPE" + (i == 0 ? "" : i), "PETITION FOR AMENDMENT OF CERTIFICATION", Document);
+            if (caseInfo.type != null) {
+                if (caseInfo.type.equals("AC")) {
+                    processBookmark.process("CASETYPE" + (i == 0 ? "" : i), "PETITION FOR REPRESENTATION", Document);
+                } else if (caseInfo.type.equals("RC")) {
+                    processBookmark.process("CASETYPE" + (i == 0 ? "" : i), "PETITION FOR AMENDMENT OF CERTIFICATION", Document);
+                }
             }
 
             processBookmark.process("RIVALVOTES" + (i == 0 ? "" : i),
