@@ -1157,8 +1157,7 @@ public class Activity {
 
             String sql = "SELECT * FROM Activity WHERE Activity.date >= ?  AND Activity.date <= ? "
                     + "AND Activity.fileName IS NOT NULL AND Activity.fileName != '' "
-                    + "AND (Activity.action LIKE 'IN -%' OR Activity.action LIKE 'OUT -%') "
-                    + " and Activity.active = 1 AND Activity.mailLog = 1 ";
+                    + "AND Activity.active = 1 AND Activity.mailLog = 1 ";
 
             if (!casetypes.isEmpty()) {
                 sql += "AND (";

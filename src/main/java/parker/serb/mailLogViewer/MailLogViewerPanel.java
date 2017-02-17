@@ -132,8 +132,7 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
         List<String> casetypes = CaseType.getCaseType();
 
         String sqlWHERE = " Activity.date >= '" + startDateField.getText() + " 00:00:00.000'  AND Activity.date <= '" + endDateField.getText() + " 23:59:59.999' "
-                    + "AND Activity.fileName IS NOT NULL AND Activity.fileName != '' AND mailLog = 1 "
-                    + "AND (Activity.action LIKE 'IN -%' OR Activity.action LIKE 'OUT -%') ";
+                    + "AND Activity.fileName IS NOT NULL AND Activity.fileName != '' AND mailLog = 1 ";
 
             if (!casetypes.isEmpty()) {
                 sqlWHERE += "AND (";
