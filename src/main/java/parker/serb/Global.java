@@ -41,7 +41,7 @@ public class Global {
     public static String caseNumber = null;
     
     //TODO: Convert this to another color for monitor saftey
-    public static Color alternateRowColor = new Color(255, 255, 180); //very light 
+    public static Color alternateRowColor = new Color(255, 255, 204); //very light 
     
     //Stores the current search term to allow data to be retained when leaving and coming back
     public static String employerSearchTerm = null;
