@@ -10,6 +10,8 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import parker.serb.Global;
 import parker.serb.sql.BoardMeeting;
 import parker.serb.sql.CaseParty;
@@ -71,6 +73,7 @@ public class processREPbookmarks {
         String DIRECCBlock = "";
         String polling = "";
         String multiCaseElection = "";
+        String longMeetDate = "";
 
         for (CaseParty party : partyList) {
 
@@ -86,7 +89,7 @@ public class processREPbookmarks {
             for (int person : ccParties) {
                 if (person == party.id) {
                     if (!"".equals(ccNameBlock.trim())) {
-                        ccNameBlock += ", ";
+                        ccNameBlock += ",\n";
                     }
                     ccNameBlock += StringUtilities.buildCasePartyNameNoPreFix(party);
                 }
@@ -243,11 +246,19 @@ public class processREPbookmarks {
         }
 
         //Related Cases
-        for (String relatedCase : relatedCasesList) {
-            if ("".equals(relatedCases)) {
-                relatedCases = ", " + relatedCase;
-            } else {
-                relatedCases = relatedCase;
+        if (relatedCasesList.size() == 2) {
+            for (String relatedCase : relatedCasesList) {
+                relatedCases += ("".equals(relatedCases) ? relatedCase : " and " + relatedCase);
+            }
+        } else {
+            int i = 0;
+            for (String relatedCase : relatedCasesList) {
+                i++;
+                if (i == relatedCasesList.size()) {
+                    relatedCases += ("".equals(relatedCases) ? relatedCase : "; and " + relatedCase);
+                } else {
+                    relatedCases += ("".equals(relatedCases) ? relatedCase : "; " + relatedCase);
+                }
             }
         }
 
@@ -265,6 +276,15 @@ public class processREPbookmarks {
             multiCaseElection += relatedCase.toString();
         }
 
+        //BoardMeeting
+        if (meeting.boardMeetingDate == null ? false : !meeting.boardMeetingDate.equals("")){
+            try {
+                longMeetDate = Global.MMMMMdyyyy.format(Global.mmddyyyy.parse(meeting.boardMeetingDate));
+                        } catch (ParseException ex) {
+                Logger.getLogger(processREPbookmarks.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
         //ProcessBookmarks
         for (int i = 0; i < Global.BOOKMARK_LIMIT; i++) {
             //Case Number Related Information
@@ -274,70 +294,21 @@ public class processREPbookmarks {
             processBookmark.process("BALLOTTWO" + (i == 0 ? "" : i), caseInfo.ballotTwo, Document);
             processBookmark.process("BALLOTTHREE" + (i == 0 ? "" : i), caseInfo.ballotThree, Document);
             processBookmark.process("BALLOTFOUR" + (i == 0 ? "" : i), caseInfo.ballotFour, Document);
+            processBookmark.process("BallotsCountDate" + (i == 0 ? "" : i), caseInfo.ballotsCountDate == null ? "" : Global.mmddyyyy.format(caseInfo.ballotsCountDate), Document);
+            processBookmark.process("BallotsCountTime" + (i == 0 ? "" : i), caseInfo.ballotsCountTime == null ? "" : Global.hmma.format(caseInfo.ballotsCountTime), Document);
             processBookmark.process("ELIGIBILITYDATE" + (i == 0 ? "" : i), (caseInfo.eligibilityDate == null ? "" : Global.MMMMddyyyy.format(caseInfo.eligibilityDate)), Document);
             processBookmark.process("EXCLUDEDNEWORCURRENTUNIT" + (i == 0 ? "" : i), caseInfo.bargainingUnitExcluded, Document);
             processBookmark.process("PIN" + (i == 0 ? "" : i), caseInfo.professionalIncluded, Document);
             processBookmark.process("PEX" + (i == 0 ? "" : i), caseInfo.professionalExcluded, Document);
             processBookmark.process("OIN" + (i == 0 ? "" : i), caseInfo.optInIncluded, Document);
+            processBookmark.process("NonProfessional_Included" + (i == 0 ? "" : i), caseInfo.nonProfessionalIncluded, Document);
             processBookmark.process("INCLUDEDNEWORCURRENTUNIT" + (i == 0 ? "" : i), caseInfo.bargainingUnitIncluded, Document);
-
-            //Party Information
-            processBookmark.process("EMPLOYEEORG" + (i == 0 ? "" : i), employeeOrganizationName.trim(), Document);
-            processBookmark.process("EMPLOYER" + (i == 0 ? "" : i), employerName.trim(), Document);
-            processBookmark.process("EMPLOYERREP" + (i == 0 ? "" : i), employerRepName.trim(), Document);
-            processBookmark.process("EMPLOYERSAL" + (i == 0 ? "" : i), employerRepName.trim(), Document);
-            processBookmark.process("INCUMBENT" + (i == 0 ? "" : i), incumbentEmployeeOrganizationName.trim(), Document);
-            processBookmark.process("INCUMBENTREP" + (i == 0 ? "" : i), incumbentEmployeeOrganizationRepName.trim(), Document);
-            processBookmark.process("INCUMBENTREPSAL" + (i == 0 ? "" : i), incumbentEmployeeOrganizationRepName.trim(), Document);
-            processBookmark.process("EMPLOYEEORGREP" + (i == 0 ? "" : i), employeeOrganizationRepName.trim(), Document);
-            processBookmark.process("EMPLOYEEORGREPSAL" + (i == 0 ? "" : i), employeeOrganizationRepName.trim(), Document);
-            processBookmark.process("RIVAL" + (i == 0 ? "" : i), rivalEmployeeOrganizationName.trim(), Document);
-            processBookmark.process("RIVALREP" + (i == 0 ? "" : i), rivalEmployeeOrganizationRepName.trim(), Document);
-            processBookmark.process("RIVALREPSAL" + (i == 0 ? "" : i), rivalEmployeeOrganizationRepName.trim(), Document);
-            processBookmark.process("PETINTERSAL" + (i == 0 ? "" : i), petitionerName.trim(), Document);
-            processBookmark.process("PETITIONERINTERVENOR" + (i == 0 ? "" : i), petitionerName.trim(), Document);
-            processBookmark.process("PETINTERREP" + (i == 0 ? "" : i), petitionerName.trim(), Document);
-            processBookmark.process("INCUMBENTADDRESSBLOCK" + (i == 0 ? "" : i), incumbentEmployeeOrganizationAddressBlock, Document);
-            processBookmark.process("INCUMBENTREPADDRESSBLOCK" + (i == 0 ? "" : i), incumbentEmployeeOrganizationRepAddressBlock, Document);
-            processBookmark.process("EMPLOYERADDRESSBLOCK" + (i == 0 ? "" : i), employerAddressBlock, Document);
-            processBookmark.process("EMPLOYERREPADDRESSBLOCK" + (i == 0 ? "" : i), employerRepAddressBlock, Document);
-            processBookmark.process("RIVALADDRESSBLOCK" + (i == 0 ? "" : i), rivalEmployeeOrganizationAddressBlock, Document);
-            processBookmark.process("RIVALREPADDRESSBLOCK" + (i == 0 ? "" : i), rivalEmployeeOrganizationRepAddressBlock, Document);
-            processBookmark.process("EMPLOYEEORGADDRESSBLOCK" + (i == 0 ? "" : i), employeeOrganizationAddressBlock, Document);
-            processBookmark.process("EMPLOYEEORGREPADDRESSBLOCK" + (i == 0 ? "" : i), employeeOrganizationRepAddressBlock, Document);
-            processBookmark.process("PETITIONERADDRESSBLOCK" + (i == 0 ? "" : i), petitionerAddressBlock, Document);
-            processBookmark.process("PETITIONERREPADDRESSBLOCK" + (i == 0 ? "" : i), petitionerRepAddressBlock, Document);
-            processBookmark.process("IEOCONTACT" + (i == 0 ? "" : i),
-                    (!"".equals(incumbentEmployeeOrganizationRepName) ? incumbentEmployeeOrganizationRepName.trim() : incumbentEmployeeOrganizationName.trim()), Document);
-            processBookmark.process("EMPCONTACT" + (i == 0 ? "" : i),
-                    (!"".equals(employerRepName) ? employerRepName.trim() : employerName.trim()), Document);
-            processBookmark.process("REOCONTACT" + (i == 0 ? "" : i),
-                    (!"".equals(rivalEmployeeOrganizationRepName) ? rivalEmployeeOrganizationRepName.trim() : rivalEmployeeOrganizationName.trim()), Document);
-            processBookmark.process("EOCONTACT" + (i == 0 ? "" : i),
-                    (!"".equals(employeeOrganizationRepName) ? employeeOrganizationRepName.trim() : employeeOrganizationName.trim()), Document);
-            processBookmark.process("CCList" + (i == 0 ? "" : i), ccNameBlock, Document);
-            processBookmark.process("DIRECCList" + (i == 0 ? "" : i), DIRECCBlock, Document);
-
-            //Latest Mediation
-            processBookmark.process("MEDIATEDAY" + (i == 0 ? "" : i), "", Document);
-            processBookmark.process("MEDIATIONTIME" + (i == 0 ? "" : i), mediationTime, Document);
-            processBookmark.process("MEDIATIONDATE" + (i == 0 ? "" : i), mediationDate, Document);
-            processBookmark.process("CC" + (i == 0 ? "" : i), mediationCC, Document);
-
-            //LRS Worker (Passed from Sender ComboBox)
-            if (user != null) {
-                processBookmark.process("NAME" + (i == 0 ? "" : i), StringUtilities.buildFullName(user.firstName, user.middleInitial, user.lastName), Document);   //not yet setup in the Database
-                processBookmark.process("TITLE" + (i == 0 ? "" : i), user.jobTitle, Document); //not yet setup in the Database
-                processBookmark.process("PHONE" + (i == 0 ? "" : i), user.workPhone, Document);
-                processBookmark.process("EMAIL" + (i == 0 ? "" : i), user.emailAddress, Document);
-            }
-
-            //Directives Information
             processBookmark.process("REFLECT" + (i == 0 ? "" : i), caseInfo.toReflect, Document);
             processBookmark.process("MULTICASEELECTIONCASE2" + (i == 0 ? "" : i), multiCaseElection, Document);
             processBookmark.process("MULTICASEELECTIONCASE3" + (i == 0 ? "" : i), multiCaseElection, Document);
             processBookmark.process("WHOFILED" + (i == 0 ? "" : i), caseInfo.fileBy, Document);
             processBookmark.process("BDMEETDATE" + (i == 0 ? "" : i), meeting.boardMeetingDate, Document);
+            processBookmark.process("LONGMEETDATE" + (i == 0 ? "" : i), longMeetDate, Document);
             processBookmark.process("EMPLOYEEORGANIZATIONNAMECHANGEFROM" + (i == 0 ? "" : i), caseInfo.EEONameChangeFrom, Document);
             processBookmark.process("EMPLOYERNAMECHANGEFROM" + (i == 0 ? "" : i), caseInfo.ERNameChangeFrom, Document);
             processBookmark.process("SECONDCASENUMBER" + (i == 0 ? "" : i), multiCaseElection, Document);
@@ -353,11 +324,12 @@ public class processREPbookmarks {
             processBookmark.process("POLLINGPERIOD" + (i == 0 ? "" : i), polling.trim(), Document);
             processBookmark.process("WHOPREVAILED" + (i == 0 ? "" : i), caseInfo.resultWHoPrevailed, Document);
 
-
-            if (caseInfo.type.equals("AC")) {
-                processBookmark.process("CASETYPE" + (i == 0 ? "" : i), "PETITION FOR REPRESENTATION", Document);
-            } else if (caseInfo.type.equals("RC")) {
-                processBookmark.process("CASETYPE" + (i == 0 ? "" : i), "PETITION FOR AMENDMENT OF CERTIFICATION", Document);
+            if (caseInfo.type != null) {
+                if (caseInfo.type.equals("AC")) {
+                    processBookmark.process("CASETYPE" + (i == 0 ? "" : i), "PETITION FOR REPRESENTATION", Document);
+                } else if (caseInfo.type.equals("RC")) {
+                    processBookmark.process("CASETYPE" + (i == 0 ? "" : i), "PETITION FOR AMENDMENT OF CERTIFICATION", Document);
+                }
             }
 
             processBookmark.process("RIVALVOTES" + (i == 0 ? "" : i),
@@ -395,6 +367,58 @@ public class processREPbookmarks {
             processBookmark.process("INCUMBENTVOTES" + (i == 0 ? "" : i),
                     caseInfo.resultVotesCastForIncumbentEEO == null ? "0"
                             : NumberFormatService.convert(Long.parseLong(caseInfo.resultVotesCastForIncumbentEEO)) + "(" + caseInfo.resultVotesCastForIncumbentEEO + ")", Document);
+
+            //Party Information
+            processBookmark.process("EMPLOYEEORG" + (i == 0 ? "" : i), employeeOrganizationName.trim(), Document);
+            processBookmark.process("EMPLOYER" + (i == 0 ? "" : i), employerName.trim(), Document);
+            processBookmark.process("EMPLOYERREP" + (i == 0 ? "" : i), employerRepName.trim(), Document);
+            processBookmark.process("EMPLOYERSAL" + (i == 0 ? "" : i), employerRepName.trim(), Document);
+            processBookmark.process("INCUMBENT" + (i == 0 ? "" : i), incumbentEmployeeOrganizationName.trim(), Document);
+            processBookmark.process("INCUMBENTREP" + (i == 0 ? "" : i), incumbentEmployeeOrganizationRepName.trim(), Document);
+            processBookmark.process("INCUMBENTREPSAL" + (i == 0 ? "" : i), incumbentEmployeeOrganizationRepName.trim(), Document);
+            processBookmark.process("EMPLOYEEORGREP" + (i == 0 ? "" : i), employeeOrganizationRepName.trim(), Document);
+            processBookmark.process("EMPLOYEEORGREPSAL" + (i == 0 ? "" : i), employeeOrganizationRepName.trim(), Document);
+            processBookmark.process("RIVAL" + (i == 0 ? "" : i), rivalEmployeeOrganizationName.trim(), Document);
+            processBookmark.process("RIVALREP" + (i == 0 ? "" : i), rivalEmployeeOrganizationRepName.trim(), Document);
+            processBookmark.process("RIVALREPSAL" + (i == 0 ? "" : i), rivalEmployeeOrganizationRepName.trim(), Document);
+            processBookmark.process("PETINTERSAL" + (i == 0 ? "" : i), petitionerName.trim(), Document);
+            processBookmark.process("PETITIONERINTERVENOR" + (i == 0 ? "" : i), petitionerName.trim(), Document);
+            processBookmark.process("PETINTERREP" + (i == 0 ? "" : i), petitionerName.trim(), Document);
+            processBookmark.process("INCUMBENTADDRESSBLOCK" + (i == 0 ? "" : i), incumbentEmployeeOrganizationAddressBlock, Document);
+            processBookmark.process("INCUMBENTREPADDRESSBLOCK" + (i == 0 ? "" : i), incumbentEmployeeOrganizationRepAddressBlock, Document);
+            processBookmark.process("EMPLOYERADDRESSBLOCK" + (i == 0 ? "" : i), employerAddressBlock, Document);
+            processBookmark.process("EMPLOYERREPADDRESSBLOCK" + (i == 0 ? "" : i), employerRepAddressBlock, Document);
+            processBookmark.process("RIVALADDRESSBLOCK" + (i == 0 ? "" : i), rivalEmployeeOrganizationAddressBlock, Document);
+            processBookmark.process("RIVALREPADDRESSBLOCK" + (i == 0 ? "" : i), rivalEmployeeOrganizationRepAddressBlock, Document);
+            processBookmark.process("EMPLOYEEORGADDRESSBLOCK" + (i == 0 ? "" : i), employeeOrganizationAddressBlock, Document);
+            processBookmark.process("EMPLOYEEORGREPADDRESSBLOCK" + (i == 0 ? "" : i), employeeOrganizationRepAddressBlock, Document);
+            processBookmark.process("PETITIONERADDRESSBLOCK" + (i == 0 ? "" : i), petitionerAddressBlock, Document);
+            processBookmark.process("PETITIONERREPADDRESSBLOCK" + (i == 0 ? "" : i), petitionerRepAddressBlock, Document);
+            processBookmark.process("IEOCONTACT" + (i == 0 ? "" : i),
+                    (!"".equals(incumbentEmployeeOrganizationRepName) ? incumbentEmployeeOrganizationRepName.trim() : incumbentEmployeeOrganizationName.trim()), Document);
+            processBookmark.process("EMPCONTACT" + (i == 0 ? "" : i),
+                    (!"".equals(employerRepName) ? employerRepName.trim() : employerName.trim()), Document);
+            processBookmark.process("REOCONTACT" + (i == 0 ? "" : i),
+                    (!"".equals(rivalEmployeeOrganizationRepName) ? rivalEmployeeOrganizationRepName.trim() : rivalEmployeeOrganizationName.trim()), Document);
+            processBookmark.process("EOCONTACT" + (i == 0 ? "" : i),
+                    (!"".equals(employeeOrganizationRepName) ? employeeOrganizationRepName.trim() : employeeOrganizationName.trim()), Document);
+            processBookmark.process("CCList" + (i == 0 ? "" : i), ccNameBlock, Document);
+            processBookmark.process("DIRECCList" + (i == 0 ? "" : i), DIRECCBlock, Document);
+            processBookmark.process("REPCCList" + (i == 0 ? "" : i), DIRECCBlock, Document);
+
+            //Latest Mediation
+            processBookmark.process("MEDIATEDAY" + (i == 0 ? "" : i), "", Document);
+            processBookmark.process("MEDIATIONTIME" + (i == 0 ? "" : i), mediationTime, Document);
+            processBookmark.process("MEDIATIONDATE" + (i == 0 ? "" : i), mediationDate, Document);
+            processBookmark.process("CC" + (i == 0 ? "" : i), mediationCC, Document);
+
+            //LRS Worker (Passed from Sender ComboBox)
+            if (user != null) {
+                processBookmark.process("NAME" + (i == 0 ? "" : i), StringUtilities.buildFullName(user.firstName, user.middleInitial, user.lastName), Document);   //not yet setup in the Database
+                processBookmark.process("TITLE" + (i == 0 ? "" : i), user.jobTitle, Document); //not yet setup in the Database
+                processBookmark.process("PHONE" + (i == 0 ? "" : i), user.workPhone, Document);
+                processBookmark.process("EMAIL" + (i == 0 ? "" : i), user.emailAddress, Document);
+            }
         }
         return Document;
     }

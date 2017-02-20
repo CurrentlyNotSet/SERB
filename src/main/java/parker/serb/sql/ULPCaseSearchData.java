@@ -16,7 +16,7 @@ import parker.serb.util.SlackNotification;
  * @author parkerjohnston
  */
 public class ULPCaseSearchData {
-    
+
     public int id;
     public String caseYear;
     public String caseType;
@@ -26,20 +26,20 @@ public class ULPCaseSearchData {
     public String chargedParty;
     public String employerNumber;
     public String unionNumber;
-    
+
     public static List loadULPCaseList() {
         List<ULPCaseSearchData> ulpCaseList = new ArrayList<>();
-        
+
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "select * from ULPCaseSearch ORDER BY id DESC";
+            String sql = "select * from ULPCaseSearch ORDER BY caseYear DESC, caseMonth DESC, caseNumber DESC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
             ResultSet caseActivity = preparedStatement.executeQuery();
-            
+
             while(caseActivity.next()) {
                 ULPCaseSearchData ulpCase = new ULPCaseSearchData();
                 ulpCase.id = caseActivity.getInt("id");
@@ -57,15 +57,15 @@ public class ULPCaseSearchData {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadULPCaseList();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return ulpCaseList;
     }
-    
+
     public static void createNewCaseEntry(String year, String type, String month, String number) {
-        Statement stmt = null;    
+        Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -86,14 +86,14 @@ public class ULPCaseSearchData {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 createNewCaseEntry(year, type, month, number);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void updateCaseEntryFromParties(String charged, String charging) {
-        Statement stmt = null;    
+        Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -118,14 +118,14 @@ public class ULPCaseSearchData {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateCaseEntryFromParties(charged, charging);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void updateCaseEntryFromStatus(String employerNumber, String unionNumber) {
-        Statement stmt = null;    
+        Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -150,7 +150,7 @@ public class ULPCaseSearchData {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateCaseEntryFromStatus(employerNumber, unionNumber);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }

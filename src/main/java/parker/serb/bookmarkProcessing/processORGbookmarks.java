@@ -44,7 +44,7 @@ public class processORGbookmarks {
             for (int person : ccParties){
                 if (person == party.id) {
                      if (!"".equals(ccNameBlock.trim())){
-                        ccNameBlock += ", ";
+                        ccNameBlock += ",\n";
                     }
                      ccNameBlock += StringUtilities.buildCasePartyNameNoPreFix(party);
                 }

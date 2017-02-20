@@ -65,11 +65,20 @@ public class processMEDbookmarks {
         String toAddressBlock = "";
         String ccNameBlock = "";
 
-        for (String related : relatedCasesList) {
-            if (!relatedCaseNumbers.equals("")) {
-                relatedCaseNumbers += ", ";
+        if (relatedCasesList.size() == 2) {
+            for (String relatedCase : relatedCasesList) {
+                relatedCaseNumbers += ("".equals(relatedCaseNumbers) ? relatedCase : " and " + relatedCase);
             }
-            relatedCaseNumbers += related;
+        } else {
+            int i = 0;
+            for (String relatedCase : relatedCasesList) {
+                i++;
+                if (i == relatedCasesList.size()) {
+                    relatedCaseNumbers += ("".equals(relatedCaseNumbers) ? relatedCase : "; and " + relatedCase);
+                } else {
+                    relatedCaseNumbers += ("".equals(relatedCaseNumbers) ? relatedCase : "; " + relatedCase);
+                }
+            }
         }
 
         for (CaseParty party : partyList) {
@@ -86,7 +95,7 @@ public class processMEDbookmarks {
             for (int person : ccParties) {
                 if (person == party.id) {
                     if (!"".equals(ccNameBlock.trim())) {
-                        ccNameBlock += ", ";
+                        ccNameBlock += ",\n";
                     }
                     ccNameBlock += StringUtilities.buildCasePartyNameNoPreFix(party);
                 }
@@ -157,7 +166,7 @@ public class processMEDbookmarks {
                 }
             }
         }
-        
+
         String[] ffName = factFinderSelectionName.split(" ");
 
         if (ffName.length == 2) {
@@ -171,29 +180,24 @@ public class processMEDbookmarks {
         FactFinder ffDetails = FactFinder.getFactFinderLikeName(ffFirstName, ffLastName);
 
         if (ffDetails != null) {
-            if (!ffDetails.address1.equals("")) {
-                ffAddress = ffDetails.address1;
-                if (!ffDetails.address2.equals("")) {
+            if (ffDetails.address1 != null) {
+                ffAddress = ffDetails.address1.trim();
+            }
+
+            if (ffDetails.address2 != null) {
+                if (!ffAddress.equals("")) {
                     ffAddress = "\n";
                 }
-            }
-            if (!ffDetails.address2.equals("")) {
                 ffAddress = ffDetails.address2;
-                if (!ffDetails.address3.equals("")) {
-                    ffAddress = "\n";
-                }
             }
-            if (!ffDetails.address3.equals("")) {
-                ffAddress = ffDetails.address3;
-                if (!ffDetails.address3.equals("")) {
+            if (ffDetails.address3 != null) {
+                if (!ffAddress.equals("")) {
                     ffAddress = "\n";
                 }
+                ffAddress = ffDetails.address3;
             }
-            if (!ffDetails.address3.equals("")) {
-                ffAddress = ffDetails.address3;
-                if (!ffDetails.address3.equals("")) {
-                    ffAddress = "\n";
-                }
+            if (!ffAddress.equals("")) {
+                ffAddress = "\n";
             }
             ffAddress += ffDetails.city + ", " + ffDetails.state + " " + ffDetails.zip;
         }
@@ -252,15 +256,20 @@ public class processMEDbookmarks {
 
             //Fact Finder Information
             processBookmark.process("FACTFINDER1" + (i == 0 ? "" : i),
-                    (item.FFList2Name1 == null ? item.FFList1Name1 : item.FFList2Name1), Document);
+                    (item.FFList2Name1 == null ? (item.FFList1Name1 == null ? "" : item.FFList1Name1)
+                            : (item.FFList2Name1.equals("") ? (item.FFList1Name1 == null ? "" : item.FFList1Name1) : item.FFList2Name1)), Document);
             processBookmark.process("FACTFINDER2" + (i == 0 ? "" : i),
-                    (item.FFList2Name2 == null ? item.FFList1Name2 : item.FFList2Name2), Document);
+                    (item.FFList2Name2 == null ? (item.FFList1Name2 == null ? "" : item.FFList1Name2)
+                            : (item.FFList2Name2.equals("") ? (item.FFList1Name2 == null ? "" : item.FFList1Name2) : item.FFList2Name2)), Document);
             processBookmark.process("FACTFINDER3" + (i == 0 ? "" : i),
-                    (item.FFList2Name3 == null ? item.FFList1Name3 : item.FFList2Name3), Document);
+                    (item.FFList2Name3 == null ? (item.FFList1Name3 == null ? "" : item.FFList1Name3)
+                            : (item.FFList2Name3.equals("") ? (item.FFList1Name3 == null ? "" : item.FFList1Name3) : item.FFList2Name3)), Document);
             processBookmark.process("FACTFINDER4" + (i == 0 ? "" : i),
-                    (item.FFList2Name4 == null ? item.FFList1Name4 : item.FFList2Name4), Document);
+                    (item.FFList2Name4 == null ? (item.FFList1Name4 == null ? "" : item.FFList1Name4)
+                            : (item.FFList2Name4.equals("") ? (item.FFList1Name4 == null ? "" : item.FFList1Name4) : item.FFList2Name4)), Document);
             processBookmark.process("FACTFINDER5" + (i == 0 ? "" : i),
-                    (item.FFList2Name5 == null ? item.FFList1Name5 : item.FFList2Name5), Document);
+                    (item.FFList2Name5 == null ? (item.FFList1Name5 == null ? "" : item.FFList1Name5)
+                            : (item.FFList2Name5.equals("") ? (item.FFList1Name5 == null ? "" : item.FFList1Name5) : item.FFList2Name5)), Document);
             processBookmark.process("FACTFINDERSELECTED" + (i == 0 ? "" : i), factFinderSelectionName, Document);
             if (item.FFList1SelectionDueDate != null || item.FFList2SelectionDueDate != null) {
                 processBookmark.process("FFPANELSELECTIONDUEDATE" + (i == 0 ? "" : i),
@@ -276,20 +285,25 @@ public class processMEDbookmarks {
 
             //Conciliator Information
             processBookmark.process("CONCILIATOR1" + (i == 0 ? "" : i),
-                    (item.concilList2Name1 == null ? item.concilList1Name1 : item.concilList2Name1), Document);
+                    (item.concilList2Name1 == null ? (item.concilList1Name1 == null ? "" : item.concilList1Name1)
+                            : (item.concilList2Name1.equals("") ? (item.concilList1Name1 == null ? "" : item.concilList1Name1) : item.concilList2Name1)), Document);
             processBookmark.process("CONCILIATOR2" + (i == 0 ? "" : i),
-                    (item.concilList2Name2 == null ? item.concilList1Name2 : item.concilList2Name2), Document);
+                    (item.concilList2Name2 == null ? (item.concilList1Name2 == null ? "" : item.concilList1Name2)
+                            : (item.concilList2Name2.equals("") ? (item.concilList1Name2 == null ? "" : item.concilList1Name2) : item.concilList2Name2)), Document);
             processBookmark.process("CONCILIATOR3" + (i == 0 ? "" : i),
-                    (item.concilList2Name3 == null ? item.concilList1Name3 : item.concilList2Name3), Document);
+                    (item.concilList2Name3 == null ? (item.concilList1Name3 == null ? "" : item.concilList1Name3)
+                            : (item.concilList2Name3.equals("") ? (item.concilList1Name3 == null ? "" : item.concilList1Name3) : item.concilList2Name3)), Document);
             processBookmark.process("CONCILIATOR4" + (i == 0 ? "" : i),
-                    (item.concilList2Name4 == null ? item.concilList1Name4 : item.concilList2Name4), Document);
+                    (item.concilList2Name4 == null ? (item.concilList1Name4 == null ? "" : item.concilList1Name4)
+                            : (item.concilList2Name4.equals("") ? (item.concilList1Name4 == null ? "" : item.concilList1Name4) : item.concilList2Name4)), Document);
             processBookmark.process("CONCILIATOR5" + (i == 0 ? "" : i),
-                    (item.concilList2Name5 == null ? item.concilList1Name5 : item.concilList2Name5), Document);
+                    (item.concilList2Name5 == null ? (item.concilList1Name5 == null ? "" : item.concilList1Name5)
+                            : (item.concilList2Name5.equals("") ? (item.concilList1Name5 == null ? "" : item.concilList1Name5) : item.concilList2Name5)), Document);
             processBookmark.process("ConciliatorSelection" + (i == 0 ? "" : i),
                     (item.concilSelection == null ? "" : item.concilSelection.trim()), Document);
             processBookmark.process("ARBITRATORSELECTED" + (i == 0 ? "" : i),
                     (item.concilReplacement == null ? item.concilSelection.trim() : item.concilReplacement.trim()), Document);
-            
+
             processBookmark.process("CONCILIATORAPPTDATE" + (i == 0 ? "" : i),
                     (item.concilAppointmentDate == null ? "" : Global.mmddyyyy.format(item.concilAppointmentDate)), Document);
             if (item.concilList1OrderDate != null || item.concilList2OrderDate != null) {

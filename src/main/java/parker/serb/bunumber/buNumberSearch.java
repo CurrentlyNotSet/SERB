@@ -41,7 +41,7 @@ public class buNumberSearch extends javax.swing.JDialog {
     private void loadInformation(String number, String desc) {
         buNumber = number;
         unitDesc = desc;
-        certStatus = BargainingUnit.getCertStatus(number);
+        certStatus = number.equals("") ? "" : BargainingUnit.getCertStatus(number);
         bu = BargainingUnit.loadBUList();
         
         DefaultTableModel model = (DefaultTableModel) buTable.getModel();

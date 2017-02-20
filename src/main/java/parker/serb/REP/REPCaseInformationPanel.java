@@ -1208,7 +1208,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
                 bargainingUnitNumberTextBox.setText(search.getBuNumber());
                 bargainingUnitNameTextBox.setText(search.getUnitDesc());
                 bargainingUnitNameTextBox.setCaretPosition(0);
-                if(search.getCertStatus() != null) {
+                if(search.getCertStatus() != null || !search.getCertStatus().equals("")) {
                     setBUNumberCheckBoxes(search.getCertStatus());
                 } else {
                     setBUNumberCheckBoxes("");
