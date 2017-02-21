@@ -44,7 +44,7 @@ public class Global {
     public static String caseNumber = null;
     
     //Table striping color, currently will be white until paid
-    public static final Color ALTERNATE_ROW_COLOR = new Color(255, 255, 204); //light yellow
+    public static final Color ALTERNATE_ROW_COLOR = Color.WHITE;//new Color(255, 255, 204); //light yellow
     
     //Stores the current search term to allow data to be retained when leaving and coming back
     public static String employerSearchTerm = null;
