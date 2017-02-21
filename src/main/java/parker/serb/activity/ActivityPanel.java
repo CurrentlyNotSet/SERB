@@ -5,6 +5,7 @@
  */
 package parker.serb.activity;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -19,15 +20,12 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import parker.serb.Global;
 import parker.serb.sql.Activity;
 import parker.serb.sql.Audit;
 import parker.serb.sql.HearingCase;
 import parker.serb.util.FileService;
-
-//TODO: Investigate File Icon in Table
-//TODO: Add notification for no file with 
-//TODO: Remove the loadAllActivity method to be used with loadActivity(String)
 
 /**
  *
@@ -48,18 +46,18 @@ public class ActivityPanel extends javax.swing.JPanel {
     }
     
     private void addListeners() {
-//        actvityTable.setDefaultRenderer(Object.class, new TableCellRenderer(){
-//            private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
-//            @Override
-//            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-//                Component c = DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-//
-//                if (!isSelected) {
-//                    c.setBackground(row % 2 == 0 ? Color.WHITE : Global.alternateRowColor);
-//                }
-//                return c;
-//            }
-//        });
+        actvityTable.setDefaultRenderer(Object.class, new TableCellRenderer(){
+            private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component c = DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+                if (!isSelected) {
+                    c.setBackground(row % 2 == 0 ? Color.WHITE : Global.ALTERNATE_ROW_COLOR);
+                }
+                return c;
+            }
+        });
         
         searchTextBox.getDocument().addDocumentListener(new DocumentListener() {
 
@@ -352,11 +350,11 @@ public class ActivityPanel extends javax.swing.JPanel {
                 lbl.setIcon(null);
             }
             
-//            if (!isSelected) {
-//                    lbl.setBackground(row % 2 == 0 ? Color.WHITE : Global.alternateRowColor);
-//            } else {
-//                lbl.setBackground(table.getSelectionBackground());
-//            }
+            if (!isSelected) {
+                    lbl.setBackground(row % 2 == 0 ? Color.WHITE : Global.ALTERNATE_ROW_COLOR);
+            } else {
+                lbl.setBackground(table.getSelectionBackground());
+            }
 
             lbl.setOpaque(true);
             lbl.setText("");
@@ -364,5 +362,4 @@ public class ActivityPanel extends javax.swing.JPanel {
             return lbl;
         }
     }
-
 }
