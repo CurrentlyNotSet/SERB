@@ -27,10 +27,6 @@ import parker.serb.sql.Audit;
 import parker.serb.sql.HearingCase;
 import parker.serb.util.FileService;
 
-//TODO: Investigate File Icon in Table
-//TODO: Add notification for no file with 
-//TODO: Remove the loadAllActivity method to be used with loadActivity(String)
-
 /**
  *
  * @author parker
@@ -57,7 +53,7 @@ public class ActivityPanel extends javax.swing.JPanel {
                 Component c = DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
                 if (!isSelected) {
-                    c.setBackground(row % 2 == 0 ? Color.WHITE : Global.alternateRowColor);
+                    c.setBackground(row % 2 == 0 ? Color.WHITE : Global.ALTERNATE_ROW_COLOR);
                 }
                 return c;
             }
@@ -355,7 +351,7 @@ public class ActivityPanel extends javax.swing.JPanel {
             }
             
             if (!isSelected) {
-                    lbl.setBackground(row % 2 == 0 ? Color.WHITE : Global.alternateRowColor);
+                    lbl.setBackground(row % 2 == 0 ? Color.WHITE : Global.ALTERNATE_ROW_COLOR);
             } else {
                 lbl.setBackground(table.getSelectionBackground());
             }
@@ -366,5 +362,4 @@ public class ActivityPanel extends javax.swing.JPanel {
             return lbl;
         }
     }
-
 }

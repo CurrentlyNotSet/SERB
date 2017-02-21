@@ -581,7 +581,7 @@ public class Activity {
                     + " lastName like ? or"
                     + " action like ?)"
                     + " and Activity.active = 1"
-                    + " ORDER BY date DESC ";
+                    + " ORDER BY date DESC, activity.id DESC ";
 
                 preparedStatement = stmt.getConnection().prepareStatement(sql);
                 preparedStatement.setObject(1, Global.caseType);
@@ -612,7 +612,7 @@ public class Activity {
                     + " lastName like ? or"
                     + " action like ?) "
                     + " and Activity.active = 1"
-                    + "ORDER BY date DESC ";
+                    + "ORDER BY date DESC, activity.id DESC ";
 
                 preparedStatement = stmt.getConnection().prepareStatement(sql);
                 preparedStatement.setObject(1, Global.caseYear);
@@ -678,7 +678,7 @@ public class Activity {
                     + " INNER JOIN Users"
                     + " ON Activity.userID = Users.id"
                     + " WHERE Activity.active = 1"
-                    + " ORDER BY date DESC ";
+                    + " ORDER BY date DESC, activity.id DESC ";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
@@ -739,7 +739,7 @@ public class Activity {
                     + " AND CaseMonth = ?"
                     + " AND CaseNumber = ?"
                     + " and Activity.active = 1"
-                    + " ORDER BY date DESC ";
+                    + " ORDER BY date DESC, activity.id DESC ";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setTimestamp(1, HearingCase.getBoardActionPCDate());

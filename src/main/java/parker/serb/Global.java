@@ -18,7 +18,10 @@ import java.util.List;
  */
 public class Global {
   
-    //Application Version
+    //Application Version (must always be greater than 3
+    // Major Version       3 -- will stay 3
+    // Minor Version       0 -- update with larger enhancments
+    // Maintenence Version 0 -- bug fix releases
     public static final String APPLICATION_VERSION = "3.0";
 
     //All Date and Time formatters
@@ -40,8 +43,8 @@ public class Global {
     public static String caseMonth = null;
     public static String caseNumber = null;
     
-    //TODO: Convert this to another color for monitor saftey
-    public static Color alternateRowColor = new Color(255, 255, 204); //very light 
+    //Table striping color, currently will be white until paid
+    public static final Color ALTERNATE_ROW_COLOR = new Color(255, 255, 204); //light yellow
     
     //Stores the current search term to allow data to be retained when leaving and coming back
     public static String employerSearchTerm = null;
@@ -66,7 +69,7 @@ public class Global {
     public static RootPanel root;
     
     //list of all states -> can limit this down if client wants
-    public static String states[] = { "AL", "AK", "AS", "AZ", "AR", "CA", "CO", 
+    public static final String states[] = { "AL", "AK", "AS", "AZ", "AR", "CA", "CO", 
         "CT", "DE", "DC", "FL", "FM", "GA", "GU", "HI", "ID", "IL", "IN", "IA", 
         "KS", "KY", "LA", "ME", "MH", "MD", "MA", "MI", "MN", "MS", "MO", "MT", 
         "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "MP", "OH", "OK", "OR", 
@@ -93,7 +96,7 @@ public class Global {
     public static final int BOOKMARK_LIMIT = 10;
     
     //format Ending for dates
-    public static String[] daySuffixes =
+    public static final String[] daySuffixes =
   //    0     1     2     3     4     5     6     7     8     9
      { "th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th",
   //    10    11    12    13    14    15    16    17    18    19
