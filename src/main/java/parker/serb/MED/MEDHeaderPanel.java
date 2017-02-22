@@ -181,6 +181,10 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
     }
     
     void clearAll() {
+        Global.caseYear = null;
+        Global.caseType = null;
+        Global.caseMonth = null;
+        Global.caseNumber = null;
         employerTextBox.setText("");
         employerRepTextBox.setText("");
         employeeOrgTextBox.setText("");

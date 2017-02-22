@@ -177,12 +177,19 @@ public class ActivityPanel extends javax.swing.JPanel {
                 } 
             }
         }
+        
+        if(activty.isEmpty()) {
+            searchTextBox.setEnabled(false);
+        } else {
+            searchTextBox.setEnabled(true);
+        }
     }
     
     /**
      * clears the search box and removes all results displayed from the table
      */
     public void clearAll() {
+        searchTextBox.setEnabled(false);
         searchTextBox.setText("");
         DefaultTableModel model = (DefaultTableModel) actvityTable.getModel();
         model.setRowCount(0);
@@ -211,6 +218,12 @@ public class ActivityPanel extends javax.swing.JPanel {
                 model.addRow(new Object[] {act.date, act.action, act.comment, act.user, act.fileName.trim(), act.id});
             }      
         }
+        
+        if(activty.isEmpty()) {
+            searchTextBox.setEnabled(false);
+        } else {
+            searchTextBox.setEnabled(true);
+        }
     }
     
     public void loadAllHearingActivity() {
@@ -233,6 +246,12 @@ public class ActivityPanel extends javax.swing.JPanel {
                     model.addRow(new Object[] {act.date, act.action, act.comment, act.user, act.fileName.trim(), act.id});
                 }      
             }
+        }
+        
+        if(activty.isEmpty()) {
+            searchTextBox.setEnabled(false);
+        } else {
+            searchTextBox.setEnabled(true);
         }
     }
 

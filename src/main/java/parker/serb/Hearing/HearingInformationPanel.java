@@ -35,6 +35,7 @@ public class HearingInformationPanel extends javax.swing.JPanel {
      */
     public HearingInformationPanel() {
         initComponents();
+        
         setTableColumnWidth();
         jButton1.setVisible(false);
     }

@@ -5,9 +5,14 @@
  */
 package parker.serb.CMDS;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.util.List;
+import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import parker.serb.Global;
 import parker.serb.sql.CMDSHearing;
 
@@ -22,8 +27,24 @@ public class CMDSHearingsPanel extends javax.swing.JPanel {
      */
     public CMDSHearingsPanel() {
         initComponents();
+        setRenderer();
         setTableColumnWidth();
         addListeners();
+    }
+    
+    private void setRenderer() {
+        hearingTable.setDefaultRenderer(Object.class, new TableCellRenderer(){
+            private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component c = DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+                if (!isSelected) {
+                    c.setBackground(row % 2 == 0 ? Color.WHITE : Global.ALTERNATE_ROW_COLOR);
+                }
+                return c;
+            }
+        });
     }
     
     private void addListeners() {
