@@ -114,14 +114,21 @@ public class SystemMontiorDialog extends javax.swing.JDialog implements Runnable
         
         for (Object activty1 : activty) {
             Activity act = (Activity) activty1;
-            String fullCaseNumber = act.caseYear + "-" + act.caseType 
-                    + "-" + act.caseMonth + "-" + act.caseNumber;
-            model.addRow(new Object[] {act.date, fullCaseNumber, act.user, act.action});
+            model.addRow(new Object[] {act.date, generateCaseNumber(act), act.user, act.action});
         }
         
-        
         jTable1.setModel(model);
+    }
+    
+    private String generateCaseNumber(Activity act) {
+        String caseNumber = "";
         
+        if(act.caseType.equals("ORG") || act.caseType.equals("CSC")) {
+            caseNumber = act.caseType + ": " + act.caseNumber;
+        } else {
+            caseNumber = act.caseYear + "-" + act.caseType + "-" + act.caseMonth + "-" + act.caseNumber;
+        }
+        return caseNumber;
     }
     
     private void loadUsers() {

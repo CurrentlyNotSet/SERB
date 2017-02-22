@@ -304,14 +304,14 @@ public class CMDSCaseSearch extends javax.swing.JDialog {
 
             },
             new String [] {
-                "Case Number", "Open Date", "Appellant", "Appellee", "ALJ"
+                "Case Number", "Open Date", "Appellant", "Appellant Rep", "Appellee", "Appellee Rep", "ALJ"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {

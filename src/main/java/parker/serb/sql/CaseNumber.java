@@ -65,7 +65,7 @@ public class CaseNumber {
         try {
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "Select caseNumber from CaseNumber where year = ?";
+            String sql = "Select caseNumber from CaseNumber where year = ? and caseType = 'CMDS'";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, year);
