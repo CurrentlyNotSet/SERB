@@ -819,6 +819,12 @@ public class PartiesPanel extends javax.swing.JPanel {
                 model.removeRow(model.getRowCount()-1);
             }
         } 
+        
+        if(model.getRowCount() > 0) {
+            jTextField1.setEnabled(true);
+        }  else {
+            jTextField1.setEnabled(false);
+        }
     }
     
     private void loadHearingsPartySearch(String searchTerm) {
@@ -1463,6 +1469,12 @@ public class PartiesPanel extends javax.swing.JPanel {
                 model.removeRow(model.getRowCount()-1);
             }
         } 
+        
+        if(model.getRowCount() > 0) {
+            jTextField1.setEnabled(true);
+        }  else {
+            jTextField1.setEnabled(false);
+        }
     }
     
     private void loadORGPartySearch(String searchTerm) {
@@ -1569,6 +1581,12 @@ public class PartiesPanel extends javax.swing.JPanel {
                 model.removeRow(model.getRowCount()-1);
             }
         } 
+        
+        if(model.getRowCount() > 0) {
+            jTextField1.setEnabled(true);
+        }  else {
+            jTextField1.setEnabled(false);
+        }
     }
     
     private void loadCSCPartySearch(String searchTerm) {
@@ -1675,9 +1693,16 @@ public class PartiesPanel extends javax.swing.JPanel {
                 model.removeRow(model.getRowCount()-1);
             }
         } 
+        
+        if(model.getRowCount() > 0) {
+            jTextField1.setEnabled(true);
+        }  else {
+            jTextField1.setEnabled(false);
+        }
     }
     
     public void clearAll() {
+        jTextField1.setEnabled(false);
         missingParties.setText("");
         jTextField1.setText("");
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
@@ -2313,6 +2338,12 @@ public class PartiesPanel extends javax.swing.JPanel {
             }
         }
         validateParties();
+        
+        if(model.getRowCount() > 0) {
+            jTextField1.setEnabled(true);
+        }  else {
+            jTextField1.setEnabled(false);
+        }
     }
     
     public void loadHearingParties() {
@@ -2944,6 +2975,12 @@ public class PartiesPanel extends javax.swing.JPanel {
             }
         }
         missingParties.setText("");
+        
+        if(model.getRowCount() > 0) {
+            jTextField1.setEnabled(true);
+        }  else {
+            jTextField1.setEnabled(false);
+        }
     }
     
     public void loadORGParties() {
@@ -3037,6 +3074,12 @@ public class PartiesPanel extends javax.swing.JPanel {
             }
         }
         validateParties();
+        
+        if(model.getRowCount() > 0) {
+            jTextField1.setEnabled(true);
+        }  else {
+            jTextField1.setEnabled(false);
+        }
     }
     
     public void loadCSCParties() {
@@ -3130,6 +3173,12 @@ public class PartiesPanel extends javax.swing.JPanel {
             }
         }
         validateParties();
+        
+        if(model.getRowCount() > 0) {
+            jTextField1.setEnabled(true);
+        }  else {
+            jTextField1.setEnabled(false);
+        }
     }
     
     private void validateParties() {

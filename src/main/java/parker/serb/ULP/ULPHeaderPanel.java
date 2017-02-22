@@ -164,6 +164,10 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
     }
     
     void clearAll() {
+        Global.caseYear = null;
+        Global.caseType = null;
+        Global.caseMonth = null;
+        Global.caseNumber = null;
         chargingPartyTextBox.setText("");
         chargingPartyREPTextBox.setText("");
         chargedPartyTextBox.setText("");
