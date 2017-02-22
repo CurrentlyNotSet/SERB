@@ -325,11 +325,17 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                     boolean selected = false;
 
                     if (Global.activeSection.equals("ORG")
-                            && SMDSdocToGenerate.fileName.startsWith("Tickler")
+                            //&& SMDSdocToGenerate.fileName.startsWith("Tickler")
                             && doc.fileName.equals("EOAR.pdf")) {
                         selected = true;
                     }
 
+                    if (Global.activeSection.equals("ORG")
+                            && SMDSdocToGenerate.fileName.startsWith("New Registration")
+                            && doc.fileName.equals("RegistrationReportForm.pdf")) {
+                        selected = true;
+                    }
+                    
                     model.addRow(new Object[]{
                         doc.id,
                         selected,
