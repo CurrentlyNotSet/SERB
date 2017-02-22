@@ -211,7 +211,7 @@ public class REPLetterDialog extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Generate Letter");
+        jLabel1.setText("Generate Document");
 
         jLabel2.setText("Letters");
 

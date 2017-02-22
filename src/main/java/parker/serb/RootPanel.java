@@ -370,10 +370,10 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton3.setMaximumSize(dim);
                 jButton3.setVisible(true);
                 if(Global.caseNumber == null) {
-                    jButton3.setText("Letters");
+                    jButton3.setText("Documents");
                     jButton3.setEnabled(false);
                 } else {
-                    jButton3.setText("Letters");
+                    jButton3.setText("Documents");
                     jButton3.setEnabled(true);
                 }
 
@@ -445,10 +445,10 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton3.setMaximumSize(dim);
                 jButton3.setVisible(true);
                 if(Global.caseNumber == null) {
-                    jButton3.setText("Letters");
+                    jButton3.setText("Documents");
                     jButton3.setEnabled(false);
                 } else {
-                    jButton3.setText("Letters");
+                    jButton3.setText("Documents");
                     jButton3.setEnabled(true);
                 }
 
@@ -521,10 +521,10 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton3.setMaximumSize(dim);
                 jButton3.setVisible(true);
                 if(Global.caseNumber == null) {
-                    jButton3.setText("Letters");
+                    jButton3.setText("Documents");
                     jButton3.setEnabled(false);
                 } else {
-                    jButton3.setText("Letters");
+                    jButton3.setText("Documents");
                     jButton3.setEnabled(true);
                 }
 
@@ -753,18 +753,18 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton3.setMinimumSize(dim);
                 jButton3.setMaximumSize(dim);
                 jButton3.setVisible(false);
-                jButton3.setText("All Org Letters");
+                jButton3.setText("");
 
                 jButton4.setSize(dim);
                 jButton4.setMinimumSize(dim);
                 jButton4.setMaximumSize(dim);
                 jButton4.setVisible(true);
-                jButton4.setText("Letters");
+                jButton4.setText("Documents");
                 if(Global.caseNumber == null) {
-                    jButton4.setText("Letters");
+                    jButton4.setText("Documents");
                     jButton4.setEnabled(false);
                 } else {
-                    jButton4.setText("Letters");
+                    jButton4.setText("Documents");
                     jButton4.setEnabled(true);
                 }
 
@@ -772,7 +772,7 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton5.setMinimumSize(dim);
                 jButton5.setMaximumSize(dim);
                 jButton5.setVisible(true);
-                jButton5.setEnabled(false);
+                jButton5.setEnabled(true);
                 jButton5.setText("Reports");
 
                 jButton6.setSize(dim);
@@ -834,10 +834,10 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton4.setMaximumSize(dim);
                 jButton4.setVisible(true);
                 if(Global.caseNumber == null) {
-                    jButton4.setText("Letter");
+                    jButton4.setText("Documents");
                     jButton4.setEnabled(false);
                 } else {
-                    jButton4.setText("Letter");
+                    jButton4.setText("Documents");
                     jButton4.setEnabled(true);
                 }
 
