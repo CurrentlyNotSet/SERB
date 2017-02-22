@@ -173,6 +173,10 @@ public class REPHeaderPanel extends javax.swing.JPanel {
      * 
      */
     void clearAll() {
+        Global.caseYear = null;
+        Global.caseType = null;
+        Global.caseMonth = null;
+        Global.caseNumber = null;
         employerTextBox.setText("");
         employeeOrgTextBox.setText("");
         incumbentEEOTextBox.setText("");

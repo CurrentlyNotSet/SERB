@@ -235,6 +235,10 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
      * 
      */
     void clearAll() {
+        Global.caseYear = null;
+        Global.caseType = null;
+        Global.caseMonth = null;
+        Global.caseNumber = null;
         aljTextBox.setText("");
         pcDateTextBox.setText("");
         statusTextBox.setText("");

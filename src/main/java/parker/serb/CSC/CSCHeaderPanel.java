@@ -120,6 +120,10 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
     }
     
     void clearAll() {
+        Global.caseYear = null;
+        Global.caseType = null;
+        Global.caseMonth = null;
+        Global.caseNumber = null;
         CSCNumberTextBox.setText("");
     }
 
