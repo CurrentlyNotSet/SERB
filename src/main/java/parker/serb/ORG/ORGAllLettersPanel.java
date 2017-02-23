@@ -237,6 +237,14 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
                     if (template.questionsFileName != null) {
                         attachDocName = copyAttachmentToCaseFolder(item, template.questionsFileName);
                     }
+                                        
+                    if (template.fileName.startsWith("Tickler")) {
+                        attachDocName = copyAttachmentToCaseFolder(item, "EOAR.pdf");
+                    }
+                    
+                    if (template.fileName.startsWith("New Registration")) {
+                        attachDocName = copyAttachmentToCaseFolder(item, "RegistrationReportForm.pdf");
+                    }                                   
                     
                     Activity.addActivtyORGCase("ORG", item.orgNumber ,
                             "Created " + (template.historyDescription == null ? template.description : template.historyDescription)

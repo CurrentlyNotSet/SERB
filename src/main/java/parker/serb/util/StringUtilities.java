@@ -73,33 +73,33 @@ public class StringUtilities {
         return fullName.trim();
     }
 
-    public static String buildAddressBlockWithPhoneAndEmail(CaseParty item) {
-        String addressBlock = "";
-
-        addressBlock += buildCasePartyNameNoPreFix(item);
-        if (item.address1 != null) {
-            addressBlock += item.address1.trim().equals("") ? "" : "\n" + item.address1;
-        }
-        if (item.address2 != null) {
-            addressBlock += item.address2.trim().equals("") ? "" : "\n" + item.address2;
-        }
-        if (item.address3 != null) {
-            addressBlock += item.address3.trim().equals("") ? "" : "\n" + item.address3;
-        }
-        addressBlock += "\n" + (item.city == null ? "" : item.city)
-                + ", " + (item.stateCode == null ? "" : item.stateCode)
-                + " " + (item.zipcode == null ? "" : item.zipcode);
-        if (item.phone1 != null){
-            addressBlock += item.phone1.trim().equals("") ? "" : "\n" + item.phone1;
-        }
-        if (item.phone2 != null){
-            addressBlock += item.phone2.trim().equals("") ? "" : "\n" + item.phone2;
-        }
-        if (item.emailAddress != null){
-            addressBlock += item.emailAddress.trim().equals("") ? "" : "\n" + item.emailAddress;
-        }
-        return addressBlock.trim();
-    }
+//    public static String buildAddressBlockWithPhoneAndEmail(CaseParty item) {
+//        String addressBlock = "";
+//
+//        addressBlock += buildCasePartyNameNoPreFix(item);
+//        if (item.address1 != null) {
+//            addressBlock += item.address1.trim().equals("") ? "" : "\n" + item.address1;
+//        }
+//        if (item.address2 != null) {
+//            addressBlock += item.address2.trim().equals("") ? "" : "\n" + item.address2;
+//        }
+//        if (item.address3 != null) {
+//            addressBlock += item.address3.trim().equals("") ? "" : "\n" + item.address3;
+//        }
+//        addressBlock += "\n" + (item.city == null ? "" : item.city)
+//                + ", " + (item.stateCode == null ? "" : item.stateCode)
+//                + " " + (item.zipcode == null ? "" : item.zipcode);
+//        if (item.phone1 != null){
+//            addressBlock += item.phone1.trim().equals("") ? "" : "\n" + item.phone1;
+//        }
+//        if (item.phone2 != null){
+//            addressBlock += item.phone2.trim().equals("") ? "" : "\n" + item.phone2;
+//        }
+//        if (item.emailAddress != null){
+//            addressBlock += item.emailAddress.trim().equals("") ? "" : "\n" + item.emailAddress;
+//        }
+//        return addressBlock.trim();
+//    }
 
     public static String buildAddressBlockWithLineBreaks(CaseParty item) {
         String addressBlock = "";

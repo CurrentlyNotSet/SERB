@@ -74,9 +74,9 @@ public class processMEDbookmarks {
             for (String relatedCase : relatedCasesList) {
                 i++;
                 if (i == relatedCasesList.size()) {
-                    relatedCaseNumbers += ("".equals(relatedCaseNumbers) ? relatedCase : "; and " + relatedCase);
+                    relatedCaseNumbers += ("".equals(relatedCaseNumbers) ? relatedCase : ", and " + relatedCase);
                 } else {
-                    relatedCaseNumbers += ("".equals(relatedCaseNumbers) ? relatedCase : "; " + relatedCase);
+                    relatedCaseNumbers += ("".equals(relatedCaseNumbers) ? relatedCase : ", " + relatedCase);
                 }
             }
         }
@@ -110,7 +110,7 @@ public class processMEDbookmarks {
                         if (!"".equals(employerAddresses.trim())) {
                             employerAddresses += "\n\n";
                         }
-                        employerAddresses += StringUtilities.buildAddressBlockWithPhoneAndEmail(party);
+                        employerAddresses += StringUtilities.buildAddressBlockWithLineBreaks(party);
                         employerNames += StringUtilities.buildCasePartyNameNoPreFix(party);
                         break;
                     case "Employer REP":
@@ -124,7 +124,7 @@ public class processMEDbookmarks {
                         if (!"".equals(employerREPAddresses.trim())) {
                             employerREPAddresses += "\n\n";
                         }
-                        employerREPAddresses += StringUtilities.buildAddressBlockWithPhoneAndEmail(party);
+                        employerREPAddresses += StringUtilities.buildAddressBlockWithLineBreaks(party);
                         employerREPNames += StringUtilities.buildCasePartyNameNoPreFix(party);
                         employerRepSalutation += party.prefix != null ? party.prefix : "";
                         employerRepLastName += party.lastName != null ? party.lastName : "";
@@ -140,7 +140,7 @@ public class processMEDbookmarks {
                         if (!"".equals(employeeOrgAddresses.trim())) {
                             employeeOrgAddresses += "\n\n";
                         }
-                        employeeOrgAddresses += StringUtilities.buildAddressBlockWithPhoneAndEmail(party);
+                        employeeOrgAddresses += StringUtilities.buildAddressBlockWithLineBreaks(party);
                         employeeOrgNames += StringUtilities.buildCasePartyNameNoPreFix(party);
                         break;
                     case "Employee Organization REP":
@@ -154,7 +154,7 @@ public class processMEDbookmarks {
                         if (!"".equals(employeeOrgREPAddresses.trim())) {
                             employeeOrgREPAddresses += "\n\n";
                         }
-                        employeeOrgREPAddresses += StringUtilities.buildAddressBlockWithPhoneAndEmail(party);
+                        employeeOrgREPAddresses += StringUtilities.buildAddressBlockWithLineBreaks(party);
                         employeeOrgREPNames += StringUtilities.buildCasePartyNameNoPreFix(party);
 
                         employeeOrgRepSalutation += party.prefix != null ? party.prefix : "";

@@ -28,6 +28,8 @@ public class CMDSCaseSearchData {
     public String appellant;
     public String appellee;
     public String alj;
+    public String appellantRep;
+    public String appelleeRep;
 
     public static List loadCMDSCaseList() {
         List<CMDSCaseSearchData> ulpCaseList = new ArrayList<>();
@@ -55,6 +57,8 @@ public class CMDSCaseSearchData {
                 repCase.appellant = caseActivity.getString("appellant") == null ? "" : caseActivity.getString("appellant");
                 repCase.appellee = caseActivity.getString("appellee") == null ? "" : caseActivity.getString("appellee");
                 repCase.alj = caseActivity.getString("alj") == null ? "" : caseActivity.getString("alj");
+                repCase.appellantRep = caseActivity.getString("appellantRep") == null ? "" : caseActivity.getString("appellantRep");
+                repCase.appelleeRep = caseActivity.getString("appelleeRep") == null ? "" : caseActivity.getString("appelleeRep");
                 ulpCaseList.add(repCase);
             }
         } catch (SQLException ex) {
@@ -96,7 +100,10 @@ public class CMDSCaseSearchData {
         }
     }
 
-    public static void updateCaseEntryFromParties(String appellant, String appellee) {
+    public static void updateCaseEntryFromParties(String appellant,
+            String appellee,
+            String appellantRep,
+            String appelleeRep) {
         Statement stmt = null;
 
 
@@ -106,7 +113,9 @@ public class CMDSCaseSearchData {
 
             String sql = "UPDATE CMDSCaseSearch SET"
                     + " appellant = ?,"
-                    + " appellee = ?"
+                    + " appellee = ?,"
+                    + " appellantRep = ?,"
+                    + " appelleeRep = ?"
                     + " WHERE caseYear = ? AND"
                     + " caseType = ? AND"
                     + " caseMonth = ? AND"
@@ -115,17 +124,19 @@ public class CMDSCaseSearchData {
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, appellant);
             preparedStatement.setString(2, appellee);
-            preparedStatement.setString(3, Global.caseYear);
-            preparedStatement.setString(4, Global.caseType);
-            preparedStatement.setString(5, Global.caseMonth);
-            preparedStatement.setString(6, Global.caseNumber);
+            preparedStatement.setString(3, appellantRep);
+            preparedStatement.setString(4, appelleeRep);
+            preparedStatement.setString(5, Global.caseYear);
+            preparedStatement.setString(6, Global.caseType);
+            preparedStatement.setString(7, Global.caseMonth);
+            preparedStatement.setString(8, Global.caseNumber);
 
             preparedStatement.executeUpdate();
 
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                updateCaseEntryFromParties(appellant, appellee);
+                updateCaseEntryFromParties(appellant, appellee, appellantRep, appelleeRep);
             }
         } finally {
             DbUtils.closeQuietly(stmt);

@@ -208,7 +208,9 @@ public class PartiesPanel extends javax.swing.JPanel {
                 Global.root.getcMDSHeaderPanel1().loadHeaderInformation();
                 CMDSCaseSearchData.updateCaseEntryFromParties(
                         Global.root.getcMDSHeaderPanel1().getAppellantTextBox().getText(),
-                        Global.root.getcMDSHeaderPanel1().getAppelleeTextBox().getText());
+                        Global.root.getcMDSHeaderPanel1().getAppelleeTextBox().getText(),
+                        CaseParty.loadCMDSRepByCase("Appellant"),
+                        CaseParty.loadCMDSRepByCase("Appellee"));
                 break;    
         }
     }

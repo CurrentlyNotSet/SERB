@@ -13,6 +13,7 @@ import parker.serb.Global;
 import parker.serb.activity.RemoveActivityEntryDialog;
 import parker.serb.party.PartySearchDialog;
 import parker.serb.sql.CMDSCaseSearchData;
+import parker.serb.sql.CaseParty;
 import parker.serb.util.CancelUpdate;
 
 /**
@@ -149,7 +150,9 @@ public class CMDSRootPanel extends javax.swing.JPanel {
                 Global.root.getcMDSHeaderPanel1().loadHeaderInformation();
                 CMDSCaseSearchData.updateCaseEntryFromParties(
                         Global.root.getcMDSHeaderPanel1().getAppellantTextBox().getText(),
-                        Global.root.getcMDSHeaderPanel1().getAppelleeTextBox().getText());
+                        Global.root.getcMDSHeaderPanel1().getAppelleeTextBox().getText(),
+                        CaseParty.loadCMDSRepByCase("Appellant"),
+                        CaseParty.loadCMDSRepByCase("Appellee"));
                 break;
             case "Case Information":
                 if(buttonText.equals("Update")) {
@@ -206,7 +209,9 @@ public class CMDSRootPanel extends javax.swing.JPanel {
                 Global.root.getcMDSHeaderPanel1().loadHeaderInformation();
                 CMDSCaseSearchData.updateCaseEntryFromParties(
                         Global.root.getcMDSHeaderPanel1().getAppellantTextBox().getText(),
-                        Global.root.getcMDSHeaderPanel1().getAppelleeTextBox().getText());
+                        Global.root.getcMDSHeaderPanel1().getAppelleeTextBox().getText(),
+                        CaseParty.loadCMDSRepByCase("Appellant"),
+                        CaseParty.loadCMDSRepByCase("Appellee"));
                 break;
             case "Case Information":
                 cancel = new CancelUpdate(Global.root, true);

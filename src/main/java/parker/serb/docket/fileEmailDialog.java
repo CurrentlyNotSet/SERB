@@ -337,7 +337,8 @@ public class fileEmailDialog extends javax.swing.JDialog {
                 attachmentTable.getValueAt(i, 2).toString(),    //fileType
                 attachmentTable.getValueAt(i, 3) != null
                         ? attachmentTable.getValueAt(i, 3).toString() : "",
-                generateDate()); //comment
+                generateDate(),
+                directionComboBox.getSelectedItem().toString()); 
             }
         }
     }
@@ -416,6 +417,8 @@ public class fileEmailDialog extends javax.swing.JDialog {
         jButton2 = new javax.swing.JButton();
         toComboBox = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        directionComboBox = new javax.swing.JComboBox<>();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -522,6 +525,10 @@ public class fileEmailDialog extends javax.swing.JDialog {
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel8.setText("Body");
 
+        jLabel9.setText("In or Out:");
+
+        directionComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "In", "Out" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -539,14 +546,16 @@ public class fileEmailDialog extends javax.swing.JDialog {
                             .addComponent(jLabel2)
                             .addComponent(jLabel4)
                             .addComponent(jLabel5)
-                            .addComponent(jLabel7))
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel9))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(caseNumberTextBox)
                             .addComponent(dateTextBox)
                             .addComponent(fromTextBox)
                             .addComponent(subjectTextBox)
-                            .addComponent(toComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(toComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(directionComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -579,10 +588,14 @@ public class fileEmailDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(subjectTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(23, 23, 23)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(directionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(7, 7, 7)
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -607,7 +620,8 @@ public class fileEmailDialog extends javax.swing.JDialog {
                 fromTextBox.getText(),
                 toComboBox.getSelectedItem().toString(),
                 subjectTextBox.getText(),
-                generateDate());
+                generateDate(),
+                directionComboBox.getSelectedItem().toString());
         
         //fileAttachements
         fileEmailAttachments(caseNumbers);
@@ -626,6 +640,7 @@ public class fileEmailDialog extends javax.swing.JDialog {
     private javax.swing.JTextArea bodyTextArea;
     private javax.swing.JTextField caseNumberTextBox;
     private javax.swing.JTextField dateTextBox;
+    private javax.swing.JComboBox<String> directionComboBox;
     private javax.swing.JButton fileButton;
     private javax.swing.JTextField fromTextBox;
     private javax.swing.JButton jButton2;
@@ -637,6 +652,7 @@ public class fileEmailDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
