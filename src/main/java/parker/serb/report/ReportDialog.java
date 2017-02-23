@@ -43,7 +43,10 @@ public class ReportDialog extends javax.swing.JDialog {
     private void setDefaults(String sectionPassed){
         section = sectionPassed;
 
+        //load reports
         loadReports();
+
+        //load agendas
         switch (section) {
             case "REP":
             case "ULP":
@@ -90,7 +93,7 @@ public class ReportDialog extends javax.swing.JDialog {
             case "MED":
             case "ORG":
             case "Hearings":
-                List<SMDSDocuments> smdsletterList = SMDSDocuments.loadDocumentNamesByTypeAndSection(section, "Report");
+                List<SMDSDocuments> smdsletterList = SMDSDocuments.loadDocumentNamesByTypeAndSectionWithAll(section, "Report");
 
                 for (SMDSDocuments letter : smdsletterList) {
                     ReportComboBox.addItem(new Item<>(String.valueOf(letter.id), letter.description));
@@ -99,6 +102,12 @@ public class ReportDialog extends javax.swing.JDialog {
                 break;
             case "Civil Service Commission":
             case "CMDS":
+                List<SMDSDocuments> letterList = SMDSDocuments.loadDocumentNamesByTypeAndSection("ALL", "Report");
+
+                for (SMDSDocuments letter : letterList) {
+                    ReportComboBox.addItem(new Item<>(String.valueOf(letter.id), letter.description));
+                }
+
                 List<CMDSReport> cmdsletterList = CMDSReport.loadActiveReportsBySection(section);
 
                 for (CMDSReport letter : cmdsletterList) {
@@ -139,15 +148,23 @@ public class ReportDialog extends javax.swing.JDialog {
                 break;
             case "Civil Service Commission":
             case "CMDS":
-                CMDSReport cmdsreport = CMDSReport.getReportByID(id);
+                SMDSDocuments SMDSreport = null;
 
-                SMDSDocuments SMDSreport = new SMDSDocuments();
-                SMDSreport.section = cmdsreport.section;
-                SMDSreport.description = cmdsreport.description;
-                SMDSreport.fileName = cmdsreport.fileName;
-                SMDSreport.parameters = cmdsreport.parameters;
+                CMDSReport cmdsreport = CMDSReport.getReportByIDandDescription(id, ReportComboBox.getSelectedItem().toString());
 
-                GenerateReport.runReport(SMDSreport);
+                if (cmdsreport != null) {
+                    SMDSreport = new SMDSDocuments();
+                    SMDSreport.section = cmdsreport.section;
+                    SMDSreport.description = cmdsreport.description;
+                    SMDSreport.fileName = cmdsreport.fileName;
+                    SMDSreport.parameters = cmdsreport.parameters;
+                } else {
+                    SMDSreport = SMDSDocuments.findDocumentByID(id);
+                }
+
+                if (SMDSreport != null) {
+                    GenerateReport.runReport(SMDSreport);
+                }
                 break;
             default:
                 break;

@@ -12,6 +12,7 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import parker.serb.Global;
 import parker.serb.letterGeneration.LetterGenerationPanel;
+import parker.serb.sql.Audit;
 import parker.serb.sql.SMDSDocuments;
 import parker.serb.util.Item;
 
@@ -72,6 +73,7 @@ public class CSCLetterDialog extends javax.swing.JDialog {
             File templateFile = new File(Global.templatePath + Global.activeSection + File.separator + template.fileName);
 
             if (templateFile.exists()){
+                Audit.addAuditEntry("Generated CSC Letter: " + templateFile);
                 new LetterGenerationPanel(Global.root, true, template, null);
             } else {
                 WebOptionPane.showMessageDialog(Global.root, "<html><center> Sorry, unable to locate template. <br><br>" + template.fileName + "</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);

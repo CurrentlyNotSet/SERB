@@ -6,14 +6,15 @@
 package parker.serb.REP;
 
 //TODO: Load all of the letter types
-
 import com.alee.laf.optionpane.WebOptionPane;
 import java.awt.event.ItemEvent;
 import java.io.File;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import parker.serb.Global;
+import parker.serb.letterGeneration.GenerateLetterNoQueuePanel;
 import parker.serb.letterGeneration.LetterGenerationPanel;
+import parker.serb.sql.Audit;
 import parker.serb.sql.SMDSDocuments;
 import parker.serb.util.Item;
 
@@ -25,16 +26,22 @@ public class REPLetterDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form REPReportDialog
+     *
      * @param parent
      * @param modal
      */
     public REPLetterDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        loadDropDowns();
-        addListeners();
+        loadDefaults();
         setLocationRelativeTo(parent);
         setVisible(true);
+    }
+
+    private void loadDefaults() {
+        memosComboBox1.setSelectedItem("All Types");
+        loadDropDowns();
+        addListeners();
     }
 
     private void loadDropDowns() {
@@ -146,7 +153,7 @@ public class REPLetterDialog extends javax.swing.JDialog {
     }
 
     private void enableGenerateButton() {
-        if(lettersComboBox.getSelectedItem().toString().equals("")
+        if (lettersComboBox.getSelectedItem().toString().equals("")
                 && directivesComboBox.getSelectedItem().toString().equals("")
                 && memosComboBox2.getSelectedItem().toString().equals("")
                 && miscComboBox.getSelectedItem().toString().equals("")) {
@@ -176,8 +183,18 @@ public class REPLetterDialog extends javax.swing.JDialog {
             SMDSDocuments template = SMDSDocuments.findDocumentByID(selection);
             File templateFile = new File(Global.templatePath + Global.activeSection + File.separator + template.fileName);
 
-            if (templateFile.exists()){
-                new LetterGenerationPanel(Global.root, true, template, null);
+            if (templateFile.exists()) {
+                Audit.addAuditEntry("Generated REP Letter: " + templateFile);
+                switch (template.type) {
+                    case "Directive":
+                    case "Misc":
+                    case "Memo":
+                        new GenerateLetterNoQueuePanel(Global.root, true, template);
+                        break;
+                    default:
+                        new LetterGenerationPanel(Global.root, true, template, null);
+                        break;
+                }
             } else {
                 WebOptionPane.showMessageDialog(Global.root, "<html><center> Sorry, unable to locate template. <br><br>" + template.fileName + "</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
             }
