@@ -267,6 +267,8 @@ public class mediaFileDialog extends javax.swing.JDialog {
         caseNumberTextBox = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         commentTextBox = new javax.swing.JTextArea();
+        jLabel7 = new javax.swing.JLabel();
+        directionComboBox = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -314,6 +316,10 @@ public class mediaFileDialog extends javax.swing.JDialog {
         commentTextBox.setRows(5);
         jScrollPane1.setViewportView(commentTextBox);
 
+        jLabel7.setText("In or Out:");
+
+        directionComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "In", "Out" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -329,7 +335,8 @@ public class mediaFileDialog extends javax.swing.JDialog {
                             .addComponent(jLabel3)
                             .addComponent(jLabel4)
                             .addComponent(jLabel5)
-                            .addComponent(jLabel6))
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel7))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(caseNumberTextBox)
@@ -337,8 +344,9 @@ public class mediaFileDialog extends javax.swing.JDialog {
                             .addComponent(fromTextBox)
                             .addComponent(toComboBox, 0, 279, Short.MAX_VALUE)
                             .addComponent(typeComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1)))
-                    .addGroup(layout.createSequentialGroup()
+                            .addComponent(jScrollPane1)
+                            .addComponent(directionComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(fileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -373,18 +381,21 @@ public class mediaFileDialog extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(1, 1, 1)
                         .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(directionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addComponent(jLabel6))
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(20, 20, 20)
+                        .addComponent(jLabel6)
+                        .addGap(0, 108, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cancelButton)
-                    .addComponent(fileButton))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(fileButton)
+                    .addComponent(cancelButton))
+                .addContainerGap())
         );
 
         pack();
@@ -404,7 +415,8 @@ public class mediaFileDialog extends javax.swing.JDialog {
                 typeComboBox.getSelectedItem().toString().split("-")[1].trim(),
                 fromTextBox.getText(),
                 toComboBox.getSelectedItem().toString(),
-                commentTextBox.getText());
+                commentTextBox.getText(),
+                directionComboBox.getSelectedItem().toString());
         dispose();
     }//GEN-LAST:event_fileButtonActionPerformed
 
@@ -413,6 +425,7 @@ public class mediaFileDialog extends javax.swing.JDialog {
     private javax.swing.JButton cancelButton;
     private javax.swing.JTextField caseNumberTextBox;
     private javax.swing.JTextArea commentTextBox;
+    private javax.swing.JComboBox<String> directionComboBox;
     private javax.swing.JButton fileButton;
     private javax.swing.JTextField fileNameTextBox;
     private javax.swing.JTextField fromTextBox;
@@ -422,6 +435,7 @@ public class mediaFileDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JComboBox<String> toComboBox;

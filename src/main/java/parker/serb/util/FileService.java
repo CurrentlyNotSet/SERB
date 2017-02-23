@@ -222,7 +222,8 @@ public class FileService {
             String to,
             String comment,
             boolean redacted,
-            Date activityDate) {
+            Date activityDate,
+            String direction) {
 
         File docketFile = new File(Global.scanPath + section + File.separatorChar + fileName);
 
@@ -261,12 +262,12 @@ public class FileService {
                 switch(section) {
                     case "ORG":
                     case "CSC":
-                        Activity.addScanActivtyFromDocketORGCSC("Filed " + typeFull + " from " + from,
+                        Activity.addScanActivtyFromDocketORGCSC(direction + " - Filed " + typeFull + " from " + from,
                         fileDate + "_" + typeAbbrv + fileName.substring(fileName.lastIndexOf(".")),
                         caseNumber, from, to, typeFull, comment, false, false, section, activityDate);
                         break;
                     default:
-                        Activity.addScanActivtyFromDocket("Filed " + typeFull + " from " + from,
+                        Activity.addScanActivtyFromDocket(direction + " - Filed " + typeFull + " from " + from,
                         fileDate + "_" + typeAbbrv + fileName.substring(fileName.lastIndexOf(".")),
                         caseNumber.trim().split("-"),from, to, typeFull, comment, false, false, activityDate);
                         break;
@@ -287,7 +288,6 @@ public class FileService {
                 }
             }
         }
-
         docketFile.delete();
     }
 
@@ -299,7 +299,8 @@ public class FileService {
             String typeFull,
             String from,
             String to,
-            String comment) {
+            String comment,
+            String direction) {
 
         File docketFile = new File(Global.mediaPath + section + File.separatorChar + fileName);
 
@@ -338,12 +339,12 @@ public class FileService {
                 switch(section) {
                     case "ORG":
                     case "CSC":
-                        Activity.addActivtyFromDocketORGCSC("Filed " + typeFull + " from " + from,
+                        Activity.addActivtyFromDocketORGCSC(direction + " - Filed " + typeFull + " from " + from,
                         fileDate + "_" + typeAbbrv + fileName.substring(fileName.lastIndexOf(".")),
                         caseNumber, from, to, typeFull, comment, false, false, section);
                         break;
                     default:
-                        Activity.addActivtyFromDocket("Filed " + typeFull + " from " + from,
+                        Activity.addActivtyFromDocket(direction + " - Filed " + typeFull + " from " + from,
                         fileDate + "_" + typeAbbrv + fileName.substring(fileName.lastIndexOf(".")),
                         caseNumber.trim().split("-"),from, to, typeFull, comment, false, false);
                         break;
@@ -373,7 +374,8 @@ public class FileService {
             String from,
             String to,
             String subject,
-            Date activityDate) {
+            Date activityDate,
+            String direction) {
 
         String fileName = Email.getEmailBodyFileByID(emailID);
 
@@ -414,12 +416,12 @@ public class FileService {
                 switch(section) {
                     case "ORG":
                     case "CSC":
-                        Activity.addActivtyFromDocketORGCSC("Filed Email Body from " + from,
+                        Activity.addActivtyFromDocketORGCSC(direction + " - Filed Email Body from " + from,
                         fileDate + "_BODY.pdf",
                         caseNumber, from, to, "Email Body", "", false, false, section);
                         break;
                     default:
-                        Activity.addActivtyFromDocket("Filed Email Body from " + from,
+                        Activity.addActivtyFromDocket(direction + " - Filed Email Body from " + from,
                         fileDate + "_BODY.pdf",
                         caseNumber.trim().split("-"), from, to, "Email Body", "", false, false);
                         break;
@@ -454,7 +456,8 @@ public class FileService {
             String fileName,
             String type,
             String comment,
-            Date activityDate) {
+            Date activityDate,
+            String direction) {
 
         File docketFile = new File(Global.emailPath + section + File.separatorChar + fileName);
 
@@ -485,15 +488,6 @@ public class FileService {
                         break;
                 }
 
-//                String[] caseNumberParts = caseNumber.trim().split("-");
-//                File caseArchiveFile = new File(
-//                        Global.activityPath
-//                        + section
-//                        + File.separatorChar
-//                        + caseNumberParts[0]
-//                        + File.separatorChar
-//                        + caseNumber.trim());
-
                 caseArchiveFile.mkdirs();
 
                 String fileDate = String.valueOf(new Date().getTime());
@@ -507,12 +501,12 @@ public class FileService {
                 switch(section) {
                     case "ORG":
                     case "CSC":
-                        Activity.addActivtyFromDocketORGCSC("Filed " + fullType + " from " + from,
+                        Activity.addActivtyFromDocketORGCSC(direction + " - Filed " + fullType + " from " + from,
                         fileDate + "_" + type + fileExtenstion,
                         caseNumber, from, to, fullType, comment, false, fileExtenstion.endsWith("pdf"), fileDate);
                         break;
                     default:
-                        Activity.addActivtyFromDocket("Filed " + fullType + " from " + from,
+                        Activity.addActivtyFromDocket(direction + " - Filed " + fullType + " from " + from,
                         fileDate + "_" + type + fileExtenstion,
                         caseNumber.trim().split("-"), from, to, fullType, comment, false, fileExtenstion.endsWith("pdf"));
                         break;

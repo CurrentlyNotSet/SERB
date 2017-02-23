@@ -257,6 +257,65 @@ public class CaseParty {
         return parties;
     }
     
+    public static String loadCMDSRepByCase(String type) {
+        String rep = "";
+        
+        Statement stmt = null;
+        
+        try {
+            stmt = Database.connectToDB().createStatement();
+            
+            String sql = "Select firstName, middleInitial, lastName, companyName from CaseParty"
+                    + " where caseYear = ? "
+                    + " and caseType = ? "
+                    + " and caseMonth = ? "
+                    + " and caseNumber = ? "
+                    + " and caseRelation like '" + type + "% REP%'";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, Global.caseYear);
+            preparedStatement.setString(2, Global.caseType);
+            preparedStatement.setString(3, Global.caseMonth);
+            preparedStatement.setString(4, Global.caseNumber);
+            
+            ResultSet casePartyRS = preparedStatement.executeQuery();
+            
+            while(casePartyRS.next()) {
+                CaseParty party = new CaseParty();
+                
+                
+                party.firstName = casePartyRS.getString("firstName") == null ? "" : casePartyRS.getString("firstName");
+                party.middleInitial = casePartyRS.getString("middleInitial") == null ? "" : casePartyRS.getString("middleInitial");
+                party.lastName = casePartyRS.getString("lastName") == null ? "" : casePartyRS.getString("lastName");
+                party.companyName = casePartyRS.getString("companyName") == null ? "" : casePartyRS.getString("companyName");
+                
+                String name = "";
+                if(party.firstName.equals("") 
+                        && party.lastName.equals("")) {
+                    name = party.companyName;
+                } else {
+                    name = (party.firstName.equals("") ? "" : (party.firstName + " "))
+                        + (party.middleInitial.equals("") ? "" : (party.middleInitial + ". "))
+                        + (party.lastName.equals("") ? "" : (party.lastName));
+                }
+                
+                if(rep.equals("")) {
+                    rep += name; 
+                } else {
+                    rep += ", " + name;
+                }
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadCMDSRepByCase(type);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return rep;
+    }
+    
     public static List<CaseParty> loadORGPartiesByCase() {
         List<CaseParty> parties = new ArrayList<>();
         

@@ -204,7 +204,9 @@ public class CMDSCaseSearch extends javax.swing.JDialog {
         model.addColumn("Case Number");
         model.addColumn("Open Date");
         model.addColumn("Appellant");
+        model.addColumn("Appellant Rep");
         model.addColumn("Appellee");
+        model.addColumn("Appellee Rep");
         model.addColumn("ALJ");
         
         caseList = CMDSCaseSearchData.loadCMDSCaseList();
@@ -215,8 +217,10 @@ public class CMDSCaseSearch extends javax.swing.JDialog {
             model.addRow(new Object[] {
                 (act.caseYear + "-" + act.caseType + "-" + act.caseMonth + "-" + act.caseNumber),
                 act.dateOpen, //employer name
-                act.appellant, //union name
-                act.appellee, //county
+                act.appellant, //appellant
+                act.appellantRep,
+                act.appellee, //appellee
+                act.appelleeRep,
                 act.alj //employerID
             }); 
         }
@@ -240,9 +244,11 @@ public class CMDSCaseSearch extends javax.swing.JDialog {
                 || (tableData[i][2].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals(""))
                 || (tableData[i][3].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals(""))
                 || (tableData[i][4].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals(""))
+                || (tableData[i][5].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals(""))
+                || (tableData[i][6].toString().toLowerCase().contains(searchTextBox.getText().toLowerCase()) && !searchTextBox.equals(""))
                     )) {
                 model.addRow(new Object[] {tableData[i][0]
-                , tableData[i][1], tableData[i][2], tableData[i][3], tableData[i][4]}); 
+                , tableData[i][1], tableData[i][2], tableData[i][3], tableData[i][4], tableData[i][5], tableData[i][6]}); 
             }
         }
         caseSearchTable.setModel(model);
