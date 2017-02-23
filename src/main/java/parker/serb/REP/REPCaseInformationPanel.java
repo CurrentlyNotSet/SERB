@@ -540,6 +540,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
 
         currentOwnerComboBox.setEnabled(false);
 
+        employerIDNumberTextBox.setEditable(false);
         employerIDNumberTextBox.setBackground(new java.awt.Color(238, 238, 238));
         employerIDNumberTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         employerIDNumberTextBox.setEnabled(false);
@@ -549,6 +550,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
             }
         });
 
+        bargainingUnitNumberTextBox.setEditable(false);
         bargainingUnitNumberTextBox.setBackground(new java.awt.Color(238, 238, 238));
         bargainingUnitNumberTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         bargainingUnitNumberTextBox.setEnabled(false);
@@ -1197,7 +1199,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_actualClerksClosedDateMouseClicked
 
     private void bargainingUnitNumberTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bargainingUnitNumberTextBoxMouseClicked
-        if(evt.getClickCount() == 2 && evt.getButton() == MouseEvent.BUTTON3) {
+        if(evt.getClickCount() == 2 && evt.getButton() == MouseEvent.BUTTON1) {
             if(bargainingUnitNumberTextBox.isEnabled()) {
                 buNumberSearch search = new buNumberSearch(
                         (JFrame) Global.root.getRootPane().getParent(),
@@ -1205,8 +1207,8 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
                         employerIDNumberTextBox.getText().trim(),
                         bargainingUnitNumberTextBox.getText().trim(),
                         bargainingUnitNameTextBox.getText().trim());
-                bargainingUnitNumberTextBox.setText(search.getBuNumber());
-                bargainingUnitNameTextBox.setText(search.getUnitDesc());
+                bargainingUnitNumberTextBox.setText(search.getBuNumber().contains("-") ? search.getBuNumber() : "");
+                bargainingUnitNameTextBox.setText(search.getBuNumber().contains("-") ? search.getUnitDesc() : "");
                 bargainingUnitNameTextBox.setCaretPosition(0);
                 if(search.getCertStatus() != null || !search.getCertStatus().equals("")) {
                     setBUNumberCheckBoxes(search.getCertStatus());

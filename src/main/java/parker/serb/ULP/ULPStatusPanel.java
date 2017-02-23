@@ -1154,7 +1154,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         if(evt.getClickCount() == 2 && evt.getButton() != MouseEvent.BUTTON3) {
             if(barginingUnitNoTextBox.isEnabled()) {
                 buNumberSearch search = new buNumberSearch((JFrame) Global.root.getRootPane().getParent(), true, employerNumberTextBox.getText().trim(), barginingUnitNoTextBox.getText().trim(), "");
-                barginingUnitNoTextBox.setText(search.getBuNumber());
+                barginingUnitNoTextBox.setText(search.getBuNumber().contains("-") ? search.getBuNumber() : "");
                 barginingUnitNoTextBox.setCaretPosition(0);
                 if(employerNumberTextBox.getText().equals("")) {
                     employerNumberTextBox.setText(search.getBuNumber().split("-")[0]);
