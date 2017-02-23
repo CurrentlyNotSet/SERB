@@ -12,6 +12,7 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import parker.serb.Global;
 import parker.serb.letterGeneration.LetterGenerationPanel;
+import parker.serb.sql.Audit;
 import parker.serb.sql.SMDSDocuments;
 import parker.serb.util.Item;
 
@@ -69,9 +70,11 @@ public class CSCLetterDialog extends javax.swing.JDialog {
 
         if (selection > 0) {
             SMDSDocuments template = SMDSDocuments.findDocumentByID(selection);
-            File templateFile = new File(Global.templatePath + Global.activeSection + File.separator + template.fileName);
+            File templateFile = new File(Global.templatePath + (Global.activeSection.equalsIgnoreCase("Civil Service Commission") ? "CSC" : Global.activeSection)
+                    + File.separator + template.fileName);
 
             if (templateFile.exists()){
+                Audit.addAuditEntry("Generated CSC Letter: " + templateFile);
                 new LetterGenerationPanel(Global.root, true, template, null);
             } else {
                 WebOptionPane.showMessageDialog(Global.root, "<html><center> Sorry, unable to locate template. <br><br>" + template.fileName + "</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
