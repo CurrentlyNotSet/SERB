@@ -70,7 +70,8 @@ public class CSCLetterDialog extends javax.swing.JDialog {
 
         if (selection > 0) {
             SMDSDocuments template = SMDSDocuments.findDocumentByID(selection);
-            File templateFile = new File(Global.templatePath + Global.activeSection + File.separator + template.fileName);
+            File templateFile = new File(Global.templatePath + (Global.activeSection.equalsIgnoreCase("Civil Service Commission") ? "CSC" : Global.activeSection)
+                    + File.separator + template.fileName);
 
             if (templateFile.exists()){
                 Audit.addAuditEntry("Generated CSC Letter: " + templateFile);

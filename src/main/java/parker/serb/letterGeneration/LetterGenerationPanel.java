@@ -314,6 +314,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
             case "Hearings":
                 break;
             case "Civil Service Commission":
+                documentList = SMDSDocuments.loadDocumentNamesByTypeAndSection("CSC", "Quest");
                 break;
             case "CMDS":
                 break;
