@@ -76,7 +76,7 @@ public class processULPbookmarks {
                     if (!"".equals(chargingPartyAddressBlock.trim())){
                         chargingPartyAddressBlock += "\n\n";
                     }
-                    chargingPartyAddressBlock += StringUtilities.buildAddressBlockWithPhoneAndEmail(party);
+                    chargingPartyAddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
                     chargingPartyNames += StringUtilities.buildCasePartyNameNoPreFix(party);
                     break;
                 case "Charging Party REP":
@@ -86,7 +86,7 @@ public class processULPbookmarks {
                     if (!"".equals(chargingPartyREPAddressBlock.trim())){
                         chargingPartyREPAddressBlock += "\n\n";
                     }
-                    chargingPartyREPAddressBlock += StringUtilities.buildAddressBlockWithPhoneAndEmail(party);
+                    chargingPartyREPAddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
                     chargingPartyREPNames += StringUtilities.buildCasePartyNameNoPreFix(party);
                     break;
                 case "Charged Party":
@@ -96,7 +96,7 @@ public class processULPbookmarks {
                     if (!"".equals(chargedPartyAddressBlock.trim())){
                         chargedPartyAddressBlock += "\n\n";
                     }
-                    chargedPartyAddressBlock += StringUtilities.buildAddressBlockWithPhoneAndEmail(party);
+                    chargedPartyAddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
                     chargedPartyNames += StringUtilities.buildCasePartyNameNoPreFix(party);
                     break;
                 case "Charged Party REP":
@@ -106,7 +106,7 @@ public class processULPbookmarks {
                     if (!"".equals(chargedPartyREPAddressBlock.trim())){
                         chargedPartyREPAddressBlock += "\n\n";
                     }
-                    chargedPartyREPAddressBlock += StringUtilities.buildAddressBlockWithPhoneAndEmail(party);
+                    chargedPartyREPAddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
                     chargedPartyREPNames += StringUtilities.buildCasePartyNameNoPreFix(party);
                     break;
             }
