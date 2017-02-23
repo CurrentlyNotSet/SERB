@@ -10,16 +10,16 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.List;
 import parker.serb.Global;
-import parker.serb.sql.CaseParty;
-import parker.serb.util.StringUtilities;
 import parker.serb.sql.CMDSCase;
 import parker.serb.sql.CMDSDocuments;
 import parker.serb.sql.CMDSHearing;
+import parker.serb.sql.CaseParty;
 import parker.serb.sql.EmailOutInvites;
 import parker.serb.sql.User;
 import parker.serb.util.DateConversion;
 import parker.serb.util.NumberFormatService;
 import parker.serb.util.SlackNotification;
+import parker.serb.util.StringUtilities;
 
 /**
  *
@@ -28,7 +28,7 @@ import parker.serb.util.SlackNotification;
 public class processCMDSbookmarks {
 
     public static Dispatch processDoACMDSWordLetter(Dispatch Document, CMDSDocuments template, questionsCMDSModel answers, List<Integer> toParties, List<Integer> ccParties) {
-        //get basic information  
+        //get basic information
         CMDSCase item = CMDSCase.loadCMDSCaseInformation();
         List<CaseParty> partyList = CaseParty.loadPartiesByCase(Global.caseYear, Global.caseType, Global.caseMonth, Global.caseNumber);
 
@@ -87,16 +87,14 @@ public class processCMDSbookmarks {
 
         for (CaseParty party : partyList) {
 
-            for (int person : ccParties) {
-                if (person == party.id) {
-                    if (!"".equals(ccNameBlock.trim())) {
-                        ccNameBlock += ",\n";
+            if (ccParties != null) {
+                for (int person : ccParties) {
+                    if (person == party.id) {
+                        if (!"".equals(ccNameBlock.trim())) {
+                            ccNameBlock += ",\n";
+                        }
+                        ccNameBlock += StringUtilities.buildCasePartyNameNoPreFix(party);
                     }
-                    ccNameBlock += StringUtilities.buildCasePartyNameNoPreFix(party);
-                    if (!"".equals(ccAddressBlock.trim())) {
-                        ccAddressBlock += "\n\n";
-                    }
-                    ccAddressBlock += StringUtilities.buildCasePartyAddressBlock(party);
                 }
             }
 
@@ -463,7 +461,7 @@ public class processCMDSbookmarks {
             processBookmark.process("TitleOfRep" + (i == 0 ? "" : i), appellantRep1Title, Document);
             processBookmark.process("CCList" + (i == 0 ? "" : i), ccNameBlock, Document);
             processBookmark.process("ccListAddress" + (i == 0 ? "" : i), ccAddressBlock, Document);
-            
+
             //Questions
             processBookmark.process("ActionAppealed" + (i == 0 ? "" : i), answers.getActionAppealed(), Document);
             processBookmark.process("FiledOrDidNotFile" + (i == 0 ? "" : i), answers.getMemorandumContra(), Document);

@@ -12,6 +12,7 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import parker.serb.Global;
 import parker.serb.letterGeneration.LetterGenerationPanel;
+import parker.serb.sql.Audit;
 import parker.serb.sql.CMDSDocuments;
 import parker.serb.util.Item;
 
@@ -207,11 +208,11 @@ public class CMDSLetterDialog extends javax.swing.JDialog {
             File templateFile = new File(Global.templatePath + Global.activeSection + File.separator + template.Location);
 
             if (templateFile.exists()){
+                Audit.addAuditEntry("Generated CMDS Letter: " + templateFile);
                 new LetterGenerationPanel(Global.root, true, null, template);
             } else {
                 WebOptionPane.showMessageDialog(Global.root, "<html><center> Sorry, unable to locate template. <br><br>" + template.Location + "</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
             }
-
         }
     }
 

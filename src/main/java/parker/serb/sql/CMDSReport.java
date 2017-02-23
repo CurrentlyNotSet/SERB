@@ -20,7 +20,7 @@ import parker.serb.util.SlackNotification;
  * @author User
  */
 public class CMDSReport {
-    
+
     public int id;
     public boolean active;
     public String section;
@@ -28,12 +28,12 @@ public class CMDSReport {
     public String fileName;
     public String parameters;
     public double sortOrder;
-    
+
     public static List<CMDSReport> loadAllReports(String[] param) {
         List<CMDSReport> list = new ArrayList<>();
 
         Statement stmt = null;
-        
+
         try {stmt = Database.connectToDB().createStatement();
 
             String sql = "SELECT * FROM CMDSReport";
@@ -54,7 +54,7 @@ public class CMDSReport {
             for (int i = 0; i < param.length; i++) {
                 ps.setString((i + 1), "%" + param[i].trim() + "%");
             }
-            
+
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -71,18 +71,18 @@ public class CMDSReport {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadAllReports(param);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return list;
     }
-    
+
     public static List<CMDSReport> loadActiveReportsBySection(String section) {
         List<CMDSReport> list = new ArrayList<>();
 
         Statement stmt = null;
-        
+
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -106,18 +106,18 @@ public class CMDSReport {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadActiveReportsBySection(section);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return list;
     }
-    
+
     public static CMDSReport getReportByID(int id) {
         CMDSReport item = new CMDSReport();
 
         Statement stmt = null;
-        
+
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -140,16 +140,51 @@ public class CMDSReport {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 getReportByID(id);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return item;
     }
-    
+
+    public static CMDSReport getReportByIDandDescription(int id, String description) {
+        CMDSReport item = new CMDSReport();
+
+        Statement stmt = null;
+
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT * FROM CMDSReport WHERE id = ? AND description = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+            preparedStatement.setString(2, description);
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                item.id = rs.getInt("id");
+                item.active = rs.getBoolean("active");
+                item.section = rs.getString("section") == null ? "" : rs.getString("section");
+                item.description = rs.getString("description") == null ? "" : rs.getString("description");
+                item.fileName = rs.getString("fileName") == null ? "" : rs.getString("fileName");
+                item.parameters = rs.getString("parameters") == null ? "" : rs.getString("parameters");
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getReportByID(id);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return item;
+    }
+
     public static void createReport(CMDSReport item) {
         Statement stmt = null;
-        
+
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -180,7 +215,7 @@ public class CMDSReport {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 createReport(item);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -188,7 +223,7 @@ public class CMDSReport {
 
     public static void updateReport(CMDSReport item) {
         Statement stmt = null;
-        
+
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -213,7 +248,7 @@ public class CMDSReport {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateReport(item);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }

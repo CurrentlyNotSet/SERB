@@ -335,7 +335,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                             && doc.fileName.equals("RegistrationReportForm.pdf")) {
                         selected = true;
                     }
-                    
+
                     model.addRow(new Object[]{
                         doc.id,
                         selected,
@@ -463,24 +463,24 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
 
             switch (Global.activeSection) {
                 case "CMDS":
-                    Activity.addActivty("Created " + CMDSdocToGenerate.LetterName, docName);
-                    Audit.addAuditEntry("Created " + CMDSdocToGenerate.LetterName);
+                    Activity.addActivty("Generated " + CMDSdocToGenerate.LetterName, docName);
+                    Audit.addAuditEntry("Generated " + CMDSdocToGenerate.LetterName);
                     break;
                 case "ORG":
                     Activity.addActivtyORGCase("ORG", orgCase.orgNumber ,
-                            "Created " + (SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription)
+                            "Generated " + (SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription)
                             , docName);
-                    Audit.addAuditEntry("Created " + SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription);
+                    Audit.addAuditEntry("Generated " + SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription);
                     break;
                 case "Civil Service Commission":
                     Activity.addActivtyORGCase("CSC", cscCase.cscNumber ,
-                            "Created " + (SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription)
+                            "Generated " + (SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription)
                             , docName);
-                    Audit.addAuditEntry("Created " + SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription);
+                    Audit.addAuditEntry("Generated " + SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription);
                     break;
                 default:
-                    Activity.addActivty("Created " + (SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription), docName);
-                    Audit.addAuditEntry("Created " + SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription);
+                    Activity.addActivty("Generated " + (SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription), docName);
+                    Audit.addAuditEntry("Generated " + SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription);
                     break;
             }
 

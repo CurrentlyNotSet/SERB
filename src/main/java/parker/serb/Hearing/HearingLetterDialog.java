@@ -11,6 +11,7 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import parker.serb.Global;
 import parker.serb.letterGeneration.LetterGenerationPanel;
+import parker.serb.sql.Audit;
 import parker.serb.sql.SMDSDocuments;
 import parker.serb.util.Item;
 
@@ -18,7 +19,7 @@ import parker.serb.util.Item;
  *
  * @author parker
  */
-public class HearingsLetterDialog extends javax.swing.JDialog {
+public class HearingLetterDialog extends javax.swing.JDialog {
 
     String section;
 
@@ -27,7 +28,7 @@ public class HearingsLetterDialog extends javax.swing.JDialog {
      * @param parent
      * @param modal
      */
-    public HearingsLetterDialog(java.awt.Frame parent, boolean modal) {
+    public HearingLetterDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         loadReports();
@@ -58,6 +59,7 @@ public class HearingsLetterDialog extends javax.swing.JDialog {
             File templateFile = new File(Global.templatePath + Global.activeSection + File.separator + template.fileName);
 
             if (templateFile.exists()){
+                Audit.addAuditEntry("Generated Hearing Letter: " + templateFile);
                 new LetterGenerationPanel(Global.root, true, template, null);
             } else {
                 WebOptionPane.showMessageDialog(Global.root, "<html><center> Sorry, unable to locate temaplate. <br><br>" + template.fileName + "</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);

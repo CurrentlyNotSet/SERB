@@ -9,8 +9,8 @@ import com.jacob.com.Dispatch;
 import java.util.List;
 import parker.serb.Global;
 import parker.serb.sql.CaseParty;
-import parker.serb.util.StringUtilities;
 import parker.serb.sql.ORGCase;
+import parker.serb.util.StringUtilities;
 
 /**
  *
@@ -19,7 +19,7 @@ import parker.serb.sql.ORGCase;
 public class processORGbookmarks {
 
     public static Dispatch processDoAORGWordLetter(Dispatch Document, boolean toRep, List<Integer> toParties, List<Integer> ccParties, ORGCase item) {
-        //get basic information  
+        //get basic information
         List<CaseParty> partyList = CaseParty.loadPartiesByCase(null, "ORG", null, item.orgNumber);
 
         String repNames = "";
@@ -29,27 +29,31 @@ public class processORGbookmarks {
         String toAddressBlock = "";
         String ccNameBlock = "";
         String certifiedDate = "";
-        
+
         for (CaseParty party : partyList){
-            
-            for (int person : toParties){
-                if (person == party.id) {
-                     if (!"".equals(toAddressBlock.trim())){
-                        toAddressBlock += "\n\n";
+
+            if (toParties != null) {
+                for (int person : toParties) {
+                    if (person == party.id) {
+                        if (!"".equals(toAddressBlock.trim())) {
+                            toAddressBlock += "\n\n";
+                        }
+                        toAddressBlock += StringUtilities.buildCasePartyAddressBlock(party);
                     }
-                     toAddressBlock += StringUtilities.buildCasePartyAddressBlock(party);
                 }
             }
-            
-            for (int person : ccParties){
-                if (person == party.id) {
-                     if (!"".equals(ccNameBlock.trim())){
-                        ccNameBlock += ",\n";
+
+            if (ccParties != null) {
+                for (int person : ccParties) {
+                    if (person == party.id) {
+                        if (!"".equals(ccNameBlock.trim())) {
+                            ccNameBlock += ",\n";
+                        }
+                        ccNameBlock += StringUtilities.buildCasePartyNameNoPreFix(party);
                     }
-                     ccNameBlock += StringUtilities.buildCasePartyNameNoPreFix(party);
                 }
             }
-            
+
             if (null != party.caseRelation)switch (party.caseRelation) {
                 case "Representative":
                     if (!"".equals(repNames.trim())){
@@ -73,23 +77,23 @@ public class processORGbookmarks {
                     break;
             }
         }
-        
+
         String orgAddressBlock = "";
         CaseParty orgAddress = new CaseParty();
-        
+
         orgAddress.address1 = item.orgAddress1;
         orgAddress.address2 = item.orgAddress2;
         orgAddress.city = item.orgCity;
         orgAddress.stateCode = item.orgState;
         orgAddress.zipcode = item.orgZip;
         orgAddressBlock = StringUtilities.buildCasePartyNameNoPreFix(orgAddress);
-        
+
         if (item.certifiedDate != null){
             certifiedDate = Global.MMMMddyyyy.format(item.certifiedDate);
         }
-                        
+
         //ProcessBookmarks
-        for (int i = 0; i < Global.BOOKMARK_LIMIT; i++) {   
+        for (int i = 0; i < Global.BOOKMARK_LIMIT; i++) {
             if (toRep){
                 processBookmark.process("RepName" + (i == 0 ? "" : i), repNames, Document);
                 processBookmark.process("RepSalutation" + (i == 0 ? "" : i), repNames, Document);
@@ -104,10 +108,10 @@ public class processORGbookmarks {
             processBookmark.process("OrgName" + (i == 0 ? "" : i), item.orgName, Document);
             processBookmark.process("OrgNum" + (i == 0 ? "" : i), item.orgNumber, Document);
             processBookmark.process("CertifiedDate" + (i == 0 ? "" : i), certifiedDate, Document);
-            
+
             processBookmark.process("CCList" + (i == 0 ? "" : i), ccNameBlock, Document);
         }
         return Document;
     }
-    
+
 }
