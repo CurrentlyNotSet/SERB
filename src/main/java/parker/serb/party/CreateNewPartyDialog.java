@@ -206,11 +206,7 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
     
     private void validateCreateButton() {
         if(firstNameTextBox.getText().equals("") ||
-                lastNameTextBox.getText().equals("") ||
-                address1TextBox.getText().equals("") ||
-                cityTextBox.getText().equals("") ||
-                stateComboBox.getSelectedItem().toString().equals("") ||
-                zipCodeTextBox.getText().equals("")) {
+                lastNameTextBox.getText().equals("")) {
             jButton1.setEnabled(false);
         } else {
             jButton1.setEnabled(true);
