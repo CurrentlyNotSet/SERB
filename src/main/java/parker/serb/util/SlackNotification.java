@@ -26,6 +26,7 @@ public class SlackNotification {
             message += "Class Name: " + Thread.currentThread().getStackTrace()[2].getClassName() + "\n";
             message += "Method Name: " + Thread.currentThread().getStackTrace()[2].getMethodName() + "\n";
             message += "Exception Type: " + ex.getClass().getSimpleName() + "\n";
+            message += "Exception Short: " + ex.toString() + "\n";
 //            message += "Stack Trace: " + convertStackTrace(ex);
 
             new Slack(Global.SLACK_HOOK)
