@@ -492,6 +492,7 @@ public class questionsCMDSPanel extends JDialog {
         responseDueWebDateField = new WebDateField();
         responseDueWebDateField.setPreferredSize(new Dimension(150, 25));
         responseDueWebDateField.setDateFormat(Global.mmddyyyy);
+        responseDueWebDateField.setEditable(false);
         panel.setBorder(BorderFactory.createEtchedBorder());
         panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
         
@@ -706,6 +707,7 @@ public class questionsCMDSPanel extends JDialog {
         appellantAppointedWebDateField = new WebDateField();
         appellantAppointedWebDateField.setPreferredSize(new Dimension(150, 25));
         appellantAppointedWebDateField.setDateFormat(Global.mmddyyyy);
+        appellantAppointedWebDateField.setEditable(false);
         panel.setBorder(BorderFactory.createEtchedBorder());
         panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
         
@@ -778,6 +780,7 @@ public class questionsCMDSPanel extends JDialog {
         hearingDateWebDateField = new WebDateField();
         hearingDateWebDateField.setPreferredSize(new Dimension(150, 25));
         hearingDateWebDateField.setDateFormat(Global.mmddyyyy);
+        hearingDateWebDateField.setEditable(false);
         panel.setBorder(BorderFactory.createEtchedBorder());
         panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
         
@@ -839,6 +842,7 @@ public class questionsCMDSPanel extends JDialog {
         hearingDateServedWebDateField = new WebDateField();
         hearingDateServedWebDateField.setPreferredSize(new Dimension(150, 25));
         hearingDateServedWebDateField.setDateFormat(Global.mmddyyyy);
+        hearingDateServedWebDateField.setEditable(false);
         panel.setBorder(BorderFactory.createEtchedBorder());
         panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
         
@@ -972,6 +976,7 @@ public class questionsCMDSPanel extends JDialog {
         firstLetterSentWebDateField = new WebDateField();
         firstLetterSentWebDateField.setPreferredSize(new Dimension(150, 25));
         firstLetterSentWebDateField.setDateFormat(Global.mmddyyyy);
+        firstLetterSentWebDateField.setEditable(false);
         panel.setBorder(BorderFactory.createEtchedBorder());
         panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
                 
@@ -1084,6 +1089,7 @@ public class questionsCMDSPanel extends JDialog {
         stayDateWebDateField = new WebDateField();
         stayDateWebDateField.setPreferredSize(new Dimension(150, 25));
         stayDateWebDateField.setDateFormat(Global.mmddyyyy);
+        stayDateWebDateField.setEditable(false);
         panel.setBorder(BorderFactory.createEtchedBorder());
         panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
         
@@ -1151,6 +1157,7 @@ public class questionsCMDSPanel extends JDialog {
         lastUpdateWebDateField = new WebDateField();
         lastUpdateWebDateField.setPreferredSize(new Dimension(150, 25));
         lastUpdateWebDateField.setDateFormat(Global.mmddyyyy);
+        lastUpdateWebDateField.setEditable(false);
         panel.setBorder(BorderFactory.createEtchedBorder());
         panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
         
@@ -1182,6 +1189,7 @@ public class questionsCMDSPanel extends JDialog {
         matterContinuedWebDateField = new WebDateField();
         matterContinuedWebDateField.setPreferredSize(new Dimension(150, 25));
         matterContinuedWebDateField.setDateFormat(Global.mmddyyyy);
+        matterContinuedWebDateField.setEditable(false);
         panel.setBorder(BorderFactory.createEtchedBorder());
         panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
         
@@ -1213,6 +1221,7 @@ public class questionsCMDSPanel extends JDialog {
         settleMentDueWebDateField = new WebDateField();
         settleMentDueWebDateField.setPreferredSize(new Dimension(150, 25));
         settleMentDueWebDateField.setDateFormat(Global.mmddyyyy);
+        settleMentDueWebDateField.setEditable(false);
         panel.setBorder(BorderFactory.createEtchedBorder());
         panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
         
@@ -1493,6 +1502,7 @@ public class questionsCMDSPanel extends JDialog {
         dateFiledWebDateField = new WebDateField();
         dateFiledWebDateField.setPreferredSize(new Dimension(150, 25));
         dateFiledWebDateField.setDateFormat(Global.mmddyyyy);
+        dateFiledWebDateField.setEditable(false);
         panel.setBorder(BorderFactory.createEtchedBorder());
         panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
         
@@ -1615,6 +1625,7 @@ public class questionsCMDSPanel extends JDialog {
         datePOSentWebDateField = new WebDateField();
         datePOSentWebDateField.setPreferredSize(new Dimension(150, 25));
         datePOSentWebDateField.setDateFormat(Global.mmddyyyy);
+        datePOSentWebDateField.setEditable(false);
         panel.setBorder(BorderFactory.createEtchedBorder());
         panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
         
@@ -1819,6 +1830,7 @@ public class questionsCMDSPanel extends JDialog {
         JLabel actionLabel = new JLabel();
         dateRequestedWebDateField = new WebDateField();
         dateRequestedWebDateField.setDateFormat(Global.mmddyyyy);
+        dateRequestedWebDateField.setEditable(false);
         dateRequestedWebDateField.setPreferredSize(new Dimension(150, 25));
         panel.setBorder(BorderFactory.createEtchedBorder());
         panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
@@ -1891,6 +1903,7 @@ public class questionsCMDSPanel extends JDialog {
         dateRequestedExtensionWebDateField = new WebDateField();
         dateRequestedExtensionWebDateField.setPreferredSize(new Dimension(150, 25));
         dateRequestedExtensionWebDateField.setDateFormat(Global.mmddyyyy);
+        dateRequestedExtensionWebDateField.setEditable(false);
         panel.setBorder(BorderFactory.createEtchedBorder());
         panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
         

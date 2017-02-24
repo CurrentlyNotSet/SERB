@@ -285,12 +285,8 @@ public class processCMDSbookmarks {
             }
         }
 
-        if (answers.getAppealTypeLS() != null) {
-            if (!answers.getAppealTypeLS().trim().equals("")) {
-                dateRequestedString = answers.getAppealTypeLS();
-            }
-        }
-        if (answers.getRequestingPartyContinuance() != null) {
+        
+        if (answers.getDateRequestedContinuance() != null) {
             if (!answers.getRequestingPartyContinuance().trim().equals("")) {
                 dateRequestedString = answers.getRequestingPartyContinuance();
             }
@@ -298,11 +294,6 @@ public class processCMDSbookmarks {
         if (answers.getDateRequestedExtension() != null) {
             if (!answers.getDateRequestedExtension().trim().equals("")) {
                 dateRequestedString = answers.getDateRequestedExtension();
-            }
-        }
-        if (answers.getRequestingPartyConsolidation() != null) {
-            if (!answers.getRequestingPartyConsolidation().trim().equals("")) {
-                dateRequestedString = answers.getRequestingPartyConsolidation();
             }
         }
 
@@ -511,6 +502,7 @@ public class processCMDSbookmarks {
             processBookmark.process("TOTAL" + (i == 0 ? "" : i), total, Document);
             processBookmark.process("DateRequested" + (i == 0 ? "" : i), dateRequestedString, Document);
             processBookmark.process("DateResponseDue" + (i == 0 ? "" : i), dateResponseDueString, Document);
+            processBookmark.process("DateResponseDuePartyType" + (i == 0 ? "" : i), answers.getRequestingPartyConsolidation(), Document);
         }
 
         return Document;
