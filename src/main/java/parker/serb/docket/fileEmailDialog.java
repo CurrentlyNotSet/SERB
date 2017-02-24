@@ -5,6 +5,7 @@
  */
 package parker.serb.docket;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,6 +23,7 @@ import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -52,6 +54,7 @@ public class fileEmailDialog extends javax.swing.JDialog {
     public fileEmailDialog(java.awt.Frame parent, boolean modal, String id, String section, String time) {
         super(parent, modal);
         initComponents();
+        addRenderer();
         emailID = id;
         emailSection = section;
         passedTime = time;
@@ -61,6 +64,21 @@ public class fileEmailDialog extends javax.swing.JDialog {
         setColumnWidth();
         setLocationRelativeTo(parent);
         setVisible(true);
+    }
+    
+    private void addRenderer() {
+        attachmentTable.setDefaultRenderer(Object.class, new TableCellRenderer(){
+            private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component c = DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+                if (!isSelected) {
+                    c.setBackground(row % 2 == 0 ? Color.WHITE : Global.ALTERNATE_ROW_COLOR);
+                }
+                return c;
+            }
+        });
     }
     
     private void setCaseNumberTitle(String section) {

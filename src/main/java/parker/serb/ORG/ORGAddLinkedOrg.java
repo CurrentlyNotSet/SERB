@@ -5,8 +5,14 @@
  */
 package parker.serb.ORG;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.util.List;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import parker.serb.Global;
 import parker.serb.sql.ORGCase;
 
 /**
@@ -22,12 +28,32 @@ public class ORGAddLinkedOrg extends javax.swing.JDialog {
     public ORGAddLinkedOrg(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        jTable1.getColumnModel().getColumn(0).setPreferredWidth(175);
-        jTable1.getColumnModel().getColumn(0).setMinWidth(175);
-        jTable1.getColumnModel().getColumn(0).setMaxWidth(175);
+        addRenderer();
+        setColumnWidth();
         loadInformation();
         setLocationRelativeTo(parent);
         setVisible(true);
+    }
+    
+    private void addRenderer() {
+        jTable1.setDefaultRenderer(Object.class, new TableCellRenderer(){
+            private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component c = DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+                if (!isSelected) {
+                    c.setBackground(row % 2 == 0 ? Color.WHITE : Global.ALTERNATE_ROW_COLOR);
+                }
+                return c;
+            }
+        });
+    }
+    
+    private void setColumnWidth() {
+        jTable1.getColumnModel().getColumn(0).setPreferredWidth(175);
+        jTable1.getColumnModel().getColumn(0).setMinWidth(175);
+        jTable1.getColumnModel().getColumn(0).setMaxWidth(175);
     }
     
     private void loadInformation() {

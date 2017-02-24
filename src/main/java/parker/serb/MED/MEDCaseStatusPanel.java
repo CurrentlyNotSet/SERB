@@ -9,12 +9,16 @@ import com.alee.extended.date.WebCalendar;
 import com.alee.extended.date.WebDateField;
 import com.alee.utils.swing.Customizer;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import parker.serb.Global;
 import parker.serb.bunumber.buNumberSearch;
 import parker.serb.employer.employerDetail;
@@ -39,8 +43,24 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
      */
     public MEDCaseStatusPanel() {
         initComponents();
+        addRenderer();
         relatedCaseModel = (DefaultTableModel) relatedCaseTable.getModel();
         addMultiCaseButton.setVisible(false);
+    }
+    
+    private void addRenderer() {
+        relatedCaseTable.setDefaultRenderer(Object.class, new TableCellRenderer(){
+            private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component c = DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+                if (!isSelected) {
+                    c.setBackground(row % 2 == 0 ? Color.WHITE : Global.ALTERNATE_ROW_COLOR);
+                }
+                return c;
+            }
+        });
     }
     
     public void clearAll() {

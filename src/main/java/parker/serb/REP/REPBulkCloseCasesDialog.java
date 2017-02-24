@@ -6,9 +6,14 @@ package parker.serb.REP;
 
 import com.alee.extended.date.WebCalendar;
 import com.alee.utils.swing.Customizer;
+import java.awt.Color;
+import java.awt.Component;
 import java.util.Date;
 import java.util.List;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import parker.serb.Global;
 import parker.serb.report.GenerateReport;
 import parker.serb.sql.Activity;
@@ -33,9 +38,25 @@ public class REPBulkCloseCasesDialog extends javax.swing.JFrame {
      */
     public REPBulkCloseCasesDialog(java.awt.Frame parent, boolean modal) {
         initComponents();
+        addRenderer();
         setActive();
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
+    }
+    
+    private void addRenderer() {
+        caseTable.setDefaultRenderer(Object.class, new TableCellRenderer(){
+            private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component c = DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+                if (!isSelected) {
+                    c.setBackground(row % 2 == 0 ? Color.WHITE : Global.ALTERNATE_ROW_COLOR);
+                }
+                return c;
+            }
+        });
     }
 
     private void setActive(){
