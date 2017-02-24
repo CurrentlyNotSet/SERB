@@ -9,6 +9,8 @@ import com.alee.extended.date.WebCalendar;
 import com.alee.extended.date.WebDateField;
 import com.alee.laf.optionpane.WebOptionPane;
 import com.alee.utils.swing.Customizer;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.MouseEvent;
@@ -25,7 +27,10 @@ import java.util.concurrent.Executors;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import parker.serb.Global;
 import parker.serb.bookmarkProcessing.generateDocument;
@@ -71,9 +76,51 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
     public LetterGenerationPanel(java.awt.Frame parent, boolean modal, SMDSDocuments SMDSdocumentToGeneratePassed, CMDSDocuments CMDSdocumentToGeneratePassed) {
         super(parent, modal);
         initComponents();
+        addRenderer();
         loadPanel(SMDSdocumentToGeneratePassed, CMDSdocumentToGeneratePassed);
         setLocationRelativeTo(parent);
         setVisible(true);
+    }
+    
+    private void addRenderer() {
+        personTable.setDefaultRenderer(Object.class, new TableCellRenderer(){
+            private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component c = DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+                if (!isSelected) {
+                    c.setBackground(row % 2 == 0 ? Color.WHITE : Global.ALTERNATE_ROW_COLOR);
+                }
+                return c;
+            }
+        });
+        
+        activityTable.setDefaultRenderer(Object.class, new TableCellRenderer(){
+            private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component c = DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+                if (!isSelected) {
+                    c.setBackground(row % 2 == 0 ? Color.WHITE : Global.ALTERNATE_ROW_COLOR);
+                }
+                return c;
+            }
+        });
+        
+        additionalDocsTable.setDefaultRenderer(Object.class, new TableCellRenderer(){
+            private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component c = DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+                if (!isSelected) {
+                    c.setBackground(row % 2 == 0 ? Color.WHITE : Global.ALTERNATE_ROW_COLOR);
+                }
+                return c;
+            }
+        });
     }
 
     private void loadPanel(SMDSDocuments SMDSdocumentToGeneratePassed, CMDSDocuments CMDSdocumentToGeneratePassed) {
@@ -314,6 +361,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
             case "Hearings":
                 break;
             case "Civil Service Commission":
+                documentList = SMDSDocuments.loadDocumentNamesByTypeAndSection("CSC", "Quest");
                 break;
             case "CMDS":
                 break;
@@ -335,7 +383,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                             && doc.fileName.equals("RegistrationReportForm.pdf")) {
                         selected = true;
                     }
-                    
+
                     model.addRow(new Object[]{
                         doc.id,
                         selected,
@@ -463,24 +511,24 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
 
             switch (Global.activeSection) {
                 case "CMDS":
-                    Activity.addActivty("Created " + CMDSdocToGenerate.LetterName, docName);
-                    Audit.addAuditEntry("Created " + CMDSdocToGenerate.LetterName);
+                    Activity.addActivty("Generated " + CMDSdocToGenerate.LetterName, docName);
+                    Audit.addAuditEntry("Generated " + CMDSdocToGenerate.LetterName);
                     break;
                 case "ORG":
                     Activity.addActivtyORGCase("ORG", orgCase.orgNumber ,
-                            "Created " + (SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription)
+                            "Generated " + (SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription)
                             , docName);
-                    Audit.addAuditEntry("Created " + SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription);
+                    Audit.addAuditEntry("Generated " + SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription);
                     break;
                 case "Civil Service Commission":
                     Activity.addActivtyORGCase("CSC", cscCase.cscNumber ,
-                            "Created " + (SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription)
+                            "Generated " + (SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription)
                             , docName);
-                    Audit.addAuditEntry("Created " + SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription);
+                    Audit.addAuditEntry("Generated " + SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription);
                     break;
                 default:
-                    Activity.addActivty("Created " + (SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription), docName);
-                    Audit.addAuditEntry("Created " + SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription);
+                    Activity.addActivty("Generated " + (SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription), docName);
+                    Audit.addAuditEntry("Generated " + SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription);
                     break;
             }
 

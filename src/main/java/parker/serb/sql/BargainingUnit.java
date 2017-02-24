@@ -39,6 +39,7 @@ public class BargainingUnit {
     public String notes;
     
     public static String getCertStatus(String number) {
+        
         String[] buNumberParts = number.split("-");
         String certStatus = "";
         

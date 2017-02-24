@@ -415,7 +415,7 @@ public class scanFileDialog extends javax.swing.JDialog {
 
             jLabel11.setText("In or Out:");
 
-            directionComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "In", "Out" }));
+            directionComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "IN", "OUT" }));
 
             javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
             getContentPane().setLayout(layout);

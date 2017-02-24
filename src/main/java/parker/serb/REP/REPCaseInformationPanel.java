@@ -9,13 +9,17 @@ import com.alee.extended.date.WebCalendar;
 import com.alee.extended.date.WebDateField;
 import com.alee.utils.swing.Customizer;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import parker.serb.Global;
 import parker.serb.bunumber.buNumberSearch;
 import parker.serb.employer.employerDetail;
@@ -46,8 +50,24 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
      */
     public REPCaseInformationPanel() {
         initComponents();
+        addRenderer();
         relatedCaseModel = (DefaultTableModel) relatedCaseTable.getModel();
         addRelatedCaseButton.setVisible(false);
+    }
+    
+    private void addRenderer() {
+        relatedCaseTable.setDefaultRenderer(Object.class, new TableCellRenderer(){
+            private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component c = DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+                if (!isSelected) {
+                    c.setBackground(row % 2 == 0 ? Color.WHITE : Global.ALTERNATE_ROW_COLOR);
+                }
+                return c;
+            }
+        });
     }
 
     void enableUpdate() {
@@ -540,6 +560,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
 
         currentOwnerComboBox.setEnabled(false);
 
+        employerIDNumberTextBox.setEditable(false);
         employerIDNumberTextBox.setBackground(new java.awt.Color(238, 238, 238));
         employerIDNumberTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         employerIDNumberTextBox.setEnabled(false);
@@ -549,6 +570,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
             }
         });
 
+        bargainingUnitNumberTextBox.setEditable(false);
         bargainingUnitNumberTextBox.setBackground(new java.awt.Color(238, 238, 238));
         bargainingUnitNumberTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         bargainingUnitNumberTextBox.setEnabled(false);
@@ -1197,7 +1219,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_actualClerksClosedDateMouseClicked
 
     private void bargainingUnitNumberTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bargainingUnitNumberTextBoxMouseClicked
-        if(evt.getClickCount() == 2 && evt.getButton() == MouseEvent.BUTTON3) {
+        if(evt.getClickCount() == 2 && evt.getButton() == MouseEvent.BUTTON1) {
             if(bargainingUnitNumberTextBox.isEnabled()) {
                 buNumberSearch search = new buNumberSearch(
                         (JFrame) Global.root.getRootPane().getParent(),
@@ -1205,8 +1227,8 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
                         employerIDNumberTextBox.getText().trim(),
                         bargainingUnitNumberTextBox.getText().trim(),
                         bargainingUnitNameTextBox.getText().trim());
-                bargainingUnitNumberTextBox.setText(search.getBuNumber());
-                bargainingUnitNameTextBox.setText(search.getUnitDesc());
+                bargainingUnitNumberTextBox.setText(search.getBuNumber().contains("-") ? search.getBuNumber() : "");
+                bargainingUnitNameTextBox.setText(search.getBuNumber().contains("-") ? search.getUnitDesc() : "");
                 bargainingUnitNameTextBox.setCaretPosition(0);
                 if(search.getCertStatus() != null || !search.getCertStatus().equals("")) {
                     setBUNumberCheckBoxes(search.getCertStatus());

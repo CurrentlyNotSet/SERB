@@ -106,6 +106,7 @@ public class CMDSCaseHistoryEntryTypes {
                 addQEntryType(entryDescription,
                 extraText, partyType, mailType, entryDate, 
                 dialog, filePath);
+                break;
             case "R": 
                 addREntryType(entryDescription,
                 extraText, partyType, mailType, entryDate, 

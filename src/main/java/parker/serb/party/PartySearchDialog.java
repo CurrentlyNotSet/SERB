@@ -5,19 +5,22 @@
  */
 package parker.serb.party;
 
-import parker.serb.util.NumberFormatService;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.JTable;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import parker.serb.Global;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.Party;
 
-//TODO: Check that a party is not already in the DB
 
 /**
  *
@@ -32,11 +35,27 @@ public class PartySearchDialog extends javax.swing.JDialog {
     public PartySearchDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        addRenderer();
         setTableColumnWidths();
         addListeners();
         loadParties();
         setLocationRelativeTo(parent);
         setVisible(true);
+    }
+    
+    private void addRenderer() {
+        jTable1.setDefaultRenderer(Object.class, new TableCellRenderer(){
+            private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component c = DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+                if (!isSelected) {
+                    c.setBackground(row % 2 == 0 ? Color.WHITE : Global.ALTERNATE_ROW_COLOR);
+                }
+                return c;
+            }
+        });
     }
     
     private void setTableColumnWidths() {

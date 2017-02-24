@@ -15,15 +15,15 @@ public class ConfirmationDialog extends javax.swing.JDialog {
 
     String type;
     int letterID;
-    
+
     public ConfirmationDialog(java.awt.Frame parent, boolean modal, String typePassed, int letterIDPassed) {
         super(parent, modal);
         initComponents();
         loadPanel(typePassed, letterIDPassed);
         setLocationRelativeTo(parent);
-        setVisible(true);   
+        setVisible(true);
     }
-    
+
     private void loadPanel(String typePassed, int letterIDPassed) {
         loadingPanel.setVisible(false);
         type = typePassed;
@@ -45,7 +45,7 @@ public class ConfirmationDialog extends javax.swing.JDialog {
         });
         temp.start();
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

@@ -23,7 +23,7 @@ import parker.serb.CSC.CSCLetterDialog;
 import parker.serb.CSC.CSCRootPanel;
 import parker.serb.Hearing.HearingHeaderPanel;
 import parker.serb.Hearing.HearingRootPanel;
-import parker.serb.Hearing.HearingsLetterDialog;
+import parker.serb.Hearing.HearingLetterDialog;
 import parker.serb.MED.MEDBulkHandleCases;
 import parker.serb.MED.MEDHeaderPanel;
 import parker.serb.MED.MEDLetterDialog;
@@ -343,7 +343,7 @@ public class RootPanel extends javax.swing.JFrame {
                 jButton9.setMinimumSize(dim);
                 jButton9.setMaximumSize(dim);
                 jButton9.setEnabled(false);
-                jButton9.setVisible(false);
+                jButton9.setVisible(true);
                 break;
             case "REP":
                 jButton1.setSize(dim);
@@ -1946,7 +1946,7 @@ public class RootPanel extends javax.swing.JFrame {
                 new CSCLetterDialog((JFrame) this.getRootPane().getParent(), true);
                 break;
             case "Hearings":
-                new HearingsLetterDialog((JFrame) this.getRootPane().getParent(), true);
+                new HearingLetterDialog((JFrame) this.getRootPane().getParent(), true);
                 break;
             default:
                 break;

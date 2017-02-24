@@ -83,21 +83,25 @@ public class processMEDbookmarks {
 
         for (CaseParty party : partyList) {
 
-            for (int person : toParties) {
-                if (person == party.id) {
-                    if (!"".equals(toAddressBlock.trim())) {
-                        toAddressBlock += "\n\n";
+            if (toParties != null) {
+                for (int person : toParties) {
+                    if (person == party.id) {
+                        if (!"".equals(toAddressBlock.trim())) {
+                            toAddressBlock += "\n\n";
+                        }
+                        toAddressBlock += StringUtilities.buildCasePartyAddressBlock(party);
                     }
-                    toAddressBlock += StringUtilities.buildCasePartyAddressBlock(party);
                 }
             }
 
-            for (int person : ccParties) {
-                if (person == party.id) {
-                    if (!"".equals(ccNameBlock.trim())) {
-                        ccNameBlock += ",\n";
+            if (ccParties != null) {
+                for (int person : ccParties) {
+                    if (person == party.id) {
+                        if (!"".equals(ccNameBlock.trim())) {
+                            ccNameBlock += ",\n";
+                        }
+                        ccNameBlock += StringUtilities.buildCasePartyNameNoPreFix(party);
                     }
-                    ccNameBlock += StringUtilities.buildCasePartyNameNoPreFix(party);
                 }
             }
 

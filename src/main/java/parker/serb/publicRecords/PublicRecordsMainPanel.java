@@ -85,6 +85,7 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
                     c.setBackground(caseDocsTable.getBackground());
                     c.setForeground(caseDocsTable.getForeground());
                 }
+                
                 return c;
             }
         });

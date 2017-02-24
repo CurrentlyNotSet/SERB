@@ -87,6 +87,58 @@ public class SMDSDocuments {
         return documentList;
     }
 
+    public static List loadDocumentNamesByTypeAndSectionWithAll(String section, String type) {
+        List<SMDSDocuments> documentList = new ArrayList<>();
+
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT * FROM SMDSDocuments WHERE"
+                    + " (section = 'ALL' OR"
+                    + " section = ?) AND"
+                    + " type = ? AND"
+                    + " fileName != 'MailLog.jasper' AND"
+                    + " active = 1"
+                    + " ORDER BY sortOrder, cast(description AS nvarchar(max))";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, section);
+            preparedStatement.setString(2, type);
+
+            ResultSet docList = preparedStatement.executeQuery();
+
+            while(docList.next()) {
+                SMDSDocuments doc = new SMDSDocuments();
+                doc.id = docList.getInt("id");
+                doc.active = docList.getBoolean("active");
+                doc.section = docList.getString("section");
+                doc.type = docList.getString("type");
+                doc.description = docList.getString("description");
+                doc.fileName = docList.getString("fileName");
+                doc.dueDate = docList.getInt("dueDate");
+                doc.group = docList.getString("group");
+                doc.historyFileName = docList.getString("historyFileName");
+                doc.historyDescription = docList.getString("historyDescription");
+                doc.CHDCHG = docList.getString("CHDCHG");
+                doc.questionsFileName = docList.getString("questionsFileName");
+                doc.emailSubject = docList.getString("emailSubject");
+                doc.parameters = docList.getString("parameters");
+                doc.emailBody = docList.getString("emailBody");
+                doc.sortOrder = docList.getDouble("sortOrder");
+                documentList.add(doc);
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadDocumentNamesByTypeAndSection(section, type);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return documentList;
+    }
+
     public static List loadDocumentGroupByTypeAndSection(String section, String type) {
         List<String> documentList = new ArrayList<>();
 
@@ -248,6 +300,50 @@ public class SMDSDocuments {
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setInt(1, id);
+
+            ResultSet foundDoc = preparedStatement.executeQuery();
+
+            if(foundDoc.next()) {
+                doc.id = foundDoc.getInt("id");
+                doc.active = foundDoc.getBoolean("active");
+                doc.section = foundDoc.getString("section");
+                doc.type = foundDoc.getString("type");
+                doc.description = foundDoc.getString("description");
+                doc.fileName = foundDoc.getString("fileName");
+                doc.dueDate = foundDoc.getInt("dueDate");
+                doc.group = foundDoc.getString("group");
+                doc.historyFileName = foundDoc.getString("historyFileName");
+                doc.historyDescription = foundDoc.getString("historyDescription");
+                doc.CHDCHG = foundDoc.getString("CHDCHG");
+                doc.questionsFileName = foundDoc.getString("questionsFileName");
+                doc.emailSubject = foundDoc.getString("emailSubject");
+                doc.parameters = foundDoc.getString("parameters");
+                doc.emailBody = foundDoc.getString("emailBody");
+                doc.sortOrder = foundDoc.getDouble("sortOrder");
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                findDocumentByID(id);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return doc;
+    }
+
+    public static SMDSDocuments findDocumentByIDAndDescription(int id, String description) {
+        SMDSDocuments doc = new SMDSDocuments();
+
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select * from SMDSDocuments where id = ? AND description = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+            preparedStatement.setString(1, description);
 
             ResultSet foundDoc = preparedStatement.executeQuery();
 
