@@ -418,7 +418,7 @@ public class User {
         try {
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "Select * from Users where active = 1 and investigator = true";
+            String sql = "Select * from Users where active = 1 and investigator = 1";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
