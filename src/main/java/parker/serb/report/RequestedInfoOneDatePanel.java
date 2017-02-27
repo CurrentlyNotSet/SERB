@@ -82,9 +82,9 @@ public class RequestedInfoOneDatePanel extends javax.swing.JDialog {
                     calendar.setStartWeekFromSunday ( true );
                 }
             } );
-            startDateField.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    startDateFieldActionPerformed(evt);
+            startDateField.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    startDateFieldMouseClicked(evt);
                 }
             });
 
@@ -158,9 +158,9 @@ public class RequestedInfoOneDatePanel extends javax.swing.JDialog {
         GenerateReport.generateSingleDatesReport(startDateField.getText(), report);
     }//GEN-LAST:event_GenerateReportButtonActionPerformed
 
-    private void startDateFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startDateFieldActionPerformed
+    private void startDateFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_startDateFieldMouseClicked
         generateButton();
-    }//GEN-LAST:event_startDateFieldActionPerformed
+    }//GEN-LAST:event_startDateFieldMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CancelButton;

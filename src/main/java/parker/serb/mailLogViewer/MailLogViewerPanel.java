@@ -330,20 +330,22 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
     }//GEN-LAST:event_PrintButtonActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-        String fileName = jTable1.getValueAt(jTable1.getSelectedRow(), 6).toString();
-        String[] caseNumber = jTable1.getValueAt(jTable1.getSelectedRow(), 6).toString().trim().split("-");
+        if (jTable1.getSelectedRow() > -1){
+            String fileName = jTable1.getValueAt(jTable1.getSelectedRow(), 6).toString();
+            String[] caseNumber = jTable1.getValueAt(jTable1.getSelectedRow(), 2).toString().trim().split("-");
 
-        if(evt.getClickCount() == 2 && !fileName.equals("")) {
-            switch (Global.activeSection) {
-                case "ORG":
-                    FileService.openFileWithORGNumber("ORG", jTable1.getValueAt(jTable1.getSelectedRow(), 6).toString(), fileName);
-                    break;
-                case "Civil Service Commission":
-                    FileService.openFileWithORGNumber("CSC", jTable1.getValueAt(jTable1.getSelectedRow(), 6).toString(), fileName);
-                    break;
-                default:
-                    FileService.openFileWithCaseNumber(Global.activeSection, caseNumber[0], caseNumber[1], caseNumber[2], caseNumber[3], fileName);
-                    break;
+            if(evt.getClickCount() == 2 && !fileName.equals("")) {
+                switch (Global.activeSection) {
+                    case "ORG":
+                        FileService.openFileWithORGNumber("ORG", jTable1.getValueAt(jTable1.getSelectedRow(), 6).toString(), fileName);
+                        break;
+                    case "Civil Service Commission":
+                        FileService.openFileWithORGNumber("CSC", jTable1.getValueAt(jTable1.getSelectedRow(), 6).toString(), fileName);
+                        break;
+                    default:
+                        FileService.openFileWithCaseNumber(Global.activeSection, caseNumber[0], caseNumber[1], caseNumber[2], caseNumber[3], fileName);
+                        break;
+                }
             }
         }
     }//GEN-LAST:event_jTable1MouseClicked

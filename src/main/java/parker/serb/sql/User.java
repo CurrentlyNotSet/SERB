@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.apache.commons.dbutils.DbUtils;
+import org.apache.commons.lang3.StringUtils;
 import parker.serb.Global;
 import parker.serb.login.Password;
 import parker.serb.util.NumberFormatService;
@@ -113,12 +114,12 @@ public class User {
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setBoolean(1, true);
-            preparedStatement.setString (2, item.firstName);
-            preparedStatement.setString (3, item.middleInitial);
-            preparedStatement.setString (4, item.lastName);
-            preparedStatement.setString (5, item.workPhone);
-            preparedStatement.setString (6, item.emailAddress);
-            preparedStatement.setString (7, item.username);
+            preparedStatement.setString (2, StringUtils.left(item.firstName, 25));
+            preparedStatement.setString (3, StringUtils.left(item.middleInitial, 1));
+            preparedStatement.setString (4, StringUtils.left(item.lastName, 50));
+            preparedStatement.setString (5, StringUtils.left(item.workPhone, 10));
+            preparedStatement.setString (6, StringUtils.left(item.emailAddress, 100));
+            preparedStatement.setString (7, StringUtils.left(item.username, 100));
             preparedStatement.setLong   (8, passwordSalt);
             preparedStatement.setString (9, Password.hashPassword(passwordSalt, tempPassword));
             preparedStatement.setTimestamp(10, null);
@@ -417,7 +418,7 @@ public class User {
         try {
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "Select * from Users where active = 1 and investigator = true";
+            String sql = "Select * from Users where active = 1 and investigator = 1";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
@@ -772,12 +773,12 @@ public class User {
                     + " where id = ? and active = 1";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, user.firstName);
-            preparedStatement.setString(2, user.middleInitial);
-            preparedStatement.setString(3, user.lastName);
-            preparedStatement.setString(4, user.username);
-            preparedStatement.setString(5, user.emailAddress);
-            preparedStatement.setString(6, user.workPhone);
+            preparedStatement.setString(1, StringUtils.left(user.firstName, 25));
+            preparedStatement.setString(2, StringUtils.left(user.middleInitial, 1));
+            preparedStatement.setString(3, StringUtils.left(user.lastName, 50));
+            preparedStatement.setString(4, StringUtils.left(user.username, 10));
+            preparedStatement.setString(5, StringUtils.left(user.emailAddress, 100));
+            preparedStatement.setString(6, StringUtils.left(user.workPhone, 10));
             preparedStatement.setString(7, user.defaultSection);
             preparedStatement.setInt(8, Global.activeUser.id);
 
@@ -1048,12 +1049,12 @@ public class User {
                     + "CMDSDocketing = ? "
                     + "where id = ?";
             PreparedStatement ps = stmt.getConnection().prepareStatement(sql);
-            ps.setString ( 1, item.firstName.equals("") ? null : item.firstName.trim());
-            ps.setString ( 2, item.middleInitial.equals("") ? null : item.middleInitial.trim());
-            ps.setString ( 3, item.lastName.equals("") ? null : item.lastName.trim());
-            ps.setString ( 4, item.workPhone.equals("") ? null : item.workPhone.trim());
-            ps.setString ( 5, item.emailAddress.equals("") ? null : item.emailAddress.trim());
-            ps.setString ( 6, item.username.equals("") ? null : item.username.trim());
+            ps.setString ( 1, item.firstName.equals("") ? null : StringUtils.left(item.firstName.trim(), 25));
+            ps.setString ( 2, item.middleInitial.equals("") ? null : StringUtils.left(item.middleInitial.trim(), 1));
+            ps.setString ( 3, item.lastName.equals("") ? null : StringUtils.left(item.lastName.trim(), 50));
+            ps.setString ( 4, item.workPhone.equals("") ? null : StringUtils.left(item.workPhone.trim(), 10));
+            ps.setString ( 5, item.emailAddress.equals("") ? null : StringUtils.left(item.emailAddress.trim(), 100));
+            ps.setString ( 6, item.username.equals("") ? null : StringUtils.left(item.username.trim(), 100));
             ps.setBoolean( 7, item.activeLogIn);
             ps.setBoolean( 8, item.passwordReset);
             ps.setString ( 9, item.defaultSection.equals("") ? null : item.defaultSection.trim());
