@@ -33,12 +33,12 @@ public class BUInformationUpdateDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         id = passedBUID;
-        setLocationRelativeTo(parent);
         disableAll();
         loadDropdowns();
         loadData(passedBUID);
         updateButton.setVisible(Global.activeUser.REPCaseWorker);
         deleteButton.setVisible(Global.activeUser.REPCaseWorker);
+        setLocationRelativeTo(parent);
         setVisible(true);
     }
     
@@ -50,7 +50,7 @@ public class BUInformationUpdateDialog extends javax.swing.JDialog {
         unionTextBox.setText(bu.lUnion);
         localTextBox.setText(bu.local);
         countyComboBox.setSelectedItem(bu.county);
-        CertStatusComboBox.setSelectedItem(bu.cert);
+        CertStatusComboBox.setSelectedItem(getCertStatus(bu.cert));
         activeCheckBox.setSelected(bu.enabled);
         unitDescriptionTextArea.setText(bu.unitDescription);
         
@@ -61,6 +61,33 @@ public class BUInformationUpdateDialog extends javax.swing.JDialog {
         buCodeTextBox.setText(bu.lGroup);
         strikeCheckBox.setSelected(false);
         notesTextArea.setText(bu.notes);
+    }
+    
+    private String getCertStatus(String certString) {
+        String cert = "";
+        
+        switch(certString) {
+            case "B":
+                cert = "Board";
+                break;
+            case "D":
+                cert = "Deemed";
+                break;
+            case "U":
+                cert = "Unknown";
+                break;
+            case "Board":
+                cert = "B";
+                break;
+            case "Deemed":
+                cert = "D";
+                break;
+            case "Unknown":
+                cert = "U";
+                break;
+        }
+        
+        return cert;
     }
     
     private void disableAll() {
@@ -75,7 +102,7 @@ public class BUInformationUpdateDialog extends javax.swing.JDialog {
         countyComboBox.setEnabled(false);
         CertStatusComboBox.setEnabled(false);
         activeCheckBox.setEnabled(false);
-        unitDescriptionTextArea.setEnabled(false);
+        unitDescriptionTextArea.setEditable(false);
         unitDescriptionTextArea.setBackground(new Color(238,238,238));
         
         unitNumberTextBox.setEnabled(false);
@@ -89,9 +116,8 @@ public class BUInformationUpdateDialog extends javax.swing.JDialog {
         buCodeTextBox.setEnabled(false);
         buCodeTextBox.setBackground(new Color(238,238,238));
         strikeCheckBox.setEnabled(false);
-        notesTextArea.setEnabled(false);
+        notesTextArea.setEditable(false);
         notesTextArea.setBackground(new Color(238,238,238));
-        
     }
     
     private void enableAll() {
@@ -106,7 +132,7 @@ public class BUInformationUpdateDialog extends javax.swing.JDialog {
         countyComboBox.setEnabled(true);
         CertStatusComboBox.setEnabled(true);
         activeCheckBox.setEnabled(true);
-        unitDescriptionTextArea.setEnabled(true);
+        unitDescriptionTextArea.setEditable(true);
         unitDescriptionTextArea.setBackground(Color.white);
         
         unitNumberTextBox.setEnabled(true);
@@ -120,7 +146,7 @@ public class BUInformationUpdateDialog extends javax.swing.JDialog {
         buCodeTextBox.setEnabled(true);
         buCodeTextBox.setBackground(Color.white);
         strikeCheckBox.setEnabled(true);
-        notesTextArea.setEnabled(true);
+        notesTextArea.setEditable(true);
         notesTextArea.setBackground(Color.white);
     }
     
@@ -140,10 +166,9 @@ public class BUInformationUpdateDialog extends javax.swing.JDialog {
         //load cert status
         CertStatusComboBox.removeAllItems();
         CertStatusComboBox.addItem("");
-        CertStatusComboBox.addItem("B");
-        CertStatusComboBox.addItem("D");
-        CertStatusComboBox.addItem("N");
-        CertStatusComboBox.addItem("U");
+        CertStatusComboBox.addItem("Board");
+        CertStatusComboBox.addItem("Deemed");
+        CertStatusComboBox.addItem("Unknown");
     }
     
     private void saveInformation() {
@@ -155,7 +180,7 @@ public class BUInformationUpdateDialog extends javax.swing.JDialog {
         buUpdate.lUnion = unionTextBox.getText();
         buUpdate.local = localTextBox.getText();
         buUpdate.county = countyComboBox.getSelectedItem().toString();
-        buUpdate.cert = CertStatusComboBox.getSelectedItem().toString();
+        buUpdate.cert = getCertStatus(CertStatusComboBox.getSelectedItem().toString());
         buUpdate.enabled = activeCheckBox.isSelected();
         buUpdate.unitDescription = unitDescriptionTextArea.getText().trim();
         
@@ -249,7 +274,11 @@ public class BUInformationUpdateDialog extends javax.swing.JDialog {
 
         jLabel2.setText("Employer Number:");
 
+        employerNumberTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+
         jLabel4.setText("Employer Name");
+
+        employerNameTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
 
         jLabel5.setText("Union:");
 
@@ -264,6 +293,10 @@ public class BUInformationUpdateDialog extends javax.swing.JDialog {
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel10.setText("Unit Description");
 
+        unionTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+
+        localTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+
         countyComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         CertStatusComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -272,6 +305,7 @@ public class BUInformationUpdateDialog extends javax.swing.JDialog {
         unitDescriptionTextArea.setLineWrap(true);
         unitDescriptionTextArea.setRows(5);
         unitDescriptionTextArea.setWrapStyleWord(true);
+        unitDescriptionTextArea.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         jScrollPane1.setViewportView(unitDescriptionTextArea);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -367,6 +401,8 @@ public class BUInformationUpdateDialog extends javax.swing.JDialog {
 
             jLabel3.setText("Unit Number:");
 
+            unitNumberTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+
             jLabel11.setText("Certification Date:");
 
             jLabel12.setText("Case Reference:");
@@ -384,7 +420,14 @@ public class BUInformationUpdateDialog extends javax.swing.JDialog {
             notesTextArea.setLineWrap(true);
             notesTextArea.setRows(5);
             notesTextArea.setWrapStyleWord(true);
+            notesTextArea.setDisabledTextColor(new java.awt.Color(0, 0, 0));
             jScrollPane2.setViewportView(notesTextArea);
+
+            caseReferenceTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+
+            jurisdictionTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+
+            buCodeTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
 
             javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
             jPanel5.setLayout(jPanel5Layout);

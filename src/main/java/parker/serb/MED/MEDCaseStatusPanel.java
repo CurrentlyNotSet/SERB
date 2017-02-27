@@ -306,6 +306,7 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
         withdrawlCheckBox.setSelected(orginalInformation.withdrawl == true);
         motionCheckBox.setSelected(orginalInformation.motion == true);
         dismissedCheckBox.setSelected(orginalInformation.dismissed == true);
+        statusComboBox.setSelectedItem(orginalInformation.caseStatus == null ? "" : orginalInformation.caseStatus);
     }
     
     private void setBUNumberCheckBoxes(String certStatus) {
