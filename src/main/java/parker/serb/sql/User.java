@@ -1061,9 +1061,9 @@ public class User {
             ps.setBoolean(11, item.REPCaseWorker);
             ps.setBoolean(12, item.ULPDocketing);
             ps.setBoolean(13, item.REPDocketing);
-            ps.setString (14, item.initials.equals("") ? null : item.initials.trim());
+            ps.setString(14, item.initials.equals("") ? null : item.initials.trim());
             ps.setBoolean(15, item.investigator);
-            ps.setString (16, item.jobTitle.equals("") ? null : item.jobTitle.trim());
+            ps.setString(16, item.jobTitle.equals("") ? null : item.jobTitle.trim());
             ps.setBoolean(17, item.MEDCaseWorker);
             ps.setBoolean(18, item.ORGCaseWorker);
             ps.setBoolean(19, item.CSCCaseWorker);
@@ -1073,7 +1073,7 @@ public class User {
             ps.setBoolean(23, item.MEDDocketing);
             ps.setBoolean(24, item.CSCDocketing);
             ps.setBoolean(25, item.CMDSDocketing);
-            ps.setInt    (26, item.id);
+            ps.setInt(26, item.id);
 
             ps.executeUpdate();
         } catch (SQLException ex) {
