@@ -33,6 +33,7 @@ public class employerSearch extends javax.swing.JDialog {
     String employerNumber;
     String employerName;
     List employers;
+    String county = "";
     /**
      * Creates new form employerSearch
      */
@@ -43,6 +44,17 @@ public class employerSearch extends javax.swing.JDialog {
         setDefaultColumnWidth();
         addListeners();
         loadInformation(employerNumber);
+        setLocationRelativeTo(parent);
+        setVisible(true);
+    }
+    
+    public employerSearch(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
+        initComponents();
+        addRenderer();
+        setDefaultColumnWidth();
+        addListeners();
+        loadInformation("");
         setLocationRelativeTo(parent);
         setVisible(true);
     }
@@ -94,7 +106,8 @@ public class employerSearch extends javax.swing.JDialog {
                 if(e.getClickCount() == 2) {
                    employerNumber = employerTable.getValueAt(employerTable.getSelectedRow(), 0).toString().trim();
                    employerName = employerTable.getValueAt(employerTable.getSelectedRow(), 1).toString().trim();
-                    setVisible(false);
+                   county = employerName = employerTable.getValueAt(employerTable.getSelectedRow(), 2).toString().trim();
+                   setVisible(false);
                 } 
             }
 
@@ -148,6 +161,10 @@ public class employerSearch extends javax.swing.JDialog {
 
     public String getEmployerName() {
         return employerName;
+    }
+
+    public String getCounty() {
+        return county;
     }
     
     /**

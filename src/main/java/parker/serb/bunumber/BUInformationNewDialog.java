@@ -14,8 +14,10 @@ import java.sql.Timestamp;
 import java.util.List;
 import javax.swing.JFrame;
 import parker.serb.Global;
+import parker.serb.employer.employerSearch;
 import parker.serb.sql.BargainingUnit;
 import parker.serb.sql.County;
+import parker.serb.sql.Employer;
 import parker.serb.util.CancelUpdate;
 import parker.serb.util.ClearDateDialog;
 import parker.serb.util.NumberFormatService;
@@ -221,6 +223,12 @@ public class BUInformationNewDialog extends javax.swing.JDialog {
         jLabel1.setText("Bargining Unit Information");
 
         jLabel2.setText("Employer Number:");
+
+        employerNumberTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                employerNumberTextBoxMouseClicked(evt);
+            }
+        });
 
         jLabel4.setText("Employer Name");
 
@@ -499,6 +507,18 @@ public class BUInformationNewDialog extends javax.swing.JDialog {
         disableAll();
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void employerNumberTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_employerNumberTextBoxMouseClicked
+        if(evt.getClickCount() == 2) {
+            employerSearch search = new employerSearch((JFrame) Global.root.getParent(), rootPaneCheckingEnabled);
+            Employer emp = Employer.loadEmployerByID(search.getEmployerNumber());
+            search.dispose();
+            employerNameTextBox.setText(emp.employerName);
+            activeCheckBox.setSelected(true);
+            unitNumberTextBox.setText("00");
+            employerNumberTextBox.setText(emp.employerIDNumber);
+        }
+    }//GEN-LAST:event_employerNumberTextBoxMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> CertStatusComboBox;

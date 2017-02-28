@@ -85,7 +85,7 @@ public class BargainingUnit {
                     + " caseRefSection, caseRefMonth, caseRefSequence, local, cert, notes"
                     + " from BarginingUnit"
                     + " Where active = 1"
-                    + " ORDER BY employerNumber ASC ";
+                    + " ORDER BY buEmployerName ASC ";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             ResultSet employerListRS = preparedStatement.executeQuery();

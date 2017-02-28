@@ -89,6 +89,7 @@ public class UserAddEditDialog extends javax.swing.JDialog {
     private void loadDefaultSectionComboBox() {
         defaultSectionComboBox.removeAllItems();
         defaultSectionComboBox.addItem("");
+        defaultSectionComboBox.addItem("Docketing");
         defaultSectionComboBox.addItem("Civil Service Commission");
         defaultSectionComboBox.addItem("CMDS");
         defaultSectionComboBox.addItem("Hearings");
@@ -109,7 +110,7 @@ public class UserAddEditDialog extends javax.swing.JDialog {
         InitialsTextField.setText(item.initials);
         JobTitleTextField.setText(item.jobTitle);
         EmailTextField.setText(item.emailAddress);
-        PhoneTextField.setText(NumberFormatService.convertStringToPhoneNumber(item.workPhone));
+        PhoneTextField.setText(item.workPhone);
         defaultSectionComboBox.setSelectedItem(item.defaultSection);
         
         //right side load
