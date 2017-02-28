@@ -47,8 +47,16 @@ public class processULPbookmarks {
         String chargedPartyREPAddressBlock = "";
         String toAddressBlock = "";
         String ccNameBlock = "";
+        String DIRECCBlock = "";
+
 
         for (CaseParty party : partyList){
+
+            if (!DIRECCBlock.trim().equals("")){
+                DIRECCBlock += "\n";
+            }
+            DIRECCBlock += StringUtilities.buildCasePartyNameNoPreFix(party);
+            DIRECCBlock += party.emailAddress == null ? "" : ", " + party.emailAddress.trim();
 
             if (toParties != null) {
                 for (int person : toParties) {
@@ -196,6 +204,7 @@ public class processULPbookmarks {
             processBookmark.process("CHDREPNAME" + (i == 0 ? "" : i), chargedPartyREPNames, Document);
             processBookmark.process("CHDREPADDRESSBLOCK" + (i == 0 ? "" : i), chargedPartyREPAddressBlock, Document);
             processBookmark.process("CCList" + (i == 0 ? "" : i), ccNameBlock, Document);
+            processBookmark.process("DIRECCList" + (i == 0 ? "" : i), DIRECCBlock, Document);
 
             //Latest (by date) board meeting
             processBookmark.process("LONGMEETINGDATE" + (i == 0 ? "" : i), ("".equals(boardMeetingDate) ? "" : boardMeetingDate), Document);
