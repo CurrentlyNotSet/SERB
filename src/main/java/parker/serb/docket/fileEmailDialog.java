@@ -344,7 +344,7 @@ public class fileEmailDialog extends javax.swing.JDialog {
 
         for (int i = 0; i < attachmentTable.getRowCount(); i++) {
             if(!attachmentTable.getValueAt(i, 2).toString().equals("DO NOT FILE")) {
-                FileService.docketEmailAttachment(caseNumbers,
+                FileService.docketEmailAttachment(caseNumbers,  //caseNumber
                 attachmentTable.getValueAt(i, 0).toString(),    //attachmentid
                 emailID,                                        
                 emailSection,                                   
@@ -353,7 +353,7 @@ public class fileEmailDialog extends javax.swing.JDialog {
                 subjectTextBox.getText(),
                 attachmentTable.getValueAt(i, 1).toString(),    //fileName
                 attachmentTable.getValueAt(i, 2).toString(),    //fileType
-                attachmentTable.getValueAt(i, 3) != null
+                attachmentTable.getValueAt(i, 3) != null        //comment
                         ? attachmentTable.getValueAt(i, 3).toString() : "",
                 generateDate(),
                 directionComboBox.getSelectedItem().toString()); 
@@ -607,10 +607,12 @@ public class fileEmailDialog extends javax.swing.JDialog {
                     .addComponent(jLabel7)
                     .addComponent(subjectTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9)
-                    .addComponent(directionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(7, 7, 7)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(directionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(4, 4, 4)
+                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -631,15 +633,15 @@ public class fileEmailDialog extends javax.swing.JDialog {
     private void fileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileButtonActionPerformed
         //getcaseNumber
         String[] caseNumbers = caseNumberTextBox.getText().trim().split(",");
-        //fileBody
-        FileService.docketEmailBody(caseNumbers,
-                emailID,
-                emailSection,
-                fromTextBox.getText(),
-                toComboBox.getSelectedItem().toString(),
-                subjectTextBox.getText(),
-                generateDate(),
-                directionComboBox.getSelectedItem().toString());
+        //fileBody --> no longer needed 2/28/17
+//        FileService.docketEmailBody(caseNumbers,
+//                emailID,
+//                emailSection,
+//                fromTextBox.getText(),
+//                toComboBox.getSelectedItem().toString(),
+//                subjectTextBox.getText(),
+//                generateDate(),
+//                directionComboBox.getSelectedItem().toString());
         
         //fileAttachements
         fileEmailAttachments(caseNumbers);

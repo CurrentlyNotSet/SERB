@@ -459,7 +459,7 @@ public class FileService {
             Date activityDate,
             String direction) {
 
-        File docketFile = new File(Global.emailPath + section + File.separatorChar + fileName);
+        File docketFile = new File(Global.emailPath + section + File.separatorChar + fileName.trim());
 
         if(docketFile.exists()) {
 
@@ -503,7 +503,7 @@ public class FileService {
                     case "CSC":
                         Activity.addActivtyFromDocketORGCSC(direction + " - Filed " + fullType + " from " + from,
                         fileDate + "_" + type + fileExtenstion,
-                        caseNumber, from, to, fullType, comment, false, fileExtenstion.endsWith("pdf"), fileDate);
+                        caseNumber, from, to, fullType, comment, false, false, section);
                         break;
                     default:
                         Activity.addActivtyFromDocket(direction + " - Filed " + fullType + " from " + from,
