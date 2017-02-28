@@ -249,15 +249,17 @@ public class processCMDSbookmarks {
             ALJname = User.getNameByID(item.mediatorID);
         }
 
-        if (!answers.getGenderAppellant().equals("")) {
-            if (answers.getGenderAppellant().equalsIgnoreCase("male")) {
-                hisHerString = "his";
-                himHerString = "him";
-                heSheString = "he";
-            } else {
-                hisHerString = "her";
-                himHerString = "her";
-                heSheString = "she";
+        if (answers.getGenderAppellant() != null) {
+            if (!answers.getGenderAppellant().equals("")) {
+                if (answers.getGenderAppellant().equalsIgnoreCase("male")) {
+                    hisHerString = "his";
+                    himHerString = "him";
+                    heSheString = "he";
+                } else {
+                    hisHerString = "her";
+                    himHerString = "her";
+                    heSheString = "she";
+                }
             }
         }
 
