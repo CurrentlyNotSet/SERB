@@ -14,8 +14,10 @@ import java.sql.Timestamp;
 import java.util.List;
 import javax.swing.JFrame;
 import parker.serb.Global;
+import parker.serb.employer.employerSearch;
 import parker.serb.sql.BargainingUnit;
 import parker.serb.sql.County;
+import parker.serb.sql.Employer;
 import parker.serb.util.CancelUpdate;
 import parker.serb.util.ClearDateDialog;
 import parker.serb.util.NumberFormatService;
@@ -36,6 +38,33 @@ public class BUInformationNewDialog extends javax.swing.JDialog {
         enableAll();
         loadDropdowns();
         setVisible(true);
+    }
+    
+    private String getCertStatus(String certString) {
+        String cert = "";
+        
+        switch(certString) {
+            case "B":
+                cert = "Board";
+                break;
+            case "D":
+                cert = "Deemed";
+                break;
+            case "U":
+                cert = "Unknown";
+                break;
+            case "Board":
+                cert = "B";
+                break;
+            case "Deemed":
+                cert = "D";
+                break;
+            case "Unknown":
+                cert = "U";
+                break;
+        }
+        
+        return cert;
     }
     
     private void disableAll() {
@@ -115,10 +144,9 @@ public class BUInformationNewDialog extends javax.swing.JDialog {
         //load cert status
         CertStatusComboBox.removeAllItems();
         CertStatusComboBox.addItem("");
-        CertStatusComboBox.addItem("B");
-        CertStatusComboBox.addItem("D");
-        CertStatusComboBox.addItem("N");
-        CertStatusComboBox.addItem("U");
+        CertStatusComboBox.addItem("Board");
+        CertStatusComboBox.addItem("Deemed");
+        CertStatusComboBox.addItem("Unknown");
     }
     
     private void saveInformation() {
@@ -129,7 +157,7 @@ public class BUInformationNewDialog extends javax.swing.JDialog {
         buUpdate.lUnion = unionTextBox.getText();
         buUpdate.local = localTextBox.getText();
         buUpdate.county = countyComboBox.getSelectedItem().toString();
-        buUpdate.cert = CertStatusComboBox.getSelectedItem().toString();
+        buUpdate.cert = getCertStatus(CertStatusComboBox.getSelectedItem().toString());
         buUpdate.enabled = activeCheckBox.isSelected();
         buUpdate.unitDescription = unitDescriptionTextArea.getText().trim();
         
@@ -221,6 +249,12 @@ public class BUInformationNewDialog extends javax.swing.JDialog {
         jLabel1.setText("Bargining Unit Information");
 
         jLabel2.setText("Employer Number:");
+
+        employerNumberTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                employerNumberTextBoxMouseClicked(evt);
+            }
+        });
 
         jLabel4.setText("Employer Name");
 
@@ -499,6 +533,19 @@ public class BUInformationNewDialog extends javax.swing.JDialog {
         disableAll();
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void employerNumberTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_employerNumberTextBoxMouseClicked
+        if(evt.getClickCount() == 2) {
+            employerSearch search = new employerSearch((JFrame) Global.root.getParent(), rootPaneCheckingEnabled);
+            Employer emp = Employer.loadEmployerByID(search.getEmployerNumber());
+            search.dispose();
+            employerNameTextBox.setText(emp.employerName);
+            activeCheckBox.setSelected(true);
+            unitNumberTextBox.setText("00");
+            CertStatusComboBox.setSelectedItem("");
+            employerNumberTextBox.setText(emp.employerIDNumber);
+        }
+    }//GEN-LAST:event_employerNumberTextBoxMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> CertStatusComboBox;

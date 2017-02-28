@@ -74,6 +74,42 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
             public void keyReleased(KeyEvent e) {}
         });
         
+        lastNameTextBox.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                validateCreateButton();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                validateCreateButton();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                validateCreateButton();
+            }
+        });
+        
+        companyTextBox.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                validateCreateButton();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                validateCreateButton();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                validateCreateButton();
+            }
+        });
+        
         address1TextBox.getDocument().addDocumentListener(new DocumentListener() {
 
             @Override
@@ -205,11 +241,10 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
     }
     
     private void validateCreateButton() {
-        if(firstNameTextBox.getText().equals("") ||
-                lastNameTextBox.getText().equals("")) {
-            jButton1.setEnabled(false);
-        } else {
+        if((!firstNameTextBox.getText().equals("") && !lastNameTextBox.getText().equals("")) || !companyTextBox.getText().equals("")) {
             jButton1.setEnabled(true);
+        } else {
+            jButton1.setEnabled(false);
         }
     }
     
@@ -326,6 +361,12 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
 
         jLabel14.setText("Job Title:");
 
+        phone2TextBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                phone2TextBoxActionPerformed(evt);
+            }
+        });
+
         jLabel15.setText("Phone 2:");
 
         jLabel16.setText("Fax:");
@@ -422,15 +463,15 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
                     .addComponent(lastNameTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(prefix, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(suffixTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(nameTitleTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel13))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14)
                     .addComponent(jobTitleTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(companyTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
@@ -466,7 +507,7 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(phone2TextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel15))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(faxTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel16))
@@ -482,12 +523,11 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         CancelUpdate cancel = new CancelUpdate(Global.root, true);
-            if(!cancel.isReset()) {
-            } else {
-                dispose();
-            }
-        
-        
+            
+        if(!cancel.isReset()) {
+        } else {
+            dispose();
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -515,6 +555,10 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
         
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void phone2TextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_phone2TextBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_phone2TextBoxActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField address1TextBox;

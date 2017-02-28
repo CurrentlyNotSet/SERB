@@ -7,6 +7,8 @@ package parker.serb.report;
 
 import com.alee.extended.date.WebCalendar;
 import com.alee.utils.swing.Customizer;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import parker.serb.Global;
 import parker.serb.sql.SMDSDocuments;
 
@@ -29,10 +31,29 @@ public class RequestedInfoOneDatePanel extends javax.swing.JDialog {
         super(parent, modal);
         report = reportPassed;
         initComponents();
+        addListener();
         setText(report.fileName);
-        generateButton();
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
+    }
+    
+    private void addListener() {
+        startDateField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                generateButton();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                generateButton();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                generateButton();
+            }
+        });
     }
 
     private void setText(String reportName) {
@@ -85,6 +106,11 @@ public class RequestedInfoOneDatePanel extends javax.swing.JDialog {
             startDateField.addMouseListener(new java.awt.event.MouseAdapter() {
                 public void mouseClicked(java.awt.event.MouseEvent evt) {
                     startDateFieldMouseClicked(evt);
+                }
+            });
+            startDateField.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    startDateFieldActionPerformed(evt);
                 }
             });
 
@@ -161,6 +187,10 @@ public class RequestedInfoOneDatePanel extends javax.swing.JDialog {
     private void startDateFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_startDateFieldMouseClicked
         generateButton();
     }//GEN-LAST:event_startDateFieldMouseClicked
+
+    private void startDateFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startDateFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_startDateFieldActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CancelButton;

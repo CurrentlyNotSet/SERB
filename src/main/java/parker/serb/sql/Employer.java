@@ -61,15 +61,15 @@ public class Employer {
                     + " County"
                     + " from Employers"
                     + " Where employerType = 2"
-                    + " ORDER BY employerIDNumber ASC ";
+                    + " ORDER BY employerName ASC ";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             ResultSet employerListRS = preparedStatement.executeQuery();
             
             while(employerListRS.next()) {
                 Employer emp = new Employer();
-                emp.county = employerListRS.getString("County");
-                emp.employerName = employerListRS.getString("employerName");
+                emp.county = employerListRS.getString("County") == null ? "" : employerListRS.getString("County");
+                emp.employerName = employerListRS.getString("employerName") == null ? "" : employerListRS.getString("employerName");
                 emp.employerIDNumber = employerListRS.getString("EmployerIDNumber") == null ? "" : employerListRS.getString("EmployerIDNumber");
                 employerList.add(emp);
             }

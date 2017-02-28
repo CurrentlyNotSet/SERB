@@ -98,7 +98,7 @@ public class ViewUpdateCasePartyPanel extends javax.swing.JDialog {
             public void mouseClicked(MouseEvent e) {
                 if (SwingUtilities.isRightMouseButton(e) || e.isControlDown()) {
                     final String mailURIStr = String.format("mailto:%s",
-                    emailAddressTextBox.getText().trim());
+                    emailAddressTextBox.getText().trim().replace(" ", ""));
                     try {
                         final URI mailURI = new URI(mailURIStr);
                         Desktop desktop;

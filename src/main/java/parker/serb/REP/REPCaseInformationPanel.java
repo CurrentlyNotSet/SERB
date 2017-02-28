@@ -1152,6 +1152,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
             if(employerIDNumberTextBox.isEnabled()) {
                 employerSearch search = new employerSearch((JFrame) Global.root.getRootPane().getParent(), true, employerIDNumberTextBox.getText().trim());
                 employerIDNumberTextBox.setText(search.getEmployerNumber());
+                countyComboBox.setSelectedItem(search.getCounty());
                 search.dispose();
             } else {
                 if(employerIDNumberTextBox.getText().equals("")) {
