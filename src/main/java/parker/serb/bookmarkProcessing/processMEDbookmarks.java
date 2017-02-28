@@ -47,7 +47,7 @@ public class processMEDbookmarks {
         String ffFirstName = "";
         String ffLastName = "";
         String ffAddress = "";
-        String relatedCaseNumbers = "";
+        String relatedCaseNumbers = NumberFormatService.generateFullCaseNumber();
         String whoRejected = "";
         String accepted = "";
         String deemed = "";
@@ -65,7 +65,7 @@ public class processMEDbookmarks {
         String toAddressBlock = "";
         String ccNameBlock = "";
 
-        if (relatedCasesList.size() == 2) {
+        if (relatedCasesList.size() == 1) {
             for (String relatedCase : relatedCasesList) {
                 relatedCaseNumbers += ("".equals(relatedCaseNumbers) ? relatedCase : " and " + relatedCase);
             }

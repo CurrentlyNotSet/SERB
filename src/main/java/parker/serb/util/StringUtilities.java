@@ -42,11 +42,20 @@ public class StringUtilities {
             fullName = fullName.trim() + " " + item.lastName.trim();
         }
         if (item.suffix != null) {
-            fullName = fullName.trim() + " " + item.suffix.trim();
+            fullName = fullName.trim() + ", " + item.suffix.trim();
         }
-        if ("".equals(fullName.trim()) && item.companyName != null){
+        if (item.nameTitle != null) {
+            fullName = fullName.trim() + (item.nameTitle.equals("") ? "" : ", " + item.nameTitle.trim());
+        }
+        if (item.jobTitle != null) {
+            fullName = fullName.trim() + (item.jobTitle.equals("") ? "" : ", " + item.jobTitle.trim());
+        }
+        if (!"".equals(fullName.trim()) && item.companyName != null){
+            fullName = fullName.trim() + System.lineSeparator() +  item.companyName.trim();
+        } else {
             fullName = fullName.trim() + " " +  item.companyName.trim();
         }
+        
         return fullName.trim();
     }
 
