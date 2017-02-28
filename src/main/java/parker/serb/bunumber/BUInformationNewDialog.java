@@ -40,6 +40,33 @@ public class BUInformationNewDialog extends javax.swing.JDialog {
         setVisible(true);
     }
     
+    private String getCertStatus(String certString) {
+        String cert = "";
+        
+        switch(certString) {
+            case "B":
+                cert = "Board";
+                break;
+            case "D":
+                cert = "Deemed";
+                break;
+            case "U":
+                cert = "Unknown";
+                break;
+            case "Board":
+                cert = "B";
+                break;
+            case "Deemed":
+                cert = "D";
+                break;
+            case "Unknown":
+                cert = "U";
+                break;
+        }
+        
+        return cert;
+    }
+    
     private void disableAll() {
         employerNumberTextBox.setEnabled(false);
         employerNumberTextBox.setBackground(new Color(238,238,238));
@@ -117,10 +144,9 @@ public class BUInformationNewDialog extends javax.swing.JDialog {
         //load cert status
         CertStatusComboBox.removeAllItems();
         CertStatusComboBox.addItem("");
-        CertStatusComboBox.addItem("B");
-        CertStatusComboBox.addItem("D");
-        CertStatusComboBox.addItem("N");
-        CertStatusComboBox.addItem("U");
+        CertStatusComboBox.addItem("Board");
+        CertStatusComboBox.addItem("Deemed");
+        CertStatusComboBox.addItem("Unknown");
     }
     
     private void saveInformation() {
@@ -131,7 +157,7 @@ public class BUInformationNewDialog extends javax.swing.JDialog {
         buUpdate.lUnion = unionTextBox.getText();
         buUpdate.local = localTextBox.getText();
         buUpdate.county = countyComboBox.getSelectedItem().toString();
-        buUpdate.cert = CertStatusComboBox.getSelectedItem().toString();
+        buUpdate.cert = getCertStatus(CertStatusComboBox.getSelectedItem().toString());
         buUpdate.enabled = activeCheckBox.isSelected();
         buUpdate.unitDescription = unitDescriptionTextArea.getText().trim();
         
@@ -516,6 +542,7 @@ public class BUInformationNewDialog extends javax.swing.JDialog {
             employerNameTextBox.setText(emp.employerName);
             activeCheckBox.setSelected(true);
             unitNumberTextBox.setText("00");
+            CertStatusComboBox.setSelectedItem("");
             employerNumberTextBox.setText(emp.employerIDNumber);
         }
     }//GEN-LAST:event_employerNumberTextBoxMouseClicked
