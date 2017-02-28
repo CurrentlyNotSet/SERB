@@ -371,7 +371,7 @@ public class Activity {
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, null);
-            preparedStatement.setString(2, section);
+            preparedStatement.setString(2, section.equalsIgnoreCase("Civil Service Commission") ? "CSC" : section);
             preparedStatement.setString(3, null);
             preparedStatement.setString(4, caseNumber);
             preparedStatement.setInt(5, Global.activeUser.id);
