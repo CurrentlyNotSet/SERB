@@ -5,6 +5,7 @@
  */
 package parker.serb;
 
+import com.alee.laf.optionpane.WebOptionPane;
 import java.awt.CardLayout;
 import java.awt.Dimension;
 import javax.swing.ImageIcon;
@@ -22,8 +23,8 @@ import parker.serb.CSC.CSCHeaderPanel;
 import parker.serb.CSC.CSCLetterDialog;
 import parker.serb.CSC.CSCRootPanel;
 import parker.serb.Hearing.HearingHeaderPanel;
-import parker.serb.Hearing.HearingRootPanel;
 import parker.serb.Hearing.HearingLetterDialog;
+import parker.serb.Hearing.HearingRootPanel;
 import parker.serb.MED.MEDBulkHandleCases;
 import parker.serb.MED.MEDHeaderPanel;
 import parker.serb.MED.MEDLetterDialog;
@@ -49,6 +50,7 @@ import parker.serb.login.ExitVerification;
 import parker.serb.mailLogViewer.MailLogViewerPanel;
 import parker.serb.publicRecords.PublicRecordsMainPanel;
 import parker.serb.report.ReportDialog;
+import parker.serb.report.RequestedInfoTwoDatePanel;
 import parker.serb.sql.Audit;
 import parker.serb.sql.CMDSCase;
 import parker.serb.sql.CSCCase;
@@ -59,6 +61,7 @@ import parker.serb.sql.MEDCase;
 import parker.serb.sql.NewCaseLock;
 import parker.serb.sql.ORGCase;
 import parker.serb.sql.REPCase;
+import parker.serb.sql.SMDSDocuments;
 import parker.serb.sql.ULPCase;
 import parker.serb.sql.User;
 import parker.serb.user.Preferences;
@@ -73,7 +76,7 @@ import parker.serb.util.ReleaseNotesDialog;
 
 /**
  * The main panel of the application
- * 
+ *
  * @author parker
  */
 public class RootPanel extends javax.swing.JFrame {
@@ -112,7 +115,7 @@ public class RootPanel extends javax.swing.JFrame {
             new NoAppliedRolesDialog(Global.root, true);
             System.exit(0);
         }
-        
+
         if(!Global.activeUserRoles.contains("Admin")) {
             jMenuBar1.remove(jMenu2);
             for(int i = jTabbedPane1.getTabCount()-1; i >= 0; i--) {
@@ -439,7 +442,7 @@ public class RootPanel extends javax.swing.JFrame {
                     jButton2.setText("Add Entry");
                     jButton2.setEnabled(true);
                 }
-                
+
                 jButton3.setSize(dim);
                 jButton3.setMinimumSize(dim);
                 jButton3.setMaximumSize(dim);
@@ -689,7 +692,7 @@ public class RootPanel extends javax.swing.JFrame {
                     jButton4.setText("Single Letter");
                     jButton4.setEnabled(true);
                 }
-                
+
 
                 jButton5.setSize(dim);
                 jButton5.setMinimumSize(dim);
@@ -944,7 +947,7 @@ public class RootPanel extends javax.swing.JFrame {
             }
         }
     }
-    
+
 
     /**
      * This will disable all tabs that are not of the active section, this
@@ -2091,6 +2094,12 @@ public class RootPanel extends javax.swing.JFrame {
 
     private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
         Audit.addAuditEntry("Clicked New Case Log Report");
+        SMDSDocuments report = SMDSDocuments.findDocumentByFileName("Case File Log.jasper");
+        if (report != null) {
+            new RequestedInfoTwoDatePanel((JFrame) this.getRootPane().getParent(), true, report);
+        } else {
+            WebOptionPane.showMessageDialog(Global.root, "<html><center> Sorry, unable to locate report. <br><br>" + report.fileName + "</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_jMenuItem10ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
