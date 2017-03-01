@@ -23,6 +23,7 @@ import parker.serb.Global;
 import parker.serb.sql.ActivityType;
 import parker.serb.sql.CMDSCase;
 import parker.serb.sql.CaseNumber;
+import parker.serb.sql.ORGCase;
 import parker.serb.sql.REPCase;
 import parker.serb.sql.ULPCase;
 import parker.serb.sql.User;
@@ -53,12 +54,18 @@ public class scanFileDialog extends javax.swing.JDialog {
         switch(section) {
             case "ORG":
                 jLabel8.setText("ORG Number(s):");
+                orgNameLabel.setVisible(true);
+                orgNameTextBox.setVisible(true);
                 break;
             case "CSC":
                 jLabel8.setText("CSC Number(s):");
+                orgNameLabel.setVisible(false);
+                orgNameTextBox.setVisible(false);
                 break;
             default:
                 jLabel8.setText("Case Number(s):");
+                orgNameLabel.setVisible(false);
+                orgNameTextBox.setVisible(false);
                 break;
         }
     }
@@ -239,6 +246,7 @@ public class scanFileDialog extends javax.swing.JDialog {
                 break;
             case "ORG":
                 caseNumberFail = CaseNumber.validateORGCaseNumber(caseNumbers);
+                orgNameTextBox.setText("");
                 break;
             case "CMDS":
                 caseNumberFail = CaseNumber.validateCMDSCaseNumber(caseNumbers);
@@ -267,6 +275,7 @@ public class scanFileDialog extends javax.swing.JDialog {
                         toComboBox.setSelectedItem("Mary Laurent");
                         break;
                     case "ORG":
+                        orgNameTextBox.setText(ORGCase.getORGName(caseNumberTextBox.getText()));
     //                    toComboBox.setSelectedItem(ORGCase.DocketTo(caseNumberTextBox.getText()));
                         break;
                     case "CMDS":
@@ -327,6 +336,8 @@ public class scanFileDialog extends javax.swing.JDialog {
         amPMComboBox = new javax.swing.JComboBox<>();
         jLabel11 = new javax.swing.JLabel();
         directionComboBox = new javax.swing.JComboBox<>();
+        orgNameLabel = new javax.swing.JLabel();
+        orgNameTextBox = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -349,6 +360,11 @@ public class scanFileDialog extends javax.swing.JDialog {
         fileNameTextBox.setEditable(false);
         fileNameTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         fileNameTextBox.setEnabled(false);
+        fileNameTextBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fileNameTextBoxActionPerformed(evt);
+            }
+        });
 
         toComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -417,6 +433,17 @@ public class scanFileDialog extends javax.swing.JDialog {
 
             directionComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "IN", "OUT" }));
 
+            orgNameLabel.setText("Org Name:");
+
+            orgNameTextBox.setEditable(false);
+            orgNameTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+            orgNameTextBox.setEnabled(false);
+            orgNameTextBox.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    orgNameTextBoxActionPerformed(evt);
+                }
+            });
+
             javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
             getContentPane().setLayout(layout);
             layout.setHorizontalGroup(
@@ -435,7 +462,8 @@ public class scanFileDialog extends javax.swing.JDialog {
                                 .addComponent(jLabel6)
                                 .addComponent(jLabel7)
                                 .addComponent(jLabel9)
-                                .addComponent(jLabel11))
+                                .addComponent(jLabel11)
+                                .addComponent(orgNameLabel))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(caseNumberTextBox)
@@ -457,7 +485,8 @@ public class scanFileDialog extends javax.swing.JDialog {
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(redactedCheckBox)
                                     .addGap(0, 0, Short.MAX_VALUE))
-                                .addComponent(directionComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addComponent(directionComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(orgNameTextBox)))
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                             .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -473,6 +502,10 @@ public class scanFileDialog extends javax.swing.JDialog {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel8)
                         .addComponent(caseNumberTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(orgNameLabel)
+                        .addComponent(orgNameTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel2)
@@ -498,9 +531,9 @@ public class scanFileDialog extends javax.swing.JDialog {
                         .addComponent(typeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel11)
-                        .addComponent(directionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(directionComboBox)
+                        .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jLabel6)
@@ -551,6 +584,14 @@ public class scanFileDialog extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_minuteTextBoxActionPerformed
 
+    private void fileNameTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileNameTextBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fileNameTextBoxActionPerformed
+
+    private void orgNameTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_orgNameTextBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_orgNameTextBoxActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> amPMComboBox;
@@ -575,6 +616,8 @@ public class scanFileDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField minuteTextBox;
+    private javax.swing.JLabel orgNameLabel;
+    private javax.swing.JTextField orgNameTextBox;
     private javax.swing.JCheckBox redactedCheckBox;
     private com.alee.extended.date.WebDateField scanDateTextBox;
     private javax.swing.JComboBox<String> toComboBox;

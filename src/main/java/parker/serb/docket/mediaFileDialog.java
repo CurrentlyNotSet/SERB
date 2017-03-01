@@ -20,6 +20,7 @@ import parker.serb.sql.ActivityType;
 import parker.serb.sql.CMDSCase;
 import parker.serb.sql.CaseNumber;
 import parker.serb.sql.MEDCase;
+import parker.serb.sql.ORGCase;
 import parker.serb.sql.REPCase;
 import parker.serb.sql.ULPCase;
 import parker.serb.sql.User;
@@ -50,12 +51,18 @@ public class mediaFileDialog extends javax.swing.JDialog {
         switch(section) {
             case "ORG":
                 jLabel8.setText("ORG Number(s):");
+                orgNameLabel.setVisible(true);
+                orgNameTextBox.setVisible(true);
                 break;
             case "CSC":
                 jLabel8.setText("CSC Number(s):");
+                orgNameLabel.setVisible(false);
+                orgNameTextBox.setVisible(false);
                 break;
             default:
                 jLabel8.setText("Case Number(s):");
+                orgNameLabel.setVisible(false);
+                orgNameTextBox.setVisible(false);
                 break;
         }
     }
@@ -206,6 +213,7 @@ public class mediaFileDialog extends javax.swing.JDialog {
                 break;
             case "ORG":
                 caseNumberFail = CaseNumber.validateORGCaseNumber(caseNumbers);
+                orgNameTextBox.setText("");
                 break;
             case "CMDS":
                 caseNumberFail = CaseNumber.validateCMDSCaseNumber(caseNumbers);
@@ -232,6 +240,7 @@ public class mediaFileDialog extends javax.swing.JDialog {
                     toComboBox.setSelectedItem("Mary Laurent");
                     break;
                 case "ORG":
+                    orgNameTextBox.setText(ORGCase.getORGName(caseNumberTextBox.getText()));
 //                    toComboBox.setSelectedItem(ORGCase.DocketTo(caseNumberTextBox.getText()));
                     break;
                 case "CMDS":
@@ -269,6 +278,8 @@ public class mediaFileDialog extends javax.swing.JDialog {
         commentTextBox = new javax.swing.JTextArea();
         jLabel7 = new javax.swing.JLabel();
         directionComboBox = new javax.swing.JComboBox<>();
+        orgNameLabel = new javax.swing.JLabel();
+        orgNameTextBox = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -320,6 +331,10 @@ public class mediaFileDialog extends javax.swing.JDialog {
 
         directionComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "IN", "OUT" }));
 
+        orgNameLabel.setText("Org Name:");
+
+        orgNameTextBox.setEditable(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -336,7 +351,8 @@ public class mediaFileDialog extends javax.swing.JDialog {
                             .addComponent(jLabel4)
                             .addComponent(jLabel5)
                             .addComponent(jLabel6)
-                            .addComponent(jLabel7))
+                            .addComponent(jLabel7)
+                            .addComponent(orgNameLabel))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(caseNumberTextBox)
@@ -345,7 +361,8 @@ public class mediaFileDialog extends javax.swing.JDialog {
                             .addComponent(toComboBox, 0, 279, Short.MAX_VALUE)
                             .addComponent(typeComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jScrollPane1)
-                            .addComponent(directionComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(directionComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(orgNameTextBox)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -361,6 +378,10 @@ public class mediaFileDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(caseNumberTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(orgNameLabel)
+                    .addComponent(orgNameTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -382,14 +403,16 @@ public class mediaFileDialog extends javax.swing.JDialog {
                         .addGap(1, 1, 1)
                         .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(directionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(directionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(4, 4, 4)
+                        .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel6)
-                        .addGap(0, 108, Short.MAX_VALUE))
+                        .addGap(0, 70, Short.MAX_VALUE))
                     .addComponent(jScrollPane1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -438,6 +461,8 @@ public class mediaFileDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel orgNameLabel;
+    private javax.swing.JTextField orgNameTextBox;
     private javax.swing.JComboBox<String> toComboBox;
     private javax.swing.JComboBox<String> typeComboBox;
     // End of variables declaration//GEN-END:variables

@@ -43,7 +43,7 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }
-    
+
     private void setRenderer() {
         jTable1.setDefaultRenderer(Object.class, new TableCellRenderer(){
             private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
@@ -152,8 +152,9 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
 
         List<String> casetypes = CaseType.getCaseType();
 
-        String sqlWHERE = " Activity.date >= '" + startDateField.getText() + " 00:00:00.000'  AND Activity.date <= '" + endDateField.getText() + " 23:59:59.999' "
-                    + "AND Activity.fileName IS NOT NULL AND Activity.fileName != '' AND mailLog = 1 ";
+        String sqlWHERE = " Activity.mailLog >= '" + Global.SQLDateFormat.format(startDateField.getDate())
+                + "'  AND Activity.mailLog <= '" + Global.SQLDateFormat.format(endDateField.getDate()) + "' "
+                    + "AND Activity.fileName IS NOT NULL AND Activity.fileName != '' ";
 
             if (!casetypes.isEmpty()) {
                 sqlWHERE += "AND (";
