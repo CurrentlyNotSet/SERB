@@ -35,7 +35,7 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
         initComponents();
         addListeners();
     }
-    
+
     private void addListeners() {
         caseNumberComboBox.addActionListener((ActionEvent e) -> {
             if(caseNumberComboBox.getSelectedItem() != null) {
@@ -51,7 +51,7 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
 //                            Global.root.getjButton2().setText("Add Entry");
 //                            Global.root.getjButton2().setEnabled(true);
 //                        }
-                        
+
 //                        Global.caseNumber = null;
 //                        Global.caseMonth = null;
 //                        Global.caseType = null;
@@ -64,7 +64,7 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
                         Global.root.getHearingRootPanel1().getActivityPanel1().loadAllHearingActivity();
                         Global.root.getjButton2().setText("Add Entry");
                         Global.root.getjButton2().setEnabled(true);
-                        Global.root.getjButton4().setText("Letter");
+                        Global.root.getjButton4().setText("Documents");
                         Global.root.getjButton4().setEnabled(true);
                         Global.root.getjButton9().setVisible(true);
                     }
@@ -73,30 +73,30 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
             }
         });
     }
-    
+
     private void loadInformation() {
         if(caseNumberComboBox.getSelectedItem().toString().trim().length() == 16) {
             NumberFormatService.parseFullCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim());
             User.updateLastCaseNumber();
             loadHeaderInformation();
         } else {
-            new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());  
+            new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
         }
     }
-    
+
     public void loadHeaderInformation() {
         setHeaderPartyText();
-        
+
         String party1 = "";
         String party2 = "";
         String party3 = "";
         String party4 = "";
-        
-        
+
+
         if(Global.caseNumber != null) {
             HearingCase hearings = HearingCase.loadHeaderInformation();
             if(hearings == null) {
-                new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());  
+                new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
                 caseNumberComboBox.setSelectedItem("");
             } else {
                 aljTextBox.setText(User.getNameByID(hearings.aljID));
@@ -109,9 +109,9 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
 
                 for(Object caseParty: caseParties) {
                     CaseParty partyInformation = (CaseParty) caseParty;
-                    
+
                     String name = "";
-                    
+
                     if(partyInformation.firstName.equals("") && partyInformation.lastName.equals("")) {
                         name = partyInformation.companyName;
                     } else {
@@ -172,14 +172,14 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
                             } else {
                                 party3 += ", " + name;
                             }
-                            break;       
+                            break;
                         case "Charged Party REP":
                             if(party4.equals("")) {
                                 party4 += name;
                             } else {
                                 party4 += ", " + name;
                             }
-                            break;      
+                            break;
                     }
                 }
                 party1TextBox.setText(party1);
@@ -189,7 +189,7 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
             }
         }
     }
-    
+
     private void setHeaderPartyText() {
         switch(Global.caseType) {
             case "ULP":
@@ -219,20 +219,20 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
                 break;
         }
     }
-    
+
     public void loadCases() {
         caseNumberComboBox.removeAllItems();
         caseNumberComboBox.addItem("");
 
         List caseNumberList = HearingCase.loadHearingCaseNumbers();
-        
+
         caseNumberList.stream().forEach((caseNumber) -> {
             caseNumberComboBox.addItem(caseNumber.toString());
         });
     }
-    
+
     /**
-     * 
+     *
      */
     void clearAll() {
         Global.caseYear = null;
@@ -253,9 +253,9 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
     public JComboBox getjComboBox2() {
         return caseNumberComboBox;
     }
-    
-    
-    
+
+
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
