@@ -42,7 +42,7 @@ public class PartySearchDialog extends javax.swing.JDialog {
         setLocationRelativeTo(parent);
         setVisible(true);
     }
-    
+
     private void addRenderer() {
         jTable1.setDefaultRenderer(Object.class, new TableCellRenderer(){
             private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
@@ -57,7 +57,7 @@ public class PartySearchDialog extends javax.swing.JDialog {
             }
         });
     }
-    
+
     private void setTableColumnWidths() {
         jTable1.getColumnModel().getColumn(0).setPreferredWidth(0);
         jTable1.getColumnModel().getColumn(0).setMinWidth(0);
@@ -69,7 +69,7 @@ public class PartySearchDialog extends javax.swing.JDialog {
         jTable1.getColumnModel().getColumn(5).setMinWidth(125);
         jTable1.getColumnModel().getColumn(5).setMaxWidth(125);
     }
-    
+
     private void addListeners() {
         searchTextBox.getDocument().addDocumentListener(new DocumentListener() {
 
@@ -88,7 +88,7 @@ public class PartySearchDialog extends javax.swing.JDialog {
                 searchParties();
             }
         });
-        
+
         jTable1.addMouseListener(new MouseListener() {
 
             @Override
@@ -119,26 +119,26 @@ public class PartySearchDialog extends javax.swing.JDialog {
             public void mouseExited(MouseEvent e) {}
         });
     }
-    
+
     private boolean duplicateParty() {
         return CaseParty.duplicateParty(getID());
     }
-    
+
     private String getPartyName() {
         return jTable1.getValueAt(jTable1.getSelectedRow(), jTable1.getColumn("Name").getModelIndex()).toString().equals("") ? jTable1.getValueAt(jTable1.getSelectedRow(), jTable1.getColumn("Company").getModelIndex()).toString() : jTable1.getValueAt(jTable1.getSelectedRow(), jTable1.getColumn("Name").getModelIndex()).toString();
     }
-    
+
     private String getID() {
         return jTable1.getValueAt(jTable1.getSelectedRow(), jTable1.getColumn("ID").getModelIndex()).toString();
     }
-    
+
     private void loadParties() {
-    
+
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
-        
+
         parties = Party.loadAllParties();
-        
+
         for(Object party: parties) {
             Party partyInformation = (Party) party;
             model.addRow(new Object[] {partyInformation.id,
@@ -159,17 +159,25 @@ public class PartySearchDialog extends javax.swing.JDialog {
                 partyInformation.phone1});
         }
     }
-    
+
     private void searchParties() {
-    
+
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
-        
+
         for(Object party: parties) {
             Party partyInformation = (Party) party;
-            
+
+            String partyFirstAndLastName = partyInformation.firstName.toLowerCase() + " " + partyInformation.lastName.toLowerCase();
+            String partyFirstMiddleLastName =
+                    partyInformation.firstName.toLowerCase() +
+                    " " + partyInformation.middleInitial.toLowerCase() + ". "+
+                    partyInformation.lastName.toLowerCase();
+
             if(partyInformation.firstName.toLowerCase().contains(searchTextBox.getText().toLowerCase())
                     || partyInformation.lastName.toLowerCase().contains(searchTextBox.getText().toLowerCase())
+                    || partyFirstAndLastName.toLowerCase().contains(searchTextBox.getText().toLowerCase())
+                    || partyFirstMiddleLastName.toLowerCase().contains(searchTextBox.getText().toLowerCase())
                     || partyInformation.companyName.toLowerCase().contains(searchTextBox.getText().toLowerCase())
                     || partyInformation.address1.toLowerCase().contains(searchTextBox.getText().toLowerCase())
                     || partyInformation.address2.toLowerCase().contains(searchTextBox.getText().toLowerCase())
