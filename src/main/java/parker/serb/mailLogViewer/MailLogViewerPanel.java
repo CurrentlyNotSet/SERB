@@ -152,8 +152,8 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
 
         List<String> casetypes = CaseType.getCaseType();
 
-        String sqlWHERE = " Activity.mailLog >= '" + Global.SQLDateFormat.format(startDateField.getText())
-                + "'  AND Activity.mailLog <= '" + Global.SQLDateFormat.format(endDateField.getText()) + "' "
+        String sqlWHERE = " Activity.mailLog >= '" + Global.SQLDateFormat.format(startDateField.getDate())
+                + "'  AND Activity.mailLog <= '" + Global.SQLDateFormat.format(endDateField.getDate()) + "' "
                     + "AND Activity.fileName IS NOT NULL AND Activity.fileName != '' ";
 
             if (!casetypes.isEmpty()) {
