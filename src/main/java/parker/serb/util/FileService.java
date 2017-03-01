@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JFrame;
@@ -341,7 +342,7 @@ public class FileService {
                     case "CSC":
                         Activity.addActivtyFromDocketORGCSC(direction + " - Filed " + typeFull + " from " + from,
                         fileDate + "_" + typeAbbrv + fileName.substring(fileName.lastIndexOf(".")),
-                        caseNumber, from, to, typeFull, comment, false, false, section);
+                        caseNumber, from, to, typeFull, comment, false, false, section, new Timestamp(System.currentTimeMillis()));
                         break;
                     default:
                         Activity.addActivtyFromDocket(direction + " - Filed " + typeFull + " from " + from,
@@ -368,83 +369,83 @@ public class FileService {
         docketFile.delete();
     }
 
-    public static void docketEmailBody(String[] caseNumbers,
-            String emailID,
-            String section,
-            String from,
-            String to,
-            String subject,
-            Date activityDate,
-            String direction) {
-
-        String fileName = Email.getEmailBodyFileByID(emailID);
-
-        File docketFile = new File(Global.emailPath + section + File.separatorChar + fileName);
-
-        if(docketFile.exists()) {
-            for (String caseNumber : caseNumbers) {
-                File caseArchiveFile;
-//                String[] caseNumberParts = caseNumber.trim().split("-");
-
-                switch(section) {
-                    case "ORG":
-                    case "CSC":
-                        caseArchiveFile = new File(
-                        Global.activityPath
-                        + section
-                        + File.separatorChar
-                        + caseNumber.trim());
-                        break;
-                    default:
-                        String[] caseNumberParts = caseNumber.trim().split("-");
-                        caseArchiveFile = new File(
-                        Global.activityPath
-                        + section
-                        + File.separatorChar
-                        + caseNumberParts[0]
-                        + File.separatorChar
-                        + caseNumber.trim());
-                        break;
-                }
-
-                caseArchiveFile.mkdirs();
-
-                String fileDate = String.valueOf(new Date().getTime());
-
-                FileUtils.copyFile(docketFile, new File(caseArchiveFile + File.separator + fileDate + "_BODY.pdf"));
-
-                switch(section) {
-                    case "ORG":
-                    case "CSC":
-                        Activity.addActivtyFromDocketORGCSC(direction + " - Filed Email Body from " + from,
-                        fileDate + "_BODY.pdf",
-                        caseNumber, from, to, "Email Body", "", false, false, section);
-                        break;
-                    default:
-                        Activity.addActivtyFromDocket(direction + " - Filed Email Body from " + from,
-                        fileDate + "_BODY.pdf",
-                        caseNumber.trim().split("-"), from, to, "Email Body", "", false, false);
-                        break;
-                }
-                Audit.addAuditEntry("Filed Email Body from " + from);
-
-                switch(section) {
-                    case "ULP":
-                        ULPCase.ULPDocketNotification(caseNumber);
-                        break;
-                    case "REP":
-                        REPCase.REPDocketNotification(caseNumber);
-                        break;
-                    case "CMDS":
-                        CMDSCase.CMDSDocketNotification(caseNumber);
-                        break;
-                }
-            }
-        }
-        docketFile.delete();
-
-
-    }
+//    public static void docketEmailBody(String[] caseNumbers,
+//            String emailID,
+//            String section,
+//            String from,
+//            String to,
+//            String subject,
+//            Date activityDate,
+//            String direction) {
+//
+//        String fileName = Email.getEmailBodyFileByID(emailID);
+//
+//        File docketFile = new File(Global.emailPath + section + File.separatorChar + fileName);
+//
+//        if(docketFile.exists()) {
+//            for (String caseNumber : caseNumbers) {
+//                File caseArchiveFile;
+////                String[] caseNumberParts = caseNumber.trim().split("-");
+//
+//                switch(section) {
+//                    case "ORG":
+//                    case "CSC":
+//                        caseArchiveFile = new File(
+//                        Global.activityPath
+//                        + section
+//                        + File.separatorChar
+//                        + caseNumber.trim());
+//                        break;
+//                    default:
+//                        String[] caseNumberParts = caseNumber.trim().split("-");
+//                        caseArchiveFile = new File(
+//                        Global.activityPath
+//                        + section
+//                        + File.separatorChar
+//                        + caseNumberParts[0]
+//                        + File.separatorChar
+//                        + caseNumber.trim());
+//                        break;
+//                }
+//
+//                caseArchiveFile.mkdirs();
+//
+//                String fileDate = String.valueOf(new Date().getTime());
+//
+//                FileUtils.copyFile(docketFile, new File(caseArchiveFile + File.separator + fileDate + "_BODY.pdf"));
+//
+//                switch(section) {
+//                    case "ORG":
+//                    case "CSC":
+//                        Activity.addActivtyFromDocketORGCSC(direction + " - Filed Email Body from " + from,
+//                        fileDate + "_BODY.pdf",
+//                        caseNumber, from, to, "Email Body", "", false, false, section, activityDate);
+//                        break;
+//                    default:
+//                        Activity.addActivtyFromDocket(direction + " - Filed Email Body from " + from,
+//                        fileDate + "_BODY.pdf",
+//                        caseNumber.trim().split("-"), from, to, "Email Body", "", false, false, activityDate);
+//                        break;
+//                }
+//                Audit.addAuditEntry("Filed Email Body from " + from);
+//
+//                switch(section) {
+//                    case "ULP":
+//                        ULPCase.ULPDocketNotification(caseNumber);
+//                        break;
+//                    case "REP":
+//                        REPCase.REPDocketNotification(caseNumber);
+//                        break;
+//                    case "CMDS":
+//                        CMDSCase.CMDSDocketNotification(caseNumber);
+//                        break;
+//                }
+//            }
+//        }
+//        docketFile.delete();
+//
+//
+//    }
 
     public static void docketEmailAttachment(String[] caseNumbers,
             String atachmentID,
@@ -503,12 +504,12 @@ public class FileService {
                     case "CSC":
                         Activity.addActivtyFromDocketORGCSC(direction + " - Filed " + fullType + " from " + from,
                         fileDate + "_" + type + fileExtenstion,
-                        caseNumber, from, to, fullType, comment, false, false, section);
+                        caseNumber, from, to, fullType, comment, false, false, section, activityDate);
                         break;
                     default:
                         Activity.addActivtyFromDocket(direction + " - Filed " + fullType + " from " + from,
                         fileDate + "_" + type + fileExtenstion,
-                        caseNumber.trim().split("-"), from, to, fullType, comment, false, fileExtenstion.endsWith("pdf"));
+                        caseNumber.trim().split("-"), from, to, fullType, comment, false, false, activityDate);
                         break;
                 }
 

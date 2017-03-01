@@ -41,7 +41,7 @@ public class Activity {
     public boolean redacted;
     public boolean awaitingScan;
     public boolean active;
-    public boolean mailLog;
+    public String mailLog;
 
     /**
      * Add an activity to the activity table, pulls the case number from the
@@ -74,7 +74,7 @@ public class Activity {
             preparedStatement.setBoolean(13, false); //redacted
             preparedStatement.setBoolean(14, false); //awaiting timestamp
             preparedStatement.setBoolean(15, true); //active
-            preparedStatement.setBoolean(16, false); //mailLog
+            preparedStatement.setTimestamp(16, null); //mailLog
 
             preparedStatement.executeUpdate();
 
@@ -114,7 +114,7 @@ public class Activity {
             preparedStatement.setBoolean(13, false);
             preparedStatement.setBoolean(14, false);
             preparedStatement.setBoolean(15, true);
-            preparedStatement.setBoolean(16, false); //mailLog
+            preparedStatement.setTimestamp(16, null); //mailLog
 
             preparedStatement.executeUpdate();
 
@@ -160,7 +160,7 @@ public class Activity {
                 preparedStatement.setBoolean(13, false);
                 preparedStatement.setBoolean(14, false);
                 preparedStatement.setBoolean(15, true);
-                preparedStatement.setBoolean(16, false); //mailLog
+                preparedStatement.setTimestamp(16, null); //mailLog
 
                 preparedStatement.executeUpdate();
 
@@ -211,7 +211,7 @@ public class Activity {
             preparedStatement.setBoolean(13, false);
             preparedStatement.setBoolean(14, false);
             preparedStatement.setBoolean(15, true);
-            preparedStatement.setBoolean(16, false); //mailLog
+            preparedStatement.setTimestamp(16, null); //mailLog
 
             preparedStatement.executeUpdate();
 
@@ -287,9 +287,9 @@ public class Activity {
             preparedStatement.setString(11, type.equals("") ? null : type);
             preparedStatement.setString(12, comment.equals("") ? null : comment);
             preparedStatement.setBoolean(13, redacted);
-            preparedStatement.setBoolean(14, needsTimestamp);
+            preparedStatement.setBoolean(14, false);
             preparedStatement.setBoolean(15, true);
-            preparedStatement.setBoolean(16, true); //mailLog
+            preparedStatement.setTimestamp(16, new Timestamp(System.currentTimeMillis())); //mailLog
 
             preparedStatement.executeUpdate();
 
@@ -337,7 +337,7 @@ public class Activity {
             preparedStatement.setBoolean(13, redacted);
             preparedStatement.setBoolean(14, needsTimestamp);
             preparedStatement.setBoolean(15, true);
-            preparedStatement.setBoolean(16, true); //mailLog
+            preparedStatement.setTimestamp(16, new Timestamp(System.currentTimeMillis())); //mailLog
 
             preparedStatement.executeUpdate();
 
@@ -360,7 +360,8 @@ public class Activity {
             String comment,
             boolean redacted,
             boolean needsTimestamp,
-            String section) {
+            String section,
+            Date fileDate) {
         Statement stmt = null;
 
         try {
@@ -375,7 +376,7 @@ public class Activity {
             preparedStatement.setString(3, null);
             preparedStatement.setString(4, caseNumber);
             preparedStatement.setInt(5, Global.activeUser.id);
-            preparedStatement.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
+            preparedStatement.setTimestamp(6, new Timestamp(fileDate.getTime()));
             preparedStatement.setString(7, action.equals("") ? null : action);
             preparedStatement.setString(8, fileName.equals("") ? null : fileName);
             preparedStatement.setString(9, from.equals("") ? null : from);
@@ -385,13 +386,13 @@ public class Activity {
             preparedStatement.setBoolean(13, redacted);
             preparedStatement.setBoolean(14, needsTimestamp);
             preparedStatement.setBoolean(15, true);
-            preparedStatement.setBoolean(16, true); //mailLog
+            preparedStatement.setTimestamp(16, new Timestamp(System.currentTimeMillis())); //mailLog
 
             preparedStatement.executeUpdate();
 
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                addActivtyFromDocketORGCSC(action, fileName, caseNumber, from, to, type, comment, redacted, needsTimestamp, section);
+                addActivtyFromDocketORGCSC(action, fileName, caseNumber, from, to, type, comment, redacted, needsTimestamp, section, fileDate);
             } else {
                 SlackNotification.sendNotification(ex);
             }
@@ -434,13 +435,13 @@ public class Activity {
             preparedStatement.setBoolean(13, redacted);
             preparedStatement.setBoolean(14, needsTimestamp);
             preparedStatement.setBoolean(15, true);
-            preparedStatement.setBoolean(16, true); //mailLog
+            preparedStatement.setTimestamp(16, new Timestamp(System.currentTimeMillis())); //mailLog
 
             preparedStatement.executeUpdate();
 
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                addActivtyFromDocketORGCSC(action, fileName, caseNumber, from, to, type, comment, redacted, needsTimestamp, section);
+                addActivtyFromDocketORGCSC(action, fileName, caseNumber, from, to, type, comment, redacted, needsTimestamp, section, activityDate);
             } else {
                 SlackNotification.sendNotification(ex);
             }
@@ -482,7 +483,7 @@ public class Activity {
             preparedStatement.setBoolean(13, redacted);
             preparedStatement.setBoolean(14, needsTimestamp);
             preparedStatement.setBoolean(15, true);
-            preparedStatement.setBoolean(16, true); //mailLog
+            preparedStatement.setTimestamp(16, new Timestamp(System.currentTimeMillis())); //mailLog
 
             preparedStatement.executeUpdate();
 
@@ -528,7 +529,7 @@ public class Activity {
             preparedStatement.setBoolean(13, false);
             preparedStatement.setBoolean(14, false);
             preparedStatement.setBoolean(15, true);
-            preparedStatement.setBoolean(16, false); //mailLog
+            preparedStatement.setTimestamp(16, null); //mailLog
 
             preparedStatement.executeUpdate();
 
@@ -1292,7 +1293,7 @@ public class Activity {
                 activity.redacted = caseActivity.getBoolean("redacted");
                 activity.awaitingScan = caseActivity.getBoolean("awaitingTimestamp");
                 activity.active = caseActivity.getBoolean("awaitingTimestamp");
-                activity.mailLog = caseActivity.getBoolean("mailLog");
+                activity.mailLog = caseActivity.getTimestamp("mailLog") == null ? "" : Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
