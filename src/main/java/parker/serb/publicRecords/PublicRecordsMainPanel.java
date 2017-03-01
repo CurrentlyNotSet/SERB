@@ -85,7 +85,7 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
                     c.setBackground(caseDocsTable.getBackground());
                     c.setForeground(caseDocsTable.getForeground());
                 }
-                
+
                 return c;
             }
         });
@@ -530,9 +530,20 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
     private void awaitingTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_awaitingTableMouseClicked
         if (evt.getClickCount() > 1 && awaitingTable.getSelectedRow() > -1) {
             String fileName = awaitingTable.getValueAt(awaitingTable.getSelectedRow(), 4).toString();
-            String[] caseNumber = awaitingTable.getValueAt(awaitingTable.getSelectedRow(), 2).toString().split("-");
 
-            FileService.openFileWithCaseNumber(Global.activeSection, caseNumber[0], caseNumber[1], caseNumber[2], caseNumber[3], fileName);
+            switch (Global.activeSection) {
+                case "CSC":
+                case "Civil Service Commission":
+                    FileService.openFileWithORGNumber("CSC", awaitingTable.getValueAt(awaitingTable.getSelectedRow(), 2).toString(), fileName);
+                    break;
+                case "ORG":
+                    FileService.openFileWithORGNumber("ORG", awaitingTable.getValueAt(awaitingTable.getSelectedRow(), 2).toString(), fileName);
+                    break;
+                default:
+                    String[] caseNumber = awaitingTable.getValueAt(awaitingTable.getSelectedRow(), 2).toString().split("-");
+                    FileService.openFileWithCaseNumber(Global.activeSection, caseNumber[0], caseNumber[1], caseNumber[2], caseNumber[3], fileName);
+                    break;
+            }
         }
     }//GEN-LAST:event_awaitingTableMouseClicked
 

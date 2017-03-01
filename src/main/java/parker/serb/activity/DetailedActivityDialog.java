@@ -347,6 +347,7 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
                 FileService.openFileWithORGNumber("ORG", Global.caseNumber, fileName);
                 break;
             case "Civil Service Commission":
+            case "CSC":
                 FileService.openFileWithORGNumber("CSC", Global.caseNumber, fileName);
                 break;
             case "Hearings":
