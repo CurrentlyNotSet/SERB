@@ -1156,9 +1156,9 @@ public class Activity {
             int i = 0;
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "SELECT * FROM Activity WHERE Activity.date >= ?  AND Activity.date <= ? "
+            String sql = "SELECT * FROM Activity WHERE Activity.mailLog >= ?  AND Activity.mailLog <= ? "
                     + "AND Activity.fileName IS NOT NULL AND Activity.fileName != '' "
-                    + "AND Activity.active = 1 AND Activity.mailLog = 1 ";
+                    + "AND Activity.active = 1 ";
 
             if (!casetypes.isEmpty()) {
                 sql += "AND (";
@@ -1176,8 +1176,8 @@ public class Activity {
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
-            preparedStatement.setString(1, startDate + " 00:00:00.000");
-            preparedStatement.setString(2, endDate + " 23:59:59.999");
+            preparedStatement.setString(1, startDate);
+            preparedStatement.setString(2, endDate);
             int count = 2;
             for (Object casetype : casetypes) {
                 count = count + 1;
