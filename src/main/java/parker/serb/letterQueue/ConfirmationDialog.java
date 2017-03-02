@@ -40,9 +40,6 @@ public class ConfirmationDialog extends javax.swing.JDialog {
     }
 
     private void sendLetter() {
-        generateButton.setEnabled(false);
-        cancelButton.setEnabled(false);
-
         if (type.equals("Email")) {
             EmailOut.markEmailReadyToSend(letterID);
         } else if (type.equals("Postal")) {
@@ -271,7 +268,10 @@ public class ConfirmationDialog extends javax.swing.JDialog {
         if (verifyFilesExist()) {
             processThread();
             loadingPanel.setVisible(true);
+            InfoPanel.setVisible(false);
             jLayeredPane.moveToFront(loadingPanel);
+            generateButton.setEnabled(false);
+            cancelButton.setEnabled(false);
         } else {
             String listOfFiles = "";
             for (String file : filesMissing){
