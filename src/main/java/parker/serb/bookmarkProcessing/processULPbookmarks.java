@@ -159,7 +159,7 @@ public class processULPbookmarks {
         }
 
         for (BoardMeeting bm: boardMeetingList){
-            boardMeetingDate = bm.boardMeetingDate;
+            boardMeetingDate = Global.MMMMddyyyy.format(bm.boardMeetingDate);
             boardMeetingAgendaItem = bm.agendaItemNumber;
             break;
         }
