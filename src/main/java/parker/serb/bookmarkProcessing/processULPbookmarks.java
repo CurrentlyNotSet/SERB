@@ -6,6 +6,7 @@
 package parker.serb.bookmarkProcessing;
 
 import com.jacob.com.Dispatch;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import parker.serb.Global;
@@ -15,6 +16,7 @@ import parker.serb.sql.RelatedCase;
 import parker.serb.sql.ULPCase;
 import parker.serb.sql.User;
 import parker.serb.util.NumberFormatService;
+import parker.serb.util.SlackNotification;
 import parker.serb.util.StringUtilities;
 
 /**
@@ -159,7 +161,11 @@ public class processULPbookmarks {
         }
 
         for (BoardMeeting bm: boardMeetingList){
-            boardMeetingDate = Global.MMMMddyyyy.format(bm.boardMeetingDate);
+            try {
+                boardMeetingDate = Global.MMMMddyyyy.format(Global.mmddyyyy.parse(bm.boardMeetingDate));
+            } catch (ParseException ex) {
+                SlackNotification.sendNotification(ex);
+            }
             boardMeetingAgendaItem = bm.agendaItemNumber;
             break;
         }
