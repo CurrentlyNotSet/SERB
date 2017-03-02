@@ -35,23 +35,23 @@ public class PartyTypeSelectionPanel extends javax.swing.JDialog {
         setLocationRelativeTo(parent);
         setVisible(true);
     }
-    
+
     private void setLabel(String name) {
         jLabel1.setText("Please select a party type for " + name);
     }
-    
+
     private void loadPartyTypes() {
         jComboBox1.removeAllItems();
         List types = null;
-        
+
         if(Global.activeSection.equals("Hearings")) {
             types = PartyType.loadAllPartyTypesForHearings();
         } else {
             types = PartyType.loadAllPartyTypesBySection();
         }
-        
-        
-        
+
+
+
         for(Object type: types) {
             jComboBox1.addItem(type.toString());
         }
