@@ -340,6 +340,7 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
                     case "ORG":
                         FileService.openFileWithORGNumber("ORG", jTable1.getValueAt(jTable1.getSelectedRow(), 6).toString(), fileName);
                         break;
+                    case "CSC":
                     case "Civil Service Commission":
                         FileService.openFileWithORGNumber("CSC", jTable1.getValueAt(jTable1.getSelectedRow(), 6).toString(), fileName);
                         break;

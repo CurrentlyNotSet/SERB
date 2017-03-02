@@ -81,7 +81,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         setLocationRelativeTo(parent);
         setVisible(true);
     }
-    
+
     private void addRenderer() {
         personTable.setDefaultRenderer(Object.class, new TableCellRenderer(){
             private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
@@ -95,7 +95,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                 return c;
             }
         });
-        
+
         activityTable.setDefaultRenderer(Object.class, new TableCellRenderer(){
             private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
             @Override
@@ -108,7 +108,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                 return c;
             }
         });
-        
+
         additionalDocsTable.setDefaultRenderer(Object.class, new TableCellRenderer(){
             private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
             @Override
@@ -493,6 +493,8 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                     questionsCMDSPanel returnInfo = new questionsCMDSPanel(Global.root, true, CMDSdocToGenerate, count);
                     answers = returnInfo.answers;
                     returnInfo.dispose();
+                } else {
+                    answers = new questionsCMDSModel();
                 }
                 docName = generateDocument.generateCMDSdocument(CMDSdocToGenerate, answers, 0, toParties, ccParties);
                 break;
