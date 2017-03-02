@@ -356,8 +356,20 @@ public class PublicRecordsEmailPanel extends javax.swing.JDialog {
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         if (evt.getClickCount() > 1){
-            String filePath = jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString();
-            FileService.openFileWithCaseNumber(Global.activeSection, Global.caseYear, Global.caseType, Global.caseMonth, Global.caseNumber, filePath);
+            String fileName = jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString();
+
+            switch (Global.activeSection) {
+                case "CSC":
+                case "Civil Service Commission":
+                    FileService.openFileWithORGNumber("CSC", Global.caseNumber, fileName);
+                    break;
+                case "ORG":
+                    FileService.openFileWithORGNumber("ORG", Global.caseNumber, fileName);
+                    break;
+                default:
+                    FileService.openFileWithCaseNumber(Global.activeSection, Global.caseYear, Global.caseType, Global.caseMonth, Global.caseNumber, fileName);
+                    break;
+            }
         }
     }//GEN-LAST:event_jTable1MouseClicked
 

@@ -31,16 +31,16 @@ public class DetailedPostalOutPanel extends javax.swing.JDialog {
 
     int postalID;
     PostalOut post;
-    
+
     public DetailedPostalOutPanel(java.awt.Frame parent, boolean modal, int id) {
         super(parent, modal);
         initComponents();
         setRenderer();
         loadPanel(id);
         setLocationRelativeTo(parent);
-        setVisible(true);   
+        setVisible(true);
     }
-    
+
     private void setRenderer() {
         jTable1.setDefaultRenderer(Object.class, new TableCellRenderer(){
             private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
@@ -55,26 +55,26 @@ public class DetailedPostalOutPanel extends javax.swing.JDialog {
             }
         });
     }
-    
+
     private void loadPanel(int id) {
         postalID = id;
         setColumnWidth();
         loadInfo();
-        loadAttachments();       
+        loadAttachments();
     }
-    
+
     private void loadInfo() {
         post = PostalOut.getPostalOutByID(postalID);
-        
+
         addressBlockTextArea.setText(
                 (post.addressBlock.startsWith(post.person) ? "" : post.person + System.lineSeparator())
                 + post.addressBlock);
-        
+
         if (post.suggestedSendDate != null) {
             suggestedSendDatePicker.setText(Global.mmddyyyy.format(post.suggestedSendDate));
         }
     }
-    
+
     private void setColumnWidth() {
         // ID
         jTable1.getColumnModel().getColumn(0).setMinWidth(0);
@@ -85,17 +85,17 @@ public class DetailedPostalOutPanel extends javax.swing.JDialog {
     private void loadAttachments(){
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
-        
+
         List<PostalOutAttachment> postList = PostalOutAttachment.getPostalOutAttachments(postalID);
-        
+
         for (PostalOutAttachment item : postList){
             model.addRow(new Object[]{
                 item.id,
                 item.fileName
             });
-        }   
+        }
     }
-    
+
     private void clearDate(WebDateField dateField, MouseEvent evt) {
         if(evt.getButton() == MouseEvent.BUTTON3 && dateField.isEnabled()) {
             ClearDateDialog dialog = new ClearDateDialog((JFrame) Global.root, true);
@@ -105,16 +105,16 @@ public class DetailedPostalOutPanel extends javax.swing.JDialog {
             dialog.dispose();
         }
     }
-        
+
     private void saveInfo(){
         if (suggestedSendDatePicker.getText().trim().equals("")){
             post.suggestedSendDate = null;
         } else {
             post.suggestedSendDate = new java.sql.Date(suggestedSendDatePicker.getDate().getTime());
-        }  
+        }
         PostalOut.updatePostalOut(post);
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -269,8 +269,18 @@ public class DetailedPostalOutPanel extends javax.swing.JDialog {
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         if (evt.getClickCount() > 1){
-            String filePath = jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString(); 
-            FileService.openFileWithCaseNumber(post.section, post.caseYear, post.caseType, post.caseMonth, post.caseNumber, filePath);
+            String fileName = jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString();
+
+            switch (post.section) {
+                case "CSC":
+                case "Civil Service Commission":
+                case "ORG":
+                    FileService.openFileWithORGNumber(post.section, post.caseNumber, fileName);
+                    break;
+                default:
+                    FileService.openFileWithCaseNumber(post.section, post.caseYear, post.caseType, post.caseMonth, post.caseNumber, fileName);
+                    break;
+            }
         }
     }//GEN-LAST:event_jTable1MouseClicked
 

@@ -26,36 +26,36 @@ public class DetailedEmailOutPanel extends javax.swing.JDialog {
 
     int emailID;
     EmailOut eml;
-    
+
     public DetailedEmailOutPanel(java.awt.Frame parent, boolean modal, int id) {
         super(parent, modal);
         initComponents();
         loadPanel(id);
         setLocationRelativeTo(parent);
-        setVisible(true);   
+        setVisible(true);
     }
-    
+
     private void loadPanel(int id) {
         emailID = id;
         setColumnWidth();
         loadInfo();
-        loadAttachments();       
+        loadAttachments();
     }
-    
+
     private void loadInfo() {
         eml = EmailOut.getEmailByID(emailID);
-        
+
         toTextBox.setText(eml.to);
         fromTextBox.setText(eml.from);
         ccTextbox.setText(eml.cc);
         subjectTextbox.setText(eml.subject);
         emailBodyTextArea.setText(eml.body);
-        
+
         if (eml.suggestedSendDate != null) {
             suggestedSendDatePicker.setText(Global.mmddyyyy.format(eml.suggestedSendDate));
         }
     }
-    
+
     private void setColumnWidth() {
         // ID
         jTable1.getColumnModel().getColumn(0).setMinWidth(0);
@@ -66,15 +66,15 @@ public class DetailedEmailOutPanel extends javax.swing.JDialog {
     private void loadAttachments(){
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
-        
+
         List<EmailOutAttachment> emailList = EmailOutAttachment.getEmailAttachments(emailID);
-        
+
         for (EmailOutAttachment item : emailList){
             model.addRow(new Object[]{
                 item.id,
                 item.fileName
             });
-        }   
+        }
     }
 
     private void saveInfo(){
@@ -83,10 +83,10 @@ public class DetailedEmailOutPanel extends javax.swing.JDialog {
             eml.suggestedSendDate = null;
         } else {
             eml.suggestedSendDate = new java.sql.Date(suggestedSendDatePicker.getDate().getTime());
-        }  
+        }
         EmailOut.updateEmailOut(eml);
     }
-    
+
     private void clearDate(WebDateField dateField, MouseEvent evt) {
         if(evt.getButton() == MouseEvent.BUTTON3 && dateField.isEnabled()) {
             ClearDateDialog dialog = new ClearDateDialog((JFrame) Global.root, true);
@@ -96,7 +96,7 @@ public class DetailedEmailOutPanel extends javax.swing.JDialog {
             dialog.dispose();
         }
     }
-        
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -326,8 +326,17 @@ public class DetailedEmailOutPanel extends javax.swing.JDialog {
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         if (evt.getClickCount() > 1){
-            String filePath = jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString(); 
-            FileService.openFileWithCaseNumber(eml.section, eml.caseYear, eml.caseType, eml.caseMonth, eml.caseNumber, filePath);
+            String fileName = jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString();
+            switch (eml.section) {
+                case "CSC":
+                case "Civil Service Commission":
+                case "ORG":
+                    FileService.openFileWithORGNumber(eml.section, eml.caseNumber, fileName);
+                    break;
+                default:
+                    FileService.openFileWithCaseNumber(eml.section, eml.caseYear, eml.caseType, eml.caseMonth, eml.caseNumber, fileName);
+                    break;
+            }
         }
     }//GEN-LAST:event_jTable1MouseClicked
 

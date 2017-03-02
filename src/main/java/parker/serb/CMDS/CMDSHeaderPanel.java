@@ -28,7 +28,7 @@ import parker.serb.util.NumberFormatService;
 public class CMDSHeaderPanel extends javax.swing.JPanel {
 
     CMDSCaseSearch search = null;
-    
+
     /**
      * Creates new form REPHeaderPanel
      */
@@ -36,7 +36,7 @@ public class CMDSHeaderPanel extends javax.swing.JPanel {
         initComponents();
         addListeners();
     }
-    
+
     private void addListeners() {
         caseNumberComboBox.addActionListener((ActionEvent e) -> {
             if(caseNumberComboBox.getSelectedItem() != null) {
@@ -61,7 +61,7 @@ public class CMDSHeaderPanel extends javax.swing.JPanel {
                         Global.root.getcMDSRootPanel1().getActivityPanel1().loadAllActivity();
                         Global.root.getjButton2().setText("Add Entry");
                         Global.root.getjButton2().setEnabled(true);
-                        Global.root.getjButton4().setText("Letter");
+                        Global.root.getjButton4().setText("Documents");
                         Global.root.getjButton4().setEnabled(true);
                         Global.root.getjButton9().setVisible(true);
                     }
@@ -70,22 +70,22 @@ public class CMDSHeaderPanel extends javax.swing.JPanel {
             }
         });
     }
-    
+
     private void loadInformation() {
         if(caseNumberComboBox.getSelectedItem().toString().trim().length() == 16) {
             NumberFormatService.parseFullCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim());
             User.updateLastCaseNumber();
             loadHeaderInformation();
         } else {
-            new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());  
+            new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
         }
     }
-    
+
     public void loadHeaderInformation() {
-        
+
         String appellee = "";
-        String appellant = "";  
-        
+        String appellant = "";
+
         if(Global.caseNumber != null) {
             CMDSCase cmds = CMDSCase.loadHeaderInformation();
             if(cmds == null) {
@@ -99,14 +99,14 @@ public class CMDSHeaderPanel extends javax.swing.JPanel {
                 inventoryStatusLineTextBox.setText(cmds.inventroyStatusLine != null ? cmds.inventroyStatusLine : "");
                 statusTextBox.setText(cmds.caseStatus != null ? cmds.caseStatus : "");
                 resultTextBox.setText(cmds.result != null ? cmds.result : "");
-                
+
                 List caseParties = CaseParty.loadPartiesByCase();
 
                 for(Object caseParty: caseParties) {
                     CaseParty partyInformation = (CaseParty) caseParty;
-                    
+
                     String name;
-                    
+
                     if(partyInformation.firstName.equals("") && partyInformation.lastName.equals("")) {
                         name = partyInformation.companyName;
                     } else {
@@ -143,18 +143,18 @@ public class CMDSHeaderPanel extends javax.swing.JPanel {
             inventoryStatusLineTextBox.setCaretPosition(0);
         }
     }
-    
+
     public void loadCases() {
         caseNumberComboBox.removeAllItems();
         caseNumberComboBox.addItem("");
 
         List caseNumberList = CMDSCase.loadCMDSCaseNumbers();
-        
+
         caseNumberList.stream().forEach((caseNumber) -> {
             caseNumberComboBox.addItem(caseNumber.toString());
         });
     }
-    
+
     void clearAll() {
         Global.caseYear = null;
         Global.caseType = null;
@@ -191,7 +191,7 @@ public class CMDSHeaderPanel extends javax.swing.JPanel {
     public JTextField getAppelleeTextBox() {
         return appelleeTextBox;
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
