@@ -50,10 +50,12 @@ public class StringUtilities {
         if (item.jobTitle != null) {
             fullName = fullName.trim() + (item.jobTitle.equals("") ? "" : ", " + item.jobTitle.trim());
         }
-        if (!"".equals(fullName.trim()) && item.companyName != null){
-            fullName = fullName.trim() + System.lineSeparator() +  item.companyName.trim();
-        } else {
-            fullName = fullName.trim() + (item.companyName.equals("") ? "" : " " + item.companyName.trim());
+        if (item.companyName != null){
+            if (fullName.trim().equals("")){
+                fullName = fullName.trim() + (item.companyName.equals("") ? "" : " " + item.companyName.trim());
+            } else {
+                fullName = fullName.trim() + (item.companyName.equals("") ? "" : ", " + item.companyName.trim());
+            }
         }
 
         return fullName.trim();
