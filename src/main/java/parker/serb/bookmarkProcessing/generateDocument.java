@@ -353,6 +353,12 @@ public class generateDocument {
             processBookmark.process("SerbFax" + (i == 0 ? "" : i), sysAdminInfo.Fax == null ? ""
                     : "Fax: " + sysAdminInfo.Fax, Document);
 
+            //Current User
+            processBookmark.process("LOGGEDINUSER" + (i == 0 ? "" : i),
+                    StringUtilities.buildFullName(Global.activeUser.firstName, Global.activeUser.middleInitial, Global.activeUser.lastName),
+                    Document);
+            processBookmark.process("LOGGEDINUSERTITLE" + (i == 0 ? "" : i), Global.activeUser.jobTitle, Document);
+
             //Made up stuff
             processBookmark.process("TODAYSDATE" + (i == 0 ? "" : i), Global.MMMMddyyyy.format(new Date()), Document);
             processBookmark.process("DAY" + (i == 0 ? "" : i), Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
@@ -507,6 +513,12 @@ public class generateDocument {
             processBookmark.process("PBRPhone" + (i == 0 ? "" : i), sysAdminInfo.Phone, Document);
             processBookmark.process("PBRFooter" + (i == 0 ? "" : i), sysAdminInfo.Footer, Document);
             processBookmark.process("PBRFax" + (i == 0 ? "" : i), sysAdminInfo.Fax, Document);
+
+            //Current User
+            processBookmark.process("LOGGEDINUSER" + (i == 0 ? "" : i),
+                    StringUtilities.buildFullName(Global.activeUser.firstName, Global.activeUser.middleInitial, Global.activeUser.lastName),
+                    Document);
+            processBookmark.process("LOGGEDINUSERTITLE" + (i == 0 ? "" : i), Global.activeUser.jobTitle, Document);
 
             //Made up stuff
             processBookmark.process("TODAYSDATE" + (i == 0 ? "" : i), Global.MMMMddyyyy.format(new Date()), Document);

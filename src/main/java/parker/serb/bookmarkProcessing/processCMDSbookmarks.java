@@ -245,8 +245,8 @@ public class processCMDSbookmarks {
             }
         }
 
-        if (item.mediatorID > 0) {
-            ALJname = User.getNameByID(item.mediatorID);
+        if (item.aljID > 0) {
+            ALJname = User.getNameByID(item.aljID);
         }
 
         if (answers.getGenderAppellant() != null) {
@@ -287,7 +287,7 @@ public class processCMDSbookmarks {
             }
         }
 
-        
+
         if (answers.getDateRequestedContinuance() != null) {
             if (!answers.getRequestingPartyContinuance().trim().equals("")) {
                 dateRequestedString = answers.getRequestingPartyContinuance();
