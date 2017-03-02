@@ -268,8 +268,8 @@ public class processREPbookmarks {
 
         //Polling information
         if (caseInfo.pollingEndDate != null && caseInfo.pollingStartDate != null) {
-                polling = Global.mmddyyyy.format(caseInfo.pollingStartDate);
-                polling += " through " + Global.mmddyyyy.format(caseInfo.pollingEndDate);
+                polling = Global.MMMMMdyyyy.format(caseInfo.pollingStartDate);
+                polling += " through " + Global.MMMMMdyyyy.format(caseInfo.pollingEndDate);
             }
 
         //MultiCase Election
