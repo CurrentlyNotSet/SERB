@@ -44,9 +44,10 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
 
     List<ORGCase> orgCaseList;
     List<CaseParty> partyList;
-    
+
     /**
      * Creates new form ORGAllLettersPanel
+     *
      * @param parent
      * @param modal
      */
@@ -58,10 +59,11 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
         setLocationRelativeTo(parent);
         setVisible(true);
     }
-    
+
     private void addRenderer() {
-        jTable1.setDefaultRenderer(Object.class, new TableCellRenderer(){
-            private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
+        jTable1.setDefaultRenderer(Object.class, new TableCellRenderer() {
+            private DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
+
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                 Component c = DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
@@ -73,67 +75,66 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
             }
         });
     }
-    
-    private void setDefaults(){
+
+    private void setDefaults() {
         setColumnSize();
         loadReports();
         enableGenerateButton();
     }
-    
+
     //TODO: CLean this up so they all work for macOS
-    private void setColumnSize() {        
+    private void setColumnSize() {
         //ID
         jTable1.getColumnModel().getColumn(0).setMinWidth(0);
         jTable1.getColumnModel().getColumn(0).setPreferredWidth(0);
         jTable1.getColumnModel().getColumn(0).setMaxWidth(0);
-        
+
         //ORG #
         jTable1.getColumnModel().getColumn(1).setMinWidth(60);
         jTable1.getColumnModel().getColumn(1).setWidth(60);
         jTable1.getColumnModel().getColumn(1).setMaxWidth(60);
-        
+
         //Org Name
         //NONE SET
-        
         //ORG Via
         jTable1.getColumnModel().getColumn(3).setMinWidth(80);
         jTable1.getColumnModel().getColumn(3).setWidth(80);
         jTable1.getColumnModel().getColumn(3).setMaxWidth(80);
-        
+
         //Rep Via
         jTable1.getColumnModel().getColumn(4).setMinWidth(80);
         jTable1.getColumnModel().getColumn(4).setWidth(80);
         jTable1.getColumnModel().getColumn(4).setMaxWidth(80);
-        
+
         //AR Last
         jTable1.getColumnModel().getColumn(5).setMinWidth(80);
         jTable1.getColumnModel().getColumn(5).setWidth(80);
         jTable1.getColumnModel().getColumn(5).setMaxWidth(80);
-        
+
         //FS Last
         jTable1.getColumnModel().getColumn(6).setMinWidth(80);
         jTable1.getColumnModel().getColumn(6).setWidth(80);
         jTable1.getColumnModel().getColumn(6).setMaxWidth(80);
     }
-        
+
     private void loadReports() {
         List<SMDSDocuments> letterList = SMDSDocuments.loadDocumentNamesByTypeAndSection("ORG", "Letter");
-            
+
         DefaultComboBoxModel dt = new DefaultComboBoxModel();
         letterComboBox.setModel(dt);
         letterComboBox.addItem(new Item<>("0", ""));
-                
+
         for (SMDSDocuments letter : letterList) {
-            letterComboBox.addItem(new Item<>( String.valueOf(letter.id), letter.description ));
+            letterComboBox.addItem(new Item<>(String.valueOf(letter.id), letter.description));
         }
-        letterComboBox.setSelectedItem(new Item<>("0", "" ));
+        letterComboBox.setSelectedItem(new Item<>("0", ""));
     }
-        
+
     private void processComboBoxSelection() {
         orgCaseList = null;
         partyList = null;
         Calendar cal = Calendar.getInstance();
-        
+
         switch (letterComboBox.getSelectedItem().toString()) {
             case "Tickler 45 days":
                 cal.set(Calendar.DAY_OF_MONTH, 15);
@@ -156,41 +157,45 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
                 orgCaseList = ORGCase.getOrgCasesAllLettersDefault();
                 break;
         }
-        
-        FYEDuringTextField.setText(letterComboBox.getSelectedItem().toString().equals("") 
+
+        FYEDuringTextField.setText(letterComboBox.getSelectedItem().toString().equals("")
                 ? "" : cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH));
         loadTable();
     }
-    
-    private void processOverdueNumbers(Calendar cal){
+
+    private void processOverdueNumbers(Calendar cal) {
         String FYEMonthName = cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH);
-        
+
         orgCaseList = ORGCase.getOrgCasesAllLetters(FYEMonthName, Global.SQLDateFormat.format(cal.getTime()));
     }
-    
-    private void loadTable(){
+
+    private void loadTable() {
         int postalNumber = 0;
         int EmailNumber = 0;
-        
+
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
-        
+
+        System.out.println(orgCaseList.size());
+
         for (ORGCase item : orgCaseList) {
             String orgVia = "";
             String repVia = "";
-            
+            String ARDate = "";
+            String FSDate = "";
+
             partyList = CaseParty.loadORGPartiesByCase("ORG", item.orgNumber);
             for (CaseParty party : partyList) {
                 if (party.caseRelation.equals("Representative")) {
                     if (item.orgEmail != null) {
                         EmailNumber++;
-                        if (!repVia.trim().equals("")){
+                        if (!repVia.trim().equals("")) {
                             repVia += ", ";
                         }
                         repVia += "Email";
                     } else if (item.orgAddress1 != null & item.orgCity != null & item.orgState != null && item.orgZip != null) {
                         postalNumber++;
-                        if (!repVia.trim().equals("")){
+                        if (!repVia.trim().equals("")) {
                             repVia += ", ";
                         }
                         repVia += "Postal";
@@ -198,43 +203,51 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
                 }
             }
 
-            if (item.orgEmail != null){
+            if (item.orgEmail != null) {
                 EmailNumber++;
                 orgVia = "Email";
-            } else if (item.orgAddress1 != null & item.orgCity != null & item.orgState != null && item.orgZip != null){
+            } else if (item.orgAddress1 != null & item.orgCity != null & item.orgState != null && item.orgZip != null) {
                 postalNumber++;
                 orgVia = "Postal";
             }
-            
+
+            if (item.annualReport != null) {
+                ARDate = Global.mmddyyyy.format(item.annualReport);
+            }
+
+            if (item.financialReport != null) {
+                FSDate = Global.mmddyyyy.format(item.financialReport);
+            }
+
             model.addRow(new Object[]{
-                item.id,                                    //id
-                item.orgNumber,                             //org Number
-                item.orgName,                               //org Name
-                orgVia,                                     //org via
-                repVia,                                     //rep via
-                Global.mmddyyyy.format(item.annualReport),  //AR Last
-                Global.mmddyyyy.format(item.financialReport)//FS Last
+                item.id, //id
+                item.orgNumber, //org Number
+                item.orgName, //org Name
+                orgVia, //org via
+                repVia, //rep via
+                ARDate, //AR Last
+                FSDate//FS Last
             });
         }
-        
-        NumberOfOrgsTextField.setText(letterComboBox.getSelectedItem().toString().equals("") 
+
+        NumberOfOrgsTextField.setText(letterComboBox.getSelectedItem().toString().equals("")
                 ? "" : String.valueOf(orgCaseList.size()));
-        
-        PostalMailTextField.setText(letterComboBox.getSelectedItem().toString().equals("") 
+
+        PostalMailTextField.setText(letterComboBox.getSelectedItem().toString().equals("")
                 ? "" : String.valueOf(postalNumber));
-        
-        EMailTextField.setText(letterComboBox.getSelectedItem().toString().equals("") 
+
+        EMailTextField.setText(letterComboBox.getSelectedItem().toString().equals("")
                 ? "" : String.valueOf(EmailNumber));
     }
-    
+
     private void enableGenerateButton() {
-        if(letterComboBox.getSelectedItem().toString().equals("") || orgCaseList.isEmpty()) {
+        if (letterComboBox.getSelectedItem().toString().equals("") || orgCaseList.isEmpty()) {
             GenerateButton.setEnabled(false);
         } else {
             GenerateButton.setEnabled(true);
         }
     }
-    
+
     private void generateLetters() {
         int selection = 0;
 
@@ -248,44 +261,43 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
             File templateFile = new File(Global.templatePath + Global.activeSection + File.separator + template.fileName);
 
             if (templateFile.exists()) {
-                
+
                 for (ORGCase item : orgCaseList) {
                     String attachDocName = "";
-                    
+
                     String docName = generateDocument.generateSMDSdocument(template, 0, null, null, item, null);
-                    
-                    
+
                     if (template.questionsFileName != null) {
                         attachDocName = copyAttachmentToCaseFolder(item, template.questionsFileName);
                     }
-                                        
+
                     if (template.fileName.startsWith("Tickler")) {
                         attachDocName = copyAttachmentToCaseFolder(item, "EOAR.pdf");
                     }
-                    
+
                     if (template.fileName.startsWith("New Registration")) {
                         attachDocName = copyAttachmentToCaseFolder(item, "RegistrationReportForm.pdf");
-                    }                                   
-                    
-                    Activity.addActivtyORGCase("ORG", item.orgNumber ,
-                            "Created " + (template.historyDescription == null ? template.description : template.historyDescription)
-                            , docName);
-                                        
+                    }
+
+                    Activity.addActivtyORGCase("ORG", item.orgNumber,
+                            "Created " + (template.historyDescription == null ? template.description : template.historyDescription),
+                            docName);
+
                     partyList = CaseParty.loadORGPartiesByCase("ORG", item.orgNumber);
                     for (CaseParty party : partyList) {
                         if (party.caseRelation.equals("Representative")) {
-                            
+
                             if (item.orgEmail != null) {
                                 int emailID = insertEmail(template, item.orgNumber, party.emailAddress);
                                 insertGeneratedAttachementEmail(emailID, docName, true);
-                                if (!attachDocName.equals("")){
+                                if (!attachDocName.equals("")) {
                                     insertGeneratedAttachementEmail(emailID, attachDocName, false);
                                 }
-                                
+
                             } else if (party.address1 != null & party.city != null & party.stateCode != null && party.zipcode != null) {
                                 int postalID = insertPostal(template, item.orgNumber, party);
                                 insertGeneratedAttachementPostal(postalID, docName, true);
-                                if (!attachDocName.equals("")){
+                                if (!attachDocName.equals("")) {
                                     insertGeneratedAttachementPostal(postalID, attachDocName, false);
                                 }
                             }
@@ -311,7 +323,7 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
             }
         }
     }
-    
+
     private String copyAttachmentToCaseFolder(ORGCase item, String fileName) {
         String docSourcePath = Global.templatePath + File.separator + Global.activeSection + File.separator + fileName;
 
@@ -328,7 +340,7 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
         }
         return destFileName;
     }
-    
+
     private int insertEmail(SMDSDocuments SMDSdocToGenerate, String orgNumber, String toEmail) {
         String emailBody = SMDSdocToGenerate.emailBody == null ? "" : SMDSdocToGenerate.emailBody;
 
@@ -348,8 +360,8 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
         eml.to = toEmail.trim().equals("") ? null : toEmail.trim();
         eml.from = Global.activeUser.emailAddress;
         eml.cc = null;
-        eml.bcc = null;      
-        eml.subject = SMDSdocToGenerate.emailSubject != null ? SMDSdocToGenerate.emailSubject 
+        eml.bcc = null;
+        eml.subject = SMDSdocToGenerate.emailSubject != null ? SMDSdocToGenerate.emailSubject
                 : (SMDSdocToGenerate.description == null ? "" : SMDSdocToGenerate.description);
         eml.body = emailBody;
         eml.userID = Global.activeUser.id;
@@ -358,7 +370,7 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
 
         return EmailOut.insertEmail(eml);
     }
-    
+
     private int insertPostal(SMDSDocuments SMDSdocToGenerate, String orgNumber, CaseParty party) {
         PostalOut post = new PostalOut();
 
@@ -372,20 +384,19 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
         post.userID = Global.activeUser.id;
         post.suggestedSendDate = null;
         post.historyDescription = SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription;
-        
 
         return PostalOut.insertPostalOut(post);
     }
 
     private int insertPostalORG(SMDSDocuments SMDSdocToGenerate, ORGCase item) {
         CaseParty orgAddress = new CaseParty();
-        
+
         orgAddress.address1 = item.orgAddress1;
         orgAddress.address2 = item.orgAddress2;
         orgAddress.city = item.orgCity;
         orgAddress.stateCode = item.orgState;
-        orgAddress.zipcode = item.orgZip;       
-        
+        orgAddress.zipcode = item.orgZip;
+
         PostalOut post = new PostalOut();
 
         post.section = "ORG";
@@ -398,10 +409,10 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
         post.userID = Global.activeUser.id;
         post.suggestedSendDate = null;
         post.historyDescription = SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription;
-        
+
         return PostalOut.insertPostalOut(post);
     }
-    
+
     private void insertGeneratedAttachementEmail(int emailID, String docName, boolean primary) {
         if (emailID > 0) {
             EmailOutAttachment attach = new EmailOutAttachment();
@@ -423,7 +434,7 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
             PostalOutAttachment.insertAttachment(attach);
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -654,11 +665,11 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
             generateLetters();
             jLayeredPane1.moveToBack(jPanel1);
         });
-        temp.start();        
+        temp.start();
     }//GEN-LAST:event_GenerateButtonActionPerformed
 
     private void letterComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_letterComboBoxActionPerformed
-        processComboBoxSelection();        
+        processComboBoxSelection();
         enableGenerateButton();
     }//GEN-LAST:event_letterComboBoxActionPerformed
 
