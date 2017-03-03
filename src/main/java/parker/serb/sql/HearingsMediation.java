@@ -23,7 +23,7 @@ import parker.serb.util.SlackNotification;
  * @author User
  */
 public class HearingsMediation {
-    
+
     public int id;
     public boolean active;
     public String caseYear;
@@ -35,7 +35,7 @@ public class HearingsMediation {
     public Timestamp dateAssigned;
     public Timestamp mediationDate;
     public String outcome;
-    
+
     public static List<HearingsMediation> loadAllMediationsByCaseNumber() {
         List<HearingsMediation> items = new ArrayList<>();
 
@@ -70,20 +70,20 @@ public class HearingsMediation {
                 med.dateAssigned = rs.getTimestamp("dateAssigned");
                 med.mediationDate = rs.getTimestamp("mediationDate");
                 med.outcome = rs.getString("outcome");
-                
+
                 items.add(med);
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadAllMediationsByCaseNumber();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return items;
     }
-    
+
     public static String getLastestMediatorByCase() {
         String mediator = "";
 
@@ -113,7 +113,7 @@ public class HearingsMediation {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 getLastestMediatorByCase();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -125,7 +125,7 @@ public class HearingsMediation {
             int mediatorID,
             String dateAsigned,
             String mediationDate,
-            String outcome) 
+            String outcome)
     {
         Statement stmt = null;
         try {
@@ -148,20 +148,20 @@ public class HearingsMediation {
             preparedStatement.setTimestamp(7, dateAsigned.equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(dateAsigned)));
             preparedStatement.setTimestamp(8, mediationDate.equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(mediationDate)));
             preparedStatement.setString(9, outcome.equals("") ? null : outcome);
-   
+
             preparedStatement.executeUpdate();
-            
+
             Activity.addActivty("Created a Mediation on " + mediationDate, null);
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 addMediation(pcPreD, mediatorID, dateAsigned, mediationDate, outcome);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void removeMediationByID(String id, String mediationDate) {
         Statement stmt = null;
         try {
@@ -171,15 +171,15 @@ public class HearingsMediation {
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, id);
-            
+
             preparedStatement.executeUpdate();
-            
-            Activity.addActivty("Removed Meidation occuring " + mediationDate, null);
+
+            Activity.addActivty("Removed Mediation occuring " + mediationDate, null);
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 removeMediationByID(id, mediationDate);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -212,15 +212,15 @@ public class HearingsMediation {
             preparedStatement.setTimestamp(4, mediationDate.equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(mediationDate)));
             preparedStatement.setString(5, outcome.equals("") ? null : outcome);
             preparedStatement.setString(6, id);
-            
+
             preparedStatement.executeUpdate();
-            
-            Activity.addActivty("Updated Information for Meidation on " + mediationDate, null);
+
+            Activity.addActivty("Updated Information for Mediation on " + mediationDate, null);
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateMediation(id, pcPreD, mediatorID, dateAsigned, mediationDate, outcome);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
