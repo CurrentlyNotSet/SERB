@@ -2014,7 +2014,7 @@ public class RootPanel extends javax.swing.JFrame {
                 break;
             case "Hearings":
                 Audit.addAuditEntry("Clicked Hearings Report Button");
-                new ReportDialog((JFrame) this.getRootPane().getParent(), true, "Hearing");
+                new ReportDialog((JFrame) this.getRootPane().getParent(), true, "HRG");
                 break;
             case "ORG":
                 Audit.addAuditEntry("Clicked ORG Report Button");
