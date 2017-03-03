@@ -906,7 +906,10 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         if (checkActivityTable() && checkAdditionalDocsTable()){
             processThread();
             loadingPanel.setVisible(true);
+            InfoPanel.setVisible(false);
             jLayeredPane.moveToFront(loadingPanel);
+            generateButton.setEnabled(false);
+            cancelButton.setEnabled(false);
         } else {
             WebOptionPane.showMessageDialog(Global.root, "<html><center> Sorry, unable to locate files selected. <br><br>Unable to generate letter.</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
         }

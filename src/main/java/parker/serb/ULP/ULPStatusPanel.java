@@ -11,10 +11,14 @@ import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
 import parker.serb.boardmeetings.AddULPBoardMeeting;
@@ -56,6 +60,47 @@ public class ULPStatusPanel extends javax.swing.JPanel {
     }
     
     private void addListeners() {
+        
+        filedDateTextBox.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                try {
+                    Date startDate = Global.mmddyyyy.parse(filedDateTextBox.getText());
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(startDate);
+                    cal.add(Calendar.MONTH, 4);
+                    reportDueDateTextBox.setText(Global.mmddyyyy.format(cal.getTime()));
+                } catch (ParseException ex) {
+                    reportDueDateTextBox.setText("");
+                }            
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                try {
+                    Date startDate = Global.mmddyyyy.parse(filedDateTextBox.getText());
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(startDate);
+                    cal.add(Calendar.MONTH, 4);
+                    reportDueDateTextBox.setText(Global.mmddyyyy.format(cal.getTime()));
+                } catch (ParseException ex) {
+                    reportDueDateTextBox.setText("");
+                }  
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                try {
+                    Date startDate = Global.mmddyyyy.parse(filedDateTextBox.getText());
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(startDate);
+                    cal.add(Calendar.MONTH, 4);
+                    reportDueDateTextBox.setText(Global.mmddyyyy.format(cal.getTime()));
+                } catch (ParseException ex) {
+                    reportDueDateTextBox.setText("");
+                }  
+            }
+        });
         
         boardMeetingTable.addMouseListener(new MouseListener() {
             @Override

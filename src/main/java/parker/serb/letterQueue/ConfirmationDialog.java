@@ -5,7 +5,15 @@
  */
 package parker.serb.letterQueue;
 
+import com.alee.laf.optionpane.WebOptionPane;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import parker.serb.Global;
 import parker.serb.sql.EmailOut;
+import parker.serb.sql.EmailOutAttachment;
+import parker.serb.sql.PostalOut;
+import parker.serb.sql.PostalOutAttachment;
 
 /**
  *
@@ -15,6 +23,7 @@ public class ConfirmationDialog extends javax.swing.JDialog {
 
     String type;
     int letterID;
+    List<String> filesMissing = new ArrayList<>();
 
     public ConfirmationDialog(java.awt.Frame parent, boolean modal, String typePassed, int letterIDPassed) {
         super(parent, modal);
@@ -44,6 +53,63 @@ public class ConfirmationDialog extends javax.swing.JDialog {
                 dispose();
         });
         temp.start();
+    }
+
+    private boolean verifyFilesExist() {
+        boolean allExist = true;
+        String path = "";
+        if (type.equals("Email")) {
+            EmailOut eml = EmailOut.getEmailByID(letterID);
+            List<EmailOutAttachment> attachList = EmailOutAttachment.getEmailAttachments(letterID);
+            if (Global.activeSection.equalsIgnoreCase("Civil Service Commission")
+                    || Global.activeSection.equalsIgnoreCase("CSC")
+                    || Global.activeSection.equalsIgnoreCase("ORG")) {
+                path = Global.templatePath
+                        + (Global.activeSection.equals("Civil Service Commission")
+                        ? eml.caseType : Global.activeSection) + File.separator;
+            } else {
+                path = Global.activityPath + File.separatorChar
+                        + Global.activeSection + File.separatorChar
+                        + eml.caseYear + File.separatorChar
+                        + (eml.caseYear + "-" + eml.caseType + "-" + eml.caseMonth + "-" + eml.caseNumber)
+                        + File.separatorChar;
+            }
+
+            for (EmailOutAttachment attach : attachList) {
+                File templateFile = new File(path + attach.fileName);
+                if (!templateFile.exists()) {
+                    allExist = false;
+                    filesMissing.add(attach.fileName);
+                }
+            }
+
+        } else if (type.equals("Postal")) {
+            PostalOut post = PostalOut.getPostalOutByID(letterID);
+            List<PostalOutAttachment> postList = PostalOutAttachment.getPostalOutAttachments(letterID);
+            if (Global.activeSection.equalsIgnoreCase("Civil Service Commission")
+                    || Global.activeSection.equalsIgnoreCase("CSC")
+                    || Global.activeSection.equalsIgnoreCase("ORG")) {
+                path = Global.templatePath
+                        + (Global.activeSection.equals("Civil Service Commission")
+                        ? post.caseType : Global.activeSection) + File.separator;
+            } else {
+                path = Global.activityPath + File.separatorChar
+                        + Global.activeSection + File.separatorChar
+                        + post.caseYear + File.separatorChar
+                        + (post.caseYear + "-" + post.caseType + "-" + post.caseMonth + "-" + post.caseNumber)
+                        + File.separatorChar;
+            }
+
+            for (PostalOutAttachment attach : postList) {
+                File templateFile = new File(path + attach.fileName);
+                if (!templateFile.exists()) {
+                    allExist = false;
+                    filesMissing.add(attach.fileName);
+                }
+            }
+
+        }
+        return allExist;
     }
 
     @SuppressWarnings("unchecked")
@@ -199,9 +265,25 @@ public class ConfirmationDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
-        processThread();
-        loadingPanel.setVisible(true);
-        jLayeredPane.moveToFront(loadingPanel);
+        if (verifyFilesExist()) {
+            processThread();
+            loadingPanel.setVisible(true);
+            InfoPanel.setVisible(false);
+            jLayeredPane.moveToFront(loadingPanel);
+            generateButton.setEnabled(false);
+            cancelButton.setEnabled(false);
+        } else {
+            String listOfFiles = "";
+            for (String file : filesMissing){
+                listOfFiles += "<br>" + file;
+            }
+            WebOptionPane.showMessageDialog(
+                    Global.root,
+                    "<html><center> Sorry, unable to locate file(s) required to send.<br>" + listOfFiles + "</center></html>",
+                    "Error",
+                    WebOptionPane.ERROR_MESSAGE
+            );
+        }
     }//GEN-LAST:event_generateButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed

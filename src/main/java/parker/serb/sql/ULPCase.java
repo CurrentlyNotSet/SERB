@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import org.apache.commons.dbutils.DbUtils;
@@ -582,20 +583,29 @@ public class ULPCase {
                     + " caseType,"
                     + " caseMonth,"
                     + " caseNumber,"
-                    + " fileDate)"
+                    + " fileDate, "
+                    + " reportDueDate)"
                     + " Values ("
                     + " ?,"
                     + " ?,"
                     + " ?,"
                     + " ?,"
+                    + " ?,"
                     + " ?)";
+            
+            Date startDate = new Date(System.currentTimeMillis());
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(startDate);
+            cal.add(Calendar.MONTH, 4);
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, caseYear);
             preparedStatement.setString(2, caseType);
             preparedStatement.setString(3, caseMonth);
             preparedStatement.setString(4, caseNumber);
-            preparedStatement.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
+            preparedStatement.setTimestamp(5, new Timestamp(startDate.getTime()));
+            preparedStatement.setTimestamp(6, new Timestamp(cal.getTimeInMillis()));
+            
 
             int success = preparedStatement.executeUpdate();
 

@@ -102,6 +102,12 @@ public class RequestedInfoStringPanel extends javax.swing.JDialog {
         TextFieldLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         TextFieldLabel.setText("<<LABEL>>");
 
+        TextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TextFieldKeyTyped(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -150,6 +156,10 @@ public class RequestedInfoStringPanel extends javax.swing.JDialog {
     private void GenerateReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GenerateReportButtonActionPerformed
         GenerateReport.generateExactStringReport(TextField.getText().trim(), report);
     }//GEN-LAST:event_GenerateReportButtonActionPerformed
+
+    private void TextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TextFieldKeyTyped
+        generateButton();
+    }//GEN-LAST:event_TextFieldKeyTyped
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CancelButton;

@@ -328,12 +328,13 @@ public class fileEmailDialog extends javax.swing.JDialog {
         for (EmailAttachment attachment : attachments) {
             model.addRow(new Object[] {attachment.id, attachment.fileName, ""});
         }
+        
     }
     
     private JComboBox loadTypeComboBox(String section) {
         List typeList = ActivityType.loadAllActivityTypeBySection(section);
         
-        comboEditor.setMaximumRowCount(4);
+        comboEditor.setMaximumRowCount(10);
         comboEditor.removeAllItems();
         comboEditor.addItem("DO NOT FILE");
         comboEditor.addItem("-----------");
