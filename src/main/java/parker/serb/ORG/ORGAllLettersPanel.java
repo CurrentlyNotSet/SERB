@@ -660,10 +660,18 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
 
     private void GenerateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GenerateButtonActionPerformed
         jLayeredPane1.moveToFront(jPanel1);
+        GenerateButton.setEnabled(false);
+        CloseButton.setEnabled(false);
+        letterComboBox.setEnabled(false);
+        jTable1.setEnabled(false);
 
         Thread temp = new Thread(() -> {
             generateLetters();
             jLayeredPane1.moveToBack(jPanel1);
+            GenerateButton.setEnabled(true);
+            CloseButton.setEnabled(true);
+            letterComboBox.setEnabled(true);
+            jTable1.setEnabled(true);
         });
         temp.start();
     }//GEN-LAST:event_GenerateButtonActionPerformed
