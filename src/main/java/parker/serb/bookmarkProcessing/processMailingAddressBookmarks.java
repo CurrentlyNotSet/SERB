@@ -37,6 +37,8 @@ public class processMailingAddressBookmarks {
                 + NumberFormatService.generateFullCaseNumberNonGlobal(item.caseYear, item.caseType, item.caseMonth, item.caseNumber));
         docPath.mkdirs();
         String saveDocName = String.valueOf(new Date().getTime()) + "_Envelope" + ".docx";
+        saveDocName = saveDocName.replaceAll("[:\\\\/*?|<>]", "_");
+
         ActiveXComponent eolWord = null;
         eolWord = JacobCOMBridge.setWordActive(true, false, eolWord);
 
@@ -89,6 +91,8 @@ public class processMailingAddressBookmarks {
         File docPath = new File(System.getProperty("java.io.tmpdir"));
         docPath.mkdirs();
         String saveDocName = String.valueOf(new Date().getTime()) + "_Envelope" + ".docx";
+        saveDocName = saveDocName.replaceAll("[:\\\\/*?|<>]", "_");
+
         ActiveXComponent eolWord = null;
         eolWord = JacobCOMBridge.setWordActive(true, false, eolWord);
 

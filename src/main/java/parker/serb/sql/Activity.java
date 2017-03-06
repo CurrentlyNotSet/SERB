@@ -569,6 +569,7 @@ public class Activity {
                     + " date,"
                     + " action,"
                     + " comment,"
+                    + " [from],"
                     + " firstName,"
                     + " lastName,"
                     + " fileName"
@@ -599,6 +600,7 @@ public class Activity {
                     + " date,"
                     + " action,"
                     + " comment,"
+                    + " [from],"
                     + " firstName,"
                     + " lastName,"
                     + " fileName"
@@ -639,6 +641,7 @@ public class Activity {
                 act.id = caseActivity.getInt("id");
                 act.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
                 act.action = caseActivity.getString("action");
+                act.from = caseActivity.getString("from") == null ? "" : caseActivity.getString("from");
                 act.comment = caseActivity.getString("comment") == null ? "" : caseActivity.getString("comment");
                 act.fileName = caseActivity.getString("fileName");
                 activityList.add(act);
@@ -672,6 +675,7 @@ public class Activity {
                     + " date,"
                     + " action,"
                     + " comment,"
+                    + " [from],"
                     + " firstName,"
                     + " lastName,"
                     + " fileName"
@@ -692,6 +696,7 @@ public class Activity {
                 act.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
                 act.action = caseActivity.getString("action");
                 act.comment = caseActivity.getString("comment");
+                act.from = caseActivity.getString("from") == null ? "" : caseActivity.getString("from");
                 act.caseYear = caseActivity.getString("caseYear");
                 act.caseType = caseActivity.getString("caseType");
                 act.caseMonth = caseActivity.getString("caseMonth");
@@ -728,6 +733,7 @@ public class Activity {
                     + " date,"
                     + " action,"
                     + " comment,"
+                    + " [from],"
                     + " firstName,"
                     + " lastName,"
                     + " fileName"
@@ -763,6 +769,7 @@ public class Activity {
                 act.caseMonth = caseActivity.getString("caseMonth");
                 act.caseNumber = caseActivity.getString("caseNumber");
                 act.fileName = caseActivity.getString("fileName");
+                act.from = caseActivity.getString("from") == null ? "" : caseActivity.getString("from");
                 activityList.add(act);
             }
         } catch (SQLException ex) {

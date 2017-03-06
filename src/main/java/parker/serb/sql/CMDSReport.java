@@ -148,7 +148,7 @@ public class CMDSReport {
     }
 
     public static CMDSReport getReportByIDandDescription(int id, String description) {
-        CMDSReport item = new CMDSReport();
+        CMDSReport item = null;
 
         Statement stmt = null;
 
@@ -164,6 +164,7 @@ public class CMDSReport {
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
+                item = new CMDSReport();
                 item.id = rs.getInt("id");
                 item.active = rs.getBoolean("active");
                 item.section = rs.getString("section") == null ? "" : rs.getString("section");

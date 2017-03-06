@@ -263,12 +263,12 @@ public class FileService {
                 switch(section) {
                     case "ORG":
                     case "CSC":
-                        Activity.addScanActivtyFromDocketORGCSC(direction + " - Filed " + typeFull + " from " + from,
+                        Activity.addScanActivtyFromDocketORGCSC(direction + " - Filed " + typeFull,
                         fileDate + "_" + typeAbbrv + fileName.substring(fileName.lastIndexOf(".")),
                         caseNumber, from, to, typeFull, comment, false, false, section, activityDate);
                         break;
                     default:
-                        Activity.addScanActivtyFromDocket(direction + " - Filed " + typeFull + " from " + from,
+                        Activity.addScanActivtyFromDocket(direction + " - Filed " + typeFull,
                         fileDate + "_" + typeAbbrv + fileName.substring(fileName.lastIndexOf(".")),
                         caseNumber.trim().split("-"),from, to, typeFull, comment, false, false, activityDate);
                         break;
@@ -340,12 +340,12 @@ public class FileService {
                 switch(section) {
                     case "ORG":
                     case "CSC":
-                        Activity.addActivtyFromDocketORGCSC(direction + " - Filed " + typeFull + " from " + from,
+                        Activity.addActivtyFromDocketORGCSC(direction + " - Filed " + typeFull,
                         fileDate + "_" + typeAbbrv + fileName.substring(fileName.lastIndexOf(".")),
                         caseNumber, from, to, typeFull, comment, false, false, section, new Timestamp(System.currentTimeMillis()));
                         break;
                     default:
-                        Activity.addActivtyFromDocket(direction + " - Filed " + typeFull + " from " + from,
+                        Activity.addActivtyFromDocket(direction + " - Filed " + typeFull,
                         fileDate + "_" + typeAbbrv + fileName.substring(fileName.lastIndexOf(".")),
                         caseNumber.trim().split("-"),from, to, typeFull, comment, false, false);
                         break;
@@ -502,12 +502,12 @@ public class FileService {
                 switch(section) {
                     case "ORG":
                     case "CSC":
-                        Activity.addActivtyFromDocketORGCSC(direction + " - Filed " + fullType + " from " + from,
+                        Activity.addActivtyFromDocketORGCSC(direction + " - Filed " + fullType,
                         fileDate + "_" + type + fileExtenstion,
                         caseNumber, from, to, fullType, comment, false, false, section, activityDate);
                         break;
                     default:
-                        Activity.addActivtyFromDocket(direction + " - Filed " + fullType + " from " + from,
+                        Activity.addActivtyFromDocket(direction + " - Filed " + fullType,
                         fileDate + "_" + type + fileExtenstion,
                         caseNumber.trim().split("-"), from, to, fullType, comment, false, false, activityDate);
                         break;

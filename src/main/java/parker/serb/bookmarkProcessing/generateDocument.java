@@ -63,6 +63,8 @@ public class generateDocument {
                     + StringUtils.left(template.historyFileName == null ? template.description : template.historyFileName, 50)
                     + ".docx";
 
+            saveDocName = saveDocName.replaceAll("[:\\\\/*?|<>]", "_");
+
             Dispatch document = Dispatch.call(eolWord.getProperty("Documents").toDispatch(), "Open",
                     Global.templatePath + template.section.replace("HRG", "Hearings") + File.separator + template.fileName).toDispatch();
             ActiveXComponent.call(eolWord.getProperty("Selection").toDispatch(), "Find").toDispatch();
@@ -114,6 +116,8 @@ public class generateDocument {
             docPath.mkdirs();
             saveDocName = String.valueOf(new Date().getTime()) + "_" + StringUtils.left(template.LetterName, 50) + ".docx";
 
+            saveDocName = saveDocName.replaceAll("[:\\\\/*?|<>]", "_");
+
             Dispatch document = Dispatch.call(eolWord.getProperty("Documents").toDispatch(), "Open",
                     Global.templatePath + Global.activeSection + File.separator + template.Location).toDispatch();
             ActiveXComponent.call(eolWord.getProperty("Selection").toDispatch(), "Find").toDispatch();
@@ -162,6 +166,8 @@ public class generateDocument {
                         + StringUtils.left(template.historyFileName == null ? template.description : template.historyFileName, 50)
                         + ".docx";
 
+                saveDocName = saveDocName.replaceAll("[:\\\\/*?|<>]", "_");
+
                 Dispatch document = Dispatch.call(eolWord.getProperty("Documents").toDispatch(), "Open",
                         Global.templatePath + template.section.replace("HRG", "Hearings") + File.separator + template.fileName).toDispatch();
                 ActiveXComponent.call(eolWord.getProperty("Selection").toDispatch(), "Find").toDispatch();
@@ -204,6 +210,8 @@ public class generateDocument {
             saveDocName = "AnnualReport_" + startDate.replaceAll("[^\\d]", "-")
                     + "_" + endDate.replaceAll("[^\\d]", "-") + "_"
                     + String.valueOf(new Date().getTime()) + ".docx";
+
+            saveDocName = saveDocName.replaceAll("[:\\\\/*?|<>]", "_");
 
             Dispatch document = Dispatch.call(eolWord.getProperty("Documents").toDispatch(), "Open",
                     Global.templatePath + "ALL" + File.separator + "SERBAnnualReport.docx").toDispatch();
