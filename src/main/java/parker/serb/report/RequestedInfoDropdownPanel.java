@@ -66,7 +66,7 @@ public class RequestedInfoDropdownPanel extends javax.swing.JDialog {
     private void loadCombobox(String IDType) {
         DefaultComboBoxModel dt = new DefaultComboBoxModel();
         ComboBox.setModel(dt);
-        
+
         switch (IDType) {
             case "Month":
                 ComboBox.addItem("");
@@ -76,7 +76,6 @@ public class RequestedInfoDropdownPanel extends javax.swing.JDialog {
                 ComboBox.setSelectedItem("");
                 break;
             case "UserID":
-                ComboBox.addItem(new Item<>("0", ""));
                 ComboBox.addItem(new Item<>("%", "All"));
                 List<User> userList = User.getEnabledUsers();
                 for (User item : userList) {
@@ -85,7 +84,7 @@ public class RequestedInfoDropdownPanel extends javax.swing.JDialog {
                             StringUtilities.buildFullName(item.firstName, item.middleInitial, item.lastName))
                     );
                 }
-                ComboBox.setSelectedItem(new Item<>("0", ""));
+                ComboBox.setSelectedItem(new Item<>("%", "All"));
                 break;
             case "ActivityType":
                 comboBoxLabel.setText("Activity Type:");
@@ -97,7 +96,7 @@ public class RequestedInfoDropdownPanel extends javax.swing.JDialog {
                             item.descriptionFull)
                     );
                 }
-                ComboBox.setSelectedItem(new Item<>("0", ""));
+                ComboBox.setSelectedItem(new Item<>("%", "All"));
                 break;
             case "InvestigatorID":
                 comboBoxLabel.setText("Investigator:");
@@ -109,15 +108,15 @@ public class RequestedInfoDropdownPanel extends javax.swing.JDialog {
                             StringUtilities.buildFullName(item.firstName, item.middleInitial, item.lastName))
                     );
                 }
-                ComboBox.setSelectedItem(new Item<>("0", ""));
+                ComboBox.setSelectedItem(new Item<>("%", "All"));
                 break;
             default:
                 break;
         }
     }
-    
+
     private void generateButton() {
-        if (ComboBox.getSelectedIndex() > 0) {
+        if (ComboBox.getSelectedIndex() > -1) {
             GenerateReportButton.setEnabled(true);
         } else {
             GenerateReportButton.setEnabled(false);
@@ -134,16 +133,13 @@ public class RequestedInfoDropdownPanel extends javax.swing.JDialog {
             case "ActivityType":
                 Item item = (Item) ComboBox.getSelectedItem();
                 String comboBoxID = item.getValue().toString();
-                if (item.getDescription().equals("All")){
-                    comboBoxID = "%";
-                }
                 GenerateReport.generateIDReport(comboBoxID, report);
                 break;
             default:
                 break;
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

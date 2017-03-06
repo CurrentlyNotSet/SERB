@@ -59,10 +59,10 @@ public class RequestedInfoComboBoxStringPanel extends javax.swing.JDialog {
 
     private void loadCombobox(String IDType) {
         List<User> userList = null;
-        
+
         DefaultComboBoxModel dt = new DefaultComboBoxModel();
         ComboBox.setModel(dt);
-        ComboBox.addItem(new Item<>("0", ""));
+        ComboBox.addItem(new Item<>("%", "All"));
 
         switch (IDType) {
             case "ActivityType, Year":
@@ -75,7 +75,6 @@ public class RequestedInfoComboBoxStringPanel extends javax.swing.JDialog {
                 }
             case "InvestigatorID, Year":
                 userList = User.getEnabledInvestigators();
-                ComboBox.addItem(new Item<>("%", "All"));
                 for (User item : userList) {
                     if (item.investigator) {
                         ComboBox.addItem(new Item<>(
@@ -88,11 +87,11 @@ public class RequestedInfoComboBoxStringPanel extends javax.swing.JDialog {
             default:
                 break;
         }
-        ComboBox.setSelectedItem(new Item<>("0", ""));
+        ComboBox.setSelectedItem(new Item<>("%", "All"));
     }
-    
+
     private void generateButton() {
-        if (TextField.getText().trim().equals("") || ComboBox.getSelectedIndex() < 1) {
+        if (TextField.getText().trim().equals("") || ComboBox.getSelectedIndex() < 0) {
             GenerateReportButton.setEnabled(false);
         } else {
             GenerateReportButton.setEnabled(true);
@@ -154,6 +153,12 @@ public class RequestedInfoComboBoxStringPanel extends javax.swing.JDialog {
 
         TextFieldLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         TextFieldLabel.setText("<<LABEL>>");
+
+        TextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TextFieldKeyTyped(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -224,6 +229,10 @@ public class RequestedInfoComboBoxStringPanel extends javax.swing.JDialog {
     private void ComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxActionPerformed
         generateButton();
     }//GEN-LAST:event_ComboBoxActionPerformed
+
+    private void TextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TextFieldKeyTyped
+        generateButton();
+    }//GEN-LAST:event_TextFieldKeyTyped
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CancelButton;

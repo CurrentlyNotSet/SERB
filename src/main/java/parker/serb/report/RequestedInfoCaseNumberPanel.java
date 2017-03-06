@@ -6,7 +6,6 @@
 package parker.serb.report;
 
 import java.awt.event.MouseEvent;
-import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -21,7 +20,7 @@ import parker.serb.sql.SMDSDocuments;
 public class RequestedInfoCaseNumberPanel extends javax.swing.JDialog {
 
     private final SMDSDocuments report;
-    
+
     /**
      * Creates new form AddNewRelatedCase
      * @param parent
@@ -38,42 +37,42 @@ public class RequestedInfoCaseNumberPanel extends javax.swing.JDialog {
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }
-    
+
     private void setText(String reportName) {
         jLabel3.setText(reportName);
         caseNotFoundLabel.setText("");
     }
-    
+
     private void addListeners() {
         caseNumberTextBox.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                enableAddButton();    
+                enableAddButton();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                enableAddButton(); 
+                enableAddButton();
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                enableAddButton(); 
+                enableAddButton();
             }
         });
     }
-    
+
     private void enableAddButton() {
         caseNotFoundLabel.setText("");
-        
+
         String[] parsedCaseNumber = caseNumberTextBox.getText().trim().split("-");
-        
+
         if(caseNumberTextBox.getText().equals("") ||
                 parsedCaseNumber.length < 4) {
             generateReportButton.setEnabled(false);
             caseNotFoundLabel.setText("Invalid Case Number");
         } else {
-            if (CaseValidation.validateCaseNumber(caseNumberTextBox.getText().trim().toUpperCase())){
+            if (CaseValidation.validateCaseNumberActiveSection(caseNumberTextBox.getText().trim().toUpperCase())){
             generateReportButton.setEnabled(true);
             } else {
                 caseNotFoundLabel.setText("Case Number Not Found");
