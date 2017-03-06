@@ -87,20 +87,38 @@ public class ReportDialog extends javax.swing.JDialog {
         ReportComboBox.setModel(dt);
         ReportComboBox.addItem(new Item<>("0", ""));
 
+        List<SMDSDocuments> smdsletterList = null;
+        List<CMDSReport> cmdsletterList = null;
+
         switch (Global.activeSection) {
             case "REP":
             case "ULP":
             case "MED":
-            case "ORG":
             case "Hearings":
-                List<SMDSDocuments> smdsletterList = SMDSDocuments.loadDocumentNamesByTypeAndSectionWithAll(section, "Report");
+                smdsletterList = SMDSDocuments.loadDocumentNamesByTypeAndSectionWithAll(section, "Report");
 
                 for (SMDSDocuments letter : smdsletterList) {
                     ReportComboBox.addItem(new Item<>(String.valueOf(letter.id), letter.description));
                 }
                 ReportComboBox.setSelectedItem(new Item<>("0", ""));
                 break;
+            case "ORG":
+                smdsletterList = SMDSDocuments.loadDocumentNamesByTypeAndSection(section, "Report");
+
+                for (SMDSDocuments letter : smdsletterList) {
+                    ReportComboBox.addItem(new Item<>(String.valueOf(letter.id), letter.description));
+                }
+                ReportComboBox.setSelectedItem(new Item<>("0", ""));
+                break;
+            case "CSC":
             case "Civil Service Commission":
+                cmdsletterList = CMDSReport.loadActiveReportsBySection(section);
+
+                for (CMDSReport letter : cmdsletterList) {
+                    ReportComboBox.addItem(new Item<>(String.valueOf(letter.id), letter.description));
+                }
+                ReportComboBox.setSelectedItem(new Item<>("0", ""));
+                break;
             case "CMDS":
                 List<SMDSDocuments> letterList = SMDSDocuments.loadDocumentNamesByTypeAndSection("ALL", "Report");
 
@@ -108,7 +126,7 @@ public class ReportDialog extends javax.swing.JDialog {
                     ReportComboBox.addItem(new Item<>(String.valueOf(letter.id), letter.description));
                 }
 
-                List<CMDSReport> cmdsletterList = CMDSReport.loadActiveReportsBySection(section);
+                cmdsletterList = CMDSReport.loadActiveReportsBySection(section);
 
                 for (CMDSReport letter : cmdsletterList) {
                     ReportComboBox.addItem(new Item<>(String.valueOf(letter.id), letter.description));
@@ -147,6 +165,7 @@ public class ReportDialog extends javax.swing.JDialog {
                 GenerateReport.runReport(report);
                 break;
             case "Civil Service Commission":
+            case "CSC":
             case "CMDS":
                 SMDSDocuments SMDSreport = null;
 
@@ -235,6 +254,7 @@ public class ReportDialog extends javax.swing.JDialog {
         });
 
         GenerateButton.setText("Generate");
+        GenerateButton.setEnabled(false);
         GenerateButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 GenerateButtonActionPerformed(evt);

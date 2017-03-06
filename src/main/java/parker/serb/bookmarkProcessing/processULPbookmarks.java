@@ -299,7 +299,7 @@ public class processULPbookmarks {
             processBookmark.process("MCASENUMBER" + (i + 1),
                     "Case " + NumberFormatService.generateFullCaseNumberNonGlobal(item.caseYear, item.caseType, item.caseMonth, item.caseNumber), Document);
             processBookmark.process("MINFORMATION" + (i + 1), chargingPartyNames.trim() + " v. " + chargedPartyNames.trim(), Document);
-            processBookmark.process("MSENTENCE" + (i + 1), "The unfair labor practice charge alleged that Charged Party violated Ohio Revised Code §4117.11 " + item.allegation.trim() + " by " + item.statement.trim(), Document);
+            processBookmark.process("MSENTENCE" + (i + 1), "The unfair labor practice charge alleged that Charged Party violated Ohio Revised Code \u00a74117.11 " + item.allegation.trim() + " by " + item.statement.trim(), Document);
             processBookmark.process("MRATIONAL" + (i + 1), "Information gathered during the investigation revealed " + item.investigationReveals.trim(), Document);
             processBookmark.process("MRECOMMENDATION" + (i + 1), item.recommendation.trim(), Document);
 

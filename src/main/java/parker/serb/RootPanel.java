@@ -111,11 +111,14 @@ public class RootPanel extends javax.swing.JFrame {
      * etc
      */
     public void enableTabs() {
+        //if the user has no applied roles, which should be rare,
+        //alert the user and close the application
         if(Global.activeUserRoles.isEmpty()) {
             new NoAppliedRolesDialog(Global.root, true);
             System.exit(0);
         }
 
+        //if the user is not admin remove the tabs that are not selected
         if(!Global.activeUserRoles.contains("Admin")) {
             jMenuBar1.remove(jMenu2);
             for(int i = jTabbedPane1.getTabCount()-1; i >= 0; i--) {
@@ -125,25 +128,25 @@ public class RootPanel extends javax.swing.JFrame {
             }
         }
 
+        //remove the batch close of cases, role dependent.
+        //If none of the proper roles, remove the header option
         if(!Global.activeUserRoles.contains("REP")
                 && !Global.activeUserRoles.contains("MED")
                 && !Global.activeUserRoles.contains("ULP")) {
             jMenuBar1.remove(batchCloseCasesSubMenu);
+            
+            if(!Global.activeUserRoles.contains("REP")) {
+                jMenuBar1.remove(batchCloseREPMenuItem);
+            }
+
+            if(!Global.activeUserRoles.contains("MED")) {
+                jMenuBar1.remove(batchCloseMEDMenuItem);
+            }
+
+            if(!Global.activeUserRoles.contains("ULP")) {
+                jMenuBar1.remove(batchCloseULPMenuItem);
+            }
         }
-
-        if(!Global.activeUserRoles.contains("REP")) {
-            jMenuBar1.remove(batchCloseREPMenuItem);
-        }
-
-        if(!Global.activeUserRoles.contains("MED")) {
-            jMenuBar1.remove(batchCloseMEDMenuItem);
-        }
-
-        if(!Global.activeUserRoles.contains("ULP")) {
-            jMenuBar1.remove(batchCloseULPMenuItem);
-        }
-
-
     }
 
     private void setDefaultTab() {
@@ -290,7 +293,6 @@ public class RootPanel extends javax.swing.JFrame {
     /**
      * Add listeners that will watch for section change
      */
-
     private void addListeners() {
         jTabbedPane1.addChangeListener((ChangeEvent e) -> {
             if(Global.activeSection != null) {
@@ -990,6 +992,9 @@ public class RootPanel extends javax.swing.JFrame {
         jButton9.setText("Cancel");
     }
 
+    /**
+     * Enable all button when updating a panel
+     */
     public void enableButtonsAfterCancel() {
         jButton1.setEnabled(true);
         jButton3.setEnabled(true);
@@ -2014,7 +2019,7 @@ public class RootPanel extends javax.swing.JFrame {
                 break;
             case "Hearings":
                 Audit.addAuditEntry("Clicked Hearings Report Button");
-                new ReportDialog((JFrame) this.getRootPane().getParent(), true, "Hearing");
+                new ReportDialog((JFrame) this.getRootPane().getParent(), true, "HRG");
                 break;
             case "ORG":
                 Audit.addAuditEntry("Clicked ORG Report Button");

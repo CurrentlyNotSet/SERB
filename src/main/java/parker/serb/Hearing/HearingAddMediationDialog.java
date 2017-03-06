@@ -36,21 +36,21 @@ public class HearingAddMediationDialog extends javax.swing.JDialog {
         setLocationRelativeTo(parent);
         setVisible(true);
     }
-    
+
     public void loadFinalResultComboBox() {
         outcomeComboBox.removeAllItems();
-        
+
         outcomeComboBox.addItem("");
-        
+
         List<HearingOutcome> userList = HearingOutcome.loadOutcomesByType("OUT");
-        
+
         for (HearingOutcome user : userList) {
             outcomeComboBox.addItem(user.description);
         }
-        
+
         outcomeComboBox.setSelectedItem("");
     }
-    
+
     private void addListeners() {
         dateAssignedTextBox.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -68,7 +68,7 @@ public class HearingAddMediationDialog extends javax.swing.JDialog {
                 enableSaveButton();
             }
         });
-        
+
         mediationDateTextBox.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -86,24 +86,23 @@ public class HearingAddMediationDialog extends javax.swing.JDialog {
             }
         });
     }
-    
+
     private void loadALJComboBox() {
         mediatorComboBox.removeAllItems();
         mediatorComboBox.addItem("");
-        
-        List userList = User.loadSectionDropDowns("ALJ");
+
+        List userList = User.loadSectionDropDowns("MED");
         
         for (Object user : userList) {
             mediatorComboBox.addItem((String) user);
         }
     }
-    
+
     private void enableSaveButton() {
         if(mediatorComboBox.getSelectedItem() != null) {
             if(pcPreDComboBox.getSelectedItem().toString().trim().equals("") ||
                 mediatorComboBox.getSelectedItem().toString().equals("") ||
-                dateAssignedTextBox.getText().equals("") ||
-                mediationDateTextBox.getText().equals("")) 
+                dateAssignedTextBox.getText().equals(""))
             {
                 saveButton.setEnabled(false);
             } else {
@@ -111,9 +110,9 @@ public class HearingAddMediationDialog extends javax.swing.JDialog {
             }
         } else {
             saveButton.setEnabled(false);
-        }  
+        }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

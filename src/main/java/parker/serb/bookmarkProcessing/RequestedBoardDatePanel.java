@@ -43,9 +43,12 @@ public class RequestedBoardDatePanel extends javax.swing.JDialog {
     }
 
     private void generateLetterButton() {
-        processThread();
         loadingPanel.setVisible(true);
+        InfoPanel.setVisible(false);
         jLayeredPane.moveToFront(loadingPanel);
+        generateButton.setEnabled(false);
+        cancelButton.setEnabled(false);
+        processThread();
     }
 
     private void processThread() {

@@ -342,83 +342,83 @@ public class CMDSCaseHistoryEntryTypes {
                     null,
                     DateConversion.generateReminderStartDate(dueDate.getResponseDueDate())
                 );
-                
-                String caseStatus = CMDSCase.getCaseStatus();
-            
-                CMDSCase PODate = CMDSCase.getmailedPODates();
+            }
 
-                if(PODate.mailedPO1 == null) {
-                    PODate.mailedPO1 = new Timestamp(Global.mmddyyyy.parse(entryDate).getTime());
-                } else if(PODate.mailedPO2 == null) {
-                    PODate.mailedPO2 = new Timestamp(Global.mmddyyyy.parse(entryDate).getTime());
-                } else if(PODate.mailedPO3 == null) {
-                    PODate.mailedPO3 = new Timestamp(Global.mmddyyyy.parse(entryDate).getTime());
-                } else if(PODate.mailedPO4 == null) {
-                    PODate.mailedPO4 = new Timestamp(Global.mmddyyyy.parse(entryDate).getTime());
-                }
-                
-                CMDSCertifiedLetterDialog certified = new CMDSCertifiedLetterDialog(dialog, true);
-            
-                if(caseStatus.equals("S")) {
-                    CMDSRemoveStayDialog removeStay = new CMDSRemoveStayDialog(dialog, true);
-                    if(removeStay.isRemoveStay()) {
-                        caseStatus = "O";
-                    } else {
-                        caseStatus = "S";
-                    }
-                    removeStay.dispose();
-                } else if(caseStatus.equals("O")) {
-                    CMDSPlaceStayDialog placeStay = new CMDSPlaceStayDialog(dialog, true);
-                    if(placeStay.isPlaceStay()) {
-                        caseStatus = "S";
-                    } else {
-                        caseStatus = "O";
-                    }
-                    placeStay.dispose();
-                }
-            
-                String activity = entryDescription + (extraText.equals("") ? "" : " " + extraText);
-                activity += (certified.isCertified() ? " - (Certified)" : "");
-                activity += (partyType.equals("") ? "" : " " + partyType);
-                activity += (mailType.equals("") ? "" : " " + mailType);
+            String caseStatus = CMDSCase.getCaseStatus();
 
-                Date date = Global.mmddyyyy.parse(entryDate);
+            CMDSCase PODate = CMDSCase.getmailedPODates();
 
-                CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
+            if(PODate.mailedPO1 == null) {
+                PODate.mailedPO1 = new Timestamp(Global.mmddyyyy.parse(entryDate).getTime());
+            } else if(PODate.mailedPO2 == null) {
+                PODate.mailedPO2 = new Timestamp(Global.mmddyyyy.parse(entryDate).getTime());
+            } else if(PODate.mailedPO3 == null) {
+                PODate.mailedPO3 = new Timestamp(Global.mmddyyyy.parse(entryDate).getTime());
+            } else if(PODate.mailedPO4 == null) {
+                PODate.mailedPO4 = new Timestamp(Global.mmddyyyy.parse(entryDate).getTime());
+            }
 
-                if(status.isUpdateStatus()) {
-                    List groupList = CMDSCase.getGroupNumberList();
+            CMDSCertifiedLetterDialog certified = new CMDSCertifiedLetterDialog(dialog, true);
 
-                    if(groupList.isEmpty()) {
-                        Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
-                        CMDSCase.updateCaseByTypeEEntry(PODate, caseStatus, NumberFormatService.generateFullCaseNumber());
-                        CMDSCase.updateCaseInventoryStatusLines(activity, date);
-                    }
-
-                    if(groupList.size() > 0) {
-                        CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
-
-                        boolean updateAllCases = update.isUpdateStatus();
-
-                        for(int i = 0; i < groupList.size(); i++) {
-                            Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
-                            CMDSCase.updateCaseByTypeEEntry(PODate, caseStatus, groupList.get(i).toString());
-                            if(updateAllCases) {
-                                CMDSCase.updateAllGroupInventoryStatusLines(activity, date);
-                            }
-                        }
-                    }
+            if(caseStatus.equals("S")) {
+                CMDSRemoveStayDialog removeStay = new CMDSRemoveStayDialog(dialog, true);
+                if(removeStay.isRemoveStay()) {
+                    caseStatus = "O";
                 } else {
-                    List groupList = CMDSCase.getGroupNumberList();
+                    caseStatus = "S";
+                }
+                removeStay.dispose();
+            } else if(caseStatus.equals("O")) {
+                CMDSPlaceStayDialog placeStay = new CMDSPlaceStayDialog(dialog, true);
+                if(placeStay.isPlaceStay()) {
+                    caseStatus = "S";
+                } else {
+                    caseStatus = "O";
+                }
+                placeStay.dispose();
+            }
 
-                    if(groupList.isEmpty()) {
-                        Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
-                        CMDSCase.updateCaseByTypeEEntry(PODate, caseStatus, NumberFormatService.generateFullCaseNumber());
-                    } else if (groupList.size() > 0) {
-                        for(int i = 0; i < groupList.size(); i++) {
-                            Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
-                            CMDSCase.updateCaseByTypeEEntry(PODate, caseStatus, groupList.get(i).toString());
+            String activity = entryDescription + (extraText.equals("") ? "" : " " + extraText);
+            activity += (certified.isCertified() ? " - (Certified)" : "");
+            activity += (partyType.equals("") ? "" : " " + partyType);
+            activity += (mailType.equals("") ? "" : " " + mailType);
+
+            Date date = Global.mmddyyyy.parse(entryDate);
+
+            CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
+
+            if(status.isUpdateStatus()) {
+                List groupList = CMDSCase.getGroupNumberList();
+
+                if(groupList.isEmpty()) {
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    CMDSCase.updateCaseByTypeEEntry(PODate, caseStatus, NumberFormatService.generateFullCaseNumber());
+                    CMDSCase.updateCaseInventoryStatusLines(activity, date);
+                }
+
+                if(groupList.size() > 0) {
+                    CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
+
+                    boolean updateAllCases = update.isUpdateStatus();
+
+                    for(int i = 0; i < groupList.size(); i++) {
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        CMDSCase.updateCaseByTypeEEntry(PODate, caseStatus, groupList.get(i).toString());
+                        if(updateAllCases) {
+                            CMDSCase.updateAllGroupInventoryStatusLines(activity, date);
                         }
+                    }
+                }
+            } else {
+                List groupList = CMDSCase.getGroupNumberList();
+
+                if(groupList.isEmpty()) {
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    CMDSCase.updateCaseByTypeEEntry(PODate, caseStatus, NumberFormatService.generateFullCaseNumber());
+                } else if (groupList.size() > 0) {
+                    for(int i = 0; i < groupList.size(); i++) {
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        CMDSCase.updateCaseByTypeEEntry(PODate, caseStatus, groupList.get(i).toString());
                     }
                 }
             }
@@ -535,45 +535,45 @@ public class CMDSCaseHistoryEntryTypes {
                     null,
                     DateConversion.generateReminderStartDate(dueDate.getResponseDueDate())
                 );
+            }
             
-                String activity = entryDescription + (extraText.equals("") ? "" : " " + extraText);
-                activity += (dueDate.getResponseDueDate() == null ? "" : " " + Global.mmddyyyy.format(new Date(dueDate.getResponseDueDate().getTime())));
-                activity += (partyType.equals("") ? "" : " " + partyType);
-                activity += (mailType.equals("") ? "" : " " + mailType);
+            String activity = entryDescription + (extraText.equals("") ? "" : " " + extraText);
+            activity += (dueDate.getResponseDueDate() == null ? "" : " " + Global.mmddyyyy.format(new Date(dueDate.getResponseDueDate().getTime())));
+            activity += (partyType.equals("") ? "" : " " + partyType);
+            activity += (mailType.equals("") ? "" : " " + mailType);
 
-                Date date = Global.mmddyyyy.parse(entryDate);
+            Date date = Global.mmddyyyy.parse(entryDate);
 
-                CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
+            CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
 
-                if(status.isUpdateStatus()) {
-                    List groupList = CMDSCase.getGroupNumberList();
+            if(status.isUpdateStatus()) {
+                List groupList = CMDSCase.getGroupNumberList();
 
-                    if(groupList.isEmpty()) {
-                        Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
-                        CMDSCase.updateCaseInventoryStatusLines(activity, date);
-                    }
+                if(groupList.isEmpty()) {
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    CMDSCase.updateCaseInventoryStatusLines(activity, date);
+                }
 
-                    if(groupList.size() > 0) {
-                        CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
+                if(groupList.size() > 0) {
+                    CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
 
-                        boolean updateAllCases = update.isUpdateStatus();
+                    boolean updateAllCases = update.isUpdateStatus();
 
-                        for(int i = 0; i < groupList.size(); i++) {
-                            Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
-                            if(updateAllCases) {
-                                CMDSCase.updateAllGroupInventoryStatusLines(activity, date);
-                            }
+                    for(int i = 0; i < groupList.size(); i++) {
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        if(updateAllCases) {
+                            CMDSCase.updateAllGroupInventoryStatusLines(activity, date);
                         }
                     }
-                } else {
-                    List groupList = CMDSCase.getGroupNumberList();
+                }
+            } else {
+                List groupList = CMDSCase.getGroupNumberList();
 
-                    if(groupList.isEmpty()) {
-                        Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
-                    } else if (groupList.size() > 0) {
-                        for(int i = 0; i < groupList.size(); i++) {
-                            Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
-                        }
+                if(groupList.isEmpty()) {
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                } else if (groupList.size() > 0) {
+                    for(int i = 0; i < groupList.size(); i++) {
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
                     }
                 }
             }
@@ -602,45 +602,45 @@ public class CMDSCaseHistoryEntryTypes {
                     null,
                     DateConversion.generateReminderStartDate(dueDate.getResponseDueDate())
                 );
+            }
             
-                String activity = entryDescription + (extraText.equals("") ? "" : " " + extraText);
-                activity += (dueDate.getResponseDueDate() == null ? "" : " Response Due " + Global.mmddyyyy.format(new Date(dueDate.getResponseDueDate().getTime())));
-                activity += (partyType.equals("") ? "" : " " + partyType);
-                activity += (mailType.equals("") ? "" : " " + mailType);
+            String activity = entryDescription + (extraText.equals("") ? "" : " " + extraText);
+            activity += (dueDate.getResponseDueDate() == null ? "" : " Response Due " + Global.mmddyyyy.format(new Date(dueDate.getResponseDueDate().getTime())));
+            activity += (partyType.equals("") ? "" : " " + partyType);
+            activity += (mailType.equals("") ? "" : " " + mailType);
 
-                Date date = Global.mmddyyyy.parse(entryDate);
+            Date date = Global.mmddyyyy.parse(entryDate);
 
-                CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
+            CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
 
-                if(status.isUpdateStatus()) {
-                    List groupList = CMDSCase.getGroupNumberList();
+            if(status.isUpdateStatus()) {
+                List groupList = CMDSCase.getGroupNumberList();
 
-                    if(groupList.isEmpty()) {
-                        Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
-                        CMDSCase.updateCaseInventoryStatusLines(activity, date);
-                    }
+                if(groupList.isEmpty()) {
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    CMDSCase.updateCaseInventoryStatusLines(activity, date);
+                }
 
-                    if(groupList.size() > 0) {
-                        CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
+                if(groupList.size() > 0) {
+                    CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
 
-                        boolean updateAllCases = update.isUpdateStatus();
+                    boolean updateAllCases = update.isUpdateStatus();
 
-                        for(int i = 0; i < groupList.size(); i++) {
-                            Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
-                            if(updateAllCases) {
-                                CMDSCase.updateAllGroupInventoryStatusLines(activity, date);
-                            }
+                    for(int i = 0; i < groupList.size(); i++) {
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        if(updateAllCases) {
+                            CMDSCase.updateAllGroupInventoryStatusLines(activity, date);
                         }
                     }
-                } else {
-                    List groupList = CMDSCase.getGroupNumberList();
+                }
+            } else {
+                List groupList = CMDSCase.getGroupNumberList();
 
-                    if(groupList.isEmpty()) {
-                        Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
-                    } else if (groupList.size() > 0) {
-                        for(int i = 0; i < groupList.size(); i++) {
-                            Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
-                        }
+                if(groupList.isEmpty()) {
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                } else if (groupList.size() > 0) {
+                    for(int i = 0; i < groupList.size(); i++) {
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
                     }
                 }
             }
@@ -719,45 +719,45 @@ public class CMDSCaseHistoryEntryTypes {
                     null,
                     DateConversion.generateReminderStartDate(dueDate.getResponseDueDate())
                 );
+            }
             
-                String activity = entryDescription + (extraText.equals("") ? "" : " " + extraText);
-                activity += (dueDate.getResponseDueDate() == null ? "" : " Response Due " + Global.mmddyyyy.format(new Date(dueDate.getResponseDueDate().getTime())));
-                activity += (partyType.equals("") ? "" : " " + partyType);
-                activity += (mailType.equals("") ? "" : " " + mailType);
+            String activity = entryDescription + (extraText.equals("") ? "" : " " + extraText);
+            activity += (dueDate.getResponseDueDate() == null ? "" : " Response Due " + Global.mmddyyyy.format(new Date(dueDate.getResponseDueDate().getTime())));
+            activity += (partyType.equals("") ? "" : " " + partyType);
+            activity += (mailType.equals("") ? "" : " " + mailType);
 
-                Date date = Global.mmddyyyy.parse(entryDate);
+            Date date = Global.mmddyyyy.parse(entryDate);
 
-                CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
+            CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
 
-                if(status.isUpdateStatus()) {
-                    List groupList = CMDSCase.getGroupNumberList();
+            if(status.isUpdateStatus()) {
+                List groupList = CMDSCase.getGroupNumberList();
 
-                    if(groupList.isEmpty()) {
-                        Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
-                        CMDSCase.updateCaseInventoryStatusLines(activity, date);
-                    }
+                if(groupList.isEmpty()) {
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    CMDSCase.updateCaseInventoryStatusLines(activity, date);
+                }
 
-                    if(groupList.size() > 0) {
-                        CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
+                if(groupList.size() > 0) {
+                    CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
 
-                        boolean updateAllCases = update.isUpdateStatus();
+                    boolean updateAllCases = update.isUpdateStatus();
 
-                        for(int i = 0; i < groupList.size(); i++) {
-                            Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
-                            if(updateAllCases) {
-                                CMDSCase.updateAllGroupInventoryStatusLines(activity, date);
-                            }
+                    for(int i = 0; i < groupList.size(); i++) {
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        if(updateAllCases) {
+                            CMDSCase.updateAllGroupInventoryStatusLines(activity, date);
                         }
                     }
-                } else {
-                    List groupList = CMDSCase.getGroupNumberList();
+                }
+            } else {
+                List groupList = CMDSCase.getGroupNumberList();
 
-                    if(groupList.isEmpty()) {
-                        Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
-                    } else if (groupList.size() > 0) {
-                        for(int i = 0; i < groupList.size(); i++) {
-                            Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
-                        }
+                if(groupList.isEmpty()) {
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                } else if (groupList.size() > 0) {
+                    for(int i = 0; i < groupList.size(); i++) {
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
                     }
                 }
             }
@@ -1019,7 +1019,6 @@ public class CMDSCaseHistoryEntryTypes {
                     null,
                     DateConversion.generateReminderStartDate(dueDate.getResponseDueDate())
                 );
-                
             }
             
             String activity = entryDescription + (extraText.equals("") ? "" : " " + extraText);

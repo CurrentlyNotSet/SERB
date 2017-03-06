@@ -25,7 +25,7 @@ public class UserAddEditDialog extends javax.swing.JDialog {
 
     private int ID;
     private User item;
-    
+
     /**
      * Creates new form MediatorAddEdidDialog
      * @param parent
@@ -38,7 +38,7 @@ public class UserAddEditDialog extends javax.swing.JDialog {
         addListeners();
         setDefaults(itemIDpassed);
     }
-    
+
     private void addListeners() {
         EmailTextField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -78,14 +78,14 @@ public class UserAddEditDialog extends javax.swing.JDialog {
         this.setLocationRelativeTo(Global.root);
         this.setVisible(true);
     }
-    
+
     private void setTableDefault() {
         //ID
         UserRoleTable.getColumnModel().getColumn(0).setMinWidth(0);
         UserRoleTable.getColumnModel().getColumn(0).setPreferredWidth(0);
         UserRoleTable.getColumnModel().getColumn(0).setMaxWidth(0);
     }
-    
+
     private void loadDefaultSectionComboBox() {
         defaultSectionComboBox.removeAllItems();
         defaultSectionComboBox.addItem("");
@@ -98,10 +98,10 @@ public class UserAddEditDialog extends javax.swing.JDialog {
         defaultSectionComboBox.addItem("REP");
         defaultSectionComboBox.addItem("ULP");
     }
-        
+
     private void loadInformation() {
         item = User.findUserByID(ID);
-        
+
         //left side load
         UserNameTextField.setText(item.username);
         FirstNameTextField.setText(item.firstName);
@@ -112,12 +112,12 @@ public class UserAddEditDialog extends javax.swing.JDialog {
         EmailTextField.setText(item.emailAddress);
         PhoneTextField.setText(item.workPhone);
         defaultSectionComboBox.setSelectedItem(item.defaultSection);
-        
+
         //right side load
         ActiveLoginCheckBox.setSelected(item.activeLogIn);
         PasswordResetCheckBox.setSelected(item.passwordReset);
         InvestigatorCheckBox.setSelected(item.investigator);
-        
+
         //Docketing Permissions
         CMDSDocketingCheckBox.setSelected(item.CMDSDocketing);
         CSCDocketingCheckBox.setSelected(item.CSCDocketing);
@@ -125,7 +125,7 @@ public class UserAddEditDialog extends javax.swing.JDialog {
         ORGDocketingCheckBox.setSelected(item.ORGDocketing);
         REPDocketingCheckBox.setSelected(item.REPDocketing);
         ULPDocketingCheckBox.setSelected(item.ULPDocketing);
-        
+
         //Case Worker permissions
         CMDSWorkerCheckBox.setSelected(item.CMDSCaseWorker);
         CSCWorkerCheckBox.setSelected(item.CSCCaseWorker);
@@ -136,24 +136,24 @@ public class UserAddEditDialog extends javax.swing.JDialog {
         ULPWorkerCheckBox.setSelected(item.ULPCaseWorker);
         loadRolesTable();
     }
-   
+
     private void loadRolesTable() {
         List<UserRole> roleList = UserRole.loadRolesByUser(ID);
-        
+
         DefaultTableModel model = (DefaultTableModel) UserRoleTable.getModel();
         model.setRowCount(0);
-        
+
         for (UserRole role : roleList) {
 
             model.addRow(new Object[]{
                 role.roleID,
-                role.roleName              
+                role.roleName
             });
         }
     }
-    
+
     private void saveInformation() {
-        
+
         item.id = ID;
         item.firstName = FirstNameTextField.getText().trim();
         item.middleInitial = MiddleInitialTextField.getText().trim();
@@ -180,16 +180,16 @@ public class UserAddEditDialog extends javax.swing.JDialog {
         item.MEDDocketing = MEDDocketingCheckBox.isSelected();
         item.CSCDocketing = CSCDocketingCheckBox.isSelected();
         item.CMDSDocketing = CMDSDocketingCheckBox.isSelected();
-                
+
         if (ID > 0) {
             User.updateUser(item);
-            
+
             if (PasswordResetCheckBox.isSelected()){
                 long passwordSalt = Password.generatePasswordSalt();
                 String tempPassword = Password.generateTempPassword();
-                
+
                 User.resetPassword(ID, passwordSalt, tempPassword);
-                
+
                 WebOptionPane.showMessageDialog(this,
                         "<html><center>Temporary Password Created:<br><br>" + tempPassword + "</center></html>",
                         "Temporary Password", WebOptionPane.INFORMATION_MESSAGE);
@@ -208,23 +208,24 @@ public class UserAddEditDialog extends javax.swing.JDialog {
     }
 
     private void checkButton(){
-        if (FirstNameTextField.getText().trim().equals("") ||
-                LastNameTextField.getText().trim().equals("")){
+        if (FirstNameTextField.getText().trim().equals("")
+                || LastNameTextField.getText().trim().equals("")
+                || UserNameTextField.getText().trim().equals("")){
             editButton.setEnabled(false);
         } else {
             editButton.setEnabled(true);
         }
     }
-    
+
     private void removeRoleButtonAction(){
         if (UserRoleTable.getSelectedRow() > -1) {
             int roleID = (int) UserRoleTable.getValueAt(UserRoleTable.getSelectedRow(), 0);
-            
+
             UserRole.removeRole(ID, roleID);
         }
         loadRolesTable();
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
