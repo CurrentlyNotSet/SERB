@@ -91,7 +91,7 @@ public class HearingAddMediationDialog extends javax.swing.JDialog {
         mediatorComboBox.removeAllItems();
         mediatorComboBox.addItem("");
 
-        List userList = User.loadSectionDropDowns("ALJ");
+        List userList = User.loadSectionDropDowns("MED");
         
         for (Object user : userList) {
             mediatorComboBox.addItem((String) user);
