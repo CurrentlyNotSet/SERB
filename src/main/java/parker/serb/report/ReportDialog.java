@@ -254,6 +254,7 @@ public class ReportDialog extends javax.swing.JDialog {
         });
 
         GenerateButton.setText("Generate");
+        GenerateButton.setEnabled(false);
         GenerateButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 GenerateButtonActionPerformed(evt);

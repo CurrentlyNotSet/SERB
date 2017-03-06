@@ -181,28 +181,42 @@ public class StringUtilities {
         return "";
     }
 
-    public static String generateDepartmentAddressBlock(){
+    public static String generateDepartmentAddressBlock() {
         String address = "";
         String dept = StringUtilities.getDepartment();
 
         AdministrationInformation sysAdminInfo = AdministrationInformation.loadAdminInfo(dept);
 
+        if (dept.equalsIgnoreCase("SERB")) {
+            address += "State Employment Relations Board";
+        } else {
+            address += "State Personnel Board of Review";
+        }
+
         if (!sysAdminInfo.Address1.equals("")) {
+            if (!address.trim().equals("")) {
+                address += System.lineSeparator();
+            }
             address += sysAdminInfo.Address1.trim();
         }
         if (!sysAdminInfo.Address2.equals("")) {
-            address += System.lineSeparator() + sysAdminInfo.Address2.trim();
+            if (!address.trim().equals("")) {
+                address += System.lineSeparator();
+            }
+            address += sysAdminInfo.Address2.trim();
         }
-        address += System.lineSeparator();
+        if (!address.trim().equals("")) {
+            address += System.lineSeparator();
+        }
         if (!sysAdminInfo.City.equals("")) {
             address += sysAdminInfo.City.trim();
         }
         if (!sysAdminInfo.State.equals("")) {
-            address += ", " + sysAdminInfo.State.trim();
+            address += sysAdminInfo.State.trim().equals("") ? "" : ", " + sysAdminInfo.State.trim();
         }
         if (!sysAdminInfo.Zip.equals("")) {
-            address += " " + sysAdminInfo.Zip.trim();
+            address += sysAdminInfo.Zip.trim().equals("") ? "" : " " + sysAdminInfo.Zip.trim();
         }
-        return address;
+        return address.trim();
     }
 }

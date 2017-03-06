@@ -104,7 +104,7 @@ public class REPMediation {
         return mediationList;
     }
     
-    public static REPMediation loadMeidationByID(String id) {
+    public static REPMediation loadMediationByID(String id) {
         REPMediation activity = new REPMediation();
         
         Statement stmt = null;
@@ -129,7 +129,7 @@ public class REPMediation {
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                loadMeidationByID(id);
+                loadMediationByID(id);
             } 
         } finally {
             DbUtils.closeQuietly(stmt);

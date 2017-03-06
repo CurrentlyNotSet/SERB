@@ -158,7 +158,7 @@ public class REPUpdateMediationDialog extends javax.swing.JDialog {
     }
     
     private void loadInformation(String id) {
-        REPMediation repMed = REPMediation.loadMeidationByID(id);
+        REPMediation repMed = REPMediation.loadMediationByID(id);
         
         dateTextBox.setText(repMed.mediationDate.split(" ")[0]);
         hourTextBox.setText(repMed.mediationDate.split(" ")[1].split(":")[0]);
