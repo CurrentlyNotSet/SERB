@@ -84,38 +84,41 @@ public class StringUtilities {
         return fullName.trim();
     }
 
-//    public static String buildAddressBlockWithPhoneAndEmail(CaseParty item) {
-//        String addressBlock = "";
-//
-//        addressBlock += buildCasePartyNameNoPreFix(item);
-//        if (item.address1 != null) {
-//            addressBlock += item.address1.trim().equals("") ? "" : "\n" + item.address1;
-//        }
-//        if (item.address2 != null) {
-//            addressBlock += item.address2.trim().equals("") ? "" : "\n" + item.address2;
-//        }
-//        if (item.address3 != null) {
-//            addressBlock += item.address3.trim().equals("") ? "" : "\n" + item.address3;
-//        }
-//        addressBlock += "\n" + (item.city == null ? "" : item.city)
-//                + ", " + (item.stateCode == null ? "" : item.stateCode)
-//                + " " + (item.zipcode == null ? "" : item.zipcode);
-//        if (item.phone1 != null){
-//            addressBlock += item.phone1.trim().equals("") ? "" : "\n" + item.phone1;
-//        }
-//        if (item.phone2 != null){
-//            addressBlock += item.phone2.trim().equals("") ? "" : "\n" + item.phone2;
-//        }
-//        if (item.emailAddress != null){
-//            addressBlock += item.emailAddress.trim().equals("") ? "" : "\n" + item.emailAddress;
-//        }
-//        return addressBlock.trim();
-//    }
+    public static String buildCasePartyForAddressBlock(CaseParty item) {
+        String fullName = "";
+        if (item.firstName != null) {
+            fullName = fullName.trim() + (item.firstName.equals("") ? "" : item.firstName.trim());
+        }
+        if (item.middleInitial != null) {
+            fullName = fullName.trim() + (item.middleInitial.equals("") ? "" : " " + (item.middleInitial.trim().length() == 1 ? item.middleInitial.trim() + "." : item.middleInitial.trim()));
+        }
+        if (item.lastName != null) {
+            fullName = fullName.trim() + (item.lastName.equals("") ? "" : " " + item.lastName.trim());
+        }
+        if (item.suffix != null) {
+            fullName = fullName.trim() + (item.suffix.equals("") ? "" : ", " + item.suffix.trim());
+        }
+        if (item.nameTitle != null) {
+            fullName = fullName.trim() + (item.nameTitle.equals("") ? "" : ", " + item.nameTitle.trim());
+        }
+        if (item.jobTitle != null) {
+            fullName = fullName.trim() + (item.jobTitle.equals("") ? "" : ", " + item.jobTitle.trim());
+        }
+        if (item.companyName != null){
+            if (fullName.trim().equals("")){
+                fullName = fullName.trim() + (item.companyName.equals("") ? "" : item.companyName.trim());
+            } else {
+                fullName = fullName.trim() + (item.companyName.equals("") ? "" : System.lineSeparator() + item.companyName.trim());
+            }
+        }
+
+        return fullName.trim();
+    }
 
     public static String buildAddressBlockWithLineBreaks(CaseParty item) {
         String addressBlock = "";
 
-        addressBlock += buildCasePartyNameNoPreFix(item);
+        addressBlock += buildCasePartyForAddressBlock(item);
         if (item.address1 != null) {
             if (!item.address1.equals("")) {
                 addressBlock += System.lineSeparator() + item.address1;
