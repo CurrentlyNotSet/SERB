@@ -8,8 +8,8 @@ package parker.serb.ORG;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
-import parker.serb.activity.ActivityPanel;
 import parker.serb.Global;
+import parker.serb.activity.ActivityPanel;
 import parker.serb.activity.AddActivtyForSMDSDialog;
 import parker.serb.activity.RemoveActivityEntryDialog;
 import parker.serb.party.PartySearchDialog;
@@ -30,7 +30,7 @@ public class ORGRootPanel extends javax.swing.JPanel {
         initComponents();
         addListeners();
     }
-    
+
     /**
      * Removes all content from previous stored cases
      */
@@ -42,9 +42,9 @@ public class ORGRootPanel extends javax.swing.JPanel {
         oRGInformationPanel1.clearAll();
         partiesPanel1.clearAll();
     }
-    
+
     private void addListeners() {
-        
+
         jTabbedPane1.addChangeListener((ChangeEvent e) -> {
             if(Global.caseNumber != null) {
                 setButtons();
@@ -53,9 +53,9 @@ public class ORGRootPanel extends javax.swing.JPanel {
             }
         });
     }
-    
+
     /**
-     * load information about the case that is based on the tab that is selected, 
+     * load information about the case that is based on the tab that is selected,
      * trying to cheat and "lazy" load.  This my be re-factored to allow for full
      * case load while displaying a spinner.
      */
@@ -84,9 +84,9 @@ public class ORGRootPanel extends javax.swing.JPanel {
                 break;
         }
     }
-    
+
     /**
-     * Set the buttons to display the proper information and button status 
+     * Set the buttons to display the proper information and button status
      * depending on the selected tab index
      */
     private void setButtons() {
@@ -117,7 +117,7 @@ public class ORGRootPanel extends javax.swing.JPanel {
                 break;
         }
     }
-    
+
     private void disableTabs(int activeTab) {
         Global.root.getoRGHeaderPanel2().getjComboBox2().setEnabled(false);
         for(int i = jTabbedPane1.getTabCount()-1; i >= 0; i--) {
@@ -128,16 +128,16 @@ public class ORGRootPanel extends javax.swing.JPanel {
             }
         }
     }
-    
+
     private void enableTabs() {
         Global.root.getoRGHeaderPanel2().getjComboBox2().setEnabled(true);
         for(int i = jTabbedPane1.getTabCount()-1; i >= 0; i--) {
             jTabbedPane1.setEnabledAt(i, true);
         }
     }
-    
+
     /**
-     * Used to update the information in the DB with information from a panel. 
+     * Used to update the information in the DB with information from a panel.
      * Uses the currently selected panel index
      * @param buttonText the text of the current button
      */
@@ -178,7 +178,7 @@ public class ORGRootPanel extends javax.swing.JPanel {
 //                    mEDFactFinderPanel1.disableUpdate(true);
 //                }
 //                break;
-//                
+//
 //            case "Conciliation":
 //                if(buttonText.equals("Update")) {
 //                    disableTabs(jTabbedPane1.getSelectedIndex());
@@ -203,7 +203,7 @@ public class ORGRootPanel extends javax.swing.JPanel {
                 break;
         }
     }
-    
+
     /**
      * Determines if the delete button should be enabled, as well as the desired
      * functionality
@@ -218,7 +218,7 @@ public class ORGRootPanel extends javax.swing.JPanel {
                     activityPanel1.getActvityTable().getValueAt
                     (
                         activityPanel1.getActvityTable().getSelectedRow(),
-                        5
+                        6
                     ).toString()
                 );
                 activityPanel1.loadAllActivity();
@@ -262,7 +262,7 @@ public class ORGRootPanel extends javax.swing.JPanel {
     public ActivityPanel getActivityPanel1() {
         return activityPanel1;
     }
-    
+
 
     /**
      * This method is called from within the constructor to initialize the form.
