@@ -23,6 +23,7 @@ import parker.serb.Global;
 import parker.serb.sql.HearingCase;
 import parker.serb.sql.HearingOutcome;
 import parker.serb.sql.HearingsMediation;
+import parker.serb.sql.Mediator;
 import parker.serb.sql.User;
 import parker.serb.util.ClearDateDialog;
 import parker.serb.util.NumberFormatService;
@@ -43,7 +44,7 @@ public class HearingInformationPanel extends javax.swing.JPanel {
         setTableColumnWidth();
         jButton1.setVisible(false);
     }
-    
+
     private void addRenderer() {
         mediationTable.setDefaultRenderer(Object.class, new TableCellRenderer(){
             private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
@@ -58,19 +59,19 @@ public class HearingInformationPanel extends javax.swing.JPanel {
             }
         });
     }
-    
+
     private void setTableColumnWidth() {
         mediationTable.getColumnModel().getColumn(0).setPreferredWidth(0);
         mediationTable.getColumnModel().getColumn(0).setMinWidth(0);
         mediationTable.getColumnModel().getColumn(0).setMaxWidth(0);
     }
-    
+
     public void clearAll() {
         DefaultTableModel model = (DefaultTableModel) mediationTable.getModel();
         model.setRowCount(0);
-        
+
         caseStatusNotesTextBox.setText("");
-        
+
         aljComboBox.setSelectedItem("Open");
         caseTypeTextBox.setText("");
         boardActionPCDateTextBox.setText("");
@@ -82,7 +83,7 @@ public class HearingInformationPanel extends javax.swing.JPanel {
         preHearingDateTextBox.setText("");
         proposedRecDueDateTextBox.setText("");
         exceptionsDateTextBox.setText("");
-        
+
         boardActionDateTextBox.setText("");
         otherTextBox.setText("");
         aljComboBox.setSelectedItem("");
@@ -95,39 +96,39 @@ public class HearingInformationPanel extends javax.swing.JPanel {
         opinionTextBox.setText("");
         companionCasesTextBox.setText("");
     }
-    
+
     public void loadALJComboBox() {
         aljComboBox.removeAllItems();
-        
+
         aljComboBox.addItem("");
-        
+
         List userList = User.loadSectionDropDowns("ALJ");
-        
+
         for (Object user : userList) {
             aljComboBox.addItem((String) user);
         }
-        
+
         aljComboBox.setSelectedItem("");
     }
-    
+
     public void loadFinalResultComboBox() {
         finalResultComboBox.removeAllItems();
-        
+
         finalResultComboBox.addItem("");
-        
+
         List<HearingOutcome> userList = HearingOutcome.loadOutcomesByType("RST");
-        
+
         for (HearingOutcome user : userList) {
             finalResultComboBox.addItem(user.description);
         }
-        
+
         finalResultComboBox.setSelectedItem("");
     }
-    
+
     public void enableUpdate() {
         Global.root.getjButton2().setText("Save");
         Global.root.getjButton9().setVisible(true);
-        
+
         openClosedComboBox.setEnabled(true);
         boardActionPCDateTextBox.setEnabled(true);
         boardActionPCDateTextBox.setBackground(Color.white);
@@ -146,7 +147,7 @@ public class HearingInformationPanel extends javax.swing.JPanel {
         proposedRecDueDateTextBox.setBackground(Color.white);
         exceptionsDateTextBox.setEnabled(true);
         exceptionsDateTextBox.setBackground(Color.white);
-        
+
         boardActionDateTextBox.setEnabled(true);
         boardActionDateTextBox.setBackground(Color.white);
         otherTextBox.setEnabled(true);
@@ -167,17 +168,17 @@ public class HearingInformationPanel extends javax.swing.JPanel {
         opinionTextBox.setBackground(Color.white);
         companionCasesTextBox.setEnabled(true);
         companionCasesTextBox.setBackground(Color.white);
-        
+
         caseStatusNotesTextBox.setEnabled(true);
         caseStatusNotesTextBox.setBackground(Color.white);
-        
+
         jButton1.setVisible(true);
     }
-    
+
     public void disableUpdate(boolean save) {
         Global.root.getjButton2().setText("Update");
         Global.root.getjButton9().setVisible(false);
-        
+
         openClosedComboBox.setEnabled(false);
         boardActionPCDateTextBox.setEnabled(false);
         boardActionPCDateTextBox.setBackground(new Color(238,238,238));
@@ -196,7 +197,7 @@ public class HearingInformationPanel extends javax.swing.JPanel {
         proposedRecDueDateTextBox.setBackground(new Color(238,238,238));
         exceptionsDateTextBox.setEnabled(false);
         exceptionsDateTextBox.setBackground(new Color(238,238,238));
-        
+
         boardActionDateTextBox.setEnabled(false);
         boardActionDateTextBox.setBackground(new Color(238,238,238));
         otherTextBox.setEnabled(false);
@@ -217,22 +218,22 @@ public class HearingInformationPanel extends javax.swing.JPanel {
         opinionTextBox.setBackground(new Color(238,238,238));
         companionCasesTextBox.setEnabled(false);
         companionCasesTextBox.setBackground(new Color(238,238,238));
-        
+
         caseStatusNotesTextBox.setEnabled(false);
         caseStatusNotesTextBox.setBackground(new Color(238,238,238));
-        
+
         jButton1.setVisible(false);
 
         if(save) {
             saveInformation();
         }
-        
+
         loadInformation();
     }
-    
+
     private void saveInformation() {
         HearingCase newInformation = new HearingCase();
-        
+
         newInformation.openClose = openClosedComboBox.getSelectedItem().toString();
         newInformation.boardActionPCDate = boardActionPCDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(boardActionPCDateTextBox.getText()));
         newInformation.boardActionPreDDate = boardActionPreDDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(boardActionPreDDateTextBox.getText()));
@@ -243,7 +244,7 @@ public class HearingInformationPanel extends javax.swing.JPanel {
         newInformation.preHearingDate = preHearingDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(preHearingDateTextBox.getText()));
         newInformation.proposedRecDueDate = proposedRecDueDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(proposedRecDueDateTextBox.getText()));
         newInformation.exceptionFilingDate = exceptionsDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(exceptionsDateTextBox.getText()));
-          
+
         newInformation.boardActionDate = boardActionDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(boardActionDateTextBox.getText()));
         newInformation.otherAction = otherTextBox.getText().equals("") ? null : otherTextBox.getText();
         newInformation.aljID = aljComboBox.getSelectedItem().toString().trim().equals("") ? 0 : User.getUserID(aljComboBox.getSelectedItem().toString());
@@ -257,10 +258,10 @@ public class HearingInformationPanel extends javax.swing.JPanel {
         newInformation.companionCases = companionCasesTextBox.getText().equals("") ? null : companionCasesTextBox.getText();
 
         newInformation.caseStatusNotes = caseStatusNotesTextBox.getText().equals("") ? null : caseStatusNotesTextBox.getText();
-        
+
         HearingCase.updateHearingCaseInformation(newInformation, orginalInformation);
     }
-    
+
     public void loadInformation() {
         loadALJComboBox();
         loadFinalResultComboBox();
@@ -271,9 +272,9 @@ public class HearingInformationPanel extends javax.swing.JPanel {
 //        loadResultComboBox();
 
         loadMediationTable();
-        
+
         orginalInformation = HearingCase.loadHearingCaseInformation();
-        
+
         openClosedComboBox.setSelectedItem(orginalInformation.openClose);
         caseTypeTextBox.setText(Global.caseType);
         boardActionPCDateTextBox.setText(orginalInformation.boardActionPCDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.boardActionPCDate.getTime())) : "");
@@ -297,29 +298,28 @@ public class HearingInformationPanel extends javax.swing.JPanel {
         finalResultComboBox.setSelectedItem(orginalInformation.FinalResult != null ? orginalInformation.FinalResult : "");
         opinionTextBox.setText(orginalInformation.opinion != null ? Global.mmddyyyy.format(new Date(orginalInformation.opinion.getTime())) : "");
         companionCasesTextBox.setText(orginalInformation.companionCases != null ? orginalInformation.companionCases : "");
-        
+
         caseStatusNotesTextBox.setText(orginalInformation.caseStatusNotes == null ? "" : orginalInformation.caseStatusNotes);
     }
-    
+
     private void loadMediationTable() {
         DefaultTableModel model = (DefaultTableModel) mediationTable.getModel();
         model.setRowCount(0);
-        
+
         List<HearingsMediation> items = HearingsMediation.loadAllMediationsByCaseNumber();
-        
+
         for (HearingsMediation item : items) {
             model.addRow(new Object[] {
                 item.id,
-                item.pcPreD == null ? "" : item.pcPreD, 
-                User.getNameByID(item.mediatorID),
+                item.pcPreD == null ? "" : item.pcPreD,
+                Mediator.getMediatorNameByID(String.valueOf(item.mediatorID)),
                 item.dateAssigned == null ? "" : Global.mmddyyyy.format(new Date(item.dateAssigned.getTime())),
                 item.mediationDate == null ? "" : Global.mmddyyyy.format(new Date(item.mediationDate.getTime())),
                 item.outcome == null ? "" : item.outcome
             });
         }
     }
-    
-    
+
     private void clearDate(WebDateField dateField, MouseEvent evt) {
         if(evt.getButton() == MouseEvent.BUTTON3 && dateField.isEnabled()) {
             ClearDateDialog dialog = new ClearDateDialog((JFrame) Global.root, true);
@@ -1141,7 +1141,7 @@ public class HearingInformationPanel extends javax.swing.JPanel {
                     mediationTable.getValueAt(mediationTable.getSelectedRow(), 4).toString());
             mediationTable.clearSelection();
             loadMediationTable();
-        } 
+        }
     }//GEN-LAST:event_mediationTableMouseClicked
 
     private void opinionTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_opinionTextBoxMouseClicked
