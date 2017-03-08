@@ -289,8 +289,8 @@ public class processCMDSbookmarks {
 
 
         if (answers.getDateRequestedContinuance() != null) {
-            if (!answers.getRequestingPartyContinuance().trim().equals("")) {
-                dateRequestedString = answers.getRequestingPartyContinuance();
+            if (!answers.getDateRequestedContinuance().trim().equals("")) {
+                dateRequestedString = answers.getDateRequestedContinuance();
             }
         }
         if (answers.getDateRequestedExtension() != null) {
@@ -498,7 +498,7 @@ public class processCMDSbookmarks {
             processBookmark.process("AppealTypeTWO" + (i == 0 ? "" : i), answers.getAppealType2() == null ? "" : answers.getAppealType2()[1], Document);
             processBookmark.process("AppealTypeUF" + (i == 0 ? "" : i), answers.getAppealTypeUF() == null ? "" : answers.getAppealTypeUF()[1], Document);
             processBookmark.process("AppealTypeLS" + (i == 0 ? "" : i), answers.getAppealTypeLS(), Document);
-            processBookmark.process("RequestingPartyC" + (i == 0 ? "" : i), answers.getAppealTypeLS(), Document);
+            processBookmark.process("RequestingPartyC" + (i == 0 ? "" : i), answers.getRequestingPartyContinuance(), Document);
             processBookmark.process("RequestingPartyE" + (i == 0 ? "" : i), answers.getRequestingPartyExtension(), Document);
             processBookmark.process("COST" + (i == 0 ? "" : i), cost, Document);
             processBookmark.process("TOTAL" + (i == 0 ? "" : i), total, Document);
