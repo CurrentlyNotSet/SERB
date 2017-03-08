@@ -1847,6 +1847,7 @@ public class questionsCMDSPanel extends JDialog {
 
         List partyType = CaseParty.loadPartiesByCase();
         RequestingPartyContinuanceComboBox.addItem("");
+        RequestingPartyContinuanceComboBox.addItem("Joint");
         for (int i = 0; i < partyType.size(); i++) {
             CaseParty party = (CaseParty) partyType.get(i);
             RequestingPartyContinuanceComboBox.addItem(party.caseRelation);
