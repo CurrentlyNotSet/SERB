@@ -54,7 +54,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         relatedCaseModel = (DefaultTableModel) relatedCaseTable.getModel();
         addRelatedCaseButton.setVisible(false);
     }
-    
+
     private void addRenderer() {
         relatedCaseTable.setDefaultRenderer(Object.class, new TableCellRenderer(){
             private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
@@ -285,7 +285,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
 
         currentOwnerComboBox.addItem("");
 
-        List currentOwnerList = User.loadSectionDropDowns("REP");
+        List currentOwnerList = User.loadSectionDropDownsPlusALJ("REP");
 
         for (Object currentOwners : currentOwnerList) {
             currentOwnerComboBox.addItem(currentOwners.toString());

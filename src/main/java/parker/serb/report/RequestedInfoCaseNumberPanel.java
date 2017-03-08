@@ -12,6 +12,7 @@ import javax.swing.event.DocumentListener;
 import parker.serb.Global;
 import parker.serb.sql.CaseValidation;
 import parker.serb.sql.SMDSDocuments;
+import parker.serb.util.NumberFormatService;
 
 /**
  *
@@ -31,16 +32,19 @@ public class RequestedInfoCaseNumberPanel extends javax.swing.JDialog {
         super(parent, modal);
         report = reportPassed;
         initComponents();
-        setText(report.fileName);
-        enableAddButton();
-        addListeners();
+        setDefaults(report.fileName);
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }
 
-    private void setText(String reportName) {
+    private void setDefaults(String reportName) {
         jLabel3.setText(reportName);
         caseNotFoundLabel.setText("");
+        if (Global.caseNumber != null){
+            caseNumberTextBox.setText(NumberFormatService.generateFullCaseNumber());
+        }
+        enableAddButton();
+        addListeners();
     }
 
     private void addListeners() {
