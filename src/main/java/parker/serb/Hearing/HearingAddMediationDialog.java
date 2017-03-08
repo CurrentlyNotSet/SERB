@@ -8,12 +8,14 @@ package parker.serb.Hearing;
 import com.alee.extended.date.WebCalendar;
 import com.alee.utils.swing.Customizer;
 import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import parker.serb.Global;
 import parker.serb.sql.HearingOutcome;
 import parker.serb.sql.HearingsMediation;
-import parker.serb.sql.User;
+import parker.serb.sql.Mediator;
+import parker.serb.util.Item;
 
 /**
  *
@@ -31,7 +33,7 @@ public class HearingAddMediationDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         addListeners();
-        loadALJComboBox();
+        loadMediatorComboBox();
         loadFinalResultComboBox();
         setLocationRelativeTo(parent);
         setVisible(true);
@@ -87,15 +89,17 @@ public class HearingAddMediationDialog extends javax.swing.JDialog {
         });
     }
 
-    private void loadALJComboBox() {
-        mediatorComboBox.removeAllItems();
-        mediatorComboBox.addItem("");
+    private void loadMediatorComboBox() {
+        mediatorComboBox.setModel(new DefaultComboBoxModel());
+        mediatorComboBox.addItem(new Item<>("0", ""));
 
-        List userList = User.loadSectionDropDowns("MED");
-        
-        for (Object user : userList) {
-            mediatorComboBox.addItem((String) user);
+        List StateMediatorList = Mediator.loadMediators("State");
+
+        for (Object item : StateMediatorList) {
+            Mediator med = (Mediator) item;
+            mediatorComboBox.addItem(new Item<>(String.valueOf(med.id),med.firstName + " " + med.lastName));
         }
+        mediatorComboBox.setSelectedItem(new Item<>("0", ""));
     }
 
     private void enableSaveButton() {
@@ -125,7 +129,7 @@ public class HearingAddMediationDialog extends javax.swing.JDialog {
         jTextField3 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        mediatorComboBox = new javax.swing.JComboBox<>();
+        mediatorComboBox = new javax.swing.JComboBox();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         saveButton = new javax.swing.JButton();
@@ -147,7 +151,7 @@ public class HearingAddMediationDialog extends javax.swing.JDialog {
 
         jLabel3.setText("Mediator:");
 
-        mediatorComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "AM", "PM", " " }));
+        mediatorComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "AM", "PM", " " }));
         mediatorComboBox.setSelectedIndex(2);
         mediatorComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -288,9 +292,12 @@ public class HearingAddMediationDialog extends javax.swing.JDialog {
             }// </editor-fold>//GEN-END:initComponents
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
+        Item item = (Item) mediatorComboBox.getSelectedItem();
+        int mediatorID = Integer.parseInt(item.getValue().toString());
+
         HearingsMediation.addMediation(
                 pcPreDComboBox.getSelectedItem().toString(),
-                mediatorComboBox.getSelectedItem().toString().equals("") ? 0 : User.getUserID(mediatorComboBox.getSelectedItem().toString()),
+                mediatorID,
                 dateAssignedTextBox.getText().trim(),
                 mediationDateTextBox.getText().trim(),
                 outcomeComboBox.getSelectedItem().toString());
@@ -325,7 +332,7 @@ public class HearingAddMediationDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JTextField jTextField3;
     private com.alee.extended.date.WebDateField mediationDateTextBox;
-    private javax.swing.JComboBox<String> mediatorComboBox;
+    private javax.swing.JComboBox mediatorComboBox;
     private javax.swing.JComboBox<String> outcomeComboBox;
     private javax.swing.JComboBox<String> pcPreDComboBox;
     private javax.swing.JButton saveButton;

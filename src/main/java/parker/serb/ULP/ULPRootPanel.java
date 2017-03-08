@@ -8,8 +8,8 @@ package parker.serb.ULP;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
-import parker.serb.activity.ActivityPanel;
 import parker.serb.Global;
+import parker.serb.activity.ActivityPanel;
 import parker.serb.activity.AddActivtyForSMDSDialog;
 import parker.serb.activity.RemoveActivityEntryDialog;
 import parker.serb.party.PartiesPanel;
@@ -25,7 +25,7 @@ import parker.serb.util.CancelUpdate;
 public class ULPRootPanel extends javax.swing.JPanel {
 
     String currentTab = "Activity";
-    
+
     /**
      * Creates new form REPRootPanel
      */
@@ -33,7 +33,7 @@ public class ULPRootPanel extends javax.swing.JPanel {
         initComponents();
         addListeners();
     }
-    
+
     void clearAll() {
         Global.root.getuLPHeaderPanel1().clearAll();
         activityPanel1.clearAll();
@@ -44,9 +44,9 @@ public class ULPRootPanel extends javax.swing.JPanel {
         uLPInvestigationReveals1.clearAll();
         notesPanel2.clearAll();
     }
-    
+
     private void addListeners() {
-        
+
         jTabbedPane1.addChangeListener((ChangeEvent e) -> {
             if(Global.caseNumber != null) {
                 setButtons();
@@ -56,7 +56,7 @@ public class ULPRootPanel extends javax.swing.JPanel {
             }
         });
     }
-    
+
     private void loadInformation() {
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
             case "Activity":
@@ -82,7 +82,7 @@ public class ULPRootPanel extends javax.swing.JPanel {
                 break;
         }
     }
-    
+
     private void setButtons() {
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
             case "Activity":
@@ -127,7 +127,7 @@ public class ULPRootPanel extends javax.swing.JPanel {
                 break;
         }
     }
-    
+
     private void disableTabs(int activeTab) {
         Global.root.getuLPHeaderPanel1().getjComboBox2().setEnabled(false);
         for(int i = jTabbedPane1.getTabCount()-1; i >= 0; i--) {
@@ -138,14 +138,14 @@ public class ULPRootPanel extends javax.swing.JPanel {
             }
         }
     }
-    
+
     private void enableTabs() {
         Global.root.getuLPHeaderPanel1().getjComboBox2().setEnabled(true);
         for(int i = jTabbedPane1.getTabCount()-1; i >= 0; i--) {
             jTabbedPane1.setEnabledAt(i, true);
         }
     }
-    
+
     public void ulpUpdate(String buttonText) {
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
             case "Activity":
@@ -163,7 +163,7 @@ public class ULPRootPanel extends javax.swing.JPanel {
                         Global.root.getuLPHeaderPanel1().getChargingPartyTextBox().getText().trim());
                 break;
             case "Status":
-                
+
                 if(buttonText.equals("Update")) {
                     Audit.addAuditEntry("Clicked ULP Update Status Button");
                     disableTabs(jTabbedPane1.getSelectedIndex());
@@ -231,7 +231,7 @@ public class ULPRootPanel extends javax.swing.JPanel {
                 break;
         }
     }
-    
+
     public void ulpDelete() {
         CancelUpdate cancel;
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
@@ -243,7 +243,7 @@ public class ULPRootPanel extends javax.swing.JPanel {
                     activityPanel1.getActvityTable().getValueAt
                     (
                         activityPanel1.getActvityTable().getSelectedRow(),
-                        5
+                        6
                     ).toString()
                 );
                 activityPanel1.loadAllActivity();
@@ -330,7 +330,7 @@ public class ULPRootPanel extends javax.swing.JPanel {
     public PartiesPanel getPartiesPanel1() {
         return partiesPanel1;
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

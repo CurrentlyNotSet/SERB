@@ -113,7 +113,13 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
 
     private void updateAction() {
         updatedActivity.id = orgActivity.id;
-        updatedActivity.action = actionTextBox.getText().trim();
+        
+        if(orgActivity.type == null) {
+            updatedActivity.action = actionTextBox.getText().trim();
+        } else {
+            updatedActivity.action = actionTextBox.getText().trim().replace(orgActivity.type, typeComboBox.getSelectedItem().toString());
+        }
+        
         updatedActivity.comment = commentTextArea.getText();
         updatedActivity.from = fromTextBox.getText();
         updatedActivity.to = toComboBox.getSelectedItem() == null ? "" : toComboBox.getSelectedItem().toString();

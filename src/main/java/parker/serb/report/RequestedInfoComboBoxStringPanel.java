@@ -47,7 +47,7 @@ public class RequestedInfoComboBoxStringPanel extends javax.swing.JDialog {
                 TextFieldLabel.setText("Year: ");
                 break;
             case "InvestigatorID, Year":
-                comboBoxLabel.setText("Investigator: ");
+                comboBoxLabel.setText("ALJ: ");
                 TextFieldLabel.setText("Year: ");
                 break;
             default:

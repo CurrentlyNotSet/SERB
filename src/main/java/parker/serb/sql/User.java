@@ -523,6 +523,59 @@ public class User {
         return activeUsers;
     }
 
+    public static List loadSectionDropDownsPlusALJ(String section) {
+        String sectionColumnName = "";
+
+        switch(section) {
+            case "REP":
+                sectionColumnName = "repcaseworker";
+                break;
+            case "ULP":
+                sectionColumnName = "ulpcaseworker";
+                break;
+            case "MED":
+                sectionColumnName = "medcaseworker";
+                break;
+            case "ORG":
+                sectionColumnName = "orgcaseworker";
+                break;
+            case "Hearings":
+                sectionColumnName = "hearingscaseworker";
+                break;
+            case "CSC":
+                sectionColumnName = "csccaseworker";
+                break;
+            case "CMDS":
+                sectionColumnName = "cmdscaseworker";
+                break;
+        }
+        List activeUsers = new ArrayList<>();
+
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT * FROM users WHERE " + sectionColumnName + " = ? AND investigator = 1 AND active = 1 ORDER BY firstName"; //(ORDER BY firstName T#020 (Beta))
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setBoolean(1, true);
+
+            ResultSet users = preparedStatement.executeQuery();
+
+            while(users.next()) {
+                activeUsers.add(users.getString("firstName") + " " + users.getString("lastName"));
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadSectionDropDowns(section);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return activeUsers;
+    }
+
     public static void updateLogInInformation() {
         Statement stmt = null;
         try {

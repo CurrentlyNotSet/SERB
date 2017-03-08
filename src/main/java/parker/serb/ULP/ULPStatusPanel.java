@@ -47,7 +47,7 @@ import parker.serb.util.NumberFormatService;
 public class ULPStatusPanel extends javax.swing.JPanel {
 
     ULPCase currentStatusInformation;
-    
+
     /**
      * Creates new form ULPStatusPanel
      */
@@ -58,9 +58,9 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         addCaseHearingButton.setVisible(false);
         addRelatedCaseButton.setVisible(false);
     }
-    
+
     private void addListeners() {
-        
+
         filedDateTextBox.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -72,7 +72,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
                     reportDueDateTextBox.setText(Global.mmddyyyy.format(cal.getTime()));
                 } catch (ParseException ex) {
                     reportDueDateTextBox.setText("");
-                }            
+                }
             }
 
             @Override
@@ -85,7 +85,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
                     reportDueDateTextBox.setText(Global.mmddyyyy.format(cal.getTime()));
                 } catch (ParseException ex) {
                     reportDueDateTextBox.setText("");
-                }  
+                }
             }
 
             @Override
@@ -98,10 +98,10 @@ public class ULPStatusPanel extends javax.swing.JPanel {
                     reportDueDateTextBox.setText(Global.mmddyyyy.format(cal.getTime()));
                 } catch (ParseException ex) {
                     reportDueDateTextBox.setText("");
-                }  
+                }
             }
         });
-        
+
         boardMeetingTable.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -138,7 +138,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
             @Override
             public void mouseExited(MouseEvent e) {}
         });
-        
+
         relatedCaseTable.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -166,7 +166,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
             @Override
             public void mouseExited(MouseEvent e) {}
         });
-        
+
         employerNumberTextBox.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -196,26 +196,26 @@ public class ULPStatusPanel extends javax.swing.JPanel {
             public void mouseExited(MouseEvent e) {}
         });
     }
-   
+
     private void setHearingsTableColumns() {
         boardMeetingTable.getColumnModel().getColumn(0).setPreferredWidth(125);
         boardMeetingTable.getColumnModel().getColumn(0).setMinWidth(125);
         boardMeetingTable.getColumnModel().getColumn(0).setMaxWidth(125);
-        
+
         boardMeetingTable.getColumnModel().getColumn(1).setPreferredWidth(75);
         boardMeetingTable.getColumnModel().getColumn(1).setMinWidth(75);
         boardMeetingTable.getColumnModel().getColumn(1).setMaxWidth(75);
-        
+
         boardMeetingTable.getColumnModel().getColumn(3).setPreferredWidth(0);
         boardMeetingTable.getColumnModel().getColumn(3).setMinWidth(0);
         boardMeetingTable.getColumnModel().getColumn(3).setMaxWidth(0);
     }
-    
+
     public void enableUpdate() {
         //Set buttons
         Global.root.getjButton2().setText("Save");
         Global.root.getjButton9().setVisible(true);
-        
+
         //set text boxes and combo boxes
         allegationTextBox.setEnabled(true);
         allegationTextBox.setBackground(Color.white);
@@ -255,13 +255,13 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         addCaseHearingButton.setVisible(true);
         addRelatedCaseButton.setVisible(true);
     }
-    
+
     public void disableUpdate(boolean runSave) {
-        
+
         //Set Buttons
         Global.root.getjButton2().setText("Update");
         Global.root.getjButton9().setVisible(false);
-        
+
         //Set text boxes and combo boxes
         allegationTextBox.setEnabled(false);
         allegationTextBox.setBackground(new Color(238,238,238));
@@ -298,19 +298,19 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         barginingUnitNoTextBox.setEnabled(false);
         barginingUnitNoTextBox.setBackground(new Color(238,238,238));
         probableCauseCheckBox.setEnabled(false);
-        
+
         addCaseHearingButton.setVisible(false);
         addRelatedCaseButton.setVisible(false);
-        
+
         if(runSave) {
             saveInformation();
         } else {
             loadPanelInformation();
         }
     }
-    
+
     public void loadInformation() {
-        
+
         loadStatusComboBox();
         loadInvestigatorComobBox();
         loadALJComboBox();
@@ -319,99 +319,99 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         loadRelatedCasesTable();
         loadPanelInformation();
     }
-    
+
     public void loadStatusComboBox() {
         statusComboBox.removeAllItems();
         finalDispositionComboBox.removeAllItems();
-        
+
         statusComboBox.addItem("");
         finalDispositionComboBox.addItem("");
-        
+
         List recommendationList = ULPRecommendation.loadAllULPRecommendations();
-        
+
         for (Object recommendation : recommendationList) {
             ULPRecommendation rec = (ULPRecommendation) recommendation;
             statusComboBox.addItem(rec.code);
             finalDispositionComboBox.addItem(rec.code);
         }
-        
+
         statusComboBox.setSelectedItem("");
         finalDispositionComboBox.setSelectedItem("");
     }
-    
+
     public void loadInvestigatorComobBox() {
         investigatorComboBox.removeAllItems();
-        
+
         investigatorComboBox.addItem("");
-        
-        List userList = User.loadSectionDropDowns("ALJ");
-        
+
+        List userList = User.loadSectionDropDowns("ULP");
+
         for (Object user : userList) {
             investigatorComboBox.addItem((String) user);
         }
-        
+
         investigatorComboBox.setSelectedItem("");
     }
-    
+
     public void loadALJComboBox() {
         aljComboBox.removeAllItems();
-        
+
         aljComboBox.addItem("");
-        
+
         List userList = User.loadSectionDropDowns("ALJ");
-        
+
         for (Object user : userList) {
             aljComboBox.addItem((String) user);
         }
-        
+
         aljComboBox.setSelectedItem("");
     }
-    
+
     public void loadMediatorComboBox() {
         mediatorAssignedComboBox.removeAllItems();
-        
+
         mediatorAssignedComboBox.addItem("");
-        
+
         List userList = User.loadSectionDropDowns("ULP");
-        
+
         for (Object user : userList) {
             mediatorAssignedComboBox.addItem((String) user);
         }
-        
+
         mediatorAssignedComboBox.setSelectedItem("");
     }
-    
+
     public void loadBoardMeetingTable() {
         DefaultTableModel model = (DefaultTableModel) boardMeetingTable.getModel();
-        
+
         model.setRowCount(0);
-        
+
         List boardMeeting = BoardMeeting.loadULPBoardMeetings();
-        
+
         for (Object meeting : boardMeeting) {
             BoardMeeting singleMeeting = (BoardMeeting) meeting;
             model.addRow(new Object[] {singleMeeting.boardMeetingDate, singleMeeting.agendaItemNumber, singleMeeting.recommendation, singleMeeting.id});
         }
         boardMeetingTable.clearSelection();
     }
-    
+
     public void loadRelatedCasesTable() {
-        
+
         DefaultTableModel model = (DefaultTableModel) relatedCaseTable.getModel();
-        
+
         model.setRowCount(0);
-        
+
         List relatedCases = RelatedCase.loadRelatedCases();
-        
+
         for (Object relatedCase : relatedCases) {
             model.addRow(new Object[] {relatedCase});
         }
         relatedCaseTable.clearSelection();
     }
-    
+
     public void loadPanelInformation() {
         currentStatusInformation = ULPCase.loadStatus();
-        
+
         employerNumberTextBox.setText(currentStatusInformation.employerIDNumber);
         barginingUnitNoTextBox.setText(currentStatusInformation.barginingUnitNo);
         allegationTextBox.setText(currentStatusInformation.allegation);
@@ -434,11 +434,11 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         filedDateTextBox.setText(currentStatusInformation.fileDate != null ? Global.mmddyyyy.format(new Date(currentStatusInformation.fileDate.getTime())) : "");
         probableCauseCheckBox.setSelected(currentStatusInformation.probableCause);
     }
-    
+
     public void saveInformation() {
         Audit.addAuditEntry("Updated ULP Status Panel ");
         ULPCase newStatusInformation = new ULPCase();
-        
+
         newStatusInformation.employerIDNumber = employerNumberTextBox.getText().trim().equals("") ? null : employerNumberTextBox.getText().trim();
         newStatusInformation.barginingUnitNo = barginingUnitNoTextBox.getText().trim().equals("") ? null : barginingUnitNoTextBox.getText().trim();
         newStatusInformation.allegation = allegationTextBox.getText().trim().equals("") ? null : allegationTextBox.getText().trim();
@@ -460,12 +460,12 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         newStatusInformation.aljID = (aljComboBox.getSelectedItem() == null || aljComboBox.getSelectedItem().equals("")) ? 0 : (aljComboBox.getSelectedItem().toString().equals("") ? 0 : User.getUserID(aljComboBox.getSelectedItem().toString().trim()));
         newStatusInformation.fileDate = filedDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(filedDateTextBox.getText()));
         newStatusInformation.probableCause = probableCauseCheckBox.isSelected();
-        
+
         ULPCase.updateCaseStatusInformation(newStatusInformation, currentStatusInformation);
         ULPCaseSearchData.updateCaseEntryFromStatus(newStatusInformation.employerIDNumber, newStatusInformation.barginingUnitNo);
         currentStatusInformation = ULPCase.loadStatus();
     }
-    
+
     private void clearDate(WebDateField dateField, MouseEvent evt) {
         if(evt.getButton() == MouseEvent.BUTTON3 && dateField.isEnabled()) {
             ClearDateDialog dialog = new ClearDateDialog((JFrame) Global.root, true);
@@ -475,7 +475,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
             dialog.dispose();
         }
     }
-    
+
     private void clearData(JTextField dateField, MouseEvent evt) {
         if(evt.getButton() == MouseEvent.BUTTON3 && dateField.isEnabled()) {
             ClearDataDialog dialog = new ClearDataDialog((JFrame) Global.root, true);
@@ -485,16 +485,16 @@ public class ULPStatusPanel extends javax.swing.JPanel {
             dialog.dispose();
         }
     }
-    
+
     public void clearAll() {
         DefaultTableModel relatedCase = (DefaultTableModel) relatedCaseTable.getModel();
-        
+
         relatedCase.setRowCount(0);
-        
+
         DefaultTableModel boardMeeting = (DefaultTableModel) boardMeetingTable.getModel();
-        
+
         boardMeeting.setRowCount(0);
-        
+
         employerNumberTextBox.setText("");
         barginingUnitNoTextBox.setText("");
         allegationTextBox.setText("");
@@ -1206,7 +1206,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
                 }
                 search.dispose();
             }
-        } 
+        }
     }//GEN-LAST:event_barginingUnitNoTextBoxMouseClicked
 
     private void turnInDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_turnInDateTextBoxMouseClicked

@@ -376,7 +376,7 @@ public class UserAddEditDialog extends javax.swing.JDialog {
 
         InitialsTextField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
 
-        InvestigatorCheckBox.setText("Investigator");
+        InvestigatorCheckBox.setText("ALJ");
 
         jLabel12.setText("Job Title:");
 

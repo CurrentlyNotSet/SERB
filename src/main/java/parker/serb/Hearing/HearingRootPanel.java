@@ -8,8 +8,8 @@ package parker.serb.Hearing;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
-import parker.serb.activity.ActivityPanel;
 import parker.serb.Global;
+import parker.serb.activity.ActivityPanel;
 import parker.serb.activity.RemoveActivityEntryDialog;
 import parker.serb.party.PartySearchDialog;
 import parker.serb.util.CancelUpdate;
@@ -29,7 +29,7 @@ public class HearingRootPanel extends javax.swing.JPanel {
         initComponents();
         addListeners();
     }
-    
+
     /**
      * Removes all content from previous stored cases
      */
@@ -41,9 +41,9 @@ public class HearingRootPanel extends javax.swing.JPanel {
         hearingHearingsPanel1.clearTable();
         partiesPanel1.clearAll();
     }
-    
+
     private void addListeners() {
-        
+
         jTabbedPane1.addChangeListener((ChangeEvent e) -> {
             if(Global.caseNumber != null) {
                 setButtons();
@@ -52,9 +52,9 @@ public class HearingRootPanel extends javax.swing.JPanel {
             }
         });
     }
-    
+
     /**
-     * load information about the case that is based on the tab that is selected, 
+     * load information about the case that is based on the tab that is selected,
      * trying to cheat and "lazy" load.  This my be re-factored to allow for full
      * case load while displaying a spinner.
      */
@@ -77,9 +77,9 @@ public class HearingRootPanel extends javax.swing.JPanel {
                 break;
         }
     }
-    
+
     /**
-     * Set the buttons to display the proper information and button status 
+     * Set the buttons to display the proper information and button status
      * depending on the selected tab index
      */
     private void setButtons() {
@@ -108,10 +108,10 @@ public class HearingRootPanel extends javax.swing.JPanel {
                 Global.root.getjButton2().setText("Add Hearing");
                 Global.root.getjButton2().setEnabled(true);
                 Global.root.getjButton9().setVisible(false);
-                break;    
+                break;
         }
     }
-    
+
     private void disableTabs(int activeTab) {
         Global.root.getHearingHeaderPanel1().getjComboBox2().setEnabled(false);
         for(int i = jTabbedPane1.getTabCount()-1; i >= 0; i--) {
@@ -122,16 +122,16 @@ public class HearingRootPanel extends javax.swing.JPanel {
             }
         }
     }
-    
+
     private void enableTabs() {
         Global.root.getHearingHeaderPanel1().getjComboBox2().setEnabled(true);
         for(int i = jTabbedPane1.getTabCount()-1; i >= 0; i--) {
             jTabbedPane1.setEnabledAt(i, true);
         }
     }
-    
+
     /**
-     * Used to update the information in the DB with information from a panel. 
+     * Used to update the information in the DB with information from a panel.
      * Uses the currently selected panel index
      * @param buttonText the text of the current button
      */
@@ -145,7 +145,7 @@ public class HearingRootPanel extends javax.swing.JPanel {
                 new PartySearchDialog((JFrame) this.getRootPane().getParent(), true);
                 partiesPanel1.loadHearingParties();
                 Global.root.getHearingHeaderPanel1().loadHeaderInformation();
-                break; 
+                break;
             case "Case Information":
                 if(buttonText.equals("Update")) {
                     disableTabs(jTabbedPane1.getSelectedIndex());
@@ -168,14 +168,14 @@ public class HearingRootPanel extends javax.swing.JPanel {
                     Global.root.enableButtonsAfterCancel();
                     notesPanel1.disableUpdate(true);
                 }
-                break; 
+                break;
             case "Hearings":
                new HearingAddHearingDialog(Global.root, true);
                hearingHearingsPanel1.loadInformation();
-               break;  
+               break;
         }
     }
-    
+
     /**
      * Determines if the delete button should be enabled, as well as the desired
      * functionality
@@ -190,7 +190,7 @@ public class HearingRootPanel extends javax.swing.JPanel {
                     activityPanel1.getActvityTable().getValueAt
                     (
                         activityPanel1.getActvityTable().getSelectedRow(),
-                        5
+                        6
                     ).toString()
                 );
                 activityPanel1.loadAllActivity();
@@ -218,7 +218,7 @@ public class HearingRootPanel extends javax.swing.JPanel {
                     enableTabs();
                     notesPanel1.disableUpdate(false);
                 }
-                break; 
+                break;
             case "Hearings":
                 hearingHearingsPanel1.removeHearing();
                 break;

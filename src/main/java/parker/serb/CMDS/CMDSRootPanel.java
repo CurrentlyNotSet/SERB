@@ -8,8 +8,8 @@ package parker.serb.CMDS;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
-import parker.serb.activity.ActivityPanel;
 import parker.serb.Global;
+import parker.serb.activity.ActivityPanel;
 import parker.serb.activity.RemoveActivityEntryDialog;
 import parker.serb.party.PartySearchDialog;
 import parker.serb.sql.CMDSCaseSearchData;
@@ -31,7 +31,7 @@ public class CMDSRootPanel extends javax.swing.JPanel {
         initComponents();
         addListeners();
     }
-    
+
     /**
      * Removes all content from previous stored cases
      */
@@ -43,9 +43,9 @@ public class CMDSRootPanel extends javax.swing.JPanel {
         cMDSHearingsPanel1.clearTable();
         partiesPanel1.clearAll();
     }
-    
+
     private void addListeners() {
-        
+
         jTabbedPane1.addChangeListener((ChangeEvent e) -> {
             if(Global.caseNumber != null) {
                 setButtons();
@@ -54,9 +54,9 @@ public class CMDSRootPanel extends javax.swing.JPanel {
             }
         });
     }
-    
+
     /**
-     * load information about the case that is based on the tab that is selected, 
+     * load information about the case that is based on the tab that is selected,
      * trying to cheat and "lazy" load.  This my be re-factored to allow for full
      * case load while displaying a spinner.
      */
@@ -76,12 +76,12 @@ public class CMDSRootPanel extends javax.swing.JPanel {
                 break;
             case "Hearings":
                 cMDSHearingsPanel1.loadInformation();
-                break;    
+                break;
         }
     }
-    
+
     /**
-     * Set the buttons to display the proper information and button status 
+     * Set the buttons to display the proper information and button status
      * depending on the selected tab index
      */
     private void setButtons() {
@@ -110,10 +110,10 @@ public class CMDSRootPanel extends javax.swing.JPanel {
                 Global.root.getjButton2().setText("Add Hearing");
                 Global.root.getjButton2().setEnabled(true);
                 Global.root.getjButton9().setVisible(false);
-                break;    
+                break;
         }
     }
-    
+
     private void disableTabs(int activeTab) {
         Global.root.getcMDSHeaderPanel1().getjComboBox2().setEnabled(false);
         for(int i = jTabbedPane1.getTabCount()-1; i >= 0; i--) {
@@ -124,16 +124,16 @@ public class CMDSRootPanel extends javax.swing.JPanel {
             }
         }
     }
-    
+
     private void enableTabs() {
         Global.root.getcMDSHeaderPanel1().getjComboBox2().setEnabled(true);
         for(int i = jTabbedPane1.getTabCount()-1; i >= 0; i--) {
             jTabbedPane1.setEnabledAt(i, true);
         }
     }
-    
+
     /**
-     * Used to update the information in the DB with information from a panel. 
+     * Used to update the information in the DB with information from a panel.
      * Uses the currently selected panel index
      * @param buttonText the text of the current button
      */
@@ -180,10 +180,10 @@ public class CMDSRootPanel extends javax.swing.JPanel {
             case "Hearings":
                 new CMDSAddHearingDialog(Global.root, true);
                 cMDSHearingsPanel1.loadInformation();
-                break;    
+                break;
         }
     }
-    
+
     /**
      * Determines if the delete button should be enabled, as well as the desired
      * functionality
@@ -198,7 +198,7 @@ public class CMDSRootPanel extends javax.swing.JPanel {
                     activityPanel1.getActvityTable().getValueAt
                     (
                         activityPanel1.getActvityTable().getSelectedRow(),
-                        5
+                        6
                     ).toString()
                 );
                 activityPanel1.loadAllActivity();
@@ -235,7 +235,7 @@ public class CMDSRootPanel extends javax.swing.JPanel {
                 break;
             case "Hearings":
                 cMDSHearingsPanel1.removeHearing();
-                break;    
+                break;
         }
     }
 
@@ -246,7 +246,7 @@ public class CMDSRootPanel extends javax.swing.JPanel {
     public ActivityPanel getActivityPanel1() {
         return activityPanel1;
     }
-    
+
 
     /**
      * This method is called from within the constructor to initialize the form.

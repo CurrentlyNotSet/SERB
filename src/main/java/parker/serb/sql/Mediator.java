@@ -34,7 +34,7 @@ public class Mediator {
 
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "select firstName, middleName, lastName"
+            String sql = "select id, firstName, middleName, lastName"
                     + " from Mediator"
                     + " Where active = 1 and type = ?"
                     + " ORDER BY firstName ASC "; //(ORDER BY firstName T#020 (Beta))
@@ -47,6 +47,7 @@ public class Mediator {
 
             while(employerListRS.next()) {
                 Mediator med = new Mediator();
+                med.id = employerListRS.getInt("id");
                 med.firstName = employerListRS.getString("firstName") == null ? "" : employerListRS.getString("firstName");
                 med.middleName = employerListRS.getString("middleName") == null ? "" : employerListRS.getString("middleName");
                 med.lastName = employerListRS.getString("lastName") == null ? "" : employerListRS.getString("lastName");
