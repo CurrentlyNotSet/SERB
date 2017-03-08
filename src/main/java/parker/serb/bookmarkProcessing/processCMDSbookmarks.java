@@ -246,7 +246,7 @@ public class processCMDSbookmarks {
         }
 
         if (item.aljID > 0) {
-            ALJname = User.getNameByID(item.aljID);
+            ALJname = User.getFullNameByID(item.aljID);
         }
 
         if (answers.getGenderAppellant() != null) {
