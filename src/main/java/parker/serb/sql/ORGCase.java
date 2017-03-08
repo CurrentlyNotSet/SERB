@@ -518,8 +518,8 @@ public class ORGCase {
 
             String sql = "SELECT * FROM ORGCase WHERE "
                     + "Active = 1 AND Valid = 1 AND FiledByParent = 0 AND fiscalYearEnding = ? "
-                    + "AND ( constructionAndByLaws = null OR registrationReport = null "
-                    + "OR annualReport = null OR annualReport < ? OR financialReport = null "
+                    + "AND (constructionAndByLaws IS NULL OR registrationReport IS NULL "
+                    + "OR annualReport IS NULL OR annualReport < ? OR financialReport IS NULL "
                     + "OR financialReport < ?) Order By orgName ASC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
