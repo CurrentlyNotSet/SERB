@@ -1292,36 +1292,40 @@ public class CMDSCase {
         boolean validCase = false;
 
         Statement stmt = null;
+        
+        if(caseNumber.split("-").length != 4) {
+            validCase = false;
+        } else {
+            try {
+                stmt = Database.connectToDB().createStatement();
 
-        try {
-            stmt = Database.connectToDB().createStatement();
+                String sql = "Select COUNT(*) AS CASECOUNT from CMDSCase"
+                        + " where caseYear = ?"
+                        + " and caseType = ?"
+                        + " and caseMonth = ?"
+                        + " and caseNumber = ?";
 
-            String sql = "Select COUNT(*) AS CASECOUNT from CMDSCase"
-                    + " where caseYear = ?"
-                    + " and caseType = ?"
-                    + " and caseMonth = ?"
-                    + " and caseNumber = ?";
+                PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+                preparedStatement.setString(1, caseNumber.split("-")[0]);
+                preparedStatement.setString(2, caseNumber.split("-")[1]);
+                preparedStatement.setString(3, caseNumber.split("-")[2]);
+                preparedStatement.setString(4, caseNumber.split("-")[3]);
 
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, caseNumber.split("-")[0]);
-            preparedStatement.setString(2, caseNumber.split("-")[1]);
-            preparedStatement.setString(3, caseNumber.split("-")[2]);
-            preparedStatement.setString(4, caseNumber.split("-")[3]);
+                ResultSet caseNumberRS = preparedStatement.executeQuery();
 
-            ResultSet caseNumberRS = preparedStatement.executeQuery();
-
-            while(caseNumberRS.next()) {
-                if(caseNumberRS.getInt("CASECOUNT") > 0) {
-                    validCase = true;
+                while(caseNumberRS.next()) {
+                    if(caseNumberRS.getInt("CASECOUNT") > 0) {
+                        validCase = true;
+                    }
                 }
+            } catch (SQLException ex) {
+                SlackNotification.sendNotification(ex);
+                if(ex.getCause() instanceof SQLServerException) {
+                    validateCase(caseNumber);
+                }
+            } finally {
+                DbUtils.closeQuietly(stmt);
             }
-        } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex);
-            if(ex.getCause() instanceof SQLServerException) {
-                validateCase(caseNumber);
-            }
-        } finally {
-            DbUtils.closeQuietly(stmt);
         }
         return validCase;
     }
