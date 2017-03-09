@@ -365,7 +365,7 @@ public class processCMDSbookmarks {
                     addresseeName = otherInterestedPartiesNames;
                     addresseeAddressBlock = otherInterestedPartiesAddressBlock;
                     break;
-                case "Other":
+                default:
                     addresseeName = answers.getAddressBlockName();
                     addresseeAddressBlock = answers.getAddressBlockBlock();
                     break;
