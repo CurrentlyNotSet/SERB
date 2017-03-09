@@ -900,9 +900,9 @@ public class questionsCMDSPanel extends JDialog {
 
         //Set Top Panel
         final JPanel headerPanel = new JPanel();
-        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 10));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        titleLabel.setText("What Date was the Hearing Served?");
+        titleLabel.setText("What Date was the Notice of Hearing Served on Appellant?");
         headerPanel.add(titleLabel);
 
         //Set Bottom Panel (Button Bar)
