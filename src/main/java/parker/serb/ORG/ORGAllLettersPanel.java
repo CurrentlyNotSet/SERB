@@ -193,12 +193,17 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
                             repVia += ", ";
                         }
                         repVia += "Email";
-                    } else if (item.orgAddress1 != null & item.orgCity != null & item.orgState != null && item.orgZip != null) {
-                        postalNumber++;
-                        if (!repVia.trim().equals("")) {
-                            repVia += ", ";
+                    } else if (item.orgAddress1 != null && item.orgCity != null && item.orgState != null && item.orgZip != null) {
+                        if (!item.orgAddress1.equalsIgnoreCase(party.address1)
+                                && !item.orgCity.equalsIgnoreCase(party.city)
+                                && !item.orgState.equalsIgnoreCase(party.stateCode)
+                                && !item.orgZip.equalsIgnoreCase(party.zipcode)) {
+                            postalNumber++;
+                            if (!repVia.trim().equals("")) {
+                                repVia += ", ";
+                            }
+                            repVia += "Postal";
                         }
-                        repVia += "Postal";
                     }
                 }
             }
@@ -206,7 +211,7 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
             if (item.orgEmail != null) {
                 EmailNumber++;
                 orgVia = "Email";
-            } else if (item.orgAddress1 != null & item.orgCity != null & item.orgState != null && item.orgZip != null) {
+            } else if (item.orgAddress1 != null && item.orgCity != null && item.orgState != null && item.orgZip != null) {
                 postalNumber++;
                 orgVia = "Postal";
             }
@@ -271,11 +276,11 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
                         attachDocName = copyAttachmentToCaseFolder(item, template.questionsFileName);
                     }
 
-                    if (template.fileName.startsWith("Tickler")) {
+                    if (template.description.startsWith("Tickler")) {
                         attachDocName = copyAttachmentToCaseFolder(item, "EOAR.pdf");
                     }
 
-                    if (template.fileName.startsWith("New Registration")) {
+                    if (template.description.startsWith("New Registration")) {
                         attachDocName = copyAttachmentToCaseFolder(item, "RegistrationReportForm.pdf");
                     }
 
@@ -295,10 +300,15 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
                                 }
 
                             } else if (party.address1 != null & party.city != null & party.stateCode != null && party.zipcode != null) {
-                                int postalID = insertPostal(template, item.orgNumber, party);
-                                insertGeneratedAttachementPostal(postalID, docName, true);
-                                if (!attachDocName.equals("")) {
-                                    insertGeneratedAttachementPostal(postalID, attachDocName, false);
+                                if (!item.orgAddress1.equalsIgnoreCase(party.address1)
+                                        && !item.orgCity.equalsIgnoreCase(party.city)
+                                        && !item.orgState.equalsIgnoreCase(party.stateCode)
+                                        && !item.orgZip.equalsIgnoreCase(party.zipcode)) {
+                                    int postalID = insertPostal(template, item.orgNumber, party);
+                                    insertGeneratedAttachementPostal(postalID, docName, true);
+                                    if (!attachDocName.equals("")) {
+                                        insertGeneratedAttachementPostal(postalID, attachDocName, false);
+                                    }
                                 }
                             }
                         }
@@ -672,6 +682,7 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
             CloseButton.setEnabled(true);
             letterComboBox.setEnabled(true);
             jTable1.setEnabled(true);
+            WebOptionPane.showMessageDialog(Global.root, "<html><center>Finished Generation of all Documents</center></html>", "Done", WebOptionPane.INFORMATION_MESSAGE);
         });
         temp.start();
     }//GEN-LAST:event_GenerateButtonActionPerformed

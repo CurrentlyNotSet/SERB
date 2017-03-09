@@ -30,6 +30,7 @@ public class Global {
     public static SimpleDateFormat mmddyyyy = new SimpleDateFormat("MM/dd/yyyy");
     public static SimpleDateFormat EMMMMMdyyyy = new SimpleDateFormat("E, MMMMM d, yyyy");
     public static SimpleDateFormat MMMMddyyyy = new SimpleDateFormat("MMMM dd, yyyy");
+    public static SimpleDateFormat MMMMdyyyy = new SimpleDateFormat("MMMM d, yyyy");
     public static SimpleDateFormat MMMMMdyyyy = new SimpleDateFormat("MMMMM d, yyyy");
     public static SimpleDateFormat MMMMM = new SimpleDateFormat("MMMMM");
     public static SimpleDateFormat yyyy = new SimpleDateFormat("yyyy");

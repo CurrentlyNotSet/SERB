@@ -529,10 +529,10 @@ public class generateDocument {
             processBookmark.process("LOGGEDINUSERTITLE" + (i == 0 ? "" : i), Global.activeUser.jobTitle, Document);
 
             //Made up stuff
-            processBookmark.process("TODAYSDATE" + (i == 0 ? "" : i), Global.MMMMddyyyy.format(new Date()), Document);
-            processBookmark.process("Maileddate" + (i == 0 ? "" : i), Global.MMMMddyyyy.format(new Date()), Document);
-            processBookmark.process("CurrentDate" + (i == 0 ? "" : i), Global.MMMMddyyyy.format(new Date()), Document);
-            processBookmark.process("DateMatterCameOn" + (i == 0 ? "" : i), Global.MMMMddyyyy.format(new Date()), Document);
+            processBookmark.process("TODAYSDATE" + (i == 0 ? "" : i), Global.MMMMdyyyy.format(today), Document);
+            processBookmark.process("Maileddate" + (i == 0 ? "" : i), Global.MMMMdyyyy.format(today), Document);
+            processBookmark.process("CurrentDate" + (i == 0 ? "" : i), Global.MMMMdyyyy.format(today), Document);
+            processBookmark.process("DateMatterCameOn" + (i == 0 ? "" : i), Global.MMMMdyyyy.format(today), Document);
             processBookmark.process("DAY" + (i == 0 ? "" : i), Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
                     + Global.daySuffixes[Calendar.getInstance().get(Calendar.DAY_OF_MONTH)], Document);
             processBookmark.process("MONTH" + (i == 0 ? "" : i), Global.MMMMM.format(new Date()), Document);
