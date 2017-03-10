@@ -50,11 +50,14 @@ public class RequestedInfoDropdownPanel extends javax.swing.JDialog {
             case "UserID":
                 comboBoxLabel.setText("User:");
                 break;
+            case "SectionUserID":
+                comboBoxLabel.setText("User:");
+                break;
             case "ActivityType":
                 comboBoxLabel.setText("Activity Type:");
                 break;
             case "InvestigatorID":
-                comboBoxLabel.setText("Investigator:");
+                comboBoxLabel.setText("ALJ:");
                 break;
             default:
                 break;
@@ -79,6 +82,17 @@ public class RequestedInfoDropdownPanel extends javax.swing.JDialog {
                 ComboBox.addItem(new Item<>("%", "All"));
                 List<User> userList = User.getEnabledUsers();
                 for (User item : userList) {
+                    ComboBox.addItem(new Item<>(
+                            String.valueOf(item.id),
+                            StringUtilities.buildFullName(item.firstName, item.middleInitial, item.lastName))
+                    );
+                }
+                ComboBox.setSelectedItem(new Item<>("%", "All"));
+                break;
+            case "SectionUserID":
+                ComboBox.addItem(new Item<>("%", "All"));
+                List<User> sectionUserList = User.loadSectionUsersWithID(Global.activeSection);
+                for (User item : sectionUserList) {
                     ComboBox.addItem(new Item<>(
                             String.valueOf(item.id),
                             StringUtilities.buildFullName(item.firstName, item.middleInitial, item.lastName))
