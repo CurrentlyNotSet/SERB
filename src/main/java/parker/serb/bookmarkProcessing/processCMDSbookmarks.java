@@ -365,16 +365,18 @@ public class processCMDSbookmarks {
                     addresseeName = otherInterestedPartiesNames;
                     addresseeAddressBlock = otherInterestedPartiesAddressBlock;
                     break;
-                case "Other":
+                default:
                     addresseeName = answers.getAddressBlockName();
                     addresseeAddressBlock = answers.getAddressBlockBlock();
                     break;
             }
         }
 
-        if (answers.getStayDate() != null) {
-            if (!answers.getStayDate().equals("")) {
-                double precost = Double.parseDouble(answers.getStayDate()) * 1.5;
+        if (answers.getHearingLength()!= null) {
+            String cleanedNumber = answers.getHearingLength().replaceAll("\\d*\\.\\d*", "");
+            
+            if (!cleanedNumber.equals("")) {
+                double precost = Double.parseDouble(cleanedNumber) * 1.5;
                 cost = "$" + String.format("%.2f", precost);
 
                 double pretotal = precost + 25;

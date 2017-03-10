@@ -42,6 +42,7 @@ public class ConfirmationDialog extends javax.swing.JDialog {
     private void sendLetter() {
         if (type.equals("Email")) {
             EmailOut.markEmailReadyToSend(letterID);
+            WebOptionPane.showMessageDialog(Global.root, "<html><center>Email added to Outgoing Mail Queue</center></html>", "Process Complete", WebOptionPane.INFORMATION_MESSAGE);
         } else if (type.equals("Postal")) {
             postalSend.sendPostal(letterID);
         }

@@ -115,7 +115,7 @@ public class processMEDbookmarks {
                             employerAddresses += "\n\n";
                         }
                         employerAddresses += StringUtilities.buildAddressBlockWithLineBreaks(party);
-                        employerNames += StringUtilities.buildCasePartyNameNoPreFix(party);
+                        employerNames += StringUtilities.buildCasePartyNameWithPrefix(party);
                         break;
                     case "Employer REP":
                         if (!"".equals(employerREPNames.trim())) {
@@ -129,7 +129,7 @@ public class processMEDbookmarks {
                             employerREPAddresses += "\n\n";
                         }
                         employerREPAddresses += StringUtilities.buildAddressBlockWithLineBreaks(party);
-                        employerREPNames += StringUtilities.buildCasePartyNameNoPreFix(party);
+                        employerREPNames += StringUtilities.buildCasePartyNameWithPrefix(party);
                         employerRepSalutation += party.prefix != null ? party.prefix : "";
                         employerRepLastName += party.lastName != null ? party.lastName : "";
                         employerRepEmail += party.emailAddress != null ? party.emailAddress : "";
@@ -145,7 +145,7 @@ public class processMEDbookmarks {
                             employeeOrgAddresses += "\n\n";
                         }
                         employeeOrgAddresses += StringUtilities.buildAddressBlockWithLineBreaks(party);
-                        employeeOrgNames += StringUtilities.buildCasePartyNameNoPreFix(party);
+                        employeeOrgNames += StringUtilities.buildCasePartyNameWithPrefix(party);
                         break;
                     case "Employee Organization REP":
                         if (!"".equals(employeeOrgREPNames.trim())) {
@@ -159,7 +159,7 @@ public class processMEDbookmarks {
                             employeeOrgREPAddresses += "\n\n";
                         }
                         employeeOrgREPAddresses += StringUtilities.buildAddressBlockWithLineBreaks(party);
-                        employeeOrgREPNames += StringUtilities.buildCasePartyNameNoPreFix(party);
+                        employeeOrgREPNames += StringUtilities.buildCasePartyNameWithPrefix(party);
 
                         employeeOrgRepSalutation += party.prefix != null ? party.prefix : "";
                         employeeOrgRepLastName += party.lastName != null ? party.lastName : "";

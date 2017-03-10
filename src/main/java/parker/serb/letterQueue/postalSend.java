@@ -141,7 +141,7 @@ public class postalSend {
         }
 
         //Create Activity
-        Activity.addActivtyFromDocket(
+        Activity.addActivtySendPostal(
                 "OUT - " + postalEntry.historyDescription,
                 savedDoc,
                 NumberFormatService.generateFullCaseNumberNonGlobal(
