@@ -104,7 +104,7 @@ public class PublicRecordsEmailPanel extends javax.swing.JDialog {
         eml.to = toTextBox.getText().trim().equals("") ? null : toTextBox.getText().trim();
         eml.from = Global.activeUser.emailAddress;
         eml.cc = ccTextbox.getText().trim().equals("") ? null : ccTextbox.getText().trim();
-        eml.bcc = null;
+        eml.bcc = "serbeoarchive@serb.state.oh.us";
         eml.subject = subjectTextbox.getText().trim().equals("") ? null : subjectTextbox.getText().trim();
         eml.body = emailBody;
         eml.userID = Global.activeUser.id;

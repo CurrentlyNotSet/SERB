@@ -24,10 +24,10 @@ import javax.swing.table.TableCellRenderer;
 import parker.serb.Global;
 import parker.serb.bookmarkProcessing.generateDocument;
 import parker.serb.sql.Activity;
+import parker.serb.sql.CSCCase;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.EmailOut;
 import parker.serb.sql.EmailOutAttachment;
-import parker.serb.sql.CSCCase;
 import parker.serb.sql.PostalOut;
 import parker.serb.sql.PostalOutAttachment;
 import parker.serb.sql.SMDSDocuments;
@@ -59,7 +59,7 @@ public class CSCAllLettersPanel extends javax.swing.JDialog {
         setLocationRelativeTo(parent);
         setVisible(true);
     }
-    
+
     private void addRenderer() {
         jTable1.setDefaultRenderer(Object.class, new TableCellRenderer(){
             private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
@@ -341,7 +341,7 @@ public class CSCAllLettersPanel extends javax.swing.JDialog {
         eml.to = toEmail.trim().equals("") ? null : toEmail.trim();
         eml.from = Global.activeUser.emailAddress;
         eml.cc = null;
-        eml.bcc = null;
+        eml.bcc = "serbeoarchive@serb.state.oh.us";
         eml.subject = SMDSdocToGenerate.emailSubject != null ? SMDSdocToGenerate.emailSubject
                 : (SMDSdocToGenerate.description == null ? "" : SMDSdocToGenerate.description);
         eml.body = emailBody;
