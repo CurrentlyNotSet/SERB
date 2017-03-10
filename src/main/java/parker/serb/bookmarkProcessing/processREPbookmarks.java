@@ -358,6 +358,7 @@ public class processREPbookmarks {
             processBookmark.process("BallotsCountDate" + (i == 0 ? "" : i), caseInfo.ballotsCountDate == null ? "" : Global.mmddyyyy.format(caseInfo.ballotsCountDate), Document);
             processBookmark.process("BallotsCountTime" + (i == 0 ? "" : i), caseInfo.ballotsCountTime == null ? "" : Global.hmma.format(caseInfo.ballotsCountTime), Document);
             processBookmark.process("ELIGIBILITYDATE" + (i == 0 ? "" : i), (caseInfo.eligibilityDate == null ? "" : Global.MMMMddyyyy.format(caseInfo.eligibilityDate)), Document);
+            processBookmark.process("ALPHALISTDATE" + (i == 0 ? "" : i), (caseInfo.alphaListDate == null ? "" : Global.MMMMddyyyy.format(caseInfo.alphaListDate)), Document);
             processBookmark.process("EXCLUDEDNEWORCURRENTUNIT" + (i == 0 ? "" : i), caseInfo.bargainingUnitExcluded, Document);
             processBookmark.process("PIN" + (i == 0 ? "" : i), caseInfo.professionalIncluded, Document);
             processBookmark.process("PEX" + (i == 0 ? "" : i), caseInfo.professionalExcluded, Document);
