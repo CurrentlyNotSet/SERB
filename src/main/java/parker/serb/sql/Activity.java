@@ -947,7 +947,8 @@ public class Activity {
                     + "caseType = ? AND "
                     + "caseMonth = ? AND "
                     + "caseNumber = ? "
-                    + " and active = 1";
+                    + " and active = 1"
+                    + " ORDER BY date DESC, activity.id DESC ";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
@@ -996,7 +997,8 @@ public class Activity {
                     + "fileName IS NOT NULL AND "
                     + "caseType = ? AND "
                     + "caseNumber = ? "
-                    + " and active = 1";
+                    + " and active = 1"
+                    + " ORDER BY date DESC, activity.id DESC ";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
@@ -1019,7 +1021,7 @@ public class Activity {
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                loadActivityDocumentsByGlobalCase();
+                loadActivityDocumentsByGlobalCaseORG();
             } else {
                 SlackNotification.sendNotification(ex);
             }
