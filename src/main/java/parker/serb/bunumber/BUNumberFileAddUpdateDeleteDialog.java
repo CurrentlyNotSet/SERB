@@ -39,19 +39,19 @@ public class BUNumberFileAddUpdateDeleteDialog extends javax.swing.JDialog {
         setLocationRelativeTo(parent);
         setVisible(true);
     }
-    
+
     private void setColumnWidth() {
         buTable.getColumnModel().getColumn(0).setPreferredWidth(0);
         buTable.getColumnModel().getColumn(0).setMinWidth(0);
         buTable.getColumnModel().getColumn(0).setMaxWidth(0);
     }
-    
+
     private void loadInformation() {
         bu = BargainingUnit.loadBUList();
-        
+
         DefaultTableModel model = (DefaultTableModel) buTable.getModel();
         model.setRowCount(0);
-        
+
         for (Object singleBU : bu) {
             BargainingUnit buInfo = (BargainingUnit) singleBU;
             model.addRow(new Object[] {buInfo.id,
@@ -66,7 +66,7 @@ public class BUNumberFileAddUpdateDeleteDialog extends javax.swing.JDialog {
                 buInfo.cert});
         }
     }
-    
+
     private void addListeners() {
         buTable.addMouseListener(new MouseListener() {
 
@@ -75,7 +75,7 @@ public class BUNumberFileAddUpdateDeleteDialog extends javax.swing.JDialog {
                 if(e.getClickCount() == 2) {
                    new BUInformationUpdateDialog((JFrame) Global.root.getParent(), true, buTable.getValueAt(buTable.getSelectedRow(), 0).toString().trim());
                    loadInformation();
-                } 
+                }
             }
 
             @Override
@@ -90,7 +90,7 @@ public class BUNumberFileAddUpdateDeleteDialog extends javax.swing.JDialog {
             @Override
             public void mouseExited(MouseEvent e) {}
         });
-        
+
         searchTextBox.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -108,11 +108,11 @@ public class BUNumberFileAddUpdateDeleteDialog extends javax.swing.JDialog {
             }
         });
     }
-    
+
     private void searchBU() {
         DefaultTableModel model = (DefaultTableModel) buTable.getModel();
         model.setRowCount(0);
-        
+
         for (Object singleBU : bu) {
             BargainingUnit buInfo = (BargainingUnit) singleBU;
             if((buInfo.employerNumber + "-" + buInfo.unitNumber).contains(searchTextBox.getText().trim()) ||
@@ -249,9 +249,10 @@ public class BUNumberFileAddUpdateDeleteDialog extends javax.swing.JDialog {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         BUInformationNewDialog newBU = new BUInformationNewDialog((Frame) Global.root.getParent(), true);
-        loadInformation();
+        bu = BargainingUnit.loadBUList();
         searchTextBox.setText(newBU.getNumber());
         newBU.dispose();
+        searchBU();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
