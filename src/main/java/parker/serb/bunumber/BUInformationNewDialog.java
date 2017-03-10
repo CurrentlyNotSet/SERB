@@ -28,6 +28,7 @@ import parker.serb.util.NumberFormatService;
  */
 public class BUInformationNewDialog extends javax.swing.JDialog {
 
+    String number = "";
     /**
      * Creates new form BUInformationUpdateDialog
      */
@@ -38,6 +39,10 @@ public class BUInformationNewDialog extends javax.swing.JDialog {
         enableAll();
         loadDropdowns();
         setVisible(true);
+    }
+
+    public String getNumber() {
+        return number;
     }
     
     private String getCertStatus(String certString) {
@@ -183,6 +188,7 @@ public class BUInformationNewDialog extends javax.swing.JDialog {
         
         BargainingUnit.createBU(buUpdate);
         
+        number = buUpdate.employerNumber + "-" + buUpdate.unitNumber;
     }
     
     private void clearDate(WebDateField dateField, MouseEvent evt) {
@@ -526,7 +532,8 @@ public class BUInformationNewDialog extends javax.swing.JDialog {
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
         saveInformation();
         disableAll();
-        dispose();
+//        dispose();
+        setVisible(false);
     }//GEN-LAST:event_updateButtonActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

@@ -30,6 +30,7 @@ import javax.swing.table.TableColumn;
 import parker.serb.Global;
 import parker.serb.sql.ActivityType;
 import parker.serb.sql.CMDSCase;
+import parker.serb.sql.CSCCase;
 import parker.serb.sql.CaseNumber;
 import parker.serb.sql.Email;
 import parker.serb.sql.EmailAttachment;
@@ -87,17 +88,17 @@ public class fileEmailDialog extends javax.swing.JDialog {
             case "ORG":
                 jLabel2.setText("ORG Number(s):");
                 orgNameLabel.setVisible(true);
-                orgNameTextBox.setVisible(true);
+                orgNameComboBox.setVisible(true);
                 break;
             case "CSC":
                 jLabel2.setText("CSC Number(s):");
                 orgNameLabel.setVisible(false);
-                orgNameTextBox.setVisible(false);
+                orgNameComboBox.setVisible(false);
                 break;
             default:
                 jLabel2.setText("Case Number(s):");
                 orgNameLabel.setVisible(false);
-                orgNameTextBox.setVisible(false);
+                orgNameComboBox.setVisible(false);
                 break;
         }
     }
@@ -120,6 +121,23 @@ public class fileEmailDialog extends javax.swing.JDialog {
             @Override
             public void focusLost(FocusEvent e) {
                 validateCaseNumber();
+            }
+        });
+        
+        orgNameComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(orgNameComboBox.getSelectedItem() != null) {
+                    if(orgNameComboBox.getSelectedItem().toString().equals("")) {
+                        caseNumberTextBox.setText("");
+                    } else {
+                        if(section.equals("CSC")) {
+                            caseNumberTextBox.setText(CSCCase.getCSCNumber(orgNameComboBox.getSelectedItem().toString()));
+                        } else if(section.equals("ORG")) {
+                            caseNumberTextBox.setText(ORGCase.getORGNumber(orgNameComboBox.getSelectedItem().toString()));
+                        }
+                    }
+                }
             }
         });
         
@@ -248,13 +266,14 @@ public class fileEmailDialog extends javax.swing.JDialog {
                 break;
             case "ORG":
                 caseNumberFail = CaseNumber.validateORGCaseNumber(caseNumbers);
-                orgNameTextBox.setText("");
+                orgNameComboBox.setSelectedItem("");
                 break;
             case "CMDS":
                 caseNumberFail = CaseNumber.validateCMDSCaseNumber(caseNumbers);
                 break;
             case "CSC":
                 caseNumberFail = CaseNumber.validateCSCCaseNumber(caseNumbers);
+                orgNameComboBox.setSelectedItem("");
                 break;
         }
         
@@ -275,17 +294,41 @@ public class fileEmailDialog extends javax.swing.JDialog {
                         toComboBox.setSelectedItem("Mary Laurent");
                         break;
                     case "ORG":
-                        orgNameTextBox.setText(ORGCase.getORGName(caseNumberTextBox.getText()));
-    //                    toComboBox.setSelectedItem(ORGCase.DocketTo(caseNumberTextBox.getText()));
+                        orgNameComboBox.setSelectedItem(ORGCase.getORGName(caseNumberTextBox.getText()));
                         break;
                     case "CMDS":
                         toComboBox.setSelectedItem(CMDSCase.DocketTo(caseNumberTextBox.getText()));
+                        break;
+                    case "CSC":
+                        orgNameComboBox.setSelectedItem(CSCCase.getCSCName(caseNumberTextBox.getText()));
                         break;
             }
         }
     }
      
     private void loadData(String section, String id) {
+        if(section.equals("ORG")) {
+            orgNameComboBox.removeAllItems();
+            orgNameComboBox.addItem("");
+            
+            List caseNumberList = ORGCase.loadORGNames();
+
+            caseNumberList.stream().forEach((caseNumber) -> {
+                orgNameComboBox.addItem(caseNumber.toString());
+            });
+        }
+        
+        if(section.equals("CSC")) {
+            orgNameComboBox.removeAllItems();
+            orgNameComboBox.addItem("");
+            
+            List caseNumberList = CSCCase.loadCSCNames();
+
+            caseNumberList.stream().forEach((caseNumber) -> {
+                orgNameComboBox.addItem(caseNumber.toString());
+            });
+        }
+            
         loadToComboBox(section);
         loadEmailInformation(id);
         loadAttachmentTable(id, section);
@@ -372,10 +415,6 @@ public class fileEmailDialog extends javax.swing.JDialog {
     }
     
     private Date generateDate() {
-        //int hour = Integer.valueOf(hourTextBox.getText().trim());
-        
-        //03/02/2017 06:53 PM
-        
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, Integer.valueOf(passedTime.split(" ")[0].split("/")[2]));
         cal.set(Calendar.MONTH, Integer.valueOf(passedTime.split(" ")[0].split("/")[0]) - 1);
@@ -448,7 +487,7 @@ public class fileEmailDialog extends javax.swing.JDialog {
         jLabel9 = new javax.swing.JLabel();
         directionComboBox = new javax.swing.JComboBox<>();
         orgNameLabel = new javax.swing.JLabel();
-        orgNameTextBox = new javax.swing.JTextField();
+        orgNameComboBox = new javax.swing.JComboBox<>();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -566,14 +605,7 @@ public class fileEmailDialog extends javax.swing.JDialog {
 
         orgNameLabel.setText("Org Name:");
 
-        orgNameTextBox.setEditable(false);
-        orgNameTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        orgNameTextBox.setEnabled(false);
-        orgNameTextBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                orgNameTextBoxActionPerformed(evt);
-            }
-        });
+        orgNameComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -603,7 +635,7 @@ public class fileEmailDialog extends javax.swing.JDialog {
                             .addComponent(subjectTextBox)
                             .addComponent(toComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(directionComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(orgNameTextBox, javax.swing.GroupLayout.Alignment.TRAILING)))
+                            .addComponent(orgNameComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -621,9 +653,9 @@ public class fileEmailDialog extends javax.swing.JDialog {
                     .addComponent(jLabel2)
                     .addComponent(caseNumberTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(orgNameLabel)
-                    .addComponent(orgNameTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(orgNameComboBox)
+                    .addComponent(orgNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -667,6 +699,7 @@ public class fileEmailDialog extends javax.swing.JDialog {
     private void fileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileButtonActionPerformed
         //getcaseNumber
         String[] caseNumbers = caseNumberTextBox.getText().trim().split(",");
+        
         //fileBody --> no longer needed 2/28/17
 //        FileService.docketEmailBody(caseNumbers,
 //                emailID,
@@ -693,10 +726,6 @@ public class fileEmailDialog extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_dateTextBoxActionPerformed
 
-    private void orgNameTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_orgNameTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_orgNameTextBoxActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable attachmentTable;
     private javax.swing.JTextArea bodyTextArea;
@@ -719,8 +748,8 @@ public class fileEmailDialog extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable1;
+    private javax.swing.JComboBox<String> orgNameComboBox;
     private javax.swing.JLabel orgNameLabel;
-    private javax.swing.JTextField orgNameTextBox;
     private javax.swing.JTextField subjectTextBox;
     private javax.swing.JComboBox<String> toComboBox;
     // End of variables declaration//GEN-END:variables
@@ -742,13 +771,13 @@ public class fileEmailDialog extends javax.swing.JDialog {
           setSelectedItem(value);
           return this;
         }
-      }
+    }
 
-      class MyComboBoxEditor extends DefaultCellEditor {
+    class MyComboBoxEditor extends DefaultCellEditor {
         public MyComboBoxEditor(String[] items) {
           super(new JComboBox(items));
         }
-}
+    }
 
 }
 

@@ -59,12 +59,12 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="amPMComboBox" max="32767" attributes="0"/>
                           </Group>
+                          <Component id="directionComboBox" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
                               <Component id="redactedCheckBox" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
-                          <Component id="directionComboBox" max="32767" attributes="0"/>
-                          <Component id="orgNameTextBox" alignment="0" max="32767" attributes="0"/>
+                          <Component id="orgNameComboBox" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
@@ -90,7 +90,7 @@
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="orgNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="orgNameTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="orgNameComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -345,17 +345,20 @@
         <Property name="text" type="java.lang.String" value="Org Name:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="orgNameTextBox">
+    <Component class="javax.swing.JComboBox" name="orgNameComboBox">
       <Properties>
-        <Property name="editable" type="boolean" value="false"/>
-        <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="0" green="0" red="0" type="rgb"/>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="4">
+            <StringItem index="0" value="Item 1"/>
+            <StringItem index="1" value="Item 2"/>
+            <StringItem index="2" value="Item 3"/>
+            <StringItem index="3" value="Item 4"/>
+          </StringArray>
         </Property>
-        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="orgNameTextBoxActionPerformed"/>
-      </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+      </AuxValues>
     </Component>
   </SubComponents>
 </Form>

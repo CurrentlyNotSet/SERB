@@ -285,8 +285,8 @@ public class questionsCMDSPanel extends JDialog {
         answers.setRedactorName(whoRedactedTextField == null ? "" : whoRedactedTextField.getText());
         answers.setRedactorTitle(redactedTitleTextField == null ? "" : redactedTitleTextField.getText());
         answers.setDatePOSent(datePOSentWebDateField == null ? "" : datePOSentWebDateField.getText());
-        answers.setRespondingParty(respondingPartyComboBox == null ? "" : respondingPartyComboBox.getSelectedItem().toString().toLowerCase());
-        answers.setRequestingParty(requestingPartyComboBox == null ? "" : requestingPartyComboBox.getSelectedItem().toString().toLowerCase());
+        answers.setRespondingParty(respondingPartyComboBox == null ? "" : respondingPartyComboBox.getSelectedItem().toString());
+        answers.setRequestingParty(requestingPartyComboBox == null ? "" : requestingPartyComboBox.getSelectedItem().toString());
         answers.setDeposition(depositionComboBox == null ? "" : depositionComboBox.getSelectedItem().toString());
         answers.setGenderRep(genderRepresentativeComboBox == null ? "" : genderRepresentativeComboBox.getSelectedItem().toString().toLowerCase());
         answers.setAppealTypeLS(appealTypeLSComboBox == null ? "" : appealTypeLSComboBox.getSelectedItem().toString().toLowerCase());
@@ -900,9 +900,9 @@ public class questionsCMDSPanel extends JDialog {
 
         //Set Top Panel
         final JPanel headerPanel = new JPanel();
-        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 10));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        titleLabel.setText("What Date was the Hearing Served?");
+        titleLabel.setText("What Date was the Notice of Hearing Served on Appellant?");
         headerPanel.add(titleLabel);
 
         //Set Bottom Panel (Button Bar)
@@ -1388,7 +1388,7 @@ public class questionsCMDSPanel extends JDialog {
         JLabel actionLabel = new JLabel();
         requestingPartyComboBox = new JComboBox();
         requestingPartyComboBox.setPreferredSize(new Dimension(100, 25));
-        requestingPartyComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "Appellant's", "Appellee's"}));
+        requestingPartyComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "Appellant", "Appellee"}));
         panel.setBorder(BorderFactory.createEtchedBorder());
         panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
 

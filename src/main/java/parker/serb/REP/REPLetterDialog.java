@@ -39,7 +39,19 @@ public class REPLetterDialog extends javax.swing.JDialog {
     }
 
     private void loadDefaults() {
-        memosComboBox1.setSelectedItem("All Types");
+        memosComboBox1.addItem("");
+        memosComboBox1.addItem("AC");
+        memosComboBox1.addItem("All Types");
+        memosComboBox1.addItem("Mail Ballot");
+        memosComboBox1.addItem("JTAC");
+        memosComboBox1.addItem("On-Site");
+        memosComboBox1.addItem("RBT");
+        memosComboBox1.addItem("RC");
+        memosComboBox1.addItem("RD");
+        memosComboBox1.addItem("REVOKE");
+        memosComboBox1.addItem("UC");
+        memosComboBox1.addItem("VR");
+        memosComboBox1.setSelectedItem("");
         loadDropDowns();
         addListeners();
     }
@@ -235,8 +247,6 @@ public class REPLetterDialog extends javax.swing.JDialog {
         jLabel3.setText("Directives");
 
         jLabel4.setText("Memos");
-
-        memosComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "AC", "All Types", "Mail Ballot", "JTAC", "On-Site", "RBT", "RC", "RD", "REVOKE", "UC", "VR" }));
 
         generateButton.setText("Generate");
         generateButton.setEnabled(false);
