@@ -310,8 +310,10 @@ public class PartySearchDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        new CreateNewPartyDialog((JFrame) Global.root.getParent(), true);
+        CreateNewPartyDialog newParty = new CreateNewPartyDialog((JFrame) Global.root.getParent(), true);
         parties = Party.loadAllParties();
+        searchTextBox.setText(newParty.getName());
+        newParty.dispose();
         searchParties();
     }//GEN-LAST:event_jButton1ActionPerformed
 

@@ -6,13 +6,17 @@
 package parker.serb.Hearing;
 
 import com.alee.extended.date.WebCalendar;
+import com.alee.extended.date.WebDateField;
 import com.alee.utils.swing.Customizer;
+import java.awt.event.MouseEvent;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFrame;
 import parker.serb.Global;
 import parker.serb.sql.HearingOutcome;
 import parker.serb.sql.HearingsMediation;
 import parker.serb.sql.Mediator;
+import parker.serb.util.ClearDateDialog;
 import parker.serb.util.Item;
 
 /**
@@ -79,10 +83,17 @@ public class HearingUpdateMediationDialog extends javax.swing.JDialog {
             mediatorComboBox.addItem(new Item<>(String.valueOf(med.id),med.firstName + " " + med.lastName));
         }
 
-
-
-
         mediatorComboBox.setSelectedItem(new Item<>("0", ""));
+    }
+    
+    private void clearDate(WebDateField dateField, MouseEvent evt) {
+        if(evt.getButton() == MouseEvent.BUTTON3 && dateField.isEnabled()) {
+            ClearDateDialog dialog = new ClearDateDialog((JFrame) Global.root, true);
+            if(dialog.isReset()) {
+                dateField.setText("");
+            }
+            dialog.dispose();
+        }
     }
 
     /**
@@ -163,6 +174,16 @@ public class HearingUpdateMediationDialog extends javax.swing.JDialog {
                     calendar.setStartWeekFromSunday ( true );
                 }
             } );
+            dateAssignedTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    dateAssignedTextBoxMouseClicked(evt);
+                }
+            });
+            dateAssignedTextBox.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    dateAssignedTextBoxActionPerformed(evt);
+                }
+            });
 
             mediationDateTextBox.setEditable(false);
             mediationDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
@@ -177,6 +198,11 @@ public class HearingUpdateMediationDialog extends javax.swing.JDialog {
                         calendar.setStartWeekFromSunday ( true );
                     }
                 } );
+                mediationDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                    public void mouseClicked(java.awt.event.MouseEvent evt) {
+                        mediationDateTextBoxMouseClicked(evt);
+                    }
+                });
 
                 jLabel9.setText("Outcome:");
 
@@ -278,6 +304,18 @@ public class HearingUpdateMediationDialog extends javax.swing.JDialog {
     private void outcomeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_outcomeComboBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_outcomeComboBoxActionPerformed
+
+    private void dateAssignedTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateAssignedTextBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_dateAssignedTextBoxActionPerformed
+
+    private void dateAssignedTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dateAssignedTextBoxMouseClicked
+        clearDate(dateAssignedTextBox, evt);
+    }//GEN-LAST:event_dateAssignedTextBoxMouseClicked
+
+    private void mediationDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mediationDateTextBoxMouseClicked
+        clearDate(mediationDateTextBox, evt);
+    }//GEN-LAST:event_mediationDateTextBoxMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.alee.extended.date.WebDateField dateAssignedTextBox;

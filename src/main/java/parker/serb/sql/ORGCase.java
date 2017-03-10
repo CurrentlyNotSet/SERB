@@ -278,6 +278,36 @@ public class ORGCase {
         }
         return name;
     }
+    
+    public static String getORGNumber(String name) {
+        String number = null;
+
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select orgNumber"
+                    + " from ORGCase"
+                    + " where orgName = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, name);
+
+            ResultSet caseNumberRS = preparedStatement.executeQuery();
+
+            caseNumberRS.next();
+
+            number = caseNumberRS.getString("orgNumber");
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if (ex.getCause() instanceof SQLServerException) {
+                getORGName(name);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return number;
+    }
 
     /**
      * Updates the note that is related to the case number

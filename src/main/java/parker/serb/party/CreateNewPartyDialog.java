@@ -24,6 +24,7 @@ import parker.serb.util.EmailValidation;
  */
 public class CreateNewPartyDialog extends javax.swing.JDialog {
 
+    String name = "";
     /**
      * Creates new form CreateNewPartyDialog
      * @param parent
@@ -266,6 +267,10 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
             stateComboBox.addItem(state);
         }
         stateComboBox.setSelectedItem("OH");
+    }
+
+    public String getName() {
+        return name;
     }
     
     @SuppressWarnings("unchecked")
@@ -553,7 +558,9 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
                 
         Party.createParty(party);
         
-        dispose();
+        name = party.firstName + " " + party.lastName;
+        
+        setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void phone2TextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_phone2TextBoxActionPerformed

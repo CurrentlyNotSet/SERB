@@ -250,6 +250,38 @@ public class CSCCase {
         return name;
     }
     
+    public static String getCSCNumber(String cscName) {
+        String number = null;
+            
+        Statement stmt = null;
+        
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select cscnumber"
+                    + " from CSCCase"
+                    + " where name = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, cscName);
+
+            ResultSet caseNumberRS = preparedStatement.executeQuery();
+            
+            caseNumberRS.next();
+            
+            number = caseNumberRS.getString("cscnumber");
+
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getCSCNumber(cscName);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return number;
+    }
+    
     /**
      * Updates the note that is related to the case number
      * @param note the new note value to be stored

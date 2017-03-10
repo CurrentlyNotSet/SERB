@@ -139,19 +139,7 @@
     <Component class="javax.swing.JComboBox" name="memosComboBox1">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="11">
-            <StringItem index="0" value="AC"/>
-            <StringItem index="1" value="All Types"/>
-            <StringItem index="2" value="Mail Ballot"/>
-            <StringItem index="3" value="JTAC"/>
-            <StringItem index="4" value="On-Site"/>
-            <StringItem index="5" value="RBT"/>
-            <StringItem index="6" value="RC"/>
-            <StringItem index="7" value="RD"/>
-            <StringItem index="8" value="REVOKE"/>
-            <StringItem index="9" value="UC"/>
-            <StringItem index="10" value="VR"/>
-          </StringArray>
+          <StringArray count="0"/>
         </Property>
       </Properties>
     </Component>

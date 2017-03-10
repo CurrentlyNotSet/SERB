@@ -30,6 +30,7 @@ import javax.swing.table.TableColumn;
 import parker.serb.Global;
 import parker.serb.sql.ActivityType;
 import parker.serb.sql.CMDSCase;
+import parker.serb.sql.CSCCase;
 import parker.serb.sql.CaseNumber;
 import parker.serb.sql.Email;
 import parker.serb.sql.EmailAttachment;
@@ -120,6 +121,23 @@ public class fileEmailDialog extends javax.swing.JDialog {
             @Override
             public void focusLost(FocusEvent e) {
                 validateCaseNumber();
+            }
+        });
+        
+        orgNameComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(orgNameComboBox.getSelectedItem() != null) {
+                    if(orgNameComboBox.getSelectedItem().toString().equals("")) {
+                        caseNumberTextBox.setText("");
+                    } else {
+                        if(section.equals("CSC")) {
+                            caseNumberTextBox.setText(CSCCase.getCSCNumber(orgNameComboBox.getSelectedItem().toString()));
+                        } else if(section.equals("ORG")) {
+                            caseNumberTextBox.setText(ORGCase.getORGNumber(orgNameComboBox.getSelectedItem().toString()));
+                        }
+                    }
+                }
             }
         });
         
@@ -255,6 +273,7 @@ public class fileEmailDialog extends javax.swing.JDialog {
                 break;
             case "CSC":
                 caseNumberFail = CaseNumber.validateCSCCaseNumber(caseNumbers);
+                orgNameComboBox.setSelectedItem("");
                 break;
         }
         
@@ -276,10 +295,12 @@ public class fileEmailDialog extends javax.swing.JDialog {
                         break;
                     case "ORG":
                         orgNameComboBox.setSelectedItem(ORGCase.getORGName(caseNumberTextBox.getText()));
-    //                    toComboBox.setSelectedItem(ORGCase.DocketTo(caseNumberTextBox.getText()));
                         break;
                     case "CMDS":
                         toComboBox.setSelectedItem(CMDSCase.DocketTo(caseNumberTextBox.getText()));
+                        break;
+                    case "CSC":
+                        orgNameComboBox.setSelectedItem(CSCCase.getCSCName(caseNumberTextBox.getText()));
                         break;
             }
         }
@@ -298,7 +319,14 @@ public class fileEmailDialog extends javax.swing.JDialog {
         }
         
         if(section.equals("CSC")) {
+            orgNameComboBox.removeAllItems();
+            orgNameComboBox.addItem("");
             
+            List caseNumberList = CSCCase.loadCSCNames();
+
+            caseNumberList.stream().forEach((caseNumber) -> {
+                orgNameComboBox.addItem(caseNumber.toString());
+            });
         }
             
         loadToComboBox(section);
@@ -578,11 +606,6 @@ public class fileEmailDialog extends javax.swing.JDialog {
         orgNameLabel.setText("Org Name:");
 
         orgNameComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        orgNameComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                orgNameComboBoxActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -702,10 +725,6 @@ public class fileEmailDialog extends javax.swing.JDialog {
     private void dateTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateTextBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_dateTextBoxActionPerformed
-
-    private void orgNameComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_orgNameComboBoxActionPerformed
-        System.out.println("change org number");
-    }//GEN-LAST:event_orgNameComboBoxActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable attachmentTable;

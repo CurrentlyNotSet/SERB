@@ -269,14 +269,20 @@ public class ActivityPanel extends javax.swing.JPanel {
             }
         }
 
-        if(activty.isEmpty()) {
+        if(activty == null) {
             documentsOnlyCheckbox.setEnabled(false);
             searchTextBox.setEnabled(false);
             clearSearchButton.setEnabled(false);
         } else {
-            documentsOnlyCheckbox.setEnabled(true);
-            searchTextBox.setEnabled(true);
-            clearSearchButton.setEnabled(true);
+            if(activty.isEmpty()) {
+                documentsOnlyCheckbox.setEnabled(false);
+                searchTextBox.setEnabled(false);
+                clearSearchButton.setEnabled(false);
+            } else {
+                documentsOnlyCheckbox.setEnabled(true);
+                searchTextBox.setEnabled(true);
+                clearSearchButton.setEnabled(true);
+            }
         }
     }
 
