@@ -101,8 +101,13 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
 
         if(orgActivity.fileName == null) {
             viewFileButton.setVisible(false);
-        } else {
-            fileName = orgActivity.fileName;
+        } else switch (orgActivity.fileName) {
+            case "":
+                viewFileButton.setVisible(false);
+                break;
+            default:
+                fileName = orgActivity.fileName;
+                break;
         }
     }
 
