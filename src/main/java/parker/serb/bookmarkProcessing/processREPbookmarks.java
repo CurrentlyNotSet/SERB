@@ -55,6 +55,16 @@ public class processREPbookmarks {
         String employeeOrganizationRepName = "";         //EOREP
         String petitionerName = "";                      //P
         String petitionerRepName = "";                   //PREP
+        String incumbentEmployeeOrganizationEmail = "";   //IEO
+        String incumbentEmployeeOrganizationRepEmail = "";//IEOREP
+        String employerEmail = "";                        //E
+        String employerRepEmail = "";                     //EREP
+        String rivalEmployeeOrganizationEmail = "";       //REO
+        String rivalEmployeeOrganizationRepEmail = "";    //REOREP
+        String employeeOrganizationEmail = "";            //EO
+        String employeeOrganizationRepEmail = "";         //EOREP
+        String petitionerEmail = "";                      //P
+        String petitionerRepEmail = "";                   //PREP
         String incumbentEmployeeOrganizationAddressBlock = "";   //IEO
         String incumbentEmployeeOrganizationRepAddressBlock = "";//IEOREP
         String employerAddressBlock = "";                        //E
@@ -99,12 +109,11 @@ public class processREPbookmarks {
                 }
             }
 
-            if (!DIRECCBlock.trim().equals("")){
+            if (!DIRECCBlock.trim().equals("")) {
                 DIRECCBlock += "\n";
             }
             DIRECCBlock += StringUtilities.buildCasePartyNameNoPreFix(party);
             DIRECCBlock += party.emailAddress == null ? "" : ", " + party.emailAddress.trim();
-
 
             if (null != party.caseRelation) {
                 switch (party.caseRelation) {
@@ -112,121 +121,169 @@ public class processREPbookmarks {
                         if (!"".equals(incumbentEmployeeOrganizationName.trim())) {
                             incumbentEmployeeOrganizationName += ", ";
                         }
+                        if (!"".equals(incumbentEmployeeOrganizationEmail.trim())) {
+                            incumbentEmployeeOrganizationEmail += ", ";
+                        }
                         if (!"".equals(incumbentEmployeeOrganizationAddressBlock.trim())) {
                             incumbentEmployeeOrganizationAddressBlock += "\n\n";
                         }
                         incumbentEmployeeOrganizationAddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
                         incumbentEmployeeOrganizationName += StringUtilities.buildCasePartyNameNoPreFix(party);
+                        incumbentEmployeeOrganizationEmail += party.emailAddress;
                         break;
                     case "Incumbent Employee Organization REP":
                         if (!"".equals(incumbentEmployeeOrganizationRepName.trim())) {
                             incumbentEmployeeOrganizationRepName += ", ";
+                        }
+                        if (!"".equals(incumbentEmployeeOrganizationRepEmail.trim())) {
+                            incumbentEmployeeOrganizationRepEmail += ", ";
                         }
                         if (!"".equals(incumbentEmployeeOrganizationRepAddressBlock.trim())) {
                             incumbentEmployeeOrganizationRepAddressBlock += "\n\n";
                         }
                         incumbentEmployeeOrganizationRepAddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
                         incumbentEmployeeOrganizationRepName += StringUtilities.buildCasePartyNameNoPreFix(party);
+                        incumbentEmployeeOrganizationRepEmail += party.emailAddress;
                         break;
                     case "Employer":
                         if (!"".equals(employerName.trim())) {
                             employerName += ", ";
+                        }
+                        if (!"".equals(employerEmail.trim())) {
+                            employerEmail += ", ";
                         }
                         if (!"".equals(employerAddressBlock.trim())) {
                             employerAddressBlock += "\n\n";
                         }
                         employerAddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
                         employerName += StringUtilities.buildCasePartyNameNoPreFix(party);
+                        employerEmail += party.emailAddress;
                         break;
                     case "Employer REP":
                         if (!"".equals(employerRepName.trim())) {
                             employerRepName += ", ";
+                        }
+                        if (!"".equals(employerRepEmail.trim())) {
+                            employerRepEmail += ", ";
                         }
                         if (!"".equals(employerRepAddressBlock.trim())) {
                             employerRepAddressBlock += "\n\n";
                         }
                         employerRepAddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
                         employerRepName += StringUtilities.buildCasePartyNameNoPreFix(party);
+                        employerRepEmail += party.emailAddress;
                         break;
                     case "Rival Employee Organization":
                         if (!"".equals(rivalEmployeeOrganizationName.trim())) {
                             rivalEmployeeOrganizationName += ", ";
+                        }
+                        if (!"".equals(rivalEmployeeOrganizationEmail.trim())) {
+                            rivalEmployeeOrganizationEmail += ", ";
                         }
                         if (!"".equals(rivalEmployeeOrganizationAddressBlock.trim())) {
                             rivalEmployeeOrganizationAddressBlock += "\n\n";
                         }
                         rivalEmployeeOrganizationAddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
                         rivalEmployeeOrganizationName += StringUtilities.buildCasePartyNameNoPreFix(party);
+                        rivalEmployeeOrganizationEmail += party.emailAddress;
                         break;
                     case "Rival Employee Organization REP":
                         if (!"".equals(rivalEmployeeOrganizationRepName.trim())) {
                             rivalEmployeeOrganizationRepName += ", ";
+                        }
+                        if (!"".equals(rivalEmployeeOrganizationRepEmail.trim())) {
+                            rivalEmployeeOrganizationRepEmail += ", ";
                         }
                         if (!"".equals(rivalEmployeeOrganizationRepAddressBlock.trim())) {
                             rivalEmployeeOrganizationRepAddressBlock += "\n\n";
                         }
                         rivalEmployeeOrganizationRepAddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
                         rivalEmployeeOrganizationRepName += StringUtilities.buildCasePartyNameNoPreFix(party);
+                        rivalEmployeeOrganizationRepEmail += party.emailAddress;
                         break;
                     case "Employee Organization":
                         if (!"".equals(employeeOrganizationName.trim())) {
                             employeeOrganizationName += ", ";
+                        }
+                        if (!"".equals(employeeOrganizationEmail.trim())) {
+                            employeeOrganizationEmail += ", ";
                         }
                         if (!"".equals(employeeOrganizationAddressBlock.trim())) {
                             employeeOrganizationAddressBlock += "\n\n";
                         }
                         employeeOrganizationAddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
                         employeeOrganizationName += StringUtilities.buildCasePartyNameNoPreFix(party);
+                        employeeOrganizationEmail += party.emailAddress;
                         break;
                     case "Employee Organization REP":
                         if (!"".equals(employeeOrganizationRepName.trim())) {
                             employeeOrganizationRepName += ", ";
+                        }
+                        if (!"".equals(employeeOrganizationRepEmail.trim())) {
+                            employeeOrganizationRepEmail += ", ";
                         }
                         if (!"".equals(employeeOrganizationRepAddressBlock.trim())) {
                             employeeOrganizationRepAddressBlock += "\n\n";
                         }
                         employeeOrganizationRepAddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
                         employeeOrganizationRepName += StringUtilities.buildCasePartyNameNoPreFix(party);
+                        employeeOrganizationRepEmail += party.emailAddress;
                         break;
                     case "Petitioner":
                         if (!"".equals(petitionerName.trim())) {
                             petitionerName += ", ";
+                        }
+                        if (!"".equals(petitionerEmail.trim())) {
+                            petitionerEmail += ", ";
                         }
                         if (!"".equals(petitionerAddressBlock.trim())) {
                             petitionerAddressBlock += "\n\n";
                         }
                         petitionerAddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
                         petitionerName += StringUtilities.buildCasePartyNameNoPreFix(party);
+                        petitionerEmail += party.emailAddress;
                         break;
                     case "Petitioner REP":
                         if (!"".equals(petitionerRepName.trim())) {
                             petitionerRepName += ", ";
+                        }
+                        if (!"".equals(incumbentEmployeeOrganizationEmail.trim())) {
+                            incumbentEmployeeOrganizationEmail += ", ";
                         }
                         if (!"".equals(petitionerRepAddressBlock.trim())) {
                             petitionerRepAddressBlock += "\n\n";
                         }
                         petitionerRepAddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
                         petitionerRepName += StringUtilities.buildCasePartyNameNoPreFix(party);
+                        incumbentEmployeeOrganizationEmail += party.emailAddress;
                         break;
                     default:
                         if (party.caseRelation.startsWith("Rival Employee Organization") && !party.caseRelation.endsWith("REP")) {
                             if (!"".equals(rivalEmployeeOrganizationName.trim())) {
                                 rivalEmployeeOrganizationName += ", ";
                             }
+                            if (!"".equals(rivalEmployeeOrganizationRepEmail.trim())) {
+                                rivalEmployeeOrganizationEmail += ", ";
+                            }
                             if (!"".equals(rivalEmployeeOrganizationAddressBlock.trim())) {
                                 rivalEmployeeOrganizationAddressBlock += "\n\n";
                             }
                             rivalEmployeeOrganizationAddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
                             rivalEmployeeOrganizationName += StringUtilities.buildCasePartyNameNoPreFix(party);
+                            rivalEmployeeOrganizationEmail += party.emailAddress;
                         } else if (party.caseRelation.startsWith("Rival Employee Organization") && party.caseRelation.endsWith("REP")) {
                             if (!"".equals(rivalEmployeeOrganizationRepName.trim())) {
                                 rivalEmployeeOrganizationRepName += ", ";
+                            }
+                            if (!"".equals(rivalEmployeeOrganizationRepEmail.trim())) {
+                                rivalEmployeeOrganizationRepEmail += ", ";
                             }
                             if (!"".equals(rivalEmployeeOrganizationRepAddressBlock.trim())) {
                                 rivalEmployeeOrganizationRepAddressBlock += "\n\n";
                             }
                             rivalEmployeeOrganizationRepAddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
                             rivalEmployeeOrganizationRepName += StringUtilities.buildCasePartyNameNoPreFix(party);
+                            rivalEmployeeOrganizationRepEmail += party.emailAddress;
                         }
                         break;
                 }
@@ -268,23 +325,23 @@ public class processREPbookmarks {
 
         //Polling information
         if (caseInfo.pollingEndDate != null && caseInfo.pollingStartDate != null) {
-                polling = Global.MMMMMdyyyy.format(caseInfo.pollingStartDate);
-                polling += " through " + Global.MMMMMdyyyy.format(caseInfo.pollingEndDate);
-            }
+            polling = Global.MMMMMdyyyy.format(caseInfo.pollingStartDate);
+            polling += " through " + Global.MMMMMdyyyy.format(caseInfo.pollingEndDate);
+        }
 
         //MultiCase Election
         for (Object relatedCase : multicaseElection) {
-            if (!multiCaseElection.trim().equals("")){
+            if (!multiCaseElection.trim().equals("")) {
                 multiCaseElection += ", ";
             }
             multiCaseElection += relatedCase.toString();
         }
 
         //BoardMeeting
-        if (meeting.boardMeetingDate == null ? false : !meeting.boardMeetingDate.equals("")){
+        if (meeting.boardMeetingDate == null ? false : !meeting.boardMeetingDate.equals("")) {
             try {
                 longMeetDate = Global.MMMMMdyyyy.format(Global.mmddyyyy.parse(meeting.boardMeetingDate));
-                        } catch (ParseException ex) {
+            } catch (ParseException ex) {
                 Logger.getLogger(processREPbookmarks.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -301,6 +358,7 @@ public class processREPbookmarks {
             processBookmark.process("BallotsCountDate" + (i == 0 ? "" : i), caseInfo.ballotsCountDate == null ? "" : Global.mmddyyyy.format(caseInfo.ballotsCountDate), Document);
             processBookmark.process("BallotsCountTime" + (i == 0 ? "" : i), caseInfo.ballotsCountTime == null ? "" : Global.hmma.format(caseInfo.ballotsCountTime), Document);
             processBookmark.process("ELIGIBILITYDATE" + (i == 0 ? "" : i), (caseInfo.eligibilityDate == null ? "" : Global.MMMMddyyyy.format(caseInfo.eligibilityDate)), Document);
+            processBookmark.process("ALPHALISTDATE" + (i == 0 ? "" : i), (caseInfo.alphaListDate == null ? "" : Global.MMMMddyyyy.format(caseInfo.alphaListDate)), Document);
             processBookmark.process("EXCLUDEDNEWORCURRENTUNIT" + (i == 0 ? "" : i), caseInfo.bargainingUnitExcluded, Document);
             processBookmark.process("PIN" + (i == 0 ? "" : i), caseInfo.professionalIncluded, Document);
             processBookmark.process("PEX" + (i == 0 ? "" : i), caseInfo.professionalExcluded, Document);
@@ -337,16 +395,16 @@ public class processREPbookmarks {
             }
 
             processBookmark.process("RIVALVOTES" + (i == 0 ? "" : i),
-                        caseInfo.resultVotesCastForRivalEEO1 == null ? "0"
-                                : NumberFormatService.convert(Long.parseLong(caseInfo.resultVotesCastForRivalEEO1)) + "(" + caseInfo.resultVotesCastForRivalEEO1 + ")", Document);
+                    caseInfo.resultVotesCastForRivalEEO1 == null ? "0"
+                            : NumberFormatService.convert(Long.parseLong(caseInfo.resultVotesCastForRivalEEO1)) + "(" + caseInfo.resultVotesCastForRivalEEO1 + ")", Document);
 
             processBookmark.process("RIVALVOTES2" + (i == 0 ? "" : i),
-                        caseInfo.resultVotesCastForRivalEEO2 == null ? "0"
-                                : NumberFormatService.convert(Long.parseLong(caseInfo.resultVotesCastForRivalEEO2)) + "(" + caseInfo.resultVotesCastForRivalEEO2 + ")", Document);
+                    caseInfo.resultVotesCastForRivalEEO2 == null ? "0"
+                            : NumberFormatService.convert(Long.parseLong(caseInfo.resultVotesCastForRivalEEO2)) + "(" + caseInfo.resultVotesCastForRivalEEO2 + ")", Document);
 
             processBookmark.process("RIVALVOTES3" + (i == 0 ? "" : i),
-                        caseInfo.resultVotesCastForRivalEEO3 == null ? "0"
-                                : NumberFormatService.convert(Long.parseLong(caseInfo.resultVotesCastForRivalEEO3)) + "(" + caseInfo.resultVotesCastForRivalEEO3 + ")", Document);
+                    caseInfo.resultVotesCastForRivalEEO3 == null ? "0"
+                            : NumberFormatService.convert(Long.parseLong(caseInfo.resultVotesCastForRivalEEO3)) + "(" + caseInfo.resultVotesCastForRivalEEO3 + ")", Document);
 
             processBookmark.process("EOVOTES" + (i == 0 ? "" : i),
                     caseInfo.resultVotesCastForEEO == null ? "0"
@@ -406,6 +464,14 @@ public class processREPbookmarks {
                     (!"".equals(rivalEmployeeOrganizationRepName) ? rivalEmployeeOrganizationRepName.trim() : rivalEmployeeOrganizationName.trim()), Document);
             processBookmark.process("EOCONTACT" + (i == 0 ? "" : i),
                     (!"".equals(employeeOrganizationRepName) ? employeeOrganizationRepName.trim() : employeeOrganizationName.trim()), Document);
+            processBookmark.process("IEOCONTACTEMAIL" + (i == 0 ? "" : i),
+                    (!"".equals(incumbentEmployeeOrganizationRepEmail) ? incumbentEmployeeOrganizationRepEmail.trim() : incumbentEmployeeOrganizationRepEmail.trim()), Document);
+            processBookmark.process("EMPCONTACTEMAIL" + (i == 0 ? "" : i),
+                    (!"".equals(employerRepEmail) ? employerRepEmail.trim() : employerRepEmail.trim()), Document);
+            processBookmark.process("REOCONTACTEMAIL" + (i == 0 ? "" : i),
+                    (!"".equals(rivalEmployeeOrganizationRepEmail) ? rivalEmployeeOrganizationRepEmail.trim() : rivalEmployeeOrganizationRepEmail.trim()), Document);
+            processBookmark.process("EOCONTACTEMAIL" + (i == 0 ? "" : i),
+                    (!"".equals(employeeOrganizationEmail) ? employeeOrganizationEmail.trim() : employeeOrganizationEmail.trim()), Document);
             processBookmark.process("CCList" + (i == 0 ? "" : i), ccNameBlock, Document);
             processBookmark.process("DIRECCList" + (i == 0 ? "" : i), DIRECCBlock, Document);
             processBookmark.process("REPCCList" + (i == 0 ? "" : i), DIRECCBlock, Document);

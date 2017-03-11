@@ -49,6 +49,9 @@ public class RequestedInfoTwoDateIDPanel extends javax.swing.JDialog {
             case "InvestigatorID":
                 comboBoxLabel.setText("Investigator:");
                 break;
+            case "SectionUserID":
+                comboBoxLabel.setText("User:");
+                break;
             default:
                 break;
         }
@@ -85,6 +88,17 @@ public class RequestedInfoTwoDateIDPanel extends javax.swing.JDialog {
                         );
                     }
                 }
+                break;
+                case "SectionUserID":
+                ComboBox.addItem(new Item<>("%", "All"));
+                List<User> sectionUserList = User.loadSectionUsersWithID(Global.activeSection);
+                for (User item : sectionUserList) {
+                    ComboBox.addItem(new Item<>(
+                            String.valueOf(item.id),
+                            StringUtilities.buildFullName(item.firstName, item.middleInitial, item.lastName))
+                    );
+                }
+                ComboBox.setSelectedItem(new Item<>("%", "All"));
                 break;
             default:
                 break;

@@ -50,11 +50,17 @@ public class GenerateReport {
                 case "UserID":
                     new RequestedInfoDropdownPanel(Global.root, true, report, "UserID");
                     break;
+                case "SectionUserID":
+                    new RequestedInfoDropdownPanel(Global.root, true, report, "SectionUserID");
+                    break;
                 case "begin date, end date":
                     new RequestedInfoTwoDatePanel(Global.root, true, report);
                     break;
                 case "begin date, end date, InvestigatorID":
                     new RequestedInfoTwoDateIDPanel(Global.root, true, report, "InvestigatorID");
+                    break;
+                case "begin date, end date, SectionUserID":
+                    new RequestedInfoTwoDateIDPanel(Global.root, true, report, "SectionUserID");
                     break;
                 case "begin date, end date, UserID":
                     new RequestedInfoTwoDateIDPanel(Global.root, true, report, "UserID");

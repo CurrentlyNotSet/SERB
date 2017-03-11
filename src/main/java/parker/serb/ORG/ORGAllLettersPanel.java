@@ -370,7 +370,7 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
         eml.to = toEmail.trim().equals("") ? null : toEmail.trim();
         eml.from = Global.activeUser.emailAddress;
         eml.cc = null;
-        eml.bcc = null;
+        eml.bcc = "serbeoarchive@serb.state.oh.us";
         eml.subject = SMDSdocToGenerate.emailSubject != null ? SMDSdocToGenerate.emailSubject
                 : (SMDSdocToGenerate.description == null ? "" : SMDSdocToGenerate.description);
         eml.body = emailBody;
