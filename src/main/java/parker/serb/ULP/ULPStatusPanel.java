@@ -68,7 +68,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
                     Date startDate = Global.mmddyyyy.parse(filedDateTextBox.getText());
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(startDate);
-                    cal.add(Calendar.MONTH, 4);
+                    cal.add(Calendar.MONTH, 5);
                     reportDueDateTextBox.setText(Global.mmddyyyy.format(cal.getTime()));
                 } catch (ParseException ex) {
                     reportDueDateTextBox.setText("");
@@ -81,7 +81,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
                     Date startDate = Global.mmddyyyy.parse(filedDateTextBox.getText());
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(startDate);
-                    cal.add(Calendar.MONTH, 4);
+                    cal.add(Calendar.MONTH, 5);
                     reportDueDateTextBox.setText(Global.mmddyyyy.format(cal.getTime()));
                 } catch (ParseException ex) {
                     reportDueDateTextBox.setText("");
@@ -94,7 +94,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
                     Date startDate = Global.mmddyyyy.parse(filedDateTextBox.getText());
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(startDate);
-                    cal.add(Calendar.MONTH, 4);
+                    cal.add(Calendar.MONTH, 5);
                     reportDueDateTextBox.setText(Global.mmddyyyy.format(cal.getTime()));
                 } catch (ParseException ex) {
                     reportDueDateTextBox.setText("");
