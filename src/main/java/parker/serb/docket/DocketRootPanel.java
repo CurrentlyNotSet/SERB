@@ -316,13 +316,25 @@ public class DocketRootPanel extends javax.swing.JPanel {
             DocketLock docketLock = DocketLock.checkLock(section, docketTable.getValueAt(docketTable.getSelectedRow(), 0).toString());
             if(docketLock == null) {
                 String value = docketTable.getValueAt(docketTable.getSelectedRow(), 0).toString();
+                String value2 = docketTable.getValueAt(docketTable.getSelectedRow(), 1).toString();
 
                 DocketLock.addLock(section, value);
-                new fileEmailDialog((JFrame) Global.root.getRootPane().getParent(),
+                
+                if(section.equals("CMDS")) {
+                    new fileCMDSEmailDialog((JFrame) Global.root.getRootPane().getParent(),
                         true,
-                        docketTable.getValueAt(docketTable.getSelectedRow(), 0).toString(),
+                        value,
                         section,
-                        docketTable.getValueAt(docketTable.getSelectedRow(), 1).toString());
+                        value2);
+                } else {
+                    new fileEmailDialog((JFrame) Global.root.getRootPane().getParent(),
+                        true,
+                        value,
+                        section,
+                        value2);
+                }
+                
+                
                 DocketLock.removeLock(section, value);
                 reloadTableAfterFiling();
             } else {
@@ -346,6 +358,7 @@ public class DocketRootPanel extends javax.swing.JPanel {
 
     private void reloadTableAfterFiling() {
         docs.clear();
+        loadTable();
         loadScanData(SectionComboBox.getSelectedItem().toString());
         loadEmailData(SectionComboBox.getSelectedItem().toString());
         loadMediaData(SectionComboBox.getSelectedItem().toString());

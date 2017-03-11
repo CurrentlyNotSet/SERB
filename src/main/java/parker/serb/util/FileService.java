@@ -518,6 +518,79 @@ public class FileService {
         }
         docketFile.delete();
     }
+    
+    public static void docketCMDSEmailAttachment(String[] caseNumbers,
+            String atachmentID,
+            String emailID,
+            String section,
+            String from,
+            String to,
+            String subject,
+            String fileName,
+            String type,
+            String type2,
+            String comment,
+            Date activityDate,
+            String direction) {
+
+        File docketFile = new File(Global.emailPath + section + File.separatorChar + fileName.trim());
+
+        if(docketFile.exists()) {
+
+
+            for (String caseNumber : caseNumbers) {
+                File caseArchiveFile;
+//
+//                switch(section) {
+//                    case "ORG":
+//                    case "CSC":
+//                        caseArchiveFile = new File(
+//                        Global.activityPath
+//                        + section
+//                        + File.separatorChar
+//                        + caseNumber.trim());
+//                        break;
+//                    default:
+                        String[] caseNumberParts = caseNumber.trim().split("-");
+                        caseArchiveFile = new File(
+                        Global.activityPath
+                        + section
+                        + File.separatorChar
+                        + caseNumberParts[0]
+                        + File.separatorChar
+                        + caseNumber.trim());
+//                        break;
+//                }
+
+                caseArchiveFile.mkdirs();
+
+                String fileDate = String.valueOf(new Date().getTime());
+
+                String fileExtenstion = fileName.substring(fileName.lastIndexOf(".")); //. included
+
+//                String fullType = ActivityType.getFullType(type);
+
+                FileUtils.copyFile(docketFile, new File(caseArchiveFile + File.separator + fileDate + "_" + type2 + fileExtenstion));
+
+//                switch(section) {
+//                    case "ORG":
+//                    case "CSC":
+//                        Activity.addActivtyFromDocketORGCSC(direction + " - Filed " + fullType,
+//                        fileDate + "_" + type + fileExtenstion,
+//                        caseNumber, from, to, fullType, comment, false, false, section, activityDate);
+//                        break;
+//                    default:
+                        Activity.addActivtyFromDocket(direction + " - Filed " + type2,
+                        fileDate + "_" + type + fileExtenstion,
+                        caseNumber.trim().split("-"), from, to, type2, comment, false, false, activityDate);
+//                        break;
+//                }
+
+                Audit.addAuditEntry("Filed " + type2 + " from " + from);
+            }
+        }
+        docketFile.delete();
+    }
 
     public static void renameActivtyFile(String fileName, String updatedType) {
 

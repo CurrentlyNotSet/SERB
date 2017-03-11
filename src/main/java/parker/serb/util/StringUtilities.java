@@ -52,10 +52,32 @@ public class StringUtilities {
                 fullName = fullName.trim() + (item.companyName.equals("") ? "" : " " + item.companyName.trim());
             }
         }
-
         return fullName.trim();
     }
 
+    public static String buildCasePartyNameCMDSCCBlock(CaseParty item) {
+        String fullName = "";
+        if (item.firstName != null) {
+            fullName = fullName.trim() + (item.firstName.equals("") ? "" : item.firstName.trim());
+        }
+        if (item.middleInitial != null) {
+            fullName = fullName.trim() + (item.middleInitial.equals("") ? "" : " " + (item.middleInitial.trim().length() == 1 ? item.middleInitial.trim() + "." : item.middleInitial.trim()));
+        }
+        if (item.lastName != null) {
+            fullName = fullName.trim() + (item.lastName.equals("") ? "" : " " + item.lastName.trim());
+        }
+        if (item.suffix != null) {
+            fullName = fullName.trim() + (item.suffix.equals("") ? "" : ", " + item.suffix.trim());
+        }
+        if (item.nameTitle != null) {
+            fullName = fullName.trim() + (item.nameTitle.equals("") ? "" : ", " + item.nameTitle.trim());
+        }
+        if (item.companyName != null){
+                fullName = fullName.trim() + (item.companyName.equals("") ? "" : ", " + item.companyName.trim());
+        }
+        return fullName.trim();
+    }
+    
     public static String buildCasePartyNameWithPrefix(CaseParty item) {
         String fullName = "";
         if (item.prefix != null) {

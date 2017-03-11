@@ -37,7 +37,7 @@ public class BUInformationUpdateDialog extends javax.swing.JDialog {
         loadDropdowns();
         loadData(passedBUID);
         updateButton.setVisible(Global.activeUser.REPCaseWorker);
-        deleteButton.setVisible(Global.activeUser.REPCaseWorker);
+        deleteButton.setVisible(false);
         setLocationRelativeTo(parent);
         setVisible(true);
     }
