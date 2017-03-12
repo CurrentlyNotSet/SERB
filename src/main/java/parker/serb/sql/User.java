@@ -617,7 +617,7 @@ public class User {
         try {
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "SELECT * FROM users WHERE " + sectionColumnName + " = ? AND investigator = 1 AND active = 1 ORDER BY firstName"; //(ORDER BY firstName T#020 (Beta))
+            String sql = "SELECT * FROM users WHERE (" + sectionColumnName + " = ? OR investigator = 1) AND active = 1 ORDER BY firstName"; //(ORDER BY firstName T#020 (Beta))
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setBoolean(1, true);
