@@ -6,6 +6,8 @@
 package parker.serb.bookmarkProcessing;
 
 import com.jacob.com.Dispatch;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import parker.serb.Global;
 import parker.serb.sql.CaseParty;
@@ -43,7 +45,7 @@ public class processMEDbookmarks {
         String employerREPAddresses = "";
         String employeeOrgAddresses = "";
         String employeeOrgREPAddresses = "";
-        String factFinderSelectionName = item.FFReplacement == null ? item.FFSelection : item.FFReplacement;
+        String factFinderSelectionName = item.FFReplacement == null ? item.FFSelection : (item.FFReplacement.equals("") ? item.FFSelection : item.FFReplacement);
         String ffFirstName = "";
         String ffLastName = "";
         String ffAddress = "";
@@ -64,6 +66,7 @@ public class processMEDbookmarks {
         String employeeOrgRepPhone = "";
         String toAddressBlock = "";
         String ccNameBlock = "";
+        String factfinderApptDueDate = "";
 
         if (relatedCasesList.size() == 1) {
             for (String relatedCase : relatedCasesList) {
@@ -206,6 +209,20 @@ public class processMEDbookmarks {
             ffAddress += ffDetails.city + ", " + ffDetails.state + " " + ffDetails.zip;
         }
 
+        if (item.FFAppointmentDate != null){
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(item.FFAppointmentDate);
+            cal.add(Calendar.DATE, 4);
+            if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+                cal.add(Calendar.DATE, 2);
+            } 
+            if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+                cal.add(Calendar.DATE, 1);
+            } 
+            
+            factfinderApptDueDate = Global.mmddyyyy.format(cal.getTime());            
+        }
+        
         if (item.FFRejectedBy.equals("Union")) {
             whoRejected = employeeOrgNames;
         }
@@ -281,7 +298,7 @@ public class processMEDbookmarks {
             } else {
                 processBookmark.process("FFPANELSELECTIONDUEDATE" + (i == 0 ? "" : i), "", Document);
             }
-            processBookmark.process("FACTFINDERREPORTDUEDATE" + (i == 0 ? "" : i), (item.FFReportIssueDate == null ? "" : Global.MMMMddyyyy.format(item.FFReportIssueDate)), Document);
+            processBookmark.process("FACTFINDERREPORTDUEDATE" + (i == 0 ? "" : i), factfinderApptDueDate, Document);
             processBookmark.process("FACTFINDERADDRESSBLOCK" + (i == 0 ? "" : i), ffAddress, Document);
             processBookmark.process("WHOREJECTED" + (i == 0 ? "" : i), whoRejected, Document);
             processBookmark.process("ACCEPTED" + (i == 0 ? "" : i), accepted, Document);
