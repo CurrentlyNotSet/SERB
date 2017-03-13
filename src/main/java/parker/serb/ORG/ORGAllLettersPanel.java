@@ -358,7 +358,7 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
                 + StringUtilities.buildFullName(Global.activeUser.firstName, Global.activeUser.middleInitial, Global.activeUser.lastName)
                 + System.lineSeparator() + (Global.activeUser.jobTitle == null ? "" : Global.activeUser.jobTitle + System.lineSeparator())
                 + StringUtilities.generateDepartmentAddressBlock() + System.lineSeparator()
-                + (Global.activeUser.workPhone == null ? "" : "Telephone: " + NumberFormatService.convertStringToPhoneNumber(Global.activeUser.workPhone));
+                + (Global.activeUser.workPhone == null ? "" : "Telephone: " + Global.activeUser.workPhone);
 
         EmailOut eml = new EmailOut();
 
