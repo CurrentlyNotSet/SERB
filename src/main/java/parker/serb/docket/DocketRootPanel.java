@@ -191,7 +191,7 @@ public class DocketRootPanel extends javax.swing.JPanel {
     }
 
     private void loadEmailData(String section) {
-
+        System.out.println(section);
         List emailList = Email.getAllEmails(section);
 
         for (Object emailListItem : emailList) {

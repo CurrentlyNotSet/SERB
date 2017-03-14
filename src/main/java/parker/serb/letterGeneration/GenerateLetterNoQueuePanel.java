@@ -8,8 +8,11 @@ package parker.serb.letterGeneration;
 import com.alee.laf.optionpane.WebOptionPane;
 import parker.serb.Global;
 import parker.serb.bookmarkProcessing.generateDocument;
+import parker.serb.bookmarkProcessing.questionsCMDSModel;
+import parker.serb.bookmarkProcessing.questionsCMDSPanel;
 import parker.serb.sql.Activity;
 import parker.serb.sql.Audit;
+import parker.serb.sql.CMDSDocuments;
 import parker.serb.sql.SMDSDocuments;
 import parker.serb.util.FileService;
 
@@ -20,31 +23,35 @@ import parker.serb.util.FileService;
 public class GenerateLetterNoQueuePanel extends javax.swing.JDialog {
 
     SMDSDocuments SMDSdocumentToGenerate;
+    CMDSDocuments CMDSdocumentToGenerate;
 
-    public GenerateLetterNoQueuePanel(java.awt.Frame parent, boolean modal, SMDSDocuments SMDSdocumentToGeneratePassed) {
+    public GenerateLetterNoQueuePanel(java.awt.Frame parent, boolean modal, SMDSDocuments SMDSdocumentToGeneratePassed, CMDSDocuments CMDSdocumentToGeneratePassed) {
         super(parent, modal);
         initComponents();
-        loadPanel(SMDSdocumentToGeneratePassed);
+        loadPanel(SMDSdocumentToGeneratePassed, CMDSdocumentToGeneratePassed);
         setLocationRelativeTo(parent);
         setVisible(true);
     }
 
-    private void loadPanel(SMDSDocuments SMDSdocumentToGeneratePassed) {
+    private void loadPanel(SMDSDocuments SMDSdocumentToGeneratePassed, CMDSDocuments CMDSdocumentToGeneratePassed) {
         loadingPanel.setVisible(true);
         SMDSdocumentToGenerate = SMDSdocumentToGeneratePassed;
-
-        switch (SMDSdocumentToGeneratePassed.type) {
-            case "Directive":
-                HeaderLabel.setText("Generating Directive");
-                break;
-            case "Misc":
-                HeaderLabel.setText("Generating Misc");
-                break;
-            case "Memo":
-                HeaderLabel.setText("Generating Memo");
-                break;
-            default:
-                break;
+        CMDSdocumentToGenerate = CMDSdocumentToGeneratePassed;
+        
+        if (SMDSdocumentToGeneratePassed != null){
+            switch (SMDSdocumentToGeneratePassed.type) {
+                case "Directive":
+                    HeaderLabel.setText("Generating Directive");
+                    break;
+                case "Misc":
+                    HeaderLabel.setText("Generating Misc");
+                    break;
+                case "Memo":
+                    HeaderLabel.setText("Generating Memo");
+                    break;
+                default:
+                    break;
+            }
         }
         processThread();
     }
@@ -59,9 +66,19 @@ public class GenerateLetterNoQueuePanel extends javax.swing.JDialog {
 
     private void generateLetter() {
         String docName = null;
+        questionsCMDSModel answers = null;
 
         switch (Global.activeSection) {
             case "CMDS":
+                int count = CMDSDocuments.CMDSQuestionCount(CMDSdocumentToGenerate);
+                if (count > 0) {
+                    questionsCMDSPanel returnInfo = new questionsCMDSPanel(Global.root, true, CMDSdocumentToGenerate, count);
+                    answers = returnInfo.answers;
+                    returnInfo.dispose();
+                } else {
+                    answers = new questionsCMDSModel();
+                }
+                docName = generateDocument.generateCMDSdocument(CMDSdocumentToGenerate, answers, 0, null, null);
             case "ORG":
             case "Civil Service Commission":
                 break;
@@ -73,6 +90,9 @@ public class GenerateLetterNoQueuePanel extends javax.swing.JDialog {
         if (docName != null) {
             switch (Global.activeSection) {
                 case "CMDS":
+                    Activity.addActivty("Generated " + CMDSdocumentToGenerate.LetterName, docName);
+                    Audit.addAuditEntry("Generated " + CMDSdocumentToGenerate.LetterName);
+                    break;                    
                 case "ORG":
                 case "Civil Service Commission":
                     break;

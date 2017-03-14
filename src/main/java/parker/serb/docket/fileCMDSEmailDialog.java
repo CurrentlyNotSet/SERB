@@ -400,28 +400,11 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
                 attachmentTable.getValueAt(i, 2).toString(),    //fileType1
                 attachmentTable.getValueAt(i, 3).toString(),    //fileType2
                 attachmentTable.getValueAt(i, 4) != null        //comment
-                        ? attachmentTable.getValueAt(i, 3).toString() : "",
+                        ? attachmentTable.getValueAt(i, 4).toString() : "",
                 generateDate(),
-                directionComboBox.getSelectedItem().toString()); 
+                directionComboBox.getSelectedItem().toString(),
+                this); 
             }
-            
-            
-            for(int j = 0; j < caseNumbers.length; j++) {
-                
-                NumberFormatService.parseFullCaseNumber(caseNumbers[j]);
-                
-                CMDSCaseDocketEntryTypes.updateCaseHistory(
-                    attachmentTable.getValueAt(i, 2).toString().split("-")[0].trim(),
-                    attachmentTable.getValueAt(i, 2).toString().trim(),
-                    attachmentTable.getValueAt(i, 4) != null        //comment
-                        ? attachmentTable.getValueAt(i, 3).toString() : "",
-                    dateTextBox.getText().trim(),
-                    this
-                );
-            }
-            
-            
-            
         }
     }
     

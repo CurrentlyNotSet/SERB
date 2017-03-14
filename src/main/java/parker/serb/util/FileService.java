@@ -7,6 +7,7 @@ package parker.serb.util;
 
 import com.alee.utils.FileUtils;
 import java.awt.Desktop;
+import java.awt.Dialog;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -15,6 +16,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JFrame;
+import parker.serb.CMDS.CMDSCaseDocketEntryTypes;
 import parker.serb.Global;
 import parker.serb.sql.Activity;
 import parker.serb.sql.ActivityType;
@@ -531,7 +533,8 @@ public class FileService {
             String type2,
             String comment,
             Date activityDate,
-            String direction) {
+            String direction,
+            Dialog parent) {
 
         File docketFile = new File(Global.emailPath + section + File.separatorChar + fileName.trim());
 
@@ -570,8 +573,22 @@ public class FileService {
 
 //                String fullType = ActivityType.getFullType(type);
 
-                FileUtils.copyFile(docketFile, new File(caseArchiveFile + File.separator + fileDate + "_" + type2 + fileExtenstion));
-
+                FileUtils.copyFile(docketFile, new File(caseArchiveFile + File.separator + fileDate + fileExtenstion));
+                
+//                for(int j = 0; j < caseNumbers.length; j++) {
+                
+                NumberFormatService.parseFullCaseNumber(caseNumber);
+                
+                    CMDSCaseDocketEntryTypes.updateCaseHistory(
+                        type.split("-")[0].trim(),
+                        type2,
+                        comment,
+                        new Date(),
+                        parent,
+                        caseArchiveFile + File.separator + fileDate + fileExtenstion,
+                        direction
+                    );
+//                }
 //                switch(section) {
 //                    case "ORG":
 //                    case "CSC":
@@ -580,13 +597,12 @@ public class FileService {
 //                        caseNumber, from, to, fullType, comment, false, false, section, activityDate);
 //                        break;
 //                    default:
-                        Activity.addActivtyFromDocket(direction + " - Filed " + type2,
-                        fileDate + "_" + type2 + fileExtenstion,
-                        caseNumber.trim().split("-"), from, to, type2, comment, false, false, activityDate);
+//                        Activity.addActivtyFromDocket(direction + " - Filed " + type2,
+//                        fileDate + "_" + type2 + fileExtenstion,
+//                        caseNumber.trim().split("-"), from, to, type2, comment, false, false, activityDate);
 //                        break;
 //                }
-
-                Audit.addAuditEntry("Filed " + type2 + " from " + from);
+    
             }
         }
         docketFile.delete();
