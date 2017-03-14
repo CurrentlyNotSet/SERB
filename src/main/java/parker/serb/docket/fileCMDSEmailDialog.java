@@ -404,24 +404,6 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
                 generateDate(),
                 directionComboBox.getSelectedItem().toString()); 
             }
-            
-            
-            for(int j = 0; j < caseNumbers.length; j++) {
-                
-                NumberFormatService.parseFullCaseNumber(caseNumbers[j]);
-                
-                CMDSCaseDocketEntryTypes.updateCaseHistory(
-                    attachmentTable.getValueAt(i, 2).toString().split("-")[0].trim(),
-                    attachmentTable.getValueAt(i, 2).toString().trim(),
-                    attachmentTable.getValueAt(i, 4) != null        //comment
-                        ? attachmentTable.getValueAt(i, 3).toString() : "",
-                    dateTextBox.getText().trim(),
-                    this
-                );
-            }
-            
-            
-            
         }
     }
     
