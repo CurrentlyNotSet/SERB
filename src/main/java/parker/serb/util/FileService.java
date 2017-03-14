@@ -7,6 +7,7 @@ package parker.serb.util;
 
 import com.alee.utils.FileUtils;
 import java.awt.Desktop;
+import java.awt.Dialog;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -532,7 +533,8 @@ public class FileService {
             String type2,
             String comment,
             Date activityDate,
-            String direction) {
+            String direction,
+            Dialog parent) {
 
         File docketFile = new File(Global.emailPath + section + File.separatorChar + fileName.trim());
 
@@ -581,9 +583,10 @@ public class FileService {
                         type.split("-")[0].trim(),
                         type2,
                         comment != null ? comment : "",
-                        fileDate,
-                        null,
-                        caseArchiveFile + File.separator + fileDate + fileExtenstion
+                        new Date(),
+                        parent,
+                        caseArchiveFile + File.separator + fileDate + fileExtenstion,
+                        direction
                     );
 //                }
 //                switch(section) {

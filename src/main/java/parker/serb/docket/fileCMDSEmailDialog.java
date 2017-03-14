@@ -402,7 +402,8 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
                 attachmentTable.getValueAt(i, 4) != null        //comment
                         ? attachmentTable.getValueAt(i, 3).toString() : "",
                 generateDate(),
-                directionComboBox.getSelectedItem().toString()); 
+                directionComboBox.getSelectedItem().toString(),
+                this); 
             }
         }
     }
