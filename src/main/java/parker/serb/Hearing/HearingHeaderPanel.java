@@ -61,6 +61,7 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
                     }
                 } else {
                     Global.root.getHearingRootPanel1().clearAll();
+                    caseNumberComboBox.setSelectedItem(caseNumberComboBox.getSelectedItem().toString().toUpperCase());
                     loadInformation();
                     if(Global.root.getHearingRootPanel1().getjTabbedPane1().getSelectedIndex() == 0) {
                         Global.root.getHearingRootPanel1().getActivityPanel1().loadAllHearingActivity();

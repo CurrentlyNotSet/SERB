@@ -58,6 +58,7 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
                 } else {
                     Global.root.getjButton2().setEnabled(true);
                     Global.root.getjButton3().setEnabled(true);
+                    caseNumberComboBox.setSelectedItem(caseNumberComboBox.getSelectedItem().toString().toUpperCase());
                     loadInformation();
                     if(Global.root.getmEDRootPanel1().getjTabbedPane1().getSelectedIndex() == 0) {
                         Global.root.getjButton9().setVisible(true);
