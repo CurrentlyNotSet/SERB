@@ -12,12 +12,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import parker.serb.Global;
 import parker.serb.letterGeneration.GenerateLetterNoQueuePanel;
+import parker.serb.sql.Audit;
 import parker.serb.sql.CMDSDocuments;
 import parker.serb.sql.CMDSHearing;
 import parker.serb.sql.HearingRoom;
@@ -272,7 +274,13 @@ public class CMDSAddHearingDialog extends javax.swing.JDialog {
         }
         
         if (docToGenerate != null){
-            new GenerateLetterNoQueuePanel(Global.root, true, null, docToGenerate);
+            File templateFile = new File(Global.templatePath + Global.activeSection + File.separator + docToGenerate.Location);
+            if (templateFile.exists()){
+                Audit.addAuditEntry("Generated CMDS Letter: " + templateFile);
+                new GenerateLetterNoQueuePanel(Global.root, true, null, docToGenerate);
+            } else {
+                WebOptionPane.showMessageDialog(Global.root, "<html><center> Sorry, unable to locate template. <br><br>" + docToGenerate.Location + "</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
+            }
         } else {
             WebOptionPane.showMessageDialog(
                     Global.root, 

@@ -532,14 +532,16 @@ public class processCMDSbookmarks {
             processBookmark.process("PreHearingDates" + (i == 0 ? "" : i), PreHearingDates, Document);
             processBookmark.process("MediationConfDates" + (i == 0 ? "" : i), HearingDatesMC, Document);
             
-            processBookmark.process("TCYear" + (i == 0 ? "" : i), TChearing.caseYear == null ? "" : TChearing.caseYear, Document);
-            processBookmark.process("TCCaseSeqNumber" + (i == 0 ? "" : i), TChearing.caseNumber == null ? "" : TChearing.caseNumber, Document);
-            processBookmark.process("TCEntryDate" + (i == 0 ? "" : i), TChearing.entryDate == null ? "" : TChearing.entryDate, Document);
-            processBookmark.process("TCHearingType" + (i == 0 ? "" : i), TChearing.hearingType == null ? "" : TChearing.hearingType, Document);
-            processBookmark.process("TCHearingDate" + (i == 0 ? "" : i), TChearing.hearingDate == null ? "" : TChearing.hearingDate, Document);
-            processBookmark.process("TCHearingTime" + (i == 0 ? "" : i), TChearing.hearingTime == null ? "" : TChearing.hearingTime, Document);
-            processBookmark.process("TCRoom" + (i == 0 ? "" : i), TChearing.room == null ? "" : TChearing.room, Document);
-          
+            if (TChearing != null){
+                processBookmark.process("TCYear" + (i == 0 ? "" : i), TChearing.caseYear == null ? "" : TChearing.caseYear, Document);
+                processBookmark.process("TCCaseSeqNumber" + (i == 0 ? "" : i), TChearing.caseNumber == null ? "" : TChearing.caseNumber, Document);
+                processBookmark.process("TCEntryDate" + (i == 0 ? "" : i), TChearing.entryDate == null ? "" : TChearing.entryDate, Document);
+                processBookmark.process("TCHearingType" + (i == 0 ? "" : i), TChearing.hearingType == null ? "" : TChearing.hearingType, Document);
+                processBookmark.process("TCHearingDate" + (i == 0 ? "" : i), TChearing.hearingDate == null ? "" : TChearing.hearingDate, Document);
+                processBookmark.process("TCHearingTime" + (i == 0 ? "" : i), TChearing.hearingTime == null ? "" : TChearing.hearingTime, Document);
+                processBookmark.process("TCRoom" + (i == 0 ? "" : i), TChearing.room == null ? "" : TChearing.room, Document);
+            }
+            
             //Parties
             processBookmark.process("AppellantAddresseeName" + (i == 0 ? "" : i), appellantNames, Document);
             processBookmark.process("AppellantName" + (i == 0 ? "" : i), appellantNames, Document);
