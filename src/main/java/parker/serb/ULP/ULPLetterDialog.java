@@ -127,7 +127,7 @@ public class ULPLetterDialog extends javax.swing.JDialog {
                     case "Directive":
                     case "Misc":
                     case "Memo":
-                        new GenerateLetterNoQueuePanel(Global.root, true, template);
+                        new GenerateLetterNoQueuePanel(Global.root, true, template, null);
                         break;
                     default:
                         new LetterGenerationPanel(Global.root, true, template, null);

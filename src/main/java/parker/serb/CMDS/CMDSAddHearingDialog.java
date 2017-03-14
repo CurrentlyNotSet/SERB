@@ -6,6 +6,7 @@
 package parker.serb.CMDS;
 
 import com.alee.extended.date.WebCalendar;
+import com.alee.laf.optionpane.WebOptionPane;
 import com.alee.utils.swing.Customizer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,6 +17,8 @@ import java.util.Date;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import parker.serb.Global;
+import parker.serb.letterGeneration.GenerateLetterNoQueuePanel;
+import parker.serb.sql.CMDSDocuments;
 import parker.serb.sql.CMDSHearing;
 import parker.serb.sql.HearingRoom;
 import parker.serb.sql.HearingType;
@@ -235,6 +238,51 @@ public class CMDSAddHearingDialog extends javax.swing.JDialog {
         return cal.getTime();
     }
     
+    private void saveButton(){
+        CMDSHearing.addHearing(generateDate(),
+                hearingTypeComboBox.getSelectedItem().toString(),
+                hearingRoomComboBox.getSelectedItem().toString()
+        );
+        int answer = WebOptionPane.showConfirmDialog(this, "Would you like to Generate a Letter for this Hearing", "Generate", WebOptionPane.YES_NO_OPTION);
+        if (answer == WebOptionPane.YES_OPTION) {
+            generateLetter();
+            this.dispose();
+        }
+        
+        this.dispose();
+    }
+    
+    private void generateLetter(){
+        CMDSDocuments docToGenerate = null;
+        switch (hearingTypeComboBox.getSelectedItem().toString()) {
+            case "PH":
+                docToGenerate = CMDSDocuments.findDocumentByNameAndCategory("General", "Notices", "Pre-Hearing Notice");
+                break;
+            case "RH":
+                docToGenerate = CMDSDocuments.findDocumentByNameAndCategory("General", "Notices", "Record Hearing Notice");
+                break;
+            case "SE":
+                docToGenerate = CMDSDocuments.findDocumentByNameAndCategory("General", "Notices", "Settlement Conference Notice");
+                break;
+            case "ST":
+                docToGenerate = CMDSDocuments.findDocumentByNameAndCategory("General", "Notices", "Status Conference Notice");
+                break;
+            default:
+                break;
+        }
+        
+        if (docToGenerate != null){
+            new GenerateLetterNoQueuePanel(Global.root, true, null, docToGenerate);
+        } else {
+            WebOptionPane.showMessageDialog(
+                    Global.root, 
+                    "<html><center> Sorry, unable to locate letter. <br><br>For: " + hearingTypeComboBox.getSelectedItem().toString() + " hearing type.</center></html>", 
+                    "Error", 
+                    WebOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -387,11 +435,7 @@ public class CMDSAddHearingDialog extends javax.swing.JDialog {
         }// </editor-fold>//GEN-END:initComponents
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-        CMDSHearing.addHearing(generateDate(),
-                hearingTypeComboBox.getSelectedItem().toString(),
-                hearingRoomComboBox.getSelectedItem().toString());
-        
-        dispose();
+        saveButton();
     }//GEN-LAST:event_saveButtonActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

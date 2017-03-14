@@ -280,6 +280,87 @@ public class CMDSDocuments {
         return doc;
     }
     
+    public static CMDSDocuments findDocumentByNameAndCategory(String mainCategory, String subCategory, String name) {
+        CMDSDocuments doc = new CMDSDocuments();
+        
+        Statement stmt = null;
+        
+        try {
+            
+            stmt = Database.connectToDB().createStatement();
+            
+            String sql = "SELECT * FROM CMDSDocuments WHERE MainCategory = ? AND SubCategory = ? AND LetterName = ?";
+            
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, mainCategory);
+            preparedStatement.setString(2, subCategory);
+            preparedStatement.setString(3, name);
+            
+            ResultSet foundDoc = preparedStatement.executeQuery();
+            
+            if(foundDoc.next()) {
+                doc.ID = foundDoc.getInt("ID");
+                doc.Active = foundDoc.getBoolean("Active");
+                doc.MainCategory = foundDoc.getString("MainCategory");
+                doc.SubCategory = foundDoc.getString("SubCategory");
+                doc.LetterName = foundDoc.getString("LetterName");
+                doc.Location = foundDoc.getString("Location");
+                doc.MultiplePrint = foundDoc.getBoolean("MultiplePrint");
+                doc.ResponseDue = foundDoc.getBoolean("ResponseDue");
+                doc.ActionAppealed = foundDoc.getBoolean("ActionAppealed");
+                doc.ClassificationTitle = foundDoc.getBoolean("ClassificationTitle");
+                doc.ClassificationNumber = foundDoc.getBoolean("ClassificationNumber");
+                doc.BarginingUnit = foundDoc.getBoolean("BarginingUnit");
+                doc.AppelantAppointed = foundDoc.getBoolean("AppelantAppointed");
+                doc.ProbitionaryPeriod = foundDoc.getBoolean("AppelantAppointed");
+                doc.HearingDate = foundDoc.getBoolean("HearingDate");
+                doc.HearingTime = foundDoc.getBoolean("HearingTime");
+                doc.HearingServed = foundDoc.getBoolean("HearingServed");
+                doc.MemorandumContra = foundDoc.getBoolean("MemorandumContra");
+                doc.Gender = foundDoc.getBoolean("Gender");
+                doc.AddressBlock = foundDoc.getBoolean("AddressBlock");
+                doc.FirstLetterSent = foundDoc.getBoolean("FirstLetterSent");
+                doc.CodeSection = foundDoc.getBoolean("CodeSection");
+                doc.CountyName = foundDoc.getBoolean("CountyName");
+                doc.StayDate = foundDoc.getBoolean("StayDate");
+                doc.CasePendingResolution = foundDoc.getBoolean("CasePendingResolution");
+                doc.LastUpdate = foundDoc.getBoolean("LastUpdate");
+                doc.DateGranted = foundDoc.getBoolean("DateGranted");
+                doc.MatterContinued = foundDoc.getBoolean("MatterContinued");
+                doc.SettlementDue = foundDoc.getBoolean("SettlementDue");
+                doc.FilingParty = foundDoc.getBoolean("FilingParty");
+                doc.RespondingParty = foundDoc.getBoolean("RespondingParty");
+                doc.RequestingParty = foundDoc.getBoolean("RequestingParty");
+                doc.Deposition = foundDoc.getBoolean("Deposition");
+                doc.RepHimOrHer = foundDoc.getBoolean("RepHimOrHer");
+                doc.TypeOfAction = foundDoc.getBoolean("TypeOfAction");
+                doc.CodeSectionFillIn = foundDoc.getBoolean("CodeSectionFillIn");
+                doc.DocumentName = foundDoc.getBoolean("DocumentName");
+                doc.DateFiled = foundDoc.getBoolean("DateFiled");
+                doc.InfoRedacted = foundDoc.getBoolean("InfoRedacted");
+                doc.RedactorName = foundDoc.getBoolean("RedactorName");
+                doc.RedactorTitle = foundDoc.getBoolean("RedactorTitle");
+                doc.DatePOSent = foundDoc.getBoolean("DatePOSent");
+                doc.AppealType = foundDoc.getBoolean("AppealType");
+                doc.AppealType2 = foundDoc.getBoolean("AppealType2");
+                doc.AppealTypeUF = foundDoc.getBoolean("AppealTypeUF");
+                doc.AppealTypeLS = foundDoc.getBoolean("AppealTypeLS");
+                doc.RequestingPartyC = foundDoc.getBoolean("RequestingPartyC");
+                doc.DateRequested = foundDoc.getBoolean("DateRequested");
+                doc.PurposeOfExtension = foundDoc.getBoolean("PurposeOfExtension");
+                doc.sortOrder = foundDoc.getDouble("sortOrder");
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                findDocumentByName(name);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return doc;
+    }
+    
     public static int CMDSQuestionCount(CMDSDocuments template){
         int count = 0;
         
