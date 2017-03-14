@@ -52,6 +52,7 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
                         Global.root.getcSCRootPanel1().clearAll();
                     }
                 } else {
+                    caseNumberComboBox.setSelectedItem(caseNumberComboBox.getSelectedItem().toString().toUpperCase());
                     loadInformation();
                     if(Global.root.getcSCRootPanel1().getjTabbedPane1().getSelectedIndex() == 0) {
                         Global.root.getjButton2().setText("Add Entry");

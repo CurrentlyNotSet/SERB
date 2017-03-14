@@ -51,6 +51,7 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
                     Global.root.getjButton2().setEnabled(true);
 //                    Global.root.getjButton6().setEnabled(true);
                     Global.root.getjButton3().setEnabled(true);
+                    caseNumberComboBox.setSelectedItem(caseNumberComboBox.getSelectedItem().toString().toUpperCase());
                     loadInformation();
                     if(Global.root.getuLPRootPanel1().getjTabbedPane1().getSelectedIndex() == 0) {
                         Global.root.getjButton2().setText("Add Entry");

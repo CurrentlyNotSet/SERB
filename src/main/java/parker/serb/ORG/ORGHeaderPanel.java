@@ -55,6 +55,7 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
                     }
                 } else {
                     Global.root.getjButton2().setEnabled(true);
+                    caseNumberComboBox.setSelectedItem(caseNumberComboBox.getSelectedItem().toString().toUpperCase());
                     loadInformation();
                     if(Global.root.getoRGRootPanel1().getjTabbedPane1().getSelectedIndex() == 0) {
                         Global.root.getjButton2().setText("Add Entry");

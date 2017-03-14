@@ -335,7 +335,13 @@ public class fileEmailDialog extends javax.swing.JDialog {
     }
     
     private void loadToComboBox(String section) {
-        List userList = User.loadSectionDropDowns(section);
+        List userList = null;
+        
+        if(section.equals("REP")) {
+            userList = User.loadSectionDropDownsPlusALJ(section);
+        } else {
+            userList = User.loadSectionDropDowns(section);
+        }
         
         toComboBox.setMaximumRowCount(6);
         toComboBox.removeAllItems();

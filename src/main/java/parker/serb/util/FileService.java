@@ -581,7 +581,7 @@ public class FileService {
 //                        break;
 //                    default:
                         Activity.addActivtyFromDocket(direction + " - Filed " + type2,
-                        fileDate + "_" + type + fileExtenstion,
+                        fileDate + "_" + type2 + fileExtenstion,
                         caseNumber.trim().split("-"), from, to, type2, comment, false, false, activityDate);
 //                        break;
 //                }
