@@ -582,7 +582,7 @@ public class FileService {
                     CMDSCaseDocketEntryTypes.updateCaseHistory(
                         type.split("-")[0].trim(),
                         type2,
-                        comment != null ? comment : "",
+                        comment,
                         new Date(),
                         parent,
                         caseArchiveFile + File.separator + fileDate + fileExtenstion,
