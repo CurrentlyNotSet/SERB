@@ -208,7 +208,7 @@ public class mediaFileDialog extends javax.swing.JDialog {
     private void loadToComboBox(String section) {
         List userList = null;
         
-        if(section.equals("REP")) {
+        if(section.equals("REP") || section.equals("MED") || section.equals("ULP")) {
             userList = User.loadSectionDropDownsPlusALJ(section);
         } else {
             userList = User.loadSectionDropDowns(section);
