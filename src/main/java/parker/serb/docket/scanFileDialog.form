@@ -88,11 +88,11 @@
                   <Component id="caseNumberTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="orgNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="orgNameComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="orgNameComboBox" max="32767" attributes="0"/>
+                  <Component id="orgNameLabel" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="fileNameTextBox" alignment="3" min="-2" max="-2" attributes="0"/>

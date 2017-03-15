@@ -72,6 +72,28 @@ public class scanFileDialog extends javax.swing.JDialog {
     }
     
     private void loadData(String section, String file, String time) {
+        if(section.equals("ORG")) {
+            orgNameComboBox.removeAllItems();
+            orgNameComboBox.addItem("");
+            
+            List caseNumberList = ORGCase.loadORGNames();
+
+            caseNumberList.stream().forEach((caseNumber) -> {
+                orgNameComboBox.addItem(caseNumber.toString());
+            });
+        }
+        
+        if(section.equals("CSC")) {
+            orgNameComboBox.removeAllItems();
+            orgNameComboBox.addItem("");
+            
+            List caseNumberList = CSCCase.loadCSCNames();
+
+            caseNumberList.stream().forEach((caseNumber) -> {
+                orgNameComboBox.addItem(caseNumber.toString());
+            });
+        }
+        
         fileNameTextBox.setText(file);
         loadToComboBox(section);
         loadTypeComboBox();
@@ -523,9 +545,9 @@ public class scanFileDialog extends javax.swing.JDialog {
                         .addComponent(jLabel8)
                         .addComponent(caseNumberTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(orgNameLabel)
-                        .addComponent(orgNameComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(orgNameComboBox)
+                        .addComponent(orgNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel2)
