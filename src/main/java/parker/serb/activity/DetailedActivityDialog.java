@@ -6,6 +6,7 @@
 package parker.serb.activity;
 
 import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 import parker.serb.Global;
 import parker.serb.sql.Activity;
 import parker.serb.sql.ActivityType;
@@ -95,6 +96,11 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
         dateTextBox.setText(orgActivity.date);
         actionTextBox.setText(orgActivity.action);
         fromTextBox.setText(orgActivity.from);
+        
+        if(((DefaultComboBoxModel)toComboBox.getModel()).getIndexOf(orgActivity.to) < 0) {
+            toComboBox.addItem(orgActivity.to );
+        }
+        
         toComboBox.setSelectedItem(orgActivity.to);
         typeComboBox.setSelectedItem(orgActivity.type);
         commentTextArea.setText(orgActivity.comment);
