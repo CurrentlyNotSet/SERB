@@ -34,7 +34,7 @@ public class LetterQueuePanel extends javax.swing.JDialog {
         setLocationRelativeTo(parent);
         setVisible(true);
     }
-    
+
     private void setRenderer() {
         jTable1.setDefaultRenderer(Object.class, new TableCellRenderer(){
             private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
@@ -77,15 +77,27 @@ public class LetterQueuePanel extends javax.swing.JDialog {
         jTable1.getColumnModel().getColumn(3).setPreferredWidth(100);
         jTable1.getColumnModel().getColumn(3).setMaxWidth(100);
 
-        // Attachment Number
-        jTable1.getColumnModel().getColumn(6).setMinWidth(100);
-        jTable1.getColumnModel().getColumn(6).setPreferredWidth(100);
-        jTable1.getColumnModel().getColumn(6).setMaxWidth(100);
+        //UserID (4)
+        jTable1.getColumnModel().getColumn(4).setMinWidth(100);
+        jTable1.getColumnModel().getColumn(4).setPreferredWidth(100);
+        jTable1.getColumnModel().getColumn(4).setMaxWidth(100);
 
-        // Suggested Send Date
+        //To  (5)
+        //NO Preference
+
+        //Subject  (6)
+        //NO Preference
+
+        // Attachment Number
         jTable1.getColumnModel().getColumn(7).setMinWidth(100);
         jTable1.getColumnModel().getColumn(7).setPreferredWidth(100);
         jTable1.getColumnModel().getColumn(7).setMaxWidth(100);
+
+        // Suggested Send Date
+        jTable1.getColumnModel().getColumn(8).setMinWidth(100);
+        jTable1.getColumnModel().getColumn(8).setPreferredWidth(100);
+        jTable1.getColumnModel().getColumn(8).setMaxWidth(100);
+
     }
 
     private void loadLetterQueue(){
@@ -94,23 +106,24 @@ public class LetterQueuePanel extends javax.swing.JDialog {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
 
-        List<LetterQueue> emailList = LetterQueue.getLetterQueueByGlobalSection();
+        List<LetterQueue> queueList = LetterQueue.getLetterQueueByGlobalSection();
 
-        for (LetterQueue eml : emailList){
-            if (       eml.type.contains(searchTerm.toLowerCase())
-                    || eml.fullCaseNumber.toLowerCase().contains(searchTerm.toLowerCase())
-                    || eml.to.toLowerCase().contains(searchTerm.toLowerCase())
-                    || eml.subject.toLowerCase().contains(searchTerm.toLowerCase())) {
+        for (LetterQueue item : queueList){
+            if (       item.type.contains(searchTerm.toLowerCase())
+                    || item.fullCaseNumber.toLowerCase().contains(searchTerm.toLowerCase())
+                    || item.to.toLowerCase().contains(searchTerm.toLowerCase())
+                    || item.subject.toLowerCase().contains(searchTerm.toLowerCase())) {
 
                 model.addRow(new Object[]{
-                    eml.id, // ID
-                    eml.type, // Type
-                    eml.fullCaseNumber, // CaseNumber
-                    eml.creationDate, //Date Created
-                    eml.to, // To:
-                    eml.subject, // Subject
-                    eml.attachementCount,// Attachments
-                    eml.suggestedSendDate // Suggest Send Date
+                    item.id, // ID
+                    item.type, // Type
+                    item.fullCaseNumber, // CaseNumber
+                    item.creationDate, //Date Created
+                    item.userName, //UserName
+                    item.to, // To:
+                    item.subject, // Subject
+                    item.attachementCount,// Attachments
+                    item.suggestedSendDate // Suggest Send Date
                 });
             }
         }
@@ -195,17 +208,18 @@ public class LetterQueuePanel extends javax.swing.JDialog {
 
             },
             new String [] {
-                "ID", "Type", "Case Number", "Created", "To", "Subject", "Attachments", "Send Date"
+                "ID", "Type", "Case Number", "Created", "Created By", "To", "Subject", "Attachments", "Send Date"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
+        jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTable1MouseClicked(evt);
