@@ -92,7 +92,7 @@ public class mediaFileDialog extends javax.swing.JDialog {
         }
         
         fileNameTextBox.setText(file);
-        loadToComboBox();
+        loadToComboBox(section);
         loadTypeComboBox();
     }
     
@@ -205,8 +205,14 @@ public class mediaFileDialog extends javax.swing.JDialog {
         }
     }
     
-    private void loadToComboBox() {
-        List userList = User.loadSectionDropDowns(selectedSection);
+    private void loadToComboBox(String section) {
+        List userList = null;
+        
+        if(section.equals("REP")) {
+            userList = User.loadSectionDropDownsPlusALJ(section);
+        } else {
+            userList = User.loadSectionDropDowns(section);
+        }
         
         toComboBox.setMaximumRowCount(6);
         

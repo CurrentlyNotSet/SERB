@@ -73,7 +73,7 @@ public class scanFileDialog extends javax.swing.JDialog {
     
     private void loadData(String section, String file, String time) {
         fileNameTextBox.setText(file);
-        loadToComboBox();
+        loadToComboBox(section);
         loadTypeComboBox();
         scanDateTextBox.setText(time.split(" ")[0]);
         hourTextBox.setText(time.split(" ")[1].split(":")[0]);
@@ -218,8 +218,14 @@ public class scanFileDialog extends javax.swing.JDialog {
         }
     }
     
-    private void loadToComboBox() {
-        List userList = User.loadSectionDropDowns(selectedSection);
+    private void loadToComboBox(String section) {
+        List userList = null;
+        
+        if(section.equals("REP")) {
+            userList = User.loadSectionDropDownsPlusALJ(section);
+        } else {
+            userList = User.loadSectionDropDowns(section);
+        }
         
         toComboBox.setMaximumRowCount(6);
         
