@@ -31,6 +31,7 @@ public class LetterQueue {
     public int attachementCount;
     public String suggestedSendDate;
     public int userID;
+    public String userName;
     public String section;
 
 
@@ -119,7 +120,7 @@ public class LetterQueue {
                 eml.subject = rs.getString("subject") == null ? "" : rs.getString("subject");
                 eml.attachementCount = rs.getInt("attachments");
                 eml.suggestedSendDate = rs.getDate("suggestedSendDate") == null ? "" : Global.mmddyyyy.format(rs.getDate("suggestedSendDate"));
-                eml.userID = rs.getInt("userID");
+                eml.userName = User.getNameLastInitialByID(rs.getInt("userID"));
                 eml.section = rs.getString("section");
                 emailList.add(eml);
             }
