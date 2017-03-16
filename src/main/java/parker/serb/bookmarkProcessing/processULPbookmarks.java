@@ -50,6 +50,11 @@ public class processULPbookmarks {
         String toAddressBlock = "";
         String ccNameBlock = "";
         String DIRECCBlock = "";
+        String chargingPartyAddressBlockInvest = "";
+        String chargingPartyREPAddressBlockInvest = "";
+        String chargedPartyAddressBlockInvest = "";
+        String chargedPartyREPAddressBlockInvest = "";
+
 
 
         for (CaseParty party : partyList){
@@ -90,8 +95,12 @@ public class processULPbookmarks {
                     if (!"".equals(chargingPartyAddressBlock.trim())){
                         chargingPartyAddressBlock += "\n\n";
                     }
+                    if (!"".equals(chargingPartyAddressBlockInvest.trim())){
+                        chargingPartyAddressBlockInvest += "\n\n";
+                    }
                     chargingPartyAddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
                     chargingPartyNames += StringUtilities.buildCasePartyNameNoPreFix(party);
+                    chargingPartyAddressBlockInvest += StringUtilities.buildPartyBlockULPInvestigatorReport(party);
                     break;
                 case "Charging Party REP":
                     if (!"".equals(chargingPartyREPNames.trim())){
@@ -100,8 +109,12 @@ public class processULPbookmarks {
                     if (!"".equals(chargingPartyREPAddressBlock.trim())){
                         chargingPartyREPAddressBlock += "\n\n";
                     }
+                    if (!"".equals(chargingPartyREPAddressBlockInvest.trim())){
+                        chargingPartyREPAddressBlockInvest += "\n\n";
+                    }
                     chargingPartyREPAddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
                     chargingPartyREPNames += StringUtilities.buildCasePartyNameNoPreFix(party);
+                    chargingPartyREPAddressBlockInvest += StringUtilities.buildPartyBlockULPInvestigatorReport(party);
                     break;
                 case "Charged Party":
                     if (!"".equals(chargedPartyNames.trim())){
@@ -110,8 +123,12 @@ public class processULPbookmarks {
                     if (!"".equals(chargedPartyAddressBlock.trim())){
                         chargedPartyAddressBlock += "\n\n";
                     }
+                    if (!"".equals(chargedPartyAddressBlockInvest.trim())){
+                        chargedPartyAddressBlockInvest += "\n\n";
+                    }
                     chargedPartyAddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
                     chargedPartyNames += StringUtilities.buildCasePartyNameNoPreFix(party);
+                    chargedPartyAddressBlockInvest += StringUtilities.buildPartyBlockULPInvestigatorReport(party);
                     break;
                 case "Charged Party REP":
                     if (!"".equals(chargedPartyREPNames.trim())){
@@ -120,8 +137,12 @@ public class processULPbookmarks {
                     if (!"".equals(chargedPartyREPAddressBlock.trim())){
                         chargedPartyREPAddressBlock += "\n\n";
                     }
+                    if (!"".equals(chargedPartyREPAddressBlockInvest.trim())){
+                        chargedPartyREPAddressBlockInvest += "\n\n";
+                    }
                     chargedPartyREPAddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
                     chargedPartyREPNames += StringUtilities.buildCasePartyNameNoPreFix(party);
+                    chargedPartyREPAddressBlockInvest += StringUtilities.buildPartyBlockULPInvestigatorReport(party);
                     break;
             }
         }
@@ -211,6 +232,10 @@ public class processULPbookmarks {
             processBookmark.process("CHDREPADDRESSBLOCK" + (i == 0 ? "" : i), chargedPartyREPAddressBlock, Document);
             processBookmark.process("CCList" + (i == 0 ? "" : i), ccNameBlock, Document);
             processBookmark.process("DIRECCList" + (i == 0 ? "" : i), DIRECCBlock, Document);
+            processBookmark.process("ChargingPartyInvestBlock" + (i == 0 ? "" : i), chargingPartyAddressBlockInvest, Document);
+            processBookmark.process("ChargingPartyRepInvestBlock" + (i == 0 ? "" : i), chargingPartyREPAddressBlockInvest, Document);
+            processBookmark.process("ChargedPartyInvestBlock" + (i == 0 ? "" : i), chargedPartyAddressBlockInvest, Document);
+            processBookmark.process("ChargedPartyRepInvestBlock" + (i == 0 ? "" : i), chargedPartyREPAddressBlockInvest, Document);
 
             //Latest (by date) board meeting
             processBookmark.process("LONGMEETINGDATE" + (i == 0 ? "" : i), ("".equals(boardMeetingDate) ? "" : boardMeetingDate), Document);
