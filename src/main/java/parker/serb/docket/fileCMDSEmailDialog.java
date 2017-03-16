@@ -190,7 +190,8 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
                     enableButton();
                 }
 
-                if (!comboEditor.getSelectedItem().toString().equals("")) {
+                if (!comboEditor.getSelectedItem().toString().equals("") ||
+                        !comboEditor.getSelectedItem().toString().equals("DO NOT FILE")) {
                     loadType2ComboBox();
                 } else {
                     comboEditor2.removeAllItems();
@@ -252,19 +253,25 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
                     break;
                 }
             }
-
-            if (attachmentTable.getValueAt(i, 3) != null) {
-                if (attachmentTable.getValueAt(i, 3).toString().equals("")
-                        || attachmentTable.getValueAt(i, 2).toString().equals("")) {
+            
+            if (attachmentTable.getValueAt(i, 2) != null) { 
+                if(attachmentTable.getValueAt(i, 2).toString().equals("DO NOT FILE")) {
+                    comboEditor2.setSelectedItem("");
                     attachmentTable.setValueAt("", i, 3);
-                    enableButton = false;
-                    break;
-                } else if (attachmentTable.getValueAt(i, 2).toString().equals("DO NOT FILE")) {
                     enableButton = true;
+                } else {
+                    if(attachmentTable.getValueAt(i, 3) == null) {
+                        enableButton = false;
+                        break;
+                    } else {
+                        if (attachmentTable.getValueAt(i, 3).equals("")) {
+                            enableButton = false;
+                            break;
+                        } else {
+                            enableButton = true;
+                        }
+                    }
                 }
-            } else {
-                enableButton = false;
-                break;
             }
         }
 
@@ -374,13 +381,10 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
         comboEditor2.setMaximumRowCount(10);
         comboEditor2.removeAllItems();
         comboEditor2.addItem("");
-        comboEditor2.addItem("DO NOT FILE");
-        comboEditor2.addItem("-----------");
 
         for (int i = 0; i < entryTypes.size(); i++) {
             comboEditor2.addItem(entryTypes.get(i).description);
         }
-
         return comboEditor2;
     }
 
