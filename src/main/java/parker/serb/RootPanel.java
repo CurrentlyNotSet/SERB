@@ -179,6 +179,18 @@ public class RootPanel extends javax.swing.JFrame {
     private void setHeaderCard() {
         CardLayout card = (CardLayout)jPanel9.getLayout();
 
+        String firstCaseNumber = "";
+        
+        if (Global.activeSection.equalsIgnoreCase("Civil Service Commission")
+                ||Global.activeSection.equalsIgnoreCase("CSC")
+                ||Global.activeSection.equalsIgnoreCase("ORG")){
+            firstCaseNumber = Global.caseNumber;
+        } else {
+            firstCaseNumber = NumberFormatService.generateFullCaseNumberNonGlobal(Global.caseYear, Global.caseType, Global.caseMonth, Global.caseNumber);
+        }
+        
+        
+        
         switch (Global.activeSection) {
             case "Docketing":
                 card.show(jPanel9, "card2");
@@ -188,8 +200,8 @@ public class RootPanel extends javax.swing.JFrame {
                 card.show(jPanel9, "card3");
                 jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
                 rEPHeaderPanel1.loadCases();
-                if(REPCase.validateCaseNumber(NumberFormatService.generateFullCaseNumber()) && initialLoad) {
-                    rEPHeaderPanel1.getjComboBox2().setSelectedItem(NumberFormatService.generateFullCaseNumber());
+                if(REPCase.validateCaseNumber(firstCaseNumber) && initialLoad) {
+                    rEPHeaderPanel1.getjComboBox2().setSelectedItem(firstCaseNumber);
                 } else {
                     Global.caseYear = null;
                     Global.caseType = null;
@@ -202,8 +214,8 @@ public class RootPanel extends javax.swing.JFrame {
                 card.show(jPanel9, "card4");
                 jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
                 uLPHeaderPanel1.loadCases();
-                if(ULPCase.validateCaseNumber(NumberFormatService.generateFullCaseNumber()) && initialLoad) {
-                    uLPHeaderPanel1.getjComboBox2().setSelectedItem(NumberFormatService.generateFullCaseNumber());
+                if(ULPCase.validateCaseNumber(firstCaseNumber) && initialLoad) {
+                    uLPHeaderPanel1.getjComboBox2().setSelectedItem(firstCaseNumber);
                 } else {
                     Global.caseYear = null;
                     Global.caseType = null;
@@ -216,7 +228,7 @@ public class RootPanel extends javax.swing.JFrame {
                 card.show(jPanel9, "card5");
                 jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
                 oRGHeaderPanel2.loadCases();
-                if(ORGCase.validateOrg(Global.caseNumber) && initialLoad) {
+                if(ORGCase.validateOrg(firstCaseNumber) && initialLoad) {
                     oRGHeaderPanel2.getjComboBox2().setSelectedItem(ORGCase.getORGName());
                 } else {
                     Global.caseYear = null;
@@ -230,8 +242,8 @@ public class RootPanel extends javax.swing.JFrame {
                 card.show(jPanel9, "card6");
                 jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
                 mEDHeaderPanel1.loadCases();
-                if(MEDCase.validateCaseNumber(NumberFormatService.generateFullCaseNumber()) && initialLoad) {
-                    mEDHeaderPanel1.getjComboBox2().setSelectedItem(NumberFormatService.generateFullCaseNumber());
+                if(MEDCase.validateCaseNumber(firstCaseNumber) && initialLoad) {
+                    mEDHeaderPanel1.getjComboBox2().setSelectedItem(firstCaseNumber);
                 } else {
                     Global.caseYear = null;
                     Global.caseType = null;
@@ -244,8 +256,8 @@ public class RootPanel extends javax.swing.JFrame {
                 card.show(jPanel9, "card7");
                 jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
                 hearingHeaderPanel1.loadCases();
-                if(HearingCase.validateCaseNumber(NumberFormatService.generateFullCaseNumber()) && initialLoad) {
-                    hearingHeaderPanel1.getjComboBox2().setSelectedItem(NumberFormatService.generateFullCaseNumber());
+                if(HearingCase.validateCaseNumber(firstCaseNumber) && initialLoad) {
+                    hearingHeaderPanel1.getjComboBox2().setSelectedItem(firstCaseNumber);
                 } else {
                     Global.caseYear = null;
                     Global.caseType = null;
@@ -258,7 +270,7 @@ public class RootPanel extends javax.swing.JFrame {
                 card.show(jPanel9, "card8");
                 jLabel1.setIcon(new ImageIcon(getClass().getResource("/SPBRSeal.png")));
                 cSCHeaderPanel1.loadCases();
-                if(CSCCase.validateCSC(Global.caseNumber) && initialLoad) {
+                if(CSCCase.validateCSC(firstCaseNumber) && initialLoad) {
                     cSCHeaderPanel1.getjComboBox2().setSelectedItem(CSCCase.getCSCName());
                 } else {
                     Global.caseYear = null;
@@ -272,8 +284,8 @@ public class RootPanel extends javax.swing.JFrame {
                 card.show(jPanel9, "card9");
                 jLabel1.setIcon(new ImageIcon(getClass().getResource("/SPBRSeal.png")));
                 cMDSHeaderPanel1.loadCases();
-                if(CMDSCase.validateCaseNumber(NumberFormatService.generateFullCaseNumber()) && initialLoad) {
-                    cMDSHeaderPanel1.getjComboBox2().setSelectedItem(NumberFormatService.generateFullCaseNumber());
+                if(CMDSCase.validateCaseNumber(firstCaseNumber) && initialLoad) {
+                    cMDSHeaderPanel1.getjComboBox2().setSelectedItem(firstCaseNumber);
                 } else {
                     Global.caseYear = null;
                     Global.caseType = null;
