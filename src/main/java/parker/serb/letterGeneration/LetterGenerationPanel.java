@@ -282,7 +282,8 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
             String caseRelation = party.caseRelation;
 
             if (Global.activeSection.equals("MED")
-                    && (party.caseRelation.equals("Employer REP") || party.caseRelation.equals("Employee Organization REP"))) {
+                    && (party.caseRelation.equals("Employer REP") || party.caseRelation.equals("Employee Organization REP"))
+                    && SMDSdocToGenerate.id != 5475) {
                 if (!party.emailAddress.trim().equals("")) {
                     emailPostal = "Email";
                 } else {

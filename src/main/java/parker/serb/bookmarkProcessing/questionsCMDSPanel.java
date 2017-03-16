@@ -267,7 +267,7 @@ public class questionsCMDSPanel extends JDialog {
         answers.setBargainingUnit(barganingUnitTextField == null ? "" : barganingUnitTextField.getText());
         answers.setClassificationNumber(classificationNumberTextField == null ? "" : classificationNumberTextField.getText());
         answers.setAppellantAppointed(appellantAppointedWebDateField == null ? ""
-                : (probationaryPeriodTextField.getText().equals("") ? "" : Global.MMMMdyyyy.format(appellantAppointedWebDateField.getDate())));
+                : (appellantAppointedWebDateField.getText().equals("") ? "" : Global.MMMMdyyyy.format(appellantAppointedWebDateField.getDate())));
         answers.setProbationaryPeriod(probationaryPeriodTextField == null ? "" : probationaryPeriodTextField.getText());
         answers.setHearingDate(hearingDateWebDateField == null ? "" : hearingDateWebDateField.getText());
         answers.setHearingTime(hearingTimeTextField == null ? "" : hearingTimeTextField.getText());
