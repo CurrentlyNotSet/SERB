@@ -25,16 +25,18 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
     Activity orgActivity;
     Activity updatedActivity = new Activity();
     String passedID;
+    String passedUser;
     /**
      * Creates new form DetailedActivityDialog
      */
-    public DetailedActivityDialog(java.awt.Frame parent, boolean modal, String id) {
+    public DetailedActivityDialog(java.awt.Frame parent, boolean modal, String id, String userName) {
         super(parent, modal);
         initComponents();
         passedID = id;
+        passedUser = userName;
         //displayUpdateButton();
         loadComboBoxes();
-        loadInformation(id);
+        loadInformation(id, userName);
         setLocationRelativeTo(parent);
         setVisible(true);
     }
@@ -90,8 +92,8 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
         }
     }
 
-    private void loadInformation(String id) {
-        orgActivity = Activity.loadActivityByID(id);
+    private void loadInformation(String id, String userName) {
+        orgActivity = Activity.loadActivityByID(id, userName);
 
         dateTextBox.setText(orgActivity.date);
         actionTextBox.setText(orgActivity.action);
@@ -349,7 +351,7 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
             if(!cancel.isReset()) {
             } else {
                 Audit.addAuditEntry("Canceled Update of Activity " + passedID);
-                loadInformation(passedID);
+                loadInformation(passedID, passedUser);
                 enableInputs(false);
                 updateButton.setText("Update");
                 closeButton.setText("Close");

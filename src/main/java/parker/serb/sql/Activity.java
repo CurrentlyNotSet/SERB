@@ -831,16 +831,35 @@ public class Activity {
         return activityList;
     }
 
-    public static Activity loadActivityByID(String id) {
+    public static Activity loadActivityByID(String id, String user) {
         Activity activity = new Activity();
 
         Statement stmt = null;
+        
+        String sql = "";
 
         try {
 
             stmt = Database.connectToDB().createStatement();
-
-            String sql = "select Activity.id,"
+            
+            if(user.equals("SYSTEM")) {
+                sql = "select Activity.id,"
+                    + " caseYear,"
+                    + " caseType,"
+                    + " caseMonth,"
+                    + " caseNumber,"
+                    + " date,"
+                    + " [to],"
+                    + " [from],"
+                    + " type,"
+                    + " comment,"
+                    + " action,"
+                    + " fileName"
+                    + " from Activity"
+                    + " Where Activity.id = ?"
+                    + " and Activity.active = 1";
+            } else {
+                sql = "select Activity.id,"
                     + " caseYear,"
                     + " caseType,"
                     + " caseMonth,"
@@ -859,32 +878,48 @@ public class Activity {
                     + " ON Activity.userID = Users.id"
                     + " Where Activity.id = ?"
                     + " and Activity.active = 1";
-
+            }
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setInt(1, Integer.parseInt(id));
 
             ResultSet caseActivity = preparedStatement.executeQuery();
 
+            
             while(caseActivity.next()) {
-                activity.id = caseActivity.getInt("id");
-                activity.user = caseActivity.getString("firstName") + " " + caseActivity.getString("lastName");
-                activity.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
-                activity.action = caseActivity.getString("action");
-                activity.caseYear = caseActivity.getString("caseYear");
-                activity.caseType = caseActivity.getString("caseType");
-                activity.caseMonth = caseActivity.getString("caseMonth");
-                activity.caseNumber = caseActivity.getString("caseNumber");
-                activity.fileName = caseActivity.getString("fileName");
-                activity.to = caseActivity.getString("to");
-                activity.type = caseActivity.getString("type");
-                activity.comment = caseActivity.getString("comment");
-                activity.from = caseActivity.getString("from");
-
+                if (user.equals("SYSTEM")) {
+                    activity.id = caseActivity.getInt("id");
+                    activity.user = "SYSTEM";
+                    activity.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
+                    activity.action = caseActivity.getString("action");
+                    activity.caseYear = caseActivity.getString("caseYear");
+                    activity.caseType = caseActivity.getString("caseType");
+                    activity.caseMonth = caseActivity.getString("caseMonth");
+                    activity.caseNumber = caseActivity.getString("caseNumber");
+                    activity.fileName = caseActivity.getString("fileName");
+                    activity.to = caseActivity.getString("to");
+                    activity.type = caseActivity.getString("type");
+                    activity.comment = caseActivity.getString("comment");
+                    activity.from = caseActivity.getString("from");
+                } else {
+                    activity.id = caseActivity.getInt("id");
+                    activity.user = caseActivity.getString("firstName") + " " + caseActivity.getString("lastName");
+                    activity.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
+                    activity.action = caseActivity.getString("action");
+                    activity.caseYear = caseActivity.getString("caseYear");
+                    activity.caseType = caseActivity.getString("caseType");
+                    activity.caseMonth = caseActivity.getString("caseMonth");
+                    activity.caseNumber = caseActivity.getString("caseNumber");
+                    activity.fileName = caseActivity.getString("fileName");
+                    activity.to = caseActivity.getString("to");
+                    activity.type = caseActivity.getString("type");
+                    activity.comment = caseActivity.getString("comment");
+                    activity.from = caseActivity.getString("from");    
+                }
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                loadActivityByID(id);
+                loadActivityByID(id, user);
             } else {
                 SlackNotification.sendNotification(ex);
             }

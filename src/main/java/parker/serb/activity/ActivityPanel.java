@@ -117,7 +117,8 @@ public class ActivityPanel extends javax.swing.JPanel {
                         Audit.addAuditEntry("Viewing Activty Detail for ID: " + actvityTable.getValueAt(actvityTable.getSelectedRow(), 6).toString());
                         new DetailedActivityDialog((JFrame) Global.root.getRootPane().getParent(),
                                 true,
-                                actvityTable.getValueAt(actvityTable.getSelectedRow(), 6).toString());
+                                actvityTable.getValueAt(actvityTable.getSelectedRow(), 6).toString(),
+                                actvityTable.getValueAt(actvityTable.getSelectedRow(), 4).toString());
                         loadAllActivity();
                     }
                 }
