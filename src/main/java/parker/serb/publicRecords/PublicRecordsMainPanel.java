@@ -8,6 +8,7 @@ package parker.serb.publicRecords;
 import com.alee.laf.optionpane.WebOptionPane;
 import java.awt.Color;
 import java.awt.Component;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JTable;
@@ -26,6 +27,8 @@ import parker.serb.util.NumberFormatService;
  * @author parkerjohnston
  */
 public class PublicRecordsMainPanel extends javax.swing.JDialog {
+
+        List<String> filesMissing = new ArrayList<>();
 
     /**
      * Creates new form fileSelector
@@ -220,8 +223,21 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
 
         if (docsList.size() > 0) {
             //SEND panel
-            new PublicRecordsEmailPanel(Global.root, true, docsList);
-            loadCaseDocsTable();
+            if (verifyFilesExist(docsList)) {
+                new PublicRecordsEmailPanel(Global.root, true, docsList);
+                loadCaseDocsTable();
+            } else {
+                String listOfFiles = "";
+                for (String file : filesMissing) {
+                    listOfFiles += "<br>" + file;
+                }
+                WebOptionPane.showMessageDialog(
+                        Global.root,
+                        "<html><center> Sorry, unable to locate file(s) required to send.<br>" + listOfFiles + "</center></html>",
+                        "Error",
+                        WebOptionPane.ERROR_MESSAGE
+                );
+            }
         } else {
             WebOptionPane.showMessageDialog(Global.root, "No Documents Selected to Send",
                     "Send Warning", WebOptionPane.WARNING_MESSAGE);
@@ -262,6 +278,36 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
             }
         }
         loadRedactionTable();
+    }
+
+    private boolean verifyFilesExist(List<Activity> docList) {
+        boolean allExist = true;
+        String path = "";
+            if (Global.activeSection.equalsIgnoreCase("Civil Service Commission")
+                    || Global.activeSection.equalsIgnoreCase("CSC")
+                    || Global.activeSection.equalsIgnoreCase("ORG")) {
+                path = Global.templatePath
+                        + (Global.activeSection.equals("Civil Service Commission")
+                        ? Global.caseType : Global.activeSection) + File.separator;
+            } else {
+                path = Global.activityPath + File.separatorChar
+                        + Global.activeSection + File.separatorChar
+                        + Global.caseYear + File.separatorChar
+                        + (Global.caseYear + "-" + Global.caseType + "-" + Global.caseMonth + "-" + Global.caseNumber)
+                        + File.separatorChar;
+            }
+
+            filesMissing = new ArrayList<>();
+
+            for (Activity attach : docList) {
+                File templateFile = new File(path + attach.fileName);
+                if (!templateFile.exists()) {
+                    allExist = false;
+                    filesMissing.add(attach.fileName);
+                }
+            }
+
+        return allExist;
     }
 
     private void reloadActivity() {

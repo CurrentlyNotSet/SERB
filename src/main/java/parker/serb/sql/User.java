@@ -940,6 +940,34 @@ public class User {
         return userName;
     }
 
+    public static String getNameLastInitialByID(int userID) {
+        String userName = "";
+
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT firstName, LEFT(LastName, 1) AS LastName FROM Users WHERE ID = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setInt(1, userID);
+
+            ResultSet success = preparedStatement.executeQuery();
+
+            while (success.next()) {
+                userName = success.getString("FirstName") + " " + success.getString("LastName") + ".";
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getNameByID(userID);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return userName;
+    }
+
     public static String getFullNameByID(int userID) {
         String userName = "";
 

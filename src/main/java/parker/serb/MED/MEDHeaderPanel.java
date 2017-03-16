@@ -61,10 +61,10 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
                     caseNumberComboBox.setSelectedItem(caseNumberComboBox.getSelectedItem().toString().toUpperCase());
                     loadInformation();
                     if(Global.root.getmEDRootPanel1().getjTabbedPane1().getSelectedIndex() == 0) {
-                        Global.root.getjButton9().setVisible(true);
                         Global.root.getjButton2().setText("Add Entry");
                         Global.root.getjButton2().setEnabled(true);
                         Global.root.getmEDRootPanel1().getActivityPanel1().loadAllActivity(); 
+                        Global.root.getjButton9().setVisible(true);
                     }
                         
                     Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());

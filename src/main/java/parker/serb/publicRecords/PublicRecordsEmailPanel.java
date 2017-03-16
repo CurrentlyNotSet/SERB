@@ -7,17 +7,23 @@ package parker.serb.publicRecords;
 
 import com.alee.extended.date.WebCalendar;
 import com.alee.extended.date.WebDateField;
+import com.alee.laf.optionpane.WebOptionPane;
 import com.alee.utils.swing.Customizer;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
 import parker.serb.sql.Activity;
 import parker.serb.sql.EmailOut;
 import parker.serb.sql.EmailOutAttachment;
 import parker.serb.util.ClearDateDialog;
+import parker.serb.util.EmailValidation;
 import parker.serb.util.FileService;
 import parker.serb.util.NumberFormatService;
 import parker.serb.util.StringUtilities;
@@ -28,6 +34,8 @@ import parker.serb.util.StringUtilities;
  */
 public class PublicRecordsEmailPanel extends javax.swing.JDialog {
 
+    List<String> filesMissing = new ArrayList<>();
+
     public PublicRecordsEmailPanel(java.awt.Frame parent, boolean modal, List<Activity> docsList) {
         super(parent, modal);
         initComponents();
@@ -37,9 +45,46 @@ public class PublicRecordsEmailPanel extends javax.swing.JDialog {
     }
 
     private void loadPanel(List<Activity> docsList) {
+        listeners();
         setSubjectLine();
         setColumnWidth();
         loadAttachments(docsList);
+    }
+
+    private void listeners(){
+        toTextBox.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                saveButton.setEnabled(EmailValidation.validEmail(toTextBox.getText().trim()));
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                saveButton.setEnabled(EmailValidation.validEmail(toTextBox.getText().trim()));
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                saveButton.setEnabled(EmailValidation.validEmail(toTextBox.getText().trim()));
+            }
+        });
+
+        ccTextbox.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                saveButton.setEnabled(EmailValidation.validEmail(ccTextbox.getText().trim()));
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                saveButton.setEnabled(EmailValidation.validEmail(ccTextbox.getText().trim()));
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                saveButton.setEnabled(EmailValidation.validEmail(ccTextbox.getText().trim()));
+            }
+        });
     }
 
     private void setSubjectLine() {
@@ -78,11 +123,16 @@ public class PublicRecordsEmailPanel extends javax.swing.JDialog {
     }
 
     private void saveInfo(){
+        //insert email and return ID
         int emailID = insertEmail();
 
+        //insert attachments
         for (int i = 0; i < jTable1.getRowCount(); i++) {
             insertGeneratedAttachementEmail(emailID, jTable1.getValueAt(i, 1).toString());
         }
+
+        //mark email ready to send
+        sendEmail(emailID);
     }
 
     private int insertEmail() {
@@ -136,6 +186,55 @@ public class PublicRecordsEmailPanel extends javax.swing.JDialog {
         }
     }
 
+    private void sendEmail(int emailID){
+        if (verifyFilesExist(emailID)) {
+            EmailOut.markEmailReadyToSend(emailID);
+        } else {
+            String listOfFiles = "";
+            for (String file : filesMissing){
+                listOfFiles += "<br>" + file;
+            }
+            WebOptionPane.showMessageDialog(
+                    Global.root,
+                    "<html><center> Sorry, unable to locate file(s) required to send.<br>" + listOfFiles + "</center></html>",
+                    "Error",
+                    WebOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
+
+    private boolean verifyFilesExist(int emailID) {
+        boolean allExist = true;
+        String path = "";
+            EmailOut eml = EmailOut.getEmailByID(emailID);
+            List<EmailOutAttachment> attachList = EmailOutAttachment.getEmailAttachments(emailID);
+            if (Global.activeSection.equalsIgnoreCase("Civil Service Commission")
+                    || Global.activeSection.equalsIgnoreCase("CSC")
+                    || Global.activeSection.equalsIgnoreCase("ORG")) {
+                path = Global.templatePath
+                        + (Global.activeSection.equals("Civil Service Commission")
+                        ? eml.caseType : Global.activeSection) + File.separator;
+            } else {
+                path = Global.activityPath + File.separatorChar
+                        + Global.activeSection + File.separatorChar
+                        + eml.caseYear + File.separatorChar
+                        + (eml.caseYear + "-" + eml.caseType + "-" + eml.caseMonth + "-" + eml.caseNumber)
+                        + File.separatorChar;
+            }
+
+            filesMissing = new ArrayList<>();
+
+            for (EmailOutAttachment attach : attachList) {
+                File templateFile = new File(path + attach.fileName);
+                if (!templateFile.exists()) {
+                    allExist = false;
+                    filesMissing.add(attach.fileName);
+                }
+            }
+
+        return allExist;
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -167,7 +266,8 @@ public class PublicRecordsEmailPanel extends javax.swing.JDialog {
         headerLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         headerLabel.setText("Public Records Email");
 
-        saveButton.setText("Save");
+        saveButton.setText("Send");
+        saveButton.setEnabled(false);
         saveButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 saveButtonActionPerformed(evt);
@@ -277,7 +377,7 @@ public class PublicRecordsEmailPanel extends javax.swing.JDialog {
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 49, Short.MAX_VALUE))
+                                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()

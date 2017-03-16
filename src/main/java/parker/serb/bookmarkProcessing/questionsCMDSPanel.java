@@ -5,6 +5,7 @@
  */
 package parker.serb.bookmarkProcessing;
 
+import com.alee.extended.date.WebCalendar;
 import com.alee.extended.date.WebDateField;
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -265,7 +266,8 @@ public class questionsCMDSPanel extends JDialog {
         answers.setClassificationTitle(classificationTitleTextField == null ? "" : classificationTitleTextField.getText());
         answers.setBargainingUnit(barganingUnitTextField == null ? "" : barganingUnitTextField.getText());
         answers.setClassificationNumber(classificationNumberTextField == null ? "" : classificationNumberTextField.getText());
-        answers.setAppellantAppointed(appellantAppointedWebDateField == null ? "" : Global.MMMMdyyyy.format(appellantAppointedWebDateField.getDate()));
+        answers.setAppellantAppointed(appellantAppointedWebDateField == null ? ""
+                : (probationaryPeriodTextField.getText().equals("") ? "" : Global.MMMMdyyyy.format(appellantAppointedWebDateField.getDate())));
         answers.setProbationaryPeriod(probationaryPeriodTextField == null ? "" : probationaryPeriodTextField.getText());
         answers.setHearingDate(hearingDateWebDateField == null ? "" : hearingDateWebDateField.getText());
         answers.setHearingTime(hearingTimeTextField == null ? "" : hearingTimeTextField.getText());
@@ -497,6 +499,10 @@ public class questionsCMDSPanel extends JDialog {
         responseDueWebDateField.setPreferredSize(new Dimension(150, 25));
         responseDueWebDateField.setDateFormat(Global.mmddyyyy);
         responseDueWebDateField.setEditable(false);
+        responseDueWebDateField.setCalendarCustomizer((final WebCalendar calendar) -> {
+            calendar.setStartWeekFromSunday(true);
+        });
+
         panel.setBorder(BorderFactory.createEtchedBorder());
         panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
 
@@ -760,6 +766,9 @@ public class questionsCMDSPanel extends JDialog {
         appellantAppointedWebDateField.setPreferredSize(new Dimension(150, 25));
         appellantAppointedWebDateField.setDateFormat(Global.mmddyyyy);
         appellantAppointedWebDateField.setEditable(false);
+        appellantAppointedWebDateField.setCalendarCustomizer((final WebCalendar calendar) -> {
+            calendar.setStartWeekFromSunday(true);
+        });
         panel.setBorder(BorderFactory.createEtchedBorder());
         panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
 
@@ -833,6 +842,9 @@ public class questionsCMDSPanel extends JDialog {
         hearingDateWebDateField.setPreferredSize(new Dimension(150, 25));
         hearingDateWebDateField.setDateFormat(Global.mmddyyyy);
         hearingDateWebDateField.setEditable(false);
+        hearingDateWebDateField.setCalendarCustomizer((final WebCalendar calendar) -> {
+            calendar.setStartWeekFromSunday(true);
+        });
         panel.setBorder(BorderFactory.createEtchedBorder());
         panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
 
@@ -895,6 +907,9 @@ public class questionsCMDSPanel extends JDialog {
         hearingDateServedWebDateField.setPreferredSize(new Dimension(150, 25));
         hearingDateServedWebDateField.setDateFormat(Global.mmddyyyy);
         hearingDateServedWebDateField.setEditable(false);
+        hearingDateServedWebDateField.setCalendarCustomizer((final WebCalendar calendar) -> {
+            calendar.setStartWeekFromSunday(true);
+        });
         panel.setBorder(BorderFactory.createEtchedBorder());
         panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
 
@@ -1029,6 +1044,9 @@ public class questionsCMDSPanel extends JDialog {
         firstLetterSentWebDateField.setPreferredSize(new Dimension(150, 25));
         firstLetterSentWebDateField.setDateFormat(Global.mmddyyyy);
         firstLetterSentWebDateField.setEditable(false);
+        firstLetterSentWebDateField.setCalendarCustomizer((final WebCalendar calendar) -> {
+            calendar.setStartWeekFromSunday(true);
+        });
         panel.setBorder(BorderFactory.createEtchedBorder());
         panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
 
@@ -1142,6 +1160,9 @@ public class questionsCMDSPanel extends JDialog {
         stayDateWebDateField.setPreferredSize(new Dimension(150, 25));
         stayDateWebDateField.setDateFormat(Global.mmddyyyy);
         stayDateWebDateField.setEditable(false);
+        stayDateWebDateField.setCalendarCustomizer((final WebCalendar calendar) -> {
+            calendar.setStartWeekFromSunday(true);
+        });
         panel.setBorder(BorderFactory.createEtchedBorder());
         panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
 
@@ -1210,6 +1231,9 @@ public class questionsCMDSPanel extends JDialog {
         lastUpdateWebDateField.setPreferredSize(new Dimension(150, 25));
         lastUpdateWebDateField.setDateFormat(Global.mmddyyyy);
         lastUpdateWebDateField.setEditable(false);
+        lastUpdateWebDateField.setCalendarCustomizer((final WebCalendar calendar) -> {
+            calendar.setStartWeekFromSunday(true);
+        });
         panel.setBorder(BorderFactory.createEtchedBorder());
         panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
 
@@ -1242,6 +1266,9 @@ public class questionsCMDSPanel extends JDialog {
         matterContinuedWebDateField.setPreferredSize(new Dimension(150, 25));
         matterContinuedWebDateField.setDateFormat(Global.mmddyyyy);
         matterContinuedWebDateField.setEditable(false);
+        matterContinuedWebDateField.setCalendarCustomizer((final WebCalendar calendar) -> {
+            calendar.setStartWeekFromSunday(true);
+        });
         panel.setBorder(BorderFactory.createEtchedBorder());
         panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
 
@@ -1274,6 +1301,9 @@ public class questionsCMDSPanel extends JDialog {
         settleMentDueWebDateField.setPreferredSize(new Dimension(150, 25));
         settleMentDueWebDateField.setDateFormat(Global.mmddyyyy);
         settleMentDueWebDateField.setEditable(false);
+        settleMentDueWebDateField.setCalendarCustomizer((final WebCalendar calendar) -> {
+            calendar.setStartWeekFromSunday(true);
+        });
         panel.setBorder(BorderFactory.createEtchedBorder());
         panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
 
@@ -1555,6 +1585,9 @@ public class questionsCMDSPanel extends JDialog {
         dateFiledWebDateField.setPreferredSize(new Dimension(150, 25));
         dateFiledWebDateField.setDateFormat(Global.mmddyyyy);
         dateFiledWebDateField.setEditable(false);
+        dateFiledWebDateField.setCalendarCustomizer((final WebCalendar calendar) -> {
+            calendar.setStartWeekFromSunday(true);
+        });
         panel.setBorder(BorderFactory.createEtchedBorder());
         panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
 
@@ -1678,6 +1711,9 @@ public class questionsCMDSPanel extends JDialog {
         datePOSentWebDateField.setPreferredSize(new Dimension(150, 25));
         datePOSentWebDateField.setDateFormat(Global.mmddyyyy);
         datePOSentWebDateField.setEditable(false);
+        datePOSentWebDateField.setCalendarCustomizer((final WebCalendar calendar) -> {
+            calendar.setStartWeekFromSunday(true);
+        });
         panel.setBorder(BorderFactory.createEtchedBorder());
         panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
 
@@ -1885,6 +1921,9 @@ public class questionsCMDSPanel extends JDialog {
         dateRequestedWebDateField.setDateFormat(Global.mmddyyyy);
         dateRequestedWebDateField.setEditable(false);
         dateRequestedWebDateField.setPreferredSize(new Dimension(150, 25));
+        dateRequestedWebDateField.setCalendarCustomizer((final WebCalendar calendar) -> {
+            calendar.setStartWeekFromSunday(true);
+        });
         panel.setBorder(BorderFactory.createEtchedBorder());
         panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
 
@@ -1957,6 +1996,9 @@ public class questionsCMDSPanel extends JDialog {
         dateRequestedExtensionWebDateField.setPreferredSize(new Dimension(150, 25));
         dateRequestedExtensionWebDateField.setDateFormat(Global.mmddyyyy);
         dateRequestedExtensionWebDateField.setEditable(false);
+        dateRequestedExtensionWebDateField.setCalendarCustomizer((final WebCalendar calendar) -> {
+            calendar.setStartWeekFromSunday(true);
+        });
         panel.setBorder(BorderFactory.createEtchedBorder());
         panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
 

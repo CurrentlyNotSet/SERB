@@ -94,7 +94,8 @@ public class ActivityPanel extends javax.swing.JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if(actvityTable.getSelectedRow() >= 0) {
-                    String filePath = actvityTable.getValueAt(actvityTable.getSelectedRow(), 5).toString();
+                    String filePath = actvityTable.getValueAt(actvityTable.getSelectedRow(), 7) != null ? actvityTable.getValueAt(actvityTable.getSelectedRow(), 7).toString() : "";
+                    
 
                     if (e.getClickCount() == 2 && !filePath.equals("") && actvityTable.getSelectedColumn() == 5 && e.getButton() == MouseEvent.BUTTON1) {
 
@@ -116,7 +117,8 @@ public class ActivityPanel extends javax.swing.JPanel {
                         Audit.addAuditEntry("Viewing Activty Detail for ID: " + actvityTable.getValueAt(actvityTable.getSelectedRow(), 6).toString());
                         new DetailedActivityDialog((JFrame) Global.root.getRootPane().getParent(),
                                 true,
-                                actvityTable.getValueAt(actvityTable.getSelectedRow(), 6).toString());
+                                actvityTable.getValueAt(actvityTable.getSelectedRow(), 6).toString(),
+                                actvityTable.getValueAt(actvityTable.getSelectedRow(), 4).toString());
                         loadAllActivity();
                     }
                 }
@@ -156,6 +158,10 @@ public class ActivityPanel extends javax.swing.JPanel {
         actvityTable.getColumnModel().getColumn(6).setPreferredWidth(0);
         actvityTable.getColumnModel().getColumn(6).setMinWidth(0);
         actvityTable.getColumnModel().getColumn(6).setMaxWidth(0);
+        
+        actvityTable.getColumnModel().getColumn(7).setPreferredWidth(0);
+        actvityTable.getColumnModel().getColumn(7).setMinWidth(0);
+        actvityTable.getColumnModel().getColumn(7).setMaxWidth(0);
     }
 
     /**
@@ -165,9 +171,11 @@ public class ActivityPanel extends javax.swing.JPanel {
      */
     private void loadActivity(String searchTerm) {
 
+        
         Audit.addAuditEntry("Searched Activty for " + searchTerm);
 
         DefaultTableModel model = (DefaultTableModel) actvityTable.getModel();
+        
         model.setRowCount(0);
 
         for (Object activty1 : activty) {
@@ -177,10 +185,10 @@ public class ActivityPanel extends javax.swing.JPanel {
                     || act.user.toLowerCase().contains(searchTerm.toLowerCase())) {
                 if(act.fileName == null) {
                     if (!documentsOnlyCheckbox.isSelected()){
-                        model.addRow(new Object[] {act.date, act.action, act.comment, act.from, act.user, "", act.id});
+                        model.addRow(new Object[] {act.date, act.action, act.comment, act.from, act.user, "", act.id, act.fileName});
                     }
                 } else {
-                    model.addRow(new Object[] {act.date, act.action, act.comment, act.from, act.user, aboutIcon, act.id});
+                    model.addRow(new Object[] {act.date, act.action, act.comment, act.from, act.user, aboutIcon, act.id, act.fileName});
                 }
             }
         }
@@ -226,11 +234,11 @@ public class ActivityPanel extends javax.swing.JPanel {
 
             if(act.fileName == null) {
                 if (!documentsOnlyCheckbox.isSelected()){
-                    model.addRow(new Object[] {act.date, act.action, act.comment, act.from, act.user, "", act.id});
+                    model.addRow(new Object[] {act.date, act.action, act.comment, act.from, act.user, "", act.id, act.fileName});
                 }
             } else {
                 actvityTable.getColumnModel().getColumn(5).setCellRenderer(new ImageRenderer());
-                model.addRow(new Object[] {act.date, act.action, act.comment, act.from, act.user, act.fileName.trim(), act.id});
+                model.addRow(new Object[] {act.date, act.action, act.comment, act.from, act.user, act.fileName.trim(), act.id, act.fileName});
             }
         }
 
@@ -260,11 +268,11 @@ public class ActivityPanel extends javax.swing.JPanel {
 
                 if(act.fileName == null) {
                     if (!documentsOnlyCheckbox.isSelected()){
-                        model.addRow(new Object[] {act.date, act.action, act.comment, act.from, act.user, "", act.id});
+                        model.addRow(new Object[] {act.date, act.action, act.comment, act.from, act.user, "", act.id, act.fileName});
                     }
                 } else {
                     actvityTable.getColumnModel().getColumn(5).setCellRenderer(new ImageRenderer());
-                    model.addRow(new Object[] {act.date, act.action, act.comment, act.from, act.user, act.fileName.trim(), act.id});
+                    model.addRow(new Object[] {act.date, act.action, act.comment, act.from, act.user, act.fileName.trim(), act.id, act.fileName});
                 }
             }
         }
@@ -313,14 +321,14 @@ public class ActivityPanel extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Date", "Activity", "Comments", "From", "User", "", "id"
+                "Date", "Activity", "Comments", "From", "User", "", "id", "fileName"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Byte.class, java.lang.Object.class
+                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Byte.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -336,6 +344,7 @@ public class ActivityPanel extends javax.swing.JPanel {
         if (actvityTable.getColumnModel().getColumnCount() > 0) {
             actvityTable.getColumnModel().getColumn(5).setResizable(false);
             actvityTable.getColumnModel().getColumn(6).setResizable(false);
+            actvityTable.getColumnModel().getColumn(7).setResizable(false);
         }
 
         clearSearchButton.setText("Clear");

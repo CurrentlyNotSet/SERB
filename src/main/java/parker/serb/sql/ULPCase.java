@@ -1011,9 +1011,7 @@ public class ULPCase {
                 if(caseNumberRS.getInt("aljID") != 0) {
                     to = User.getNameByID(caseNumberRS.getInt("aljID"));
                     DocketNotifications.addNotification(caseNumber, "ULP", caseNumberRS.getInt("aljID"));
-                } else if(caseNumberRS.getInt("investigatorID") != 0) {
-                    to = User.getNameByID(caseNumberRS.getInt("investigatorID"));
-                }
+                } 
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);

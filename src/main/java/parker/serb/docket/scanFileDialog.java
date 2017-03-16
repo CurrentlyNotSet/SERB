@@ -72,8 +72,30 @@ public class scanFileDialog extends javax.swing.JDialog {
     }
     
     private void loadData(String section, String file, String time) {
+        if(section.equals("ORG")) {
+            orgNameComboBox.removeAllItems();
+            orgNameComboBox.addItem("");
+            
+            List caseNumberList = ORGCase.loadORGNames();
+
+            caseNumberList.stream().forEach((caseNumber) -> {
+                orgNameComboBox.addItem(caseNumber.toString());
+            });
+        }
+        
+        if(section.equals("CSC")) {
+            orgNameComboBox.removeAllItems();
+            orgNameComboBox.addItem("");
+            
+            List caseNumberList = CSCCase.loadCSCNames();
+
+            caseNumberList.stream().forEach((caseNumber) -> {
+                orgNameComboBox.addItem(caseNumber.toString());
+            });
+        }
+        
         fileNameTextBox.setText(file);
-        loadToComboBox();
+        loadToComboBox(section);
         loadTypeComboBox();
         scanDateTextBox.setText(time.split(" ")[0]);
         hourTextBox.setText(time.split(" ")[1].split(":")[0]);
@@ -218,8 +240,14 @@ public class scanFileDialog extends javax.swing.JDialog {
         }
     }
     
-    private void loadToComboBox() {
-        List userList = User.loadSectionDropDowns(selectedSection);
+    private void loadToComboBox(String section) {
+        List userList = null;
+        
+        if(section.equals("REP") || section.equals("MED") || section.equals("ULP")) {
+            userList = User.loadSectionDropDownsPlusALJ(section);
+        } else {
+            userList = User.loadSectionDropDowns(section);
+        }
         
         toComboBox.setMaximumRowCount(6);
         
@@ -517,9 +545,9 @@ public class scanFileDialog extends javax.swing.JDialog {
                         .addComponent(jLabel8)
                         .addComponent(caseNumberTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(orgNameLabel)
-                        .addComponent(orgNameComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(orgNameComboBox)
+                        .addComponent(orgNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel2)
