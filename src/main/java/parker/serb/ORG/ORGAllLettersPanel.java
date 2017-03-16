@@ -181,7 +181,7 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
             partyList = CaseParty.loadORGPartiesByCase("ORG", item.orgNumber);
             for (CaseParty party : partyList) {
                 if (party.caseRelation.equals("Representative")) {
-                    if (item.orgEmail != null) {
+                    if (party.emailAddress != null) {
                         EmailNumber++;
                         if (!repVia.trim().equals("")) {
                             repVia += ", ";
@@ -286,7 +286,7 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
                     for (CaseParty party : partyList) {
                         if (party.caseRelation.equals("Representative")) {
 
-                            if (item.orgEmail != null) {
+                            if (party.emailAddress != null) {
                                 int emailID = insertEmail(template, item.orgNumber, party.emailAddress);
                                 insertGeneratedAttachementEmail(emailID, docName, true);
                                 if (!attachDocName.equals("")) {
