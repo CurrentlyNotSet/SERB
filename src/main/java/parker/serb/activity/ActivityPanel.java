@@ -94,7 +94,8 @@ public class ActivityPanel extends javax.swing.JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if(actvityTable.getSelectedRow() >= 0) {
-                    String filePath = actvityTable.getValueAt(actvityTable.getSelectedRow(), 7).toString();
+                    String filePath = actvityTable.getValueAt(actvityTable.getSelectedRow(), 7) != null ? actvityTable.getValueAt(actvityTable.getSelectedRow(), 7).toString() : "";
+                    
 
                     if (e.getClickCount() == 2 && !filePath.equals("") && actvityTable.getSelectedColumn() == 5 && e.getButton() == MouseEvent.BUTTON1) {
 
