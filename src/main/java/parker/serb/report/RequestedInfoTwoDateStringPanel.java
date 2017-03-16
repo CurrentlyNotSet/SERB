@@ -34,18 +34,18 @@ public class RequestedInfoTwoDateStringPanel extends javax.swing.JDialog {
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }
-    
+
     private void setActive(String reportName, String type) {
-        if (type.equals("exact")){
+        if (type.equals("exact")) {
             textBoxLabel.setText("Equals:");
-        } else if (type.equals("like")){
+        } else if (type.equals("like")) {
             textBoxLabel.setText("Contains:");
         }
-        
+
         reportLabel.setText(reportName);
         generateButton();
     }
-    
+
     private void generateButton() {
         if (startDateField.getText().trim().equals("")
                 || endDateField.getText().trim().equals("")
@@ -216,7 +216,7 @@ public class RequestedInfoTwoDateStringPanel extends javax.swing.JDialog {
     }//GEN-LAST:event_CancelButtonActionPerformed
 
     private void GenerateReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GenerateReportButtonActionPerformed
-        GenerateReport.generateTwoDatesIDReport(startDateField.getText(), endDateField.getText(), likeTextField.getText(), report);
+        GenerateReport.generateTwoDatesExactStringReport(startDateField.getText(), endDateField.getText(), likeTextField.getText(), report);
     }//GEN-LAST:event_GenerateReportButtonActionPerformed
 
     private void startDateFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startDateFieldActionPerformed
