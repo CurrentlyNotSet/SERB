@@ -77,7 +77,7 @@ public class StringUtilities {
         }
         return fullName.trim();
     }
-    
+
     public static String buildCasePartyNameWithPrefix(CaseParty item) {
         String fullName = "";
         if (item.prefix != null) {
@@ -160,6 +160,43 @@ public class StringUtilities {
         addressBlock += System.lineSeparator() + (item.city == null ? "" : item.city)
                 + ", " + (item.stateCode == null ? "" : item.stateCode)
                 + " " + (item.zipcode == null ? "" : item.zipcode);
+
+        return addressBlock.trim();
+    }
+
+    public static String buildPartyBlockULPInvestigatorReport(CaseParty item) {
+        String addressBlock = "";
+
+        addressBlock += buildCasePartyForAddressBlock(item);
+        if (item.address1 != null) {
+            if (!item.address1.equals("")) {
+                addressBlock += System.lineSeparator() + item.address1;
+            }
+        }
+        if (item.address2 != null) {
+            if (!item.address2.equals("")) {
+                addressBlock += System.lineSeparator() + item.address2;
+            }
+        }
+        if (item.address3 != null) {
+            if (!item.address3.equals("")) {
+                addressBlock += System.lineSeparator() + item.address3;
+            }
+        }
+        addressBlock += System.lineSeparator() + (item.city == null ? "" : item.city)
+                + ", " + (item.stateCode == null ? "" : item.stateCode)
+                + " " + (item.zipcode == null ? "" : item.zipcode);
+
+        if (item.phone1 != null) {
+            if (!item.phone1.equals("")) {
+                addressBlock += System.lineSeparator() + item.phone1;
+            }
+        }
+        if (item.phone2 != null) {
+            if (!item.phone2.equals("")) {
+                addressBlock += System.lineSeparator() + item.phone2;
+            }
+        }
 
         return addressBlock.trim();
     }

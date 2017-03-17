@@ -93,7 +93,7 @@ public class PublicRecordsEmailPanel extends javax.swing.JDialog {
                 Global.activeSection.equals("CSC")){
             subjectTextbox.setText("Public Records Request");
         } else {
-            subjectTextbox.setText("Public Records Request for case #" + NumberFormatService.generateFullCaseNumber());
+            subjectTextbox.setText("Public Records Request for Case #" + NumberFormatService.generateFullCaseNumber());
         }
     }
 

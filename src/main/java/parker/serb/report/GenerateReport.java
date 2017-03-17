@@ -239,6 +239,7 @@ public class GenerateReport {
         hash.put("caseTypeREP", generateCaseTypeListBySection("REP"));
         hash.put("caseTypeULP", generateCaseTypeListBySection("ULP"));
         hash.put("caseTypeCMDS", generateCaseTypeListBySection("CMDS"));
+        hash.put("activeSection", Global.activeSection);
         
         String jasperFileName = Global.reportingPath  + report.section + File.separator + report.fileName;
         

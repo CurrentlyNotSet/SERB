@@ -145,6 +145,7 @@ public class RequestedInfoDropdownPanel extends javax.swing.JDialog {
             case "UserID":
             case "InvestigatorID":
             case "ActivityType":
+            case "SectionUserID":
                 Item item = (Item) ComboBox.getSelectedItem();
                 String comboBoxID = item.getValue().toString();
                 GenerateReport.generateIDReport(comboBoxID, report);
