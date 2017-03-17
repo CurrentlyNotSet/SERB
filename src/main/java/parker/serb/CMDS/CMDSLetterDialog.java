@@ -11,6 +11,7 @@ import java.io.File;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import parker.serb.Global;
+import parker.serb.letterGeneration.GenerateLetterNoQueuePanel;
 import parker.serb.letterGeneration.LetterGenerationPanel;
 import parker.serb.sql.Audit;
 import parker.serb.sql.CMDSDocuments;
@@ -46,6 +47,7 @@ public class CMDSLetterDialog extends javax.swing.JDialog {
             ReportAndRecsMainComboBox.setSelectedItem("");
             POQuestionsSubComboBox.setSelectedItem(new Item<>("0", ""));
             ReportAndRecsSubComboBox.setSelectedItem(new Item<>("0", ""));
+            specialtyDocumentsComboBox.setSelectedItem(new Item<>("0", ""));
             POQuestionsSubComboBox.setEnabled(false);
             ReportAndRecsSubComboBox.setEnabled(false);
 
@@ -58,6 +60,7 @@ public class CMDSLetterDialog extends javax.swing.JDialog {
             BOLettersMainComboBox.setSelectedItem("");
             ReportAndRecsSubComboBox.setSelectedItem(new Item<>("0", ""));
             BOLettersSubComboBox.setSelectedItem(new Item<>("0", ""));
+            specialtyDocumentsComboBox.setSelectedItem(new Item<>("0", ""));
             ReportAndRecsSubComboBox.setEnabled(false);
             BOLettersSubComboBox.setEnabled(false);
 
@@ -70,10 +73,25 @@ public class CMDSLetterDialog extends javax.swing.JDialog {
             POQuestionsMainComboBox.setSelectedItem("");
             BOLettersSubComboBox.setSelectedItem(new Item<>("0", ""));
             POQuestionsSubComboBox.setSelectedItem(new Item<>("0", ""));
+            specialtyDocumentsComboBox.setSelectedItem(new Item<>("0", ""));
             BOLettersSubComboBox.setEnabled(false);
             POQuestionsSubComboBox.setEnabled(false);
 
             loadReportRecsSubDropDown();
+            generateButton.setEnabled(false);
+        });
+
+        specialtyDocumentsComboBox.addItemListener((ItemEvent e) -> {
+            BOLettersMainComboBox.setSelectedItem("");
+            POQuestionsMainComboBox.setSelectedItem("");
+            ReportAndRecsMainComboBox.setSelectedItem("");
+            ReportAndRecsSubComboBox.setSelectedItem(new Item<>("0", ""));
+            BOLettersSubComboBox.setSelectedItem(new Item<>("0", ""));
+            POQuestionsSubComboBox.setSelectedItem(new Item<>("0", ""));
+            BOLettersSubComboBox.setEnabled(false);
+            ReportAndRecsSubComboBox.setEnabled(false);
+            POQuestionsSubComboBox.setEnabled(false);
+
             generateButton.setEnabled(false);
         });
 
@@ -112,13 +130,15 @@ public class CMDSLetterDialog extends javax.swing.JDialog {
                 generateButton.setEnabled(false);
             }
         });
+
+
     }
 
     private void loadDropDowns() {
         loadBoardOrderMainDropDown();
         loadProceduralOrderMainDropDown();
         loadReportRecsMainDropDown();
-
+        loadSpecalityDropDown();
     }
 
     private void loadBoardOrderMainDropDown() {
@@ -193,27 +213,98 @@ public class CMDSLetterDialog extends javax.swing.JDialog {
         ReportAndRecsSubComboBox.setEnabled(true);
     }
 
-    private void generateDocument() {
-        String selection = "";
-        if (!BOLettersSubComboBox.getSelectedItem().toString().trim().equals("")) {
-            selection = BOLettersSubComboBox.getSelectedItem().toString().trim();
-        } else if (!POQuestionsSubComboBox.getSelectedItem().toString().trim().equals("")) {
-            selection = POQuestionsSubComboBox.getSelectedItem().toString().trim();
-        } else if (!ReportAndRecsSubComboBox.getSelectedItem().toString().trim().equals("")) {
-            selection = ReportAndRecsSubComboBox.getSelectedItem().toString().trim();
+    private void loadSpecalityDropDown() {
+        DefaultComboBoxModel dt = new DefaultComboBoxModel();
+        specialtyDocumentsComboBox.setModel(dt);
+        specialtyDocumentsComboBox.addItem(new Item<>("0", ""));
+
+        List<CMDSDocuments> letterList = CMDSDocuments.findDocumentsBySubCategories("Specialty");
+        for (CMDSDocuments letter : letterList) {
+            specialtyDocumentsComboBox.addItem(new Item<>(String.valueOf(letter.ID), letter.LetterName));
         }
+        specialtyDocumentsComboBox.setSelectedItem(new Item<>("0", ""));
+        specialtyDocumentsComboBox.setEnabled(true);
+    }
 
-        if (!"".equals(selection)) {
-            CMDSDocuments template = CMDSDocuments.findDocumentByName(selection);
-            File templateFile = new File(Global.templatePath + Global.activeSection + File.separator + template.Location);
-
-            if (templateFile.exists()){
-                Audit.addAuditEntry("Generated CMDS Letter: " + templateFile);
-                new LetterGenerationPanel(Global.root, true, null, template);
-            } else {
-                WebOptionPane.showMessageDialog(Global.root, "<html><center> Sorry, unable to locate template. <br><br>" + template.Location + "</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
+    private void generateDocument() {
+        String selectionName = "";
+        int selectionID = 0;
+        if (!BOLettersSubComboBox.getSelectedItem().toString().trim().equals("")) {
+            Item item = (Item) BOLettersSubComboBox.getSelectedItem();
+            selectionID = Integer.parseInt(item.getValue().toString());
+            selectionName = BOLettersSubComboBox.getSelectedItem().toString().trim();
+        } else if (!POQuestionsSubComboBox.getSelectedItem().toString().trim().equals("")) {
+            Item item = (Item) POQuestionsSubComboBox.getSelectedItem();
+            selectionID = Integer.parseInt(item.getValue().toString());
+            selectionName = POQuestionsSubComboBox.getSelectedItem().toString().trim();
+        } else if (!ReportAndRecsSubComboBox.getSelectedItem().toString().trim().equals("")) {
+            Item item = (Item) ReportAndRecsSubComboBox.getSelectedItem();
+            selectionID = Integer.parseInt(item.getValue().toString());
+            selectionName = ReportAndRecsSubComboBox.getSelectedItem().toString().trim();
+        } else if (!specialtyDocumentsComboBox.getSelectedItem().toString().trim().equals("")) {
+            Item item = (Item) specialtyDocumentsComboBox.getSelectedItem();
+            selectionID = Integer.parseInt(item.getValue().toString());
+            selectionName = specialtyDocumentsComboBox.getSelectedItem().toString().trim();
+            if (selectionName.equalsIgnoreCase("Initial Case Letter")){
+                if (Global.caseType.equalsIgnoreCase("INV")){
+                        selectionName = "Notice of Request for Investigation";
+                        selectionID = 0;
+                    } else {
+                        selectionName = "Notice of Appeal";
+                        selectionID = 0;
+                    }
             }
         }
+
+        if (!"".equals(selectionName) || selectionID > 0) {
+            CMDSDocuments template = null;
+
+            if (selectionID > 0) {
+                template = CMDSDocuments.findDocumentByID(selectionID);
+            } else {
+                template = CMDSDocuments.findDocumentByName(selectionName);
+            }
+
+            if (template != null) {
+                File templateFile = new File(Global.templatePath + Global.activeSection + File.separator + template.Location);
+
+                if (templateFile.exists()) {
+                    Audit.addAuditEntry("Generated CMDS Letter: " + templateFile);
+                    if (specialtyDocumentsComboBox.getSelectedItem().toString().trim().equals("Initial Case Letter")) {
+                        new GenerateLetterNoQueuePanel(Global.root, true, null, template);
+                        if (Global.caseType.equalsIgnoreCase("REC")) {
+                            generateRECdocument();
+                        }
+                    } else {
+                        new LetterGenerationPanel(Global.root, true, null, template);
+                    }
+                } else {
+                    missingTemplateMessage(template);
+                }
+            } else {
+                missingTemplateMessage(template);
+            }
+        }
+    }
+
+    private void generateRECdocument() {
+        CMDSDocuments template = CMDSDocuments.findDocumentByNameAndCategory("Procedural", "Reclassification", "Appellee Reclassification Questionnaire");
+        if (template != null) {
+            File templateFile = new File(Global.templatePath + Global.activeSection + File.separator + template.Location);
+            if (templateFile.exists()) {
+                Audit.addAuditEntry("Generated CMDS Letter: " + templateFile);
+                new GenerateLetterNoQueuePanel(Global.root, true, null, template);
+            } else {
+                missingTemplateMessage(template);
+            }
+        } else {
+            missingTemplateMessage(template);
+        }
+    }
+
+    private void missingTemplateMessage(CMDSDocuments template){
+        WebOptionPane.showMessageDialog(Global.root, "<html><center> Sorry, unable to locate template. <br><br>"
+                    + template.Location + "</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
     }
 
     @SuppressWarnings("unchecked")
@@ -232,6 +323,8 @@ public class CMDSLetterDialog extends javax.swing.JDialog {
         BOLettersSubComboBox = new javax.swing.JComboBox();
         POQuestionsSubComboBox = new javax.swing.JComboBox();
         ReportAndRecsSubComboBox = new javax.swing.JComboBox();
+        jLabel4 = new javax.swing.JLabel();
+        specialtyDocumentsComboBox = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -267,6 +360,14 @@ public class CMDSLetterDialog extends javax.swing.JDialog {
 
         ReportAndRecsSubComboBox.setEnabled(false);
 
+        jLabel4.setText("Specialty:");
+
+        specialtyDocumentsComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                specialtyDocumentsComboBoxActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -287,7 +388,11 @@ public class CMDSLetterDialog extends javax.swing.JDialog {
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(BOLettersSubComboBox, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(POQuestionsSubComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(ReportAndRecsSubComboBox, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(ReportAndRecsSubComboBox, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(specialtyDocumentsComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -313,7 +418,11 @@ public class CMDSLetterDialog extends javax.swing.JDialog {
                 .addComponent(ReportAndRecsMainComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(ReportAndRecsSubComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(specialtyDocumentsComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(generateButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(cancelButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -331,6 +440,18 @@ public class CMDSLetterDialog extends javax.swing.JDialog {
         dispose();
     }//GEN-LAST:event_cancelButtonActionPerformed
 
+    private void specialtyDocumentsComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_specialtyDocumentsComboBoxActionPerformed
+        if (specialtyDocumentsComboBox.getSelectedItem() != null) {
+            if (!specialtyDocumentsComboBox.getSelectedItem().toString().equals("")) {
+                generateButton.setEnabled(true);
+            } else {
+                generateButton.setEnabled(false);
+            }
+        } else {
+            generateButton.setEnabled(false);
+        }
+    }//GEN-LAST:event_specialtyDocumentsComboBoxActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox BOLettersMainComboBox;
     private javax.swing.JComboBox BOLettersSubComboBox;
@@ -343,6 +464,8 @@ public class CMDSLetterDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JComboBox specialtyDocumentsComboBox;
     // End of variables declaration//GEN-END:variables
 }
