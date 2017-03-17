@@ -572,7 +572,7 @@ public class FileService {
                 String fileExtenstion = fileName.substring(fileName.lastIndexOf(".")); //. included
 
 //                String fullType = ActivityType.getFullType(type);
-
+                
                 FileUtils.copyFile(docketFile, new File(caseArchiveFile + File.separator + fileDate + fileExtenstion));
                 
 //                for(int j = 0; j < caseNumbers.length; j++) {
@@ -586,7 +586,8 @@ public class FileService {
                         new Date(),
                         parent,
                         caseArchiveFile + File.separator + fileDate + fileExtenstion,
-                        direction
+                        direction,
+                        caseNumber
                     );
 //                }
 //                switch(section) {
