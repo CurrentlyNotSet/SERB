@@ -153,6 +153,46 @@ public class CMDSCase {
         }
         return orgNameList;
     }
+    
+    public static List getGroupNumberList(String caseNumber) {
+        List orgNameList = new ArrayList<>();
+
+        Statement stmt = null;
+
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select "
+                    + " caseYear, caseType, caseMonth, caseNumber, groupNumber"
+                    + " from CMDSCase"
+                    + " where groupNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, getGroupNumber(caseNumber));
+
+            ResultSet caseNumberRS = preparedStatement.executeQuery();
+
+            while(caseNumberRS.next()) {
+                if(!(caseNumberRS.getString("groupNumber").equals("")
+                        || caseNumberRS.getString("groupNumber").equals("00000000")
+                        || caseNumberRS.getString("groupNumber") == null))
+                {
+                    orgNameList.add(caseNumberRS.getString("caseYear") + "-"
+                        + caseNumberRS.getString("caseType") + "-"
+                        + caseNumberRS.getString("caseMonth") + "-"
+                        + caseNumberRS.getString("caseNumber"));
+                }
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getGroupNumberList();
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return orgNameList;
+    }
 
     public static String getGroupNumber() {
         String note = null;
@@ -174,6 +214,44 @@ public class CMDSCase {
             preparedStatement.setString(2, Global.caseType);
             preparedStatement.setString(3, Global.caseMonth);
             preparedStatement.setString(4, Global.caseNumber);
+
+            ResultSet caseNumberRS = preparedStatement.executeQuery();
+
+            caseNumberRS.next();
+
+            note = caseNumberRS.getString("groupNumber");
+
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getGroupNumber();
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return note;
+    }
+    
+    public static String getGroupNumber(String caseNumber) {
+        String note = null;
+
+        Statement stmt = null;
+
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select groupNumber"
+                    + " from CMDSCase"
+                    + " where caseYear = ?"
+                    + " and caseType = ?"
+                    + " and caseMonth = ?"
+                    + " and caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, caseNumber.split("-")[0]);
+            preparedStatement.setString(2, caseNumber.split("-")[1]);
+            preparedStatement.setString(3, caseNumber.split("-")[2]);
+            preparedStatement.setString(4, caseNumber.split("-")[3]);
 
             ResultSet caseNumberRS = preparedStatement.executeQuery();
 
@@ -297,6 +375,33 @@ public class CMDSCase {
             DbUtils.closeQuietly(stmt);
         }
     }
+    
+    public static void updateAllGroupInventoryStatusLines(String activty, Date date, String caseNumber) {
+        Statement stmt = null;
+
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Update CMDSCase"
+                    + " set inventoryStatusLine = ?,"
+                    + " inventoryStatusDate = ?"
+                    + " where groupNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, activty);
+            preparedStatement.setTimestamp(2, new Timestamp(date.getTime()));
+            preparedStatement.setString(3, getGroupNumber(caseNumber));
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateAllGroupInventoryStatusLines(activty, date);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+    }
 
     public static String getCaseStatus() {
         String caseStatus = "";
@@ -315,6 +420,40 @@ public class CMDSCase {
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, Global.caseYear);
             preparedStatement.setString(2, Global.caseNumber);
+
+            ResultSet caseNumberRS = preparedStatement.executeQuery();
+
+            if(caseNumberRS.next()) {
+                 caseStatus = caseNumberRS.getString("caseStatus");
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getCaseStatus();
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return caseStatus;
+    }
+    
+    public static String getCaseStatus(String caseNumber) {
+        String caseStatus = "";
+
+        Statement stmt = null;
+
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select"
+                    + " caseStatus"
+                    + " from CMDSCase"
+                    + " where caseYear = ? "
+                    + " and caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, caseNumber.split("-")[0]);
+            preparedStatement.setString(2, caseNumber.split("-")[3]);
 
             ResultSet caseNumberRS = preparedStatement.executeQuery();
 
@@ -375,6 +514,50 @@ public class CMDSCase {
         }
         return cmds;
     }
+    
+    public static CMDSCase getRRPOPullDates(String caseNumber) {
+
+        CMDSCase cmds = new CMDSCase();
+
+        Statement stmt = null;
+
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select"
+                    + " pullDateRR,"
+                    + " pullDatePO1,"
+                    + " pullDatePO2,"
+                    + " pullDatePO3,"
+                    + " pullDatePO4"
+                    + " from CMDSCase"
+                    + " where caseYear = ? "
+                    + " and caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, caseNumber.split("-")[0]);
+            preparedStatement.setString(2, caseNumber.split("-")[3]);
+
+            ResultSet caseNumberRS = preparedStatement.executeQuery();
+
+            if(caseNumberRS.next()) {
+                cmds.pullDateRR = caseNumberRS.getTimestamp("pullDateRR");
+                cmds.pullDatePO1 = caseNumberRS.getTimestamp("pullDatePO1");
+                cmds.pullDatePO2 = caseNumberRS.getTimestamp("pullDatePO2");
+                cmds.pullDatePO3 = caseNumberRS.getTimestamp("pullDatePO3");
+                cmds.pullDatePO4 = caseNumberRS.getTimestamp("pullDatePO4");
+            }
+            stmt.close();
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getRRPOPullDates();
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return cmds;
+    }
 
     public static CMDSCase getmailedPODates() {
         CMDSCase cmds = new CMDSCase();
@@ -393,6 +576,43 @@ public class CMDSCase {
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, Global.caseYear);
             preparedStatement.setString(2, Global.caseNumber);
+
+            ResultSet caseNumberRS = preparedStatement.executeQuery();
+
+            if(caseNumberRS.next()) {
+                cmds.mailedPO1 = caseNumberRS.getTimestamp("mailedPO1");
+                cmds.mailedPO2 = caseNumberRS.getTimestamp("mailedPO2");
+                cmds.mailedPO3 = caseNumberRS.getTimestamp("mailedPO3");
+                cmds.mailedPO4 = caseNumberRS.getTimestamp("mailedPO4");
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getmailedPODates();
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return cmds;
+    }
+    
+    public static CMDSCase getmailedPODates(String caseNumber) {
+        CMDSCase cmds = new CMDSCase();
+
+        Statement stmt = null;
+
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select"
+                    + " mailedPO1, mailedPO2, mailedPO3, mailedPO4"
+                    + " from CMDSCase"
+                    + " where caseYear = ? "
+                    + " and caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, caseNumber.split("-")[0]);
+            preparedStatement.setString(2, caseNumber.split("-")[3]);
 
             ResultSet caseNumberRS = preparedStatement.executeQuery();
 
@@ -469,6 +689,39 @@ public class CMDSCase {
             preparedStatement.setString(4, Global.caseType);
             preparedStatement.setString(5, Global.caseMonth);
             preparedStatement.setString(6, Global.caseNumber);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateAllGroupInventoryStatusLines(activty, date);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+    }
+    
+    public static void updateCaseInventoryStatusLines(String activty, Date date, String caseNumber) {
+        Statement stmt = null;
+
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Update CMDSCase"
+                    + " set inventoryStatusLine = ?,"
+                    + " inventoryStatusDate = ?"
+                    + " where caseYear = ?"
+                    + " and caseType = ?"
+                    + " and caseMonth = ?"
+                    + " and caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, activty);
+            preparedStatement.setTimestamp(2, new Timestamp(date.getTime()));
+            preparedStatement.setString(3, caseNumber.split("-")[0]);
+            preparedStatement.setString(4, caseNumber.split("-")[1]);
+            preparedStatement.setString(5, caseNumber.split("-")[2]);
+            preparedStatement.setString(6, caseNumber.split("-")[3]);
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {

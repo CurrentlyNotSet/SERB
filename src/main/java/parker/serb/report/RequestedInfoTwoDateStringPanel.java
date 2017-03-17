@@ -17,6 +17,7 @@ import parker.serb.sql.SMDSDocuments;
 public class RequestedInfoTwoDateStringPanel extends javax.swing.JDialog {
 
     SMDSDocuments report;
+    String type;
 
     /**
      * Creates new form RequestedReportInformationPanel
@@ -24,28 +25,29 @@ public class RequestedInfoTwoDateStringPanel extends javax.swing.JDialog {
      * @param parent
      * @param modal
      * @param reportPassed
-     * @param type
+     * @param typePassed
      */
-    public RequestedInfoTwoDateStringPanel(java.awt.Frame parent, boolean modal, SMDSDocuments reportPassed, String type) {
+    public RequestedInfoTwoDateStringPanel(java.awt.Frame parent, boolean modal, SMDSDocuments reportPassed, String typePassed) {
         super(parent, modal);
         report = reportPassed;
+        type = typePassed;
         initComponents();
-        setActive(report.fileName, type);
+        setActive();
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }
-    
-    private void setActive(String reportName, String type) {
-        if (type.equals("exact")){
+
+    private void setActive() {
+        if (type.equals("exact")) {
             textBoxLabel.setText("Equals:");
-        } else if (type.equals("like")){
+        } else if (type.equals("like")) {
             textBoxLabel.setText("Contains:");
         }
-        
-        reportLabel.setText(reportName);
+
+        reportLabel.setText(report.fileName);
         generateButton();
     }
-    
+
     private void generateButton() {
         if (startDateField.getText().trim().equals("")
                 || endDateField.getText().trim().equals("")
@@ -216,7 +218,12 @@ public class RequestedInfoTwoDateStringPanel extends javax.swing.JDialog {
     }//GEN-LAST:event_CancelButtonActionPerformed
 
     private void GenerateReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GenerateReportButtonActionPerformed
-        GenerateReport.generateTwoDatesIDReport(startDateField.getText(), endDateField.getText(), likeTextField.getText(), report);
+        GenerateReport.generateTwoDatesExactStringReport(
+                startDateField.getText(),
+                endDateField.getText(),
+                (type.equals("like") ? "%" + likeTextField.getText() + "%" : likeTextField.getText()),
+                report
+        );
     }//GEN-LAST:event_GenerateReportButtonActionPerformed
 
     private void startDateFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startDateFieldActionPerformed

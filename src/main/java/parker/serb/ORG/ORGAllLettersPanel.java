@@ -32,7 +32,6 @@ import parker.serb.sql.PostalOut;
 import parker.serb.sql.PostalOutAttachment;
 import parker.serb.sql.SMDSDocuments;
 import parker.serb.util.Item;
-import parker.serb.util.NumberFormatService;
 import parker.serb.util.SlackNotification;
 import parker.serb.util.StringUtilities;
 
@@ -135,27 +134,22 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
         partyList = null;
         Calendar cal = Calendar.getInstance();
 
-        switch (letterComboBox.getSelectedItem().toString()) {
-            case "Tickler 45 days":
-                cal.set(Calendar.DAY_OF_MONTH, 15);
-                cal.add(Calendar.MONTH, 1);
-                cal.add(Calendar.MONTH, -5);
-                processOverdueNumbers(cal);
-                break;
-            case "Tickler 10 days":
-                cal.set(Calendar.DAY_OF_MONTH, 15);
-                cal.add(Calendar.MONTH, -5);
-                processOverdueNumbers(cal);
-                break;
-            case "Tickler 31 days overdue":
-                cal.set(Calendar.DAY_OF_MONTH, 15);
-                cal.add(Calendar.MONTH, -5);
-                cal.add(Calendar.MONTH, -1);
-                processOverdueNumbers(cal);
-                break;
-            default:
-                orgCaseList = ORGCase.getOrgCasesAllLettersDefault();
-                break;
+        if (letterComboBox.getSelectedItem().toString().startsWith("Tickler 45")) {
+            cal.set(Calendar.DAY_OF_MONTH, 15);
+            cal.add(Calendar.MONTH, 1);
+            cal.add(Calendar.MONTH, -5);
+            processOverdueNumbers(cal);
+        } else if (letterComboBox.getSelectedItem().toString().startsWith("Tickler 10")) {
+            cal.set(Calendar.DAY_OF_MONTH, 15);
+            cal.add(Calendar.MONTH, -5);
+            processOverdueNumbers(cal);
+        } else if (letterComboBox.getSelectedItem().toString().startsWith("Tickler 31")) {
+            cal.set(Calendar.DAY_OF_MONTH, 15);
+            cal.add(Calendar.MONTH, -5);
+            cal.add(Calendar.MONTH, -1);
+            processOverdueNumbers(cal);
+        } else {
+            orgCaseList = ORGCase.getOrgCasesAllLettersDefault();
         }
 
         FYEDuringTextField.setText(letterComboBox.getSelectedItem().toString().equals("")
@@ -187,7 +181,7 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
             partyList = CaseParty.loadORGPartiesByCase("ORG", item.orgNumber);
             for (CaseParty party : partyList) {
                 if (party.caseRelation.equals("Representative")) {
-                    if (item.orgEmail != null) {
+                    if (party.emailAddress != null) {
                         EmailNumber++;
                         if (!repVia.trim().equals("")) {
                             repVia += ", ";
@@ -292,7 +286,7 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
                     for (CaseParty party : partyList) {
                         if (party.caseRelation.equals("Representative")) {
 
-                            if (item.orgEmail != null) {
+                            if (party.emailAddress != null) {
                                 int emailID = insertEmail(template, item.orgNumber, party.emailAddress);
                                 insertGeneratedAttachementEmail(emailID, docName, true);
                                 if (!attachDocName.equals("")) {
