@@ -158,38 +158,42 @@ public class CMDSCase {
         List orgNameList = new ArrayList<>();
 
         Statement stmt = null;
+        
+        String groupNumber = getGroupNumber(caseNumber);
 
-        try {
-            stmt = Database.connectToDB().createStatement();
+        if(groupNumber != null) {
+            try {
+                stmt = Database.connectToDB().createStatement();
 
-            String sql = "Select "
-                    + " caseYear, caseType, caseMonth, caseNumber, groupNumber"
-                    + " from CMDSCase"
-                    + " where groupNumber = ?";
+                String sql = "Select "
+                        + " caseYear, caseType, caseMonth, caseNumber, groupNumber"
+                        + " from CMDSCase"
+                        + " where groupNumber = ?";
 
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, getGroupNumber(caseNumber));
+                PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+                preparedStatement.setString(1, groupNumber);
 
-            ResultSet caseNumberRS = preparedStatement.executeQuery();
+                ResultSet caseNumberRS = preparedStatement.executeQuery();
 
-            while(caseNumberRS.next()) {
-                if(!(caseNumberRS.getString("groupNumber").equals("")
-                        || caseNumberRS.getString("groupNumber").equals("00000000")
-                        || caseNumberRS.getString("groupNumber") == null))
-                {
-                    orgNameList.add(caseNumberRS.getString("caseYear") + "-"
-                        + caseNumberRS.getString("caseType") + "-"
-                        + caseNumberRS.getString("caseMonth") + "-"
-                        + caseNumberRS.getString("caseNumber"));
+                while(caseNumberRS.next()) {
+                    if(!(caseNumberRS.getString("groupNumber").equals("")
+                            || caseNumberRS.getString("groupNumber").equals("00000000")
+                            || caseNumberRS.getString("groupNumber") == null))
+                    {
+                        orgNameList.add(caseNumberRS.getString("caseYear") + "-"
+                            + caseNumberRS.getString("caseType") + "-"
+                            + caseNumberRS.getString("caseMonth") + "-"
+                            + caseNumberRS.getString("caseNumber"));
+                    }
                 }
+            } catch (SQLException ex) {
+                SlackNotification.sendNotification(ex);
+                if(ex.getCause() instanceof SQLServerException) {
+                    getGroupNumberList();
+                }
+            } finally {
+                DbUtils.closeQuietly(stmt);
             }
-        } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex);
-            if(ex.getCause() instanceof SQLServerException) {
-                getGroupNumberList();
-            }
-        } finally {
-            DbUtils.closeQuietly(stmt);
         }
         return orgNameList;
     }
@@ -255,10 +259,9 @@ public class CMDSCase {
 
             ResultSet caseNumberRS = preparedStatement.executeQuery();
 
-            caseNumberRS.next();
-
-            note = caseNumberRS.getString("groupNumber");
-
+            if(caseNumberRS.next()) {
+                note = caseNumberRS.getString("groupNumber");
+            }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
