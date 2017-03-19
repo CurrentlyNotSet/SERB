@@ -229,7 +229,7 @@ public class RootPanel extends javax.swing.JFrame {
                 jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
                 oRGHeaderPanel2.loadCases();
                 if(ORGCase.validateOrg(firstCaseNumber) && initialLoad) {
-                    oRGHeaderPanel2.getjComboBox2().setSelectedItem(ORGCase.getORGName());
+                    oRGHeaderPanel2.getjComboBox2().setSelectedItem(ORGCase.getORGName(firstCaseNumber));
                 } else {
                     Global.caseYear = null;
                     Global.caseType = null;
@@ -271,7 +271,7 @@ public class RootPanel extends javax.swing.JFrame {
                 jLabel1.setIcon(new ImageIcon(getClass().getResource("/SPBRSeal.png")));
                 cSCHeaderPanel1.loadCases();
                 if(CSCCase.validateCSC(firstCaseNumber) && initialLoad) {
-                    cSCHeaderPanel1.getjComboBox2().setSelectedItem(CSCCase.getCSCName());
+                    cSCHeaderPanel1.getjComboBox2().setSelectedItem(CSCCase.getCSCName(firstCaseNumber));
                 } else {
                     Global.caseYear = null;
                     Global.caseType = null;

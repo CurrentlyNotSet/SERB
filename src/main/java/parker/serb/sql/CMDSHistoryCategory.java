@@ -155,6 +155,8 @@ public class CMDSHistoryCategory {
         return list;
     }
     
+    
+    
     public static List<CMDSHistoryCategory> loadActiveHearingHistoryDescriptions() {
         List<CMDSHistoryCategory> list = new ArrayList<>();
 
@@ -245,6 +247,35 @@ public class CMDSHistoryCategory {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 getHeaingHistoryDescriptionByID(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return item;
+    }
+    
+    public static String getCategotyByLetter(String type) {
+        String item = "";
+
+        Statement stmt = null;
+        
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT * FROM HearingHistoryCategory WHERE entryType = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, type);
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                item = rs.getString("entryType") + " - " + rs.getString("description");
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getCategotyByLetter(type);
             } 
         } finally {
             DbUtils.closeQuietly(stmt);
