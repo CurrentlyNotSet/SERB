@@ -129,9 +129,15 @@ public class Activity {
         }
     }
 
-    public static void addCMDSActivty(String action, String fileName, Date date, String caseNumber) {
+    public static void addCMDSActivty(String action, String fileName, Date date,
+            String caseNumber, String from, String to, String category, String description) {
         try {
             Statement stmt = null;
+            String type = null;
+            
+            if(category != null && description != null) {
+                type = category + " - " + description;
+            }
 
             String timeString = Global.mmddyyyyhhmma.format(new Date()).substring(10); // 10 is the beginIndex of time here
             String startUserDateString = Global.mmddyyyy.format(date);
@@ -145,18 +151,19 @@ public class Activity {
                 String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
                 PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-                preparedStatement.setString(1, caseNumber.split("-")[0]);
-                preparedStatement.setString(2, caseNumber.split("-")[1]);
-                preparedStatement.setString(3, caseNumber.split("-")[2]);
-                preparedStatement.setString(4, caseNumber.split("-")[3]);
-                preparedStatement.setInt(5, Global.activeUser.id);
-                preparedStatement.setTimestamp(6, new Timestamp(date.getTime()));
-                preparedStatement.setString(7, action.equals("") ? null : action);
-                preparedStatement.setString(8, fileName == null || fileName.equals("") ? null : FilenameUtils.getName(fileName));
-                preparedStatement.setString(9, null);
-                preparedStatement.setString(10, null);
-                preparedStatement.setString(11, null);
-                preparedStatement.setString(12, null);
+                preparedStatement.setString(1, caseNumber.split("-")[0]); //caseYear
+                preparedStatement.setString(2, caseNumber.split("-")[1]); //caseType
+                preparedStatement.setString(3, caseNumber.split("-")[2]); //caseMonth
+                preparedStatement.setString(4, caseNumber.split("-")[3]); //caseNumber
+                preparedStatement.setInt(5, Global.activeUser.id); //user
+                preparedStatement.setTimestamp(6, new Timestamp(date.getTime())); //date
+                preparedStatement.setString(7, action.equals("") ? null : action); //action
+                preparedStatement.setString(8, fileName == null || fileName.equals("") ?
+                        null : FilenameUtils.getName(fileName)); //fileName
+                preparedStatement.setString(9, from); //from
+                preparedStatement.setString(10, to); //to
+                preparedStatement.setString(11, type); //type
+                preparedStatement.setString(12, null); //comment
                 preparedStatement.setBoolean(13, false);
                 preparedStatement.setBoolean(14, false);
                 preparedStatement.setBoolean(15, true);
@@ -172,7 +179,7 @@ public class Activity {
                 }
             } catch (SQLException ex) {
                 if(ex.getCause() instanceof SQLServerException) {
-                    addCMDSActivty(action, fileName, date, caseNumber);
+                    addCMDSActivty(action, fileName, date, caseNumber, from, to, category, description);
                 } else {
                     SlackNotification.sendNotification(ex);
                 }

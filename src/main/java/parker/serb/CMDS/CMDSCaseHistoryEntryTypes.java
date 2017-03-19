@@ -153,7 +153,7 @@ public class CMDSCaseHistoryEntryTypes {
                 List groupList = CMDSCase.getGroupNumberList();
                 
                 if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                     CMDSCase.updateCaseInventoryStatusLines(activity, date);
                 }
                 
@@ -163,7 +163,7 @@ public class CMDSCaseHistoryEntryTypes {
                     boolean updateAllCases = update.isUpdateStatus();
                     
                     for(int i = 0; i < groupList.size(); i++) {
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
 
                         if(updateAllCases) {
                             CMDSCase.updateAllGroupInventoryStatusLines(activity, date);
@@ -174,10 +174,10 @@ public class CMDSCaseHistoryEntryTypes {
                 List groupList = CMDSCase.getGroupNumberList();
                 
                 if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                 } else if (groupList.size() > 0) {
                     for(int i = 0; i < groupList.size(); i++) {
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                     }
                 }
             }
@@ -204,7 +204,7 @@ public class CMDSCaseHistoryEntryTypes {
                 List groupList = CMDSCase.getGroupNumberList();
                 
                 if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                     CMDSCase.updateCaseByTypeCEntry(date, NumberFormatService.generateFullCaseNumber());
                     CMDSCase.updateCaseInventoryStatusLines(activity, date);
                 }
@@ -215,7 +215,7 @@ public class CMDSCaseHistoryEntryTypes {
                     boolean updateAllCases = update.isUpdateStatus();
                     
                     for(int i = 0; i < groupList.size(); i++) {
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                         CMDSCase.updateCaseByTypeCEntry(date, groupList.get(i).toString());
                         if(updateAllCases) {
                             CMDSCase.updateAllGroupInventoryStatusLines(activity, date);
@@ -227,11 +227,11 @@ public class CMDSCaseHistoryEntryTypes {
                 
                 if(groupList.isEmpty()) {
                     CMDSCase.updateCaseByTypeCEntry(date, NumberFormatService.generateFullCaseNumber());
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                 } else if (groupList.size() > 0) {
                     for(int i = 0; i < groupList.size(); i++) {
                         CMDSCase.updateCaseByTypeCEntry(date, groupList.get(i).toString());
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                     }
                 }
             }
@@ -285,7 +285,7 @@ public class CMDSCaseHistoryEntryTypes {
                     List groupList = CMDSCase.getGroupNumberList();
 
                     if(groupList.isEmpty()) {
-                        Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                        Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                         CMDSCase.updateCaseByTypeDEntry(result.getResult(), MailedBO, caseStatus, NumberFormatService.generateFullCaseNumber());
                         CMDSCase.updateCaseInventoryStatusLines(activity, date);
                     }
@@ -296,7 +296,7 @@ public class CMDSCaseHistoryEntryTypes {
                         boolean updateAllCases = update.isUpdateStatus();
 
                         for(int i = 0; i < groupList.size(); i++) {
-                            Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                            Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                             CMDSCase.updateCaseByTypeDEntry(result.getResult(), MailedBO, caseStatus, groupList.get(i).toString());
                             if(updateAllCases) {
                                 CMDSCase.updateAllGroupInventoryStatusLines(activity, date);
@@ -307,11 +307,11 @@ public class CMDSCaseHistoryEntryTypes {
                     List groupList = CMDSCase.getGroupNumberList();
 
                     if(groupList.isEmpty()) {
-                        Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                        Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                         CMDSCase.updateCaseByTypeDEntry(result.getResult(), MailedBO, caseStatus, NumberFormatService.generateFullCaseNumber());
                     } else if (groupList.size() > 0) {
                         for(int i = 0; i < groupList.size(); i++) {
-                            Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                            Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                             CMDSCase.updateCaseByTypeDEntry(result.getResult(), MailedBO, caseStatus, groupList.get(i).toString());
                         }
                     }
@@ -391,7 +391,7 @@ public class CMDSCaseHistoryEntryTypes {
                 List groupList = CMDSCase.getGroupNumberList();
 
                 if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                     CMDSCase.updateCaseByTypeEEntry(PODate, caseStatus, NumberFormatService.generateFullCaseNumber());
                     CMDSCase.updateCaseInventoryStatusLines(activity, date);
                 }
@@ -402,7 +402,7 @@ public class CMDSCaseHistoryEntryTypes {
                     boolean updateAllCases = update.isUpdateStatus();
 
                     for(int i = 0; i < groupList.size(); i++) {
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                         CMDSCase.updateCaseByTypeEEntry(PODate, caseStatus, groupList.get(i).toString());
                         if(updateAllCases) {
                             CMDSCase.updateAllGroupInventoryStatusLines(activity, date);
@@ -413,11 +413,11 @@ public class CMDSCaseHistoryEntryTypes {
                 List groupList = CMDSCase.getGroupNumberList();
 
                 if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                     CMDSCase.updateCaseByTypeEEntry(PODate, caseStatus, NumberFormatService.generateFullCaseNumber());
                 } else if (groupList.size() > 0) {
                     for(int i = 0; i < groupList.size(); i++) {
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                         CMDSCase.updateCaseByTypeEEntry(PODate, caseStatus, groupList.get(i).toString());
                     }
                 }
@@ -479,7 +479,7 @@ public class CMDSCaseHistoryEntryTypes {
                 List groupList = CMDSCase.getGroupNumberList();
 
                 if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                     CMDSCase.updateCaseByTypeFEntry(rrpoPullDates, NumberFormatService.generateFullCaseNumber());
                     CMDSCase.updateCaseInventoryStatusLines(activity, date);
                 }
@@ -490,7 +490,7 @@ public class CMDSCaseHistoryEntryTypes {
                     boolean updateAllCases = update.isUpdateStatus();
 
                     for(int i = 0; i < groupList.size(); i++) {
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                         CMDSCase.updateCaseByTypeFEntry(rrpoPullDates, groupList.get(i).toString());
                         if(updateAllCases) {
                             CMDSCase.updateAllGroupInventoryStatusLines(activity, date);
@@ -501,11 +501,11 @@ public class CMDSCaseHistoryEntryTypes {
                 List groupList = CMDSCase.getGroupNumberList();
 
                 if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                     CMDSCase.updateCaseByTypeFEntry(rrpoPullDates, NumberFormatService.generateFullCaseNumber());
                 } else if (groupList.size() > 0) {
                     for(int i = 0; i < groupList.size(); i++) {
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                         CMDSCase.updateCaseByTypeFEntry(rrpoPullDates, groupList.get(i).toString());
                     }
                 }
@@ -550,7 +550,7 @@ public class CMDSCaseHistoryEntryTypes {
                 List groupList = CMDSCase.getGroupNumberList();
 
                 if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                     CMDSCase.updateCaseInventoryStatusLines(activity, date);
                 }
 
@@ -560,7 +560,7 @@ public class CMDSCaseHistoryEntryTypes {
                     boolean updateAllCases = update.isUpdateStatus();
 
                     for(int i = 0; i < groupList.size(); i++) {
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                         if(updateAllCases) {
                             CMDSCase.updateAllGroupInventoryStatusLines(activity, date);
                         }
@@ -570,10 +570,10 @@ public class CMDSCaseHistoryEntryTypes {
                 List groupList = CMDSCase.getGroupNumberList();
 
                 if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                 } else if (groupList.size() > 0) {
                     for(int i = 0; i < groupList.size(); i++) {
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                     }
                 }
             }
@@ -617,7 +617,7 @@ public class CMDSCaseHistoryEntryTypes {
                 List groupList = CMDSCase.getGroupNumberList();
 
                 if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                     CMDSCase.updateCaseInventoryStatusLines(activity, date);
                 }
 
@@ -627,7 +627,7 @@ public class CMDSCaseHistoryEntryTypes {
                     boolean updateAllCases = update.isUpdateStatus();
 
                     for(int i = 0; i < groupList.size(); i++) {
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                         if(updateAllCases) {
                             CMDSCase.updateAllGroupInventoryStatusLines(activity, date);
                         }
@@ -637,10 +637,10 @@ public class CMDSCaseHistoryEntryTypes {
                 List groupList = CMDSCase.getGroupNumberList();
 
                 if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                 } else if (groupList.size() > 0) {
                     for(int i = 0; i < groupList.size(); i++) {
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                     }
                 }
             }
@@ -667,7 +667,7 @@ public class CMDSCaseHistoryEntryTypes {
                 List groupList = CMDSCase.getGroupNumberList();
 
                 if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                     CMDSCase.updateCaseInventoryStatusLines(activity, date);
                 }
 
@@ -677,7 +677,7 @@ public class CMDSCaseHistoryEntryTypes {
                     boolean updateAllCases = update.isUpdateStatus();
 
                     for(int i = 0; i < groupList.size(); i++) {
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                         if(updateAllCases) {
                             CMDSCase.updateAllGroupInventoryStatusLines(activity, date);
                         }
@@ -687,10 +687,10 @@ public class CMDSCaseHistoryEntryTypes {
                 List groupList = CMDSCase.getGroupNumberList();
 
                 if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                 } else if (groupList.size() > 0) {
                     for(int i = 0; i < groupList.size(); i++) {
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                     }
                 }
             }
@@ -734,7 +734,7 @@ public class CMDSCaseHistoryEntryTypes {
                 List groupList = CMDSCase.getGroupNumberList();
 
                 if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                     CMDSCase.updateCaseInventoryStatusLines(activity, date);
                 }
 
@@ -744,7 +744,7 @@ public class CMDSCaseHistoryEntryTypes {
                     boolean updateAllCases = update.isUpdateStatus();
 
                     for(int i = 0; i < groupList.size(); i++) {
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                         if(updateAllCases) {
                             CMDSCase.updateAllGroupInventoryStatusLines(activity, date);
                         }
@@ -754,10 +754,10 @@ public class CMDSCaseHistoryEntryTypes {
                 List groupList = CMDSCase.getGroupNumberList();
 
                 if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                 } else if (groupList.size() > 0) {
                     for(int i = 0; i < groupList.size(); i++) {
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                     }
                 }
             }
@@ -784,7 +784,7 @@ public class CMDSCaseHistoryEntryTypes {
                 List groupList = CMDSCase.getGroupNumberList();
 
                 if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                     CMDSCase.updateCaseInventoryStatusLines(activity, date);
                 }
 
@@ -794,7 +794,7 @@ public class CMDSCaseHistoryEntryTypes {
                     boolean updateAllCases = update.isUpdateStatus();
 
                     for(int i = 0; i < groupList.size(); i++) {
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                         if(updateAllCases) {
                             CMDSCase.updateAllGroupInventoryStatusLines(activity, date);
                         }
@@ -804,10 +804,10 @@ public class CMDSCaseHistoryEntryTypes {
                 List groupList = CMDSCase.getGroupNumberList();
 
                 if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                 } else if (groupList.size() > 0) {
                     for(int i = 0; i < groupList.size(); i++) {
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                     }
                 }
             }
@@ -836,7 +836,7 @@ public class CMDSCaseHistoryEntryTypes {
                 List groupList = CMDSCase.getGroupNumberList();
 
                 if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                     CMDSCase.updateCaseInventoryStatusLines(activity, date);
                 }
 
@@ -850,7 +850,7 @@ public class CMDSCaseHistoryEntryTypes {
                     }
 
                     for(int i = 0; i < groupList.size(); i++) {
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                         if(updateAllCases) {
                             CMDSCase.updateAllGroupInventoryStatusLines(activity, date);
                         }
@@ -860,10 +860,10 @@ public class CMDSCaseHistoryEntryTypes {
                 List groupList = CMDSCase.getGroupNumberList();
 
                 if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                 } else if (groupList.size() > 0) {
                     for(int i = 0; i < groupList.size(); i++) {
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                     }
                 }
             }
@@ -896,7 +896,7 @@ public class CMDSCaseHistoryEntryTypes {
                 List groupList = CMDSCase.getGroupNumberList();
 
                 if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                     CMDSCase.updateCaseByTypeMEntry(NumberFormatService.generateFullCaseNumber());
                     CMDSCase.updateCaseInventoryStatusLines(activity, date);
                 }
@@ -911,7 +911,7 @@ public class CMDSCaseHistoryEntryTypes {
                     }
 
                     for(int i = 0; i < groupList.size(); i++) {
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                         CMDSCase.updateCaseByTypeMEntry(groupList.get(i).toString());
                         if(updateAllCases) {
                             CMDSCase.updateAllGroupInventoryStatusLines(activity, date);
@@ -922,11 +922,11 @@ public class CMDSCaseHistoryEntryTypes {
                 List groupList = CMDSCase.getGroupNumberList();
 
                 if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                     CMDSCase.updateCaseByTypeMEntry(NumberFormatService.generateFullCaseNumber());
                 } else if (groupList.size() > 0) {
                     for(int i = 0; i < groupList.size(); i++) {
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                         CMDSCase.updateCaseByTypeMEntry(groupList.get(i).toString());
                     }
                 }
@@ -959,7 +959,7 @@ public class CMDSCaseHistoryEntryTypes {
                 List groupList = CMDSCase.getGroupNumberList();
 
                 if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                     CMDSCase.updateCaseByTypeNEntry(clearWhichDate(clear.getDateType(), clear.getWhichDate()), NumberFormatService.generateFullCaseNumber());
                     CMDSCase.updateCaseInventoryStatusLines(activity, date);
                 }
@@ -974,7 +974,7 @@ public class CMDSCaseHistoryEntryTypes {
                     }
 
                     for(int i = 0; i < groupList.size(); i++) {
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                         CMDSCase.updateCaseByTypeNEntry(clearWhichDate(clear.getDateType(), clear.getWhichDate()), groupList.get(i).toString());
                         if(updateAllCases) {
                             CMDSCase.updateAllGroupInventoryStatusLines(activity, date);
@@ -985,11 +985,11 @@ public class CMDSCaseHistoryEntryTypes {
                 List groupList = CMDSCase.getGroupNumberList();
 
                 if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                     CMDSCase.updateCaseByTypeNEntry(clearWhichDate(clear.getDateType(), clear.getWhichDate()), NumberFormatService.generateFullCaseNumber());
                 } else if (groupList.size() > 0) {
                     for(int i = 0; i < groupList.size(); i++) {
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                         CMDSCase.updateCaseByTypeNEntry(clearWhichDate(clear.getDateType(), clear.getWhichDate()), groupList.get(i).toString());
                     }
                 }
@@ -1036,7 +1036,7 @@ public class CMDSCaseHistoryEntryTypes {
                 List groupList = CMDSCase.getGroupNumberList();
 
                 if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                     CMDSCase.updateCaseInventoryStatusLines(activity, date);
                 }
 
@@ -1050,7 +1050,7 @@ public class CMDSCaseHistoryEntryTypes {
                     }
 
                     for(int i = 0; i < groupList.size(); i++) {
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                         if(updateAllCases) {
                             CMDSCase.updateAllGroupInventoryStatusLines(activity, date);
                         }
@@ -1060,10 +1060,10 @@ public class CMDSCaseHistoryEntryTypes {
                 List groupList = CMDSCase.getGroupNumberList();
 
                 if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                 } else if (groupList.size() > 0) {
                     for(int i = 0; i < groupList.size(); i++) {
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                     }
                 }
             }
@@ -1093,7 +1093,7 @@ public class CMDSCaseHistoryEntryTypes {
                 List groupList = CMDSCase.getGroupNumberList();
 
                 if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                     CMDSCase.updateCaseInventoryStatusLines(activity, date);
                 }
 
@@ -1107,7 +1107,7 @@ public class CMDSCaseHistoryEntryTypes {
                     }
 
                     for(int i = 0; i < groupList.size(); i++) {
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                         if(updateAllCases) {
                             CMDSCase.updateAllGroupInventoryStatusLines(activity, date);
                         }
@@ -1117,10 +1117,10 @@ public class CMDSCaseHistoryEntryTypes {
                 List groupList = CMDSCase.getGroupNumberList();
 
                 if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                 } else if (groupList.size() > 0) {
                     for(int i = 0; i < groupList.size(); i++) {
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                     }
                 }
             }
@@ -1151,7 +1151,7 @@ public class CMDSCaseHistoryEntryTypes {
                 List groupList = CMDSCase.getGroupNumberList();
 
                 if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                     CMDSCase.updateCaseByTypeQEntry(greenCardWhichDate(pullDate.getWhichType()),
                             whichPullDate(pullDate.getWhichType()),
                             pullDate.getSignedDate(),
@@ -1170,7 +1170,7 @@ public class CMDSCaseHistoryEntryTypes {
                     }
 
                     for(int i = 0; i < groupList.size(); i++) {
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                         CMDSCase.updateCaseByTypeQEntry(greenCardWhichDate(pullDate.getWhichType()),
                                 whichPullDate(pullDate.getWhichType()),
                                 pullDate.getSignedDate(),
@@ -1190,7 +1190,7 @@ public class CMDSCaseHistoryEntryTypes {
                             pullDate.getSignedDate(),
                             pullDate.getPullDate(),
                             NumberFormatService.generateFullCaseNumber());
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                 } else if (groupList.size() > 0) {
                     for(int i = 0; i < groupList.size(); i++) {
                         CMDSCase.updateCaseByTypeQEntry(greenCardWhichDate(pullDate.getWhichType()),
@@ -1198,7 +1198,7 @@ public class CMDSCaseHistoryEntryTypes {
                                 pullDate.getSignedDate(),
                                 pullDate.getPullDate(),
                                 groupList.get(i).toString());
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                     }
                 }
             }
@@ -1228,7 +1228,7 @@ public class CMDSCaseHistoryEntryTypes {
                 List groupList = CMDSCase.getGroupNumberList();
 
                 if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                     CMDSCase.updateCaseByTypeREntry(entryDate, NumberFormatService.generateFullCaseNumber());
                     CMDSCase.updateCaseInventoryStatusLines(activity, date);
                 }
@@ -1243,7 +1243,7 @@ public class CMDSCaseHistoryEntryTypes {
                     }
 
                     for(int i = 0; i < groupList.size(); i++) {
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                         CMDSCase.updateCaseByTypeREntry(entryDate, groupList.get(i).toString());
                         if(updateAllCases) {
                             CMDSCase.updateAllGroupInventoryStatusLines(activity, date);
@@ -1255,12 +1255,12 @@ public class CMDSCaseHistoryEntryTypes {
 
                 if(groupList.isEmpty()) {
                     CMDSCase.updateCaseByTypeREntry(entryDate, NumberFormatService.generateFullCaseNumber());
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                     
                 } else if (groupList.size() > 0) {
                     for(int i = 0; i < groupList.size(); i++) {
                         CMDSCase.updateCaseByTypeREntry(entryDate, groupList.get(i).toString());
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                     }
                 }
             }
@@ -1289,7 +1289,7 @@ public class CMDSCaseHistoryEntryTypes {
                 List groupList = CMDSCase.getGroupNumberList();
 
                 if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                     CMDSCase.updateCaseInventoryStatusLines(activity, date);
                 }
 
@@ -1303,7 +1303,7 @@ public class CMDSCaseHistoryEntryTypes {
                     }
 
                     for(int i = 0; i < groupList.size(); i++) {
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                         if(updateAllCases) {
                             CMDSCase.updateAllGroupInventoryStatusLines(activity, date);
                         }
@@ -1313,10 +1313,10 @@ public class CMDSCaseHistoryEntryTypes {
                 List groupList = CMDSCase.getGroupNumberList();
 
                 if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                 } else if (groupList.size() > 0) {
                     for(int i = 0; i < groupList.size(); i++) {
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                     }
                 }
             }
@@ -1348,7 +1348,7 @@ public class CMDSCaseHistoryEntryTypes {
                 List groupList = CMDSCase.getGroupNumberList();
 
                 if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                     CMDSCase.updateCaseByTypeUEntry(pbr.getPbrBox().equals("") ? null : pbr.getPbrBox(),
                             NumberFormatService.generateFullCaseNumber());
                     CMDSCase.updateCaseInventoryStatusLines(activity, date);
@@ -1364,7 +1364,7 @@ public class CMDSCaseHistoryEntryTypes {
                     }
 
                     for(int i = 0; i < groupList.size(); i++) {
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                         CMDSCase.updateCaseByTypeUEntry(pbr.getPbrBox().equals("") ? null : pbr.getPbrBox(),
                             groupList.get(i).toString());
                         if(updateAllCases) {
@@ -1376,14 +1376,14 @@ public class CMDSCaseHistoryEntryTypes {
                 List groupList = CMDSCase.getGroupNumberList();
 
                 if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                     CMDSCase.updateCaseByTypeUEntry(pbr.getPbrBox().equals("") ? null : pbr.getPbrBox(),
                             NumberFormatService.generateFullCaseNumber());
                 } else if (groupList.size() > 0) {
                     for(int i = 0; i < groupList.size(); i++) {
                         CMDSCase.updateCaseByTypeUEntry(pbr.getPbrBox().equals("") ? null : pbr.getPbrBox(),
                             groupList.get(i).toString());
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                     }
                 }
             }
@@ -1421,7 +1421,7 @@ public class CMDSCaseHistoryEntryTypes {
                 List groupList = CMDSCase.getGroupNumberList();
 
                 if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                     CMDSCase.updateCaseByTypeVEntry(whichRemailedDate(remailed.getWhichType()),
                             remailed.getRemailedDate(),
                             pulldate == null ? null : pulldate.getResponseDueDate(),
@@ -1439,7 +1439,7 @@ public class CMDSCaseHistoryEntryTypes {
                     }
 
                     for(int i = 0; i < groupList.size(); i++) {
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                         CMDSCase.updateCaseByTypeVEntry(whichRemailedDate(remailed.getWhichType()),
                                 remailed.getRemailedDate(),
                                 pulldate == null ? null : pulldate.getResponseDueDate(),
@@ -1453,7 +1453,7 @@ public class CMDSCaseHistoryEntryTypes {
                 List groupList = CMDSCase.getGroupNumberList();
 
                 if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                     CMDSCase.updateCaseByTypeVEntry(whichRemailedDate(remailed.getWhichType()),
                             remailed.getRemailedDate(),
                             pulldate == null ? null : pulldate.getResponseDueDate(),
@@ -1464,7 +1464,7 @@ public class CMDSCaseHistoryEntryTypes {
                                 remailed.getRemailedDate(),
                                 pulldate == null ? null : pulldate.getResponseDueDate(),
                                 groupList.get(i).toString());
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                     }
                 }
             }
@@ -1494,7 +1494,7 @@ public class CMDSCaseHistoryEntryTypes {
                 List groupList = CMDSCase.getGroupNumberList();
 
                 if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                     CMDSCase.updateCaseInventoryStatusLines(activity, date);
                 }
 
@@ -1508,7 +1508,7 @@ public class CMDSCaseHistoryEntryTypes {
                     }
 
                     for(int i = 0; i < groupList.size(); i++) {
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                         if(updateAllCases) {
                             CMDSCase.updateAllGroupInventoryStatusLines(activity, date);
                         }
@@ -1518,10 +1518,10 @@ public class CMDSCaseHistoryEntryTypes {
                 List groupList = CMDSCase.getGroupNumberList();
 
                 if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber());
+                    Activity.addCMDSActivty(activity, filePath, date, NumberFormatService.generateFullCaseNumber(), null, null, null, null);
                 } else if (groupList.size() > 0) {
                     for(int i = 0; i < groupList.size(); i++) {
-                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString());
+                        Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, null, null);
                     }
                 }
             }

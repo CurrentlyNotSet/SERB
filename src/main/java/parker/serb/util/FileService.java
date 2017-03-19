@@ -587,7 +587,9 @@ public class FileService {
                         parent,
                         caseArchiveFile + File.separator + fileDate + fileExtenstion,
                         direction,
-                        caseNumber
+                        caseNumber,
+                        from,
+                        to
                     );
 //                }
 //                switch(section) {

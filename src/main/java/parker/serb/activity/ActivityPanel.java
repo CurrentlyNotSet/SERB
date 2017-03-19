@@ -115,10 +115,19 @@ public class ActivityPanel extends javax.swing.JPanel {
                         }
                     } else if (e.getClickCount() == 2 && actvityTable.getSelectedColumn() != 5 && e.getButton() == MouseEvent.BUTTON1) {
                         Audit.addAuditEntry("Viewing Activty Detail for ID: " + actvityTable.getValueAt(actvityTable.getSelectedRow(), 6).toString());
-                        new DetailedActivityDialog((JFrame) Global.root.getRootPane().getParent(),
+                        
+                        if(Global.activeSection.equals("CMDS")) {
+                            new CMDSDetailedActivityDialog((JFrame) Global.root.getRootPane().getParent(),
                                 true,
                                 actvityTable.getValueAt(actvityTable.getSelectedRow(), 6).toString(),
                                 actvityTable.getValueAt(actvityTable.getSelectedRow(), 4).toString());
+                        } else {
+                            new DetailedActivityDialog((JFrame) Global.root.getRootPane().getParent(),
+                                true,
+                                actvityTable.getValueAt(actvityTable.getSelectedRow(), 6).toString(),
+                                actvityTable.getValueAt(actvityTable.getSelectedRow(), 4).toString());
+                        }
+                        
                         loadAllActivity();
                     }
                 }
