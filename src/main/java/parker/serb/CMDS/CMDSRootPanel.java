@@ -60,7 +60,7 @@ public class CMDSRootPanel extends javax.swing.JPanel {
      * trying to cheat and "lazy" load.  This my be re-factored to allow for full
      * case load while displaying a spinner.
      */
-    private void loadInformation() {
+    public void loadInformation() {
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
             case "Activity":
                 activityPanel1.loadAllActivity();
