@@ -99,6 +99,9 @@ public class Global {
     //bookmark loop limit
     public static final int BOOKMARK_LIMIT = 10;
 
+    //email File size Limit (22MB  25MB is the max, leaving overhead for conversions)
+    public static final double EmailSizeLimit = 22000000;
+
     //format Ending for dates
     public static final String[] daySuffixes =
   //    0     1     2     3     4     5     6     7     8     9

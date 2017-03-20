@@ -9,6 +9,7 @@ import com.alee.laf.optionpane.WebOptionPane;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.io.FilenameUtils;
 import parker.serb.Global;
 import parker.serb.sql.EmailOut;
 import parker.serb.sql.EmailOutAttachment;
@@ -23,7 +24,10 @@ public class ConfirmationDialog extends javax.swing.JDialog {
 
     String type;
     int letterID;
+    double attachmentSize = 0.0;
     List<String> filesMissing = new ArrayList<>();
+    boolean fileInUse = false;
+    List<String> fileInUseList = new ArrayList<>();
 
     public ConfirmationDialog(java.awt.Frame parent, boolean modal, String typePassed, int letterIDPassed) {
         super(parent, modal);
@@ -77,10 +81,19 @@ public class ConfirmationDialog extends javax.swing.JDialog {
             }
 
             for (EmailOutAttachment attach : attachList) {
-                File templateFile = new File(path + attach.fileName);
-                if (!templateFile.exists()) {
+                File attachment = new File(path + attach.fileName);
+                if (!attachment.exists()) {
                     allExist = false;
                     filesMissing.add(attach.fileName);
+                } else {
+                    if ("docx".equalsIgnoreCase(FilenameUtils.getExtension(attach.fileName))
+                            || "doc".equalsIgnoreCase(FilenameUtils.getExtension(attach.fileName))) {
+                        if (!attachment.renameTo(attachment)) {
+                            fileInUse = true;
+                            fileInUseList.add(attach.fileName);
+                        }
+                        attachmentSize += attachment.length();
+                    }
                 }
             }
 
@@ -102,15 +115,59 @@ public class ConfirmationDialog extends javax.swing.JDialog {
             }
 
             for (PostalOutAttachment attach : postList) {
-                File templateFile = new File(path + attach.fileName);
-                if (!templateFile.exists()) {
+                File attachment = new File(path + attach.fileName);
+                if (!attachment.exists()) {
                     allExist = false;
                     filesMissing.add(attach.fileName);
+                } else {
+                    if ("docx".equalsIgnoreCase(FilenameUtils.getExtension(attach.fileName))
+                            || "doc".equalsIgnoreCase(FilenameUtils.getExtension(attach.fileName))) {
+                        if (!attachment.renameTo(attachment)) {
+                            fileInUse = true;
+                            fileInUseList.add(attach.fileName);
+                        }
+                        attachmentSize += attachment.length();
+                    }
                 }
             }
 
         }
         return allExist;
+    }
+
+    private void missingFilesMessage() {
+        String listOfFiles = "";
+        for (String file : filesMissing) {
+            listOfFiles += "<br>" + file;
+        }
+        WebOptionPane.showMessageDialog(
+                Global.root,
+                "<html><center> Sorry, unable to locate file(s) required to send.<br>" + listOfFiles + "</center></html>",
+                "Error",
+                WebOptionPane.ERROR_MESSAGE
+        );
+    }
+
+    private void tooLargeMessage() {
+        WebOptionPane.showMessageDialog(
+                Global.root,
+                "<html><center> Sorry, email size exceeds server limit unable to send.</center></html>",
+                "Error",
+                WebOptionPane.ERROR_MESSAGE
+        );
+    }
+
+    private void filesInUseMessage() {
+        String listOfFiles = "";
+        for (String file : fileInUseList) {
+            listOfFiles += "<br>" + file;
+        }
+        WebOptionPane.showMessageDialog(
+                Global.root,
+                "<html><center> Sorry, files in use. Please close documents before sending.<br>" + listOfFiles + "</center></html>",
+                "Error",
+                WebOptionPane.ERROR_MESSAGE
+        );
     }
 
     @SuppressWarnings("unchecked")
@@ -267,23 +324,22 @@ public class ConfirmationDialog extends javax.swing.JDialog {
 
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
         if (verifyFilesExist()) {
-            processThread();
-            loadingPanel.setVisible(true);
-            InfoPanel.setVisible(false);
-            jLayeredPane.moveToFront(loadingPanel);
-            generateButton.setEnabled(false);
-            cancelButton.setEnabled(false);
-        } else {
-            String listOfFiles = "";
-            for (String file : filesMissing){
-                listOfFiles += "<br>" + file;
+            if (Global.EmailSizeLimit >= attachmentSize){
+                if (fileInUse) {
+                    filesInUseMessage();
+                } else {
+                    processThread();
+                    loadingPanel.setVisible(true);
+                    InfoPanel.setVisible(false);
+                    jLayeredPane.moveToFront(loadingPanel);
+                    generateButton.setEnabled(false);
+                    cancelButton.setEnabled(false);
+                }
+            } else {
+                tooLargeMessage();
             }
-            WebOptionPane.showMessageDialog(
-                    Global.root,
-                    "<html><center> Sorry, unable to locate file(s) required to send.<br>" + listOfFiles + "</center></html>",
-                    "Error",
-                    WebOptionPane.ERROR_MESSAGE
-            );
+        } else {
+            missingFilesMessage();
         }
     }//GEN-LAST:event_generateButtonActionPerformed
 
