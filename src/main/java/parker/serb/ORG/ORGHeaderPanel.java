@@ -37,7 +37,7 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
     private void addListeners() {
         caseNumberComboBox.addActionListener((ActionEvent e) -> {
             if(caseNumberComboBox.getSelectedItem() != null) {
-                Global.root.getoRGRootPanel1().getjTabbedPane1().setSelectedIndex(0);
+//                Global.root.getoRGRootPanel1().getjTabbedPane1().setSelectedIndex(0);
                 if(caseNumberComboBox.getSelectedItem().toString().trim().equals("")) {
                     if(Global.root != null) {
                         Global.root.getjButton2().setText("Update");
@@ -79,6 +79,7 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
         Global.caseNumber = caseNumberComboBox.getSelectedItem().toString().trim();
 
         loadHeaderInformation();
+        Global.root.getoRGRootPanel1().loadInformation();
     }
 
     public void loadHeaderInformation() {

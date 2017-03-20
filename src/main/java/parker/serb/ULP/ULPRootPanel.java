@@ -57,7 +57,7 @@ public class ULPRootPanel extends javax.swing.JPanel {
         });
     }
 
-    private void loadInformation() {
+    public void loadInformation() {
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
             case "Activity":
                 activityPanel1.loadAllActivity();

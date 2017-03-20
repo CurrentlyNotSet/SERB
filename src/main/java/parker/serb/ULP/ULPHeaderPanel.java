@@ -36,7 +36,7 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
     private void addListeners() {
         caseNumberComboBox.addActionListener((ActionEvent e) -> {
             if(caseNumberComboBox.getSelectedItem() != null) {
-                Global.root.getuLPRootPanel1().getjTabbedPane1().setSelectedIndex(0);
+//                Global.root.getuLPRootPanel1().getjTabbedPane1().setSelectedIndex(0);
                 if(caseNumberComboBox.getSelectedItem().toString().trim().equals("")) {
                     if(Global.root != null) {
                         Global.root.getjButton2().setText("Update");
@@ -70,6 +70,7 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
             NumberFormatService.parseFullCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim());
             User.updateLastCaseNumber();
             loadHeaderInformation();
+            Global.root.getuLPRootPanel1().loadInformation();
         } else {
             new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());  
             Global.root.getuLPRootPanel1().clearAll();

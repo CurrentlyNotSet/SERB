@@ -77,14 +77,10 @@ public class CMDSHeaderPanel extends javax.swing.JPanel {
             NumberFormatService.parseFullCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim());
             User.updateLastCaseNumber();
             loadHeaderInformation();
-            loadTabInformation();
+            Global.root.getcMDSRootPanel1().loadInformation();
         } else {
             new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
         }
-    }
-    
-    private void loadTabInformation() {
-        Global.root.getcMDSRootPanel1().loadInformation();
     }
 
     public void loadHeaderInformation() {

@@ -36,7 +36,7 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
     private void addListeners() {
         caseNumberComboBox.addActionListener((ActionEvent e) -> {
             if(caseNumberComboBox.getSelectedItem() != null) {
-                Global.root.getcSCRootPanel1().getjTabbedPane1().setSelectedIndex(0);
+//                Global.root.getcSCRootPanel1().getjTabbedPane1().setSelectedIndex(0);
                 if(caseNumberComboBox.getSelectedItem().toString().trim().equals("")) {
                     if(Global.root != null) {
                         Global.root.getjButton2().setText("Update");
@@ -88,6 +88,7 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
                 Global.caseType = "CSC";
                 User.updateLastCaseNumber();
                 CSCNumberTextBox.setText(csc.cscNumber != null ? csc.cscNumber : "");
+                Global.root.getcSCRootPanel1().loadInformation();
             }
         }
     }

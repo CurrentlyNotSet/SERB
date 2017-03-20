@@ -41,7 +41,7 @@ public class REPHeaderPanel extends javax.swing.JPanel {
     private void addListeners() {
         caseNumberComboBox.addActionListener((ActionEvent e) -> {
             if(caseNumberComboBox.getSelectedItem() != null) {
-                Global.root.getrEPRootPanel1().getjTabbedPane1().setSelectedIndex(0);
+//                Global.root.getrEPRootPanel1().getjTabbedPane1().setSelectedIndex(0);
                 if(caseNumberComboBox.getSelectedItem().toString().trim().equals("")) {
                     Global.root.getjButton9().setVisible(false);
                     if(Global.root != null) {
@@ -74,6 +74,7 @@ public class REPHeaderPanel extends javax.swing.JPanel {
             NumberFormatService.parseFullCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim());
             User.updateLastCaseNumber();
             loadHeaderInformation();
+            Global.root.getrEPRootPanel1().loadInformation();
         } else {
             new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());  
         }

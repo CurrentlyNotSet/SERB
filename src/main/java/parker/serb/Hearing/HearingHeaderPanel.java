@@ -39,7 +39,7 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
     private void addListeners() {
         caseNumberComboBox.addActionListener((ActionEvent e) -> {
             if(caseNumberComboBox.getSelectedItem() != null) {
-                Global.root.getHearingRootPanel1().getjTabbedPane1().setSelectedIndex(0);
+//                Global.root.getHearingRootPanel1().getjTabbedPane1().setSelectedIndex(0);
                 if(caseNumberComboBox.getSelectedItem().toString().trim().equals("")) {
                     Global.root.getHearingRootPanel1().clearAll();
                     if(Global.root != null) {
@@ -82,6 +82,7 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
             NumberFormatService.parseFullCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim());
             User.updateLastCaseNumber();
             loadHeaderInformation();
+            Global.root.getHearingRootPanel1().loadInformation();
         } else {
             new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
         }
