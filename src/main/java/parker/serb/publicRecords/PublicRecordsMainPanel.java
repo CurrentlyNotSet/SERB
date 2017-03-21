@@ -95,31 +95,52 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
     }
 
     private void setTableColumns() {
+        // ID
         caseDocsTable.getColumnModel().getColumn(0).setMinWidth(0);
         caseDocsTable.getColumnModel().getColumn(0).setPreferredWidth(0);
         caseDocsTable.getColumnModel().getColumn(0).setMaxWidth(0);
+        // Include
         caseDocsTable.getColumnModel().getColumn(1).setMinWidth(60);
         caseDocsTable.getColumnModel().getColumn(1).setPreferredWidth(60);
         caseDocsTable.getColumnModel().getColumn(1).setMaxWidth(60);
+        // Date
         caseDocsTable.getColumnModel().getColumn(2).setMinWidth(150);
         caseDocsTable.getColumnModel().getColumn(2).setPreferredWidth(150);
         caseDocsTable.getColumnModel().getColumn(2).setMaxWidth(150);
+        // Description - NO Pref
+
+        // File Name
         caseDocsTable.getColumnModel().getColumn(4).setMinWidth(0);
         caseDocsTable.getColumnModel().getColumn(4).setPreferredWidth(0);
         caseDocsTable.getColumnModel().getColumn(4).setMaxWidth(0);
+        //Redacted
         caseDocsTable.getColumnModel().getColumn(5).setMinWidth(0);
         caseDocsTable.getColumnModel().getColumn(5).setPreferredWidth(0);
         caseDocsTable.getColumnModel().getColumn(5).setMaxWidth(0);
+        //Size in MB
+        caseDocsTable.getColumnModel().getColumn(6).setMinWidth(80);
+        caseDocsTable.getColumnModel().getColumn(6).setPreferredWidth(80);
+        caseDocsTable.getColumnModel().getColumn(6).setMaxWidth(80);
+        //Size in Bytes
+        caseDocsTable.getColumnModel().getColumn(7).setMinWidth(0);
+        caseDocsTable.getColumnModel().getColumn(7).setPreferredWidth(0);
+        caseDocsTable.getColumnModel().getColumn(7).setMaxWidth(0);
 
+        // ID
         awaitingTable.getColumnModel().getColumn(0).setMinWidth(0);
         awaitingTable.getColumnModel().getColumn(0).setPreferredWidth(0);
         awaitingTable.getColumnModel().getColumn(0).setMaxWidth(0);
+        // Complete
         awaitingTable.getColumnModel().getColumn(1).setMinWidth(80);
         awaitingTable.getColumnModel().getColumn(1).setPreferredWidth(80);
         awaitingTable.getColumnModel().getColumn(1).setMaxWidth(80);
+        // Case Number
         awaitingTable.getColumnModel().getColumn(2).setMinWidth(130);
         awaitingTable.getColumnModel().getColumn(2).setPreferredWidth(130);
         awaitingTable.getColumnModel().getColumn(2).setMaxWidth(130);
+        //Description - NO Pref
+
+        // FileName
         awaitingTable.getColumnModel().getColumn(4).setMinWidth(0);
         awaitingTable.getColumnModel().getColumn(4).setPreferredWidth(0);
         awaitingTable.getColumnModel().getColumn(4).setMaxWidth(0);
@@ -164,6 +185,7 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
         DefaultTableModel model = (DefaultTableModel) caseDocsTable.getModel();
         model.setRowCount(0);
         List<Activity> activtyList = null;
+        String path = "";
 
         switch (Global.activeSection) {
             case "REP":
@@ -172,21 +194,49 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
             case "CMDS":
             case "Hearings":
                 activtyList = Activity.loadActivityDocumentsByGlobalCasePublicRecords();
+                path = Global.activityPath + File.separatorChar
+                        + Global.activeSection + File.separatorChar
+                        + Global.caseYear + File.separatorChar
+                        + NumberFormatService.generateFullCaseNumber()
+                        + File.separatorChar;
                 break;
             case "Civil Service Commission":
             case "ORG":
+            case "CSC":
                 activtyList = Activity.loadActivityDocumentsByGlobalCaseORGCSCPublicRecords();
+                path = Global.templatePath
+                        + (Global.activeSection.equals("Civil Service Commission")
+                        ? Global.caseType : Global.activeSection) + File.separator;
                 break;
         }
 
         for (Activity doc : activtyList) {
+            double bytes = 0;
+            double megabytes = 0;
+
+            File file = new File(path + doc.fileName);
+
+            if (file.exists()){
+                bytes = file.length();
+                megabytes = (bytes / 1024) / 1024;
+
+                //Get Hundrethds rounding
+                megabytes = Math.round(megabytes * 100.0) / 100.0;
+            }
+
+
+
+
+
             model.addRow(new Object[]{
                 doc.id,
                 false,
                 doc.date,
                 doc.action,
                 doc.fileName,
-                doc.redacted
+                doc.redacted,
+                String.valueOf(megabytes) + "Mb",
+                bytes
             });
         }
     }
@@ -377,14 +427,14 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
 
             },
             new String [] {
-                "ID", "Include", "Date", "Description", "FileName", "Redacted"
+                "ID", "Include", "Date", "Description", "FileName", "Redacted", "Size", "Size Bytes"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.Object.class, java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, false, false, false, false
+                false, true, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -408,6 +458,8 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
             caseDocsTable.getColumnModel().getColumn(3).setResizable(false);
             caseDocsTable.getColumnModel().getColumn(4).setResizable(false);
             caseDocsTable.getColumnModel().getColumn(5).setResizable(false);
+            caseDocsTable.getColumnModel().getColumn(6).setResizable(false);
+            caseDocsTable.getColumnModel().getColumn(7).setResizable(false);
         }
 
         caseDocsLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N

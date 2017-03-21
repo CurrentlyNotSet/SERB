@@ -62,6 +62,7 @@ public class ConfirmationDialog extends javax.swing.JDialog {
 
     private boolean verifyFilesExist() {
         boolean allExist = true;
+        fileInUse = false;
         String path = "";
         if (type.equals("Email")) {
             EmailOut eml = EmailOut.getEmailByID(letterID);
