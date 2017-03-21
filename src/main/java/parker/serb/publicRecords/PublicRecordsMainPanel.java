@@ -29,6 +29,7 @@ import parker.serb.util.NumberFormatService;
 public class PublicRecordsMainPanel extends javax.swing.JDialog {
 
         List<String> filesMissing = new ArrayList<>();
+        double attachmentSize = 0.0;
 
     /**
      * Creates new form fileSelector
@@ -259,6 +260,8 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
     }
 
     private void sendDocs() {
+        attachmentSize = 0.0;
+
         List<Activity> docsList = new ArrayList<>();
 
         for (int i = 0; i < caseDocsTable.getRowCount(); i++) {
@@ -274,19 +277,14 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
         if (docsList.size() > 0) {
             //SEND panel
             if (verifyFilesExist(docsList)) {
+                if (Global.EmailSizeLimit >= attachmentSize){
                 new PublicRecordsEmailPanel(Global.root, true, docsList);
                 loadCaseDocsTable();
-            } else {
-                String listOfFiles = "";
-                for (String file : filesMissing) {
-                    listOfFiles += "<br>" + file;
+                } else {
+                    tooLargeMessage();
                 }
-                WebOptionPane.showMessageDialog(
-                        Global.root,
-                        "<html><center> Sorry, unable to locate file(s) required to send.<br>" + listOfFiles + "</center></html>",
-                        "Error",
-                        WebOptionPane.ERROR_MESSAGE
-                );
+            } else {
+                missingFilesMessage();
             }
         } else {
             WebOptionPane.showMessageDialog(Global.root, "No Documents Selected to Send",
@@ -350,10 +348,12 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
             filesMissing = new ArrayList<>();
 
             for (Activity attach : docList) {
-                File templateFile = new File(path + attach.fileName);
-                if (!templateFile.exists()) {
+                File attachment = new File(path + attach.fileName);
+                if (!attachment.exists()) {
                     allExist = false;
                     filesMissing.add(attach.fileName);
+                } else {
+                    attachmentSize += attachment.length();
                 }
             }
 
@@ -385,6 +385,28 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
                     break;
             }
         }
+    }
+
+    private void missingFilesMessage() {
+        String listOfFiles = "";
+        for (String file : filesMissing) {
+            listOfFiles += "<br>" + file;
+        }
+        WebOptionPane.showMessageDialog(
+                Global.root,
+                "<html><center> Sorry, unable to locate file(s) required to send.<br>" + listOfFiles + "</center></html>",
+                "Error",
+                WebOptionPane.ERROR_MESSAGE
+        );
+    }
+
+    private void tooLargeMessage() {
+        WebOptionPane.showMessageDialog(
+                Global.root,
+                "<html><center> Sorry, email size exceeds server limit unable to send.</center></html>",
+                "Error",
+                WebOptionPane.ERROR_MESSAGE
+        );
     }
 
     /**
