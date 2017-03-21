@@ -740,7 +740,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
                 //ballotsCountDate
                 newCaseInformation.ballotsCountDate = ballotsCountDate.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(ballotsCountDate.getText()));
                 //ballotsCountTime
-                newCaseInformation.ballotsCountTime = ballotsCountTime.getText().equals("") ? null : new Timestamp(NumberFormatService.converthmma(ballotsCountTime.getText() + " " + amPMComboBox.getSelectedItem().toString()));
+                newCaseInformation.ballotsCountTime = ballotsCountTime.getText().equals("") ? null : new Timestamp(NumberFormatService.converthmma(ballotsCountTime.getText().trim() + " " + amPMComboBox.getSelectedItem().toString()));
                 //eligibilityListDate
                 newCaseInformation.eligibilityListDate = eligibilityListDate.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(eligibilityListDate.getText()));
                 //preElectionConfDate --> null
