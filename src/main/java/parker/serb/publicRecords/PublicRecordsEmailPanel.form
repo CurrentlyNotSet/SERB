@@ -32,7 +32,7 @@
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="cancelButton" linkSize="2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
-                      <Component id="saveButton" linkSize="2" min="-2" pref="100" max="-2" attributes="0"/>
+                      <Component id="sendButton" linkSize="2" min="-2" pref="100" max="-2" attributes="0"/>
                   </Group>
                   <Component id="jLabel5" max="32767" attributes="0"/>
                   <Component id="jLabel6" alignment="0" max="32767" attributes="0"/>
@@ -100,7 +100,7 @@
               <Component id="jScrollPane1" min="-2" pref="157" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="saveButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="sendButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="cancelButton" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -118,13 +118,13 @@
         <Property name="text" type="java.lang.String" value="Public Records Email"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="saveButton">
+    <Component class="javax.swing.JButton" name="sendButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Send"/>
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="saveButtonActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sendButtonActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="cancelButton">

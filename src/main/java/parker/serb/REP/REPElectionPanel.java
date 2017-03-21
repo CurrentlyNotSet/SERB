@@ -45,16 +45,16 @@ public class REPElectionPanel extends javax.swing.JPanel {
     String[] professional = new String[]{"","","","","","","","","","","","","","",""};
     String[] nonprofessional = new String[]{"","","","","","","","","","","","","","",""};
     String[] combined = new String[]{"","","","","","","","","","","","","","",""};
-    
+
     /**
      * Creates new form REPElectionPanel
      */
     public REPElectionPanel() {
-        
+
         initComponents();
         addRenderer();
         addListeners();
-        
+
         setOnSiteTableColumnWidth();
         professionalButton.setSelected(true);
         resultsCard = (CardLayout)jPanel4.getLayout();
@@ -62,7 +62,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
         jPanel4.setVisible(false);
 //        hideNotRequiredInformation();
     }
-    
+
     private void addRenderer() {
         sitesTable.setDefaultRenderer(Object.class, new TableCellRenderer(){
             private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
@@ -77,13 +77,13 @@ public class REPElectionPanel extends javax.swing.JPanel {
             }
         });
     }
-    
+
     private void setOnSiteTableColumnWidth() {
         sitesTable.getColumnModel().getColumn(4).setPreferredWidth(0);
         sitesTable.getColumnModel().getColumn(4).setMinWidth(0);
         sitesTable.getColumnModel().getColumn(4).setMaxWidth(0);
     }
-    
+
     private void addListeners() {
         ballotsCountTime.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -113,7 +113,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
                 }
             }
         });
-        
+
         pollingStartDate.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -155,7 +155,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
             }
         });
     }
-    
+
     private void hideNotRequiredInformation() {
         jPanel1.setVisible(false);
         jPanel2.setVisible(false);
@@ -164,7 +164,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
         addMultiCaseElectionButton.setVisible(false);
         addSiteInformation.setVisible(false);
     }
-    
+
     private void hanldeProfessionalNonProfessionalElection(String headedTo) {
         switch(whereUserIsComingFrom) {
             case "Professional":
@@ -219,7 +219,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
                 combined[14] = votesCastForRivalEEO3TextBox.getText().trim();
                 break;
         }
-        
+
         switch(headedTo) {
             case "Professional":
                 approxNumberEligibleVotersTextBox.setText(professional[0]);
@@ -273,10 +273,10 @@ public class REPElectionPanel extends javax.swing.JPanel {
                 votesCastForRivalEEO3TextBox.setText(combined[14]);
                 break;
         }
-        
+
         whereUserIsComingFrom = headedTo;
     }
-    
+
     private void loadElectionArrays(REPCase repCase) {
         professional[0] = repCase.professionalApproxNumberEligible == null ? "" : repCase.professionalApproxNumberEligible;
         professional[1] = repCase.professionalYES == null ? "" : repCase.professionalYES;
@@ -293,7 +293,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
         professional[12] = repCase.professionalVotesCastForRivalEEO1 == null ? "" : repCase.professionalVotesCastForRivalEEO1;
         professional[13] = repCase.professionalVotesCastForRivalEEO2 == null ? "" : repCase.professionalVotesCastForRivalEEO2;
         professional[14] = repCase.professionalVotesCastForRivalEEO3 == null ? "" : repCase.professionalVotesCastForRivalEEO3;
-        
+
         nonprofessional[0] = repCase.nonprofessionalApproxNumberEligible == null ? "" : repCase.nonprofessionalApproxNumberEligible;
         nonprofessional[1] = repCase.nonprofessionalYES == null ? "" : repCase.nonprofessionalYES;
         nonprofessional[2] = repCase.nonprofessionalNO == null ? "" : repCase.nonprofessionalNO;
@@ -309,7 +309,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
         nonprofessional[12] = repCase.nonprofessionalVotesCastForRivalEEO1 == null ? "" : repCase.nonprofessionalVotesCastForRivalEEO1;
         nonprofessional[13] = repCase.nonprofessionalVotesCastForRivalEEO2 == null ? "" : repCase.nonprofessionalVotesCastForRivalEEO2;
         nonprofessional[14] = repCase.nonprofessionalVotesCastForRivalEEO3 == null ? "" : repCase.nonprofessionalVotesCastForRivalEEO3;
-        
+
         combined[0] = repCase.combinedApproxNumberEligible == null ? "" : repCase.combinedApproxNumberEligible;
         combined[1] = repCase.combinedYES == null ? "" : repCase.combinedYES;
         combined[2] = repCase.combinedlNO == null ? "" : repCase.combinedlNO;
@@ -325,7 +325,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
         combined[12] = repCase.combinedVotesCastForRivalEEO1 == null ? "" : repCase.combinedVotesCastForRivalEEO1;
         combined[13] = repCase.combinedVotesCastForRivalEEO2 == null ? "" : repCase.combinedVotesCastForRivalEEO2;
         combined[14] = repCase.combinedVotesCastForRivalEEO3 == null ? "" : repCase.combinedVotesCastForRivalEEO3;
-        
+
         if(professionalButton.isSelected()) {
             approxNumberEligibleVotersTextBox.setText(professional[0]);
             yesTextBox.setText(professional[1]);
@@ -376,19 +376,19 @@ public class REPElectionPanel extends javax.swing.JPanel {
             votesCastForRivalEEO3TextBox.setText(combined[14]);
         }
     }
-    
+
     private void loadWhoPrevailed() {
         List comps = CaseParty.loadPartiesByCase();
-        
+
         whoPrevailedComboBox.removeAllItems();
         resultsWhoPrevailed.removeAllItems();
-        
+
         whoPrevailedComboBox.addItem("");
         resultsWhoPrevailed.addItem("");
-        
+
         whoPrevailedComboBox.addItem("No Representative");
         resultsWhoPrevailed.addItem("No Representative");
-        
+
         for(int i = 0; i < comps.size(); i++) {
             CaseParty caseParty = (CaseParty) comps.get(i);
             if(caseParty.companyName.equals("")) {
@@ -400,28 +400,28 @@ public class REPElectionPanel extends javax.swing.JPanel {
             }
         }
     }
-    
+
     //if missing a descriptor it is on the electronic/mail panel
     public void  loadInformation() {
         clearAll();
         loadWhoPrevailed();
-        
+
         repCase = REPCase.loadElectionInformation();
-        
+
         multiCaseElectionCheckBox.setSelected(repCase.multicaseElection);
-        
+
         if(multiCaseElectionCheckBox.isSelected()) {
             loadMultiCase();
         }
-        
+
         electionType1ComboBox.setSelectedItem(repCase.electionType1 == null ? " " : repCase.electionType1);
         electionType2ComboBox.setSelectedItem(repCase.electionType2 == null ? " " : repCase.electionType2);
         electionType3ComboBox.setSelectedItem(repCase.electionType3 == null ? "" : repCase.electionType3);
-        
+
         if(jPanel2.isVisible()) {
             loadSites();
         }
-        
+
         if(electionType3ComboBox.getSelectedItem().toString().equals("Professional/Non-Professional")) {
             loadElectionArrays(repCase);
         } else {
@@ -438,7 +438,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
             resultsTotalBallotsCast.setText(repCase.resultTotalBallotsCast == null ? "" : repCase.resultTotalBallotsCast);
             resultsWhoPrevailed.setSelectedItem(repCase.resultWHoPrevailed == null ? "" : repCase.resultWHoPrevailed);
         }
-        
+
         eligibiltyDateTextBox.setText(repCase.eligibilityDate == null ? "" : Global.mmddyyyy.format(repCase.eligibilityDate.getTime()));
         eligibilityDate.setText(repCase.eligibilityDate == null ? "" : Global.mmddyyyy.format(repCase.eligibilityDate.getTime()));
         ballotOneTextBox.setText(repCase.ballotOne == null ? "" : repCase.ballotOne);
@@ -460,20 +460,20 @@ public class REPElectionPanel extends javax.swing.JPanel {
         preElectionConfDateTextBox.setText(repCase.preElectionConfDate == null ? "" : Global.mmddyyyy.format(repCase.preElectionConfDate));
         selfReleasingTextBox.setText(repCase.selfReleasing == null ? "" : repCase.selfReleasing);
     }
-    
+
     public void disableUpdate(boolean runSave) {
-        
+
         Global.root.getjButton2().setText("Update");
-        
+
         Global.root.getjButton9().setVisible(false);
-        
+
         multiCaseElectionCheckBox.setEnabled(false);
         addMultiCaseElectionButton.setVisible(false);
-        
+
         electionType1ComboBox.setEnabled(false);
         electionType2ComboBox.setEnabled(false);
         electionType3ComboBox.setEnabled(false);
-        
+
         eligibiltyDateTextBox.setEnabled(false);
         eligibiltyDateTextBox.setBackground(new Color(238, 238, 238));
         eligibilityDate.setEnabled(false);
@@ -512,7 +512,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
         preElectionConfDateTextBox.setBackground(new Color(238, 238, 238));
         selfReleasingTextBox.setEnabled(false);
         selfReleasingTextBox.setBackground(new Color(238, 238, 238));
-        
+
         resultsApproxNumberOfEligibleVoters.setEnabled(false);
         resultsApproxNumberOfEligibleVoters.setBackground(new Color(238, 238, 238));
         resultsVoidBallots.setEnabled(false);
@@ -536,7 +536,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
         resultsTotalBallotsCast.setEnabled(false);
         resultsTotalBallotsCast.setBackground(new Color(238, 238, 238));
         resultsWhoPrevailed.setEnabled(false);
-        
+
         approxNumberEligibleVotersTextBox.setEnabled(false);
         approxNumberEligibleVotersTextBox.setBackground(new Color(238, 238, 238));
         yesTextBox.setEnabled(false);
@@ -561,28 +561,28 @@ public class REPElectionPanel extends javax.swing.JPanel {
         votesCastForRivalEEO2TextBox.setBackground(new Color(238, 238, 238));
         votesCastForRivalEEO3TextBox.setEnabled(false);
         votesCastForRivalEEO3TextBox.setBackground(new Color(238, 238, 238));
-        
+
         addSiteInformation.setVisible(false);
-        
+
         if(runSave) {
             saveInfomration();
         } else {
             loadInformation();
         }
     }
-    
+
     public void enableUpdate() {
         Global.root.getjButton2().setText("Save");
-        
+
         Global.root.getjButton9().setVisible(true);
-        
+
         multiCaseElectionCheckBox.setEnabled(true);
         addMultiCaseElectionButton.setVisible(true);
-        
+
         electionType1ComboBox.setEnabled(true);
         electionType2ComboBox.setEnabled(true);
         electionType3ComboBox.setEnabled(true);
-        
+
         eligibiltyDateTextBox.setEnabled(true);
         eligibiltyDateTextBox.setBackground(Color.WHITE);
         eligibilityDate.setEnabled(true);
@@ -621,7 +621,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
         preElectionConfDateTextBox.setBackground(Color.WHITE);
         selfReleasingTextBox.setEnabled(true);
         selfReleasingTextBox.setBackground(Color.WHITE);
-        
+
         resultsApproxNumberOfEligibleVoters.setEnabled(true);
         resultsApproxNumberOfEligibleVoters.setBackground(Color.WHITE);
         resultsVoidBallots.setEnabled(true);
@@ -641,7 +641,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
         resultsChallengedBallots.setEnabled(true);
         resultsChallengedBallots.setBackground(Color.WHITE);
         resultsWhoPrevailed.setEnabled(true);
-        
+
         approxNumberEligibleVotersTextBox.setEnabled(true);
         approxNumberEligibleVotersTextBox.setBackground(Color.WHITE);
         yesTextBox.setEnabled(true);
@@ -666,10 +666,10 @@ public class REPElectionPanel extends javax.swing.JPanel {
         votesCastForRivalEEO2TextBox.setBackground(Color.WHITE);
         votesCastForRivalEEO3TextBox.setEnabled(true);
         votesCastForRivalEEO3TextBox.setBackground(Color.WHITE);
-        
+
         addSiteInformation.setVisible(true);
     }
-    
+
     private void saveInfomration(){
         if(professionalButton.isSelected()) {
             hanldeProfessionalNonProfessionalElection("Professional");
@@ -678,14 +678,14 @@ public class REPElectionPanel extends javax.swing.JPanel {
         } else if(combinedButton.isSelected()){
             hanldeProfessionalNonProfessionalElection("Combined");
         }
-        
+
         REPCase newCaseInformation = new REPCase();
-        
+
         newCaseInformation.multicaseElection = multiCaseElectionCheckBox.isSelected();
         newCaseInformation.electionType1 = electionType1ComboBox.getSelectedItem().toString().trim().equals("") ? null : electionType1ComboBox.getSelectedItem().toString();
         newCaseInformation.electionType2 = electionType2ComboBox.getSelectedItem().toString().trim().equals("") ? null : electionType2ComboBox.getSelectedItem().toString();
         newCaseInformation.electionType3 = electionType3ComboBox.getSelectedItem().toString().trim().equals("") ? null : electionType3ComboBox.getSelectedItem().toString();
-        
+
         switch (newCaseInformation.electionType1) {
             case "On-Site":
                 //eligibilityDate
@@ -779,7 +779,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
                 newCaseInformation.selfReleasing = null;
                 break;
         }
-        
+
         if(jPanel5.isVisible()) {
             newCaseInformation.resultApproxNumberEligibleVotes = resultsApproxNumberOfEligibleVoters.getText().equals("") ? null : resultsApproxNumberOfEligibleVoters.getText();
             newCaseInformation.resultVoidBallots = resultsVoidBallots.getText().equals("") ? null : resultsVoidBallots.getText();
@@ -805,24 +805,24 @@ public class REPElectionPanel extends javax.swing.JPanel {
             newCaseInformation.resultValidVotesCounted = null;
             newCaseInformation.resultChallengedBallots = null;
             newCaseInformation.resultTotalBallotsCast = null;
-            newCaseInformation.resultWHoPrevailed = null;       
+            newCaseInformation.resultWHoPrevailed = null;
         }
-        
+
         REPCase.updateElectionInformation(newCaseInformation, repCase, professional, nonprofessional, combined);
     }
-    
+
     public void clearAll() {
         electionType3ComboBox.setSelectedIndex(1);
         electionType1ComboBox.setSelectedItem(" ");
         electionType2ComboBox.setSelectedItem(" ");
-        
+
         DefaultTableModel model = (DefaultTableModel) multiCaseElectionTable.getModel();
         model.setRowCount(0);
         DefaultTableModel model2 = (DefaultTableModel) sitesTable.getModel();
         model2.setRowCount(0);
         hideNotRequiredInformation();
         multiCaseElectionCheckBox.setSelected(false);
-        
+
         ballotOne.setText("");
         ballotOneTextBox.setText("");
         ballotTwo.setText("");
@@ -843,11 +843,11 @@ public class REPElectionPanel extends javax.swing.JPanel {
         ballotsCountTime.setText("");
         amPMComboBox.setSelectedIndex(2);
         eligibilityListDate.setText("");
-        
+
         professional = new String[]{"","","","","","","","","","","","","","",""};
         nonprofessional = new String[]{"","","","","","","","","","","","","","",""};
         combined = new String[]{"","","","","","","","","","","","","","",""};
-        
+
         approxNumberEligibleVotersTextBox.setText("");
         yesTextBox.setText("");
         noTextBox.setText("");
@@ -863,7 +863,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
         votesCastForRivalEEO1TextBox.setText("");
         votesCastForRivalEEO2TextBox.setText("");
         votesCastForRivalEEO3TextBox.setText("");
-        
+
         resultsApproxNumberOfEligibleVoters.setText("");
         resultsVoidBallots.setText("");
         resultsVotesCastForEEO.setText("");
@@ -876,38 +876,38 @@ public class REPElectionPanel extends javax.swing.JPanel {
         resultsChallengedBallots.setText("");
         resultsTotalBallotsCast.setText("");
         whoPrevailedComboBox.setSelectedItem("");
-        
+
     }
-    
-    
-    
+
+
+
     private void loadMultiCase() {
         DefaultTableModel model = (DefaultTableModel) multiCaseElectionTable.getModel();
-        
+
         model.setRowCount(0);
-        
+
         List relatedCases = REPElectionMultiCase.loadMultiCaseNumber();
-        
+
         for (Object relatedCase : relatedCases) {
             model.addRow(new Object[] {relatedCase});
         }
         multiCaseElectionTable.clearSelection();
     }
-    
+
     private void loadSites() {
         DefaultTableModel model = (DefaultTableModel) sitesTable.getModel();
-        
+
         model.setRowCount(0);
-        
+
         List relatedCases = REPElectionSiteInformation.loadSiteInformationByCaseNumber();
-        
+
         for (Object relatedCase : relatedCases) {
             REPElectionSiteInformation siteData = (REPElectionSiteInformation) relatedCase;
             model.addRow(new Object[] {
-                (siteData.siteDate == null ? "" : Global.mmddyyyy.format(siteData.siteDate.getTime())) 
+                (siteData.siteDate == null ? "" : Global.mmddyyyy.format(siteData.siteDate.getTime()))
                         + " "
                         + (siteData.siteStartTime == null ? "" : Global.hmma.format(siteData.siteStartTime.getTime()))
-                        + (siteData.siteEndTime == null ? "" : " - " + Global.hmma.format(siteData.siteEndTime.getTime())), 
+                        + (siteData.siteEndTime == null ? "" : " - " + Global.hmma.format(siteData.siteEndTime.getTime())),
                 siteData.sitePlace,
                 siteData.siteAddress1 + (siteData.siteAddress2 == null ? "" : ", " + siteData.siteAddress2),
                 siteData.siteLocation,
@@ -916,34 +916,34 @@ public class REPElectionPanel extends javax.swing.JPanel {
         }
         sitesTable.clearSelection();
     }
-    
+
     private void sumResultsVotes() {
         int totalVotes = 0;
         int ballotsCast = 0;
-        
+
         totalVotes += resultsVotesCastForEEO.getText().equals("") ? 0 : Integer.valueOf(resultsVotesCastForEEO.getText());
         totalVotes += resultsVotesCastForIncumbentEEO.getText().equals("") ? 0 : Integer.valueOf(resultsVotesCastForIncumbentEEO.getText());
         totalVotes += resultsVotesCastForRivalEEO1.getText().equals("") ? 0 : Integer.valueOf(resultsVotesCastForRivalEEO1.getText());
         totalVotes += resultsVotesCastForRivalEEO2.getText().equals("") ? 0 : Integer.valueOf(resultsVotesCastForRivalEEO2.getText());
         totalVotes += resultsVotesCastForRivalEEO3.getText().equals("") ? 0 : Integer.valueOf(resultsVotesCastForRivalEEO3.getText());
         totalVotes += resultsVotesCastForNoRepresentative.getText().equals("") ? 0 : Integer.valueOf(resultsVotesCastForNoRepresentative.getText());
-        
+
         resultsValidVotesCounted.setText(String.valueOf(totalVotes));
-        
+
         ballotsCast = totalVotes + (resultsChallengedBallots.getText().equals("") ? 0 : Integer.valueOf(resultsChallengedBallots.getText()));
         resultsTotalBallotsCast.setText(String.valueOf(ballotsCast));
     }
-    
+
     private void sumVotes() {
         //9-14
         int professionalVotes = 0;
         int nonprofessionalVotes = 0;
         int combinedVotes = 0;
-        
+
         int totalProfessional = 0;
         int totalNonProfessional = 0;
         int totalCombined = 0;
-        
+
         if(professionalButton.isSelected()) {
             professionalVotes += professional[9].equals("") ? 0 : Integer.valueOf(professional[9]);
             professionalVotes += professional[10].equals("") ? 0 : Integer.valueOf(professional[10]);
@@ -952,10 +952,10 @@ public class REPElectionPanel extends javax.swing.JPanel {
             professionalVotes += professional[13].equals("") ? 0 : Integer.valueOf(professional[13]);
             professionalVotes += professional[14].equals("") ? 0 : Integer.valueOf(professional[14]);
             validVotesTextBox.setText(String.valueOf(professionalVotes));
-            
+
             totalProfessional = professionalVotes + (professional[3].equals("") ? 0 : Integer.valueOf(professional[3]));
             totalBVotesTextBox.setText(String.valueOf(totalProfessional));
-            
+
         } else if(nonProfessionalButton.isSelected()) {
             nonprofessionalVotes += nonprofessional[9].equals("") ? 0 : Integer.valueOf(nonprofessional[9]);
             nonprofessionalVotes += nonprofessional[10].equals("") ? 0 : Integer.valueOf(nonprofessional[10]);
@@ -964,7 +964,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
             nonprofessionalVotes += nonprofessional[13].equals("") ? 0 : Integer.valueOf(nonprofessional[13]);
             nonprofessionalVotes += nonprofessional[14].equals("") ? 0 : Integer.valueOf(nonprofessional[14]);
             validVotesTextBox.setText(String.valueOf(nonprofessionalVotes));
-            
+
             totalNonProfessional = nonprofessionalVotes + (nonprofessional[3].equals("") ? 0 : Integer.valueOf(nonprofessional[3]));
             totalBVotesTextBox.setText(String.valueOf(totalNonProfessional));
         } else {
@@ -975,12 +975,12 @@ public class REPElectionPanel extends javax.swing.JPanel {
             combinedVotes += combined[13].equals("") ? 0 : Integer.valueOf(combined[13]);
             combinedVotes += combined[14].equals("") ? 0 : Integer.valueOf(combined[14]);
             validVotesTextBox.setText(String.valueOf(combinedVotes));
-            
+
             totalCombined = combinedVotes + (combined[3].equals("") ? 0 : Integer.valueOf(combined[3]));
             totalBVotesTextBox.setText(String.valueOf(totalCombined));
         }
     }
-    
+
     private void clearDate(WebDateField dateField, MouseEvent evt) {
         if(evt.getButton() == MouseEvent.BUTTON3 && dateField.isEnabled()) {
             ClearDateDialog dialog = new ClearDateDialog((JFrame) Global.root, true);
@@ -2312,7 +2312,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
             }// </editor-fold>//GEN-END:initComponents
 
     private void electionType1ComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_electionType1ComboBoxActionPerformed
-        jPanel2.setVisible(electionType1ComboBox.getSelectedItem().equals("On-Site")); 
+        jPanel2.setVisible(electionType1ComboBox.getSelectedItem().equals("On-Site"));
 
         if(electionType1ComboBox.getSelectedItem().equals("")) {
             jPanel3.setVisible(false);
@@ -2376,7 +2376,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_electionType1ComboBoxActionPerformed
 
     private void electionType3ComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_electionType3ComboBoxActionPerformed
-        
+
         if(electionType3ComboBox.getSelectedItem().toString().equals("Standard")) {
             if(electionType1ComboBox.getSelectedItem().toString().trim().equals("")) {
                 jPanel4.setVisible(false);
@@ -2436,7 +2436,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_addMultiCaseElectionButtonActionPerformed
 
     private void pollingEndDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pollingEndDateActionPerformed
-        
+
     }//GEN-LAST:event_pollingEndDateActionPerformed
 
     private void ballotsCountTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ballotsCountTimeActionPerformed
@@ -2447,7 +2447,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
         professionalButton.setSelected(false);
         nonProfessionalButton.setSelected(true);
         combinedButton.setSelected(false);
-        
+
         hanldeProfessionalNonProfessionalElection("Non-Professional");
     }//GEN-LAST:event_nonProfessionalButtonActionPerformed
 
@@ -2455,7 +2455,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
         professionalButton.setSelected(true);
         nonProfessionalButton.setSelected(false);
         combinedButton.setSelected(false);
-        
+
         hanldeProfessionalNonProfessionalElection("Professional");
     }//GEN-LAST:event_professionalButtonActionPerformed
 
@@ -2463,7 +2463,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
         professionalButton.setSelected(false);
         nonProfessionalButton.setSelected(false);
         combinedButton.setSelected(true);
-        
+
         hanldeProfessionalNonProfessionalElection("Combined");
     }//GEN-LAST:event_combinedButtonActionPerformed
 
@@ -2541,7 +2541,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
         } catch (ParseException ex) {
             SlackNotification.sendNotification(ex);
         }
-        
+
     }//GEN-LAST:event_pollingStartDateCaretPositionChanged
 
     private void pollingStartDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pollingStartDateActionPerformed
