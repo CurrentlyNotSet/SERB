@@ -222,24 +222,23 @@ public class CMDSCaseDocketEntryTypes {
 
         if(entryDescription.toLowerCase().contains("stayed") ||
                 entryDescription.toLowerCase().contains("fifting of stay")) {
-            if (caseStatus != null) {
-                if (caseStatus.equals("S")) {
-                    CMDSRemoveStayDialog removeStay = new CMDSRemoveStayDialog(dialog, true);
-                    if (removeStay.isRemoveStay()) {
-                        caseStatus = "O";
-                    } else {
-                        caseStatus = "S";
-                    }
-                    removeStay.dispose();
-                } else if (caseStatus.equals("O")) {
-                    CMDSPlaceStayDialog placeStay = new CMDSPlaceStayDialog(dialog, true);
-                    if (placeStay.isPlaceStay()) {
-                        caseStatus = "S";
-                    } else {
-                        caseStatus = "O";
-                    }
-                    placeStay.dispose();
+            
+            if (caseStatus.equals("S")) {
+                CMDSRemoveStayDialog removeStay = new CMDSRemoveStayDialog(dialog, true);
+                if (removeStay.isRemoveStay()) {
+                    caseStatus = "O";
+                } else {
+                    caseStatus = "S";
                 }
+                removeStay.dispose();
+            } else if (caseStatus.equals("O")) {
+                CMDSPlaceStayDialog placeStay = new CMDSPlaceStayDialog(dialog, true);
+                if (placeStay.isPlaceStay()) {
+                    caseStatus = "S";
+                } else {
+                    caseStatus = "O";
+                }
+                placeStay.dispose();
             }
         }
 
@@ -324,25 +323,24 @@ public class CMDSCaseDocketEntryTypes {
 
         CMDSCertifiedLetterDialog certified = new CMDSCertifiedLetterDialog(dialog, true);
 
-        if (caseStatus != null){
-            if(caseStatus.equals("S")) {
-                CMDSRemoveStayDialog removeStay = new CMDSRemoveStayDialog(dialog, true);
-                if(removeStay.isRemoveStay()) {
-                    caseStatus = "O";
-                } else {
-                    caseStatus = "S";
-                }
-                removeStay.dispose();
-            } else if(caseStatus.equals("O")) {
-                CMDSPlaceStayDialog placeStay = new CMDSPlaceStayDialog(dialog, true);
-                if(placeStay.isPlaceStay()) {
-                    caseStatus = "S";
-                } else {
-                    caseStatus = "O";
-                }
-                placeStay.dispose();
+        if(caseStatus.equals("S")) {
+            CMDSRemoveStayDialog removeStay = new CMDSRemoveStayDialog(dialog, true);
+            if(removeStay.isRemoveStay()) {
+                caseStatus = "O";
+            } else {
+                caseStatus = "S";
             }
+            removeStay.dispose();
+        } else if(caseStatus.equals("O")) {
+            CMDSPlaceStayDialog placeStay = new CMDSPlaceStayDialog(dialog, true);
+            if(placeStay.isPlaceStay()) {
+                caseStatus = "S";
+            } else {
+                caseStatus = "O";
+            }
+            placeStay.dispose();
         }
+        
 
         String activity = direction + " - " + entryDescription;
         activity += (certified.isCertified() ? " - (Certified)" : "");
