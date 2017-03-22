@@ -205,7 +205,7 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
             case "ORG":
             case "CSC":
                 activtyList = Activity.loadActivityDocumentsByGlobalCaseORGCSCPublicRecords();
-                path = Global.templatePath
+                path = Global.activityPath
                         + (Global.activeSection.equals("Civil Service Commission")
                         ? Global.caseType : Global.activeSection) + File.separator;
                 break;
