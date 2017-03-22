@@ -8,7 +8,6 @@ package parker.serb.docket;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
@@ -45,11 +44,13 @@ import parker.serb.util.FileService;
  * @author parker
  */
 public class fileEmailDialog extends javax.swing.JDialog {
-    
+
     JComboBox comboEditor = new JComboBox();
     String emailID = "";
     String emailSection = "";
     String passedTime;
+    boolean orgProcess = false;
+
     /**
      * Creates new form FileDocumentDialog
      */
@@ -64,10 +65,11 @@ public class fileEmailDialog extends javax.swing.JDialog {
         setCaseNumberTitle(section);
         loadData(section, id);
         setColumnWidth();
+        this.pack();
         setLocationRelativeTo(parent);
         setVisible(true);
     }
-    
+
     private void addRenderer() {
         attachmentTable.setDefaultRenderer(Object.class, new TableCellRenderer(){
             private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
@@ -82,7 +84,7 @@ public class fileEmailDialog extends javax.swing.JDialog {
             }
         });
     }
-    
+
     private void setCaseNumberTitle(String section) {
         switch(section) {
             case "ORG":
@@ -91,9 +93,10 @@ public class fileEmailDialog extends javax.swing.JDialog {
                 orgNameComboBox.setVisible(true);
                 break;
             case "CSC":
+            case "Civil Service Commission":
                 jLabel2.setText("CSC Number(s):");
-                orgNameLabel.setVisible(false);
-                orgNameComboBox.setVisible(false);
+                orgNameLabel.setVisible(true);
+                orgNameComboBox.setVisible(true);
                 break;
             default:
                 jLabel2.setText("Case Number(s):");
@@ -102,7 +105,7 @@ public class fileEmailDialog extends javax.swing.JDialog {
                 break;
         }
     }
-    
+
     private void setColumnWidth() {
         attachmentTable.getColumnModel().getColumn(0).setPreferredWidth(0);
         attachmentTable.getColumnModel().getColumn(0).setMinWidth(0);
@@ -110,9 +113,9 @@ public class fileEmailDialog extends javax.swing.JDialog {
         attachmentTable.getColumnModel().getColumn(2).setPreferredWidth(150);
         attachmentTable.getColumnModel().getColumn(2).setMinWidth(150);
         attachmentTable.getColumnModel().getColumn(2).setMaxWidth(150);
-        
+
     }
-    
+
     private void addListeners(String section, String id) {
         caseNumberTextBox.addFocusListener(new FocusListener() {
             @Override
@@ -123,29 +126,69 @@ public class fileEmailDialog extends javax.swing.JDialog {
                 validateCaseNumber();
             }
         });
-        
-        orgNameComboBox.addActionListener(new ActionListener() {
+
+        caseNumberTextBox.addMouseListener(new MouseListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                if(orgNameComboBox.getSelectedItem() != null) {
-                    if(orgNameComboBox.getSelectedItem().toString().equals("")) {
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() >= 2) {
+                    switch (section) {
+                        case "ORG":
+                            orgProcess = true;
+                            DocketORGCaseSearch orgSearch = new DocketORGCaseSearch(Global.root, true);
+                            caseNumberTextBox.setText(orgSearch.orgNumber);
+                            orgNameComboBox.setSelectedItem(orgSearch.orgName);
+                            orgSearch.dispose();
+                            validateCaseNumber();
+                            orgProcess = false;
+                            break;
+                        case "CSC":
+                        case "Civil Service Commission":
+                            orgProcess = true;
+                            DocketCSCCaseSearch cscSearch = new DocketCSCCaseSearch(Global.root, true);
+                            caseNumberTextBox.setText(cscSearch.orgNumber);
+                            orgNameComboBox.setSelectedItem(cscSearch.orgName);
+                            cscSearch.dispose();
+                            validateCaseNumber();
+                            orgProcess = false;
+                            break;
+                    }
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        });
+
+        orgNameComboBox.addActionListener((ActionEvent e) -> {
+            if (!orgProcess) {
+                if (orgNameComboBox.getSelectedItem() != null) {
+                    if (orgNameComboBox.getSelectedItem().toString().equals("")) {
                         caseNumberTextBox.setText("");
                     } else {
-                        if(section.equals("CSC")) {
+                        if (section.equals("CSC")) {
                             caseNumberTextBox.setText(CSCCase.getCSCNumber(orgNameComboBox.getSelectedItem().toString()));
-                        } else if(section.equals("ORG")) {
+                        } else if (section.equals("ORG")) {
                             caseNumberTextBox.setText(ORGCase.getORGNumber(orgNameComboBox.getSelectedItem().toString()));
                         }
                     }
                 }
             }
         });
-        
+
         bodyTextArea.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if(e.getClickCount() == 2) {
-                    if(!bodyTextArea.getText().toString().trim().equals("")) {
+                    if(!bodyTextArea.getText().trim().equals("")) {
                         FileService.openEmailBodyFile(id, section);
                     }
                 }
@@ -163,7 +206,7 @@ public class fileEmailDialog extends javax.swing.JDialog {
             @Override
             public void mouseExited(MouseEvent e) {}
         });
-        
+
         attachmentTable.addMouseListener(new MouseListener() {
 
             @Override
@@ -185,23 +228,17 @@ public class fileEmailDialog extends javax.swing.JDialog {
             @Override
             public void mouseExited(MouseEvent e) {}
         });
-        
-        comboEditor.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(attachmentTable != null) {
-                    enableButton();
-                } 
-            }
-        });
-        
-        toComboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+
+        comboEditor.addActionListener((ActionEvent e) -> {
+            if(attachmentTable != null) {
                 enableButton();
             }
         });
-        
+
+        toComboBox.addActionListener((ActionEvent e) -> {
+            enableButton();
+        });
+
         caseNumberTextBox.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -218,13 +255,13 @@ public class fileEmailDialog extends javax.swing.JDialog {
                 enableButton();
             }
         });
-        
-        
+
+
     }
-    
+
     private void enableButton() {
         boolean enableButton = true;
-        
+
         for (int i = 0; i < attachmentTable.getRowCount(); i++) {
             if(attachmentTable.getValueAt(i, 2) != null) {
                 if(attachmentTable.getValueAt(i, 2).toString().equals("")
@@ -235,25 +272,25 @@ public class fileEmailDialog extends javax.swing.JDialog {
                 }
             }
         }
-        
+
         if(toComboBox.getSelectedItem() != null) {
             if(toComboBox.getSelectedItem().toString().equals("")) {
                 enableButton = false;
             }
         }
-        
+
         if(caseNumberTextBox.getText().equals("")) {
             enableButton = false;
         }
-        
+
         fileButton.setEnabled(enableButton);
     }
-    
+
     private void validateCaseNumber() {
         String[] caseNumbers = caseNumberTextBox.getText().split(",");
-        
+
         String caseNumberFail = "";
-        
+
         switch(emailSection) {
             case "ULP":
                 caseNumberFail = CaseNumber.validateULPCaseNumber(caseNumbers);
@@ -266,25 +303,25 @@ public class fileEmailDialog extends javax.swing.JDialog {
                 break;
             case "ORG":
                 caseNumberFail = CaseNumber.validateORGCaseNumber(caseNumbers);
-                orgNameComboBox.setSelectedItem("");
+                //orgNameComboBox.setSelectedItem("");
                 break;
             case "CMDS":
                 caseNumberFail = CaseNumber.validateCMDSCaseNumber(caseNumbers);
                 break;
             case "CSC":
                 caseNumberFail = CaseNumber.validateCSCCaseNumber(caseNumbers);
-                orgNameComboBox.setSelectedItem("");
+                //orgNameComboBox.setSelectedItem("");
                 break;
         }
-        
+
         if(!caseNumberFail.equals("")) {
             new docketingCaseNotFound((JFrame) Global.root.getRootPane().getParent(), true, caseNumberFail);
             caseNumberTextBox.requestFocus();
         }
-        
+
         if(!caseNumberTextBox.getText().equals("")) {
             switch (emailSection) {
-                    case "ULP":  
+                    case "ULP":
                         toComboBox.setSelectedItem(ULPCase.DocketTo(caseNumberTextBox.getText()));
                         break;
                     case "REP":
@@ -305,97 +342,97 @@ public class fileEmailDialog extends javax.swing.JDialog {
             }
         }
     }
-     
+
     private void loadData(String section, String id) {
         if(section.equals("ORG")) {
             orgNameComboBox.removeAllItems();
             orgNameComboBox.addItem("");
-            
+
             List caseNumberList = ORGCase.loadORGNames();
 
             caseNumberList.stream().forEach((caseNumber) -> {
                 orgNameComboBox.addItem(caseNumber.toString());
             });
         }
-        
+
         if(section.equals("CSC")) {
             orgNameComboBox.removeAllItems();
             orgNameComboBox.addItem("");
-            
+
             List caseNumberList = CSCCase.loadCSCNames();
 
             caseNumberList.stream().forEach((caseNumber) -> {
                 orgNameComboBox.addItem(caseNumber.toString());
             });
         }
-            
+
         loadToComboBox(section);
         loadEmailInformation(id);
         loadAttachmentTable(id, section);
     }
-    
+
     private void loadToComboBox(String section) {
         List userList = null;
-        
+
         if(section.equals("REP") || section.equals("MED") || section.equals("ULP")) {
             userList = User.loadSectionDropDownsPlusALJ(section);
         } else {
             userList = User.loadSectionDropDowns(section);
         }
-        
+
         toComboBox.setMaximumRowCount(6);
         toComboBox.removeAllItems();
         toComboBox.addItem("");
-        
+
         for(int i = 0; i < userList.size(); i++) {
             toComboBox.addItem(userList.get(i).toString());
         }
     }
-    
+
     private void loadEmailInformation(String id) {
         Email emailToLoad = Email.getEmailByID(id);
-        
+
         dateTextBox.setText(Global.mmddyyyyhhmma.format(emailToLoad.receivedDate));
         fromTextBox.setText(emailToLoad.emailFrom);
         subjectTextBox.setText(emailToLoad.emailSubject);
         bodyTextArea.setText(emailToLoad.emailBody);
-        
+
     }
-    
+
     private void loadAttachmentTable(String id, String section) {
-        
+
         DefaultTableModel model = (DefaultTableModel) attachmentTable.getModel();
-        
+
         TableColumn myColumn = attachmentTable.getColumnModel().getColumn(2);
-        
+
         myColumn.setCellEditor(new DefaultCellEditor(loadTypeComboBox(section)));
-        
+
         model.setRowCount(0);
-        
+
         List<EmailAttachment> attachments = EmailAttachment.getAttachmentList(id);
-        
+
         for (EmailAttachment attachment : attachments) {
             model.addRow(new Object[] {attachment.id, attachment.fileName, ""});
         }
-        
+
     }
-    
+
     private JComboBox loadTypeComboBox(String section) {
         List typeList = ActivityType.loadAllActivityTypeBySection(section);
-        
+
         comboEditor.setMaximumRowCount(10);
         comboEditor.removeAllItems();
         comboEditor.addItem("DO NOT FILE");
         comboEditor.addItem("-----------");
-        
+
         for(Object type : typeList) {
             ActivityType item = (ActivityType) type;
             comboEditor.addItem(item.descriptionAbbrv);
         }
-        
+
         return comboEditor;
     }
-    
+
     private void fileEmailAttachments(String[] caseNumbers) {
         //stop the possible edits on the table and file accordingly
         if(attachmentTable.getCellEditor() != null)
@@ -405,8 +442,8 @@ public class fileEmailDialog extends javax.swing.JDialog {
             if(!attachmentTable.getValueAt(i, 2).toString().equals("DO NOT FILE")) {
                 FileService.docketEmailAttachment(caseNumbers,  //caseNumber
                 attachmentTable.getValueAt(i, 0).toString(),    //attachmentid
-                emailID,                                        
-                emailSection,                                   
+                emailID,
+                emailSection,
                 fromTextBox.getText(),
                 toComboBox.getSelectedItem().toString(),
                 subjectTextBox.getText(),
@@ -415,11 +452,11 @@ public class fileEmailDialog extends javax.swing.JDialog {
                 attachmentTable.getValueAt(i, 3) != null        //comment
                         ? attachmentTable.getValueAt(i, 3).toString() : "",
                 generateDate(),
-                directionComboBox.getSelectedItem().toString()); 
+                directionComboBox.getSelectedItem().toString());
             }
         }
     }
-    
+
     private Date generateDate() {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, Integer.valueOf(passedTime.split(" ")[0].split("/")[2]));
@@ -429,12 +466,12 @@ public class fileEmailDialog extends javax.swing.JDialog {
         cal.set(Calendar.MINUTE, Integer.valueOf(passedTime.split(" ")[1].split(":")[1]));
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
-        
+
         return cal.getTime();
     }
-    
+
     private void deleteEmail(String id) {
-                    
+
         String emailBodyFileName = Email.getEmailBodyFileByID(id);
 
         File bodyFile = new File(Global.emailPath + emailSection + File.separatorChar + emailBodyFileName);
@@ -459,7 +496,7 @@ public class fileEmailDialog extends javax.swing.JDialog {
             EmailAttachment.deleteEmailAttachmentEntry(attach.id);
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -705,7 +742,7 @@ public class fileEmailDialog extends javax.swing.JDialog {
     private void fileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileButtonActionPerformed
         //getcaseNumber
         String[] caseNumbers = caseNumberTextBox.getText().trim().split(",");
-        
+
         //fileBody --> no longer needed 2/28/17
 //        FileService.docketEmailBody(caseNumbers,
 //                emailID,
@@ -715,12 +752,12 @@ public class fileEmailDialog extends javax.swing.JDialog {
 //                subjectTextBox.getText(),
 //                generateDate(),
 //                directionComboBox.getSelectedItem().toString());
-        
+
         //fileAttachements
         fileEmailAttachments(caseNumbers);
-        
+
         deleteEmail(emailID);
-        
+
         dispose();
     }//GEN-LAST:event_fileButtonActionPerformed
 
@@ -765,6 +802,7 @@ public class fileEmailDialog extends javax.swing.JDialog {
           super(items);
         }
 
+        @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
             boolean hasFocus, int row, int column) {
           if (isSelected) {
