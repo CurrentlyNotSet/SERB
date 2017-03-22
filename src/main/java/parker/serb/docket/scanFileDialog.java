@@ -381,7 +381,11 @@ public class scanFileDialog extends javax.swing.JDialog {
         cal.set(Calendar.YEAR, Integer.valueOf(scanDateTextBox.getText().split("/")[2]));
         cal.set(Calendar.MONTH, Integer.valueOf(scanDateTextBox.getText().split("/")[0]) - 1);
         cal.set(Calendar.DAY_OF_MONTH, Integer.valueOf(scanDateTextBox.getText().split("/")[1]));
-        cal.set(Calendar.HOUR_OF_DAY, amPMComboBox.getSelectedItem().toString().equalsIgnoreCase("AM") ? hour : hour + 12);
+        if (amPMComboBox.getSelectedItem().toString().equalsIgnoreCase("PM") && hour == 12){
+            cal.set(Calendar.HOUR_OF_DAY, hour);
+        } else {
+            cal.set(Calendar.HOUR_OF_DAY, amPMComboBox.getSelectedItem().toString().equalsIgnoreCase("AM") ? hour : hour + 12);
+        }
         cal.set(Calendar.MINUTE, Integer.valueOf(minuteTextBox.getText().trim()));
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
