@@ -248,9 +248,11 @@ public class BUNumberFileAddUpdateDeleteDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        BUInformationNewDialog newBU = new BUInformationNewDialog((Frame) Global.root.getParent(), true);
+        BUInformationNewDialog newBU = new BUInformationNewDialog((Frame) Global.root.getParent(), true, searchTextBox.getText().trim());
         bu = BargainingUnit.loadBUList();
-        searchTextBox.setText(newBU.getNumber());
+        if (!newBU.getNumber().trim().equals("")){
+            searchTextBox.setText(newBU.getNumber());
+        }
         newBU.dispose();
         searchBU();
     }//GEN-LAST:event_jButton2ActionPerformed

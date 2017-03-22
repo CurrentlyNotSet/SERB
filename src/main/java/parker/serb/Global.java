@@ -22,7 +22,7 @@ public class Global {
     // Major Version       3 -- will stay 3
     // Minor Version       0 -- update with larger enhancments
     // Maintenence Version 0 -- bug fix releases
-    public static final String APPLICATION_VERSION = "3.0.8";
+    public static final String APPLICATION_VERSION = "3.0.9";
 
     //All Date and Time formatters
     public static SimpleDateFormat mmddyyyyhhmma = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
@@ -98,6 +98,9 @@ public class Global {
 
     //bookmark loop limit
     public static final int BOOKMARK_LIMIT = 10;
+
+    //email File size Limit (22MB  25MB is the max, leaving overhead for conversions)
+    public static final double EmailSizeLimit = 22000000;
 
     //format Ending for dates
     public static final String[] daySuffixes =

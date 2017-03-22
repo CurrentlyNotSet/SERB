@@ -286,7 +286,8 @@ public class questionsCMDSPanel extends JDialog {
         answers.setInfoRedacted(infoRedactedTextField == null ? "" : infoRedactedTextField.getText());
         answers.setRedactorName(whoRedactedTextField == null ? "" : whoRedactedTextField.getText());
         answers.setRedactorTitle(redactedTitleTextField == null ? "" : redactedTitleTextField.getText());
-        answers.setDatePOSent(datePOSentWebDateField == null ? "" : datePOSentWebDateField.getText());
+        answers.setDatePOSent(datePOSentWebDateField == null ? ""
+                : (datePOSentWebDateField.getText().equals("") ? "" : Global.MMMMdyyyy.format(datePOSentWebDateField.getDate())));
         answers.setRespondingParty(respondingPartyComboBox == null ? "" : respondingPartyComboBox.getSelectedItem().toString());
         answers.setRequestingParty(requestingPartyComboBox == null ? "" : requestingPartyComboBox.getSelectedItem().toString());
         answers.setDeposition(depositionComboBox == null ? "" : depositionComboBox.getSelectedItem().toString());
