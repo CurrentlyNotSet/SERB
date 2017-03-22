@@ -359,7 +359,7 @@ public class CMDSCaseHistoryEntryTypes {
             }
 
             CMDSCertifiedLetterDialog certified = new CMDSCertifiedLetterDialog(dialog, true);
-
+            
             if(caseStatus.equals("S")) {
                 CMDSRemoveStayDialog removeStay = new CMDSRemoveStayDialog(dialog, true);
                 if(removeStay.isRemoveStay()) {
