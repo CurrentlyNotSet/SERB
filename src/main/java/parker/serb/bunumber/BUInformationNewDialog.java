@@ -13,12 +13,12 @@ import java.awt.event.MouseEvent;
 import java.sql.Timestamp;
 import java.util.List;
 import javax.swing.JFrame;
+import org.apache.commons.lang.StringUtils;
 import parker.serb.Global;
 import parker.serb.employer.employerSearch;
 import parker.serb.sql.BargainingUnit;
 import parker.serb.sql.County;
 import parker.serb.sql.Employer;
-import parker.serb.util.CancelUpdate;
 import parker.serb.util.ClearDateDialog;
 import parker.serb.util.NumberFormatService;
 
@@ -31,23 +31,40 @@ public class BUInformationNewDialog extends javax.swing.JDialog {
     String number = "";
     /**
      * Creates new form BUInformationUpdateDialog
+     * @param parent
+     * @param modal
+     * @param passedNumber
      */
-    public BUInformationNewDialog(java.awt.Frame parent, boolean modal) {
+    public BUInformationNewDialog(java.awt.Frame parent, boolean modal, String passedNumber) {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(parent);
-        enableAll();
-        loadDropdowns();
+        loadDefaults(passedNumber);
         setVisible(true);
     }
 
     public String getNumber() {
         return number;
     }
-    
+
+    private void loadDefaults(String passedNumber){
+        Employer loadedEmployer = null;
+        enableAll();
+        loadDropdowns();
+
+        loadedEmployer = Employer.loadEmployerByID(StringUtils.left(passedNumber, 4));
+
+        if (loadedEmployer != null){
+            employerNumberTextBox.setText(loadedEmployer.employerIDNumber == null ? "" : loadedEmployer.employerIDNumber);
+            employerNameTextBox.setText(loadedEmployer.employerName == null ? "" : loadedEmployer.employerName);
+            countyComboBox.setSelectedItem(loadedEmployer.county == null ? "" : loadedEmployer.county);
+        }
+        this.pack();
+    }
+
     private String getCertStatus(String certString) {
         String cert = "";
-        
+
         switch(certString) {
             case "B":
                 cert = "Board";
@@ -68,10 +85,10 @@ public class BUInformationNewDialog extends javax.swing.JDialog {
                 cert = "U";
                 break;
         }
-        
+
         return cert;
     }
-    
+
     private void disableAll() {
         employerNumberTextBox.setEnabled(false);
         employerNumberTextBox.setBackground(new Color(238,238,238));
@@ -86,7 +103,7 @@ public class BUInformationNewDialog extends javax.swing.JDialog {
         activeCheckBox.setEnabled(false);
         unitDescriptionTextArea.setEnabled(false);
         unitDescriptionTextArea.setBackground(new Color(238,238,238));
-        
+
         unitNumberTextBox.setEnabled(false);
         unitNumberTextBox.setBackground(new Color(238,238,238));
         certificationDateTextBox.setEnabled(false);
@@ -100,9 +117,9 @@ public class BUInformationNewDialog extends javax.swing.JDialog {
         strikeCheckBox.setEnabled(false);
         notesTextArea.setEnabled(false);
         notesTextArea.setBackground(new Color(238,238,238));
-        
+
     }
-    
+
     private void enableAll() {
         employerNumberTextBox.setEnabled(true);
         employerNumberTextBox.setBackground(Color.white);
@@ -117,7 +134,7 @@ public class BUInformationNewDialog extends javax.swing.JDialog {
         activeCheckBox.setEnabled(true);
         unitDescriptionTextArea.setEnabled(true);
         unitDescriptionTextArea.setBackground(Color.white);
-        
+
         unitNumberTextBox.setEnabled(true);
         unitNumberTextBox.setBackground(Color.white);
         certificationDateTextBox.setEnabled(true);
@@ -132,20 +149,20 @@ public class BUInformationNewDialog extends javax.swing.JDialog {
         notesTextArea.setEnabled(true);
         notesTextArea.setBackground(Color.white);
     }
-    
-    
+
+
     private void loadDropdowns() {
         //load county
         List<String> countyList = County.loadCountyList();
-        
+
         countyComboBox.removeAllItems();
         countyComboBox.addItem("");
-        
+
         for (Object singleCounty : countyList) {
             County county = (County) singleCounty;
             countyComboBox.addItem(county.countyName);
         }
-        
+
         //load cert status
         CertStatusComboBox.removeAllItems();
         CertStatusComboBox.addItem("");
@@ -153,10 +170,10 @@ public class BUInformationNewDialog extends javax.swing.JDialog {
         CertStatusComboBox.addItem("Deemed");
         CertStatusComboBox.addItem("Unknown");
     }
-    
+
     private void saveInformation() {
         BargainingUnit buUpdate = new BargainingUnit();
-        
+
         buUpdate.employerNumber = employerNumberTextBox.getText();
         buUpdate.buEmployerName = employerNameTextBox.getText();
         buUpdate.lUnion = unionTextBox.getText();
@@ -165,7 +182,7 @@ public class BUInformationNewDialog extends javax.swing.JDialog {
         buUpdate.cert = getCertStatus(CertStatusComboBox.getSelectedItem().toString());
         buUpdate.enabled = activeCheckBox.isSelected();
         buUpdate.unitDescription = unitDescriptionTextArea.getText().trim();
-        
+
         buUpdate.unitNumber = unitNumberTextBox.getText();
         buUpdate.certDate = certificationDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(certificationDateTextBox.getText()));
 
@@ -180,17 +197,17 @@ public class BUInformationNewDialog extends javax.swing.JDialog {
            buUpdate.caseRefMonth = null;
            buUpdate.caseRefSequence = null;
         }
-        
+
         buUpdate.jurisdiction = jurisdictionTextBox.getText();
         buUpdate.lGroup = buCodeTextBox.getText();
         buUpdate.strike = strikeCheckBox.isSelected();
         buUpdate.notes = notesTextArea.getText().trim();
-        
+
         BargainingUnit.createBU(buUpdate);
-        
+
         number = buUpdate.employerNumber + "-" + buUpdate.unitNumber;
     }
-    
+
     private void clearDate(WebDateField dateField, MouseEvent evt) {
         if(evt.getButton() == MouseEvent.BUTTON3 && dateField.isEnabled()) {
             ClearDateDialog dialog = new ClearDateDialog((JFrame) Global.root, true);
