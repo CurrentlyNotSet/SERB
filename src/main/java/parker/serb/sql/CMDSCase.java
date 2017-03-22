@@ -1055,7 +1055,7 @@ public class CMDSCase {
         try {
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "Insert into CMDSCase (CaseYear, CaseType, CaseMonth, CaseNumber, openDate) Values (?,?,?,?,?)";
+            String sql = "Insert into CMDSCase (CaseYear, CaseType, CaseMonth, CaseNumber, openDate, caseStatus) Values (?,?,?,?,?, 'O')";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, caseYear);

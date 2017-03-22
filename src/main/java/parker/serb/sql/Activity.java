@@ -130,11 +130,11 @@ public class Activity {
     }
 
     public static void addCMDSActivty(String action, String fileName, Date date,
-            String caseNumber, String from, String to, String category, String description) {
+            String caseNumber, String from, String to, String category, String description, String comment) {
         try {
             Statement stmt = null;
             String type = null;
-            
+
             if(category != null && description != null) {
                 type = category + " - " + description;
             }
@@ -160,10 +160,14 @@ public class Activity {
                 preparedStatement.setString(7, action.equals("") ? null : action); //action
                 preparedStatement.setString(8, fileName == null || fileName.equals("") ?
                         null : FilenameUtils.getName(fileName)); //fileName
-                preparedStatement.setString(9, from); //from
-                preparedStatement.setString(10, to); //to
-                preparedStatement.setString(11, type); //type
-                preparedStatement.setString(12, null); //comment
+                preparedStatement.setString(9, from == null ? null :
+                        from.trim().equals("") ? null : from.trim()); //from
+                preparedStatement.setString(10, to == null ? null :
+                        to.trim().equals("") ? null : to.trim()); //to
+                preparedStatement.setString(11, type == null ? null :
+                        type.trim().equals("") ? null : type.trim()); //type
+                preparedStatement.setString(12, comment == null ? null :
+                        comment.trim().equals("") ? null : comment.trim()); //comment
                 preparedStatement.setBoolean(13, false);
                 preparedStatement.setBoolean(14, false);
                 preparedStatement.setBoolean(15, true);
@@ -179,7 +183,7 @@ public class Activity {
                 }
             } catch (SQLException ex) {
                 if(ex.getCause() instanceof SQLServerException) {
-                    addCMDSActivty(action, fileName, date, caseNumber, from, to, category, description);
+                    addCMDSActivty(action, fileName, date, caseNumber, from, to, category, description, comment);
                 } else {
                     SlackNotification.sendNotification(ex);
                 }
@@ -842,13 +846,13 @@ public class Activity {
         Activity activity = new Activity();
 
         Statement stmt = null;
-        
+
         String sql = "";
 
         try {
 
             stmt = Database.connectToDB().createStatement();
-            
+
             if(user.equals("SYSTEM")) {
                 sql = "select Activity.id,"
                     + " caseYear,"
@@ -892,7 +896,7 @@ public class Activity {
 
             ResultSet caseActivity = preparedStatement.executeQuery();
 
-            
+
             while(caseActivity.next()) {
                 if (user.equals("SYSTEM")) {
                     activity.id = caseActivity.getInt("id");
@@ -921,7 +925,7 @@ public class Activity {
                     activity.to = caseActivity.getString("to");
                     activity.type = caseActivity.getString("type");
                     activity.comment = caseActivity.getString("comment");
-                    activity.from = caseActivity.getString("from");    
+                    activity.from = caseActivity.getString("from");
                 }
             }
         } catch (SQLException ex) {

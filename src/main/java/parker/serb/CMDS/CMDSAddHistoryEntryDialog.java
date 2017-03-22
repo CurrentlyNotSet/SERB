@@ -25,6 +25,8 @@ public class CMDSAddHistoryEntryDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form CMDSAddHistoryEntryDialog
+     * @param parent
+     * @param modal
      */
     public CMDSAddHistoryEntryDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -36,7 +38,7 @@ public class CMDSAddHistoryEntryDialog extends javax.swing.JDialog {
         setLocationRelativeTo(parent);
         setVisible(true);
     }
-    
+
     private void addListeners() {
         entryDateTextBox.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -54,10 +56,10 @@ public class CMDSAddHistoryEntryDialog extends javax.swing.JDialog {
                 enableSaveButton();
             }
         });
-        
-        
+
+
     }
-    
+
     private void enableSaveButton() {
         if(entryDateTextBox.getText().equals("")
                 || mailTypeComboBox.getSelectedItem().toString().equals("")
@@ -72,41 +74,41 @@ public class CMDSAddHistoryEntryDialog extends javax.swing.JDialog {
             }
         }
     }
-    
+
     private void loadMailTypeComboBox() {
         mailTypeComboBox.removeAllItems();
-        
+
         mailTypeComboBox.addItem("");
         mailTypeComboBox.addItem("I");
         mailTypeComboBox.addItem("N");
         mailTypeComboBox.addItem("O");
     }
-    
+
     private void loadEntryTypeComboBox() {
         entryTypeComboBox.removeAllItems();
-        
+
         entryTypeComboBox.addItem("");
-        
+
         List<CMDSHistoryCategory> entryTypes = CMDSHistoryCategory.loadActiveCMDSHistoryDescriptions();
-        
+
         for(int i = 0; i < entryTypes.size(); i++) {
             entryTypeComboBox.addItem(entryTypes.get(i).entryType + " - " + entryTypes.get(i).description);
         }
     }
-    
+
     private void loadEntryDescriptionComboBox() {
         entryDescriptionComboBox.removeAllItems();
-        
+
         List<CMDSHistoryDescription> entryTypes = CMDSHistoryDescription.loadAllStatusTypes(entryTypeComboBox.getSelectedItem().toString().split("-")[0].trim());
-        
+
         for(int i = 0; i < entryTypes.size(); i++) {
             entryDescriptionComboBox.addItem(entryTypes.get(i).description);
         }
     }
-    
+
     private String partyName() {
         String party = "";
-        
+
         if (appellantButton.isSelected()) {
             party = "Appellant";
         } else if(appelleeButton.isSelected()) {
@@ -114,7 +116,7 @@ public class CMDSAddHistoryEntryDialog extends javax.swing.JDialog {
         } else {
             party = "";
         }
-        
+
         return party;
     }
 
@@ -371,7 +373,7 @@ public class CMDSAddHistoryEntryDialog extends javax.swing.JDialog {
             this,
             documnetLinkTextBox.getText().trim()
         );
-        
+
         dispose();
     }//GEN-LAST:event_saveButtonActionPerformed
 
