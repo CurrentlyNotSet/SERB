@@ -24,31 +24,28 @@ import parker.serb.util.FileService;
 public class CMDSDetailedActivityDialog extends javax.swing.JDialog {
 
     String fileName;
-    Activity orgActivity;
+    Activity activityInfo;
     Activity updatedActivity = new Activity();
     String passedID;
     String passedUser;
     /**
      * Creates new form DetailedActivityDialog
+     * @param parent
+     * @param modal
+     * @param id
+     * @param userName
      */
     public CMDSDetailedActivityDialog(java.awt.Frame parent, boolean modal, String id, String userName) {
         super(parent, modal);
         initComponents();
         passedID = id;
         passedUser = userName;
-        //displayUpdateButton();
         loadComboBoxes();
         enableInputs(false);
         loadInformation(id, userName);
         setLocationRelativeTo(parent);
         setVisible(true);
     }
-
-//    private void displayUpdateButton() {
-//        if(!Global.activeUserRoles.contains("Admin")) {
-//            updateButton.setVisible(false);
-//        }
-//    }
 
     private void loadComboBoxes() {
         loadToComboBox();
@@ -60,9 +57,7 @@ public class CMDSDetailedActivityDialog extends javax.swing.JDialog {
         List userList = userList = User.loadSectionDropDowns("CMDS");
 
         toComboBox.setMaximumRowCount(6);
-
         toComboBox.removeAllItems();
-
         toComboBox.addItem("");
 
         for(int i = 0; i < userList.size(); i++) {
@@ -72,16 +67,9 @@ public class CMDSDetailedActivityDialog extends javax.swing.JDialog {
 
     private void loadTypeComboBox() {
         List<CMDSHistoryCategory> entryTypes = CMDSHistoryCategory.loadActiveCMDSHistoryDescriptions();
-        
-//        for(int i = 0; i < entryTypes.size(); i++) {
-//            entryTypeComboBox.addItem(entryTypes.get(i).entryType + " - " + entryTypes.get(i).description);
-//        }
-//        List typeList = CMDS.loadAllActivityTypeBySection(Global.activeSection);
 
         typeComboBox.setMaximumRowCount(10);
-
         typeComboBox.removeAllItems();
-
         typeComboBox.addItem("");
 
         for(int i = 0; i < entryTypes.size(); i++) {
@@ -89,67 +77,87 @@ public class CMDSDetailedActivityDialog extends javax.swing.JDialog {
             typeComboBox.addItem(item.entryType + " - " + item.description);
         }
     }
-    
+
     private void loadEntryDescriptionComboBox() {
         descriptionComboBox.removeAllItems();
-        
+
         List<CMDSHistoryDescription> entryTypes = CMDSHistoryDescription.loadAllStatusTypes(typeComboBox.getSelectedItem().toString().split("-")[0].trim());
-        
+
         for(int i = 0; i < entryTypes.size(); i++) {
             descriptionComboBox.addItem(entryTypes.get(i).description);
         }
     }
 
     private void loadInformation(String id, String userName) {
-        orgActivity = Activity.loadActivityByID(id, userName);
+        activityInfo = Activity.loadActivityByID(id, userName);
 
-        dateTextBox.setText(orgActivity.date);
-        actionTextBox.setText(orgActivity.action);
-        fromTextBox.setText(orgActivity.from);
-        
-        if(((DefaultComboBoxModel)toComboBox.getModel()).getIndexOf(orgActivity.to) < 0) {
-            toComboBox.addItem(orgActivity.to );
+        dateTextBox.setText(activityInfo.date);
+        actionTextBox.setText(activityInfo.action);
+        fromTextBox.setText(activityInfo.from);
+
+        if(((DefaultComboBoxModel)toComboBox.getModel()).getIndexOf(activityInfo.to) < 0) {
+            toComboBox.addItem(activityInfo.to );
         }
-        
-        toComboBox.setSelectedItem(orgActivity.to);
-        typeComboBox.setSelectedItem(orgActivity.type == null ? "" : getCategory(orgActivity.type.split("-")[0].trim()));
-        descriptionComboBox.setSelectedItem(orgActivity.type == null ? "" : orgActivity.type.split("-")[1].trim());
 
-        if(orgActivity.fileName == null) {
+        toComboBox.setSelectedItem(activityInfo.to);
+
+        String typeLoad = "";
+        String descriptionLoad = "";
+
+        if (activityInfo.type != null) {
+            String[] activtyTypeSplit = activityInfo.type.split("-", 2);
+
+            if (activtyTypeSplit.length == 1) {
+                typeLoad = getCategory(activtyTypeSplit[0].trim());
+            }
+            if (activtyTypeSplit.length == 2) {
+                typeLoad = getCategory(activtyTypeSplit[0].trim());
+                descriptionLoad = activtyTypeSplit[1].trim();
+            }
+        }
+
+        typeComboBox.setSelectedItem(typeLoad);
+        descriptionComboBox.setSelectedItem(descriptionLoad);
+        commentTextArea.setText(activityInfo.comment == null ? "" : activityInfo.comment.trim());
+
+        if(activityInfo.fileName == null) {
             viewFileButton.setVisible(false);
-        } else switch (orgActivity.fileName) {
+        } else switch (activityInfo.fileName) {
             case "":
                 viewFileButton.setVisible(false);
                 break;
             default:
-                fileName = orgActivity.fileName;
+                fileName = activityInfo.fileName;
                 break;
         }
     }
-    
+
     private String getCategory(String type) {
         return CMDSHistoryCategory.getCategotyByLetter(type);
     }
 
     private void enableInputs(boolean value) {
-//        typeComboBox.setEnabled(value);
-
+        //typeComboBox.setEnabled(value);
         descriptionComboBox.setEnabled(value);
-//        commentTextArea.setEditable(value);
     }
 
     private void updateAction() {
-        updatedActivity.id = orgActivity.id;
-        
-        if(orgActivity.type == null) {
+        updatedActivity.id = activityInfo.id;
+
+        if(activityInfo.type == null) {
             updatedActivity.action = actionTextBox.getText().trim();
         } else {
-            updatedActivity.action = actionTextBox.getText().trim().replace(orgActivity.type.split("-")[1].trim(), descriptionComboBox.getSelectedItem().toString().trim());
+            String[] activtyTypeSplit = activityInfo.type.split("-", 2);
+            if (activtyTypeSplit.length == 2) {
+                updatedActivity.action = actionTextBox.getText().trim().replace(activtyTypeSplit[1].trim(), descriptionComboBox.getSelectedItem().toString().trim());
+            }
         }
-        
-        updatedActivity.from = fromTextBox.getText();
-        updatedActivity.to = toComboBox.getSelectedItem() == null ? "" : toComboBox.getSelectedItem().toString();
-        
+
+        updatedActivity.from = fromTextBox.getText().equals("") ? null
+                : fromTextBox.getText();
+        updatedActivity.to = toComboBox.getSelectedItem() == null ? null
+                : toComboBox.getSelectedItem().toString().equals("") ? null :toComboBox.getSelectedItem().toString();
+
         if(!typeComboBox.getSelectedItem().toString().equals("") &&
             !descriptionComboBox.getSelectedItem().toString().equals("")) {
             updatedActivity.type = typeComboBox.getSelectedItem().toString().split("-")[0].trim() + " - " + descriptionComboBox.getSelectedItem().toString().trim();
@@ -157,26 +165,28 @@ public class CMDSDetailedActivityDialog extends javax.swing.JDialog {
             updatedActivity.type = null;
         }
 
+        updatedActivity.comment = commentTextArea.getText().trim().equals("") ? null : commentTextArea.getText().trim();
+
         Activity.updateActivtyEntry(updatedActivity);
     }
 
     private void updateFileName() {
         if(Global.activeSection.equals("CMDS")) {
-            updatedActivity.fileName = orgActivity.fileName;
-        } else if(orgActivity.type != null) {
-            if(!orgActivity.type.equals(typeComboBox.getSelectedItem().toString())) {
-                if(orgActivity.fileName != null) {
-                    FileService.renameActivtyFile(orgActivity.fileName, typeComboBox.getSelectedItem().toString());
+            updatedActivity.fileName = activityInfo.fileName;
+        } else if(activityInfo.type != null) {
+            if(!activityInfo.type.equals(typeComboBox.getSelectedItem().toString())) {
+                if(activityInfo.fileName != null) {
+                    FileService.renameActivtyFile(activityInfo.fileName, typeComboBox.getSelectedItem().toString());
 
-                    updatedActivity.fileName = orgActivity.fileName.split("_")[0] + "_"
+                    updatedActivity.fileName = activityInfo.fileName.split("_")[0] + "_"
                             + ActivityType.getTypeAbbrv(typeComboBox.getSelectedItem().toString()).replace(" ", "_")
-                            + "." + orgActivity.fileName.split("\\.")[1];
+                            + "." + activityInfo.fileName.split("\\.")[1];
                     fileName = updatedActivity.fileName;
                 }
             } else {
-                updatedActivity.fileName = orgActivity.fileName;
+                updatedActivity.fileName = activityInfo.fileName;
             }
-        } 
+        }
     }
 
     /**
@@ -204,6 +214,9 @@ public class CMDSDetailedActivityDialog extends javax.swing.JDialog {
         updateButton = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         descriptionComboBox = new javax.swing.JComboBox<>();
+        jLabel8 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        commentTextArea = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -233,10 +246,8 @@ public class CMDSDetailedActivityDialog extends javax.swing.JDialog {
         fromTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         fromTextBox.setEnabled(false);
 
-        toComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         toComboBox.setEnabled(false);
 
-        typeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         typeComboBox.setEnabled(false);
         typeComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -267,8 +278,15 @@ public class CMDSDetailedActivityDialog extends javax.swing.JDialog {
 
         jLabel7.setText("Description:");
 
-        descriptionComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         descriptionComboBox.setEnabled(false);
+
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel8.setText("Comment:");
+
+        commentTextArea.setColumns(20);
+        commentTextArea.setRows(5);
+        commentTextArea.setEnabled(false);
+        jScrollPane1.setViewportView(commentTextArea);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -282,13 +300,14 @@ public class CMDSDetailedActivityDialog extends javax.swing.JDialog {
                             .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addGap(20, 20, 20)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(jLabel3)
                                     .addComponent(jLabel2)
                                     .addComponent(jLabel4)
                                     .addComponent(jLabel5)
                                     .addComponent(jLabel6)
-                                    .addComponent(jLabel7))
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(dateTextBox)
@@ -297,7 +316,8 @@ public class CMDSDetailedActivityDialog extends javax.swing.JDialog {
                                     .addComponent(toComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(typeComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(viewFileButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 347, Short.MAX_VALUE)
-                                    .addComponent(descriptionComboBox, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                    .addComponent(descriptionComboBox, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jScrollPane1)))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(updateButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -335,7 +355,11 @@ public class CMDSDetailedActivityDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(descriptionComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE))
-                .addGap(5, 5, 5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel8)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(viewFileButton)
                 .addGap(18, 18, 18)
                 .addComponent(updateButton)
@@ -350,7 +374,8 @@ public class CMDSDetailedActivityDialog extends javax.swing.JDialog {
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
         if(updateButton.getText().equals("Update")) {
             Audit.addAuditEntry("Clicked Update Button for Activity: " + passedID);
-            enableInputs(typeComboBox.getSelectedItem() == null);
+            enableInputs(!typeComboBox.getSelectedItem().toString().equals(""));
+            commentTextArea.setEnabled(true);
             updateButton.setText("Save");
             closeButton.setText("Cancel");
         } else if(updateButton.getText().equals("Save")) {
@@ -358,6 +383,7 @@ public class CMDSDetailedActivityDialog extends javax.swing.JDialog {
             updateFileName();
             updateAction();
             enableInputs(false);
+            commentTextArea.setEnabled(false);
             loadInformation(passedID, passedUser);
             Audit.addAuditEntry("Updated Information for Activity: " + passedID);
             updateButton.setText("Update");
@@ -384,21 +410,7 @@ public class CMDSDetailedActivityDialog extends javax.swing.JDialog {
 
     private void viewFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewFileButtonActionPerformed
         Audit.addAuditEntry("Opened File for Activity: " + passedID);
-//        switch (Global.activeSection) {
-//            case "ORG":
-//                FileService.openFileWithORGNumber("ORG", Global.caseNumber, fileName);
-//                break;
-//            case "Civil Service Commission":
-//            case "CSC":
-//                FileService.openFileWithORGNumber("CSC", Global.caseNumber, fileName);
-//                break;
-//            case "Hearings":
-//                FileService.openHearingCaseFile(fileName);
-//                break;
-//            default:
-                FileService.openFile(fileName);
-//                break;
-//        }
+        FileService.openFile(fileName);
     }//GEN-LAST:event_viewFileButtonActionPerformed
 
     private void typeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_typeComboBoxActionPerformed
@@ -417,6 +429,7 @@ public class CMDSDetailedActivityDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField actionTextBox;
     private javax.swing.JButton closeButton;
+    private javax.swing.JTextArea commentTextArea;
     private javax.swing.JTextField dateTextBox;
     private javax.swing.JComboBox<String> descriptionComboBox;
     private javax.swing.JTextField fromTextBox;
@@ -427,6 +440,8 @@ public class CMDSDetailedActivityDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JComboBox<String> toComboBox;
     private javax.swing.JComboBox<String> typeComboBox;
     private javax.swing.JButton updateButton;

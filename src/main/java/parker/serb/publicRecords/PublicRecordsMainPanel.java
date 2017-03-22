@@ -643,7 +643,20 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
 
     private void caseDocsTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_caseDocsTableMouseClicked
         if (evt.getClickCount() > 1 && caseDocsTable.getSelectedRow() > -1) {
-            FileService.openFile(caseDocsTable.getValueAt(caseDocsTable.getSelectedRow(), 4).toString());
+            String fileName = caseDocsTable.getValueAt(caseDocsTable.getSelectedRow(), 4).toString();
+
+            switch (Global.activeSection) {
+                case "CSC":
+                case "Civil Service Commission":
+                    FileService.openFileWithORGNumber("CSC", Global.caseNumber, fileName);
+                    break;
+                case "ORG":
+                    FileService.openFileWithORGNumber("ORG", Global.caseNumber, fileName);
+                    break;
+                default:
+                    FileService.openFileWithCaseNumber(Global.activeSection, Global.caseYear, Global.caseType, Global.caseMonth, Global.caseNumber, fileName);
+                    break;
+            }
         }
     }//GEN-LAST:event_caseDocsTableMouseClicked
 

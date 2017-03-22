@@ -52,6 +52,7 @@ public class scanFileDialog extends javax.swing.JDialog {
         setCaseNumberTitle(section);
         loadData(section, file, time);
         addListeners(section);
+        this.pack();
         setLocationRelativeTo(parent);
         setVisible(true);
     }

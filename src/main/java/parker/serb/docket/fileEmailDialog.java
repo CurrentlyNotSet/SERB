@@ -65,6 +65,7 @@ public class fileEmailDialog extends javax.swing.JDialog {
         setCaseNumberTitle(section);
         loadData(section, id);
         setColumnWidth();
+        this.pack();
         setLocationRelativeTo(parent);
         setVisible(true);
     }

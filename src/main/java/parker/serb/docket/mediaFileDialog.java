@@ -47,6 +47,7 @@ public class mediaFileDialog extends javax.swing.JDialog {
         setCaseNumberTitle(section);
         loadData(section, file);
         addListeners(section);
+        this.pack();
         setLocationRelativeTo(parent);
         setVisible(true);
     }

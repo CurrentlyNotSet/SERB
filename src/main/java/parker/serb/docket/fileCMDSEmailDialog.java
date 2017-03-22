@@ -125,7 +125,7 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    if (!bodyTextArea.getText().toString().trim().equals("")) {
+                    if (!bodyTextArea.getText().trim().equals("")) {
                         FileService.openEmailBodyFile(id, section);
                     }
                 }
@@ -174,52 +174,40 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
             }
         });
 
-        comboEditor.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (attachmentTable != null) {
-                    enableButton();
-                }
-            }
-        });
-
-        comboEditor.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (attachmentTable != null) {
-                    enableButton();
-                }
-
-                if (!comboEditor.getSelectedItem().toString().equals("") ||
-                        !comboEditor.getSelectedItem().toString().equals("DO NOT FILE")) {
-                    loadType2ComboBox();
-                } else {
-                    comboEditor2.removeAllItems();
-                    comboEditor2.addItem("");
-                    comboEditor2.setSelectedItem("");
-                }
-            }
-        });
-
-        comboEditor2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (comboEditor.getSelectedItem().toString().equals("")
-                        || comboEditor.getSelectedItem().toString().equals("DO NOT FILE")) {
-                    comboEditor2.setSelectedItem("");
-                }
-
-                if (attachmentTable != null) {
-                    enableButton();
-                }
-            }
-        });
-
-        toComboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        comboEditor.addActionListener((ActionEvent e) -> {
+            if (attachmentTable != null) {
                 enableButton();
             }
+        });
+
+        comboEditor.addActionListener((ActionEvent e) -> {
+            if (attachmentTable != null) {
+                enableButton();
+            }
+
+            if (!comboEditor.getSelectedItem().toString().equals("") ||
+                    !comboEditor.getSelectedItem().toString().equals("DO NOT FILE")) {
+                loadType2ComboBox();
+            } else {
+                comboEditor2.removeAllItems();
+                comboEditor2.addItem("");
+                comboEditor2.setSelectedItem("");
+            }
+        });
+
+        comboEditor2.addActionListener((ActionEvent e) -> {
+            if (comboEditor.getSelectedItem().toString().equals("")
+                    || comboEditor.getSelectedItem().toString().equals("DO NOT FILE")) {
+                comboEditor2.setSelectedItem("");
+            }
+
+            if (attachmentTable != null) {
+                enableButton();
+            }
+        });
+
+        toComboBox.addActionListener((ActionEvent e) -> {
+            enableButton();
         });
 
         caseNumberTextBox.getDocument().addDocumentListener(new DocumentListener() {
@@ -253,8 +241,8 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
                     break;
                 }
             }
-            
-            if (attachmentTable.getValueAt(i, 2) != null) { 
+
+            if (attachmentTable.getValueAt(i, 2) != null) {
                 if(attachmentTable.getValueAt(i, 2).toString().equals("DO NOT FILE")) {
                     comboEditor2.setSelectedItem("");
                     attachmentTable.setValueAt("", i, 3);

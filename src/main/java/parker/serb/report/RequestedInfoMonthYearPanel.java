@@ -7,8 +7,6 @@ package parker.serb.report;
 
 import parker.serb.Global;
 import parker.serb.sql.SMDSDocuments;
-import parker.serb.util.Item;
-import parker.serb.util.NumberFormatService;
 
 /**
  *
@@ -178,7 +176,7 @@ public class RequestedInfoMonthYearPanel extends javax.swing.JDialog {
     }//GEN-LAST:event_CancelButtonActionPerformed
 
     private void GenerateReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GenerateReportButtonActionPerformed
-        GenerateReport.generateMonthYearReport(NumberFormatService.monthNumber(ComboBox.getSelectedItem().toString()), TextField.getText().trim(), report);
+        GenerateReport.generateMonthYearReport(ComboBox.getSelectedItem().toString(), TextField.getText().trim(), report);
     }//GEN-LAST:event_GenerateReportButtonActionPerformed
 
     private void ComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxActionPerformed
