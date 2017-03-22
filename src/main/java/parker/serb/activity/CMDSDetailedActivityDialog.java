@@ -100,8 +100,24 @@ public class CMDSDetailedActivityDialog extends javax.swing.JDialog {
         }
 
         toComboBox.setSelectedItem(activityInfo.to);
-        typeComboBox.setSelectedItem(activityInfo.type == null ? "" : getCategory(activityInfo.type.split("-")[0].trim()));
-        descriptionComboBox.setSelectedItem(activityInfo.type == null ? "" : activityInfo.type.split("-")[1].trim());
+
+        String typeLoad = "";
+        String descriptionLoad = "";
+
+        if (activityInfo.type != null) {
+            String[] activtyTypeSplit = activityInfo.type.split("-", 2);
+
+            if (activtyTypeSplit.length == 1) {
+                typeLoad = getCategory(activtyTypeSplit[0].trim());
+            }
+            if (activtyTypeSplit.length == 2) {
+                typeLoad = getCategory(activtyTypeSplit[0].trim());
+                descriptionLoad = activtyTypeSplit[1].trim();
+            }
+        }
+
+        typeComboBox.setSelectedItem(typeLoad);
+        descriptionComboBox.setSelectedItem(descriptionLoad);
         commentTextArea.setText(activityInfo.comment == null ? "" : activityInfo.comment.trim());
 
         if(activityInfo.fileName == null) {
@@ -131,11 +147,16 @@ public class CMDSDetailedActivityDialog extends javax.swing.JDialog {
         if(activityInfo.type == null) {
             updatedActivity.action = actionTextBox.getText().trim();
         } else {
-            updatedActivity.action = actionTextBox.getText().trim().replace(activityInfo.type.split("-")[1].trim(), descriptionComboBox.getSelectedItem().toString().trim());
+            String[] activtyTypeSplit = activityInfo.type.split("-", 2);
+            if (activtyTypeSplit.length == 2) {
+                updatedActivity.action = actionTextBox.getText().trim().replace(activtyTypeSplit[1].trim(), descriptionComboBox.getSelectedItem().toString().trim());
+            }
         }
 
-        updatedActivity.from = fromTextBox.getText();
-        updatedActivity.to = toComboBox.getSelectedItem() == null ? "" : toComboBox.getSelectedItem().toString();
+        updatedActivity.from = fromTextBox.getText().equals("") ? null
+                : fromTextBox.getText();
+        updatedActivity.to = toComboBox.getSelectedItem() == null ? null
+                : toComboBox.getSelectedItem().toString().equals("") ? null :toComboBox.getSelectedItem().toString();
 
         if(!typeComboBox.getSelectedItem().toString().equals("") &&
             !descriptionComboBox.getSelectedItem().toString().equals("")) {
