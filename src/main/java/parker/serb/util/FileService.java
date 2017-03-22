@@ -514,9 +514,23 @@ public class FileService {
                         caseNumber.trim().split("-"), from, to, fullType, comment, false, false, activityDate);
                         break;
                 }
+                
+                switch(section) {
+                    case "ULP":
+                        ULPCase.ULPDocketNotification(caseNumber);
+                        break;
+                    case "REP":
+                        REPCase.REPDocketNotification(caseNumber);
+                        break;
+                    case "CMDS":
+                        CMDSCase.CMDSDocketNotification(caseNumber);
+                        break;
+                }
 
                 Audit.addAuditEntry("Filed " + fullType + " from " + from);
             }
+            
+            
         }
         docketFile.delete();
     }
