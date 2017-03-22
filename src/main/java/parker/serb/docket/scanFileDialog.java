@@ -8,7 +8,6 @@ package parker.serb.docket;
 import com.alee.extended.date.WebCalendar;
 import com.alee.utils.swing.Customizer;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
@@ -37,8 +36,14 @@ import parker.serb.util.FileService;
 public class scanFileDialog extends javax.swing.JDialog {
 
     String selectedSection = "";
+    boolean orgProcess = false;
     /**
      * Creates new form scanFileDialog
+     * @param parent
+     * @param modal
+     * @param file
+     * @param time
+     * @param section
      */
     public scanFileDialog(java.awt.Frame parent, boolean modal, String file, String section, String time) {
         super(parent, modal);
@@ -48,9 +53,9 @@ public class scanFileDialog extends javax.swing.JDialog {
         loadData(section, file, time);
         addListeners(section);
         setLocationRelativeTo(parent);
-        setVisible(true); 
+        setVisible(true);
     }
-    
+
     private void setCaseNumberTitle(String section) {
         switch(section) {
             case "ORG":
@@ -70,30 +75,30 @@ public class scanFileDialog extends javax.swing.JDialog {
                 break;
         }
     }
-    
+
     private void loadData(String section, String file, String time) {
         if(section.equals("ORG")) {
             orgNameComboBox.removeAllItems();
             orgNameComboBox.addItem("");
-            
+
             List caseNumberList = ORGCase.loadORGNames();
 
             caseNumberList.stream().forEach((caseNumber) -> {
                 orgNameComboBox.addItem(caseNumber.toString());
             });
         }
-        
+
         if(section.equals("CSC")) {
             orgNameComboBox.removeAllItems();
             orgNameComboBox.addItem("");
-            
+
             List caseNumberList = CSCCase.loadCSCNames();
 
             caseNumberList.stream().forEach((caseNumber) -> {
                 orgNameComboBox.addItem(caseNumber.toString());
             });
         }
-        
+
         fileNameTextBox.setText(file);
         loadToComboBox(section);
         loadTypeComboBox();
@@ -101,27 +106,67 @@ public class scanFileDialog extends javax.swing.JDialog {
         hourTextBox.setText(time.split(" ")[1].split(":")[0]);
         minuteTextBox.setText(time.split(" ")[1].split(":")[1]);
         amPMComboBox.setSelectedItem(time.split(" ")[2]);
-        
+
     }
-    
+
     private void addListeners(String section) {
-        orgNameComboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(orgNameComboBox.getSelectedItem() != null) {
-                    if(orgNameComboBox.getSelectedItem().toString().equals("")) {
+        orgNameComboBox.addActionListener((ActionEvent e) -> {
+            if (!orgProcess) {
+                if (orgNameComboBox.getSelectedItem() != null) {
+                    if (orgNameComboBox.getSelectedItem().toString().equals("")) {
                         caseNumberTextBox.setText("");
                     } else {
-                        if(section.equals("CSC")) {
+                        if (section.equals("CSC")) {
                             caseNumberTextBox.setText(CSCCase.getCSCNumber(orgNameComboBox.getSelectedItem().toString()));
-                        } else if(section.equals("ORG")) {
+                        } else if (section.equals("ORG")) {
                             caseNumberTextBox.setText(ORGCase.getORGNumber(orgNameComboBox.getSelectedItem().toString()));
                         }
                     }
                 }
             }
         });
-        
+
+        caseNumberTextBox.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() >= 2) {
+                    switch (section) {
+                        case "ORG":
+                            orgProcess = true;
+                            DocketORGCaseSearch orgSearch = new DocketORGCaseSearch(Global.root, true);
+                            caseNumberTextBox.setText(orgSearch.orgNumber);
+                            orgNameComboBox.setSelectedItem(orgSearch.orgName);
+                            orgSearch.dispose();
+                            validateCaseNumber();
+                            orgProcess = false;
+                            break;
+                        case "CSC":
+                        case "Civil Service Commission":
+                            orgProcess = true;
+                            DocketCSCCaseSearch cscSearch = new DocketCSCCaseSearch(Global.root, true);
+                            caseNumberTextBox.setText(cscSearch.orgNumber);
+                            orgNameComboBox.setSelectedItem(cscSearch.orgName);
+                            cscSearch.dispose();
+                            validateCaseNumber();
+                            orgProcess = false;
+                            break;
+                    }
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        });
+
         hourTextBox.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -138,7 +183,7 @@ public class scanFileDialog extends javax.swing.JDialog {
                 autoCompleteTimeOfDay();
             }
         });
-        
+
         caseNumberTextBox.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {}
@@ -148,13 +193,13 @@ public class scanFileDialog extends javax.swing.JDialog {
                 validateCaseNumber();
             }
         });
-        
+
         caseNumberTextBox.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
                 enableButton();
             }
-            
+
             @Override
             public void removeUpdate(DocumentEvent e) {
                 enableButton();
@@ -165,7 +210,7 @@ public class scanFileDialog extends javax.swing.JDialog {
                 enableButton();
             }
          });
-         
+
         fromTextBox.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -182,21 +227,15 @@ public class scanFileDialog extends javax.swing.JDialog {
                 enableButton();
             }
         });
-         
-        toComboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                enableButton();
-            }
+
+        toComboBox.addActionListener((ActionEvent e) -> {
+            enableButton();
         });
-         
-        typeComboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-               enableButton();
-            }
+
+        typeComboBox.addActionListener((ActionEvent e) -> {
+            enableButton();
         });
-        
+
         fileNameTextBox.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -218,7 +257,7 @@ public class scanFileDialog extends javax.swing.JDialog {
             public void mouseExited(MouseEvent e) {}
         });
     }
-    
+
     private void autoCompleteTimeOfDay() {
         if(hourTextBox.getText().equals("")) {
             //place holder
@@ -228,7 +267,7 @@ public class scanFileDialog extends javax.swing.JDialog {
             amPMComboBox.setSelectedItem("PM");
         }
     }
-    
+
     private void enableButton() {
         if(caseNumberTextBox.getText().equals("")
                 || fromTextBox.getText().equals("")
@@ -239,47 +278,47 @@ public class scanFileDialog extends javax.swing.JDialog {
             fileButton.setEnabled(true);
         }
     }
-    
+
     private void loadToComboBox(String section) {
         List userList = null;
-        
+
         if(section.equals("REP") || section.equals("MED") || section.equals("ULP")) {
             userList = User.loadSectionDropDownsPlusALJ(section);
         } else {
             userList = User.loadSectionDropDowns(section);
         }
-        
+
         toComboBox.setMaximumRowCount(6);
-        
+
         toComboBox.removeAllItems();
-        
+
         toComboBox.addItem("");
-        
+
         for(int i = 0; i < userList.size(); i++) {
             toComboBox.addItem(userList.get(i).toString());
         }
     }
-    
+
     private void loadTypeComboBox() {
         List typeList = ActivityType.loadAllActivityTypeBySection(selectedSection);
-        
+
         typeComboBox.setMaximumRowCount(10);
-        
+
         typeComboBox.removeAllItems();
-        
+
         typeComboBox.addItem("");
-        
+
         for(int i = 0; i < typeList.size(); i++) {
             ActivityType item = (ActivityType) typeList.get(i);
             typeComboBox.addItem(item.descriptionAbbrv + " - " + item.descriptionFull);
         }
     }
-    
+
     private void validateCaseNumber() {
         String[] caseNumbers = caseNumberTextBox.getText().split(",");
-        
+
         String caseNumberFail = "";
-        
+
         switch(selectedSection) {
             case "ULP":
                 caseNumberFail = CaseNumber.validateULPCaseNumber(caseNumbers);
@@ -292,27 +331,27 @@ public class scanFileDialog extends javax.swing.JDialog {
                 break;
             case "ORG":
                 caseNumberFail = CaseNumber.validateORGCaseNumber(caseNumbers);
-                orgNameComboBox.setSelectedItem("");
+                //orgNameComboBox.setSelectedItem("");
                 break;
             case "CMDS":
                 caseNumberFail = CaseNumber.validateCMDSCaseNumber(caseNumbers);
                 break;
             case "CSC":
                 caseNumberFail = CaseNumber.validateCSCCaseNumber(caseNumbers);
-                orgNameComboBox.setSelectedItem("");
+                //orgNameComboBox.setSelectedItem("");
                 break;
         }
-        
+
         if(!caseNumberFail.equals("")) {
             new docketingCaseNotFound((JFrame) Global.root.getRootPane().getParent(), true, caseNumberFail);
             caseNumberTextBox.requestFocus();
         }
-        
+
         if(!caseNumberTextBox.getText().equals("")) {
             if(!caseNumberTextBox.getText().equals("")) {
-                
+
                 switch (selectedSection) {
-                    case "ULP":  
+                    case "ULP":
                         toComboBox.setSelectedItem(ULPCase.DocketTo(caseNumberTextBox.getText()));
                         break;
                     case "REP":
@@ -334,10 +373,10 @@ public class scanFileDialog extends javax.swing.JDialog {
             }
         }
     }
-    
+
     private Date generateDate() {
         int hour = Integer.valueOf(hourTextBox.getText().trim());
-        
+
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, Integer.valueOf(scanDateTextBox.getText().split("/")[2]));
         cal.set(Calendar.MONTH, Integer.valueOf(scanDateTextBox.getText().split("/")[0]) - 1);
@@ -346,7 +385,7 @@ public class scanFileDialog extends javax.swing.JDialog {
         cal.set(Calendar.MINUTE, Integer.valueOf(minuteTextBox.getText().trim()));
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
-        
+
         return cal.getTime();
     }
 
