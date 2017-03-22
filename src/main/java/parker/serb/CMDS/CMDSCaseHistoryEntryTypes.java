@@ -365,7 +365,6 @@ public class CMDSCaseHistoryEntryTypes {
             }
 
             CMDSCertifiedLetterDialog certified = new CMDSCertifiedLetterDialog(dialog, true);
-<<<<<<< HEAD
             
             if(caseStatus.equals("S")) {
                 CMDSRemoveStayDialog removeStay = new CMDSRemoveStayDialog(dialog, true);
@@ -381,26 +380,6 @@ public class CMDSCaseHistoryEntryTypes {
                     caseStatus = "S";
                 } else {
                     caseStatus = "O";
-=======
-
-            if (caseStatus != null){
-                if(caseStatus.equals("S")) {
-                    CMDSRemoveStayDialog removeStay = new CMDSRemoveStayDialog(dialog, true);
-                    if(removeStay.isRemoveStay()) {
-                        caseStatus = "O";
-                    } else {
-                        caseStatus = "S";
-                    }
-                    removeStay.dispose();
-                } else if(caseStatus.equals("O")) {
-                    CMDSPlaceStayDialog placeStay = new CMDSPlaceStayDialog(dialog, true);
-                    if(placeStay.isPlaceStay()) {
-                        caseStatus = "S";
-                    } else {
-                        caseStatus = "O";
-                    }
-                    placeStay.dispose();
->>>>>>> b8a0a5a74f28dc717f3ca61dbf17fc9c6cfe2136
                 }
             }
 
