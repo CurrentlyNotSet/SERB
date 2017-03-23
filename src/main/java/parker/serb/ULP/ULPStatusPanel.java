@@ -918,6 +918,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
 
                                     jLabel2.setText("Related Cases:");
 
+                                    relatedCaseTable.setAutoCreateRowSorter(true);
                                     relatedCaseTable.setModel(new javax.swing.table.DefaultTableModel(
                                         new Object [][] {
 
@@ -968,11 +969,12 @@ public class ULPStatusPanel extends javax.swing.JPanel {
                                             .addComponent(jLabel2)
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                             .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(addRelatedCaseButton, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE)
+                                                .addComponent(addRelatedCaseButton, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE)
                                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                                             .addGap(0, 0, 0))
                                     );
 
+                                    boardMeetingTable.setAutoCreateRowSorter(true);
                                     boardMeetingTable.setModel(new javax.swing.table.DefaultTableModel(
                                         new Object [][] {
 
@@ -1036,7 +1038,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
                                     jPanel3.setLayout(jPanel3Layout);
                                     jPanel3Layout.setHorizontalGroup(
                                         jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 359, Short.MAX_VALUE)
+                                        .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 397, Short.MAX_VALUE)
                                         .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     );
                                     jPanel3Layout.setVerticalGroup(

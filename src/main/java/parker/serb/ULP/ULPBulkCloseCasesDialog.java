@@ -242,6 +242,7 @@ public class ULPBulkCloseCasesDialog extends javax.swing.JFrame {
 
             jLayeredPane1.setLayout(new javax.swing.OverlayLayout(jLayeredPane1));
 
+            caseTable.setAutoCreateRowSorter(true);
             caseTable.setModel(new javax.swing.table.DefaultTableModel(
                 new Object [][] {
 
