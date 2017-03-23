@@ -163,6 +163,7 @@ public class REPMediationPanel extends javax.swing.JPanel {
 
         jLabel1.setText("Search:");
 
+        mediationTable.setAutoCreateRowSorter(true);
         mediationTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 

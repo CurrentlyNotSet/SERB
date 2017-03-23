@@ -589,6 +589,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         bargainingUnitNameTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         bargainingUnitNameTextBox.setEnabled(false);
 
+        relatedCaseTable.setAutoCreateRowSorter(true);
         relatedCaseTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 

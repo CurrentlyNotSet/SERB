@@ -388,6 +388,7 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
 
             jScrollPane2.setToolTipText("");
 
+            boardMeetingTable.setAutoCreateRowSorter(true);
             boardMeetingTable.setModel(new javax.swing.table.DefaultTableModel(
                 new Object [][] {
 

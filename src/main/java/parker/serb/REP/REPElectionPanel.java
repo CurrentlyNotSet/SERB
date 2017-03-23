@@ -1230,6 +1230,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
             }
         });
 
+        sitesTable.setAutoCreateRowSorter(true);
         sitesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
