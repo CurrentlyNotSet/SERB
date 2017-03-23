@@ -9,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.List;
-import parker.serb.util.NumberFormatService;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import parker.serb.Global;
@@ -17,6 +16,7 @@ import parker.serb.sql.NamePrefix;
 import parker.serb.sql.Party;
 import parker.serb.util.CancelUpdate;
 import parker.serb.util.EmailValidation;
+import parker.serb.util.NumberFormatService;
 
 /**
  *
@@ -39,7 +39,7 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
         setLocationRelativeTo(parent);
         setVisible(true);
     }
-    
+
     private void addListeners() {
         firstNameTextBox.getDocument().addDocumentListener(new DocumentListener() {
 
@@ -58,7 +58,7 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
                 validateCreateButton();
             }
         });
-        
+
         middleInitialTextBox.addKeyListener(new KeyListener() {
 
             @Override
@@ -74,7 +74,7 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
             @Override
             public void keyReleased(KeyEvent e) {}
         });
-        
+
         lastNameTextBox.getDocument().addDocumentListener(new DocumentListener() {
 
             @Override
@@ -92,7 +92,7 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
                 validateCreateButton();
             }
         });
-        
+
         companyTextBox.getDocument().addDocumentListener(new DocumentListener() {
 
             @Override
@@ -110,7 +110,7 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
                 validateCreateButton();
             }
         });
-        
+
         address1TextBox.getDocument().addDocumentListener(new DocumentListener() {
 
             @Override
@@ -128,7 +128,7 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
                 validateCreateButton();
             }
         });
-        
+
         cityTextBox.getDocument().addDocumentListener(new DocumentListener() {
 
             @Override
@@ -146,11 +146,11 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
                 validateCreateButton();
             }
         });
-        
+
         stateComboBox.addActionListener((ActionEvent e) -> {
             validateCreateButton();
         });
-        
+
         zipCodeTextBox.getDocument().addDocumentListener(new DocumentListener() {
 
             @Override
@@ -168,7 +168,7 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
                 validateCreateButton();
             }
         });
-        
+
         emailTextBox.getDocument().addDocumentListener(new DocumentListener() {
 
             @Override
@@ -186,7 +186,7 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
                 validateCreateButton();
             }
         });
-        
+
         phoneTextBox.getDocument().addDocumentListener(new DocumentListener() {
 
             @Override
@@ -204,7 +204,7 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
                 validateCreateButton();
             }
         });
-        
+
         lastNameTextBox.getDocument().addDocumentListener(new DocumentListener() {
 
             @Override
@@ -222,7 +222,7 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
                 validateCreateButton();
             }
         });
-        
+
         emailTextBox.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -240,7 +240,7 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
             }
         });
     }
-    
+
     private void validateCreateButton() {
         if((!firstNameTextBox.getText().equals("") && !lastNameTextBox.getText().equals("")) || !companyTextBox.getText().equals("")) {
             jButton1.setEnabled(true);
@@ -248,21 +248,22 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
             jButton1.setEnabled(false);
         }
     }
-    
+
     private void loadPrefixComboBox() {
         List<String> prefixList = NamePrefix.loadActivePrefix();
-        
+
         prefix.removeAllItems();
         prefix.addItem("");
-        
+
         for (String singlePrefix : prefixList) {
             prefix.addItem(singlePrefix);
         }
     }
-    
+
     private void loadStateComboBox() {
         stateComboBox.removeAllItems();
-        
+        stateComboBox.addItem("");
+
         for (String state : Global.states) {
             stateComboBox.addItem(state);
         }
@@ -272,7 +273,7 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
     public String getName() {
         return name;
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -340,8 +341,6 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
         jLabel10.setText("Phone 1:");
 
         jLabel11.setText("State:");
-
-        stateComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel12.setText("Zip:");
 
@@ -528,7 +527,7 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         CancelUpdate cancel = new CancelUpdate(Global.root, true);
-            
+
         if(!cancel.isReset()) {
         } else {
             dispose();
@@ -555,11 +554,11 @@ public class CreateNewPartyDialog extends javax.swing.JDialog {
         party.phone1 = NumberFormatService.convertPhoneNumberToString(phoneTextBox.getText().trim());
         party.phone2 = NumberFormatService.convertPhoneNumberToString(phone2TextBox.getText().trim());
         party.fax = NumberFormatService.convertPhoneNumberToString(faxTextBox.getText().trim());
-                
+
         Party.createParty(party);
-        
+
         name = party.firstName + " " + party.lastName;
-        
+
         setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 

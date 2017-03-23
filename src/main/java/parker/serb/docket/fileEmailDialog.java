@@ -418,7 +418,7 @@ public class fileEmailDialog extends javax.swing.JDialog {
     }
 
     private JComboBox loadTypeComboBox(String section) {
-        List typeList = ActivityType.loadAllActivityTypeBySection(section);
+        List typeList = ActivityType.loadActiveActivityTypeBySection(section);
 
         comboEditor.setMaximumRowCount(10);
         comboEditor.removeAllItems();

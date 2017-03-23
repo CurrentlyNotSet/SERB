@@ -5,7 +5,6 @@
  */
 package parker.serb.party;
 
-import parker.serb.util.NumberFormatService;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.event.KeyEvent;
@@ -26,6 +25,7 @@ import parker.serb.sql.NamePrefix;
 import parker.serb.sql.Party;
 import parker.serb.util.CancelUpdate;
 import parker.serb.util.EmailValidation;
+import parker.serb.util.NumberFormatService;
 import parker.serb.util.SlackNotification;
 
 //TODO: Allow for a party to be updated from this panel
@@ -40,7 +40,7 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
     String id;
     public int updateStatus;
     Party partyInformation;
-    
+
     /**
      * Creates new form ViewUpdatePartyPanel
      * @param parent
@@ -59,7 +59,7 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
         setLocationRelativeTo(parent);
         setVisible(true);
     }
-    
+
     private void addListeners() {
         emailAddressTextBox.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -77,7 +77,7 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
                 updateButton.setEnabled(EmailValidation.validEmail(emailAddressTextBox.getText().trim()));
             }
         });
-        
+
         middleInitialTextBox.addKeyListener(new KeyListener() {
 
             @Override
@@ -93,7 +93,7 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
             @Override
             public void keyReleased(KeyEvent e) {}
         });
-        
+
         emailAddressTextBox.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -110,7 +110,7 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
                     }
                 }
             }
-            
+
             @Override
             public void mousePressed(MouseEvent e) {}
 
@@ -124,30 +124,31 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
             public void mouseExited(MouseEvent e) {}
         });
     }
-    
+
     private void loadStateComboBox() {
         stateComboBox.removeAllItems();
-        
+        stateComboBox.addItem("");
+
         for (String state : Global.states) {
             stateComboBox.addItem(state);
         }
     }
-        
+
     private void loadPrefixComboBox() {
         List<String> prefixList = NamePrefix.loadActivePrefix();
-        
+
         prefixComboBox.removeAllItems();
         prefixComboBox.addItem("");
-        
+
         for (String singlePrefix : prefixList) {
             prefixComboBox.addItem(singlePrefix);
         }
     }
-    
-    
+
+
     private void loadInformation(String id) {
         partyInformation = Party.getPartyByID(String.valueOf(id));
-        
+
         prefixComboBox.setSelectedItem(partyInformation.prefix);
         firstNameTextBox.setText(partyInformation.firstName);
         middleInitialTextBox.setText(partyInformation.middleInitial);
@@ -160,14 +161,14 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
         address2TextBox.setText(partyInformation.address2);
         address3TextBox.setText(partyInformation.address3);
         cityTextBox.setText(partyInformation.city);
-        stateComboBox.setSelectedItem(partyInformation.stateCode);
+        stateComboBox.setSelectedItem(partyInformation.stateCode == null ? "" : partyInformation.stateCode);
         zipCodeTextBox.setText(partyInformation.zipCode);
         phoneNumberTextBox.setText(partyInformation.phone1);
         phone2NumberTextBox.setText(partyInformation.phone2);
         emailAddressTextBox.setText(partyInformation.emailAddress);
         faxNumberTextBox.setText(partyInformation.fax);
     }
-    
+
     private void enableAll() {
         updateButton.setText("Save");
         closeButton.setText("Cancel");
@@ -206,7 +207,7 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
         faxNumberTextBox.setEnabled(true);
         faxNumberTextBox.setBackground(Color.WHITE);
     }
-    
+
     private void disableAll() {
         updateButton.setText("Update");
         closeButton.setText("Close");
@@ -245,10 +246,10 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
         faxNumberTextBox.setEnabled(false);
         faxNumberTextBox.setBackground(new Color(238,238,238));
     }
-    
+
     private void updatePartyInformation() {
         CaseParty updateParty = new CaseParty();
-        
+
         updateParty.prefix = prefixComboBox.getSelectedItem() == null ? "" : prefixComboBox.getSelectedItem().toString().trim();
         updateParty.firstName = firstNameTextBox.getText().trim();
         updateParty.middleInitial = middleInitialTextBox.getText().trim();
@@ -267,7 +268,7 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
         updateParty.phone2 = NumberFormatService.convertPhoneNumberToString(phone2NumberTextBox.getText().trim()).length() >= 10 ? NumberFormatService.convertPhoneNumberToString(phone2NumberTextBox.getText().trim()) : null;
         updateParty.fax = NumberFormatService.convertPhoneNumberToString(faxNumberTextBox.getText().trim()).length() >= 10 ? NumberFormatService.convertPhoneNumberToString(faxNumberTextBox.getText().trim()) : null;
         updateParty.emailAddress = emailAddressTextBox.getText().trim();
-        
+
         Party.updateParty(updateParty, Integer.valueOf(id));
     }
 
