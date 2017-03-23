@@ -15,13 +15,13 @@ import parker.serb.util.SlackNotification;
  * @author parkerjohnston
  */
 public class ActivityType {
-    
+
     public int id;
     public boolean active;
     public String section;
     public String descriptionAbbrv;
     public String descriptionFull;
-    
+
     /**
      * Loads all activities without a limited result
      * @param section
@@ -29,9 +29,9 @@ public class ActivityType {
      */
     public static List loadAllActivityTypeBySection(String section) {
         List<ActivityType> activityTypeList = new ArrayList<>();
-        
+
         Statement stmt = null;
-            
+
         try {
 
             stmt = Database.connectToDB().createStatement();
@@ -44,7 +44,7 @@ public class ActivityType {
             preparedStatement.setString(1, section);
 
             ResultSet activityTypeListRS = preparedStatement.executeQuery();
-            
+
             while(activityTypeListRS.next()) {
                 ActivityType activityType = new ActivityType();
                 activityType.id = activityTypeListRS.getInt("id");
@@ -58,18 +58,56 @@ public class ActivityType {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadAllActivityTypeBySection(section);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return activityTypeList;
     }
-    
+
+    public static List loadActiveActivityTypeBySection(String section) {
+        List<ActivityType> activityTypeList = new ArrayList<>();
+
+        Statement stmt = null;
+
+        try {
+
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "select * from ActivityType"
+                    + " where Section = ? AND active = 1"
+                    + " order by descriptionAbbrv asc";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, section);
+
+            ResultSet activityTypeListRS = preparedStatement.executeQuery();
+
+            while(activityTypeListRS.next()) {
+                ActivityType activityType = new ActivityType();
+                activityType.id = activityTypeListRS.getInt("id");
+                activityType.active = activityTypeListRS.getBoolean("active");
+                activityType.section = activityTypeListRS.getString("section");
+                activityType.descriptionAbbrv = activityTypeListRS.getString("descriptionAbbrv");
+                activityType.descriptionFull = activityTypeListRS.getString("descriptionFull");
+                activityTypeList.add(activityType);
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadActiveActivityTypeBySection(section);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return activityTypeList;
+    }
+
     public static String getFullType(String typeAbbrv) {
         String fullType = "";
-        
+
         Statement stmt = null;
-            
+
         try {
 
             stmt = Database.connectToDB().createStatement();
@@ -81,7 +119,7 @@ public class ActivityType {
             preparedStatement.setString(1, typeAbbrv);
 
             ResultSet activityTypeListRS = preparedStatement.executeQuery();
-            
+
             while(activityTypeListRS.next()) {
                 fullType = activityTypeListRS.getString("descriptionFull");
             }
@@ -89,18 +127,18 @@ public class ActivityType {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 getFullType(typeAbbrv);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return fullType;
     }
-    
+
     public static String getTypeAbbrv(String typeFull) {
         String typeAbbrv = "";
-        
+
         Statement stmt = null;
-            
+
         try {
 
             stmt = Database.connectToDB().createStatement();
@@ -112,7 +150,7 @@ public class ActivityType {
             preparedStatement.setString(1, typeFull);
 
             ResultSet activityTypeListRS = preparedStatement.executeQuery();
-            
+
             while(activityTypeListRS.next()) {
                 typeAbbrv = activityTypeListRS.getString("descriptionAbbrv");
             }
@@ -120,19 +158,19 @@ public class ActivityType {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 getTypeAbbrv(typeFull);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return typeAbbrv;
     }
-    
-    
-    
-    
+
+
+
+
     public static List searchActivityType(String[] param) {
         List<ActivityType> list = new ArrayList<>();
-        
+
         Statement stmt = null;
 
         try {
@@ -156,7 +194,7 @@ public class ActivityType {
             for (int i = 0; i < param.length; i++) {
                 ps.setString((i + 1), "%" + param[i].trim() + "%");
             }
-            
+
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -172,7 +210,7 @@ public class ActivityType {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 searchActivityType(param);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -183,7 +221,7 @@ public class ActivityType {
         ActivityType item = new ActivityType();
 
         Statement stmt = null;
-        
+
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -205,7 +243,7 @@ public class ActivityType {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 getActivityTypeByID(id);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -214,7 +252,7 @@ public class ActivityType {
 
     public static void createActivityType(ActivityType item) {
         Statement stmt = null;
-        
+
         try {
 
             stmt = Database.connectToDB().createStatement();
@@ -240,7 +278,7 @@ public class ActivityType {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 createActivityType(item);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -248,7 +286,7 @@ public class ActivityType {
 
     public static void updateActivityType(ActivityType item) {
         Statement stmt = null;
-        
+
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -271,7 +309,7 @@ public class ActivityType {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateActivityType(item);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
