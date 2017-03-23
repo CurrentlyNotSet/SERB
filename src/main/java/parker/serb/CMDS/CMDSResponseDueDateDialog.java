@@ -135,7 +135,7 @@ public class CMDSResponseDueDateDialog extends javax.swing.JDialog {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         try {
-            responseDueDate = new Timestamp(Global.mmddyyyy.parse(responseDueDateTextBox.getText()).getTime());
+            responseDueDate = responseDueDateTextBox.getText().trim().equals("") ? null : new Timestamp(Global.mmddyyyy.parse(responseDueDateTextBox.getText()).getTime());
         } catch (ParseException ex) {
             SlackNotification.sendNotification(ex);
         }

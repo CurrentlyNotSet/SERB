@@ -515,12 +515,26 @@ public class FileService {
                         break;
                 }
 
+                switch(section) {
+                    case "ULP":
+                        ULPCase.ULPDocketNotification(caseNumber);
+                        break;
+                    case "REP":
+                        REPCase.REPDocketNotification(caseNumber);
+                        break;
+                    case "CMDS":
+                        CMDSCase.CMDSDocketNotification(caseNumber);
+                        break;
+                }
+
                 Audit.addAuditEntry("Filed " + fullType + " from " + from);
             }
+
+
         }
         docketFile.delete();
     }
-    
+
     public static void docketCMDSEmailAttachment(String[] caseNumbers,
             String atachmentID,
             String emailID,
@@ -538,32 +552,19 @@ public class FileService {
 
         File docketFile = new File(Global.emailPath + section + File.separatorChar + fileName.trim());
 
-        if(docketFile.exists()) {
-
-
+        if (docketFile.exists()) {
             for (String caseNumber : caseNumbers) {
                 File caseArchiveFile;
-//
-//                switch(section) {
-//                    case "ORG":
-//                    case "CSC":
-//                        caseArchiveFile = new File(
-//                        Global.activityPath
-//                        + section
-//                        + File.separatorChar
-//                        + caseNumber.trim());
-//                        break;
-//                    default:
-                        String[] caseNumberParts = caseNumber.trim().split("-");
-                        caseArchiveFile = new File(
+
+                String[] caseNumberParts = caseNumber.trim().split("-");
+                caseArchiveFile = new File(
                         Global.activityPath
                         + section
                         + File.separatorChar
                         + caseNumberParts[0]
                         + File.separatorChar
-                        + caseNumber.trim());
-//                        break;
-//                }
+                        + caseNumber.trim()
+                );
 
                 caseArchiveFile.mkdirs();
 
@@ -571,15 +572,11 @@ public class FileService {
 
                 String fileExtenstion = fileName.substring(fileName.lastIndexOf(".")); //. included
 
-//                String fullType = ActivityType.getFullType(type);
-                
                 FileUtils.copyFile(docketFile, new File(caseArchiveFile + File.separator + fileDate + fileExtenstion));
-                
-//                for(int j = 0; j < caseNumbers.length; j++) {
-                
+
                 NumberFormatService.parseFullCaseNumber(caseNumber);
-                
-                    CMDSCaseDocketEntryTypes.updateCaseHistory(
+
+                CMDSCaseDocketEntryTypes.updateCaseHistory(
                         type.split("-")[0].trim(),
                         type2,
                         comment,
@@ -590,22 +587,7 @@ public class FileService {
                         caseNumber,
                         from,
                         to
-                    );
-//                }
-//                switch(section) {
-//                    case "ORG":
-//                    case "CSC":
-//                        Activity.addActivtyFromDocketORGCSC(direction + " - Filed " + fullType,
-//                        fileDate + "_" + type + fileExtenstion,
-//                        caseNumber, from, to, fullType, comment, false, false, section, activityDate);
-//                        break;
-//                    default:
-//                        Activity.addActivtyFromDocket(direction + " - Filed " + type2,
-//                        fileDate + "_" + type2 + fileExtenstion,
-//                        caseNumber.trim().split("-"), from, to, type2, comment, false, false, activityDate);
-//                        break;
-//                }
-    
+                );
             }
         }
         docketFile.delete();

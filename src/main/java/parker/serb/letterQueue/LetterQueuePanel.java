@@ -146,10 +146,12 @@ public class LetterQueuePanel extends javax.swing.JDialog {
     }
 
     private void processSendButton() {
-        new ConfirmationDialog(Global.root, true,
-                jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString(),
-                (int) jTable1.getValueAt(jTable1.getSelectedRow(), 0));
-        loadLetterQueue();
+        if (jTable1.getSelectedRow() >= 0){
+            new ConfirmationDialog(Global.root, true,
+                    jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString(),
+                    (int) jTable1.getValueAt(jTable1.getSelectedRow(), 0));
+            loadLetterQueue();
+        }
     }
 
     private void processDeleteButton() {

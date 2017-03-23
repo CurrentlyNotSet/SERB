@@ -72,6 +72,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
     boolean sendToPostal = false;
     String toEmail = "";
     String ccEmail = "";
+    double attachmentSize = 0.0;
 
     public LetterGenerationPanel(java.awt.Frame parent, boolean modal, SMDSDocuments SMDSdocumentToGeneratePassed, CMDSDocuments CMDSdocumentToGeneratePassed) {
         super(parent, modal);
@@ -904,15 +905,29 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
     }
 
     private void generateLetterButton() {
-        if (checkActivityTable() && checkAdditionalDocsTable()){
-            processThread();
-            loadingPanel.setVisible(true);
-            InfoPanel.setVisible(false);
-            jLayeredPane.moveToFront(loadingPanel);
-            generateButton.setEnabled(false);
-            cancelButton.setEnabled(false);
+        if (checkActivityTable() && checkAdditionalDocsTable()) {
+            if (Global.EmailSizeLimit >= attachmentSize) {
+                processThread();
+                loadingPanel.setVisible(true);
+                InfoPanel.setVisible(false);
+                jLayeredPane.moveToFront(loadingPanel);
+                generateButton.setEnabled(false);
+                cancelButton.setEnabled(false);
+            } else {
+                WebOptionPane.showMessageDialog(
+                        Global.root,
+                        "<html><center> Sorry, email size exceeds server limit unable to send.</center></html>",
+                        "Error",
+                        WebOptionPane.ERROR_MESSAGE
+                );
+            }
         } else {
-            WebOptionPane.showMessageDialog(Global.root, "<html><center> Sorry, unable to locate files selected. <br><br>Unable to generate letter.</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
+            WebOptionPane.showMessageDialog(
+                    Global.root,
+                    "<html><center> Sorry, unable to locate files selected. <br><br>Unable to generate letter.</center></html>",
+                    "Error",
+                    WebOptionPane.ERROR_MESSAGE
+            );
         }
     }
 
@@ -929,6 +944,8 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                 File templateFile = new File(path + activityTable.getValueAt(i, 3));
                 if (!templateFile.exists()){
                     return false;
+                } else {
+                    attachmentSize += templateFile.length();
                 }
             }
         }
@@ -946,6 +963,8 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                     File templateFile = new File(path + additionalDocsTable.getValueAt(i, 3));
                     if (!templateFile.exists()){
                         return false;
+                    } else {
+                        attachmentSize += templateFile.length();
                     }
                 } else {
                     return false;

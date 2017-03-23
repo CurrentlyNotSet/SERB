@@ -7,7 +7,6 @@ package parker.serb.bookmarkProcessing;
 
 import com.jacob.com.Dispatch;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import parker.serb.Global;
 import parker.serb.sql.CaseParty;
@@ -212,17 +211,17 @@ public class processMEDbookmarks {
         if (item.FFAppointmentDate != null){
             Calendar cal = Calendar.getInstance();
             cal.setTime(item.FFAppointmentDate);
-            cal.add(Calendar.DATE, 4);
+            cal.add(Calendar.DATE, 14);
             if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
                 cal.add(Calendar.DATE, 2);
-            } 
+            }
             if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
                 cal.add(Calendar.DATE, 1);
-            } 
-            
-            factfinderApptDueDate = Global.mmddyyyy.format(cal.getTime());            
+            }
+
+            factfinderApptDueDate = Global.mmddyyyy.format(cal.getTime());
         }
-        
+
         if (item.FFRejectedBy.equals("Union")) {
             whoRejected = employeeOrgNames;
         }
