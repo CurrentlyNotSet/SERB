@@ -54,14 +54,14 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
                 } else {
                     caseNumberComboBox.setSelectedItem(caseNumberComboBox.getSelectedItem().toString().toUpperCase());
                     loadInformation();
-                    if(Global.root.getcSCRootPanel1().getjTabbedPane1().getSelectedIndex() == 0) {
-                        Global.root.getjButton2().setText("Add Entry");
-                        Global.root.getjButton2().setEnabled(true);
-                        Global.root.getjButton4().setText("Single Letter");
-                        Global.root.getjButton4().setEnabled(true);
-                        Global.root.getjButton9().setVisible(true);
-                        Global.root.getcSCRootPanel1().getActivityPanel1().loadAllActivity();
-                    } 
+//                    if(Global.root.getcSCRootPanel1().getjTabbedPane1().getSelectedIndex() == 0) {
+//                        Global.root.getjButton2().setText("Add Entry");
+//                        Global.root.getjButton2().setEnabled(true);
+//                        Global.root.getjButton4().setText("Single Letter");
+//                        Global.root.getjButton4().setEnabled(true);
+//                        Global.root.getjButton9().setVisible(true);
+//                        Global.root.getcSCRootPanel1().getActivityPanel1().loadAllActivity();
+//                    } 
                     Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
                 }
             }
@@ -89,6 +89,7 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
                 User.updateLastCaseNumber();
                 CSCNumberTextBox.setText(csc.cscNumber != null ? csc.cscNumber : "");
                 Global.root.getcSCRootPanel1().loadInformation();
+                Global.root.getcSCRootPanel1().setButtons();
             }
         }
     }
