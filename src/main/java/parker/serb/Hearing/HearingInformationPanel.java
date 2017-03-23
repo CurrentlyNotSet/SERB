@@ -986,6 +986,7 @@ public class HearingInformationPanel extends javax.swing.JPanel {
                                                                 jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
                                                                 jLabel21.setText("Mediation Information");
 
+                                                                mediationTable.setAutoCreateRowSorter(true);
                                                                 mediationTable.setModel(new javax.swing.table.DefaultTableModel(
                                                                     new Object [][] {
 
