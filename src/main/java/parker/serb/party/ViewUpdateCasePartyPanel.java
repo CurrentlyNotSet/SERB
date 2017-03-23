@@ -5,7 +5,6 @@
  */
 package parker.serb.party;
 
-import parker.serb.util.NumberFormatService;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.event.KeyEvent;
@@ -26,6 +25,7 @@ import parker.serb.sql.NamePrefix;
 import parker.serb.sql.PartyType;
 import parker.serb.util.CancelUpdate;
 import parker.serb.util.EmailValidation;
+import parker.serb.util.NumberFormatService;
 import parker.serb.util.SlackNotification;
 
 //TODO: Allow for a party to be updated from this panel
@@ -58,7 +58,7 @@ public class ViewUpdateCasePartyPanel extends javax.swing.JDialog {
         setLocationRelativeTo(parent);
         setVisible(true);
     }
-    
+
     private void addListeners() {
         emailAddressTextBox.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -76,7 +76,7 @@ public class ViewUpdateCasePartyPanel extends javax.swing.JDialog {
                 jButton2.setEnabled(EmailValidation.validEmail(emailAddressTextBox.getText().trim()));
             }
         });
-        
+
         middleInitialTextBox.addKeyListener(new KeyListener() {
 
             @Override
@@ -92,7 +92,7 @@ public class ViewUpdateCasePartyPanel extends javax.swing.JDialog {
             @Override
             public void keyReleased(KeyEvent e) {}
         });
-        
+
         emailAddressTextBox.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -109,7 +109,7 @@ public class ViewUpdateCasePartyPanel extends javax.swing.JDialog {
                     }
                 }
             }
-            
+
             @Override
             public void mousePressed(MouseEvent e) {}
 
@@ -123,40 +123,41 @@ public class ViewUpdateCasePartyPanel extends javax.swing.JDialog {
             public void mouseExited(MouseEvent e) {}
         });
     }
-    
+
     private void loadStateComboBox() {
         stateComboBox.removeAllItems();
-        
+        stateComboBox.addItem("");
+
         for (String state : Global.states) {
             stateComboBox.addItem(state);
         }
     }
-    
+
     private void loadPartyTypeComboBox() {
         List<String> partyList = PartyType.loadAllPartyTypesBySection();
-        
+
         partyTypeComboBox.removeAllItems();
-        
+
         for (String type : partyList) {
             partyTypeComboBox.addItem(type);
         }
     }
-    
+
     private void loadPrefixComboBox() {
         List<String> prefixList = NamePrefix.loadActivePrefix();
-        
+
         prefixComboBox.removeAllItems();
         prefixComboBox.addItem("");
-        
+
         for (String singlePrefix : prefixList) {
             prefixComboBox.addItem(singlePrefix);
         }
     }
-    
-    
+
+
     private void loadInformation(String id) {
         partyInformation = CaseParty.getCasePartyByID(id);
-        
+
         partyTypeComboBox.setSelectedItem(partyInformation.caseRelation);
         prefixComboBox.setSelectedItem(partyInformation.prefix);
         firstNameTextBox.setText(partyInformation.firstName);
@@ -170,14 +171,14 @@ public class ViewUpdateCasePartyPanel extends javax.swing.JDialog {
         address2TextBox.setText(partyInformation.address2);
         address3TextBox.setText(partyInformation.address3);
         cityTextBox.setText(partyInformation.city);
-        stateComboBox.setSelectedItem(partyInformation.stateCode);
+        stateComboBox.setSelectedItem(partyInformation.stateCode == null ? "" : partyInformation.stateCode);
         zipCodeTextBox.setText(partyInformation.zipcode);
         phoneNumberTextBox.setText(partyInformation.phone1);
         phone2NumberTextBox.setText(partyInformation.phone2);
         faxNumberTextBox.setText(partyInformation.fax);
         emailAddressTextBox.setText(partyInformation.emailAddress);
     }
-    
+
     private void enableAll() {
         jButton2.setText("Save");
         jButton1.setText("Cancel");
@@ -217,7 +218,7 @@ public class ViewUpdateCasePartyPanel extends javax.swing.JDialog {
         faxNumberTextBox.setBackground(Color.WHITE);
         faxNumberTextBox.setEnabled(true);
     }
-    
+
     private void disableAll() {
         jButton2.setText("Update");
         jButton1.setText("Close");
@@ -257,10 +258,10 @@ public class ViewUpdateCasePartyPanel extends javax.swing.JDialog {
         faxNumberTextBox.setBackground(new Color(238,238,238));
         faxNumberTextBox.setEnabled(false);
     }
-    
+
     private void updatePartyInformation() {
         CaseParty updateParty = new CaseParty();
-        
+
         updateParty.caseRelation = partyTypeComboBox.getSelectedItem().toString();
         updateParty.prefix = prefixComboBox.getSelectedItem() == null ? "" : prefixComboBox.getSelectedItem().toString().trim();
         updateParty.firstName = firstNameTextBox.getText().trim();
@@ -279,10 +280,10 @@ public class ViewUpdateCasePartyPanel extends javax.swing.JDialog {
         updateParty.phone1 = NumberFormatService.convertPhoneNumberToString(phoneNumberTextBox.getText().trim()).length() >= 10 ? NumberFormatService.convertPhoneNumberToString(phoneNumberTextBox.getText().trim()) : null;
         updateParty.phone2 = NumberFormatService.convertPhoneNumberToString(phone2NumberTextBox.getText().trim()).length() >= 10 ? NumberFormatService.convertPhoneNumberToString(phone2NumberTextBox.getText().trim()) : null;
         updateParty.fax = NumberFormatService.convertPhoneNumberToString(faxNumberTextBox.getText().trim()).length() >= 10 ? NumberFormatService.convertPhoneNumberToString(faxNumberTextBox.getText().trim()) : null;
-        
-        
+
+
         updateParty.emailAddress = emailAddressTextBox.getText().trim();
-        
+
         CaseParty.updateParty(updateParty, id);
     }
 

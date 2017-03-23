@@ -78,7 +78,7 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
     }
 
     private void loadTypeComboBox() {
-        List typeList = ActivityType.loadAllActivityTypeBySection(Global.activeSection);
+        List typeList = ActivityType.loadActiveActivityTypeBySection(Global.activeSection);
 
         typeComboBox.setMaximumRowCount(10);
 
@@ -98,11 +98,11 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
         dateTextBox.setText(orgActivity.date);
         actionTextBox.setText(orgActivity.action);
         fromTextBox.setText(orgActivity.from);
-        
+
         if(((DefaultComboBoxModel)toComboBox.getModel()).getIndexOf(orgActivity.to) < 0) {
             toComboBox.addItem(orgActivity.to );
         }
-        
+
         toComboBox.setSelectedItem(orgActivity.to);
         typeComboBox.setSelectedItem(orgActivity.type);
         commentTextArea.setText(orgActivity.comment);
@@ -126,13 +126,13 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
 
     private void updateAction() {
         updatedActivity.id = orgActivity.id;
-        
+
         if(orgActivity.type == null) {
             updatedActivity.action = actionTextBox.getText().trim();
         } else {
             updatedActivity.action = actionTextBox.getText().trim().replace(orgActivity.type, typeComboBox.getSelectedItem().toString());
         }
-        
+
         updatedActivity.comment = commentTextArea.getText();
         updatedActivity.from = fromTextBox.getText();
         updatedActivity.to = toComboBox.getSelectedItem() == null ? "" : toComboBox.getSelectedItem().toString();
