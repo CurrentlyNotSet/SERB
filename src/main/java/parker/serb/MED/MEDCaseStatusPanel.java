@@ -471,6 +471,7 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
 
         jLabel2.setText("Multi Case Numbers:");
 
+        relatedCaseTable.setAutoCreateRowSorter(true);
         relatedCaseTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
