@@ -105,6 +105,7 @@ public class CMDSHearingsPanel extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         hearingTable = new javax.swing.JTable();
 
+        hearingTable.setAutoCreateRowSorter(true);
         hearingTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
