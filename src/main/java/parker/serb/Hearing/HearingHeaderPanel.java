@@ -39,7 +39,7 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
     private void addListeners() {
         caseNumberComboBox.addActionListener((ActionEvent e) -> {
             if(caseNumberComboBox.getSelectedItem() != null) {
-                Global.root.getHearingRootPanel1().getjTabbedPane1().setSelectedIndex(0);
+//                Global.root.getHearingRootPanel1().getjTabbedPane1().setSelectedIndex(0);
                 if(caseNumberComboBox.getSelectedItem().toString().trim().equals("")) {
                     Global.root.getHearingRootPanel1().clearAll();
                     if(Global.root != null) {
@@ -63,14 +63,14 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
                     Global.root.getHearingRootPanel1().clearAll();
                     caseNumberComboBox.setSelectedItem(caseNumberComboBox.getSelectedItem().toString().toUpperCase());
                     loadInformation();
-                    if(Global.root.getHearingRootPanel1().getjTabbedPane1().getSelectedIndex() == 0) {
-                        Global.root.getHearingRootPanel1().getActivityPanel1().loadAllHearingActivity();
-                        Global.root.getjButton2().setText("Add Entry");
-                        Global.root.getjButton2().setEnabled(true);
-                        Global.root.getjButton4().setText("Documents");
-                        Global.root.getjButton4().setEnabled(true);
-                        Global.root.getjButton9().setVisible(true);
-                    }
+//                    if(Global.root.getHearingRootPanel1().getjTabbedPane1().getSelectedIndex() == 0) {
+//                        Global.root.getHearingRootPanel1().getActivityPanel1().loadAllHearingActivity();
+//                        Global.root.getjButton2().setText("Add Entry");
+//                        Global.root.getjButton2().setEnabled(true);
+//                        Global.root.getjButton4().setText("Documents");
+//                        Global.root.getjButton4().setEnabled(true);
+//                        Global.root.getjButton9().setVisible(true);
+//                    }
                     Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
                 }
             }
@@ -82,6 +82,8 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
             NumberFormatService.parseFullCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim());
             User.updateLastCaseNumber();
             loadHeaderInformation();
+            Global.root.getHearingRootPanel1().loadInformation();
+            Global.root.getHearingRootPanel1().setButtons();
         } else {
             new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
         }
