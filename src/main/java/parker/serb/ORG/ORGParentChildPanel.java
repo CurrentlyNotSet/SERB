@@ -132,6 +132,7 @@ public class ORGParentChildPanel extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         parentChildTable = new javax.swing.JTable();
 
+        parentChildTable.setAutoCreateRowSorter(true);
         parentChildTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
