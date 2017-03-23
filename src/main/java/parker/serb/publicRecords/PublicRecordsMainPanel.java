@@ -28,8 +28,8 @@ import parker.serb.util.NumberFormatService;
  */
 public class PublicRecordsMainPanel extends javax.swing.JDialog {
 
-        List<String> filesMissing = new ArrayList<>();
-        double attachmentSize = 0.0;
+    List<String> filesMissing = new ArrayList<>();
+    double attachmentSize = 0.0;
 
     /**
      * Creates new form fileSelector
@@ -207,7 +207,7 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
                 activtyList = Activity.loadActivityDocumentsByGlobalCaseORGCSCPublicRecords();
                 path = Global.activityPath
                         + (Global.activeSection.equals("Civil Service Commission")
-                        ? Global.caseType : Global.activeSection) + File.separator;
+                        ? Global.caseType : Global.activeSection) + File.separator + Global.caseNumber + File.separator;
                 break;
         }
 
@@ -217,17 +217,13 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
 
             File file = new File(path + doc.fileName);
 
-            if (file.exists()){
+            if (file.exists()) {
                 bytes = file.length();
                 megabytes = (bytes / 1024) / 1024;
 
                 //Get Hundrethds rounding
                 megabytes = Math.round(megabytes * 100.0) / 100.0;
             }
-
-
-
-
 
             model.addRow(new Object[]{
                 doc.id,
@@ -277,7 +273,7 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
         if (docsList.size() > 0) {
             //SEND panel
             if (verifyFilesExist(docsList)) {
-                if (Global.EmailSizeLimit >= attachmentSize){
+                if (Global.EmailSizeLimit >= attachmentSize) {
                     new PublicRecordsEmailPanel(Global.root, true, docsList);
                     loadCaseDocsTable();
                 } else {
@@ -331,31 +327,31 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
     private boolean verifyFilesExist(List<Activity> docList) {
         boolean allExist = true;
         String path = "";
-            if (Global.activeSection.equalsIgnoreCase("Civil Service Commission")
-                    || Global.activeSection.equalsIgnoreCase("CSC")
-                    || Global.activeSection.equalsIgnoreCase("ORG")) {
-                path = Global.templatePath
-                        + (Global.activeSection.equals("Civil Service Commission")
-                        ? Global.caseType : Global.activeSection) + File.separator;
+        if (Global.activeSection.equalsIgnoreCase("Civil Service Commission")
+                || Global.activeSection.equalsIgnoreCase("CSC")
+                || Global.activeSection.equalsIgnoreCase("ORG")) {
+            path = Global.activityPath
+                    + (Global.activeSection.equals("Civil Service Commission")
+                    ? Global.caseType : Global.activeSection) + File.separator + Global.caseNumber + File.separatorChar;
+        } else {
+            path = Global.activityPath + File.separatorChar
+                    + Global.activeSection + File.separatorChar
+                    + Global.caseYear + File.separatorChar
+                    + (Global.caseYear + "-" + Global.caseType + "-" + Global.caseMonth + "-" + Global.caseNumber)
+                    + File.separatorChar;
+        }
+
+        filesMissing = new ArrayList<>();
+
+        for (Activity attach : docList) {
+            File attachment = new File(path + attach.fileName);
+            if (!attachment.exists()) {
+                allExist = false;
+                filesMissing.add(attach.fileName);
             } else {
-                path = Global.activityPath + File.separatorChar
-                        + Global.activeSection + File.separatorChar
-                        + Global.caseYear + File.separatorChar
-                        + (Global.caseYear + "-" + Global.caseType + "-" + Global.caseMonth + "-" + Global.caseNumber)
-                        + File.separatorChar;
+                attachmentSize += attachment.length();
             }
-
-            filesMissing = new ArrayList<>();
-
-            for (Activity attach : docList) {
-                File attachment = new File(path + attach.fileName);
-                if (!attachment.exists()) {
-                    allExist = false;
-                    filesMissing.add(attach.fileName);
-                } else {
-                    attachmentSize += attachment.length();
-                }
-            }
+        }
 
         return allExist;
     }
