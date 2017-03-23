@@ -5,6 +5,8 @@
  */
 package parker.serb.activity;
 
+import com.alee.laf.optionpane.WebOptionPane;
+import java.io.File;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import parker.serb.Global;
@@ -22,7 +24,7 @@ import parker.serb.util.FileService;
 public class DetailedActivityDialog extends javax.swing.JDialog {
 
     String fileName;
-    Activity orgActivity;
+    Activity origActivity;
     Activity updatedActivity = new Activity();
     String passedID;
     String passedUser;
@@ -93,28 +95,28 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
     }
 
     private void loadInformation(String id, String userName) {
-        orgActivity = Activity.loadActivityByID(id, userName);
+        origActivity = Activity.loadActivityByID(id, userName);
 
-        dateTextBox.setText(orgActivity.date);
-        actionTextBox.setText(orgActivity.action);
-        fromTextBox.setText(orgActivity.from);
+        dateTextBox.setText(origActivity.date);
+        actionTextBox.setText(origActivity.action);
+        fromTextBox.setText(origActivity.from);
 
-        if(((DefaultComboBoxModel)toComboBox.getModel()).getIndexOf(orgActivity.to) < 0) {
-            toComboBox.addItem(orgActivity.to );
+        if(((DefaultComboBoxModel)toComboBox.getModel()).getIndexOf(origActivity.to) < 0) {
+            toComboBox.addItem(origActivity.to );
         }
 
-        toComboBox.setSelectedItem(orgActivity.to);
-        typeComboBox.setSelectedItem(orgActivity.type);
-        commentTextArea.setText(orgActivity.comment);
+        toComboBox.setSelectedItem(origActivity.to);
+        typeComboBox.setSelectedItem(origActivity.type);
+        commentTextArea.setText(origActivity.comment);
 
-        if(orgActivity.fileName == null) {
+        if(origActivity.fileName == null) {
             viewFileButton.setVisible(false);
-        } else switch (orgActivity.fileName) {
+        } else switch (origActivity.fileName) {
             case "":
                 viewFileButton.setVisible(false);
                 break;
             default:
-                fileName = orgActivity.fileName;
+                fileName = origActivity.fileName;
                 break;
         }
     }
@@ -125,12 +127,12 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
     }
 
     private void updateAction() {
-        updatedActivity.id = orgActivity.id;
+        updatedActivity.id = origActivity.id;
 
-        if(orgActivity.type == null) {
+        if(origActivity.type == null) {
             updatedActivity.action = actionTextBox.getText().trim();
         } else {
-            updatedActivity.action = actionTextBox.getText().trim().replace(orgActivity.type, typeComboBox.getSelectedItem().toString());
+            updatedActivity.action = actionTextBox.getText().trim().replace(origActivity.type, typeComboBox.getSelectedItem().toString());
         }
 
         updatedActivity.comment = commentTextArea.getText();
@@ -139,24 +141,73 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
         updatedActivity.type = typeComboBox.getSelectedItem().toString();
 
         Activity.updateActivtyEntry(updatedActivity);
+
+        origActivity = Activity.loadActivityByID(passedID, passedUser);
     }
 
     private void updateFileName() {
-        if(orgActivity.type != null)
+        if(origActivity.type != null)
         {
-            if(!orgActivity.type.equals(typeComboBox.getSelectedItem().toString())) {
-                if(orgActivity.fileName != null) {
-                    FileService.renameActivtyFile(orgActivity.fileName, typeComboBox.getSelectedItem().toString());
+            if(!origActivity.type.equals(typeComboBox.getSelectedItem().toString())) {
+                if(origActivity.fileName != null) {
+                    FileService.renameActivtyFile(origActivity.fileName, typeComboBox.getSelectedItem().toString());
 
-                    updatedActivity.fileName = orgActivity.fileName.split("_")[0] + "_"
+                    updatedActivity.fileName = origActivity.fileName.split("_")[0] + "_"
                             + ActivityType.getTypeAbbrv(typeComboBox.getSelectedItem().toString()).replace(" ", "_")
-                            + "." + orgActivity.fileName.split("\\.")[1];
+                            + "." + origActivity.fileName.split("\\.")[1];
                     fileName = updatedActivity.fileName;
                 }
             } else {
-                updatedActivity.fileName = orgActivity.fileName;
+                updatedActivity.fileName = origActivity.fileName;
             }
         }
+    }
+
+    private boolean okToRenameFile() {
+        if (!origActivity.type.equals(typeComboBox.getSelectedItem().toString())) {
+            String path = "";
+            if (Global.activeSection.equalsIgnoreCase("Civil Service Commission")
+                    || Global.activeSection.equalsIgnoreCase("CSC")
+                    || Global.activeSection.equalsIgnoreCase("ORG")) {
+                path = Global.activityPath
+                        + (Global.activeSection.equals("Civil Service Commission")
+                        ? Global.caseType : Global.activeSection) + File.separator + Global.caseNumber + File.separatorChar;
+            } else {
+                path = Global.activityPath + File.separatorChar
+                        + Global.activeSection + File.separatorChar
+                        + Global.caseYear + File.separatorChar
+                        + (Global.caseYear + "-" + Global.caseType + "-" + Global.caseMonth + "-" + Global.caseNumber)
+                        + File.separatorChar;
+            }
+
+            File attachment = new File(path + origActivity.fileName);
+            if (attachment.exists()) {
+                return attachment.renameTo(attachment);
+            } else {
+                filesMissingMessage();
+                return false;
+            }
+        } else {
+            return true;
+        }
+    }
+
+    private void filesMissingMessage() {
+        WebOptionPane.showMessageDialog(
+                    Global.root,
+                    "<html><center> Sorry, unable to locate file</center></html>",
+                    "Error",
+                    WebOptionPane.ERROR_MESSAGE
+            );
+    }
+
+    private void filesInUseMessage() {
+        WebOptionPane.showMessageDialog(
+                Global.root,
+                "<html><center> Sorry, file in use. Please close document before saving.</center></html>",
+                "Error",
+                WebOptionPane.ERROR_MESSAGE
+        );
     }
 
     /**
@@ -332,13 +383,17 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
             updateButton.setText("Save");
             closeButton.setText("Cancel");
         } else if(updateButton.getText().equals("Save")) {
-            Audit.addAuditEntry("Clicked Save Button for Activity: " + passedID);
-            updateFileName();
-            updateAction();
-            enableInputs(false);
-            Audit.addAuditEntry("Updated Information for Activity: " + passedID);
-            updateButton.setText("Update");
-            closeButton.setText("Close");
+            if (okToRenameFile()) {
+                Audit.addAuditEntry("Clicked Save Button for Activity: " + passedID);
+                updateFileName();
+                updateAction();
+                enableInputs(false);
+                Audit.addAuditEntry("Updated Information for Activity: " + passedID);
+                updateButton.setText("Update");
+                closeButton.setText("Close");
+            } else {
+                filesInUseMessage();
+            }
         }
     }//GEN-LAST:event_updateButtonActionPerformed
 
