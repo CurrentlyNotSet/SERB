@@ -22,12 +22,9 @@ public class Global {
     // Major Version       3 -- will stay 3
     // Minor Version       0 -- update with larger enhancments
     // Maintenence Version 0 -- bug fix releases
-<<<<<<< HEAD
-    public static final String APPLICATION_VERSION = "3.1";
-=======
-    public static final String APPLICATION_VERSION = "3.0.10";
->>>>>>> 00178353a64862ecde63aa3cdbe2bf9959b62f6c
 
+    public static final String APPLICATION_VERSION = "3.1";
+    
     //All Date and Time formatters
     public static SimpleDateFormat mmddyyyyhhmma = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
     public static SimpleDateFormat hmma = new SimpleDateFormat("h:mm a");
