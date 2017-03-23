@@ -48,6 +48,7 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
                     if(Global.root != null) {
                         Global.root.getjButton2().setText("Update");
                         Global.root.getjButton2().setEnabled(false);
+                        Global.root.getjButton3().setEnabled(false);
                         Global.root.getjButton9().setVisible(false);
 //                        Global.caseYear = null;
 //                        Global.caseType = null;
@@ -60,12 +61,12 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
                     Global.root.getjButton3().setEnabled(true);
                     caseNumberComboBox.setSelectedItem(caseNumberComboBox.getSelectedItem().toString().toUpperCase());
                     loadInformation();
-                    if(Global.root.getmEDRootPanel1().getjTabbedPane1().getSelectedIndex() == 0) {
-                        Global.root.getjButton2().setText("Add Entry");
-                        Global.root.getjButton2().setEnabled(true);
-                        Global.root.getmEDRootPanel1().getActivityPanel1().loadAllActivity(); 
-                        Global.root.getjButton9().setVisible(true);
-                    }
+//                    if(Global.root.getmEDRootPanel1().getjTabbedPane1().getSelectedIndex() == 0) {
+//                        Global.root.getjButton2().setText("Add Entry");
+//                        Global.root.getjButton2().setEnabled(true);
+//                        Global.root.getmEDRootPanel1().getActivityPanel1().loadAllActivity(); 
+//                        Global.root.getjButton9().setVisible(true);
+//                    }
                         
                     Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
                 }
@@ -79,6 +80,7 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
             User.updateLastCaseNumber();
             loadHeaderInformation();
             Global.root.getmEDRootPanel1().loadInformation();
+            Global.root.getmEDRootPanel1().setButtons();
         } else {
             new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());  
         }
