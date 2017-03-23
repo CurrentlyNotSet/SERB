@@ -84,12 +84,12 @@ public class CMDSRootPanel extends javax.swing.JPanel {
      * Set the buttons to display the proper information and button status
      * depending on the selected tab index
      */
-    private void setButtons() {
+    public void setButtons() {
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
             case "Activity":
                 Global.root.getjButton2().setText("Add Entry");
                 Global.root.getjButton2().setEnabled(true);
-                Global.root.getjButton9().setVisible(false);
+                Global.root.getjButton9().setVisible(true);
                 break;
             case "Parties":
                 Global.root.getjButton2().setText("Add Party");
