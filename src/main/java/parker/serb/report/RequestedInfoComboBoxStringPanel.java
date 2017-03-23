@@ -66,7 +66,7 @@ public class RequestedInfoComboBoxStringPanel extends javax.swing.JDialog {
 
         switch (IDType) {
             case "ActivityType, Year":
-                List<ActivityType> typeList = ActivityType.loadAllActivityTypeBySection(Global.activeSection);
+                List<ActivityType> typeList = ActivityType.loadActiveActivityTypeBySection(Global.activeSection);
                 for (ActivityType item : typeList) {
                     ComboBox.addItem(new Item<>(
                             String.valueOf(item.id),

@@ -103,7 +103,7 @@ public class RequestedInfoDropdownPanel extends javax.swing.JDialog {
             case "ActivityType":
                 comboBoxLabel.setText("Activity Type:");
                 ComboBox.addItem(new Item<>("%", "All"));
-                List<ActivityType> typeList = ActivityType.loadAllActivityTypeBySection(Global.activeSection);
+                List<ActivityType> typeList = ActivityType.loadActiveActivityTypeBySection(Global.activeSection);
                 for (ActivityType item : typeList) {
                     ComboBox.addItem(new Item<>(
                             String.valueOf(item.id),
