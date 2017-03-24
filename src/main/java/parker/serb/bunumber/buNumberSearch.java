@@ -187,6 +187,7 @@ public class buNumberSearch extends javax.swing.JDialog {
 
         jLabel2.setText("Search:");
 
+        buTable.setAutoCreateRowSorter(true);
         buTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
