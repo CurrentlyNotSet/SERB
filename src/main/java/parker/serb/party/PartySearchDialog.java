@@ -238,6 +238,7 @@ public class PartySearchDialog extends javax.swing.JDialog {
             }
         });
 
+        jTable1.setAutoCreateRowSorter(true);
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
