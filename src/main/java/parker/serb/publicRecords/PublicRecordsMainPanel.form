@@ -108,6 +108,7 @@
               <SubComponents>
                 <Component class="javax.swing.JTable" name="caseDocsTable">
                   <Properties>
+                    <Property name="autoCreateRowSorter" type="boolean" value="true"/>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                       <Table columnCount="8" rowCount="0">
                         <Column editable="false" title="ID" type="java.lang.Object"/>
@@ -219,6 +220,7 @@
               <SubComponents>
                 <Component class="javax.swing.JTable" name="awaitingTable">
                   <Properties>
+                    <Property name="autoCreateRowSorter" type="boolean" value="true"/>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                       <Table columnCount="5" rowCount="0">
                         <Column editable="false" title="id" type="java.lang.Object"/>

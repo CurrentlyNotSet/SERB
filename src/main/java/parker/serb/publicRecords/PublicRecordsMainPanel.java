@@ -440,6 +440,7 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
             }
         });
 
+        caseDocsTable.setAutoCreateRowSorter(true);
         caseDocsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -505,6 +506,7 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
 
         jTabbedPane1.addTab("Case Documents", caseDocsPanel);
 
+        awaitingTable.setAutoCreateRowSorter(true);
         awaitingTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
