@@ -301,6 +301,7 @@ public class ULPCaseSearch extends javax.swing.JDialog {
 
         jLayeredPane1.setLayout(new javax.swing.OverlayLayout(jLayeredPane1));
 
+        caseSearchTable.setAutoCreateRowSorter(true);
         caseSearchTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
