@@ -1040,6 +1040,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
             jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
             jLabel4.setText("Suggested Send Date:");
 
+            personTable.setAutoCreateRowSorter(true);
             personTable.setModel(new javax.swing.table.DefaultTableModel(
                 new Object [][] {
 
@@ -1061,6 +1062,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
             jScrollPane1.setViewportView(personTable);
             personTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
+            activityTable.setAutoCreateRowSorter(true);
             activityTable.setModel(new javax.swing.table.DefaultTableModel(
                 new Object [][] {
 
@@ -1096,6 +1098,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
 
             additionalDocumentsLabel.setText("Additional Documents:");
 
+            additionalDocsTable.setAutoCreateRowSorter(true);
             additionalDocsTable.setModel(new javax.swing.table.DefaultTableModel(
                 new Object [][] {
 
