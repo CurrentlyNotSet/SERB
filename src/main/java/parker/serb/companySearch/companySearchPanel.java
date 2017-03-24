@@ -217,6 +217,7 @@ public class companySearchPanel extends javax.swing.JPanel {
 
         jLayeredPane1.setLayout(new javax.swing.OverlayLayout(jLayeredPane1));
 
+        employerTable.setAutoCreateRowSorter(true);
         employerTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
