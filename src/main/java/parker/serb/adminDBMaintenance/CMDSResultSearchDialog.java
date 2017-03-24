@@ -155,6 +155,7 @@ public class CMDSResultSearchDialog extends javax.swing.JDialog {
             }
         });
 
+        SearchTable.setAutoCreateRowSorter(true);
         SearchTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 

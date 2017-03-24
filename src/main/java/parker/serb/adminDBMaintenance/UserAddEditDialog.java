@@ -384,6 +384,7 @@ public class UserAddEditDialog extends javax.swing.JDialog {
 
         jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
+        UserRoleTable.setAutoCreateRowSorter(true);
         UserRoleTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
