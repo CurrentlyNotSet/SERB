@@ -519,6 +519,7 @@ public class DocketRootPanel extends javax.swing.JPanel {
 
         jLabel3.setText("jLabel3");
 
+        docketTable.setAutoCreateRowSorter(true);
         docketTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
