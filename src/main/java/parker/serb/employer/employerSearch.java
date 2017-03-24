@@ -191,6 +191,7 @@ public class employerSearch extends javax.swing.JDialog {
 
         jLabel2.setText("Search:");
 
+        employerTable.setAutoCreateRowSorter(true);
         employerTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
