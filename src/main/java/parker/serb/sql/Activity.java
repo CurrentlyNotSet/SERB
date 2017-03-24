@@ -1462,8 +1462,8 @@ public class Activity {
             preparedStatement.setString(12, item.comment);
             preparedStatement.setBoolean(13, item.redacted);
             preparedStatement.setBoolean(14, item.awaitingScan);
-            preparedStatement.setBoolean(16, true); //active
-            preparedStatement.setBoolean(16, false); //mailLog
+            preparedStatement.setBoolean(15, true); //active
+            preparedStatement.setNull(16, java.sql.Types.DATE); //mailLog
 
             preparedStatement.executeUpdate();
 
