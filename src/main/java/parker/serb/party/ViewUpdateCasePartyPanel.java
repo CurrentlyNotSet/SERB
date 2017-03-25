@@ -134,7 +134,13 @@ public class ViewUpdateCasePartyPanel extends javax.swing.JDialog {
     }
 
     private void loadPartyTypeComboBox() {
-        List<String> partyList = PartyType.loadAllPartyTypesBySection();
+        List<String> partyList = null;
+
+        if (Global.activeSection.equals("Hearings")){
+            partyList = PartyType.loadAllPartyTypesForHearings();
+        } else {
+            partyList = PartyType.loadAllPartyTypesBySection();
+        }
 
         partyTypeComboBox.removeAllItems();
 

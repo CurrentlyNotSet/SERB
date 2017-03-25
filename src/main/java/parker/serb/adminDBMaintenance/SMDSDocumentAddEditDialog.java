@@ -17,7 +17,7 @@ public class SMDSDocumentAddEditDialog extends javax.swing.JDialog {
 
     private int ID;
     private SMDSDocuments item;
-    
+
     /**
      * Creates new form CMDSStatusTypeAddEditDialog
      * @param parent
@@ -47,7 +47,7 @@ public class SMDSDocumentAddEditDialog extends javax.swing.JDialog {
         this.setLocationRelativeTo(Global.root);
         this.setVisible(true);
     }
-    
+
     private void loadSectionComboBox() {
         sectionComboBox.removeAllItems();
         sectionComboBox.addItem("");
@@ -57,28 +57,37 @@ public class SMDSDocumentAddEditDialog extends javax.swing.JDialog {
         sectionComboBox.addItem("REP");
         sectionComboBox.addItem("ULP");
     }
-    
+
     private void loadParameterComboBox() {
         parametersComboBox.removeAllItems();
         parametersComboBox.addItem("");
-        parametersComboBox.addItem("ActivityType, Year");
-        parametersComboBox.addItem("ALJ, Year");
+        parametersComboBox.addItem("EmployerID");
+        parametersComboBox.addItem("date");
+        parametersComboBox.addItem("caseNumber");
+        parametersComboBox.addItem("month");
+        parametersComboBox.addItem("UserID");
+        parametersComboBox.addItem("SectionUserID");
         parametersComboBox.addItem("begin date, end date");
         parametersComboBox.addItem("begin date, end date, InvestigatorID");
-        parametersComboBox.addItem("begin date, end date, LikeString");
+        parametersComboBox.addItem("begin date, end date, SectionUserID");
         parametersComboBox.addItem("begin date, end date, UserID");
+        parametersComboBox.addItem("begin date, end date, LikeString");
         parametersComboBox.addItem("begin date, end date, String");
-        parametersComboBox.addItem("caseNumber");
-        parametersComboBox.addItem("date");
-        parametersComboBox.addItem("EmployerID");
-        parametersComboBox.addItem("month");
-        parametersComboBox.addItem("String");
-        parametersComboBox.addItem("UserID");
+        parametersComboBox.addItem("ActivityType, Year");
+        parametersComboBox.addItem("Year, InvestigatorID");
+        parametersComboBox.addItem("ActivityType");
+        parametersComboBox.addItem("InvestigatorID");
+        parametersComboBox.addItem("groupNumber");
+        parametersComboBox.addItem("Month, Year");
+        parametersComboBox.addItem("Year");
+        parametersComboBox.addItem("OrgNumber");
+        parametersComboBox.addItem("Charging Party, Charged Party");
+        parametersComboBox.addItem("begin date, end date, EmployerType");
     }
-        
+
     private void loadInformation() {
         item = SMDSDocuments.getDocumentByID(ID);
-        
+
         sectionComboBox.setSelectedItem(item.section);
         typeTextField.setText(item.type);
         descriptionTextField.setText(item.description);
@@ -92,14 +101,14 @@ public class SMDSDocumentAddEditDialog extends javax.swing.JDialog {
         emailBodyTextArea.setText(item.emailBody);
         sortOrderTextField.setText(String.valueOf(item.sortOrder));
     }
-    
+
     private void saveInformation() {
         item.id = ID;
         item.section = sectionComboBox.getSelectedItem().toString();
         item.type = typeTextField.getText().trim();
         item.description = descriptionTextField.getText().trim();
         item.fileName = fileNameTextField.getText().trim();
-        
+
         if (!dueDateTextField.getText().replaceAll("[^0-9]", "").equals("")){
             item.dueDate = Integer.parseInt(dueDateTextField.getText().trim());
         } else {
@@ -116,10 +125,10 @@ public class SMDSDocumentAddEditDialog extends javax.swing.JDialog {
         } else {
             item.dueDate = -1;
         }
-        
+
         item.CHDCHG = "";
         item.questionsFileName = "";
-                
+
         if (ID > 0){
             SMDSDocuments.updateDocument(item);
         } else {
@@ -128,16 +137,16 @@ public class SMDSDocumentAddEditDialog extends javax.swing.JDialog {
     }
 
     private void checkButton(){
-        if (sectionComboBox.getSelectedItem().toString().trim().equals("") || 
-                typeTextField.getText().trim().equals("") || 
-                descriptionTextField.getText().trim().equals("") || 
+        if (sectionComboBox.getSelectedItem().toString().trim().equals("") ||
+                typeTextField.getText().trim().equals("") ||
+                descriptionTextField.getText().trim().equals("") ||
                 fileNameTextField.getText().trim().equals("")){
             editButton.setEnabled(false);
         } else {
             editButton.setEnabled(true);
         }
-    }    
-    
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

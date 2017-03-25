@@ -37,7 +37,7 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
     private void addListeners() {
         caseNumberComboBox.addActionListener((ActionEvent e) -> {
             if(caseNumberComboBox.getSelectedItem() != null) {
-                Global.root.getoRGRootPanel1().getjTabbedPane1().setSelectedIndex(0);
+//                Global.root.getoRGRootPanel1().getjTabbedPane1().setSelectedIndex(0);
                 if(caseNumberComboBox.getSelectedItem().toString().trim().equals("")) {
                     if(Global.root != null) {
                         Global.root.getjButton2().setText("Update");
@@ -57,14 +57,14 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
                     Global.root.getjButton2().setEnabled(true);
                     caseNumberComboBox.setSelectedItem(caseNumberComboBox.getSelectedItem().toString().toUpperCase());
                     loadInformation();
-                    if(Global.root.getoRGRootPanel1().getjTabbedPane1().getSelectedIndex() == 0) {
-                        Global.root.getjButton2().setText("Add Entry");
-                        Global.root.getjButton2().setEnabled(true);
-                        Global.root.getjButton4().setText("Single Letter");
-                        Global.root.getjButton4().setEnabled(true);
-                        Global.root.getjButton9().setVisible(true);
-                        Global.root.getoRGRootPanel1().getActivityPanel1().loadAllActivity();
-                    }
+//                    if(Global.root.getoRGRootPanel1().getjTabbedPane1().getSelectedIndex() == 0) {
+//                        Global.root.getjButton2().setText("Add Entry");
+//                        Global.root.getjButton2().setEnabled(true);
+//                        Global.root.getjButton4().setText("Single Letter");
+//                        Global.root.getjButton4().setEnabled(true);
+//                        Global.root.getjButton9().setVisible(true);
+//                        Global.root.getoRGRootPanel1().getActivityPanel1().loadAllActivity();
+//                    }
 
                     Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
                 }
@@ -79,6 +79,8 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
         Global.caseNumber = caseNumberComboBox.getSelectedItem().toString().trim();
 
         loadHeaderInformation();
+        Global.root.getoRGRootPanel1().loadInformation();
+        Global.root.getoRGRootPanel1().setButtons();
     }
 
     public void loadHeaderInformation() {

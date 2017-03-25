@@ -23,33 +23,33 @@ public class REPCaseDetailsPanel extends javax.swing.JPanel {
         initComponents();
         hideNotRequiredInformation();
     }
-    
+
     private void hideNotRequiredInformation() {
         //hide opt in
         optInIncludedLabel.setVisible(false);
         optInIncludedScrollPane.setVisible(false);
         optInIncludedTextArea.setText("");
-        
+
         //handle professional non professional checkbox
         displayProfessionalNonProfessionalInformation();
-        
+
         //display certifications and unit information
         displayCertificationsUnitChangeInformation(false);
         clearCertificationsUnitChangeInformation();
     }
-    
+
     public void loadInformation() {
         optInIncludedTextArea.setText("");
         professionalNonProfessionalCheckBox.setSelected(false);
         clearProfessionalNonProfessionalInformation();
         clearCertificationsUnitChangeInformation();
-        
+
         repCase = REPCase.loadCaseDetails();
-        
-        filedByComboBox.setSelectedItem(repCase.fileBy);
+
+        filedByComboBox.setSelectedItem(repCase.fileBy == null ? "" : repCase.fileBy);
         bargainingUnitIncludedTextArea.setText(repCase.bargainingUnitIncluded);
         bargainingUnitExcludedTextArea.setText(repCase.bargainingUnitExcluded);
-        
+
         //hide/show opt in text area
         if(repCase.type == null) {
             optInIncludedLabel.setVisible(false);
@@ -65,9 +65,9 @@ public class REPCaseDetailsPanel extends javax.swing.JPanel {
             optInIncludedScrollPane.setVisible(false);
             optInIncludedTextArea.setText("");
         }
-        
+
         professionalNonProfessionalCheckBox.setSelected(repCase.professionalNonProfessional);
-        
+
         if(professionalNonProfessionalCheckBox.isSelected()) {
             professionalIncludedTextArea.setText(repCase.professionalIncluded);
             professionalExcludedTextArea.setText(repCase.professionalExcluded);
@@ -79,7 +79,7 @@ public class REPCaseDetailsPanel extends javax.swing.JPanel {
             nonProfessionalIncludedTextArea.setText("");
             nonProfessionalExcludedTextArea.setText("");
         }
-        
+
         if(repCase.type == null) {
             displayCertificationsUnitChangeInformation(false);
         } else if(repCase.type.equalsIgnoreCase("AC") ||
@@ -99,12 +99,12 @@ public class REPCaseDetailsPanel extends javax.swing.JPanel {
             displayCertificationsUnitChangeInformation(false);
         }
     }
-    
+
     public void enableUpdate() {
         Global.root.getjButton2().setText("Save");
-        
+
         Global.root.getjButton9().setVisible(true);
-        
+
         filedByComboBox.setEnabled(true);
         bargainingUnitIncludedTextArea.setEnabled(true);
         bargainingUnitIncludedTextArea.setBackground(Color.WHITE);
@@ -136,12 +136,12 @@ public class REPCaseDetailsPanel extends javax.swing.JPanel {
         ERNameChangeToTextBox.setEnabled(true);
         ERNameChangeToTextBox.setBackground(Color.WHITE);
     }
-    
+
     public void disableUpdate(boolean runSave) {
         Global.root.getjButton2().setText("Update");
-        
+
         Global.root.getjButton9().setVisible(false);
-        
+
         filedByComboBox.setEnabled(false);
         bargainingUnitIncludedTextArea.setEnabled(false);
         bargainingUnitIncludedTextArea.setBackground(new Color(238,238,238));
@@ -172,133 +172,133 @@ public class REPCaseDetailsPanel extends javax.swing.JPanel {
         ERNameChangeFromTextBox.setBackground(new Color(238,238,238));
         ERNameChangeToTextBox.setEnabled(false);
         ERNameChangeToTextBox.setBackground(new Color(238,238,238));
-        
+
         if(runSave) {
             saveInformation();
         } else {
             loadInformation();
         }
     }
-    
+
     private void saveInformation() {
        REPCase newRepCase = new REPCase();
        newRepCase.fileBy = filedByComboBox.getSelectedItem().toString().equals("") ? null : filedByComboBox.getSelectedItem().toString();
        newRepCase.bargainingUnitIncluded = bargainingUnitIncludedTextArea.getText().trim().equals("") ? null : bargainingUnitIncludedTextArea.getText().trim();
        newRepCase.bargainingUnitExcluded = bargainingUnitExcludedTextArea.getText().trim().equals("") ? null : bargainingUnitExcludedTextArea.getText().trim();
-       
+
        if(optInIncludedScrollPane.isVisible()) {
            newRepCase.optInIncluded = optInIncludedTextArea.getText().trim().equals("") ? null : optInIncludedTextArea.getText().trim();
        } else {
            optInIncludedTextArea.setText("");
            newRepCase.optInIncluded = null;
        }
-       
+
        newRepCase.professionalNonProfessional = professionalNonProfessionalCheckBox.isSelected();
-       
+
        if(professionalNonProfessionalCheckBox.isSelected()) {
            newRepCase.professionalIncluded = professionalIncludedTextArea.getText().trim().equals("") ? null : professionalIncludedTextArea.getText().trim();
        } else {
            professionalIncludedTextArea.setText("");
            newRepCase.professionalIncluded = null;
        }
-       
+
        if(professionalNonProfessionalCheckBox.isSelected()) {
            newRepCase.professionalExcluded = professionalExcludedTextArea.getText().trim().equals("") ? null : professionalExcludedTextArea.getText().trim();
        } else {
            professionalExcludedTextArea.setText("");
            newRepCase.professionalExcluded = null;
        }
-       
+
        if(professionalNonProfessionalCheckBox.isSelected()) {
            newRepCase.nonProfessionalIncluded = nonProfessionalIncludedTextArea.getText().trim().equals("") ? null : nonProfessionalIncludedTextArea.getText().trim();
        } else {
            nonProfessionalIncludedTextArea.setText("");
            newRepCase.nonProfessionalIncluded = null;
        }
-       
+
        if(professionalNonProfessionalCheckBox.isSelected()) {
            newRepCase.nonProfessionalExcluded = nonProfessionalExcludedTextArea.getText().trim().equals("") ? null : nonProfessionalExcludedTextArea.getText().trim();
        } else {
            nonProfessionalExcludedTextArea.setText("");
            newRepCase.nonProfessionalExcluded = null;
        }
-       
+
        if(toReflectTextBox.isVisible()) {
            newRepCase.toReflect = toReflectTextBox.getText().trim().equals("") ? null : toReflectTextBox.getText().trim();
        } else {
            toReflectTextBox.setText("");
            newRepCase.toReflect = null;
        }
-       
+
        if(typeFiledByComboBox.isVisible()) {
            newRepCase.typeFiledBy = typeFiledByComboBox.getSelectedItem() == null ? null : typeFiledByComboBox.getSelectedItem().toString();
        } else {
            typeFiledByComboBox.setSelectedItem("");
            newRepCase.typeFiledBy = null;
        }
-       
+
        if(typeFiledViaComboBox.isVisible()) {
            newRepCase.typeFiledVia = typeFiledViaComboBox.getSelectedItem() == null ? null : typeFiledViaComboBox.getSelectedItem().toString().trim();
        } else {
            typeFiledViaComboBox.setSelectedItem("");
            newRepCase.typeFiledVia = null;
        }
-       
+
        if(PositionStatementFiledByTextBox.isVisible()) {
            newRepCase.positionStatementFiledBy = PositionStatementFiledByTextBox.getText().trim().equals("") ? null : PositionStatementFiledByTextBox.getText().trim();
        } else {
            PositionStatementFiledByTextBox.setText("");
            newRepCase.positionStatementFiledBy = null;
        }
-       
+
        if(EEONameChangeFromTextBox.isVisible()) {
            newRepCase.EEONameChangeFrom = EEONameChangeFromTextBox.getText().trim().equals("") ? null : EEONameChangeFromTextBox.getText().trim();
        } else {
            EEONameChangeFromTextBox.setText("");
            newRepCase.EEONameChangeFrom = null;
        }
-       
+
        if(EEONameChangeToTextBox.isVisible()) {
            newRepCase.EEONameChangeTo = EEONameChangeToTextBox.getText().trim().equals("") ? null : EEONameChangeToTextBox.getText().trim();
        } else {
            EEONameChangeFromTextBox.setText("");
            newRepCase.EEONameChangeTo = null;
        }
-       
+
        if(ERNameChangeFromTextBox.isVisible()) {
            newRepCase.ERNameChangeFrom = ERNameChangeFromTextBox.getText().trim().equals("") ? null : ERNameChangeFromTextBox.getText().trim();
        } else {
            ERNameChangeFromTextBox.setText("");
            newRepCase.ERNameChangeFrom = null;
        }
-       
+
        if(ERNameChangeToTextBox.isVisible()) {
            newRepCase.ERNameChangeTo = ERNameChangeToTextBox.getText().trim().equals("") ? null : ERNameChangeToTextBox.getText().trim();
        } else {
            ERNameChangeToTextBox.setText("");
            newRepCase.ERNameChangeTo = null;
        }
-       
+
        REPCase.updateCaseDetails(newRepCase, repCase);
        repCase = REPCase.loadCaseDetails();
     }
-    
+
     public void clearAll() {
         filedByComboBox.setSelectedItem("");
         bargainingUnitIncludedTextArea.setText("");
         bargainingUnitExcludedTextArea.setText("");
-        
+
         optInIncludedLabel.setVisible(false);
         optInIncludedScrollPane.setVisible(false);
         optInIncludedTextArea.setText("");
-        
+
         professionalNonProfessionalCheckBox.setSelected(false);
         displayProfessionalNonProfessionalInformation();
-        
+
         clearCertificationsUnitChangeInformation();
         displayCertificationsUnitChangeInformation(false);
     }
-    
+
     private void displayProfessionalNonProfessionalInformation() {
         if(professionalNonProfessionalCheckBox.isSelected()) {
             professionalIncludedPanel.setVisible(true);
@@ -312,14 +312,14 @@ public class REPCaseDetailsPanel extends javax.swing.JPanel {
             nonProfessionalIncludedPanel.setVisible(false);
         }
     }
-    
+
     private void clearProfessionalNonProfessionalInformation() {
         professionalIncludedTextArea.setText("");
         professionalExcludedTextArea.setText("");
         nonProfessionalIncludedTextArea.setText("");
         nonProfessionalExcludedTextArea.setText("");
     }
-    
+
     private void displayCertificationsUnitChangeInformation(boolean show) {
         certificationUnitChangesLabel.setVisible(show);
         toReflectLabel.setVisible(show);
@@ -339,7 +339,7 @@ public class REPCaseDetailsPanel extends javax.swing.JPanel {
         ERNameChangeToLabel.setVisible(show);
         ERNameChangeToTextBox.setVisible(show);
     }
-    
+
     private void clearCertificationsUnitChangeInformation() {
         toReflectTextBox.setText("");
         typeFiledByComboBox.setSelectedItem("");
