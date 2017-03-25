@@ -58,7 +58,7 @@ public class HearingRootPanel extends javax.swing.JPanel {
      * trying to cheat and "lazy" load.  This my be re-factored to allow for full
      * case load while displaying a spinner.
      */
-    private void loadInformation() {
+    public void loadInformation() {
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
             case "Activity":
                 activityPanel1.loadAllHearingActivity();
@@ -82,31 +82,42 @@ public class HearingRootPanel extends javax.swing.JPanel {
      * Set the buttons to display the proper information and button status
      * depending on the selected tab index
      */
-    private void setButtons() {
+    public void setButtons() {
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
             case "Activity":
                 Global.root.getjButton2().setText("Add Entry");
                 Global.root.getjButton2().setEnabled(true);
-                Global.root.getjButton9().setVisible(false);
+                Global.root.getjButton4().setText("Documents");
+                Global.root.getjButton4().setEnabled(true);
+                Global.root.getjButton9().setVisible(true);
+                
                 break;
             case "Parties":
                 Global.root.getjButton2().setText("Add Party");
                 Global.root.getjButton2().setEnabled(true);
+                Global.root.getjButton4().setText("Documents");
+                Global.root.getjButton4().setEnabled(true);
                 Global.root.getjButton9().setVisible(true);
                 break;
             case "Case Information":
                 Global.root.getjButton2().setText("Update");
                 Global.root.getjButton2().setEnabled(true);
+                Global.root.getjButton4().setText("Documents");
+                Global.root.getjButton4().setEnabled(true);
                 Global.root.getjButton9().setVisible(false);
                 break;
             case "Notes":
                 Global.root.getjButton2().setText("Update");
                 Global.root.getjButton2().setEnabled(true);
+                Global.root.getjButton4().setText("Documents");
+                Global.root.getjButton4().setEnabled(true);
                 Global.root.getjButton9().setVisible(false);
                 break;
             case "Hearings":
                 Global.root.getjButton2().setText("Add Hearing");
                 Global.root.getjButton2().setEnabled(true);
+                Global.root.getjButton4().setText("Documents");
+                Global.root.getjButton4().setEnabled(true);
                 Global.root.getjButton9().setVisible(false);
                 break;
         }

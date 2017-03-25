@@ -57,7 +57,7 @@ public class ULPRootPanel extends javax.swing.JPanel {
         });
     }
 
-    private void loadInformation() {
+    public void loadInformation() {
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
             case "Activity":
                 activityPanel1.loadAllActivity();
@@ -83,11 +83,11 @@ public class ULPRootPanel extends javax.swing.JPanel {
         }
     }
 
-    private void setButtons() {
+    public void setButtons() {
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
             case "Activity":
-                Global.root.getjButton2().setText("Update");
-                Global.root.getjButton2().setEnabled(false);
+                Global.root.getjButton2().setText("Add Entry");
+                Global.root.getjButton2().setEnabled(true);
                 Global.root.getjButton9().setVisible(true);
                 break;
             case "Information":
