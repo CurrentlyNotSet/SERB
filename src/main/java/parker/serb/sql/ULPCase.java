@@ -592,7 +592,7 @@ public class ULPCase {
                     + " ?,"
                     + " ?,"
                     + " ?)";
-            
+
             Date startDate = new Date(System.currentTimeMillis());
             Calendar cal = Calendar.getInstance();
             cal.setTime(startDate);
@@ -605,7 +605,7 @@ public class ULPCase {
             preparedStatement.setString(4, caseNumber);
             preparedStatement.setTimestamp(5, new Timestamp(startDate.getTime()));
             preparedStatement.setTimestamp(6, new Timestamp(cal.getTimeInMillis()));
-            
+
 
             int success = preparedStatement.executeUpdate();
 
@@ -986,40 +986,42 @@ public class ULPCase {
         String[] parsedCase = caseNumber.trim().split("-");
         String to = "";
 
-        Statement stmt = null;
-        try {
-            stmt = Database.connectToDB().createStatement();
+        if (parsedCase.length == 4){
+            Statement stmt = null;
+            try {
+                stmt = Database.connectToDB().createStatement();
 
-            String sql = "Select"
-                    + " investigatorID,"
-                    + " aljID"
-                    + " from ULPCase"
-                    + " where caseYear = ? "
-                    + " and caseType = ? "
-                    + " and caseMonth = ? "
-                    + " and caseNumber = ?";
+                String sql = "Select"
+                        + " investigatorID,"
+                        + " aljID"
+                        + " from ULPCase"
+                        + " where caseYear = ? "
+                        + " and caseType = ? "
+                        + " and caseMonth = ? "
+                        + " and caseNumber = ?";
 
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, parsedCase[0]);
-            preparedStatement.setString(2, parsedCase[1]);
-            preparedStatement.setString(3, parsedCase[2]);
-            preparedStatement.setString(4, parsedCase[3]);
+                PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+                preparedStatement.setString(1, parsedCase[0]);
+                preparedStatement.setString(2, parsedCase[1]);
+                preparedStatement.setString(3, parsedCase[2]);
+                preparedStatement.setString(4, parsedCase[3]);
 
-            ResultSet caseNumberRS = preparedStatement.executeQuery();
+                ResultSet caseNumberRS = preparedStatement.executeQuery();
 
-            if(caseNumberRS.next()) {
-                if(caseNumberRS.getInt("aljID") != 0) {
-                    to = User.getNameByID(caseNumberRS.getInt("aljID"));
-                    DocketNotifications.addNotification(caseNumber, "ULP", caseNumberRS.getInt("aljID"));
-                } 
+                if(caseNumberRS.next()) {
+                    if(caseNumberRS.getInt("aljID") != 0) {
+                        to = User.getNameByID(caseNumberRS.getInt("aljID"));
+                        DocketNotifications.addNotification(caseNumber, "ULP", caseNumberRS.getInt("aljID"));
+                    }
+                }
+            } catch (SQLException ex) {
+                SlackNotification.sendNotification(ex);
+                if(ex.getCause() instanceof SQLServerException) {
+                    DocketTo(caseNumber);
+                }
+            } finally {
+                DbUtils.closeQuietly(stmt);
             }
-        } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex);
-            if(ex.getCause() instanceof SQLServerException) {
-                DocketTo(caseNumber);
-            }
-        } finally {
-            DbUtils.closeQuietly(stmt);
         }
         return to;
     }
