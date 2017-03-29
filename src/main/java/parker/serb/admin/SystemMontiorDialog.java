@@ -137,12 +137,19 @@ public class SystemMontiorDialog extends javax.swing.JDialog implements Runnable
     
     private void loadActivity() {
         
-        DefaultTableModel model = new DefaultTableModel();
+        DefaultTableModel model = new DefaultTableModel() {
+            @Override 
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         
         model.addColumn("Date");
         model.addColumn("Case Number");
         model.addColumn("User");
         model.addColumn("Action");
+        
+        
         
         List activty = Activity.loadAllActivity();
         
@@ -263,6 +270,7 @@ public class SystemMontiorDialog extends javax.swing.JDialog implements Runnable
                 return canEdit [columnIndex];
             }
         });
+        jTable1.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTable1);
         if (jTable1.getColumnModel().getColumnCount() > 0) {
             jTable1.getColumnModel().getColumn(0).setResizable(false);

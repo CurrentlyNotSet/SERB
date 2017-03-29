@@ -74,7 +74,8 @@ public class BUNumberFileAddUpdateDeleteDialog extends javax.swing.JDialog {
             public void mouseClicked(MouseEvent e) {
                 if(e.getClickCount() == 2) {
                    new BUInformationUpdateDialog((JFrame) Global.root.getParent(), true, buTable.getValueAt(buTable.getSelectedRow(), 0).toString().trim());
-                   loadInformation();
+                   bu = BargainingUnit.loadBUList();
+                   searchBU();
                 }
             }
 
