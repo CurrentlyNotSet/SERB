@@ -48,6 +48,17 @@ public class employerSearch extends javax.swing.JDialog {
         setVisible(true);
     }
     
+    public employerSearch(java.awt.Frame parent, boolean modal, String employerNumber, String passedCounty) {
+        super(parent, modal);
+        initComponents();
+        addRenderer();
+        setDefaultColumnWidth();
+        addListeners();
+        loadInformation(employerNumber, passedCounty);
+        setLocationRelativeTo(parent);
+        setVisible(true);
+    }
+    
     public employerSearch(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -85,6 +96,22 @@ public class employerSearch extends javax.swing.JDialog {
     
     private void loadInformation(String number) {
         employerNumber = number;
+        employers = Employer.loadEmployerList();
+        
+        DefaultTableModel model = (DefaultTableModel) employerTable.getModel();
+        model.setRowCount(0);
+        
+        for (Object employer : employers) {
+            Employer emp = (Employer) employer;
+            model.addRow(new Object[] {emp.employerIDNumber, emp.employerName, emp.county});
+        }
+        
+        searchTextBox.setText(number);
+    }
+    
+    private void loadInformation(String number, String passedCounty) {
+        employerNumber = number;
+        county = passedCounty;
         employers = Employer.loadEmployerList();
         
         DefaultTableModel model = (DefaultTableModel) employerTable.getModel();

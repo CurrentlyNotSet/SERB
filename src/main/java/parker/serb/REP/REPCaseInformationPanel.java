@@ -1150,7 +1150,11 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
     private void employerIDNumberTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_employerIDNumberTextBoxMouseClicked
         if(evt.getClickCount() == 2) {
             if(employerIDNumberTextBox.isEnabled()) {
-                employerSearch search = new employerSearch((JFrame) Global.root.getRootPane().getParent(), true, employerIDNumberTextBox.getText().trim());
+                employerSearch search = new employerSearch(
+                        (JFrame) Global.root.getRootPane().getParent(),
+                        true,
+                        employerIDNumberTextBox.getText().trim(), 
+                        countyComboBox.getSelectedItem().toString());
                 employerIDNumberTextBox.setText(search.getEmployerNumber());
                 countyComboBox.setSelectedItem(search.getCounty());
                 search.dispose();
