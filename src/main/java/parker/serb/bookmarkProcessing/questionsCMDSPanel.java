@@ -1887,7 +1887,7 @@ public class questionsCMDSPanel extends JDialog {
         RequestingPartyContinuanceComboBox.addItem("Joint");
         for (int i = 0; i < partyType.size(); i++) {
             CaseParty party = (CaseParty) partyType.get(i);
-            RequestingPartyContinuanceComboBox.addItem(party.caseRelation);
+            RequestingPartyContinuanceComboBox.addItem(party.caseRelation + "'s");
         }
 
         panel.setBorder(BorderFactory.createEtchedBorder());

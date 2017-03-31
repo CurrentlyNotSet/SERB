@@ -63,17 +63,17 @@ public class ViewUpdateCasePartyPanel extends javax.swing.JDialog {
         emailAddressTextBox.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                jButton2.setEnabled(EmailValidation.validEmail(emailAddressTextBox.getText().trim()));
+                updateButton.setEnabled(EmailValidation.validEmail(emailAddressTextBox.getText().trim()));
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                jButton2.setEnabled(EmailValidation.validEmail(emailAddressTextBox.getText().trim()));
+                updateButton.setEnabled(EmailValidation.validEmail(emailAddressTextBox.getText().trim()));
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                jButton2.setEnabled(EmailValidation.validEmail(emailAddressTextBox.getText().trim()));
+                updateButton.setEnabled(EmailValidation.validEmail(emailAddressTextBox.getText().trim()));
             }
         });
 
@@ -186,8 +186,8 @@ public class ViewUpdateCasePartyPanel extends javax.swing.JDialog {
     }
 
     private void enableAll() {
-        jButton2.setText("Save");
-        jButton1.setText("Cancel");
+        updateButton.setText("Save");
+        closeButton.setText("Cancel");
         partyTypeComboBox.setEnabled(true);
         prefixComboBox.setEnabled(true);
         firstNameTextBox.setEnabled(true);
@@ -226,8 +226,8 @@ public class ViewUpdateCasePartyPanel extends javax.swing.JDialog {
     }
 
     private void disableAll() {
-        jButton2.setText("Update");
-        jButton1.setText("Close");
+        updateButton.setText("Update");
+        closeButton.setText("Close");
         partyTypeComboBox.setEnabled(false);
         prefixComboBox.setEnabled(false);
         firstNameTextBox.setEnabled(false);
@@ -318,8 +318,8 @@ public class ViewUpdateCasePartyPanel extends javax.swing.JDialog {
         address3TextBox = new javax.swing.JTextField();
         phoneNumberTextBox = new javax.swing.JTextField();
         emailAddressTextBox = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        closeButton = new javax.swing.JButton();
+        updateButton = new javax.swing.JButton();
         cityTextBox = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         stateComboBox = new javax.swing.JComboBox();
@@ -390,17 +390,17 @@ public class ViewUpdateCasePartyPanel extends javax.swing.JDialog {
             }
         });
 
-        jButton1.setText("Close");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        closeButton.setText("Close");
+        closeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                closeButtonActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Update");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        updateButton.setText("Update");
+        updateButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                updateButtonActionPerformed(evt);
             }
         });
 
@@ -437,6 +437,7 @@ public class ViewUpdateCasePartyPanel extends javax.swing.JDialog {
         nameTitleTextBox.setBackground(new java.awt.Color(238, 238, 238));
         nameTitleTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
 
+        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel13.setText("Prof. Designation:");
 
         jobTitleTextBox.setBackground(new java.awt.Color(238, 238, 238));
@@ -472,29 +473,30 @@ public class ViewUpdateCasePartyPanel extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(updateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(44, 44, 44)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel7)
-                                    .addComponent(jLabel8)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel9)
-                                    .addComponent(jLabel14)
-                                    .addComponent(jLabel15)
-                                    .addComponent(jLabel16)))
-                            .addComponent(jLabel13)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(44, 44, 44)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jLabel4)
+                                        .addComponent(jLabel3)
+                                        .addComponent(jLabel5)
+                                        .addComponent(jLabel6)
+                                        .addComponent(jLabel7)
+                                        .addComponent(jLabel8)
+                                        .addComponent(jLabel2)
+                                        .addComponent(jLabel9)
+                                        .addComponent(jLabel14)
+                                        .addComponent(jLabel15)
+                                        .addComponent(jLabel16)))
+                                .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(faxNumberTextBox)
@@ -599,8 +601,8 @@ public class ViewUpdateCasePartyPanel extends javax.swing.JDialog {
                     .addComponent(jLabel9))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
+                    .addComponent(closeButton)
+                    .addComponent(updateButton)
                     .addComponent(jButton3))
                 .addContainerGap())
         );
@@ -608,8 +610,8 @@ public class ViewUpdateCasePartyPanel extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if(jButton1.getText().equals("Cancel")) {
+    private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
+        if(closeButton.getText().equals("Cancel")) {
             CancelUpdate cancel = new CancelUpdate(this, true);
             if(!cancel.isReset()) {
             } else {
@@ -619,18 +621,18 @@ public class ViewUpdateCasePartyPanel extends javax.swing.JDialog {
         } else {
             dispose();
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_closeButtonActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        if(jButton2.getText().equals("Update")) {
+    private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
+        if(updateButton.getText().equals("Update")) {
             enableAll();
-            jButton2.setText("Save");
+            updateButton.setText("Save");
         } else {
             updatePartyInformation();
             disableAll();
             dispose();
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_updateButtonActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         processMailingAddressBookmarks.processSingleEnvelopeInsert(Global.templatePath, "EnvelopeInsert.docx", partyInformation);
@@ -651,12 +653,11 @@ public class ViewUpdateCasePartyPanel extends javax.swing.JDialog {
     private javax.swing.JTextField address2TextBox;
     private javax.swing.JTextField address3TextBox;
     private javax.swing.JTextField cityTextBox;
+    private javax.swing.JButton closeButton;
     private javax.swing.JTextField companyTextBox;
     private javax.swing.JTextField emailAddressTextBox;
     private javax.swing.JTextField faxNumberTextBox;
     private javax.swing.JTextField firstNameTextBox;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -684,6 +685,7 @@ public class ViewUpdateCasePartyPanel extends javax.swing.JDialog {
     private javax.swing.JComboBox<String> prefixComboBox;
     private javax.swing.JComboBox stateComboBox;
     private javax.swing.JTextField suffixTextBox;
+    private javax.swing.JButton updateButton;
     private javax.swing.JTextField zipCodeTextBox;
     // End of variables declaration//GEN-END:variables
 }
