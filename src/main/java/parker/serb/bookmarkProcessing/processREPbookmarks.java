@@ -385,6 +385,11 @@ public class processREPbookmarks {
             processBookmark.process("CASE3EXCLUDED" + (i == 0 ? "" : i), caseInfo.bargainingUnitExcluded, Document);
             processBookmark.process("POLLINGPERIOD" + (i == 0 ? "" : i), polling.trim(), Document);
             processBookmark.process("WHOPREVAILED" + (i == 0 ? "" : i), caseInfo.resultWHoPrevailed, Document);
+            processBookmark.process("MAILKITDATE" + (i == 0 ? "" : i), caseInfo.mailKitDate  == null ? ""
+                    : Global.MMMMMdyyyy.format(caseInfo.mailKitDate), Document);
+            processBookmark.process("BOARDACTIONDATE" + (i == 0 ? "" : i), caseInfo.boardActionDate  == null ? ""
+                    : Global.MMMMMdyyyy.format(caseInfo.boardActionDate), Document);
+
 
             if (caseInfo.type != null) {
                 if (caseInfo.type.equals("AC")) {
