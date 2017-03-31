@@ -209,6 +209,7 @@
           <SubComponents>
             <Component class="javax.swing.JTable" name="multiCaseElectionTable">
               <Properties>
+                <Property name="autoCreateRowSorter" type="boolean" value="true"/>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                   <Table columnCount="1" rowCount="0">
                     <Column editable="false" title="Multicase Election" type="java.lang.Object"/>

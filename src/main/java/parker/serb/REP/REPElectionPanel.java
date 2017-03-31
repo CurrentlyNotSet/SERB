@@ -76,6 +76,19 @@ public class REPElectionPanel extends javax.swing.JPanel {
                 return c;
             }
         });
+        
+        multiCaseElectionTable.setDefaultRenderer(Object.class, new TableCellRenderer(){
+            private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component c = DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+                if (!isSelected) {
+                    c.setBackground(row % 2 == 0 ? Color.WHITE : Global.ALTERNATE_ROW_COLOR);
+                }
+                return c;
+            }
+        });
     }
 
     private void setOnSiteTableColumnWidth() {
@@ -1168,6 +1181,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
         jScrollPane1.setMinimumSize(new java.awt.Dimension(454, 49));
         jScrollPane1.setPreferredSize(new java.awt.Dimension(454, 49));
 
+        multiCaseElectionTable.setAutoCreateRowSorter(true);
         multiCaseElectionTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
