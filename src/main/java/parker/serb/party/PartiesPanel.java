@@ -3565,6 +3565,7 @@ public class PartiesPanel extends javax.swing.JPanel {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         Audit.addAuditEntry("Clear Parties Panel Button Clicked");
         jTextField1.setText("");
+        jTable1.getRowSorter().setSortKeys(null);
     }//GEN-LAST:event_jButton1ActionPerformed
 
 

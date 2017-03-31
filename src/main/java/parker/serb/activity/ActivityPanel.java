@@ -405,6 +405,7 @@ public class ActivityPanel extends javax.swing.JPanel {
         Audit.addAuditEntry("Clicked Activity Clear Button");
         documentsOnlyCheckbox.setSelected(false);
         searchTextBox.setText("");
+        actvityTable.getRowSorter().setSortKeys(null);
     }//GEN-LAST:event_clearSearchButtonActionPerformed
 
     private void documentsOnlyCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_documentsOnlyCheckboxActionPerformed
