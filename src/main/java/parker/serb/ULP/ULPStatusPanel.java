@@ -8,6 +8,7 @@ import com.alee.extended.date.WebCalendar;
 import com.alee.extended.date.WebDateField;
 import com.alee.utils.swing.Customizer;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.Timestamp;
@@ -16,10 +17,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import parker.serb.Global;
 import parker.serb.boardmeetings.AddULPBoardMeeting;
 import parker.serb.boardmeetings.RemoveBoardMeetingDialog;
@@ -53,10 +57,39 @@ public class ULPStatusPanel extends javax.swing.JPanel {
      */
     public ULPStatusPanel() {
         initComponents();
+        setRenderers();
         addListeners();
         setHearingsTableColumns();
         addCaseHearingButton.setVisible(false);
         addRelatedCaseButton.setVisible(false);
+    }
+    
+    private void setRenderers() {
+        boardMeetingTable.setDefaultRenderer(Object.class, new TableCellRenderer(){
+            private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component c = DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+                if (!isSelected) {
+                    c.setBackground(row % 2 == 0 ? Color.WHITE : Global.ALTERNATE_ROW_COLOR);
+                }
+                return c;
+            }
+        });
+        
+        relatedCaseTable.setDefaultRenderer(Object.class, new TableCellRenderer(){
+            private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component c = DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+                if (!isSelected) {
+                    c.setBackground(row % 2 == 0 ? Color.WHITE : Global.ALTERNATE_ROW_COLOR);
+                }
+                return c;
+            }
+        });
     }
 
     private void addListeners() {
