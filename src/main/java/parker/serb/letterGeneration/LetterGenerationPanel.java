@@ -274,7 +274,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                 cscCase.email
             });
         } else {
-            partyList = CaseParty.loadPartiesByCase();
+            partyList = CaseParty.loadPartiesByCaseForLetterGeneration();
         }
 
         for (CaseParty party : partyList) {
