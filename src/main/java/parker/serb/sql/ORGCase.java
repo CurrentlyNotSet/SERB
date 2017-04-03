@@ -218,7 +218,7 @@ public class ORGCase {
         }
         return note;
     }
-    
+
     public static String getORGName() {
         String name = null;
 
@@ -278,7 +278,7 @@ public class ORGCase {
         }
         return name;
     }
-    
+
     public static String getORGNumber(String name) {
         String number = null;
 
@@ -692,6 +692,30 @@ public class ORGCase {
             SlackNotification.sendNotification(ex);
             if (ex.getCause() instanceof SQLServerException) {
                 updateORGInformation(newCaseInformation, caseInformation);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+    }
+
+     public static void updateORGLastNotification(String lastNotification, String orgNumber) {
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Update ORGCase Set"
+                    + " lastNotification = ?"
+                    + " from ORGCase where orgNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, lastNotification);
+            preparedStatement.setString(2, orgNumber);
+
+            int success = preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if (ex.getCause() instanceof SQLServerException) {
+                updateORGLastNotification(lastNotification, orgNumber);
             }
         } finally {
             DbUtils.closeQuietly(stmt);

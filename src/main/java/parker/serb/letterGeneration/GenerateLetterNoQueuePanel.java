@@ -37,7 +37,7 @@ public class GenerateLetterNoQueuePanel extends javax.swing.JDialog {
         loadingPanel.setVisible(true);
         SMDSdocumentToGenerate = SMDSdocumentToGeneratePassed;
         CMDSdocumentToGenerate = CMDSdocumentToGeneratePassed;
-        
+
         if (SMDSdocumentToGeneratePassed != null){
             switch (SMDSdocumentToGeneratePassed.type) {
                 case "Directive":
@@ -83,7 +83,7 @@ public class GenerateLetterNoQueuePanel extends javax.swing.JDialog {
             case "Civil Service Commission":
                 break;
             default:
-                docName = generateDocument.generateSMDSdocument(SMDSdocumentToGenerate, 0, null, null, null, null);
+                docName = generateDocument.generateSMDSdocument(SMDSdocumentToGenerate, 0, null, null, null, null, true);
                 break;
         }
 
@@ -92,7 +92,7 @@ public class GenerateLetterNoQueuePanel extends javax.swing.JDialog {
                 case "CMDS":
                     Activity.addActivty("Generated " + CMDSdocumentToGenerate.LetterName, docName);
                     Audit.addAuditEntry("Generated " + CMDSdocumentToGenerate.LetterName);
-                    break;                    
+                    break;
                 case "ORG":
                 case "Civil Service Commission":
                     break;
