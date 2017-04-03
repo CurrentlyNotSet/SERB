@@ -14,10 +14,12 @@ import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import parker.serb.Global;
+import parker.serb.REP.REPCaseSearch;
 import parker.serb.sql.Audit;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.ULPCase;
 import parker.serb.sql.User;
+import parker.serb.util.CaseInEditModeDialog;
 import parker.serb.util.CaseNotFoundDialog;
 import parker.serb.util.NumberFormatService;
 /**
@@ -380,13 +382,17 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
-        if(SwingUtilities.isRightMouseButton(evt) || evt.getButton() == MouseEvent.BUTTON3) {
-            Audit.addAuditEntry("Opened ULP Case Search Dialog");
-            if(search == null) {
-                search = new ULPCaseSearch((JFrame) getRootPane().getParent(), true);
-            } else {
-                search.setVisible(true);
+        if(caseNumberComboBox.isEnabled()) {
+            if(SwingUtilities.isRightMouseButton(evt) || evt.getButton() == MouseEvent.BUTTON3) {
+                Audit.addAuditEntry("Opened ULP Case Search Dialog");
+                if(search == null) {
+                    search = new ULPCaseSearch((JFrame) getRootPane().getParent(), true);
+                } else {
+                    search.setVisible(true);
+                }
             }
+        } else {
+            new CaseInEditModeDialog(Global.root, true);
         }
     }//GEN-LAST:event_jLabel11MouseClicked
 

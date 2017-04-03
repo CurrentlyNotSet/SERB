@@ -15,10 +15,12 @@ import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import parker.serb.Global;
+import parker.serb.ORG.ORGNumberSearchDialog;
 import parker.serb.sql.Audit;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.REPCase;
 import parker.serb.sql.User;
+import parker.serb.util.CaseInEditModeDialog;
 import parker.serb.util.NumberFormatService;
 
 //
@@ -420,12 +422,16 @@ public class REPHeaderPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_employerTextBoxActionPerformed
 
     private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
-        if(SwingUtilities.isRightMouseButton(evt) || evt.getButton() == MouseEvent.BUTTON3) {
-            if(search == null) {
-                search = new REPCaseSearch((JFrame) getRootPane().getParent(), true);
-            } else {
-                search.setVisible(true);
+        if(caseNumberComboBox.isEnabled()) {
+            if(SwingUtilities.isRightMouseButton(evt) || evt.getButton() == MouseEvent.BUTTON3) {
+                if(search == null) {
+                    search = new REPCaseSearch((JFrame) getRootPane().getParent(), true);
+                } else {
+                    search.setVisible(true);
+                }
             }
+        } else {
+            new CaseInEditModeDialog(Global.root, true);
         }
     }//GEN-LAST:event_jLabel11MouseClicked
 
