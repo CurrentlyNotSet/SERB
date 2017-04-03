@@ -339,11 +339,11 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
             if(evt.getClickCount() == 2 && !fileName.equals("")) {
                 switch (Global.activeSection) {
                     case "ORG":
-                        FileService.openFileWithORGNumber("ORG", jTable1.getValueAt(jTable1.getSelectedRow(), 6).toString(), fileName);
+                        FileService.openFileWithORGNumber("ORG", jTable1.getValueAt(jTable1.getSelectedRow(), 2).toString(), fileName);
                         break;
                     case "CSC":
                     case "Civil Service Commission":
-                        FileService.openFileWithORGNumber("CSC", jTable1.getValueAt(jTable1.getSelectedRow(), 6).toString(), fileName);
+                        FileService.openFileWithORGNumber("CSC", jTable1.getValueAt(jTable1.getSelectedRow(), 2).toString(), fileName);
                         break;
                     default:
                         FileService.openFileWithCaseNumber(Global.activeSection, caseNumber[0], caseNumber[1], caseNumber[2], caseNumber[3], fileName);
