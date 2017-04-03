@@ -20,7 +20,7 @@ public class processORGbookmarks {
 
     public static Dispatch processDoAORGWordLetter(Dispatch Document, boolean toRep, List<Integer> toParties, List<Integer> ccParties, ORGCase item) {
         //get basic information
-        List<CaseParty> partyList = CaseParty.loadPartiesByCase(null, "ORG", null, item.orgNumber);
+        List<CaseParty> partyList = CaseParty.loadORGPartiesByCase("ORG", item.orgNumber);
 
         String repNames = "";
         String officerNames = "";
@@ -29,6 +29,10 @@ public class processORGbookmarks {
         String toAddressBlock = "";
         String ccNameBlock = "";
         String certifiedDate = "";
+        String OrgHeaderBlock = "";
+        String repNameBookmark = "";
+        String repSalutationBookmark = "";
+        String orgAddressBookmark = "";
 
         for (CaseParty party : partyList){
 
@@ -62,7 +66,7 @@ public class processORGbookmarks {
                     if (!"".equals(repAddressBlock.trim())){
                         repAddressBlock += "\n\n";
                     }
-                    repAddressBlock += StringUtilities.buildCasePartyAddressBlock(party);
+                    repAddressBlock += StringUtilities.buildORGBookmarkAddressWithLineBreaks(party);
                     repNames += StringUtilities.buildCasePartyNameNoPreFix(party);
                     break;
                 case "Officer":
@@ -72,7 +76,7 @@ public class processORGbookmarks {
                     if (!"".equals(officerAddressBlock.trim())){
                         officerAddressBlock += "\n\n";
                     }
-                    officerAddressBlock += StringUtilities.buildCasePartyAddressBlock(party);
+                    officerAddressBlock += StringUtilities.buildORGBookmarkAddressWithLineBreaks(party);
                     officerNames += StringUtilities.buildCasePartyNameNoPreFix(party);
                     break;
             }
@@ -81,34 +85,42 @@ public class processORGbookmarks {
         String orgAddressBlock = "";
         CaseParty orgAddress = new CaseParty();
 
-        orgAddress.address1 = item.orgAddress1;
-        orgAddress.address2 = item.orgAddress2;
+        orgAddress.address1 = item.orgAddress1 == null ? "" : item.orgAddress1.trim();
+        orgAddress.address2 = item.orgAddress2 == null ? "" : item.orgAddress2.trim();
+        orgAddress.address3 = "";
         orgAddress.city = item.orgCity;
         orgAddress.stateCode = item.orgState;
         orgAddress.zipcode = item.orgZip;
-        orgAddressBlock = StringUtilities.buildCasePartyNameNoPreFix(orgAddress);
+        orgAddressBlock = StringUtilities.buildORGBookmarkAddressWithLineBreaks(orgAddress);
 
         if (item.certifiedDate != null){
             certifiedDate = Global.MMMMddyyyy.format(item.certifiedDate);
         }
 
+        if (toRep){
+            repNameBookmark = repNames;
+            repSalutationBookmark = repNames;
+            orgAddressBookmark = repAddressBlock;
+            OrgHeaderBlock += repNames.trim();
+            OrgHeaderBlock += OrgHeaderBlock.trim().equals("") ? item.orgName.trim() : "\n" + item.orgName.trim();
+            OrgHeaderBlock += OrgHeaderBlock.trim().equals("") ? repAddressBlock.trim() : "\n" + repAddressBlock.trim();
+        } else {
+            repNameBookmark = "";
+            repSalutationBookmark = item.orgName;
+            orgAddressBookmark = orgAddressBlock;
+            OrgHeaderBlock += OrgHeaderBlock.trim().equals("") ? item.orgName.trim() : "\n" + item.orgName.trim();
+            OrgHeaderBlock += OrgHeaderBlock.trim().equals("") ? orgAddressBlock.trim() : "\n" + orgAddressBlock.trim();
+        }
+
         //ProcessBookmarks
         for (int i = 0; i < Global.BOOKMARK_LIMIT; i++) {
-            if (toRep){
-                processBookmark.process("RepName" + (i == 0 ? "" : i), repNames, Document);
-                processBookmark.process("RepSalutation" + (i == 0 ? "" : i), repNames, Document);
-                processBookmark.process("OrgAddress" + (i == 0 ? "" : i), repAddressBlock, Document);
-
-            } else {
-                processBookmark.process("RepName" + (i == 0 ? "" : i), "", Document);
-                processBookmark.process("RepSalutation" + (i == 0 ? "" : i), item.orgName, Document);
-                processBookmark.process("OrgAddress" + (i == 0 ? "" : i), orgAddressBlock, Document);
-            }
-
+            processBookmark.process("OrgHeaderBlock" + (i == 0 ? "" : i), OrgHeaderBlock, Document);
+            processBookmark.process("RepName" + (i == 0 ? "" : i), repNameBookmark, Document);
+            processBookmark.process("RepSalutation" + (i == 0 ? "" : i), repSalutationBookmark, Document);
+            processBookmark.process("OrgAddress" + (i == 0 ? "" : i), orgAddressBookmark, Document);
             processBookmark.process("OrgName" + (i == 0 ? "" : i), item.orgName, Document);
             processBookmark.process("OrgNum" + (i == 0 ? "" : i), item.orgNumber, Document);
             processBookmark.process("CertifiedDate" + (i == 0 ? "" : i), certifiedDate, Document);
-
             processBookmark.process("CCList" + (i == 0 ? "" : i), ccNameBlock, Document);
         }
         return Document;

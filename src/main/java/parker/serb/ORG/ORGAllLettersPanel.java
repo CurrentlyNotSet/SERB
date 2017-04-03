@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import javax.swing.DefaultComboBoxModel;
@@ -260,11 +261,10 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
             File templateFile = new File(Global.templatePath + Global.activeSection + File.separator + template.fileName);
 
             if (templateFile.exists()) {
-
                 for (ORGCase item : orgCaseList) {
                     String attachDocName = "";
-
-                    String docName = generateDocument.generateSMDSdocument(template, 0, null, null, item, null);
+                    String orgdocName = generateDocument.generateSMDSdocument(template, 0, null, null, item, null, false);
+                    String repdocName = generateDocument.generateSMDSdocument(template, 0, null, null, item, null, true);
 
                     if (template.questionsFileName != null) {
                         attachDocName = copyAttachmentToCaseFolder(item, template.questionsFileName);
@@ -279,8 +279,28 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
                     }
 
                     Activity.addActivtyORGCase("ORG", item.orgNumber,
-                            "Created " + (template.historyDescription == null ? template.description : template.historyDescription),
-                            docName);
+                            "Created " + (template.historyDescription == null ? template.description : template.historyDescription) + " for Org",
+                            orgdocName);
+
+                    Activity.addActivtyORGCase("ORG", item.orgNumber,
+                            "Created " + (template.historyDescription == null ? template.description : template.historyDescription) + " for Rep",
+                            repdocName);
+
+                    String lastNotify = "";
+
+                    if (letterComboBox.getSelectedItem().toString().startsWith("Tickler 45")) {
+                        lastNotify = "45";
+                    } else if (letterComboBox.getSelectedItem().toString().startsWith("Tickler 10")) {
+                        lastNotify = "10";
+                    } else if (letterComboBox.getSelectedItem().toString().startsWith("Tickler 31")) {
+                        lastNotify = "31";
+                    } else if (letterComboBox.getSelectedItem().toString().startsWith("New")) {
+                        lastNotify = "NR";
+                    }
+
+                    if (!lastNotify.equals("")){
+                        ORGCase.updateORGLastNotification(lastNotify, item.orgNumber);
+                    }
 
                     partyList = CaseParty.loadORGPartiesByCase("ORG", item.orgNumber);
                     for (CaseParty party : partyList) {
@@ -288,7 +308,7 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
 
                             if (party.emailAddress != null) {
                                 int emailID = insertEmail(template, item.orgNumber, party.emailAddress);
-                                insertGeneratedAttachementEmail(emailID, docName, true);
+                                insertGeneratedAttachementEmail(emailID, repdocName, true);
                                 if (!attachDocName.equals("")) {
                                     insertGeneratedAttachementEmail(emailID, attachDocName, false);
                                 }
@@ -299,7 +319,7 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
                                         && !item.orgState.equalsIgnoreCase(party.stateCode)
                                         && !item.orgZip.equalsIgnoreCase(party.zipcode)) {
                                     int postalID = insertPostal(template, item.orgNumber, party);
-                                    insertGeneratedAttachementPostal(postalID, docName, true);
+                                    insertGeneratedAttachementPostal(postalID, repdocName, true);
                                     if (!attachDocName.equals("")) {
                                         insertGeneratedAttachementPostal(postalID, attachDocName, false);
                                     }
@@ -310,13 +330,13 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
 
                     if (item.orgEmail != null) {
                         int emailID = insertEmail(template, item.orgNumber, item.orgEmail);
-                        insertGeneratedAttachementEmail(emailID, docName, true);
+                        insertGeneratedAttachementEmail(emailID, orgdocName, true);
                         if (!attachDocName.equals("")) {
                             insertGeneratedAttachementEmail(emailID, attachDocName, false);
                         }
                     } else if (item.orgAddress1 != null & item.orgCity != null & item.orgState != null && item.orgZip != null) {
                         int postalID = insertPostalORG(template, item);
-                        insertGeneratedAttachementPostal(postalID, docName, true);
+                        insertGeneratedAttachementPostal(postalID, orgdocName, true);
                         if (!attachDocName.equals("")) {
                             insertGeneratedAttachementPostal(postalID, attachDocName, false);
                         }
@@ -667,23 +687,43 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
         GenerateButton.setEnabled(false);
         CloseButton.setEnabled(false);
         letterComboBox.setEnabled(false);
-        jTable1.setEnabled(false);
+        jScrollPane1.setVisible(false);
 
         Thread temp = new Thread(() -> {
+            System.out.println(new Date());
             generateLetters();
+            System.out.println(new Date());
+
             jLayeredPane1.moveToBack(jPanel1);
             GenerateButton.setEnabled(true);
             CloseButton.setEnabled(true);
             letterComboBox.setEnabled(true);
-            jTable1.setEnabled(true);
+            jScrollPane1.setVisible(true);
             WebOptionPane.showMessageDialog(Global.root, "<html><center>Finished Generation of all Documents</center></html>", "Done", WebOptionPane.INFORMATION_MESSAGE);
         });
         temp.start();
     }//GEN-LAST:event_GenerateButtonActionPerformed
 
     private void letterComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_letterComboBoxActionPerformed
+        jLayeredPane1.moveToFront(jPanel1);
+        GenerateButton.setEnabled(false);
+        CloseButton.setEnabled(false);
+        letterComboBox.setEnabled(false);
+        jTable1.setVisible(false);
+        jTable1.setEnabled(false);
+
+        Thread temp = new Thread(() -> {
         processComboBoxSelection();
         enableGenerateButton();
+
+        jLayeredPane1.moveToBack(jPanel1);
+        GenerateButton.setEnabled(true);
+        CloseButton.setEnabled(true);
+        letterComboBox.setEnabled(true);
+        jTable1.setVisible(true);
+        jTable1.setEnabled(true);
+        });
+        temp.start();
     }//GEN-LAST:event_letterComboBoxActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -31,7 +31,7 @@ import parker.serb.util.StringUtilities;
  */
 public class generateDocument {
 
-    public static String generateSMDSdocument(SMDSDocuments template, int senderID, List<Integer> toParties, List<Integer> ccParties, ORGCase orgCase, CSCCase cscCase) {
+    public static String generateSMDSdocument(SMDSDocuments template, int senderID, List<Integer> toParties, List<Integer> ccParties, ORGCase orgCase, CSCCase cscCase, boolean toRep) {
         File docPath = null;
         String saveDocName = null;
         ActiveXComponent eolWord = null;
@@ -85,7 +85,7 @@ public class generateDocument {
                     break;
                 case "ORG":
                     document = defaultSMDSBookmarks(document, template.dueDate);
-                    document = processORGbookmarks.processDoAORGWordLetter(document, true, toParties, ccParties, orgCase);
+                    document = processORGbookmarks.processDoAORGWordLetter(document, toRep, toParties, ccParties, orgCase);
                     break;
                 case "CSC":
                     document = defaultCMDSBookmarks(document);
