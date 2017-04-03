@@ -257,6 +257,75 @@ public class CaseParty {
         return parties;
     }
 
+    public static List<CaseParty> loadPartiesByCaseForLetterGeneration() {
+        List<CaseParty> parties = new ArrayList<>();
+
+        Statement stmt = null;
+
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select * from CaseParty"
+                    + " where caseYear = ?"
+                    + " and caseType = ?"
+                    + " and caseMonth = ?"
+                    + " and caseNumber = ?"
+                    + " ORDER BY "
+                    + " CASE WHEN caseParty.caseRelation LIKE 'Charging%' AND caseParty.caseRelation NOT LIKE '%REP%' THEN '1' "
+                    + " WHEN caseParty.caseRelation LIKE 'Charging%' AND caseParty.caseRelation LIKE '%REP%' THEN '2' " 
+                    + " WHEN caseParty.caseRelation LIKE 'Charged%' AND caseParty.caseRelation NOT LIKE '%REP%' THEN '3' "
+                    + " WHEN caseParty.caseRelation LIKE 'Charged%' AND caseParty.caseRelation LIKE '%REP%' THEN '4' "
+                    + " ELSE caseParty.caseRelation END ASC, caseRelation DESC";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, Global.caseYear);
+            preparedStatement.setString(2, Global.caseType);
+            preparedStatement.setString(3, Global.caseMonth);
+            preparedStatement.setString(4, Global.caseNumber);
+
+            ResultSet casePartyRS = preparedStatement.executeQuery();
+
+            while(casePartyRS.next()) {
+                CaseParty party = new CaseParty();
+                party.id = casePartyRS.getInt("id");
+                party.caseYear = casePartyRS.getString("caseYear");
+                party.caseType = casePartyRS.getString("caseType");
+                party.caseMonth = casePartyRS.getString("caseMonth");
+                party.caseNumber = casePartyRS.getString("caseNumber");
+                party.partyID = casePartyRS.getInt("partyID");
+                party.caseRelation = casePartyRS.getString("caseRelation");
+                party.prefix = casePartyRS.getString("prefix") == null ? "" : casePartyRS.getString("prefix");
+                party.firstName = casePartyRS.getString("firstName") == null ? "" : casePartyRS.getString("firstName");
+                party.middleInitial = casePartyRS.getString("middleInitial") == null ? "" : casePartyRS.getString("middleInitial");
+                party.lastName = casePartyRS.getString("lastName") == null ? "" : casePartyRS.getString("lastName");
+                party.suffix = casePartyRS.getString("suffix") == null ? "" : casePartyRS.getString("suffix");
+                party.nameTitle = casePartyRS.getString("nameTitle") == null ? "" : casePartyRS.getString("nameTitle");
+                party.jobTitle = casePartyRS.getString("jobTitle") == null ? "" : casePartyRS.getString("jobTitle");
+                party.companyName = casePartyRS.getString("companyName") == null ? "" : casePartyRS.getString("companyName");
+                party.address1 = casePartyRS.getString("address1") == null ? "" : casePartyRS.getString("address1");
+                party.address2 = casePartyRS.getString("address2") == null ? "" : casePartyRS.getString("address2");
+                party.address3 = casePartyRS.getString("address3") == null ? "" : casePartyRS.getString("address3");
+                party.city = casePartyRS.getString("city") == null ? "" : casePartyRS.getString("city");
+                party.stateCode = casePartyRS.getString("stateCode") == null ? "" : casePartyRS.getString("stateCode");
+                party.zipcode = casePartyRS.getString("zipcode") == null ? "" : casePartyRS.getString("zipcode");
+                party.phone1 = casePartyRS.getString("phone1") == null ? "" : NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("phone1"));
+                party.phone2 = casePartyRS.getString("phone2") == null ? "" : NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("phone2"));
+                party.emailAddress = casePartyRS.getString("email") == null ? "" : casePartyRS.getString("email");
+                party.fax = casePartyRS.getString("fax") == null ? "" : NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("fax"));
+
+                parties.add(party);
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadPartiesByCase();
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return parties;
+    }
+
     public static String loadCMDSRepByCase(String type) {
         String rep = "";
 
