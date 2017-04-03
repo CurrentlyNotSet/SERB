@@ -3496,7 +3496,6 @@ public class PartiesPanel extends javax.swing.JPanel {
 
         jLabel1.setText("Search:");
 
-        jTable1.setAutoCreateRowSorter(true);
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
