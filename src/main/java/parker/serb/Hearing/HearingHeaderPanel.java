@@ -18,6 +18,7 @@ import parker.serb.sql.CaseParty;
 import parker.serb.sql.HearingCase;
 import parker.serb.sql.HearingsMediation;
 import parker.serb.sql.User;
+import parker.serb.util.CaseInEditModeDialog;
 import parker.serb.util.CaseNotFoundDialog;
 import parker.serb.util.NumberFormatService;
 
@@ -459,12 +460,16 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
-        if(SwingUtilities.isRightMouseButton(evt) || evt.getButton() == MouseEvent.BUTTON3) {
-            if(search == null) {
-                search = new HearingCaseSearch(Global.root, true);
-            } else {
-                search.setVisible(true);
+        if(caseNumberComboBox.isEnabled()) {
+            if(SwingUtilities.isRightMouseButton(evt) || evt.getButton() == MouseEvent.BUTTON3) {
+                if(search == null) {
+                    search = new HearingCaseSearch(Global.root, true);
+                } else {
+                    search.setVisible(true);
+                }
             }
+        } else {
+            new CaseInEditModeDialog(Global.root, true);
         }
     }//GEN-LAST:event_jLabel11MouseClicked
 

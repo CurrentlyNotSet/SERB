@@ -131,7 +131,7 @@ public class Activity {
 
     public static void addCMDSActivty(String action, String fileName, Date date,
             String caseNumber, String from, String to, String category, String description, String comment) {
-        try {
+//        try {
             Statement stmt = null;
             String type = null;
 
@@ -139,10 +139,10 @@ public class Activity {
                 type = category + " - " + description;
             }
 
-            String timeString = Global.mmddyyyyhhmma.format(new Date()).substring(10); // 10 is the beginIndex of time here
-            String startUserDateString = Global.mmddyyyy.format(date);
-            startUserDateString = startUserDateString+" "+timeString;
-            date = Global.mmddyyyyhhmma.parse(startUserDateString);
+//            String timeString = Global.mmddyyyyhhmma.format(date); // 10 is the beginIndex of time here
+//            String startUserDateString = Global.mmddyyyy.format(date);
+//            startUserDateString = startUserDateString+" "+timeString;
+//            date = Global.mmddyyyyhhmma.parse(startUserDateString);
 
             try {
 
@@ -171,7 +171,7 @@ public class Activity {
                 preparedStatement.setBoolean(13, false);
                 preparedStatement.setBoolean(14, false);
                 preparedStatement.setBoolean(15, true);
-                preparedStatement.setTimestamp(16, null); //mailLog
+                preparedStatement.setTimestamp(16, new Timestamp(System.currentTimeMillis())); //mailLog
 
                 preparedStatement.executeUpdate();
 
@@ -192,9 +192,9 @@ public class Activity {
             } finally {
                 DbUtils.closeQuietly(stmt);
             }
-        } catch (ParseException ex) {
-            SlackNotification.sendNotification(ex);
-        }
+//        } catch (ParseException ex) {
+//            SlackNotification.sendNotification(ex);
+//        }
     }
 
     public static void addHearingActivty(String action, String fileName, String caseNumber) {

@@ -501,13 +501,13 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                 docName = generateDocument.generateCMDSdocument(CMDSdocToGenerate, answers, 0, toParties, ccParties);
                 break;
             case "ORG":
-                docName = generateDocument.generateSMDSdocument(SMDSdocToGenerate, 0, toParties, ccParties, orgCase, null);
+                docName = generateDocument.generateSMDSdocument(SMDSdocToGenerate, 0, toParties, ccParties, orgCase, null, true);
                 break;
             case "Civil Service Commission":
-                docName = generateDocument.generateSMDSdocument(SMDSdocToGenerate, 0, toParties, ccParties, null, cscCase);
+                docName = generateDocument.generateSMDSdocument(SMDSdocToGenerate, 0, toParties, ccParties, null, cscCase, true);
                 break;
             default:
-                docName = generateDocument.generateSMDSdocument(SMDSdocToGenerate, 0, toParties, ccParties, null, null);
+                docName = generateDocument.generateSMDSdocument(SMDSdocToGenerate, 0, toParties, ccParties, null, null, true);
                 break;
         }
 
@@ -522,6 +522,22 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                     Activity.addActivtyORGCase("ORG", orgCase.orgNumber ,
                             "Generated " + (SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription)
                             , docName);
+                    String lastNotify = "";
+
+                    if (SMDSdocToGenerate.description.startsWith("Tickler 45")) {
+                        lastNotify = "45";
+                    } else if (SMDSdocToGenerate.description.startsWith("Tickler 10")) {
+                        lastNotify = "10";
+                    } else if (SMDSdocToGenerate.description.startsWith("Tickler 31")) {
+                        lastNotify = "31";
+                    } else if (SMDSdocToGenerate.description.startsWith("New")) {
+                        lastNotify = "NR";
+                    }
+
+                    if (!lastNotify.equals("")){
+                        ORGCase.updateORGLastNotification(lastNotify, orgCase.orgNumber);
+                    }
+
                     Audit.addAuditEntry("Generated " + SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription);
                     break;
                 case "Civil Service Commission":
@@ -824,7 +840,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
 
                 if (additionalDocsTable.getValueAt(i, 3).toString().toLowerCase().endsWith(".docx")) {
                     SMDSDocuments additionalDoc = SMDSDocuments.findDocumentByID(Integer.valueOf(additionalDocsTable.getValueAt(i, 0).toString()));
-                    docName = generateDocument.generateSMDSdocument(additionalDoc, 0, toParties, ccParties, null, null);
+                    docName = generateDocument.generateSMDSdocument(additionalDoc, 0, toParties, ccParties, null, null, true);
                 } else {
                     docName = copyAttachmentToCaseFolder(
                             "Copy of " + additionalDocsTable.getValueAt(i, 2).toString() + " For Generation of " + SMDSdocToGenerate.description,

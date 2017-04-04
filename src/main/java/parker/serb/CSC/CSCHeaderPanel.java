@@ -9,11 +9,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.util.List;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+import parker.serb.CMDS.CMDSCaseSearch;
 import parker.serb.Global;
+import parker.serb.MED.MEDCaseSearch;
 import parker.serb.sql.Audit;
 import parker.serb.sql.CSCCase;
 import parker.serb.sql.User;
+import parker.serb.util.CaseInEditModeDialog;
 
 //
 
@@ -233,20 +237,28 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_CSCNumberTextBoxActionPerformed
 
     private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
-        if(SwingUtilities.isRightMouseButton(evt) || evt.getButton() == MouseEvent.BUTTON3) {
-            Audit.addAuditEntry("Opened CSC Case Search Dialog");
-            if(search == null) {
-                search = new CSCCaseSearch(Global.root, true);
-            } else {
-                search.setVisible(true);
+        if(caseNumberComboBox.isEnabled()) {
+            if(SwingUtilities.isRightMouseButton(evt) || evt.getButton() == MouseEvent.BUTTON3) {
+                Audit.addAuditEntry("Opened CSC Case Search Dialog");
+                if(search == null) {
+                    search = new CSCCaseSearch(Global.root, true);
+                } else {
+                    search.setVisible(true);
+                }
             }
+        } else {
+            new CaseInEditModeDialog(Global.root, true);
         }
     }//GEN-LAST:event_jLabel11MouseClicked
 
     private void CSCNumberTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CSCNumberTextBoxMouseClicked
-         if(SwingUtilities.isRightMouseButton(evt) || evt.getButton() == MouseEvent.BUTTON3) {
-            Audit.addAuditEntry("Opened CSC Case Search Dialog");
-            new CSCNumberSearchDialog(Global.root, true);
+        if(caseNumberComboBox.isEnabled()) {
+            if(SwingUtilities.isRightMouseButton(evt) || evt.getButton() == MouseEvent.BUTTON3) {
+                Audit.addAuditEntry("Opened CSC Case Search Dialog");
+                new CSCNumberSearchDialog(Global.root, true);
+            }
+        } else {
+            new CaseInEditModeDialog(Global.root, true);
         }
     }//GEN-LAST:event_CSCNumberTextBoxMouseClicked
 

@@ -254,7 +254,7 @@ public class CSCAllLettersPanel extends javax.swing.JDialog {
                 for (CSCCase item : cscCaseList) {
                     String attachDocName = "";
 
-                    String docName = generateDocument.generateSMDSdocument(template, 0, null, null, null, item);
+                    String docName = generateDocument.generateSMDSdocument(template, 0, null, null, null, item, true);
 
                     if (template.questionsFileName != null) {
                         attachDocName = copyAttachmentToCaseFolder(item, template.questionsFileName);
