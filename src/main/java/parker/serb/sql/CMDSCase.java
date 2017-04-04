@@ -1694,6 +1694,10 @@ public class CMDSCase {
         String[] parsedCase = caseNumber.trim().split("-");
         String to = "";
 
+        if(parsedCase.length != 4) {
+            return to;
+        }
+        
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();

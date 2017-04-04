@@ -100,13 +100,13 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
 
         //Case Number
         if (Global.activeSection.equals("ORG") || Global.activeSection.equals("Civil Service Commission")){
-            jTable1.getColumnModel().getColumn(2).setMinWidth(90);
-            jTable1.getColumnModel().getColumn(2).setPreferredWidth(90);
-            jTable1.getColumnModel().getColumn(2).setMaxWidth(90);
-        } else {
             jTable1.getColumnModel().getColumn(2).setMinWidth(125);
             jTable1.getColumnModel().getColumn(2).setPreferredWidth(125);
             jTable1.getColumnModel().getColumn(2).setMaxWidth(125);
+        } else {
+            jTable1.getColumnModel().getColumn(2).setMinWidth(150);
+            jTable1.getColumnModel().getColumn(2).setPreferredWidth(150);
+            jTable1.getColumnModel().getColumn(2).setMaxWidth(150);
         }
 
         //FROM

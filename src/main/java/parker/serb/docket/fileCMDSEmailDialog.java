@@ -408,11 +408,15 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
         cal.set(Calendar.YEAR, Integer.valueOf(passedTime.split(" ")[0].split("/")[2]));
         cal.set(Calendar.MONTH, Integer.valueOf(passedTime.split(" ")[0].split("/")[0]) - 1);
         cal.set(Calendar.DAY_OF_MONTH, Integer.valueOf(passedTime.split(" ")[0].split("/")[1]));
-        cal.set(Calendar.HOUR_OF_DAY, passedTime.split(" ")[2].equals("AM") ? Integer.valueOf(passedTime.split(" ")[1].split(":")[0]) : Integer.valueOf(passedTime.split(" ")[1].split(":")[0]) + 12);
+        if(passedTime.split(" ")[1].split(":")[0].equals("12")) {
+            cal.set(Calendar.HOUR_OF_DAY, passedTime.split(" ")[2].equals("AM") ? Integer.valueOf(passedTime.split(" ")[1].split(":")[0]) : Integer.valueOf(passedTime.split(" ")[1].split(":")[0]));
+        } else {
+            cal.set(Calendar.HOUR_OF_DAY, passedTime.split(" ")[2].equals("AM") ? Integer.valueOf(passedTime.split(" ")[1].split(":")[0]) : Integer.valueOf(passedTime.split(" ")[1].split(":")[0]) + 12);
+        }
         cal.set(Calendar.MINUTE, Integer.valueOf(passedTime.split(" ")[1].split(":")[1]));
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
-
+        
         return cal.getTime();
     }
 
