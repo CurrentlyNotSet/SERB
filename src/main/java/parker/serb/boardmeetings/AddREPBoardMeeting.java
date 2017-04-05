@@ -19,6 +19,7 @@ import parker.serb.sql.BoardMeeting;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.REPCase;
 import parker.serb.sql.REPRecommendation;
+import parker.serb.sql.RelatedCase;
 import parker.serb.util.ClearDateDialog;
 
 /**
@@ -29,6 +30,8 @@ public class AddREPBoardMeeting extends javax.swing.JDialog {
 
     /**
      * Creates new form AddULPBoardMeeting
+     * @param parent
+     * @param modal
      */
     public AddREPBoardMeeting(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -95,94 +98,135 @@ public class AddREPBoardMeeting extends javax.swing.JDialog {
     }
 
     private void handleRecommendationSelection(String recText) {
-        //List of potential "bookmarks"
-        //<<Incumbent>>
-        //<<Employer>>
-        //<<Rival>>
-        //<<PetitionerIntervenor>>
-        //<<Polling_Period>>
-        //<<CountBallotsDate>>
-
-
         recText = recText.replaceAll("«", "<<");
         recText = recText.replaceAll("»", ">>");
 
         //Party Information loading
-        if (recText.contains("<<PetitionerIntervenor>>")
+        if (recText.contains("<<Petitioner>>")
+                || recText.contains("<<Intervener>>")
                 || recText.contains("<<Employer>>")
                 || recText.contains("<<Rival>>")
                 || recText.contains("<<Incumbent>>")) {
-            List<CaseParty> partyList = CaseParty.loadPartiesByCase(Global.caseYear, Global.caseType, Global.caseMonth, Global.caseNumber);
-
-            String incumbentNames = "";
-            String employerNames = "";
-            String rivalNames = "";
-            String petitionerIntervenorNames = "";
-
-            for (CaseParty party : partyList) {
-                if (null != party.caseRelation) {
-                    switch (party.caseRelation) {
-                        case "Incumbent Employee Organization":
-                            if (!"".equals(incumbentNames.trim())) {
-                                incumbentNames += ", ";
-                            }
-                            incumbentNames += party.companyName;
-                            break;
-                        case "Employer":
-                            if (!"".equals(employerNames.trim())) {
-                                employerNames += ", ";
-                            }
-                            employerNames += party.companyName;
-                            break;
-                        case "Rival Employee Organization":
-                            if (!"".equals(rivalNames.trim())) {
-                                rivalNames += ", ";
-                            }
-                            rivalNames += party.companyName;
-                            break;
-                        case "Petitioner":
-                            if (!"".equals(petitionerIntervenorNames.trim())) {
-                                petitionerIntervenorNames += ", ";
-                            }
-                            petitionerIntervenorNames += party.companyName;
-                            break;
-                        default:
-                            if (party.caseRelation.startsWith("Rival Employee Organization") && !party.caseRelation.endsWith("REP")) {
-                                if (!"".equals(rivalNames.trim())) {
-                                    rivalNames += ", ";
-                                }
-                                rivalNames += party.companyName;
-                            }
-                            break;
-                    }
-                }
-            }
-
-            recText = recText.replaceAll("<<Incumbent>>", incumbentNames);
-            recText = recText.replaceAll("<<Employer>>", employerNames);
-            recText = recText.replaceAll("<<Rival>>", rivalNames);
-            recText = recText.replaceAll("<<PetitionerIntervenor>>", petitionerIntervenorNames);
+            recText = processCasePartyReplacements(recText);
         }
 
         //Case Information Loading
         if (recText.contains("<<Polling_Period>>")
                 || recText.contains("<<CountBallotsDate>>")) {
-            REPCase caseInfo = REPCase.loadCaseDetails(Global.caseYear, Global.caseType, Global.caseMonth, Global.caseNumber);
+            recText = processCaseInformationReplacements(recText);
+        }
 
-            String balloutCountDate = caseInfo.ballotsCountDate == null ? "" : Global.MMMMMdyyyy.format(caseInfo.ballotsCountDate);
-            String pollingPeriod = "";
-            //Polling information
-            if (caseInfo.pollingEndDate != null && caseInfo.pollingStartDate != null) {
-                pollingPeriod = Global.MMMMMdyyyy.format(caseInfo.pollingStartDate);
-                pollingPeriod += " thru " + Global.MMMMMdyyyy.format(caseInfo.pollingEndDate);
-            }
-
-            recText = recText.replaceAll("<<Polling_Period>>", balloutCountDate);
-            recText = recText.replaceAll("<<CountBallotsDate>>", pollingPeriod);
+        //Related Case Information
+        if (recText.contains("<<CaseNumbers>>")) {
+            recText = processCaseNumberReplacements(recText);
         }
 
         recommendationTextArea.setText(recText);
     }
+
+    private String processCasePartyReplacements(String recText) {
+        List<CaseParty> partyList = CaseParty.loadPartiesByCase(Global.caseYear, Global.caseType, Global.caseMonth, Global.caseNumber);
+
+        String incumbentNames = "";
+        String intervenerNames = "";
+        String employerNames = "";
+        String rivalNames = "";
+        String petitionerNames = "";
+
+        for (CaseParty party : partyList) {
+            if (null != party.caseRelation) {
+                switch (party.caseRelation) {
+                    case "Incumbent Employee Organization":
+                        if (!"".equals(incumbentNames.trim())) {
+                            incumbentNames += ", ";
+                        }
+                        incumbentNames += party.companyName;
+                        break;
+                    case "Employer":
+                        if (!"".equals(employerNames.trim())) {
+                            employerNames += ", ";
+                        }
+                        employerNames += party.companyName;
+                        break;
+                    case "Rival Employee Organization":
+                        if (!"".equals(rivalNames.trim())) {
+                            rivalNames += ", ";
+                        }
+                        rivalNames += party.companyName;
+                        break;
+                    case "Petitioner":
+                        if (!"".equals(petitionerNames.trim())) {
+                            petitionerNames += ", ";
+                        }
+                        petitionerNames += party.companyName;
+                        break;
+                    case "Intervener":
+                        if (!"".equals(petitionerNames.trim())) {
+                            intervenerNames += ", ";
+                        }
+                        intervenerNames += party.companyName;
+                        break;
+                    default:
+                        if (party.caseRelation.startsWith("Rival Employee Organization") && !party.caseRelation.endsWith("REP")) {
+                            if (!"".equals(rivalNames.trim())) {
+                                rivalNames += ", ";
+                            }
+                            rivalNames += party.companyName;
+                        }
+                        break;
+                }
+            }
+        }
+
+        recText = recText.replaceAll("<<Incumbent>>", incumbentNames);
+        recText = recText.replaceAll("<<Employer>>", employerNames);
+        recText = recText.replaceAll("<<Rival>>", rivalNames);
+        recText = recText.replaceAll("<<Petitioner>>", petitionerNames);
+        recText = recText.replaceAll("<<Intervener>>", intervenerNames);
+        return recText;
+    }
+
+    private String processCaseInformationReplacements(String recText) {
+        REPCase caseInfo = REPCase.loadCaseDetails(Global.caseYear, Global.caseType, Global.caseMonth, Global.caseNumber);
+
+        String balloutCountDate = caseInfo.ballotsCountDate == null ? "" : Global.MMMMMdyyyy.format(caseInfo.ballotsCountDate);
+        String pollingPeriod = "";
+        //Polling information
+        if (caseInfo.pollingEndDate != null && caseInfo.pollingStartDate != null) {
+            pollingPeriod = Global.MMMMMdyyyy.format(caseInfo.pollingStartDate);
+            pollingPeriod += " thru " + Global.MMMMMdyyyy.format(caseInfo.pollingEndDate);
+        }
+
+        recText = recText.replaceAll("<<Polling_Period>>", balloutCountDate);
+        recText = recText.replaceAll("<<CountBallotsDate>>", pollingPeriod);
+        return recText;
+    }
+
+    private String processCaseNumberReplacements(String recText){
+        List<String> relatedCasesList = RelatedCase.loadRelatedCases();
+        String relatedCases = "";
+
+        //Related Cases
+        if (relatedCasesList.size() == 2) {
+            for (String relatedCase : relatedCasesList) {
+                relatedCases += ("".equals(relatedCases) ? relatedCase : " and " + relatedCase);
+            }
+        } else {
+            int i = 0;
+            for (String relatedCase : relatedCasesList) {
+                i++;
+                if (i == relatedCasesList.size()) {
+                    relatedCases += ("".equals(relatedCases) ? relatedCase : ", and " + relatedCase);
+                } else {
+                    relatedCases += ("".equals(relatedCases) ? relatedCase : ", " + relatedCase);
+                }
+            }
+        }
+
+        recText = recText.replaceAll("<<CaseNumbers>>", relatedCases);
+        return recText;
+    }
+
 
     private void enableAddButton() {
         if(meetingDateTextBox.getText().equals("") ||
