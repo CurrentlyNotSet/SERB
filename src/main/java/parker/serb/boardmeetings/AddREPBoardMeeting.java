@@ -9,7 +9,6 @@ import com.alee.extended.date.WebCalendar;
 import com.alee.extended.date.WebDateField;
 import com.alee.utils.swing.Customizer;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.util.List;
 import javax.swing.JFrame;
@@ -17,6 +16,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import parker.serb.Global;
 import parker.serb.sql.BoardMeeting;
+import parker.serb.sql.CaseParty;
+import parker.serb.sql.REPCase;
 import parker.serb.sql.REPRecommendation;
 import parker.serb.util.ClearDateDialog;
 
@@ -38,7 +39,7 @@ public class AddREPBoardMeeting extends javax.swing.JDialog {
         setLocationRelativeTo(parent);
         setVisible(true);
     }
-    
+
     private void addListeners() {
         meetingDateTextBox.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -56,7 +57,7 @@ public class AddREPBoardMeeting extends javax.swing.JDialog {
                 enableAddButton();
             }
         });
-        
+
         agendaItemTextBox.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -73,29 +74,116 @@ public class AddREPBoardMeeting extends javax.swing.JDialog {
                 enableAddButton();
             }
         });
-        
-        recommendationComboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(recommendationComboBox.getSelectedItem() != null)
-                    recommendationTextArea.setText(recommendationComboBox.getSelectedItem().toString());
-            }
+
+        recommendationComboBox.addActionListener((ActionEvent e) -> {
+            if(recommendationComboBox.getSelectedItem() != null)
+                handleRecommendationSelection(recommendationComboBox.getSelectedItem().toString());
         });
     }
-    
+
     private void loadRecComboBox() {
         recommendationComboBox.removeAllItems();
-        
+
         recommendationComboBox.addItem("");
-        
+
         List recommendationList = REPRecommendation.loadAllREPRecommendations();
-        
+
         for (Object recommendation : recommendationList) {
             REPRecommendation rec = (REPRecommendation) recommendation;
             recommendationComboBox.addItem(rec.recommendation);
         }
     }
-    
+
+    private void handleRecommendationSelection(String recText) {
+        //List of potential "bookmarks"
+        //<<Incumbent>>
+        //<<Employer>>
+        //<<Rival>>
+        //<<PetitionerIntervenor>>
+        //<<Polling_Period>>
+        //<<CountBallotsDate>>
+
+
+        recText = recText.replaceAll("«", "<<");
+        recText = recText.replaceAll("»", ">>");
+
+        //Party Information loading
+        if (recText.contains("<<PetitionerIntervenor>>")
+                || recText.contains("<<Employer>>")
+                || recText.contains("<<Rival>>")
+                || recText.contains("<<Incumbent>>")) {
+            List<CaseParty> partyList = CaseParty.loadPartiesByCase(Global.caseYear, Global.caseType, Global.caseMonth, Global.caseNumber);
+
+            String incumbentNames = "";
+            String employerNames = "";
+            String rivalNames = "";
+            String petitionerIntervenorNames = "";
+
+            for (CaseParty party : partyList) {
+                if (null != party.caseRelation) {
+                    switch (party.caseRelation) {
+                        case "Incumbent Employee Organization":
+                            if (!"".equals(incumbentNames.trim())) {
+                                incumbentNames += ", ";
+                            }
+                            incumbentNames += party.companyName;
+                            break;
+                        case "Employer":
+                            if (!"".equals(employerNames.trim())) {
+                                employerNames += ", ";
+                            }
+                            employerNames += party.companyName;
+                            break;
+                        case "Rival Employee Organization":
+                            if (!"".equals(rivalNames.trim())) {
+                                rivalNames += ", ";
+                            }
+                            rivalNames += party.companyName;
+                            break;
+                        case "Petitioner":
+                            if (!"".equals(petitionerIntervenorNames.trim())) {
+                                petitionerIntervenorNames += ", ";
+                            }
+                            petitionerIntervenorNames += party.companyName;
+                            break;
+                        default:
+                            if (party.caseRelation.startsWith("Rival Employee Organization") && !party.caseRelation.endsWith("REP")) {
+                                if (!"".equals(rivalNames.trim())) {
+                                    rivalNames += ", ";
+                                }
+                                rivalNames += party.companyName;
+                            }
+                            break;
+                    }
+                }
+            }
+
+            recText = recText.replaceAll("<<Incumbent>>", incumbentNames);
+            recText = recText.replaceAll("<<Employer>>", employerNames);
+            recText = recText.replaceAll("<<Rival>>", rivalNames);
+            recText = recText.replaceAll("<<PetitionerIntervenor>>", petitionerIntervenorNames);
+        }
+
+        //Case Information Loading
+        if (recText.contains("<<Polling_Period>>")
+                || recText.contains("<<CountBallotsDate>>")) {
+            REPCase caseInfo = REPCase.loadCaseDetails(Global.caseYear, Global.caseType, Global.caseMonth, Global.caseNumber);
+
+            String balloutCountDate = caseInfo.ballotsCountDate == null ? "" : Global.MMMMMdyyyy.format(caseInfo.ballotsCountDate);
+            String pollingPeriod = "";
+            //Polling information
+            if (caseInfo.pollingEndDate != null && caseInfo.pollingStartDate != null) {
+                pollingPeriod = Global.MMMMMdyyyy.format(caseInfo.pollingStartDate);
+                pollingPeriod += " thru " + Global.MMMMMdyyyy.format(caseInfo.pollingEndDate);
+            }
+
+            recText = recText.replaceAll("<<Polling_Period>>", balloutCountDate);
+            recText = recText.replaceAll("<<CountBallotsDate>>", pollingPeriod);
+        }
+
+        recommendationTextArea.setText(recText);
+    }
+
     private void enableAddButton() {
         if(meetingDateTextBox.getText().equals("") ||
                 agendaItemTextBox.getText().equals("")) {
@@ -104,7 +192,7 @@ public class AddREPBoardMeeting extends javax.swing.JDialog {
             addBoardMeetingButton.setEnabled(true);
         }
     }
-    
+
     private void clearDate(WebDateField dateField, MouseEvent evt) {
         if(evt.getButton() == MouseEvent.BUTTON3 && dateField.isEnabled()) {
             ClearDateDialog dialog = new ClearDateDialog((JFrame) Global.root, true);
@@ -283,7 +371,7 @@ public class AddREPBoardMeeting extends javax.swing.JDialog {
     }//GEN-LAST:event_cancelBoardMeetingButtonActionPerformed
 
     private void addBoardMeetingButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBoardMeetingButtonActionPerformed
-        BoardMeeting.addREPBoardMeeting(meetingDateTextBox.getText(), agendaItemTextBox.getText(), recommendationTextArea.getText().toString(), memoDateTextBox.getText());
+        BoardMeeting.addREPBoardMeeting(meetingDateTextBox.getText(), agendaItemTextBox.getText(), recommendationTextArea.getText(), memoDateTextBox.getText());
         dispose();
     }//GEN-LAST:event_addBoardMeetingButtonActionPerformed
 
