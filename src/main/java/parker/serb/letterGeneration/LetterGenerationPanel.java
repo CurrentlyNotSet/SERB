@@ -502,7 +502,14 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                 docName = generateDocument.generateCMDSdocument(CMDSdocToGenerate, answers, 0, toParties, ccParties);
                 break;
             case "ORG":
-                docName = generateDocument.generateSMDSdocument(SMDSdocToGenerate, 0, toParties, ccParties, orgCase, null, true);
+                boolean toRep = false;
+                int answer = WebOptionPane.showConfirmDialog(this,
+                        "Do you want to send this letter to the employee organization rep?", "To Rep?", WebOptionPane.YES_NO_OPTION);
+                if (answer == WebOptionPane.YES_OPTION) {
+                    toRep = true;
+                }
+
+                docName = generateDocument.generateSMDSdocument(SMDSdocToGenerate, 0, toParties, ccParties, orgCase, null, toRep);
                 break;
             case "Civil Service Commission":
                 docName = generateDocument.generateSMDSdocument(SMDSdocToGenerate, 0, toParties, ccParties, null, cscCase, true);
