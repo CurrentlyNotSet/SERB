@@ -45,6 +45,7 @@ import parker.serb.sql.EmailOut;
 import parker.serb.sql.EmailOutAttachment;
 import parker.serb.sql.FactFinder;
 import parker.serb.sql.MEDCase;
+import parker.serb.sql.Mediator;
 import parker.serb.sql.ORGCase;
 import parker.serb.sql.PostalOut;
 import parker.serb.sql.PostalOutAttachment;
@@ -642,6 +643,91 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
             } else if (personTable.getValueAt(i, 2).equals("Both")) {
                 sendToEmail = true;
                 sendToPostal = true;
+            }
+        }
+
+        //if Section = MED
+        if(Global.activeSection.equalsIgnoreCase("MED") && medCaseData != null){
+            String ccExtra = "";
+
+            //CC Mediator (FMCS)
+            if (SMDSdocToGenerate.description.toLowerCase().equals("mediator appointment fmcs")){
+                if(!medCaseData.FMCSMediatorAppointedID.equals("0")){
+                    Mediator mediatorDetails = Mediator.getMediatorByID(Integer.valueOf(medCaseData.FMCSMediatorAppointedID));
+                    if (!mediatorDetails.email.equals("")){
+                        ccExtra += ccExtra.trim().equals("") ? mediatorDetails.email.trim() : "; " + mediatorDetails.email.trim();
+                    }
+                }
+            }
+
+            //CC Mediator (STATE)
+            if (SMDSdocToGenerate.description.toLowerCase().equals("mediator appointment state")){
+                if(!medCaseData.stateMediatorAppointedID.equals("0")){
+                    Mediator mediatorDetails = Mediator.getMediatorByID(Integer.valueOf(medCaseData.stateMediatorAppointedID));
+                    if (!mediatorDetails.email.equals("")){
+                        ccExtra += ccExtra.trim().equals("") ? mediatorDetails.email.trim() : "; " + mediatorDetails.email.trim();
+                    }
+                }
+            }
+
+            //CC FactFinder
+            if (SMDSdocToGenerate.description.toLowerCase().equals("mad fact finder appointment")
+                    || SMDSdocToGenerate.description.toLowerCase().equals("fact finder appointment letter")) {
+                if(!medCaseData.FFSelection.equals("") || !medCaseData.FFReplacement.equals("")){
+                    String factFinderSelectionName = medCaseData.FFReplacement == null
+                        ? medCaseData.FFSelection
+                        : (medCaseData.FFReplacement.equals("") ? medCaseData.FFSelection : medCaseData.FFReplacement);
+
+                String ffFirstName = "";
+                String ffLastName = "";
+                String[] ffName = factFinderSelectionName.split(" ");
+
+                if (ffName.length == 2) {
+                    ffFirstName = ffName[0];
+                    ffLastName = ffName[1];
+                } else if (ffName.length == 3) {
+                    ffFirstName = ffName[0];
+                    ffLastName = ffName[2];
+                }
+
+                FactFinder ffDetails = FactFinder.getFactFinderLikeName(ffFirstName, ffLastName);
+
+                if (!ffDetails.email.equals("")) {
+                    ccExtra += ccExtra.trim().equals("") ? ffDetails.email.trim() : "; " + ffDetails.email.trim();
+                }
+                }
+            }
+
+            //CCConciliator
+            if(SMDSdocToGenerate.description.toLowerCase().equals("mad conciliation appointment") ||
+                    SMDSdocToGenerate.description.toLowerCase().equals("conciliation appointment letter")){
+                if(!medCaseData.concilSelection.equals("") || !medCaseData.concilReplacement.equals("")){
+                    String concilSelectionName = medCaseData.concilReplacement == null
+                            ? medCaseData.concilSelection
+                            : (medCaseData.concilReplacement.equals("") ? medCaseData.concilSelection : medCaseData.concilReplacement);
+
+                    String concFirstName=  "";
+                    String concLastName = "";
+                    String[] concName = concilSelectionName.split(" ");
+
+                    if (concName.length == 2) {
+                        concFirstName = concName[0];
+                        concLastName = concName[1];
+                    } else if (concName.length == 3) {
+                        concFirstName = concName[0];
+                        concLastName = concName[2];
+                    }
+
+                    FactFinder concDetails = FactFinder.getFactFinderLikeName(concFirstName, concLastName);
+
+                    if (!concDetails.email.equals("")) {
+                        ccExtra += ccExtra.trim().equals("") ? concDetails.email.trim() : "; " + concDetails.email.trim();
+                    }
+                }
+            }
+
+            if (!ccExtra.equals("")){
+                ccEmail += ccEmail.trim().equals("") ? ccExtra : "; " + ccExtra;
             }
         }
     }
