@@ -587,7 +587,7 @@ public class FileService {
 
                 FileUtils.copyFile(docketFile, new File(caseArchiveFile + File.separator + fileDate + fileExtenstion));
 
-                NumberFormatService.parseFullCaseNumber(caseNumber);
+                NumberFormatService.parseFullCaseNumber(caseNumber.trim());
 
                 CMDSCaseDocketEntryTypes.updateCaseHistory(
                         type.split("-")[0].trim(),
@@ -597,7 +597,7 @@ public class FileService {
                         parent,
                         caseArchiveFile + File.separator + fileDate + fileExtenstion,
                         direction,
-                        caseNumber,
+                        caseNumber.trim(),
                         from,
                         to
                 );
