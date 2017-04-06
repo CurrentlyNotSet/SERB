@@ -152,7 +152,7 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() >= 2) {
+                if (e.getClickCount() >= 2 && attachmentTable.getSelectedRow() > -1) {
                     FileService.openAttachmentFile(attachmentTable.getValueAt(attachmentTable.getSelectedRow(), 0).toString(), section);
                 }
             }
@@ -416,7 +416,7 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
         cal.set(Calendar.MINUTE, Integer.valueOf(passedTime.split(" ")[1].split(":")[1]));
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
-        
+
         return cal.getTime();
     }
 

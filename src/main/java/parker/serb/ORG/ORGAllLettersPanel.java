@@ -182,13 +182,13 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
             partyList = CaseParty.loadORGPartiesByCase("ORG", item.orgNumber);
             for (CaseParty party : partyList) {
                 if (party.caseRelation.equals("Representative")) {
-                    if (party.emailAddress != null) {
+                    if (!party.emailAddress.equals("")) {
                         EmailNumber++;
                         if (!repVia.trim().equals("")) {
                             repVia += ", ";
                         }
                         repVia += "Email";
-                    } else if (item.orgAddress1 != null && item.orgCity != null && item.orgState != null && item.orgZip != null) {
+                    } else if (!party.address1.equals("") & !party.city.equals("") & !party.stateCode.equals("") && !party.zipcode.equals("")) {
                         if (!item.orgAddress1.equalsIgnoreCase(party.address1)
                                 && !item.orgCity.equalsIgnoreCase(party.city)
                                 && !item.orgState.equalsIgnoreCase(party.stateCode)
@@ -306,14 +306,14 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
                     for (CaseParty party : partyList) {
                         if (party.caseRelation.equals("Representative")) {
 
-                            if (party.emailAddress != null) {
+                            if (!party.emailAddress.equals("")) {
                                 int emailID = insertEmail(template, item.orgNumber, party.emailAddress);
                                 insertGeneratedAttachementEmail(emailID, repdocName, true);
                                 if (!attachDocName.equals("")) {
                                     insertGeneratedAttachementEmail(emailID, attachDocName, false);
                                 }
 
-                            } else if (party.address1 != null & party.city != null & party.stateCode != null && party.zipcode != null) {
+                            } else if (!party.address1.equals("") & !party.city.equals("") & !party.stateCode.equals("") && !party.zipcode.equals("")) {
                                 if (!item.orgAddress1.equalsIgnoreCase(party.address1)
                                         && !item.orgCity.equalsIgnoreCase(party.city)
                                         && !item.orgState.equalsIgnoreCase(party.stateCode)
