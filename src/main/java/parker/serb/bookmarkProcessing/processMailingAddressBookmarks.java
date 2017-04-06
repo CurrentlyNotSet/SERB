@@ -17,7 +17,6 @@ import parker.serb.sql.CaseParty;
 import parker.serb.sql.PostalOut;
 import parker.serb.util.FileService;
 import parker.serb.util.JacobCOMBridge;
-import parker.serb.util.NumberFormatService;
 import parker.serb.util.StringUtilities;
 
 /**
@@ -31,10 +30,23 @@ public class processMailingAddressBookmarks {
         AdministrationInformation sysAdminInfo = AdministrationInformation.loadAdminInfo(dept);
 
         //Setup Document
-        File docPath = new File(Global.activityPath
-                + item.section + File.separator
-                + item.caseYear + File.separator
-                + NumberFormatService.generateFullCaseNumberNonGlobal(item.caseYear, item.caseType, item.caseMonth, item.caseNumber));
+        String casePath = "";
+        if (Global.activeSection.equalsIgnoreCase("Civil Service Commission")
+                    || Global.activeSection.equalsIgnoreCase("CSC")
+                    || Global.activeSection.equalsIgnoreCase("ORG")) {
+                casePath = Global.activityPath
+                        + (Global.activeSection.equals("Civil Service Commission")
+                        ? item.caseType : Global.activeSection) + File.separator + item.caseNumber + File.separator;
+            } else {
+                casePath = Global.activityPath + File.separatorChar
+                        + Global.activeSection + File.separatorChar
+                        + item.caseYear + File.separatorChar
+                        + (item.caseYear + "-" + item.caseType + "-" + item.caseMonth + "-" + item.caseNumber)
+                        + File.separatorChar;
+            }
+
+
+        File docPath = new File(casePath);
         docPath.mkdirs();
         String saveDocName = String.valueOf(new Date().getTime()) + "_Envelope" + ".docx";
         saveDocName = saveDocName.replaceAll("[:\\\\/*?|<>]", "_");
@@ -67,6 +79,7 @@ public class processMailingAddressBookmarks {
         }
 
         String name = "";
+        name += item.person.trim() + System.lineSeparator();
         if (!item.addressBlock.equals("")) {
             name += item.addressBlock.trim();
         }

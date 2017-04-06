@@ -45,11 +45,21 @@ public class postalSend {
         List<PostalOutAttachment> attachmentList = PostalOutAttachment.getPostalOutAttachments(sendID);
 
         //Set Case Path
-        String casePath = Global.activityPath
-                + Global.activeSection + File.separator
-                + postalEntry.caseYear + File.separator
-                + NumberFormatService.generateFullCaseNumberNonGlobal(
-                        postalEntry.caseYear, postalEntry.caseType, postalEntry.caseMonth, postalEntry.caseNumber) + File.separator;
+        String casePath = "";
+        if (Global.activeSection.equalsIgnoreCase("Civil Service Commission")
+                    || Global.activeSection.equalsIgnoreCase("CSC")
+                    || Global.activeSection.equalsIgnoreCase("ORG")) {
+                casePath = Global.activityPath
+                        + (Global.activeSection.equals("Civil Service Commission")
+                        ? postalEntry.caseType : Global.activeSection) + File.separator + postalEntry.caseNumber + File.separator;
+            } else {
+                casePath = Global.activityPath + File.separatorChar
+                        + Global.activeSection + File.separatorChar
+                        + postalEntry.caseYear + File.separatorChar
+                        + (postalEntry.caseYear + "-" + postalEntry.caseType + "-" + postalEntry.caseMonth + "-" + postalEntry.caseNumber)
+                        + File.separatorChar;
+            }
+
 
         //Generate Envelope Insert
         String envelopeFileName = processMailingAddressBookmarks.processDoAEnvelopeInsert(Global.templatePath, "EnvelopeInsert.docx", postalEntry);
@@ -108,7 +118,7 @@ public class postalSend {
                 }
 
                 //If PDF
-            } else if (FilenameUtils.getExtension(fileName).equals(".pdf")) {
+            } else if (FilenameUtils.getExtension(fileName).equals("pdf")) {
 
                 //Add Attachment To PDF Merge
                 try {
@@ -141,45 +151,56 @@ public class postalSend {
         }
 
         //Create Activity
-        Activity.addActivtySendPostal(
+        if (Global.activeSection.equalsIgnoreCase("Civil Service Commission")
+                    || Global.activeSection.equalsIgnoreCase("CSC")
+                    || Global.activeSection.equalsIgnoreCase("ORG")) {
+        Activity.addActivtySendPostalORGCSC(
+                "OUT - " + postalEntry.historyDescription,
+                savedDoc,
+                postalEntry.caseType,
+                postalEntry.caseNumber,
+                "", "", "", "", false, false);
+        } else {
+            Activity.addActivtySendPostal(
                 "OUT - " + postalEntry.historyDescription,
                 savedDoc,
                 NumberFormatService.generateFullCaseNumberNonGlobal(
                         postalEntry.caseYear, postalEntry.caseType, postalEntry.caseMonth, postalEntry.caseNumber).split("-"),
                 "", "", "", "", false, false);
+        }
 
         //Remove SQL Entries for Postal
         PostalOut.removeEntry(sendID);
         PostalOutAttachment.removeEntry(sendID);
 
         //Update Activity List if Available
-        if (postalEntry.caseYear.equals(Global.caseYear)
-                && postalEntry.caseType.equals(Global.caseType)
-                && postalEntry.caseMonth.equals(Global.caseMonth)
-                && postalEntry.caseNumber.equals(Global.caseNumber)) {
-            switch (Global.activeSection) {
-                case "REP":
-                    Global.root.getrEPRootPanel1().getActivityPanel1().loadAllActivity();
-                    break;
-                case "ULP":
-                    Global.root.getuLPRootPanel1().getActivityPanel1().loadAllActivity();
-                    break;
-                case "ORG":
-                    Global.root.getoRGRootPanel1().getActivityPanel1().loadAllActivity();
-                    break;
-                case "MED":
-                    Global.root.getmEDRootPanel1().getActivityPanel1().loadAllActivity();
-                    break;
-                case "Hearings":
-                    break;
-                case "Civil Service Commission":
-                    Global.root.getcSCRootPanel1().getActivityPanel1().loadAllActivity();
-                    break;
-                case "CMDS":
-                    Global.root.getcMDSRootPanel1().getActivityPanel1().loadAllActivity();
-                    break;
-            }
-        }
+//        if (postalEntry.caseYear.equals(Global.caseYear)
+//                && postalEntry.caseType.equals(Global.caseType)
+//                && postalEntry.caseMonth.equals(Global.caseMonth)
+//                && postalEntry.caseNumber.equals(Global.caseNumber)) {
+//            switch (Global.activeSection) {
+//                case "REP":
+//                    Global.root.getrEPRootPanel1().getActivityPanel1().loadAllActivity();
+//                    break;
+//                case "ULP":
+//                    Global.root.getuLPRootPanel1().getActivityPanel1().loadAllActivity();
+//                    break;
+//                case "ORG":
+//                    Global.root.getoRGRootPanel1().getActivityPanel1().loadAllActivity();
+//                    break;
+//                case "MED":
+//                    Global.root.getmEDRootPanel1().getActivityPanel1().loadAllActivity();
+//                    break;
+//                case "Hearings":
+//                    break;
+//                case "Civil Service Commission":
+//                    Global.root.getcSCRootPanel1().getActivityPanel1().loadAllActivity();
+//                    break;
+//                case "CMDS":
+//                    Global.root.getcMDSRootPanel1().getActivityPanel1().loadAllActivity();
+//                    break;
+//            }
+//        }
     }
 
 }
