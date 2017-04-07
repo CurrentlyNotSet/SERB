@@ -32,6 +32,7 @@ import parker.serb.sql.ORGCase;
 import parker.serb.sql.PostalOut;
 import parker.serb.sql.PostalOutAttachment;
 import parker.serb.sql.SMDSDocuments;
+import parker.serb.util.EmailValidation;
 import parker.serb.util.Item;
 import parker.serb.util.SlackNotification;
 import parker.serb.util.StringUtilities;
@@ -174,12 +175,16 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
         System.out.println(orgCaseList.size());
 
         for (ORGCase item : orgCaseList) {
+            String heldREPEmailAddress = "";
+            String heldREPAddress1 = "";
             String orgVia = "";
             String repVia = "";
             String ARDate = "";
             String FSDate = "";
 
             partyList = CaseParty.loadORGPartiesByCase("ORG", item.orgNumber);
+
+            // REP Logic (FIRST AND MOST IMPORTANT)
             for (CaseParty party : partyList) {
                 if (party.caseRelation.equals("Representative")) {
                     if (!party.emailAddress.equals("")) {
@@ -187,29 +192,80 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
                         if (!repVia.trim().equals("")) {
                             repVia += ", ";
                         }
+                        heldREPEmailAddress += " " + party.emailAddress;
                         repVia += "Email";
                     } else if (!party.address1.equals("") & !party.city.equals("") & !party.stateCode.equals("") && !party.zipcode.equals("")) {
-                        if (!item.orgAddress1.equalsIgnoreCase(party.address1)
-                                && !item.orgCity.equalsIgnoreCase(party.city)
-                                && !item.orgState.equalsIgnoreCase(party.stateCode)
-                                && !item.orgZip.equalsIgnoreCase(party.zipcode)) {
-                            postalNumber++;
-                            if (!repVia.trim().equals("")) {
-                                repVia += ", ";
-                            }
-                            repVia += "Postal";
+                        postalNumber++;
+                        if (!repVia.trim().equals("")) {
+                            repVia += ", ";
                         }
+                        repVia += "Postal";
+                    }
+
+                    if (party.address1 != null) {
+                        heldREPAddress1 += party.address1 + " ";
                     }
                 }
             }
 
-            if (item.orgEmail != null) {
+
+            // ORG Logic
+            String orgEmail = item.orgEmail == null ? "" : item.orgEmail;
+
+            // IF (ORGEmail does NOT Equal <<BLANK>>) AND (ORGEmail is NOT Equal to REPEmail)
+            if (!orgEmail.equals("") && !heldREPEmailAddress.toLowerCase().contains(orgEmail.toLowerCase())) {
                 EmailNumber++;
                 orgVia = "Email";
-            } else if (item.orgAddress1 != null && item.orgCity != null && item.orgState != null && item.orgZip != null) {
-                postalNumber++;
-                orgVia = "Postal";
+            } else {
+
+                // IF (ORGPostalAddress is NOT Equal to REPPostalAddress) or (OrgPostalAddress EQUALS RepPostalAddress and RepEmail IS NOT Blank)
+                String orgAddress1 = item.orgAddress1 == null ? "" : item.orgAddress1;
+
+                if (!heldREPAddress1.toLowerCase().contains(orgAddress1.toLowerCase())
+                        || (heldREPAddress1.toLowerCase().contains(orgAddress1.toLowerCase()) && !heldREPEmailAddress.trim().equals(""))) {
+                    if (item.orgAddress1 != null && item.orgCity != null && item.orgState != null && item.orgZip != null) {
+                        postalNumber++;
+                        orgVia = "Postal";
+                    } else {
+                        // ORG GETS NOTHING
+                    }
+                }
             }
+
+
+
+
+// OLD LOGIC THAT IS INCORRECT APPARENTLY
+//            for (CaseParty party : partyList) {
+//                if (party.caseRelation.equals("Representative")) {
+//                    if (!party.emailAddress.equals("")) {
+//                        EmailNumber++;
+//                        if (!repVia.trim().equals("")) {
+//                            repVia += ", ";
+//                        }
+//                        repVia += "Email";
+//                    } else if (!party.address1.equals("") & !party.city.equals("") & !party.stateCode.equals("") && !party.zipcode.equals("")) {
+//                        if (!item.orgAddress1.equalsIgnoreCase(party.address1)
+//                                && !item.orgCity.equalsIgnoreCase(party.city)
+//                                && !item.orgState.equalsIgnoreCase(party.stateCode)
+//                                && !item.orgZip.equalsIgnoreCase(party.zipcode)) {
+//                            postalNumber++;
+//                            if (!repVia.trim().equals("")) {
+//                                repVia += ", ";
+//                            }
+//                            repVia += "Postal";
+//                        }
+//                    }
+//                }
+//            }
+//
+//            if (item.orgEmail != null) {
+//                EmailNumber++;
+//                orgVia = "Email";
+//            } else if (item.orgAddress1 != null && item.orgCity != null && item.orgState != null && item.orgZip != null) {
+//                postalNumber++;
+//                orgVia = "Postal";
+//            }
 
             if (item.annualReport != null) {
                 ARDate = Global.mmddyyyy.format(item.annualReport);
@@ -298,49 +354,125 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
                         lastNotify = "NR";
                     }
 
-                    if (!lastNotify.equals("")){
+                    if (!lastNotify.equals("")) {
                         ORGCase.updateORGLastNotification(lastNotify, item.orgNumber);
                     }
 
                     partyList = CaseParty.loadORGPartiesByCase("ORG", item.orgNumber);
+
+                    String heldREPEmails = "";
+                    String heldREPAddress1 = "";
+
+                    // REP Logic (FIRST AND MOST IMPORTANT)
                     for (CaseParty party : partyList) {
                         if (party.caseRelation.equals("Representative")) {
-
                             if (!party.emailAddress.equals("")) {
-                                int emailID = insertEmail(template, item.orgNumber, party.emailAddress);
-                                insertGeneratedAttachementEmail(emailID, repdocName, true);
-                                if (!attachDocName.equals("")) {
-                                    insertGeneratedAttachementEmail(emailID, attachDocName, false);
+
+                                //BUILD OUT REP EMAILS
+                                if (!heldREPEmails.trim().equals("") && EmailValidation.validEmail(party.emailAddress.trim())) {
+                                    heldREPEmails += "; ";
+                                }
+
+                                //Add only if valid
+                                if (EmailValidation.validEmail(party.emailAddress.trim())) {
+                                    heldREPEmails += party.emailAddress.trim();
                                 }
 
                             } else if (!party.address1.equals("") & !party.city.equals("") & !party.stateCode.equals("") && !party.zipcode.equals("")) {
-                                if (!item.orgAddress1.equalsIgnoreCase(party.address1)
-                                        && !item.orgCity.equalsIgnoreCase(party.city)
-                                        && !item.orgState.equalsIgnoreCase(party.stateCode)
-                                        && !item.orgZip.equalsIgnoreCase(party.zipcode)) {
-                                    int postalID = insertPostal(template, item.orgNumber, party);
-                                    insertGeneratedAttachementPostal(postalID, repdocName, true);
-                                    if (!attachDocName.equals("")) {
-                                        insertGeneratedAttachementPostal(postalID, attachDocName, false);
-                                    }
+
+                                // SEND REP POSTAL
+                                int postalID = insertPostal(template, item.orgNumber, party);
+                                insertGeneratedAttachementPostal(postalID, repdocName, true);
+                                if (!attachDocName.equals("")) {
+                                    insertGeneratedAttachementPostal(postalID, attachDocName, false);
                                 }
+                            }
+
+                            //Gather REP Address1 fields for verification NO MATTER WHAT
+                            if (party.address1 != null) {
+                                heldREPAddress1 += party.address1 + " ";
                             }
                         }
                     }
 
-                    if (item.orgEmail != null) {
+                    //Insert REP Email
+                    if (!heldREPEmails.trim().equals("")) {
+                        int emailID = insertEmail(template, item.orgNumber, heldREPEmails);
+                        insertGeneratedAttachementEmail(emailID, repdocName, true);
+                        if (!attachDocName.equals("")) {
+                            insertGeneratedAttachementEmail(emailID, attachDocName, false);
+                        }
+                    }
+
+                    // ORG Logic
+                    String orgEmail = item.orgEmail == null ? "" : item.orgEmail;
+                    String orgAddress1 = item.orgAddress1 == null ? "" : item.orgAddress1;
+
+                    // IF (ORGEmail does NOT Equal <<BLANK>>) AND (ORGEmail is NOT Equal to REPEmail)
+                    if (!orgEmail.equals("") && !heldREPEmails.toLowerCase().contains(orgEmail.toLowerCase())) {
                         int emailID = insertEmail(template, item.orgNumber, item.orgEmail);
                         insertGeneratedAttachementEmail(emailID, orgdocName, true);
                         if (!attachDocName.equals("")) {
                             insertGeneratedAttachementEmail(emailID, attachDocName, false);
                         }
-                    } else if (item.orgAddress1 != null & item.orgCity != null & item.orgState != null && item.orgZip != null) {
-                        int postalID = insertPostalORG(template, item);
-                        insertGeneratedAttachementPostal(postalID, orgdocName, true);
-                        if (!attachDocName.equals("")) {
-                            insertGeneratedAttachementPostal(postalID, attachDocName, false);
+                    } else {
+
+                        // IF (ORGPostalAddress is NOT Equal to REPPostalAddress) or (OrgPostalAddress EQUALS RepPostalAddress and RepEmail IS NOT Blank)
+                        if (!heldREPAddress1.toLowerCase().contains(orgAddress1.toLowerCase())
+                                || (heldREPAddress1.toLowerCase().contains(orgAddress1.toLowerCase()) && !heldREPEmails.trim().equals(""))) {
+                            if (item.orgAddress1 != null && item.orgCity != null && item.orgState != null && item.orgZip != null) {
+                                int postalID = insertPostalORG(template, item);
+                                insertGeneratedAttachementPostal(postalID, orgdocName, true);
+                                if (!attachDocName.equals("")) {
+                                    insertGeneratedAttachementPostal(postalID, attachDocName, false);
+                                }
+                            } else {
+                                // ORG GETS NOTHING
+                            }
                         }
                     }
+
+
+
+//OLD CODE NOT CORRECT
+//                    for (CaseParty party : partyList) {
+//                        if (party.caseRelation.equals("Representative")) {
+//
+//                            if (!party.emailAddress.equals("")) {
+//                                int emailID = insertEmail(template, item.orgNumber, party.emailAddress);
+//                                insertGeneratedAttachementEmail(emailID, repdocName, true);
+//                                if (!attachDocName.equals("")) {
+//                                    insertGeneratedAttachementEmail(emailID, attachDocName, false);
+//                                }
+//
+//                            } else if (!party.address1.equals("") & !party.city.equals("") & !party.stateCode.equals("") && !party.zipcode.equals("")) {
+//                                if (!item.orgAddress1.equalsIgnoreCase(party.address1)
+//                                        && !item.orgCity.equalsIgnoreCase(party.city)
+//                                        && !item.orgState.equalsIgnoreCase(party.stateCode)
+//                                        && !item.orgZip.equalsIgnoreCase(party.zipcode)) {
+//                                    int postalID = insertPostal(template, item.orgNumber, party);
+//                                    insertGeneratedAttachementPostal(postalID, repdocName, true);
+//                                    if (!attachDocName.equals("")) {
+//                                        insertGeneratedAttachementPostal(postalID, attachDocName, false);
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//
+//                    if (item.orgEmail != null) {
+//                        int emailID = insertEmail(template, item.orgNumber, item.orgEmail);
+//                        insertGeneratedAttachementEmail(emailID, orgdocName, true);
+//                        if (!attachDocName.equals("")) {
+//                            insertGeneratedAttachementEmail(emailID, attachDocName, false);
+//                        }
+//                    } else if (item.orgAddress1 != null & item.orgCity != null & item.orgState != null && item.orgZip != null) {
+//                        int postalID = insertPostalORG(template, item);
+//                        insertGeneratedAttachementPostal(postalID, orgdocName, true);
+//                        if (!attachDocName.equals("")) {
+//                            insertGeneratedAttachementPostal(postalID, attachDocName, false);
+//                        }
+//                    }
                 }
             } else {
                 WebOptionPane.showMessageDialog(Global.root, "<html><center> Sorry, unable to locate template. <br><br>" + template.fileName + "</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
