@@ -164,6 +164,31 @@ public class StringUtilities {
         return addressBlock.trim();
     }
 
+    public static String buildAddressBlockforPostal(CaseParty item) {
+        String addressBlock = "";
+
+        if (item.address1 != null) {
+            if (!item.address1.equals("")) {
+                addressBlock += System.lineSeparator() + item.address1;
+            }
+        }
+        if (item.address2 != null) {
+            if (!item.address2.equals("")) {
+                addressBlock += System.lineSeparator() + item.address2;
+            }
+        }
+        if (item.address3 != null) {
+            if (!item.address3.equals("")) {
+                addressBlock += System.lineSeparator() + item.address3;
+            }
+        }
+        addressBlock += System.lineSeparator() + (item.city == null ? "" : item.city)
+                + ", " + (item.stateCode == null ? "" : item.stateCode)
+                + " " + (item.zipcode == null ? "" : item.zipcode);
+
+        return addressBlock.trim();
+    }
+
     public static String buildORGBookmarkAddressWithLineBreaks(CaseParty item) {
         String addressBlock = "";
 

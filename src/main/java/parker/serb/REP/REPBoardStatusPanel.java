@@ -45,12 +45,12 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
         initComponents();
         addRenderer();
         setColumnWidths();
-        
+
         addListeners();
-        
+
         addBoardMeetingButton.setVisible(false);
     }
-    
+
     private void addRenderer() {
         boardMeetingTable.setDefaultRenderer(Object.class, new TableCellRenderer(){
             private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
@@ -65,25 +65,25 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
             }
         });
     }
-    
+
     private void setColumnWidths() {
         boardMeetingTable.getColumnModel().getColumn(0).setPreferredWidth(125);
         boardMeetingTable.getColumnModel().getColumn(0).setMinWidth(125);
         boardMeetingTable.getColumnModel().getColumn(0).setMaxWidth(125);
-        
+
         boardMeetingTable.getColumnModel().getColumn(1).setPreferredWidth(75);
         boardMeetingTable.getColumnModel().getColumn(1).setMinWidth(75);
         boardMeetingTable.getColumnModel().getColumn(1).setMaxWidth(75);
-        
+
         boardMeetingTable.getColumnModel().getColumn(3).setPreferredWidth(125);
         boardMeetingTable.getColumnModel().getColumn(3).setMinWidth(125);
         boardMeetingTable.getColumnModel().getColumn(3).setMaxWidth(125);
-        
+
         boardMeetingTable.getColumnModel().getColumn(4).setPreferredWidth(0);
         boardMeetingTable.getColumnModel().getColumn(4).setMinWidth(0);
         boardMeetingTable.getColumnModel().getColumn(4).setMaxWidth(0);
     }
-    
+
     private void addListeners() {
         boardMeetingTable.addMouseListener(new MouseListener() {
             @Override
@@ -93,18 +93,18 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
                         new UpdateREPBoardMeeting(
                                 (JFrame) Global.root.getRootPane().getParent(),
                                 true,
-                                boardMeetingTable.getValueAt(boardMeetingTable.getSelectedRow(), 0).toString().trim(),
-                                boardMeetingTable.getValueAt(boardMeetingTable.getSelectedRow(), 1).toString().trim(),
-                                boardMeetingTable.getValueAt(boardMeetingTable.getSelectedRow(), 2).toString().trim(),
-                                boardMeetingTable.getValueAt(boardMeetingTable.getSelectedRow(), 4).toString().trim(),
-                                boardMeetingTable.getValueAt(boardMeetingTable.getSelectedRow(), 3).toString().trim()
+                                boardMeetingTable.getValueAt(boardMeetingTable.getSelectedRow(), 0).toString().trim(), //Date
+                                boardMeetingTable.getValueAt(boardMeetingTable.getSelectedRow(), 1).toString().trim(), //agenda number
+                                boardMeetingTable.getValueAt(boardMeetingTable.getSelectedRow(), 2).toString().trim(), //recommendation
+                                boardMeetingTable.getValueAt(boardMeetingTable.getSelectedRow(), 4).toString().trim(), //ID
+                                boardMeetingTable.getValueAt(boardMeetingTable.getSelectedRow(), 3).toString().trim()  //memoDate
                             );
                         loadBoardMeetings();
                     } else if(e.getButton() == MouseEvent.BUTTON3) {
                         new RemoveBoardMeetingDialog(
                                 (JFrame) Global.root.getRootPane().getParent(),
                                 true,
-                                boardMeetingTable.getValueAt(boardMeetingTable.getSelectedRow(), 4).toString().trim());
+                                boardMeetingTable.getValueAt(boardMeetingTable.getSelectedRow(), 4).toString().trim()); //ID
                         loadBoardMeetings();
                     }
                 }
@@ -123,53 +123,53 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
             public void mouseExited(MouseEvent e) {}
         });
     }
-    
+
     public void loadHearingPerson() {
         hearingPersonComboBox.removeAllItems();
-        
+
         hearingPersonComboBox.addItem("");
-        
+
         List hearingPeopleList = User.loadSectionDropDowns("REP");
-        
+
         for (Object hearingPerson : hearingPeopleList) {
             hearingPersonComboBox.addItem(hearingPerson.toString());
         }
     }
-    
+
     public void loadBoardActionType() {
         boardActionTypeComboBox.removeAllItems();
-        
+
         boardActionTypeComboBox.addItem("");
-        
+
         List boardActionTypeList = REPBoardActionType.loadAllREPBoardActionTypes();
-        
+
         for (Object boardAction : boardActionTypeList) {
             boardActionTypeComboBox.addItem(boardAction.toString());
         }
     }
-    
+
     public void loadInformation() {
         loadHearingPerson();
         loadBoardActionType();
         loadBoardMeetings();
         loadStatusInformation();
     }
-    
+
     private void loadStatusInformation() {
         caseInformation = REPCase.loadBoardStatus();
-        
+
         boardActionTypeComboBox.setSelectedItem(caseInformation.boardActionType == null ? "" : caseInformation.boardActionType);
-        boardActionDateTextBox.setText(caseInformation.boardActionDate != null ? Global.mmddyyyy.format(new Date(caseInformation.boardActionDate.getTime())) : ""); 
+        boardActionDateTextBox.setText(caseInformation.boardActionDate != null ? Global.mmddyyyy.format(new Date(caseInformation.boardActionDate.getTime())) : "");
         hearingPersonComboBox.setSelectedItem(caseInformation.hearingPersonID == 0 ? "" : User.getNameByID(caseInformation.hearingPersonID));
         BoardActionNote.setText(caseInformation.boardStatusNote);
         BoardMeetingBlurb.setText(caseInformation.boardStatusBlurb);
     }
-    
+
     void enableUpdate() {
         Global.root.getjButton2().setText("Save");
-        
+
         Global.root.getjButton9().setVisible(true);
-        
+
         boardActionTypeComboBox.setEnabled(true);
         boardActionDateTextBox.setEnabled(true);
         boardActionDateTextBox.setBackground(Color.WHITE);
@@ -178,15 +178,15 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
         BoardActionNote.setBackground(Color.WHITE);
         BoardMeetingBlurb.setEnabled(true);
         BoardMeetingBlurb.setBackground(Color.WHITE);
-        
+
         addBoardMeetingButton.setVisible(true);
     }
-    
+
     void disableUpdate(boolean runSave) {
         Global.root.getjButton2().setText("Update");
-        
+
         Global.root.getjButton9().setVisible(false);
-        
+
         boardActionTypeComboBox.setEnabled(false);
         boardActionDateTextBox.setEnabled(false);
         boardActionDateTextBox.setBackground(new Color(238,238,238));
@@ -196,42 +196,48 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
         BoardMeetingBlurb.setEnabled(false);
         BoardMeetingBlurb.setBackground(new Color(238,238,238));
         addBoardMeetingButton.setVisible(false);
-        
+
         if(runSave) {
             saveInformation();
         } else {
             loadStatusInformation();
         }
-            
+
     }
-    
+
     private void loadBoardMeetings() {
         DefaultTableModel model = (DefaultTableModel) boardMeetingTable.getModel();
-        
+
         model.setRowCount(0);
-        
+
         List boardMeeting = BoardMeeting.loadREPBoardMeetings();
-        
+
         for (Object meeting : boardMeeting) {
             BoardMeeting singleMeeting = (BoardMeeting) meeting;
-            model.addRow(new Object[] {singleMeeting.boardMeetingDate, singleMeeting.agendaItemNumber, singleMeeting.recommendation, singleMeeting.memoDate, singleMeeting.id});
+            model.addRow(new Object[]{
+                singleMeeting.boardMeetingDate,
+                singleMeeting.agendaItemNumber,
+                singleMeeting.recommendation,
+                singleMeeting.memoDate,
+                singleMeeting.id
+            });
         }
         boardMeetingTable.clearSelection();
     }
-    
+
     private void saveInformation() {
         REPCase newCaseInformation = new REPCase();
-        
+
         newCaseInformation.boardActionType = boardActionTypeComboBox.getSelectedItem().toString().equals("") ? null : boardActionTypeComboBox.getSelectedItem().toString();
         newCaseInformation.boardActionDate = boardActionDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(boardActionDateTextBox.getText()));
         newCaseInformation.hearingPersonID = hearingPersonComboBox.getSelectedItem().toString().equals("") ? 0 : User.getUserID(hearingPersonComboBox.getSelectedItem().toString());
         newCaseInformation.boardStatusNote = BoardActionNote.getText().equals("") ? null : BoardActionNote.getText();
         newCaseInformation.boardStatusBlurb = BoardMeetingBlurb.getText().equals("") ? null : BoardMeetingBlurb.getText();
-        
+
         REPCase.updateBoardStatus(newCaseInformation, caseInformation);
         caseInformation = REPCase.loadBoardStatus();
     }
-    
+
     private void clearDate(WebDateField dateField, MouseEvent evt) {
         if(evt.getButton() == MouseEvent.BUTTON3 && dateField.isEnabled()) {
             ClearDateDialog dialog = new ClearDateDialog((JFrame) Global.root, true);
@@ -241,7 +247,7 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
             dialog.dispose();
         }
     }
-    
+
 
     /**
      * This method is called from within the constructor to initialize the form.
