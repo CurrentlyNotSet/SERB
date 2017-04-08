@@ -507,15 +507,16 @@ public class scanCMDSFileDialog extends javax.swing.JDialog {
         String[] caseNumbers = caseNumberTextBox.getText().trim().split(",");
 
         FileService.docketCMDSScan(caseNumbers, //caseNumber
-                        selectedSection,
-                        fromTextBox.getText(),
-                        toComboBox.getSelectedItem().toString(),
-                        fileNameTextBox.getText(), //fileName
-                        typeComboBox.getSelectedItem().toString(), //fileType1
-                        descriptionComboBox.getSelectedItem().toString(), //fileType2
-                        commentTextBox.getText().trim().equals("") ? null : commentTextBox.getText().trim(),
-                        directionComboBox.getSelectedItem().toString(),
-                        this
+            selectedSection,
+            fromTextBox.getText(),
+            toComboBox.getSelectedItem().toString(),
+            fileNameTextBox.getText(), //fileName
+            typeComboBox.getSelectedItem().toString(), //fileType1
+            descriptionComboBox.getSelectedItem().toString(), //fileType2
+            commentTextBox.getText().trim(),
+            directionComboBox.getSelectedItem().toString(),
+            this, 
+            generateDate()
         );
         dispose();
     }//GEN-LAST:event_fileButtonActionPerformed

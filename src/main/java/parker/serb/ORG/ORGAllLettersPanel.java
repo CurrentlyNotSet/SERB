@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import javax.swing.DefaultComboBoxModel;
@@ -31,6 +32,7 @@ import parker.serb.sql.ORGCase;
 import parker.serb.sql.PostalOut;
 import parker.serb.sql.PostalOutAttachment;
 import parker.serb.sql.SMDSDocuments;
+import parker.serb.util.EmailValidation;
 import parker.serb.util.Item;
 import parker.serb.util.SlackNotification;
 import parker.serb.util.StringUtilities;
@@ -173,42 +175,97 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
         System.out.println(orgCaseList.size());
 
         for (ORGCase item : orgCaseList) {
+            String heldREPEmailAddress = "";
+            String heldREPAddress1 = "";
             String orgVia = "";
             String repVia = "";
             String ARDate = "";
             String FSDate = "";
 
             partyList = CaseParty.loadORGPartiesByCase("ORG", item.orgNumber);
+
+            // REP Logic (FIRST AND MOST IMPORTANT)
             for (CaseParty party : partyList) {
                 if (party.caseRelation.equals("Representative")) {
-                    if (party.emailAddress != null) {
+                    if (!party.emailAddress.equals("")) {
                         EmailNumber++;
                         if (!repVia.trim().equals("")) {
                             repVia += ", ";
                         }
+                        heldREPEmailAddress += " " + party.emailAddress;
                         repVia += "Email";
-                    } else if (item.orgAddress1 != null && item.orgCity != null && item.orgState != null && item.orgZip != null) {
-                        if (!item.orgAddress1.equalsIgnoreCase(party.address1)
-                                && !item.orgCity.equalsIgnoreCase(party.city)
-                                && !item.orgState.equalsIgnoreCase(party.stateCode)
-                                && !item.orgZip.equalsIgnoreCase(party.zipcode)) {
-                            postalNumber++;
-                            if (!repVia.trim().equals("")) {
-                                repVia += ", ";
-                            }
-                            repVia += "Postal";
+                    } else if (!party.address1.equals("") & !party.city.equals("") & !party.stateCode.equals("") && !party.zipcode.equals("")) {
+                        postalNumber++;
+                        if (!repVia.trim().equals("")) {
+                            repVia += ", ";
                         }
+                        repVia += "Postal";
+                    }
+
+                    if (party.address1 != null) {
+                        heldREPAddress1 += party.address1 + " ";
                     }
                 }
             }
 
-            if (item.orgEmail != null) {
+
+            // ORG Logic
+            String orgEmail = item.orgEmail == null ? "" : item.orgEmail;
+
+            // IF (ORGEmail does NOT Equal <<BLANK>>) AND (ORGEmail is NOT Equal to REPEmail)
+            if (!orgEmail.equals("") && !heldREPEmailAddress.toLowerCase().contains(orgEmail.toLowerCase())) {
                 EmailNumber++;
                 orgVia = "Email";
-            } else if (item.orgAddress1 != null && item.orgCity != null && item.orgState != null && item.orgZip != null) {
-                postalNumber++;
-                orgVia = "Postal";
+            } else {
+
+                // IF (ORGPostalAddress is NOT Equal to REPPostalAddress) or (OrgPostalAddress EQUALS RepPostalAddress and RepEmail IS NOT Blank)
+                String orgAddress1 = item.orgAddress1 == null ? "" : item.orgAddress1;
+
+                if (!heldREPAddress1.toLowerCase().contains(orgAddress1.toLowerCase())
+                        || (heldREPAddress1.toLowerCase().contains(orgAddress1.toLowerCase()) && !heldREPEmailAddress.trim().equals(""))) {
+                    if (item.orgAddress1 != null && item.orgCity != null && item.orgState != null && item.orgZip != null) {
+                        postalNumber++;
+                        orgVia = "Postal";
+                    } else {
+                        // ORG GETS NOTHING
+                    }
+                }
             }
+
+
+
+
+// OLD LOGIC THAT IS INCORRECT APPARENTLY
+//            for (CaseParty party : partyList) {
+//                if (party.caseRelation.equals("Representative")) {
+//                    if (!party.emailAddress.equals("")) {
+//                        EmailNumber++;
+//                        if (!repVia.trim().equals("")) {
+//                            repVia += ", ";
+//                        }
+//                        repVia += "Email";
+//                    } else if (!party.address1.equals("") & !party.city.equals("") & !party.stateCode.equals("") && !party.zipcode.equals("")) {
+//                        if (!item.orgAddress1.equalsIgnoreCase(party.address1)
+//                                && !item.orgCity.equalsIgnoreCase(party.city)
+//                                && !item.orgState.equalsIgnoreCase(party.stateCode)
+//                                && !item.orgZip.equalsIgnoreCase(party.zipcode)) {
+//                            postalNumber++;
+//                            if (!repVia.trim().equals("")) {
+//                                repVia += ", ";
+//                            }
+//                            repVia += "Postal";
+//                        }
+//                    }
+//                }
+//            }
+//
+//            if (item.orgEmail != null) {
+//                EmailNumber++;
+//                orgVia = "Email";
+//            } else if (item.orgAddress1 != null && item.orgCity != null && item.orgState != null && item.orgZip != null) {
+//                postalNumber++;
+//                orgVia = "Postal";
+//            }
 
             if (item.annualReport != null) {
                 ARDate = Global.mmddyyyy.format(item.annualReport);
@@ -260,11 +317,10 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
             File templateFile = new File(Global.templatePath + Global.activeSection + File.separator + template.fileName);
 
             if (templateFile.exists()) {
-
                 for (ORGCase item : orgCaseList) {
                     String attachDocName = "";
-
-                    String docName = generateDocument.generateSMDSdocument(template, 0, null, null, item, null);
+                    String orgdocName = generateDocument.generateSMDSdocument(template, 0, null, null, item, null, false);
+                    String repdocName = generateDocument.generateSMDSdocument(template, 0, null, null, item, null, true);
 
                     if (template.questionsFileName != null) {
                         attachDocName = copyAttachmentToCaseFolder(item, template.questionsFileName);
@@ -279,48 +335,144 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
                     }
 
                     Activity.addActivtyORGCase("ORG", item.orgNumber,
-                            "Created " + (template.historyDescription == null ? template.description : template.historyDescription),
-                            docName);
+                            "Created " + (template.historyDescription == null ? template.description : template.historyDescription) + " for Org",
+                            orgdocName);
+
+                    Activity.addActivtyORGCase("ORG", item.orgNumber,
+                            "Created " + (template.historyDescription == null ? template.description : template.historyDescription) + " for Rep",
+                            repdocName);
+
+                    String lastNotify = "";
+
+                    if (letterComboBox.getSelectedItem().toString().startsWith("Tickler 45")) {
+                        lastNotify = "45";
+                    } else if (letterComboBox.getSelectedItem().toString().startsWith("Tickler 10")) {
+                        lastNotify = "10";
+                    } else if (letterComboBox.getSelectedItem().toString().startsWith("Tickler 31")) {
+                        lastNotify = "31";
+                    } else if (letterComboBox.getSelectedItem().toString().startsWith("New")) {
+                        lastNotify = "NR";
+                    }
+
+                    if (!lastNotify.equals("")) {
+                        ORGCase.updateORGLastNotification(lastNotify, item.orgNumber);
+                    }
 
                     partyList = CaseParty.loadORGPartiesByCase("ORG", item.orgNumber);
+
+                    String heldREPEmails = "";
+                    String heldREPAddress1 = "";
+
+                    // REP Logic (FIRST AND MOST IMPORTANT)
                     for (CaseParty party : partyList) {
                         if (party.caseRelation.equals("Representative")) {
+                            if (!party.emailAddress.equals("")) {
 
-                            if (party.emailAddress != null) {
-                                int emailID = insertEmail(template, item.orgNumber, party.emailAddress);
-                                insertGeneratedAttachementEmail(emailID, docName, true);
+                                //BUILD OUT REP EMAILS
+                                if (!heldREPEmails.trim().equals("") && EmailValidation.validEmail(party.emailAddress.trim())) {
+                                    heldREPEmails += "; ";
+                                }
+
+                                //Add only if valid
+                                if (EmailValidation.validEmail(party.emailAddress.trim())) {
+                                    heldREPEmails += party.emailAddress.trim();
+                                }
+
+                            } else if (!party.address1.equals("") & !party.city.equals("") & !party.stateCode.equals("") && !party.zipcode.equals("")) {
+
+                                // SEND REP POSTAL
+                                int postalID = insertPostal(template, item.orgNumber, party);
+                                insertGeneratedAttachementPostal(postalID, repdocName, true);
                                 if (!attachDocName.equals("")) {
-                                    insertGeneratedAttachementEmail(emailID, attachDocName, false);
+                                    insertGeneratedAttachementPostal(postalID, attachDocName, false);
                                 }
+                            }
 
-                            } else if (party.address1 != null & party.city != null & party.stateCode != null && party.zipcode != null) {
-                                if (!item.orgAddress1.equalsIgnoreCase(party.address1)
-                                        && !item.orgCity.equalsIgnoreCase(party.city)
-                                        && !item.orgState.equalsIgnoreCase(party.stateCode)
-                                        && !item.orgZip.equalsIgnoreCase(party.zipcode)) {
-                                    int postalID = insertPostal(template, item.orgNumber, party);
-                                    insertGeneratedAttachementPostal(postalID, docName, true);
-                                    if (!attachDocName.equals("")) {
-                                        insertGeneratedAttachementPostal(postalID, attachDocName, false);
-                                    }
-                                }
+                            //Gather REP Address1 fields for verification NO MATTER WHAT
+                            if (party.address1 != null) {
+                                heldREPAddress1 += party.address1 + " ";
                             }
                         }
                     }
 
-                    if (item.orgEmail != null) {
-                        int emailID = insertEmail(template, item.orgNumber, item.orgEmail);
-                        insertGeneratedAttachementEmail(emailID, docName, true);
+                    //Insert REP Email
+                    if (!heldREPEmails.trim().equals("")) {
+                        int emailID = insertEmail(template, item.orgNumber, heldREPEmails);
+                        insertGeneratedAttachementEmail(emailID, repdocName, true);
                         if (!attachDocName.equals("")) {
                             insertGeneratedAttachementEmail(emailID, attachDocName, false);
                         }
-                    } else if (item.orgAddress1 != null & item.orgCity != null & item.orgState != null && item.orgZip != null) {
-                        int postalID = insertPostalORG(template, item);
-                        insertGeneratedAttachementPostal(postalID, docName, true);
+                    }
+
+                    // ORG Logic
+                    String orgEmail = item.orgEmail == null ? "" : item.orgEmail;
+                    String orgAddress1 = item.orgAddress1 == null ? "" : item.orgAddress1;
+
+                    // IF (ORGEmail does NOT Equal <<BLANK>>) AND (ORGEmail is NOT Equal to REPEmail)
+                    if (!orgEmail.equals("") && !heldREPEmails.toLowerCase().contains(orgEmail.toLowerCase())) {
+                        int emailID = insertEmail(template, item.orgNumber, item.orgEmail);
+                        insertGeneratedAttachementEmail(emailID, orgdocName, true);
                         if (!attachDocName.equals("")) {
-                            insertGeneratedAttachementPostal(postalID, attachDocName, false);
+                            insertGeneratedAttachementEmail(emailID, attachDocName, false);
+                        }
+                    } else {
+
+                        // IF (ORGPostalAddress is NOT Equal to REPPostalAddress) or (OrgPostalAddress EQUALS RepPostalAddress and RepEmail IS NOT Blank)
+                        if (!heldREPAddress1.toLowerCase().contains(orgAddress1.toLowerCase())
+                                || (heldREPAddress1.toLowerCase().contains(orgAddress1.toLowerCase()) && !heldREPEmails.trim().equals(""))) {
+                            if (item.orgAddress1 != null && item.orgCity != null && item.orgState != null && item.orgZip != null) {
+                                int postalID = insertPostalORG(template, item);
+                                insertGeneratedAttachementPostal(postalID, orgdocName, true);
+                                if (!attachDocName.equals("")) {
+                                    insertGeneratedAttachementPostal(postalID, attachDocName, false);
+                                }
+                            } else {
+                                // ORG GETS NOTHING
+                            }
                         }
                     }
+
+
+
+//OLD CODE NOT CORRECT
+//                    for (CaseParty party : partyList) {
+//                        if (party.caseRelation.equals("Representative")) {
+//
+//                            if (!party.emailAddress.equals("")) {
+//                                int emailID = insertEmail(template, item.orgNumber, party.emailAddress);
+//                                insertGeneratedAttachementEmail(emailID, repdocName, true);
+//                                if (!attachDocName.equals("")) {
+//                                    insertGeneratedAttachementEmail(emailID, attachDocName, false);
+//                                }
+//
+//                            } else if (!party.address1.equals("") & !party.city.equals("") & !party.stateCode.equals("") && !party.zipcode.equals("")) {
+//                                if (!item.orgAddress1.equalsIgnoreCase(party.address1)
+//                                        && !item.orgCity.equalsIgnoreCase(party.city)
+//                                        && !item.orgState.equalsIgnoreCase(party.stateCode)
+//                                        && !item.orgZip.equalsIgnoreCase(party.zipcode)) {
+//                                    int postalID = insertPostal(template, item.orgNumber, party);
+//                                    insertGeneratedAttachementPostal(postalID, repdocName, true);
+//                                    if (!attachDocName.equals("")) {
+//                                        insertGeneratedAttachementPostal(postalID, attachDocName, false);
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//
+//                    if (item.orgEmail != null) {
+//                        int emailID = insertEmail(template, item.orgNumber, item.orgEmail);
+//                        insertGeneratedAttachementEmail(emailID, orgdocName, true);
+//                        if (!attachDocName.equals("")) {
+//                            insertGeneratedAttachementEmail(emailID, attachDocName, false);
+//                        }
+//                    } else if (item.orgAddress1 != null & item.orgCity != null & item.orgState != null && item.orgZip != null) {
+//                        int postalID = insertPostalORG(template, item);
+//                        insertGeneratedAttachementPostal(postalID, orgdocName, true);
+//                        if (!attachDocName.equals("")) {
+//                            insertGeneratedAttachementPostal(postalID, attachDocName, false);
+//                        }
+//                    }
                 }
             } else {
                 WebOptionPane.showMessageDialog(Global.root, "<html><center> Sorry, unable to locate template. <br><br>" + template.fileName + "</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
@@ -384,7 +536,7 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
         post.caseMonth = null;
         post.caseNumber = orgNumber;
         post.person = StringUtilities.buildCasePartyNameNoPreFix(party);
-        post.addressBlock = StringUtilities.buildAddressBlockWithLineBreaks(party);
+        post.addressBlock = StringUtilities.buildAddressBlockforPostal(party);
         post.userID = Global.activeUser.id;
         post.suggestedSendDate = null;
         post.historyDescription = SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription;
@@ -409,7 +561,7 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
         post.caseMonth = null;
         post.caseNumber = item.orgNumber;
         post.person = item.orgName;
-        post.addressBlock = StringUtilities.buildAddressBlockWithLineBreaks(orgAddress);
+        post.addressBlock = StringUtilities.buildAddressBlockforPostal(orgAddress);
         post.userID = Global.activeUser.id;
         post.suggestedSendDate = null;
         post.historyDescription = SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription;
@@ -668,23 +820,43 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
         GenerateButton.setEnabled(false);
         CloseButton.setEnabled(false);
         letterComboBox.setEnabled(false);
-        jTable1.setEnabled(false);
+        jScrollPane1.setVisible(false);
 
         Thread temp = new Thread(() -> {
+            System.out.println(new Date());
             generateLetters();
+            System.out.println(new Date());
+
             jLayeredPane1.moveToBack(jPanel1);
             GenerateButton.setEnabled(true);
             CloseButton.setEnabled(true);
             letterComboBox.setEnabled(true);
-            jTable1.setEnabled(true);
+            jScrollPane1.setVisible(true);
             WebOptionPane.showMessageDialog(Global.root, "<html><center>Finished Generation of all Documents</center></html>", "Done", WebOptionPane.INFORMATION_MESSAGE);
         });
         temp.start();
     }//GEN-LAST:event_GenerateButtonActionPerformed
 
     private void letterComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_letterComboBoxActionPerformed
+        jLayeredPane1.moveToFront(jPanel1);
+        GenerateButton.setEnabled(false);
+        CloseButton.setEnabled(false);
+        letterComboBox.setEnabled(false);
+        jTable1.setVisible(false);
+        jTable1.setEnabled(false);
+
+        Thread temp = new Thread(() -> {
         processComboBoxSelection();
         enableGenerateButton();
+
+        jLayeredPane1.moveToBack(jPanel1);
+        GenerateButton.setEnabled(true);
+        CloseButton.setEnabled(true);
+        letterComboBox.setEnabled(true);
+        jTable1.setVisible(true);
+        jTable1.setEnabled(true);
+        });
+        temp.start();
     }//GEN-LAST:event_letterComboBoxActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

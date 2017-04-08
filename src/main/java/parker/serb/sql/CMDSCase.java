@@ -153,12 +153,12 @@ public class CMDSCase {
         }
         return orgNameList;
     }
-    
+
     public static List getGroupNumberList(String caseNumber) {
         List orgNameList = new ArrayList<>();
 
         Statement stmt = null;
-        
+
         String groupNumber = getGroupNumber(caseNumber);
 
         if(groupNumber != null) {
@@ -235,7 +235,7 @@ public class CMDSCase {
         }
         return note;
     }
-    
+
     public static String getGroupNumber(String caseNumber) {
         String note = null;
 
@@ -378,7 +378,7 @@ public class CMDSCase {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void updateAllGroupInventoryStatusLines(String activty, Date date, String caseNumber) {
         Statement stmt = null;
 
@@ -399,7 +399,7 @@ public class CMDSCase {
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                updateAllGroupInventoryStatusLines(activty, date);
+                updateAllGroupInventoryStatusLines(activty, date, caseNumber);
             }
         } finally {
             DbUtils.closeQuietly(stmt);
@@ -439,7 +439,7 @@ public class CMDSCase {
         }
         return caseStatus;
     }
-    
+
     public static String getCaseStatus(String caseNumber) {
         String caseStatus = "";
 
@@ -517,7 +517,7 @@ public class CMDSCase {
         }
         return cmds;
     }
-    
+
     public static CMDSCase getRRPOPullDates(String caseNumber) {
 
         CMDSCase cmds = new CMDSCase();
@@ -598,7 +598,7 @@ public class CMDSCase {
         }
         return cmds;
     }
-    
+
     public static CMDSCase getmailedPODates(String caseNumber) {
         CMDSCase cmds = new CMDSCase();
 
@@ -697,13 +697,13 @@ public class CMDSCase {
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                updateAllGroupInventoryStatusLines(activty, date);
+                updateCaseInventoryStatusLines(activty, date);
             }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void updateCaseInventoryStatusLines(String activty, Date date, String caseNumber) {
         Statement stmt = null;
 
@@ -730,7 +730,7 @@ public class CMDSCase {
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                updateAllGroupInventoryStatusLines(activty, date);
+                updateCaseInventoryStatusLines(activty, date, caseNumber);
             }
         } finally {
             DbUtils.closeQuietly(stmt);
@@ -1548,7 +1548,7 @@ public class CMDSCase {
         boolean validCase = false;
 
         Statement stmt = null;
-        
+
         if(caseNumber.split("-").length != 4) {
             validCase = false;
         } else {
@@ -1694,6 +1694,10 @@ public class CMDSCase {
         String[] parsedCase = caseNumber.trim().split("-");
         String to = "";
 
+        if(parsedCase.length != 4) {
+            return to;
+        }
+        
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();

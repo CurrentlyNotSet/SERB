@@ -587,17 +587,17 @@ public class FileService {
 
                 FileUtils.copyFile(docketFile, new File(caseArchiveFile + File.separator + fileDate + fileExtenstion));
 
-                NumberFormatService.parseFullCaseNumber(caseNumber);
+                NumberFormatService.parseFullCaseNumber(caseNumber.trim());
 
                 CMDSCaseDocketEntryTypes.updateCaseHistory(
                         type.split("-")[0].trim(),
                         type2,
                         comment,
-                        new Date(),
+                        activityDate,
                         parent,
                         caseArchiveFile + File.separator + fileDate + fileExtenstion,
                         direction,
-                        caseNumber,
+                        caseNumber.trim(),
                         from,
                         to
                 );
@@ -669,7 +669,8 @@ public class FileService {
             String type2,
             String comment,
             String direction,
-            Dialog parent) {
+            Dialog parent,
+            Date activityDate) {
 
         File docketFile = new File(Global.scanPath + section + File.separatorChar + fileName.trim());
 
@@ -698,16 +699,16 @@ public class FileService {
                 NumberFormatService.parseFullCaseNumber(caseNumber);
 
                 CMDSCaseDocketEntryTypes.updateCaseHistory(
-                        type.split("-")[0].trim(),
-                        type2,
-                        comment,
-                        new Date(),
-                        parent,
-                        caseArchiveFile + File.separator + fileDate + fileExtenstion,
-                        direction,
-                        caseNumber,
-                        from,
-                        to
+                    type.split("-")[0].trim(),
+                    type2,
+                    comment,
+                    activityDate,
+                    parent,
+                    caseArchiveFile + File.separator + fileDate + fileExtenstion,
+                    direction,
+                    caseNumber,
+                    from,
+                    to
                 );
             }
         }

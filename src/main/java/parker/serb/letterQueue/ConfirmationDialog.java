@@ -54,8 +54,8 @@ public class ConfirmationDialog extends javax.swing.JDialog {
 
     private void processThread() {
         Thread temp = new Thread(() -> {
-                sendLetter();
-                dispose();
+            sendLetter();
+            dispose();
         });
         temp.start();
     }
@@ -70,9 +70,9 @@ public class ConfirmationDialog extends javax.swing.JDialog {
             if (Global.activeSection.equalsIgnoreCase("Civil Service Commission")
                     || Global.activeSection.equalsIgnoreCase("CSC")
                     || Global.activeSection.equalsIgnoreCase("ORG")) {
-                path = Global.templatePath
+                path = Global.activityPath
                         + (Global.activeSection.equals("Civil Service Commission")
-                        ? eml.caseType : Global.activeSection) + File.separator;
+                        ? eml.caseType : Global.activeSection) + File.separator + eml.caseNumber + File.separator;
             } else {
                 path = Global.activityPath + File.separatorChar
                         + Global.activeSection + File.separatorChar
@@ -104,9 +104,9 @@ public class ConfirmationDialog extends javax.swing.JDialog {
             if (Global.activeSection.equalsIgnoreCase("Civil Service Commission")
                     || Global.activeSection.equalsIgnoreCase("CSC")
                     || Global.activeSection.equalsIgnoreCase("ORG")) {
-                path = Global.templatePath
+                path = Global.activityPath
                         + (Global.activeSection.equals("Civil Service Commission")
-                        ? post.caseType : Global.activeSection) + File.separator;
+                        ? post.caseType : Global.activeSection) + File.separator + post.caseNumber + File.separator;
             } else {
                 path = Global.activityPath + File.separatorChar
                         + Global.activeSection + File.separatorChar
@@ -325,7 +325,7 @@ public class ConfirmationDialog extends javax.swing.JDialog {
 
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
         if (verifyFilesExist()) {
-            if (Global.EmailSizeLimit >= attachmentSize){
+            if (Global.EmailSizeLimit >= attachmentSize) {
                 if (fileInUse) {
                     filesInUseMessage();
                 } else {

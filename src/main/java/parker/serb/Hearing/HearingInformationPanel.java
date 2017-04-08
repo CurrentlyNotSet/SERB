@@ -254,7 +254,7 @@ public class HearingInformationPanel extends javax.swing.JPanel {
         newInformation.responseFilingDate = responseFilingDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(responseFilingDateTextBox.getText()));
         newInformation.IssuanceOfOptionOrDirectiveDate = issuanceOfOPDirDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(issuanceOfOPDirDateTextBox.getText()));
         newInformation.FinalResult = finalResultComboBox.getSelectedItem().toString().equals("") ? null : finalResultComboBox.getSelectedItem().toString();
-        newInformation.opinion = opinionTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(opinionTextBox.getText()));
+        newInformation.opinion = opinionTextBox.getText().equals("") ? null : opinionTextBox.getText();
         newInformation.companionCases = companionCasesTextBox.getText().equals("") ? null : companionCasesTextBox.getText();
 
         newInformation.caseStatusNotes = caseStatusNotesTextBox.getText().equals("") ? null : caseStatusNotesTextBox.getText();
@@ -296,7 +296,7 @@ public class HearingInformationPanel extends javax.swing.JPanel {
         responseFilingDateTextBox.setText(orginalInformation.responseFilingDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.responseFilingDate.getTime())) : "");
         issuanceOfOPDirDateTextBox.setText(orginalInformation.IssuanceOfOptionOrDirectiveDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.IssuanceOfOptionOrDirectiveDate.getTime())) : "");
         finalResultComboBox.setSelectedItem(orginalInformation.FinalResult != null ? orginalInformation.FinalResult : "");
-        opinionTextBox.setText(orginalInformation.opinion != null ? Global.mmddyyyy.format(new Date(orginalInformation.opinion.getTime())) : "");
+        opinionTextBox.setText(orginalInformation.opinion != null ? orginalInformation.opinion : "");
         companionCasesTextBox.setText(orginalInformation.companionCases != null ? orginalInformation.companionCases : "");
 
         caseStatusNotesTextBox.setText(orginalInformation.caseStatusNotes == null ? "" : orginalInformation.caseStatusNotes);
@@ -380,12 +380,12 @@ public class HearingInformationPanel extends javax.swing.JPanel {
         boardActionDateTextBox = new com.alee.extended.date.WebDateField();
         complaintIssuedDateTextBox = new com.alee.extended.date.WebDateField();
         hearingDateTextBox = new com.alee.extended.date.WebDateField();
-        opinionTextBox = new com.alee.extended.date.WebDateField();
         proposedRecIssuedTextBox = new com.alee.extended.date.WebDateField();
         responseFilingDateTextBox = new com.alee.extended.date.WebDateField();
         issuanceOfOPDirDateTextBox = new com.alee.extended.date.WebDateField();
         finalResultComboBox = new javax.swing.JComboBox<>();
         otherTextBox = new javax.swing.JTextField();
+        opinionTextBox = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         caseStatusNotesTextBox = new javax.swing.JTextArea();
@@ -774,14 +774,26 @@ public class HearingInformationPanel extends javax.swing.JPanel {
                                                         }
                                                     });
 
-                                                    opinionTextBox.setEditable(false);
-                                                    opinionTextBox.setBackground(new java.awt.Color(238, 238, 238));
-                                                    opinionTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
-                                                    opinionTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-                                                    opinionTextBox.setEnabled(false);
-                                                    opinionTextBox.setDateFormat(Global.mmddyyyy);
+                                                    proposedRecIssuedTextBox.setEditable(false);
+                                                    proposedRecIssuedTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                                                    proposedRecIssuedTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+                                                    proposedRecIssuedTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                                                    proposedRecIssuedTextBox.setEnabled(false);
+                                                    proposedRecIssuedTextBox.setDateFormat(Global.mmddyyyy);
+                                                    proposedRecIssuedTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                                                        public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                                            proposedRecIssuedTextBoxMouseClicked(evt);
+                                                        }
+                                                    });
 
-                                                    opinionTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                                                    responseFilingDateTextBox.setEditable(false);
+                                                    responseFilingDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                                                    responseFilingDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+                                                    responseFilingDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                                                    responseFilingDateTextBox.setEnabled(false);
+                                                    responseFilingDateTextBox.setDateFormat(Global.mmddyyyy);
+
+                                                    responseFilingDateTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
                                                         {
                                                             @Override
                                                             public void customize ( final WebCalendar calendar )
@@ -789,32 +801,20 @@ public class HearingInformationPanel extends javax.swing.JPanel {
                                                                 calendar.setStartWeekFromSunday ( true );
                                                             }
                                                         } );
-                                                        opinionTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                                                        responseFilingDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
                                                             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                                                opinionTextBoxMouseClicked(evt);
+                                                                responseFilingDateTextBoxMouseClicked(evt);
                                                             }
                                                         });
 
-                                                        proposedRecIssuedTextBox.setEditable(false);
-                                                        proposedRecIssuedTextBox.setBackground(new java.awt.Color(238, 238, 238));
-                                                        proposedRecIssuedTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
-                                                        proposedRecIssuedTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-                                                        proposedRecIssuedTextBox.setEnabled(false);
-                                                        proposedRecIssuedTextBox.setDateFormat(Global.mmddyyyy);
-                                                        proposedRecIssuedTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-                                                            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                                                proposedRecIssuedTextBoxMouseClicked(evt);
-                                                            }
-                                                        });
+                                                        issuanceOfOPDirDateTextBox.setEditable(false);
+                                                        issuanceOfOPDirDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                                                        issuanceOfOPDirDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+                                                        issuanceOfOPDirDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                                                        issuanceOfOPDirDateTextBox.setEnabled(false);
+                                                        issuanceOfOPDirDateTextBox.setDateFormat(Global.mmddyyyy);
 
-                                                        responseFilingDateTextBox.setEditable(false);
-                                                        responseFilingDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
-                                                        responseFilingDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
-                                                        responseFilingDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-                                                        responseFilingDateTextBox.setEnabled(false);
-                                                        responseFilingDateTextBox.setDateFormat(Global.mmddyyyy);
-
-                                                        responseFilingDateTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                                                        issuanceOfOPDirDateTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
                                                             {
                                                                 @Override
                                                                 public void customize ( final WebCalendar calendar )
@@ -822,255 +822,237 @@ public class HearingInformationPanel extends javax.swing.JPanel {
                                                                     calendar.setStartWeekFromSunday ( true );
                                                                 }
                                                             } );
-                                                            responseFilingDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                                                            issuanceOfOPDirDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
                                                                 public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                                                    responseFilingDateTextBoxMouseClicked(evt);
+                                                                    issuanceOfOPDirDateTextBoxMouseClicked(evt);
                                                                 }
                                                             });
 
-                                                            issuanceOfOPDirDateTextBox.setEditable(false);
-                                                            issuanceOfOPDirDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
-                                                            issuanceOfOPDirDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
-                                                            issuanceOfOPDirDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-                                                            issuanceOfOPDirDateTextBox.setEnabled(false);
-                                                            issuanceOfOPDirDateTextBox.setDateFormat(Global.mmddyyyy);
+                                                            finalResultComboBox.setEnabled(false);
 
-                                                            issuanceOfOPDirDateTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
-                                                                {
-                                                                    @Override
-                                                                    public void customize ( final WebCalendar calendar )
-                                                                    {
-                                                                        calendar.setStartWeekFromSunday ( true );
-                                                                    }
-                                                                } );
-                                                                issuanceOfOPDirDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-                                                                    public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                                                        issuanceOfOPDirDateTextBoxMouseClicked(evt);
-                                                                    }
-                                                                });
+                                                            otherTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                                                            otherTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                                                            otherTextBox.setEnabled(false);
 
-                                                                finalResultComboBox.setEnabled(false);
+                                                            opinionTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                                                            opinionTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                                                            opinionTextBox.setEnabled(false);
 
-                                                                otherTextBox.setBackground(new java.awt.Color(238, 238, 238));
-                                                                otherTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-                                                                otherTextBox.setEnabled(false);
+                                                            javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+                                                            jPanel2.setLayout(jPanel2Layout);
+                                                            jPanel2Layout.setHorizontalGroup(
+                                                                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                                        .addComponent(jLabel20)
+                                                                        .addComponent(jLabel19)
+                                                                        .addComponent(jLabel18)
+                                                                        .addComponent(jLabel17)
+                                                                        .addComponent(jLabel16)
+                                                                        .addComponent(jLabel12)
+                                                                        .addComponent(jLabel9)
+                                                                        .addComponent(jLabel7)
+                                                                        .addComponent(jLabel8)
+                                                                        .addComponent(jLabel11)
+                                                                        .addComponent(jLabel10))
+                                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                        .addComponent(companionCasesTextBox, javax.swing.GroupLayout.Alignment.TRAILING)
+                                                                        .addComponent(boardActionDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                        .addComponent(aljComboBox, 0, 292, Short.MAX_VALUE)
+                                                                        .addComponent(complaintIssuedDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                        .addComponent(hearingDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                        .addComponent(proposedRecIssuedTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                        .addComponent(responseFilingDateTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                        .addComponent(issuanceOfOPDirDateTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                        .addComponent(finalResultComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                        .addComponent(otherTextBox, javax.swing.GroupLayout.Alignment.TRAILING)
+                                                                        .addComponent(opinionTextBox, javax.swing.GroupLayout.Alignment.TRAILING))
+                                                                    .addContainerGap())
+                                                            );
+                                                            jPanel2Layout.setVerticalGroup(
+                                                                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                                                    .addContainerGap()
+                                                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                        .addComponent(jLabel7)
+                                                                        .addComponent(boardActionDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                        .addComponent(otherTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                                        .addComponent(aljComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                                                            .addGap(4, 4, 4)
+                                                                            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                        .addComponent(complaintIssuedDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                        .addComponent(hearingDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                        .addComponent(jLabel12)
+                                                                        .addComponent(proposedRecIssuedTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                        .addComponent(jLabel16)
+                                                                        .addComponent(responseFilingDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                        .addComponent(jLabel17)
+                                                                        .addComponent(issuanceOfOPDirDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                                        .addComponent(finalResultComboBox)
+                                                                        .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                        .addComponent(jLabel19)
+                                                                        .addComponent(opinionTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                        .addComponent(jLabel20)
+                                                                        .addComponent(companionCasesTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                    .addContainerGap(16, Short.MAX_VALUE))
+                                                            );
 
-                                                                javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-                                                                jPanel2.setLayout(jPanel2Layout);
-                                                                jPanel2Layout.setHorizontalGroup(
-                                                                    jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                                            .addComponent(jLabel20)
-                                                                            .addComponent(jLabel19)
-                                                                            .addComponent(jLabel18)
-                                                                            .addComponent(jLabel17)
-                                                                            .addComponent(jLabel16)
-                                                                            .addComponent(jLabel12)
-                                                                            .addComponent(jLabel9)
-                                                                            .addComponent(jLabel7)
-                                                                            .addComponent(jLabel8)
-                                                                            .addComponent(jLabel11)
-                                                                            .addComponent(jLabel10))
-                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                            .addComponent(companionCasesTextBox, javax.swing.GroupLayout.Alignment.TRAILING)
-                                                                            .addComponent(boardActionDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                            .addComponent(aljComboBox, 0, 292, Short.MAX_VALUE)
-                                                                            .addComponent(complaintIssuedDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                            .addComponent(hearingDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                            .addComponent(opinionTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                            .addComponent(proposedRecIssuedTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                            .addComponent(responseFilingDateTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                            .addComponent(issuanceOfOPDirDateTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                            .addComponent(finalResultComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                            .addComponent(otherTextBox, javax.swing.GroupLayout.Alignment.TRAILING))
-                                                                        .addContainerGap())
-                                                                );
-                                                                jPanel2Layout.setVerticalGroup(
-                                                                    jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                                                        .addContainerGap()
-                                                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                                            .addComponent(jLabel7)
-                                                                            .addComponent(boardActionDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                            .addComponent(otherTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                                            .addComponent(aljComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                                                                .addGap(4, 4, 4)
-                                                                                .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                            .addComponent(complaintIssuedDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                            .addComponent(hearingDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                                            .addComponent(jLabel12)
-                                                                            .addComponent(proposedRecIssuedTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                                            .addComponent(jLabel16)
-                                                                            .addComponent(responseFilingDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                                            .addComponent(jLabel17)
-                                                                            .addComponent(issuanceOfOPDirDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                                            .addComponent(finalResultComboBox)
-                                                                            .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                                            .addComponent(jLabel19)
-                                                                            .addComponent(opinionTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                                            .addComponent(jLabel20)
-                                                                            .addComponent(companionCasesTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                                                );
+                                                            jLabel14.setText("Case Status Notes:");
 
-                                                                jLabel14.setText("Case Status Notes:");
+                                                            caseStatusNotesTextBox.setBackground(new java.awt.Color(238, 238, 238));
+                                                            caseStatusNotesTextBox.setColumns(20);
+                                                            caseStatusNotesTextBox.setLineWrap(true);
+                                                            caseStatusNotesTextBox.setRows(5);
+                                                            caseStatusNotesTextBox.setWrapStyleWord(true);
+                                                            caseStatusNotesTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+                                                            caseStatusNotesTextBox.setEnabled(false);
+                                                            jScrollPane1.setViewportView(caseStatusNotesTextBox);
 
-                                                                caseStatusNotesTextBox.setBackground(new java.awt.Color(238, 238, 238));
-                                                                caseStatusNotesTextBox.setColumns(20);
-                                                                caseStatusNotesTextBox.setLineWrap(true);
-                                                                caseStatusNotesTextBox.setRows(5);
-                                                                caseStatusNotesTextBox.setWrapStyleWord(true);
-                                                                caseStatusNotesTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-                                                                caseStatusNotesTextBox.setEnabled(false);
-                                                                jScrollPane1.setViewportView(caseStatusNotesTextBox);
+                                                            javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+                                                            jPanel3.setLayout(jPanel3Layout);
+                                                            jPanel3Layout.setHorizontalGroup(
+                                                                jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                .addGroup(jPanel3Layout.createSequentialGroup()
+                                                                    .addContainerGap()
+                                                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                        .addGroup(jPanel3Layout.createSequentialGroup()
+                                                                            .addGap(6, 6, 6)
+                                                                            .addComponent(jLabel14)
+                                                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                            .addComponent(jScrollPane1)
+                                                                            .addContainerGap())
+                                                                        .addGroup(jPanel3Layout.createSequentialGroup()
+                                                                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                                            );
+                                                            jPanel3Layout.setVerticalGroup(
+                                                                jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                .addGroup(jPanel3Layout.createSequentialGroup()
+                                                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                    .addGap(10, 10, 10)
+                                                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE)
+                                                                        .addGroup(jPanel3Layout.createSequentialGroup()
+                                                                            .addComponent(jLabel14)
+                                                                            .addGap(0, 0, Short.MAX_VALUE)))
+                                                                    .addContainerGap())
+                                                            );
 
-                                                                javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-                                                                jPanel3.setLayout(jPanel3Layout);
-                                                                jPanel3Layout.setHorizontalGroup(
-                                                                    jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                                                        .addContainerGap()
-                                                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                                                                .addGap(6, 6, 6)
-                                                                                .addComponent(jLabel14)
-                                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                .addComponent(jScrollPane1)
-                                                                                .addContainerGap())
-                                                                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                                                                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                                                                );
-                                                                jPanel3Layout.setVerticalGroup(
-                                                                    jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                                        .addGap(10, 10, 10)
-                                                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE)
-                                                                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                                                                .addComponent(jLabel14)
-                                                                                .addGap(0, 0, Short.MAX_VALUE)))
-                                                                        .addContainerGap())
-                                                                );
+                                                            jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+                                                            jLabel21.setText("Mediation Information");
 
-                                                                jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-                                                                jLabel21.setText("Mediation Information");
+                                                            mediationTable.setModel(new javax.swing.table.DefaultTableModel(
+                                                                new Object [][] {
 
-                                                                mediationTable.setAutoCreateRowSorter(true);
-                                                                mediationTable.setModel(new javax.swing.table.DefaultTableModel(
-                                                                    new Object [][] {
+                                                                },
+                                                                new String [] {
+                                                                    "id", "PC / Pre-D", "Mediator", "Date Assigned", "Mediation Date", "Outcome"
+                                                                }
+                                                            ) {
+                                                                Class[] types = new Class [] {
+                                                                    java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                                                                };
+                                                                boolean[] canEdit = new boolean [] {
+                                                                    false, false, false, false, false, false
+                                                                };
 
-                                                                    },
-                                                                    new String [] {
-                                                                        "id", "PC / Pre-D", "Mediator", "Date Assigned", "Mediation Date", "Outcome"
-                                                                    }
-                                                                ) {
-                                                                    Class[] types = new Class [] {
-                                                                        java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-                                                                    };
-                                                                    boolean[] canEdit = new boolean [] {
-                                                                        false, false, false, false, false, false
-                                                                    };
-
-                                                                    public Class getColumnClass(int columnIndex) {
-                                                                        return types [columnIndex];
-                                                                    }
-
-                                                                    public boolean isCellEditable(int rowIndex, int columnIndex) {
-                                                                        return canEdit [columnIndex];
-                                                                    }
-                                                                });
-                                                                mediationTable.setRequestFocusEnabled(false);
-                                                                mediationTable.addMouseListener(new java.awt.event.MouseAdapter() {
-                                                                    public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                                                        mediationTableMouseClicked(evt);
-                                                                    }
-                                                                });
-                                                                jScrollPane2.setViewportView(mediationTable);
-                                                                if (mediationTable.getColumnModel().getColumnCount() > 0) {
-                                                                    mediationTable.getColumnModel().getColumn(0).setResizable(false);
+                                                                public Class getColumnClass(int columnIndex) {
+                                                                    return types [columnIndex];
                                                                 }
 
-                                                                jButton1.setText("+");
-                                                                jButton1.addActionListener(new java.awt.event.ActionListener() {
-                                                                    public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                                                        jButton1ActionPerformed(evt);
-                                                                    }
-                                                                });
+                                                                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                                                                    return canEdit [columnIndex];
+                                                                }
+                                                            });
+                                                            mediationTable.setRequestFocusEnabled(false);
+                                                            mediationTable.addMouseListener(new java.awt.event.MouseAdapter() {
+                                                                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                                                    mediationTableMouseClicked(evt);
+                                                                }
+                                                            });
+                                                            jScrollPane2.setViewportView(mediationTable);
+                                                            if (mediationTable.getColumnModel().getColumnCount() > 0) {
+                                                                mediationTable.getColumnModel().getColumn(0).setResizable(false);
+                                                            }
 
-                                                                javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-                                                                jPanel4.setLayout(jPanel4Layout);
-                                                                jPanel4Layout.setHorizontalGroup(
-                                                                    jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                    .addGroup(jPanel4Layout.createSequentialGroup()
-                                                                        .addContainerGap()
-                                                                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                                                                .addComponent(jLabel21, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                                .addContainerGap())
-                                                                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                                                                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 915, Short.MAX_VALUE)
-                                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                                                );
-                                                                jPanel4Layout.setVerticalGroup(
-                                                                    jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                    .addGroup(jPanel4Layout.createSequentialGroup()
-                                                                        .addComponent(jLabel21)
-                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
-                                                                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                                                                        .addContainerGap())
-                                                                );
+                                                            jButton1.setText("+");
+                                                            jButton1.addActionListener(new java.awt.event.ActionListener() {
+                                                                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                                                    jButton1ActionPerformed(evt);
+                                                                }
+                                                            });
 
-                                                                javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-                                                                this.setLayout(layout);
-                                                                layout.setHorizontalGroup(
-                                                                    layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                    .addGroup(layout.createSequentialGroup()
-                                                                        .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                        .addContainerGap())
-                                                                );
-                                                                layout.setVerticalGroup(
-                                                                    layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                    .addGroup(layout.createSequentialGroup()
-                                                                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                        .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                                                );
-                                                            }// </editor-fold>//GEN-END:initComponents
+                                                            javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+                                                            jPanel4.setLayout(jPanel4Layout);
+                                                            jPanel4Layout.setHorizontalGroup(
+                                                                jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                .addGroup(jPanel4Layout.createSequentialGroup()
+                                                                    .addContainerGap()
+                                                                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                        .addGroup(jPanel4Layout.createSequentialGroup()
+                                                                            .addComponent(jLabel21, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                            .addContainerGap())
+                                                                        .addGroup(jPanel4Layout.createSequentialGroup()
+                                                                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 915, Short.MAX_VALUE)
+                                                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                                            );
+                                                            jPanel4Layout.setVerticalGroup(
+                                                                jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                .addGroup(jPanel4Layout.createSequentialGroup()
+                                                                    .addComponent(jLabel21)
+                                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)
+                                                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                                                                    .addContainerGap())
+                                                            );
+
+                                                            javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+                                                            this.setLayout(layout);
+                                                            layout.setHorizontalGroup(
+                                                                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                .addGroup(layout.createSequentialGroup()
+                                                                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                    .addContainerGap())
+                                                            );
+                                                            layout.setVerticalGroup(
+                                                                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                .addGroup(layout.createSequentialGroup()
+                                                                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                            );
+                                                        }// </editor-fold>//GEN-END:initComponents
 
     private void boardActionPCDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_boardActionPCDateTextBoxMouseClicked
         clearDate(boardActionPCDateTextBox, evt);
@@ -1145,10 +1127,6 @@ public class HearingInformationPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_mediationTableMouseClicked
 
-    private void opinionTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_opinionTextBoxMouseClicked
-        clearDate(opinionTextBox, evt);
-    }//GEN-LAST:event_opinionTextBoxMouseClicked
-
     private void proposedRecIssuedTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_proposedRecIssuedTextBoxMouseClicked
         clearDate(proposedRecIssuedTextBox, evt);
     }//GEN-LAST:event_proposedRecIssuedTextBoxMouseClicked
@@ -1216,7 +1194,7 @@ public class HearingInformationPanel extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable mediationTable;
     private javax.swing.JComboBox<String> openClosedComboBox;
-    private com.alee.extended.date.WebDateField opinionTextBox;
+    private javax.swing.JTextField opinionTextBox;
     private javax.swing.JTextField otherTextBox;
     private com.alee.extended.date.WebDateField preHearingDateTextBox;
     private com.alee.extended.date.WebDateField proposedRecDueDateTextBox;
