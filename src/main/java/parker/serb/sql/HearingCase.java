@@ -46,7 +46,7 @@ public class HearingCase {
     public Timestamp responseFilingDate;
     public Timestamp IssuanceOfOptionOrDirectiveDate;
     public String FinalResult;
-    public Timestamp opinion;
+    public String opinion;
     public String companionCases;
 
     public static List loadHearingCaseNumbers() {
@@ -280,7 +280,7 @@ public class HearingCase {
             preparedStatement.setTimestamp(18, newCaseInformation.responseFilingDate);
             preparedStatement.setTimestamp(19, newCaseInformation.IssuanceOfOptionOrDirectiveDate);
             preparedStatement.setString(20, newCaseInformation.FinalResult);
-            preparedStatement.setTimestamp(21, newCaseInformation.opinion);
+            preparedStatement.setString(21, newCaseInformation.opinion);
             preparedStatement.setString(22, newCaseInformation.companionCases);
 
             preparedStatement.setString(23, Global.caseYear);
@@ -499,12 +499,12 @@ public class HearingCase {
 
         //opinion
         if(newCaseInformation.opinion == null && oldCaseInformation.opinion != null) {
-            Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.opinion.getTime())) + " from Opinion Date", null);
+            Activity.addActivty("Removed " + oldCaseInformation.opinion + " from Opinion", null);
         } else if(newCaseInformation.opinion != null && oldCaseInformation.opinion == null) {
-            Activity.addActivty("Set Opinion Date to " + Global.mmddyyyy.format(new Date(newCaseInformation.opinion.getTime())), null);
+            Activity.addActivty("Set Opinion to " + newCaseInformation.opinion, null);
         } else if(newCaseInformation.opinion != null && oldCaseInformation.opinion != null) {
-            if(!Global.mmddyyyy.format(new Date(oldCaseInformation.opinion.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.opinion.getTime()))))
-                Activity.addActivty("Changed Opinion Date from " + Global.mmddyyyy.format(new Date(oldCaseInformation.opinion.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.opinion.getTime())), null);
+            if(!newCaseInformation.opinion.equals(oldCaseInformation.opinion))
+                Activity.addActivty("Changed Opinion from " + oldCaseInformation.opinion + " to " + newCaseInformation.opinion, null);
         }
 
         //companionCases
@@ -584,7 +584,7 @@ public class HearingCase {
                 hearingCase.responseFilingDate = rs.getTimestamp("responseFilingDate");
                 hearingCase.IssuanceOfOptionOrDirectiveDate = rs.getTimestamp("IssuanceOfOptionOrDirectiveDate");
                 hearingCase.FinalResult = rs.getString("FinalResult");
-                hearingCase.opinion = rs.getTimestamp("opinion");
+                hearingCase.opinion = rs.getString("opinion");
                 hearingCase.companionCases = rs.getString("companionCases");
             }
         } catch (SQLException ex) {

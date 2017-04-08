@@ -129,7 +129,7 @@ public class REPBoardStatusPanel extends javax.swing.JPanel {
 
         hearingPersonComboBox.addItem("");
 
-        List hearingPeopleList = User.loadSectionDropDowns("REP");
+        List hearingPeopleList = User.loadSectionDropDowns("ALJ");
 
         for (Object hearingPerson : hearingPeopleList) {
             hearingPersonComboBox.addItem(hearingPerson.toString());
