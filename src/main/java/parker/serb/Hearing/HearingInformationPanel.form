@@ -472,12 +472,12 @@
                           <Component id="aljComboBox" alignment="0" pref="292" max="32767" attributes="0"/>
                           <Component id="complaintIssuedDateTextBox" alignment="0" max="32767" attributes="0"/>
                           <Component id="hearingDateTextBox" alignment="0" max="32767" attributes="0"/>
-                          <Component id="opinionTextBox" alignment="0" max="32767" attributes="0"/>
                           <Component id="proposedRecIssuedTextBox" alignment="1" max="32767" attributes="0"/>
                           <Component id="responseFilingDateTextBox" alignment="1" max="32767" attributes="0"/>
                           <Component id="issuanceOfOPDirDateTextBox" alignment="1" max="32767" attributes="0"/>
                           <Component id="finalResultComboBox" alignment="0" max="32767" attributes="0"/>
                           <Component id="otherTextBox" alignment="1" max="32767" attributes="0"/>
+                          <Component id="opinionTextBox" alignment="1" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -544,7 +544,7 @@
                           <Component id="jLabel20" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="companionCasesTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace pref="16" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -690,27 +690,6 @@
                 <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="hearingDateTextBox.setDateFormat(Global.mmddyyyy);&#xa;&#xa;hearingDateTextBox.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
               </AuxValues>
             </Component>
-            <Component class="com.alee.extended.date.WebDateField" name="opinionTextBox">
-              <Properties>
-                <Property name="editable" type="boolean" value="false"/>
-                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="ee" green="ee" red="ee" type="rgb"/>
-                </Property>
-                <Property name="caretColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="0" green="0" red="0" type="rgb"/>
-                </Property>
-                <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="0" green="0" red="0" type="rgb"/>
-                </Property>
-                <Property name="enabled" type="boolean" value="false"/>
-              </Properties>
-              <Events>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="opinionTextBoxMouseClicked"/>
-              </Events>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="opinionTextBox.setDateFormat(Global.mmddyyyy);&#xa;&#xa;opinionTextBox.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
-              </AuxValues>
-            </Component>
             <Component class="com.alee.extended.date.WebDateField" name="proposedRecIssuedTextBox">
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
@@ -796,6 +775,17 @@
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
             </Component>
+            <Component class="javax.swing.JTextField" name="opinionTextBox">
+              <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ee" green="ee" red="ee" type="rgb"/>
+                </Property>
+                <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="0" green="0" red="0" type="rgb"/>
+                </Property>
+                <Property name="enabled" type="boolean" value="false"/>
+              </Properties>
+            </Component>
           </SubComponents>
         </Container>
         <Component class="javax.swing.JLabel" name="jLabel14">
@@ -856,7 +846,7 @@
                   <Component id="jLabel21" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jButton1" pref="126" max="32767" attributes="0"/>
+                      <Component id="jButton1" pref="116" max="32767" attributes="0"/>
                       <Component id="jScrollPane2" pref="0" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>

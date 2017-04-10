@@ -113,7 +113,7 @@ public class RequestedInfoDropdownPanel extends javax.swing.JDialog {
                 ComboBox.setSelectedItem(new Item<>("%", "All"));
                 break;
             case "InvestigatorID":
-                comboBoxLabel.setText("Investigator:");
+                comboBoxLabel.setText("ALJ:");
                 ComboBox.addItem(new Item<>("%", "All"));
                 List<User> investigatorList = User.getEnabledInvestigators();
                 for (User item : investigatorList) {

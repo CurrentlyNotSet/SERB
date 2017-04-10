@@ -98,7 +98,7 @@ public class BoardMeeting {
             preparedStatement.setTimestamp(5, new Timestamp(NumberFormatService.convertMMDDYYYY(meetingDate)));
             preparedStatement.setString(6, agendaItem);
             preparedStatement.setString(7, recommendation);
-            preparedStatement.setTimestamp(8, new Timestamp(NumberFormatService.convertMMDDYYYY(meetingDate)));
+            preparedStatement.setTimestamp(8, new Timestamp(NumberFormatService.convertMMDDYYYY(memoDate)));
 
             preparedStatement.executeUpdate();
 

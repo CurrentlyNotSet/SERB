@@ -47,7 +47,7 @@ public class RequestedInfoTwoDateIDPanel extends javax.swing.JDialog {
                 comboBoxLabel.setText("User:");
                 break;
             case "InvestigatorID":
-                comboBoxLabel.setText("Investigator:");
+                comboBoxLabel.setText("ALJ:");
                 break;
             case "SectionUserID":
                 comboBoxLabel.setText("User:");

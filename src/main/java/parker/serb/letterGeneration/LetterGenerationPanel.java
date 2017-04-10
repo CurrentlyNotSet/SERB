@@ -823,7 +823,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
             orgAddress.zipcode = orgCase.orgZip;
 
             name = orgCase.orgName;
-            address = StringUtilities.buildAddressBlockWithLineBreaks(orgAddress);
+            address = StringUtilities.buildAddressBlockforPostal(orgAddress);
 
         } else if (Csc){
             CaseParty orgAddress = new CaseParty();
@@ -835,12 +835,12 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
             orgAddress.zipcode = cscCase.zipCode;
 
             name = orgCase.orgName;
-            address = StringUtilities.buildAddressBlockWithLineBreaks(orgAddress);
+            address = StringUtilities.buildAddressBlockforPostal(orgAddress);
 
         } else {
             CaseParty party = CaseParty.getCasePartyByID(partyID);
             name = StringUtilities.buildCasePartyNameNoPreFix(party);
-            address = StringUtilities.buildAddressBlockWithLineBreaks(party);
+            address = StringUtilities.buildAddressBlockforPostal(party);
         }
 
         PostalOut post = new PostalOut();

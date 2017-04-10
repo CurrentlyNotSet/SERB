@@ -361,7 +361,7 @@ public class CSCAllLettersPanel extends javax.swing.JDialog {
         post.caseMonth = null;
         post.caseNumber = orgNumber;
         post.person = StringUtilities.buildCasePartyNameNoPreFix(party);
-        post.addressBlock = StringUtilities.buildAddressBlockWithLineBreaks(party);
+        post.addressBlock = StringUtilities.buildAddressBlockforPostal(party);
         post.userID = Global.activeUser.id;
         post.suggestedSendDate = null;
         post.historyDescription = SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription;
@@ -386,7 +386,7 @@ public class CSCAllLettersPanel extends javax.swing.JDialog {
         post.caseMonth = null;
         post.caseNumber = item.cscNumber;
         post.person = item.name;
-        post.addressBlock = StringUtilities.buildAddressBlockWithLineBreaks(orgAddress);
+        post.addressBlock = StringUtilities.buildAddressBlockforPostal(orgAddress);
         post.userID = Global.activeUser.id;
         post.suggestedSendDate = null;
         post.historyDescription = SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription;
