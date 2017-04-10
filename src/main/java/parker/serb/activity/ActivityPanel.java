@@ -17,7 +17,6 @@ import javax.swing.JTable;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -77,14 +76,11 @@ public class ActivityPanel extends javax.swing.JPanel {
             }
         });
 
-        actvityTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                if(actvityTable.getSelectedRow() >= 0) {
-                    Global.root.getjButton9().setEnabled(true);
-                } else {
-                    Global.root.getjButton9().setEnabled(false);
-                }
+        actvityTable.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
+            if(actvityTable.getSelectedRow() >= 0) {
+                Global.root.getjButton9().setEnabled(true);
+            } else {
+                Global.root.getjButton9().setEnabled(false);
             }
         });
 
@@ -94,10 +90,10 @@ public class ActivityPanel extends javax.swing.JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if(actvityTable.getSelectedRow() >= 0) {
-                    String filePath = actvityTable.getValueAt(actvityTable.getSelectedRow(), 7) != null ? actvityTable.getValueAt(actvityTable.getSelectedRow(), 7).toString() : "";
-                    
+                    String filePath = actvityTable.getValueAt(actvityTable.getSelectedRow(), 6) != null ? actvityTable.getValueAt(actvityTable.getSelectedRow(), 6).toString() : "";
 
-                    if (e.getClickCount() == 2 && !filePath.equals("") && actvityTable.getSelectedColumn() == 5 && e.getButton() == MouseEvent.BUTTON1) {
+
+                    if (e.getClickCount() == 2 && !filePath.equals("") && actvityTable.getSelectedColumn() == 0 && e.getButton() == MouseEvent.BUTTON1) {
 
                         switch (Global.activeSection) {
                             case "ORG":
@@ -113,21 +109,21 @@ public class ActivityPanel extends javax.swing.JPanel {
                                 FileService.openFile(filePath);
                                 break;
                         }
-                    } else if (e.getClickCount() == 2 && actvityTable.getSelectedColumn() != 5 && e.getButton() == MouseEvent.BUTTON1) {
-                        Audit.addAuditEntry("Viewing Activty Detail for ID: " + actvityTable.getValueAt(actvityTable.getSelectedRow(), 6).toString());
-                        
+                    } else if (e.getClickCount() == 2 && actvityTable.getSelectedColumn() != 0 && e.getButton() == MouseEvent.BUTTON1) {
+                        Audit.addAuditEntry("Viewing Activty Detail for ID: " + actvityTable.getValueAt(actvityTable.getSelectedRow(), 5).toString());
+
                         if(Global.activeSection.equals("CMDS")) {
                             new CMDSDetailedActivityDialog((JFrame) Global.root.getRootPane().getParent(),
                                 true,
-                                actvityTable.getValueAt(actvityTable.getSelectedRow(), 6).toString(),
+                                actvityTable.getValueAt(actvityTable.getSelectedRow(), 5).toString(),
                                 actvityTable.getValueAt(actvityTable.getSelectedRow(), 4).toString());
                         } else {
                             new DetailedActivityDialog((JFrame) Global.root.getRootPane().getParent(),
                                 true,
-                                actvityTable.getValueAt(actvityTable.getSelectedRow(), 6).toString(),
+                                actvityTable.getValueAt(actvityTable.getSelectedRow(), 5).toString(),
                                 actvityTable.getValueAt(actvityTable.getSelectedRow(), 4).toString());
                         }
-                        
+
                         loadAllActivity();
                     }
                 }
@@ -151,26 +147,30 @@ public class ActivityPanel extends javax.swing.JPanel {
      * Set the width of all the columns in the table.
      */
     private void setTableColumnWidths() {
-        //Date
-        actvityTable.getColumnModel().getColumn(0).setPreferredWidth(175);
-        actvityTable.getColumnModel().getColumn(0).setMinWidth(175);
-        actvityTable.getColumnModel().getColumn(0).setMaxWidth(175);
-        //User
-        actvityTable.getColumnModel().getColumn(4).setPreferredWidth(200);
-        actvityTable.getColumnModel().getColumn(4).setMinWidth(200);
-        actvityTable.getColumnModel().getColumn(4).setMaxWidth(200);
         // Document Icon
-        actvityTable.getColumnModel().getColumn(5).setPreferredWidth(25);
-        actvityTable.getColumnModel().getColumn(5).setMinWidth(25);
-        actvityTable.getColumnModel().getColumn(5).setMaxWidth(25);
-        // ID
+        actvityTable.getColumnModel().getColumn(0).setPreferredWidth(25);
+        actvityTable.getColumnModel().getColumn(0).setMinWidth(25);
+        actvityTable.getColumnModel().getColumn(0).setMaxWidth(25);
+
+        //Date
+        actvityTable.getColumnModel().getColumn(1).setPreferredWidth(140);
+        actvityTable.getColumnModel().getColumn(1).setMinWidth(140);
+        actvityTable.getColumnModel().getColumn(1).setMaxWidth(140);
+
+        //User
+        actvityTable.getColumnModel().getColumn(4).setPreferredWidth(150);
+        actvityTable.getColumnModel().getColumn(4).setMinWidth(150);
+        actvityTable.getColumnModel().getColumn(4).setMaxWidth(150);
+
+        //ID
+        actvityTable.getColumnModel().getColumn(5).setPreferredWidth(0);
+        actvityTable.getColumnModel().getColumn(5).setMinWidth(0);
+        actvityTable.getColumnModel().getColumn(5).setMaxWidth(0);
+
+        //File Name
         actvityTable.getColumnModel().getColumn(6).setPreferredWidth(0);
         actvityTable.getColumnModel().getColumn(6).setMinWidth(0);
         actvityTable.getColumnModel().getColumn(6).setMaxWidth(0);
-        
-        actvityTable.getColumnModel().getColumn(7).setPreferredWidth(0);
-        actvityTable.getColumnModel().getColumn(7).setMinWidth(0);
-        actvityTable.getColumnModel().getColumn(7).setMaxWidth(0);
     }
 
     /**
@@ -180,11 +180,11 @@ public class ActivityPanel extends javax.swing.JPanel {
      */
     private void loadActivity(String searchTerm) {
 
-        
+
         Audit.addAuditEntry("Searched Activty for " + searchTerm);
 
         DefaultTableModel model = (DefaultTableModel) actvityTable.getModel();
-        
+
         model.setRowCount(0);
 
         for (Object activty1 : activty) {
@@ -194,10 +194,10 @@ public class ActivityPanel extends javax.swing.JPanel {
                     || act.user.toLowerCase().contains(searchTerm.toLowerCase())) {
                 if(act.fileName == null) {
                     if (!documentsOnlyCheckbox.isSelected()){
-                        model.addRow(new Object[] {act.date, act.action, act.comment, act.from, act.user, "", act.id, act.fileName});
+                        model.addRow(new Object[] {"", act.date, act.action + " " + act.comment, act.from, act.user, act.id, act.fileName});
                     }
                 } else {
-                    model.addRow(new Object[] {act.date, act.action, act.comment, act.from, act.user, aboutIcon, act.id, act.fileName});
+                    model.addRow(new Object[] {act.fileName.trim(), act.date, act.action + " " + act.comment, act.from, act.user, act.id, act.fileName});
                 }
             }
         }
@@ -243,11 +243,11 @@ public class ActivityPanel extends javax.swing.JPanel {
 
             if(act.fileName == null) {
                 if (!documentsOnlyCheckbox.isSelected()){
-                    model.addRow(new Object[] {act.date, act.action, act.comment, act.from, act.user, "", act.id, act.fileName});
+                    model.addRow(new Object[] {"", act.date, act.action + " " + act.comment, act.from, act.user, act.id, act.fileName});
                 }
             } else {
-                actvityTable.getColumnModel().getColumn(5).setCellRenderer(new ImageRenderer());
-                model.addRow(new Object[] {act.date, act.action, act.comment, act.from, act.user, act.fileName.trim(), act.id, act.fileName});
+                actvityTable.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer());
+                model.addRow(new Object[] {act.fileName.trim(), act.date, act.action + " " + act.comment, act.from, act.user, act.id, act.fileName});
             }
         }
 
@@ -277,11 +277,11 @@ public class ActivityPanel extends javax.swing.JPanel {
 
                 if(act.fileName == null) {
                     if (!documentsOnlyCheckbox.isSelected()){
-                        model.addRow(new Object[] {act.date, act.action, act.comment, act.from, act.user, "", act.id, act.fileName});
+                        model.addRow(new Object[] {"",act.date, act.action + " " + act.comment, act.from, act.user, act.id, act.fileName});
                     }
                 } else {
-                    actvityTable.getColumnModel().getColumn(5).setCellRenderer(new ImageRenderer());
-                    model.addRow(new Object[] {act.date, act.action, act.comment, act.from, act.user, act.fileName.trim(), act.id, act.fileName});
+                    actvityTable.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer());
+                    model.addRow(new Object[] {act.fileName.trim(), act.date, act.action + " " + act.comment, act.from, act.user, act.id, act.fileName});
                 }
             }
         }
@@ -330,14 +330,14 @@ public class ActivityPanel extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Date", "Activity", "Comments", "From", "User", "", "id", "fileName"
+                "", "Date", "Activity", "From", "User", "id", "fileName"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Byte.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.Byte.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -351,9 +351,9 @@ public class ActivityPanel extends javax.swing.JPanel {
         actvityTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(actvityTable);
         if (actvityTable.getColumnModel().getColumnCount() > 0) {
+            actvityTable.getColumnModel().getColumn(0).setResizable(false);
             actvityTable.getColumnModel().getColumn(5).setResizable(false);
             actvityTable.getColumnModel().getColumn(6).setResizable(false);
-            actvityTable.getColumnModel().getColumn(7).setResizable(false);
         }
 
         clearSearchButton.setText("Clear");
@@ -419,24 +419,24 @@ public class ActivityPanel extends javax.swing.JPanel {
     private javax.swing.JTextField searchTextBox;
     // End of variables declaration//GEN-END:variables
 
-
     class ImageRenderer extends DefaultTableCellRenderer {
+
         JLabel lbl = new JLabel();
 
         ImageIcon icon = new ImageIcon(getClass().getResource("/file-icon.png"));
 
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-            boolean hasFocus, int row, int column) {
+                boolean hasFocus, int row, int column) {
 
-            if(!value.equals("")) {
+            if (!value.equals("")) {
                 lbl.setIcon(icon);
             } else {
                 lbl.setIcon(null);
             }
 
             if (!isSelected) {
-                    lbl.setBackground(row % 2 == 0 ? Color.WHITE : Global.ALTERNATE_ROW_COLOR);
+                lbl.setBackground(row % 2 == 0 ? Color.WHITE : Global.ALTERNATE_ROW_COLOR);
             } else {
                 lbl.setBackground(table.getSelectionBackground());
             }
