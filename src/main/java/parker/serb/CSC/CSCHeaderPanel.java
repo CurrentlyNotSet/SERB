@@ -56,6 +56,7 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
                         Global.root.getcSCRootPanel1().clearAll();
                     }
                 } else {
+                    Global.root.getcSCRootPanel1().clearAll();
                     caseNumberComboBox.setSelectedItem(caseNumberComboBox.getSelectedItem().toString().toUpperCase());
                     loadInformation();
 //                    if(Global.root.getcSCRootPanel1().getjTabbedPane1().getSelectedIndex() == 0) {

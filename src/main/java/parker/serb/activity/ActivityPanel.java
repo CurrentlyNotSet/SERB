@@ -223,6 +223,7 @@ public class ActivityPanel extends javax.swing.JPanel {
         searchTextBox.setText("");
         DefaultTableModel model = (DefaultTableModel) actvityTable.getModel();
         model.setRowCount(0);
+        actvityTable.getRowSorter().setSortKeys(null);
     }
 
     /**

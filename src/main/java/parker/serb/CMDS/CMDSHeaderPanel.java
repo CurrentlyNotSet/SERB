@@ -57,6 +57,7 @@ public class CMDSHeaderPanel extends javax.swing.JPanel {
                         Global.root.getcMDSRootPanel1().clearAll();
                     }
                 } else {
+                    Global.root.getcMDSRootPanel1().clearAll();
                     caseNumberComboBox.setSelectedItem(caseNumberComboBox.getSelectedItem().toString().toUpperCase());
                     loadInformation();
 //                    if(Global.root.getcMDSRootPanel1().getjTabbedPane1().getSelectedIndex() == 0) {
