@@ -21,6 +21,7 @@ import parker.serb.util.StringUtilities;
 public class RequestedInfoComboBoxStringPanel extends javax.swing.JDialog {
 
     SMDSDocuments report;
+    String IDType;
 
     /**
      * Creates new form RequestedReportInformationPanel
@@ -28,18 +29,19 @@ public class RequestedInfoComboBoxStringPanel extends javax.swing.JDialog {
      * @param parent
      * @param modal
      * @param reportPassed
-     * @param IDType
+     * @param IDTypePassed
      */
-    public RequestedInfoComboBoxStringPanel(java.awt.Frame parent, boolean modal, SMDSDocuments reportPassed, String IDType) {
+    public RequestedInfoComboBoxStringPanel(java.awt.Frame parent, boolean modal, SMDSDocuments reportPassed, String IDTypePassed) {
         super(parent, modal);
         report = reportPassed;
+        IDType = IDTypePassed;
         initComponents();
-        setActive(report.fileName, IDType);
+        setActive(report.fileName);
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }
 
-    private void setActive(String reportName, String IDType) {
+    private void setActive(String reportName) {
         reportLabel.setText(reportName);
         switch (IDType) {
             case "ActivityType, Year":
@@ -50,22 +52,26 @@ public class RequestedInfoComboBoxStringPanel extends javax.swing.JDialog {
                 comboBoxLabel.setText("ALJ: ");
                 TextFieldLabel.setText("Year: ");
                 break;
+            case "CMDSActivityType, Year":
+                comboBoxLabel.setText("Activity Type: ");
+                TextFieldLabel.setText("Year: ");
+                break;
             default:
                 break;
         }
-        loadCombobox(IDType);
+        loadCombobox();
         generateButton();
     }
 
-    private void loadCombobox(String IDType) {
+    private void loadCombobox() {
         List<User> userList = null;
 
         DefaultComboBoxModel dt = new DefaultComboBoxModel();
         ComboBox.setModel(dt);
-        ComboBox.addItem(new Item<>("%", "All"));
 
         switch (IDType) {
             case "ActivityType, Year":
+                ComboBox.addItem(new Item<>("%", "All"));
                 List<ActivityType> typeList = ActivityType.loadActiveActivityTypeBySection(Global.activeSection);
                 for (ActivityType item : typeList) {
                     ComboBox.addItem(new Item<>(
@@ -73,7 +79,14 @@ public class RequestedInfoComboBoxStringPanel extends javax.swing.JDialog {
                             item.descriptionFull)
                     );
                 }
+                break;
+            case "CMDSActivityType, Year":
+                ComboBox.addItem(new Item<>(" Activity.type LIKE 'M -%' OR Activity.type = 'M' OR Activity.type LIKE 'C -%' OR Activity.type = 'C' ", "Both"));
+                ComboBox.addItem(new Item<>(" Activity.type LIKE 'C -%' OR Activity.type = 'C' ", "C - R and R"));
+                ComboBox.addItem(new Item<>(" Activity.type LIKE 'M -%' OR Activity.type = 'M' ", "M - Appealed to a Higher Court"));
+                break;
             case "InvestigatorID, Year":
+                ComboBox.addItem(new Item<>("%", "All"));
                 userList = User.getEnabledInvestigators();
                 for (User item : userList) {
                     if (item.investigator) {
@@ -220,8 +233,15 @@ public class RequestedInfoComboBoxStringPanel extends javax.swing.JDialog {
     private void GenerateReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GenerateReportButtonActionPerformed
         Item item = (Item) ComboBox.getSelectedItem();
         String comboBoxID = item.getValue().toString();
-        if (item.getDescription().equals("All")){
-            comboBoxID = "%";
+
+        switch (IDType) {
+            case "CMDSActivityType, Year":
+                break;
+            default:
+                if (item.getDescription().equals("All")) {
+                    comboBoxID = "%";
+                }
+                break;
         }
         GenerateReport.generateIDStringReport(comboBoxID, TextField.getText().trim(), report);
     }//GEN-LAST:event_GenerateReportButtonActionPerformed
