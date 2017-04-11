@@ -795,7 +795,12 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                     (CMDSdocToGenerate.emailSubject == null
                     ? (CMDSdocToGenerate.LetterName == null ? "" : " " + CMDSdocToGenerate.LetterName)
                     : " " + CMDSdocToGenerate.emailSubject);
-        } else {
+        } else if (Global.activeSection.equals("ORG") || Global.activeSection.equals("CSC")){
+            eml.subject = "Org#-" + Global.caseNumber + " " + (SMDSdocToGenerate.emailSubject == null
+                    ? (SMDSdocToGenerate.description == null ? "" : " " + SMDSdocToGenerate.description)
+                    : " " + SMDSdocToGenerate.emailSubject);
+
+        }else {
             eml.subject = NumberFormatService.generateFullCaseNumber() +
                     (SMDSdocToGenerate.emailSubject == null
                     ? (SMDSdocToGenerate.description == null ? "" : " " + SMDSdocToGenerate.description)
