@@ -224,7 +224,8 @@ public class PublicRecordsEmailPanel extends javax.swing.JDialog {
                     || Global.activeSection.equalsIgnoreCase("ORG")) {
                 path = Global.templatePath
                         + (Global.activeSection.equals("Civil Service Commission")
-                        ? Global.caseType : Global.activeSection) + File.separator;
+                        ? Global.caseType : Global.activeSection) + File.separator
+                        + Global.caseNumber + File.separator;
             } else {
                 path = Global.activityPath + File.separatorChar
                         + Global.activeSection + File.separatorChar
