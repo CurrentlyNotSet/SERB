@@ -137,16 +137,16 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
         Calendar cal = Calendar.getInstance();
 
         if (letterComboBox.getSelectedItem().toString().startsWith("Tickler 45")) {
-            cal.set(Calendar.DAY_OF_MONTH, 15);
+            cal.set(Calendar.DAY_OF_MONTH, 1);
             cal.add(Calendar.MONTH, 1);
             cal.add(Calendar.MONTH, -5);
             processOverdueNumbers(cal);
         } else if (letterComboBox.getSelectedItem().toString().startsWith("Tickler 10")) {
-            cal.set(Calendar.DAY_OF_MONTH, 15);
+            cal.set(Calendar.DAY_OF_MONTH, 1);
             cal.add(Calendar.MONTH, -5);
             processOverdueNumbers(cal);
         } else if (letterComboBox.getSelectedItem().toString().startsWith("Tickler 31")) {
-            cal.set(Calendar.DAY_OF_MONTH, 15);
+            cal.set(Calendar.DAY_OF_MONTH, 1);
             cal.add(Calendar.MONTH, -5);
             cal.add(Calendar.MONTH, -1);
             processOverdueNumbers(cal);
