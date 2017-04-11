@@ -9,8 +9,10 @@ import com.alee.extended.date.WebCalendar;
 import com.alee.utils.swing.Customizer;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.event.ActionEvent;
 import java.util.Date;
 import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -18,9 +20,10 @@ import javax.swing.table.TableCellRenderer;
 import parker.serb.Global;
 import parker.serb.report.GenerateReport;
 import parker.serb.sql.Activity;
-import parker.serb.sql.CaseType;
 import parker.serb.sql.SMDSDocuments;
+import parker.serb.sql.User;
 import parker.serb.util.FileService;
+import parker.serb.util.Item;
 import parker.serb.util.NumberFormatService;
 
 /**
@@ -73,10 +76,34 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
         endDateField.setDate(new Date());
         addListeners();
         setColumnSize();
+        loadDropdown();
         loadTable();
     }
 
+    private void loadDropdown(){
+        DefaultComboBoxModel dt = new DefaultComboBoxModel();
+        assignedToCombobox.setModel(dt);
+        assignedToCombobox.addItem(new Item<>("%", "All"));
+
+        List<User> userList = null;
+
+        if(Global.activeSection.equals("REP") || Global.activeSection.equals("MED") || Global.activeSection.equals("ULP")) {
+            userList = User.loadSectionDropDownsPlusALJWithID(Global.activeSection);
+        } else {
+            userList = User.loadSectionUsersWithID(Global.activeSection);
+        }
+
+        for (User item : userList) {
+            assignedToCombobox.addItem(new Item<>(String.valueOf(item.id), item.firstName + " " + item.lastName));
+        }
+        assignedToCombobox.setSelectedItem(new Item<>("%", "All"));
+    }
+
     private void addListeners() {
+        assignedToCombobox.addActionListener((ActionEvent e) -> {
+            loadTable();
+        });
+
         startDateField.addDateSelectionListener((Date date) -> {
             endDateField.setDate(date);
             loadTable();
@@ -93,33 +120,52 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
         jTable1.getColumnModel().getColumn(0).setPreferredWidth(0);
         jTable1.getColumnModel().getColumn(0).setMaxWidth(0);
 
-        //Date Time
-        jTable1.getColumnModel().getColumn(1).setMinWidth(150);
-        jTable1.getColumnModel().getColumn(1).setPreferredWidth(150);
-        jTable1.getColumnModel().getColumn(1).setMaxWidth(150);
+        //Recieved Date
+        jTable1.getColumnModel().getColumn(1).setMinWidth(140);
+        jTable1.getColumnModel().getColumn(1).setPreferredWidth(140);
+        jTable1.getColumnModel().getColumn(1).setMaxWidth(140);
+
+        //Docket Date
+        jTable1.getColumnModel().getColumn(2).setMinWidth(80);
+        jTable1.getColumnModel().getColumn(2).setPreferredWidth(80);
+        jTable1.getColumnModel().getColumn(2).setMaxWidth(80);
 
         //Case Number
         if (Global.activeSection.equals("ORG") || Global.activeSection.equals("Civil Service Commission")){
-            jTable1.getColumnModel().getColumn(2).setMinWidth(125);
-            jTable1.getColumnModel().getColumn(2).setPreferredWidth(125);
-            jTable1.getColumnModel().getColumn(2).setMaxWidth(125);
+            jTable1.getColumnModel().getColumn(3).setMinWidth(125);
+            jTable1.getColumnModel().getColumn(3).setPreferredWidth(125);
+            jTable1.getColumnModel().getColumn(3).setMaxWidth(125);
         } else {
-            jTable1.getColumnModel().getColumn(2).setMinWidth(150);
-            jTable1.getColumnModel().getColumn(2).setPreferredWidth(150);
-            jTable1.getColumnModel().getColumn(2).setMaxWidth(150);
+            jTable1.getColumnModel().getColumn(3).setMinWidth(125);
+            jTable1.getColumnModel().getColumn(3).setPreferredWidth(125);
+            jTable1.getColumnModel().getColumn(3).setMaxWidth(125);
         }
+
+        //Investigator
+        jTable1.getColumnModel().getColumn(4).setMinWidth(150);
+        jTable1.getColumnModel().getColumn(4).setPreferredWidth(150);
+        jTable1.getColumnModel().getColumn(4).setMaxWidth(150);
 
         //FROM
         if (Global.activeSection.equals("CMDS")){
-            jTable1.getColumnModel().getColumn(4).setMinWidth(0);
-            jTable1.getColumnModel().getColumn(4).setPreferredWidth(0);
-            jTable1.getColumnModel().getColumn(4).setMaxWidth(0);
+            jTable1.getColumnModel().getColumn(5).setMinWidth(0);
+            jTable1.getColumnModel().getColumn(5).setPreferredWidth(0);
+            jTable1.getColumnModel().getColumn(5).setMaxWidth(0);
         }
+
+        //FileName
+        jTable1.getColumnModel().getColumn(7).setMinWidth(0);
+        jTable1.getColumnModel().getColumn(7).setPreferredWidth(0);
+        jTable1.getColumnModel().getColumn(7).setMaxWidth(0);
     }
 
     private void loadTable(){
+
         List<Activity> activityList = Activity.loadMailLogBySection(
-                Global.SQLDateFormat.format(startDateField.getDate()), Global.SQLDateFormat.format(endDateField.getDate()));
+                Global.SQLDateFormat.format(startDateField.getDate()),
+                Global.SQLDateFormat.format(endDateField.getDate()),
+                assignedToCombobox.getSelectedItem().toString().trim().equals("All") ? "" : assignedToCombobox.getSelectedItem().toString().trim(),
+                Global.activeSection);
 
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
@@ -135,6 +181,7 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
             model.addRow(new Object[]{
                 item.id,
                 item.date,
+                item.mailLog,
                 number,
                 item.to,
                 item.from,
@@ -150,26 +197,13 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
         doc.section = "ALL";
         doc.fileName = "MailLog.jasper";
 
-        List<String> casetypes = CaseType.getCaseType();
 
-        String sqlWHERE = " Activity.mailLog >= '" + Global.SQLDateFormat.format(startDateField.getDate())
-                + "'  AND Activity.mailLog <= '" + Global.SQLDateFormat.format(endDateField.getDate()) + "' "
-                    + "AND Activity.fileName IS NOT NULL AND Activity.fileName != '' ";
-
-            if (!casetypes.isEmpty()) {
-                sqlWHERE += "AND (";
-
-                for (String casetype : casetypes) {
-
-                    sqlWHERE += " Activity.caseType = '" + casetype + "' OR";
-                }
-
-                sqlWHERE = sqlWHERE.substring(0, (sqlWHERE.length() - 2)) + ")";
-            }
-
-            sqlWHERE += " ORDER BY Activity.CaseYear DESC, Activity.caseMonth DESC, Activity.caseNumber DESC, activity.id DESC";
-
-        GenerateReport.generateExactStringReport(sqlWHERE, doc);
+        GenerateReport.generateMailLogReport(Global.SQLDateFormat.format(startDateField.getDate()),
+                Global.SQLDateFormat.format(endDateField.getDate()),
+                "%" + (assignedToCombobox.getSelectedItem().toString().trim().equals("All") ? "" : assignedToCombobox.getSelectedItem().toString().trim()) + "%",
+                Global.activeSection,
+                doc
+        );
     }
 
     /**
@@ -182,14 +216,17 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
     private void initComponents() {
 
         headerLabel = new javax.swing.JLabel();
-        startDateField = new com.alee.extended.date.WebDateField();
-        jLabel7 = new javax.swing.JLabel();
-        endDateField = new com.alee.extended.date.WebDateField();
-        jLabel8 = new javax.swing.JLabel();
         CancelButton = new javax.swing.JButton();
         PrintButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        startDateField = new com.alee.extended.date.WebDateField();
+        endDateField = new com.alee.extended.date.WebDateField();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        assignedToCombobox = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Maillog Viewer");
@@ -198,6 +235,49 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
         headerLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         headerLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         headerLabel.setText("Mail Log");
+
+        CancelButton.setText("Close");
+        CancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CancelButtonActionPerformed(evt);
+            }
+        });
+
+        PrintButton.setText("Print");
+        PrintButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PrintButtonActionPerformed(evt);
+            }
+        });
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Reveived", "Docketed", "Case Number", "Investigator", "From", "Description", "FileName"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(7).setResizable(false);
+        }
+
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel7.setText("Start Date:");
 
         startDateField.setDateFormat(Global.mmddyyyy);
 
@@ -209,9 +289,6 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
                     calendar.setStartWeekFromSunday ( true );
                 }
             } );
-
-            jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-            jLabel7.setText("Start Date:");
 
             endDateField.setDateFormat(Global.mmddyyyy);
 
@@ -227,45 +304,46 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
                 jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
                 jLabel8.setText("End Date:");
 
-                CancelButton.setText("Close");
-                CancelButton.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        CancelButtonActionPerformed(evt);
-                    }
-                });
+                jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+                jLabel1.setText("Assigned To:");
 
-                PrintButton.setText("Print");
-                PrintButton.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        PrintButtonActionPerformed(evt);
-                    }
-                });
+                javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+                jPanel1.setLayout(jPanel1Layout);
+                jPanel1Layout.setHorizontalGroup(
+                    jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(assignedToCombobox, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(startDateField, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(endDateField, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                );
 
-                jTable1.setModel(new javax.swing.table.DefaultTableModel(
-                    new Object [][] {
+                jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {endDateField, startDateField});
 
-                    },
-                    new String [] {
-                        "ID", "Date", "Case Number", "Investigator", "From", "Description", "FileName"
-                    }
-                ) {
-                    boolean[] canEdit = new boolean [] {
-                        false, false, false, false, false, false, false
-                    };
+                jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel7, jLabel8});
 
-                    public boolean isCellEditable(int rowIndex, int columnIndex) {
-                        return canEdit [columnIndex];
-                    }
-                });
-                jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
-                    public void mouseClicked(java.awt.event.MouseEvent evt) {
-                        jTable1MouseClicked(evt);
-                    }
-                });
-                jScrollPane1.setViewportView(jTable1);
-                if (jTable1.getColumnModel().getColumnCount() > 0) {
-                    jTable1.getColumnModel().getColumn(6).setResizable(false);
-                }
+                jPanel1Layout.setVerticalGroup(
+                    jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel7)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(endDateField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel8)
+                            .addComponent(startDateField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel1)
+                        .addComponent(assignedToCombobox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                );
+
+                jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {endDateField, jLabel7, jLabel8, startDateField});
 
                 javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
                 getContentPane().setLayout(layout);
@@ -274,40 +352,25 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1)
-                            .addComponent(headerLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 1082, Short.MAX_VALUE)
+                            .addComponent(headerLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(CancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(PrintButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(290, 290, 290)
-                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(startDateField, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(endDateField, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE)))
+                                .addComponent(PrintButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(250, 250, 250)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(252, Short.MAX_VALUE))
                 );
-
-                layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {endDateField, startDateField});
-
-                layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel7, jLabel8});
-
                 layout.setVerticalGroup(
                     layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(headerLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(endDateField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel8)
-                            .addComponent(startDateField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7))
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 452, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
@@ -316,8 +379,6 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
                             .addComponent(PrintButton))
                         .addContainerGap())
                 );
-
-                layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {endDateField, jLabel7, jLabel8, startDateField});
 
                 pack();
             }// </editor-fold>//GEN-END:initComponents
@@ -355,10 +416,13 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CancelButton;
     private javax.swing.JButton PrintButton;
+    private javax.swing.JComboBox assignedToCombobox;
     private com.alee.extended.date.WebDateField endDateField;
     private javax.swing.JLabel headerLabel;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private com.alee.extended.date.WebDateField startDateField;

@@ -156,6 +156,15 @@ public class GenerateReport {
         generateReport(report, hash);
     }
 
+    public static void generateMailLogReport(String Start, String End, String to, String section, SMDSDocuments report) {
+        HashMap hash = new HashMap();
+        hash.put("begin date", Start);
+        hash.put("end date", End);
+        hash.put("assignedTo", to);
+        hash.put("section", section);
+        generateReport(report, hash);
+    }
+
     public static void generateIDStringReport(String ID, String exact, SMDSDocuments report) {
         HashMap hash = new HashMap();
         hash.put("ID", ID);

@@ -638,6 +638,64 @@ public class User {
         return activeUsers;
     }
 
+    public static List<User> loadSectionDropDownsPlusALJWithID(String section) {
+        String sectionColumnName = "";
+
+        switch(section) {
+            case "REP":
+                sectionColumnName = "repcaseworker";
+                break;
+            case "ULP":
+                sectionColumnName = "ulpcaseworker";
+                break;
+            case "MED":
+                sectionColumnName = "medcaseworker";
+                break;
+            case "ORG":
+                sectionColumnName = "orgcaseworker";
+                break;
+            case "Hearings":
+                sectionColumnName = "hearingscaseworker";
+                break;
+            case "CSC":
+                sectionColumnName = "csccaseworker";
+                break;
+            case "CMDS":
+                sectionColumnName = "cmdscaseworker";
+                break;
+        }
+        List<User> activeUsers = new ArrayList<>();
+
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT * FROM users WHERE (" + sectionColumnName + " = ? OR investigator = 1) AND active = 1 ORDER BY firstName"; //(ORDER BY firstName T#020 (Beta))
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setBoolean(1, true);
+
+            ResultSet users = preparedStatement.executeQuery();
+
+            while(users.next()) {
+                User item = new User();
+                item.id = users.getInt("id");
+                item.firstName = users.getString("firstName");
+                item.lastName = users.getString("lastName");
+
+                activeUsers.add(item);
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadSectionDropDowns(section);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return activeUsers;
+    }
+
     public static void updateLogInInformation() {
         Statement stmt = null;
         try {
