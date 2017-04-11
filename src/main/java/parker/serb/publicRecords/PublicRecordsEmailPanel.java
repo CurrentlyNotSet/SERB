@@ -55,7 +55,7 @@ public class PublicRecordsEmailPanel extends javax.swing.JDialog {
         loadAttachments(docsList);
     }
 
-    private void listeners(){
+    private void listeners() {
         toTextBox.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -92,9 +92,9 @@ public class PublicRecordsEmailPanel extends javax.swing.JDialog {
     }
 
     private void setSubjectLine() {
-        if (Global.activeSection.equals("ORG") ||
-                Global.activeSection.equals("Civil Service Commission") ||
-                Global.activeSection.equals("CSC")){
+        if (Global.activeSection.equals("ORG")
+                || Global.activeSection.equals("Civil Service Commission")
+                || Global.activeSection.equals("CSC")) {
             subjectTextbox.setText("Public Records Request");
         } else {
             subjectTextbox.setText("Public Records Request for Case #" + NumberFormatService.generateFullCaseNumber());
@@ -113,11 +113,11 @@ public class PublicRecordsEmailPanel extends javax.swing.JDialog {
         jTable1.getColumnModel().getColumn(1).setMaxWidth(0);
     }
 
-    private void loadAttachments(List<Activity> docsList){
+    private void loadAttachments(List<Activity> docsList) {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
 
-        for (Activity item : docsList){
+        for (Activity item : docsList) {
             model.addRow(new Object[]{
                 item.id,
                 item.fileName,
@@ -128,7 +128,7 @@ public class PublicRecordsEmailPanel extends javax.swing.JDialog {
 
     private void sendButtonProcess() {
         if (verifyFilesExist()) {
-            if (Global.EmailSizeLimit >= attachmentSize){
+            if (Global.EmailSizeLimit >= attachmentSize) {
                 if (fileInUse) {
                     filesInUseMessage();
                 } else {
@@ -171,7 +171,7 @@ public class PublicRecordsEmailPanel extends javax.swing.JDialog {
                 + StringUtilities.buildFullName(Global.activeUser.firstName, Global.activeUser.middleInitial, Global.activeUser.lastName)
                 + System.lineSeparator() + (Global.activeUser.jobTitle == null ? "" : Global.activeUser.jobTitle + System.lineSeparator())
                 + StringUtilities.generateDepartmentAddressBlock() + System.lineSeparator()
-                + (Global.activeUser.workPhone == null ? "" :  "Telephone: " + Global.activeUser.workPhone);
+                + (Global.activeUser.workPhone == null ? "" : "Telephone: " + Global.activeUser.workPhone);
 
         EmailOut eml = new EmailOut();
 
@@ -194,8 +194,8 @@ public class PublicRecordsEmailPanel extends javax.swing.JDialog {
         return EmailOut.insertEmail(eml);
     }
 
-    private void insertGeneratedAttachementEmail(int emailID, String docName){
-        if (emailID > 0){
+    private void insertGeneratedAttachementEmail(int emailID, String docName) {
+        if (emailID > 0) {
             EmailOutAttachment attach = new EmailOutAttachment();
 
             attach.emailOutID = emailID;
@@ -206,9 +206,9 @@ public class PublicRecordsEmailPanel extends javax.swing.JDialog {
     }
 
     private void clearDate(WebDateField dateField, MouseEvent evt) {
-        if(evt.getButton() == MouseEvent.BUTTON3 && dateField.isEnabled()) {
+        if (evt.getButton() == MouseEvent.BUTTON3 && dateField.isEnabled()) {
             ClearDateDialog dialog = new ClearDateDialog((JFrame) Global.root, true);
-            if(dialog.isReset()) {
+            if (dialog.isReset()) {
                 dateField.setText("");
             }
             dialog.dispose();
@@ -219,42 +219,42 @@ public class PublicRecordsEmailPanel extends javax.swing.JDialog {
         boolean allExist = true;
         String path = "";
 
-            if (Global.activeSection.equalsIgnoreCase("Civil Service Commission")
-                    || Global.activeSection.equalsIgnoreCase("CSC")
-                    || Global.activeSection.equalsIgnoreCase("ORG")) {
-                path = Global.templatePath
-                        + (Global.activeSection.equals("Civil Service Commission")
-                        ? Global.caseType : Global.activeSection) + File.separator
-                        + Global.caseNumber + File.separator;
+        if (Global.activeSection.equalsIgnoreCase("Civil Service Commission")
+                || Global.activeSection.equalsIgnoreCase("CSC")
+                || Global.activeSection.equalsIgnoreCase("ORG")) {
+            path = Global.activityPath
+                    + (Global.activeSection.equals("Civil Service Commission")
+                    ? Global.caseType : Global.activeSection) + File.separator
+                    + Global.caseNumber + File.separator;
+        } else {
+            path = Global.activityPath + File.separatorChar
+                    + Global.activeSection + File.separatorChar
+                    + Global.caseYear + File.separatorChar
+                    + NumberFormatService.generateFullCaseNumber()
+                    + File.separatorChar;
+        }
+
+        filesMissing = new ArrayList<>();
+
+        for (int i = 0; i < jTable1.getRowCount(); i++) {
+            String fileName = jTable1.getValueAt(i, 1).toString();
+
+            File attachment = new File(path + fileName);
+            if (!attachment.exists()) {
+                allExist = false;
+                filesMissing.add(fileName);
             } else {
-                path = Global.activityPath + File.separatorChar
-                        + Global.activeSection + File.separatorChar
-                        + Global.caseYear + File.separatorChar
-                        + NumberFormatService.generateFullCaseNumber()
-                        + File.separatorChar;
+                if ("docx".equalsIgnoreCase(FilenameUtils.getExtension(fileName))
+                        || "doc".equalsIgnoreCase(FilenameUtils.getExtension(fileName))) {
+                    if (!attachment.renameTo(attachment)) {
+                        fileInUse = true;
+                        fileInUseList.add(fileName);
+                    }
+                    attachmentSize += attachment.length();
+                }
             }
 
-            filesMissing = new ArrayList<>();
-
-            for (int i = 0; i < jTable1.getRowCount(); i++) {
-                    String fileName = jTable1.getValueAt(i, 1).toString();
-
-                    File attachment = new File(path + fileName);
-                    if (!attachment.exists()) {
-                        allExist = false;
-                        filesMissing.add(fileName);
-                    }  else {
-                    if ("docx".equalsIgnoreCase(FilenameUtils.getExtension(fileName))
-                            || "doc".equalsIgnoreCase(FilenameUtils.getExtension(fileName))) {
-                        if (!attachment.renameTo(attachment)) {
-                            fileInUse = true;
-                            fileInUseList.add(fileName);
-                        }
-                        attachmentSize += attachment.length();
-                    }
-                }
-
-                }
+        }
 
         return allExist;
     }
@@ -501,7 +501,7 @@ public class PublicRecordsEmailPanel extends javax.swing.JDialog {
     }//GEN-LAST:event_suggestedSendDatePickerMouseClicked
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-        if (evt.getClickCount() > 1){
+        if (evt.getClickCount() > 1) {
             String fileName = jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString();
 
             switch (Global.activeSection) {
