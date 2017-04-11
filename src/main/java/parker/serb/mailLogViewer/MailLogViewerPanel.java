@@ -200,7 +200,7 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
 
         GenerateReport.generateMailLogReport(Global.SQLDateFormat.format(startDateField.getDate()),
                 Global.SQLDateFormat.format(endDateField.getDate()),
-                "%" + (assignedToCombobox.getSelectedItem().toString().trim().equals("All") ? "" : assignedToCombobox.getSelectedItem().toString().trim()) + "%",
+                assignedToCombobox.getSelectedItem().toString().trim().equals("All") ? "" : assignedToCombobox.getSelectedItem().toString().trim(),
                 Global.activeSection,
                 doc
         );
