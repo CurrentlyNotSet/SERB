@@ -31,6 +31,7 @@ import parker.serb.relatedcase.AddNewRelatedCase;
 import parker.serb.relatedcase.RemoveRelatedCaseDialog;
 import parker.serb.sql.Audit;
 import parker.serb.sql.BoardMeeting;
+import parker.serb.sql.DocketNotifications;
 import parker.serb.sql.RelatedCase;
 import parker.serb.sql.ULPCase;
 import parker.serb.sql.ULPCaseSearchData;
@@ -463,7 +464,17 @@ public class ULPStatusPanel extends javax.swing.JPanel {
 
         ULPCase.updateCaseStatusInformation(newStatusInformation, currentStatusInformation);
         ULPCaseSearchData.updateCaseEntryFromStatus(newStatusInformation.employerIDNumber, newStatusInformation.barginingUnitNo);
+        newCaseNotification();
         currentStatusInformation = ULPCase.loadStatus();
+    }
+
+    private void newCaseNotification() {
+        if (currentStatusInformation.investigatorID == 0 && !investigatorComboBox.getSelectedItem().toString().trim().equals("")){
+            int id = User.getUserID(investigatorComboBox.getSelectedItem().toString());
+            if (id > 0){
+                DocketNotifications.addNewCaseNotification(NumberFormatService.generateFullCaseNumber(), Global.activeSection, id);
+            }
+        }
     }
 
     private void clearDate(WebDateField dateField, MouseEvent evt) {

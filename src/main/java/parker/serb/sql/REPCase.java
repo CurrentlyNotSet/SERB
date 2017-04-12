@@ -2242,9 +2242,9 @@ public class REPCase {
             if(caseNumberRS.next()) {
                 if(caseNumberRS.getInt("currentOwnerID") != 0) {
                     to = User.getNameByID(caseNumberRS.getInt("currentOwnerID"));
-                    DocketNotifications.addNotification(caseNumber, "REP", caseNumberRS.getInt("currentOwnerID"));
                 } else if(caseNumberRS.getInt("hearingPersonID") != 0) {
                     to = User.getNameByID(caseNumberRS.getInt("hearingPersonID"));
+                    DocketNotifications.addNotification(caseNumber, "REP", caseNumberRS.getInt("hearingPersonID"));
                 }
             }
         } catch (SQLException ex) {

@@ -31,7 +31,7 @@ import parker.serb.util.StringUtilities;
  * @author User
  */
 public class GenerateReport {
- 
+
     public static void runReport(SMDSDocuments report) {
         if (report.parameters != null) {
             switch (report.parameters) {
@@ -74,6 +74,9 @@ public class GenerateReport {
                 case "ActivityType, Year":
                     new RequestedInfoComboBoxStringPanel(Global.root, true, report, "ActivityType, Year");
                     break;
+                case "CMDSActivityType, Year":
+                    new RequestedInfoComboBoxStringPanel(Global.root, true, report, "CMDSActivityType, Year");
+                    break;
                 case "Year, InvestigatorID":
                     new RequestedInfoComboBoxStringPanel(Global.root, true, report, "InvestigatorID, Year");
                     break;
@@ -98,6 +101,9 @@ public class GenerateReport {
                 case "Charging Party, Charged Party":
                     new RequestedInfoTwoStringPanel(Global.root, true, report, "Charging Party, Charged Party");
                     break;
+                case "Multi Case Party":
+                    new RequestedInfoThreeStringPanel(Global.root, true, report, "Multi Case Party");
+                    break;
                 case "begin date, end date, EmployerType":
                     new RequestedInfoTwoDateComboBoxPanel(Global.root, true, report, "EmployerType");
                     break;
@@ -111,26 +117,26 @@ public class GenerateReport {
             generateReport(report, hash);
         }
     }
-    
+
     public static void generateSingleDatesReport(String date, SMDSDocuments report) {
         HashMap hash = new HashMap();
         hash.put("date", date);
         generateReport(report, hash);
     }
-    
+
     public static void generateIDReport(String ID, SMDSDocuments report) {
         HashMap hash = new HashMap();
         hash.put("ID", ID);
         generateReport(report, hash);
     }
-    
+
     public static void generateTwoDatesReport(String Start, String End, SMDSDocuments report) {
         HashMap hash = new HashMap();
         hash.put("begin date", Start);
         hash.put("end date", End);
         generateReport(report, hash);
     }
-    
+
     public static void generateTwoDatesIDReport(String Start, String End, String ID, SMDSDocuments report) {
         HashMap hash = new HashMap();
         hash.put("begin date", Start);
@@ -138,13 +144,13 @@ public class GenerateReport {
         hash.put("ID", ID);
         generateReport(report, hash);
     }
-      
+
     public static void generateExactStringReport(String exact, SMDSDocuments report) {
         HashMap hash = new HashMap();
         hash.put("string", exact);
         generateReport(report, hash);
     }
-    
+
     public static void generateTwoDatesExactStringReport(String Start, String End, String exact, SMDSDocuments report) {
         HashMap hash = new HashMap();
         hash.put("begin date", Start);
@@ -152,31 +158,48 @@ public class GenerateReport {
         hash.put("string", exact);
         generateReport(report, hash);
     }
-    
+
+    public static void generateMailLogReport(String Start, String End, String to, String section, SMDSDocuments report) {
+        HashMap hash = new HashMap();
+        hash.put("begin date", Start);
+        hash.put("end date", End);
+        hash.put("assignedTo", to);
+        hash.put("section", section);
+        generateReport(report, hash);
+    }
+
     public static void generateIDStringReport(String ID, String exact, SMDSDocuments report) {
         HashMap hash = new HashMap();
         hash.put("ID", ID);
         hash.put("string", exact);
         generateReport(report, hash);
     }
-    
+
     public static void generateTwoStringsReport(String string1, String string2, SMDSDocuments report) {
         HashMap hash = new HashMap();
         hash.put("string1", string1);
         hash.put("string2", string2);
         generateReport(report, hash);
     }
-    
+
+    public static void generateThreeStringsReport(String string1, String string2, String string3, SMDSDocuments report) {
+        HashMap hash = new HashMap();
+        hash.put("string1", string1);
+        hash.put("string2", string2);
+        hash.put("string3", string3);
+        generateReport(report, hash);
+    }
+
     public static void generateMonthYearReport(String month, String year, SMDSDocuments report) {
         HashMap hash = new HashMap();
         hash.put("month", month);
         hash.put("year", year);
         generateReport(report, hash);
     }
-    
+
     public static void generateCasenumberReport(String CaseNumber, SMDSDocuments report) {
         NumberFormatService num = NumberFormatService.parseFullCaseNumberNoNGlobal(CaseNumber);
-        
+
         HashMap hash = new HashMap();
         hash.put("caseYear", num.caseYear);
         hash.put("caseType", num.caseType);
@@ -184,54 +207,54 @@ public class GenerateReport {
         hash.put("caseNumber", num.caseNumber);
         generateReport(report, hash);
     }
-    
+
     private static String generateCaseTypeList(){
         String param = "";
         List casetypes = null;
-        
+
         if (Global.activeSection.equals("Hearings")){
             casetypes = CaseType.getCaseTypeHearings();
         } else {
             casetypes = CaseType.getCaseType();
         }
-        
+
         if (!casetypes.isEmpty()) {
                 param += "AND (";
-                
+
                 for (Object casetype : casetypes) {
                     param += " " + Global.activeSection.replaceAll(" ", "") + ".caseType = '" + casetype.toString() + "' OR";
                 }
                 param = param.substring(0, (param.length() - 2)) + ")";
             }
-        
+
         return param;
     }
-    
+
     private static String generateCaseTypeListBySection(String section){
         String param = "";
         List casetypes = null;
 
         casetypes = CaseType.getCaseTypeBySection(section);
-        
+
         if (!casetypes.isEmpty()) {
                 param += "AND (";
-                
+
                 for (Object casetype : casetypes) {
                     param += " " + section.replaceAll(" ", "") + ".caseType = '" + casetype.toString() + "' OR";
                 }
                 param = param.substring(0, (param.length() - 2)) + ")";
             }
-        
+
         return param;
     }
-    
+
     private static void generateReport(SMDSDocuments report, HashMap hash) {
         long lStartTime = System.currentTimeMillis();
         Connection conn = null;
-        
+
         hash.put("current user", StringUtilities.buildFullName(
-                Global.activeUser.firstName, 
-                Global.activeUser.middleInitial, 
+                Global.activeUser.firstName,
+                Global.activeUser.middleInitial,
                 Global.activeUser.lastName)
         );
         hash.put("caseTypeBySection", generateCaseTypeList());
@@ -240,9 +263,9 @@ public class GenerateReport {
         hash.put("caseTypeULP", generateCaseTypeListBySection("ULP"));
         hash.put("caseTypeCMDS", generateCaseTypeListBySection("CMDS"));
         hash.put("activeSection", Global.activeSection);
-        
+
         String jasperFileName = Global.reportingPath  + report.section + File.separator + report.fileName;
-        
+
         if (report.fileName == null || !new File(jasperFileName).exists()) {
             WebOptionPane.showMessageDialog(Global.root, "<html><center> Sorry, unable to locate report. <br><br>" + report.fileName + "</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
         } else {
@@ -253,7 +276,7 @@ public class GenerateReport {
                 } else {
                     fileName = fileName + "_" + System.currentTimeMillis();
                 }
-                
+
                 String pdfFileName = System.getProperty("java.io.tmpdir") + fileName + ".pdf";
 
                 conn = Database.connectToDB();
@@ -269,7 +292,7 @@ public class GenerateReport {
                 if (recentReport.exists()) {
                     FileService.openFileFullPath(recentReport);
                     long lEndTime = System.currentTimeMillis();
-                    System.out.println("Report Generation Time: " + NumberFormatService.convertLongToTime(lEndTime - lStartTime));                    
+                    System.out.println("Report Generation Time: " + NumberFormatService.convertLongToTime(lEndTime - lStartTime));
                 }
             } catch (JRException ex) {
                 SlackNotification.sendNotification(ex);
@@ -277,6 +300,6 @@ public class GenerateReport {
                 DbUtils.closeQuietly(conn);
             }
         }
-    }   
-    
+    }
+
 }
