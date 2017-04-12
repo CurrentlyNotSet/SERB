@@ -28,7 +28,7 @@
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jLabel1" pref="395" max="32767" attributes="0"/>
+                  <Component id="jLabel1" pref="405" max="32767" attributes="0"/>
                   <Component id="reportLabel" alignment="0" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="CancelButton" min="-2" pref="133" max="-2" attributes="0"/>
@@ -36,22 +36,16 @@
                       <Component id="GenerateReportButton" min="-2" pref="133" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                          <Component id="TextField2Label" pref="133" max="32767" attributes="0"/>
+                          <Component id="TextField1Label" max="32767" attributes="0"/>
+                          <Component id="TextField3Label" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Component id="TextField1Label" min="-2" pref="96" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="TextField1" min="-2" pref="217" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="TextField2Label" min="-2" pref="96" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="TextField2" min="-2" pref="217" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="TextField3Label" min="-2" pref="96" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="TextField3" min="-2" pref="217" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="TextField1" alignment="0" min="-2" pref="217" max="-2" attributes="0"/>
+                          <Component id="TextField2" alignment="0" min="-2" pref="217" max="-2" attributes="0"/>
+                          <Component id="TextField3" alignment="0" min="-2" pref="217" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
