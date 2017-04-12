@@ -246,27 +246,6 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
         FF1OrderDate.setText(orginalInformation.FFList1OrderDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.FFList1OrderDate.getTime())) : "");
         FF1SelectionDate.setText(orginalInformation.FFList1SelectionDueDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.FFList1SelectionDueDate.getTime())) : "");    
         
-        if(orginalInformation.FFType != null) {
-            switch(orginalInformation.FFType) {
-                case "Selected by parties":
-                    populateFFSelection();
-                    populateFFReplacement();
-                    break;
-                case "Discretionary":
-                    populateFullFFSelection();
-                    populateFullFFReplacement();
-                    break;
-                case "Replacement":
-                    populateFullFFSelection();
-                    populateFullFFReplacement();
-                    break;
-                case "Alternate Selection":
-                    populateFullFFSelection();
-                    populateFullFFReplacement();
-                    break;
-            } 
-        }
-        
         if(orginalInformation.FFList1Name1 != null) {
             FFList1Model.removeAllElements();
             FF1List.setModel(FFList1Model);
@@ -322,6 +301,27 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
         RejectedByComboBox.setSelectedItem(orginalInformation.FFRejectedBy != null ? orginalInformation.FFRejectedBy : " ");
         OverallResultComboBox.setSelectedItem(orginalInformation.FFOverallResult != null ? orginalInformation.FFOverallResult : " ");
         FFNote.setText(orginalInformation.FFNote == null ? "" : orginalInformation.FFNote);
+        
+        if(orginalInformation.FFType != null) {
+            switch(orginalInformation.FFType) {
+                case "Selected by parties":
+                    populateFFSelection();
+                    populateFFReplacement();
+                    break;
+                case "Discretionary":
+                    populateFullFFSelection();
+                    populateFullFFReplacement();
+                    break;
+                case "Replacement":
+                    populateFullFFSelection();
+                    populateFullFFReplacement();
+                    break;
+                case "Alternate Selection":
+                    populateFullFFSelection();
+                    populateFullFFReplacement();
+                    break;
+            } 
+        }
     }
     
     private void saveInformation() {
