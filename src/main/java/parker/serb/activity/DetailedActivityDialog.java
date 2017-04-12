@@ -30,6 +30,10 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
     String passedUser;
     /**
      * Creates new form DetailedActivityDialog
+     * @param parent
+     * @param modal
+     * @param id
+     * @param userName
      */
     public DetailedActivityDialog(java.awt.Frame parent, boolean modal, String id, String userName) {
         super(parent, modal);
@@ -129,7 +133,7 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
     private void updateAction() {
         updatedActivity.id = origActivity.id;
 
-        if(origActivity.type == null) {
+        if(origActivity.type == null || typeComboBox.getSelectedItem() == null) {
             updatedActivity.action = actionTextBox.getText().trim();
         } else {
             updatedActivity.action = actionTextBox.getText().trim().replace(origActivity.type, typeComboBox.getSelectedItem().toString());
@@ -137,8 +141,8 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
 
         updatedActivity.comment = commentTextArea.getText();
         updatedActivity.from = fromTextBox.getText();
-        updatedActivity.to = toComboBox.getSelectedItem() == null ? "" : toComboBox.getSelectedItem().toString();
-        updatedActivity.type = typeComboBox.getSelectedItem().toString();
+        updatedActivity.to = toComboBox.getSelectedItem() == null ? null : toComboBox.getSelectedItem().toString();
+        updatedActivity.type = typeComboBox.getSelectedItem() == null ? null : typeComboBox.getSelectedItem().toString();
 
         Activity.updateActivtyEntry(updatedActivity);
 
@@ -146,14 +150,14 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
     }
 
     private void updateFileName() {
-        if(origActivity.type != null)
-        {
-            if(!origActivity.type.equals(typeComboBox.getSelectedItem().toString())) {
-                if(origActivity.fileName != null) {
-                    FileService.renameActivtyFile(origActivity.fileName, typeComboBox.getSelectedItem().toString());
+        String type = typeComboBox.getSelectedItem() == null ? "" : typeComboBox.getSelectedItem().toString();
+        if (origActivity.type != null) {
+            if (!origActivity.type.equals(type)) {
+                if (origActivity.fileName != null) {
+                    FileService.renameActivtyFile(origActivity.fileName, type);
 
                     updatedActivity.fileName = origActivity.fileName.split("_")[0] + "_"
-                            + ActivityType.getTypeAbbrv(typeComboBox.getSelectedItem().toString()).replace(" ", "_")
+                            + ActivityType.getTypeAbbrv(type).replace(" ", "_")
                             + "." + origActivity.fileName.split("\\.")[1];
                     fileName = updatedActivity.fileName;
                 }
@@ -164,7 +168,11 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
     }
 
     private boolean okToRenameFile() {
-        if (!origActivity.type.equals(typeComboBox.getSelectedItem().toString())) {
+        String typeSelection = typeComboBox.getSelectedItem() == null ? "" : typeComboBox.getSelectedItem().toString();
+        String origType = origActivity.type == null ? "" : origActivity.type;
+        String origFileName = origActivity.fileName == null ? "" : origActivity.fileName;
+
+        if (!origType.equals(typeSelection) && !origFileName.equals("")) {
             String path = "";
             if (Global.activeSection.equalsIgnoreCase("Civil Service Commission")
                     || Global.activeSection.equalsIgnoreCase("CSC")
@@ -182,7 +190,12 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
 
             File attachment = new File(path + origActivity.fileName);
             if (attachment.exists()) {
-                return attachment.renameTo(attachment);
+                if (attachment.renameTo(attachment)) {
+                    return true;
+                } else {
+                    filesInUseMessage();
+                    return false;
+                }
             } else {
                 filesMissingMessage();
                 return false;
@@ -391,8 +404,6 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
                 Audit.addAuditEntry("Updated Information for Activity: " + passedID);
                 updateButton.setText("Update");
                 closeButton.setText("Close");
-            } else {
-                filesInUseMessage();
             }
         }
     }//GEN-LAST:event_updateButtonActionPerformed
