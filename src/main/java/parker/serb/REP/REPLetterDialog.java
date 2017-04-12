@@ -60,7 +60,8 @@ public class REPLetterDialog extends javax.swing.JDialog {
         loadLetters();
         loadDirectives();
         loadMemos2();
-        loadMiscDocs();
+        loadMiscDocs1();
+        loadMiscDocs2();
     }
 
     private void addListeners() {
@@ -68,6 +69,7 @@ public class REPLetterDialog extends javax.swing.JDialog {
             directivesComboBox.setSelectedItem(new Item<>("0", ""));
             memosComboBox2.setSelectedItem(new Item<>("0", ""));
             miscComboBox.setSelectedItem(new Item<>("0", ""));
+            miscComboBox2.setSelectedItem(new Item<>("0", ""));
             enableGenerateButton();
         });
 
@@ -75,6 +77,7 @@ public class REPLetterDialog extends javax.swing.JDialog {
             lettersComboBox.setSelectedItem(new Item<>("0", ""));
             memosComboBox2.setSelectedItem(new Item<>("0", ""));
             miscComboBox.setSelectedItem(new Item<>("0", ""));
+            miscComboBox2.setSelectedItem(new Item<>("0", ""));
             enableGenerateButton();
         });
 
@@ -83,6 +86,7 @@ public class REPLetterDialog extends javax.swing.JDialog {
             directivesComboBox.setSelectedItem(new Item<>("0", ""));
             memosComboBox2.setSelectedItem(new Item<>("0", ""));
             miscComboBox.setSelectedItem(new Item<>("0", ""));
+            miscComboBox2.setSelectedItem(new Item<>("0", ""));
             loadMemos2();
             enableGenerateButton();
         });
@@ -91,6 +95,7 @@ public class REPLetterDialog extends javax.swing.JDialog {
             lettersComboBox.setSelectedItem(new Item<>("0", ""));
             directivesComboBox.setSelectedItem(new Item<>("0", ""));
             miscComboBox.setSelectedItem(new Item<>("0", ""));
+            miscComboBox2.setSelectedItem(new Item<>("0", ""));
             enableGenerateButton();
         });
 
@@ -98,6 +103,15 @@ public class REPLetterDialog extends javax.swing.JDialog {
             lettersComboBox.setSelectedItem(new Item<>("0", ""));
             directivesComboBox.setSelectedItem(new Item<>("0", ""));
             memosComboBox2.setSelectedItem(new Item<>("0", ""));
+            miscComboBox2.setSelectedItem(new Item<>("0", ""));
+            enableGenerateButton();
+        });
+
+        miscComboBox2.addItemListener((ItemEvent e) -> {
+            lettersComboBox.setSelectedItem(new Item<>("0", ""));
+            directivesComboBox.setSelectedItem(new Item<>("0", ""));
+            memosComboBox2.setSelectedItem(new Item<>("0", ""));
+            miscComboBox.setSelectedItem(new Item<>("0", ""));
             enableGenerateButton();
         });
     }
@@ -152,6 +166,7 @@ public class REPLetterDialog extends javax.swing.JDialog {
         memosComboBox2.setSelectedItem(new Item<>("0", ""));
     }
 
+    @Deprecated
     private void loadMiscDocs() {
         DefaultComboBoxModel dt = new DefaultComboBoxModel();
         miscComboBox.setModel(dt);
@@ -164,11 +179,36 @@ public class REPLetterDialog extends javax.swing.JDialog {
         miscComboBox.setSelectedItem(new Item<>("0", ""));
     }
 
+    private void loadMiscDocs1() {
+        DefaultComboBoxModel dt = new DefaultComboBoxModel();
+        miscComboBox.setModel(dt);
+        miscComboBox.addItem(new Item<>("0", ""));
+
+        List<SMDSDocuments> letterList = SMDSDocuments.loadDocumentNamesByTypeAndSectionCEAChoice("REP", "Misc", false);
+        for (SMDSDocuments letter : letterList) {
+            miscComboBox.addItem(new Item<>(String.valueOf(letter.id), letter.description));
+        }
+        miscComboBox.setSelectedItem(new Item<>("0", ""));
+    }
+
+    private void loadMiscDocs2() {
+        DefaultComboBoxModel dt = new DefaultComboBoxModel();
+        miscComboBox2.setModel(dt);
+        miscComboBox2.addItem(new Item<>("0", ""));
+
+        List<SMDSDocuments> letterList = SMDSDocuments.loadDocumentNamesByTypeAndSectionCEAChoice("REP", "Misc", true);
+        for (SMDSDocuments letter : letterList) {
+            miscComboBox2.addItem(new Item<>(String.valueOf(letter.id), letter.description));
+        }
+        miscComboBox2.setSelectedItem(new Item<>("0", ""));
+    }
+
     private void enableGenerateButton() {
         if (lettersComboBox.getSelectedItem().toString().equals("")
                 && directivesComboBox.getSelectedItem().toString().equals("")
                 && memosComboBox2.getSelectedItem().toString().equals("")
-                && miscComboBox.getSelectedItem().toString().equals("")) {
+                && miscComboBox.getSelectedItem().toString().equals("")
+                && miscComboBox2.getSelectedItem().toString().equals("")) {
             generateButton.setEnabled(false);
         } else {
             generateButton.setEnabled(true);
@@ -189,6 +229,9 @@ public class REPLetterDialog extends javax.swing.JDialog {
         } else if (!miscComboBox.getSelectedItem().toString().equals("")) {
             Item item = (Item) miscComboBox.getSelectedItem();
             selection = Integer.parseInt(item.getValue().toString());
+        } else if (!miscComboBox2.getSelectedItem().toString().equals("")) {
+            Item item = (Item) miscComboBox2.getSelectedItem();
+            selection = Integer.parseInt(item.getValue().toString());
         }
 
         if (selection > 0) {
@@ -199,7 +242,6 @@ public class REPLetterDialog extends javax.swing.JDialog {
                 Audit.addAuditEntry("Generated REP Letter: " + templateFile);
                 switch (template.type) {
                     case "Directive":
-                    case "Misc":
                     case "Memo":
                         new GenerateLetterNoQueuePanel(Global.root, true, template, null);
                         break;
@@ -235,6 +277,7 @@ public class REPLetterDialog extends javax.swing.JDialog {
         cancelButton = new javax.swing.JButton();
         miscComboBox = new javax.swing.JComboBox();
         jLabel6 = new javax.swing.JLabel();
+        miscComboBox2 = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -263,7 +306,7 @@ public class REPLetterDialog extends javax.swing.JDialog {
             }
         });
 
-        jLabel6.setText("Miscellaneous");
+        jLabel6.setText("Election Docs");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -296,6 +339,10 @@ public class REPLetterDialog extends javax.swing.JDialog {
                         .addComponent(jLabel6)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(miscComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -314,13 +361,15 @@ public class REPLetterDialog extends javax.swing.JDialog {
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(memosComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(memosComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(miscComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(miscComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(generateButton)
                     .addComponent(cancelButton))
@@ -352,5 +401,6 @@ public class REPLetterDialog extends javax.swing.JDialog {
     private javax.swing.JComboBox memosComboBox1;
     private javax.swing.JComboBox memosComboBox2;
     private javax.swing.JComboBox miscComboBox;
+    private javax.swing.JComboBox miscComboBox2;
     // End of variables declaration//GEN-END:variables
 }

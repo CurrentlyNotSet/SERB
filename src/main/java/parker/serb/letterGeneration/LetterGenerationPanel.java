@@ -555,7 +555,9 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                     Audit.addAuditEntry("Generated " + SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription);
                     break;
                 default:
-                    Activity.addActivty("Generated " + (SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription), docName);
+                    if (!(SMDSdocToGenerate.section.equalsIgnoreCase("REP") && SMDSdocToGenerate.type.equalsIgnoreCase("Misc"))){
+                        Activity.addActivty("Generated " + (SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription), docName);
+                    }
                     Audit.addAuditEntry("Generated " + SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription);
                     break;
             }
@@ -680,28 +682,27 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
             //CC FactFinder
             if (SMDSdocToGenerate.description.toLowerCase().equals("mad fact finder appointment")
                     || SMDSdocToGenerate.description.toLowerCase().equals("fact finder appointment letter")) {
-                if(!medCaseData.FFSelection.equals("") || !medCaseData.FFReplacement.equals("")){
+                if (!medCaseData.FFSelection.equals("") || !medCaseData.FFReplacement.equals("")) {
                     String factFinderSelectionName = medCaseData.FFReplacement == null
-                        ? medCaseData.FFSelection
-                        : (medCaseData.FFReplacement.equals("") ? medCaseData.FFSelection : medCaseData.FFReplacement);
+                            ? medCaseData.FFSelection
+                            : (medCaseData.FFReplacement.equals("") ? medCaseData.FFSelection : medCaseData.FFReplacement);
 
-                String ffFirstName = "";
-                String ffLastName = "";
-                String[] ffName = factFinderSelectionName.split(" ");
+                    String ffFirstName = "";
+                    String ffLastName = "";
+                    String[] ffName = factFinderSelectionName.split(" ");
 
-                if (ffName.length == 2) {
-                    ffFirstName = ffName[0];
-                    ffLastName = ffName[1];
-                } else if (ffName.length == 3) {
-                    ffFirstName = ffName[0];
-                    ffLastName = ffName[2];
-                }
+                    if (ffName.length == 2) {
+                        ffFirstName = ffName[0];
+                        ffLastName = ffName[1];
+                    } else if (ffName.length == 3) {
+                        ffFirstName = ffName[0];
+                        ffLastName = ffName[2];
+                    }
 
-                FactFinder ffDetails = FactFinder.getFactFinderLikeName(ffFirstName, ffLastName);
-
-                if (!ffDetails.email.equals("")) {
-                    ccExtra += ccExtra.trim().equals("") ? ffDetails.email.trim() : "; " + ffDetails.email.trim();
-                }
+                    FactFinder ffDetails = FactFinder.getFactFinderLikeName(ffFirstName, ffLastName);
+                    if (!ffDetails.email.equals("")) {
+                        ccExtra += ccExtra.trim().equals("") ? ffDetails.email.trim() : "; " + ffDetails.email.trim();
+                    }
                 }
             }
 
@@ -790,21 +791,25 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         eml.from = Global.activeUser.emailAddress;
         eml.cc = ccEmail.trim().equals("") ? null : ccEmail.trim();
         eml.bcc = "serbeoarchive@serb.state.oh.us";
-        if (Global.activeSection.equals("CMDS")){
-            eml.subject = NumberFormatService.generateFullCaseNumber() +
-                    (CMDSdocToGenerate.emailSubject == null
-                    ? (CMDSdocToGenerate.LetterName == null ? "" : " " + CMDSdocToGenerate.LetterName)
-                    : " " + CMDSdocToGenerate.emailSubject);
-        } else if (Global.activeSection.equals("ORG") || Global.activeSection.equals("CSC")){
-            eml.subject = "Org#-" + Global.caseNumber + " " + (SMDSdocToGenerate.emailSubject == null
-                    ? (SMDSdocToGenerate.description == null ? "" : " " + SMDSdocToGenerate.description)
-                    : " " + SMDSdocToGenerate.emailSubject);
-
-        }else {
-            eml.subject = NumberFormatService.generateFullCaseNumber() +
-                    (SMDSdocToGenerate.emailSubject == null
-                    ? (SMDSdocToGenerate.description == null ? "" : " " + SMDSdocToGenerate.description)
-                    : " " + SMDSdocToGenerate.emailSubject);
+        switch (Global.activeSection) {
+            case "CMDS":
+                eml.subject = NumberFormatService.generateFullCaseNumber() +
+                        (CMDSdocToGenerate.emailSubject == null
+                        ? (CMDSdocToGenerate.LetterName == null ? "" : " " + CMDSdocToGenerate.LetterName)
+                        : " " + CMDSdocToGenerate.emailSubject);
+                break;
+            case "ORG":
+            case "CSC":
+                eml.subject = "Org#-" + Global.caseNumber + " " + (SMDSdocToGenerate.emailSubject == null
+                        ? (SMDSdocToGenerate.description == null ? "" : " " + SMDSdocToGenerate.description)
+                        : " " + SMDSdocToGenerate.emailSubject);
+                break;
+            default:
+                eml.subject = NumberFormatService.generateFullCaseNumber() +
+                        (SMDSdocToGenerate.emailSubject == null
+                        ? (SMDSdocToGenerate.description == null ? "" : " " + SMDSdocToGenerate.description)
+                        : " " + SMDSdocToGenerate.emailSubject);
+                break;
         }
         eml.body = emailBody;
         eml.userID = Global.activeUser.id;
