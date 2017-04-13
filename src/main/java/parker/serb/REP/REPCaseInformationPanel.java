@@ -28,6 +28,7 @@ import parker.serb.relatedcase.AddNewRelatedCase;
 import parker.serb.relatedcase.RemoveRelatedCaseDialog;
 import parker.serb.sql.BargainingUnit;
 import parker.serb.sql.County;
+import parker.serb.sql.DocketNotifications;
 import parker.serb.sql.REPCase;
 import parker.serb.sql.REPCaseStatus;
 import parker.serb.sql.REPCaseType;
@@ -391,7 +392,17 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         newCaseInformation.clerksClosedUser = clerksClosedUser.getSelectedItem().equals("") ? 0 : User.getUserID(clerksClosedUser.getSelectedItem().toString());
 
         REPCase.updateCaseInformation(newCaseInformation, caseInformation);
+        newCaseNotification();
         caseInformation = REPCase.loadCaseInformation();
+    }
+
+    private void newCaseNotification() {
+        if (caseInformation.currentOwnerID == 0 && !currentOwnerComboBox.getSelectedItem().toString().trim().equals("")){
+            int id = User.getUserID(currentOwnerComboBox.getSelectedItem().toString());
+            if (id > 0){
+                DocketNotifications.addNewCaseNotification(NumberFormatService.generateFullCaseNumber(), Global.activeSection, id);
+            }
+        }
     }
 
     public void loadRelatedCasesTable() {
@@ -1154,7 +1165,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
                 employerSearch search = new employerSearch(
                         (JFrame) Global.root.getRootPane().getParent(),
                         true,
-                        employerIDNumberTextBox.getText().trim(), 
+                        employerIDNumberTextBox.getText().trim(),
                         countyComboBox.getSelectedItem().toString());
                 employerIDNumberTextBox.setText(search.getEmployerNumber());
                 countyComboBox.setSelectedItem(search.getCounty());

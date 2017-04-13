@@ -87,6 +87,61 @@ public class SMDSDocuments {
         return documentList;
     }
 
+    public static List loadDocumentNamesByTypeAndSectionCEAChoice(String section, String type, boolean CEA) {
+        List<SMDSDocuments> documentList = new ArrayList<>();
+
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "select * from SMDSDocuments where"
+                    + " section = ? AND "
+                    + " type = ? AND ";
+                    if (CEA){
+                        sql += " description LIKE '%CEA%' AND ";
+                    } else {
+                        sql += " description NOT LIKE '%CEA%' AND ";
+                    }
+                    sql += " active = 1 "
+                    + " ORDER BY sortOrder, cast(description as nvarchar(max))";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, section);
+            preparedStatement.setString(2, type);
+
+            ResultSet docList = preparedStatement.executeQuery();
+
+            while(docList.next()) {
+                SMDSDocuments doc = new SMDSDocuments();
+                doc.id = docList.getInt("id");
+                doc.active = docList.getBoolean("active");
+                doc.section = docList.getString("section");
+                doc.type = docList.getString("type");
+                doc.description = docList.getString("description");
+                doc.fileName = docList.getString("fileName");
+                doc.dueDate = docList.getInt("dueDate");
+                doc.group = docList.getString("group");
+                doc.historyFileName = docList.getString("historyFileName");
+                doc.historyDescription = docList.getString("historyDescription");
+                doc.CHDCHG = docList.getString("CHDCHG");
+                doc.questionsFileName = docList.getString("questionsFileName");
+                doc.emailSubject = docList.getString("emailSubject");
+                doc.parameters = docList.getString("parameters");
+                doc.emailBody = docList.getString("emailBody");
+                doc.sortOrder = docList.getDouble("sortOrder");
+                documentList.add(doc);
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadDocumentNamesByTypeAndSection(section, type);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return documentList;
+    }
+
     public static List loadDocumentNamesByTypeAndSectionWithAll(String section, String type) {
         List<SMDSDocuments> documentList = new ArrayList<>();
 

@@ -250,28 +250,6 @@ public class MEDConciliationPanel extends javax.swing.JPanel {
         
         conciliation1OrderDate.setText(orginalInformation.concilList1OrderDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.concilList1OrderDate.getTime())) : "");
         conciliation1SelectionDate.setText(orginalInformation.concilList1SelectionDueDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.concilList1SelectionDueDate.getTime())) : "");
-       
-        
-        if(orginalInformation.concilType != null) {
-            switch(orginalInformation.concilType) {
-                case "Selected by parties":
-                    populateConciliatorSelection();
-                    populateConciliatorReplacement();
-                    break;
-                case "Discretionary":
-                    populateFullConciliatorSelection();
-                    populateFullConciliatorReplacement();
-                    break;
-                case "Replacement":
-                    populateFullConciliatorSelection();
-                    populateFullConciliatorReplacement();
-                    break;
-                case "Alternate Selection":
-                    populateFullConciliatorSelection();
-                    populateFullConciliatorReplacement();
-                    break;
-            } 
-        }
         
         if(orginalInformation.concilList1Name1 != null) {
             concilList1Model.removeAllElements();
@@ -315,6 +293,27 @@ public class MEDConciliationPanel extends javax.swing.JPanel {
         } else {
             concilList2Model.removeAllElements();
             conciliation2List.setModel(concilList2Model);
+        }
+        
+        if(orginalInformation.concilType != null) {
+            switch(orginalInformation.concilType) {
+                case "Selected by parties":
+                    populateConciliatorSelection();
+                    populateConciliatorReplacement();
+                    break;
+                case "Discretionary":
+                    populateFullConciliatorSelection();
+                    populateFullConciliatorReplacement();
+                    break;
+                case "Replacement":
+                    populateFullConciliatorSelection();
+                    populateFullConciliatorReplacement();
+                    break;
+                case "Alternate Selection":
+                    populateFullConciliatorSelection();
+                    populateFullConciliatorReplacement();
+                    break;
+            } 
         }
     }
     

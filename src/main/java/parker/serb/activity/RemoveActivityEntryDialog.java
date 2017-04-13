@@ -17,6 +17,9 @@ public class RemoveActivityEntryDialog extends javax.swing.JDialog {
     String id;
     /**
      * Creates new form RemoveActivityEntryDialog
+     * @param parent
+     * @param modal
+     * @param passedID
      */
     public RemoveActivityEntryDialog(java.awt.Frame parent, boolean modal, String passedID) {
         super(parent, modal);

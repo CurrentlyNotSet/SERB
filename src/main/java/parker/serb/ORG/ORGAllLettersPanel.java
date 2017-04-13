@@ -137,16 +137,16 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
         Calendar cal = Calendar.getInstance();
 
         if (letterComboBox.getSelectedItem().toString().startsWith("Tickler 45")) {
-            cal.set(Calendar.DAY_OF_MONTH, 15);
+            cal.set(Calendar.DAY_OF_MONTH, 1);
             cal.add(Calendar.MONTH, 1);
             cal.add(Calendar.MONTH, -5);
             processOverdueNumbers(cal);
         } else if (letterComboBox.getSelectedItem().toString().startsWith("Tickler 10")) {
-            cal.set(Calendar.DAY_OF_MONTH, 15);
+            cal.set(Calendar.DAY_OF_MONTH, 1);
             cal.add(Calendar.MONTH, -5);
             processOverdueNumbers(cal);
         } else if (letterComboBox.getSelectedItem().toString().startsWith("Tickler 31")) {
-            cal.set(Calendar.DAY_OF_MONTH, 15);
+            cal.set(Calendar.DAY_OF_MONTH, 1);
             cal.add(Calendar.MONTH, -5);
             cal.add(Calendar.MONTH, -1);
             processOverdueNumbers(cal);
@@ -231,41 +231,6 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
                     }
                 }
             }
-
-
-
-
-// OLD LOGIC THAT IS INCORRECT APPARENTLY
-//            for (CaseParty party : partyList) {
-//                if (party.caseRelation.equals("Representative")) {
-//                    if (!party.emailAddress.equals("")) {
-//                        EmailNumber++;
-//                        if (!repVia.trim().equals("")) {
-//                            repVia += ", ";
-//                        }
-//                        repVia += "Email";
-//                    } else if (!party.address1.equals("") & !party.city.equals("") & !party.stateCode.equals("") && !party.zipcode.equals("")) {
-//                        if (!item.orgAddress1.equalsIgnoreCase(party.address1)
-//                                && !item.orgCity.equalsIgnoreCase(party.city)
-//                                && !item.orgState.equalsIgnoreCase(party.stateCode)
-//                                && !item.orgZip.equalsIgnoreCase(party.zipcode)) {
-//                            postalNumber++;
-//                            if (!repVia.trim().equals("")) {
-//                                repVia += ", ";
-//                            }
-//                            repVia += "Postal";
-//                        }
-//                    }
-//                }
-//            }
-//
-//            if (item.orgEmail != null) {
-//                EmailNumber++;
-//                orgVia = "Email";
-//            } else if (item.orgAddress1 != null && item.orgCity != null && item.orgState != null && item.orgZip != null) {
-//                postalNumber++;
-//                orgVia = "Postal";
-//            }
 
             if (item.annualReport != null) {
                 ARDate = Global.mmddyyyy.format(item.annualReport);
@@ -431,48 +396,6 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
                             }
                         }
                     }
-
-
-
-//OLD CODE NOT CORRECT
-//                    for (CaseParty party : partyList) {
-//                        if (party.caseRelation.equals("Representative")) {
-//
-//                            if (!party.emailAddress.equals("")) {
-//                                int emailID = insertEmail(template, item.orgNumber, party.emailAddress);
-//                                insertGeneratedAttachementEmail(emailID, repdocName, true);
-//                                if (!attachDocName.equals("")) {
-//                                    insertGeneratedAttachementEmail(emailID, attachDocName, false);
-//                                }
-//
-//                            } else if (!party.address1.equals("") & !party.city.equals("") & !party.stateCode.equals("") && !party.zipcode.equals("")) {
-//                                if (!item.orgAddress1.equalsIgnoreCase(party.address1)
-//                                        && !item.orgCity.equalsIgnoreCase(party.city)
-//                                        && !item.orgState.equalsIgnoreCase(party.stateCode)
-//                                        && !item.orgZip.equalsIgnoreCase(party.zipcode)) {
-//                                    int postalID = insertPostal(template, item.orgNumber, party);
-//                                    insertGeneratedAttachementPostal(postalID, repdocName, true);
-//                                    if (!attachDocName.equals("")) {
-//                                        insertGeneratedAttachementPostal(postalID, attachDocName, false);
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-//
-//                    if (item.orgEmail != null) {
-//                        int emailID = insertEmail(template, item.orgNumber, item.orgEmail);
-//                        insertGeneratedAttachementEmail(emailID, orgdocName, true);
-//                        if (!attachDocName.equals("")) {
-//                            insertGeneratedAttachementEmail(emailID, attachDocName, false);
-//                        }
-//                    } else if (item.orgAddress1 != null & item.orgCity != null & item.orgState != null && item.orgZip != null) {
-//                        int postalID = insertPostalORG(template, item);
-//                        insertGeneratedAttachementPostal(postalID, orgdocName, true);
-//                        if (!attachDocName.equals("")) {
-//                            insertGeneratedAttachementPostal(postalID, attachDocName, false);
-//                        }
-//                    }
                 }
             } else {
                 WebOptionPane.showMessageDialog(Global.root, "<html><center> Sorry, unable to locate template. <br><br>" + template.fileName + "</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
@@ -517,7 +440,7 @@ public class ORGAllLettersPanel extends javax.swing.JDialog {
         eml.from = Global.activeUser.emailAddress;
         eml.cc = null;
         eml.bcc = "serbeoarchive@serb.state.oh.us";
-        eml.subject = SMDSdocToGenerate.emailSubject != null ? SMDSdocToGenerate.emailSubject
+        eml.subject = "Org#-" + orgNumber + " " + SMDSdocToGenerate.emailSubject != null ? SMDSdocToGenerate.emailSubject
                 : (SMDSdocToGenerate.description == null ? "" : SMDSdocToGenerate.description);
         eml.body = emailBody;
         eml.userID = Global.activeUser.id;

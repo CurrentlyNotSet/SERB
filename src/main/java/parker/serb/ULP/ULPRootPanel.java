@@ -243,7 +243,7 @@ public class ULPRootPanel extends javax.swing.JPanel {
                     activityPanel1.getActvityTable().getValueAt
                     (
                         activityPanel1.getActvityTable().getSelectedRow(),
-                        6
+                        5
                     ).toString()
                 );
                 activityPanel1.loadAllActivity();
