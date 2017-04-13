@@ -393,7 +393,7 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         if (jTable1.getSelectedRow() > -1){
-            String fileName = jTable1.getValueAt(jTable1.getSelectedRow(), 6).toString();
+            String fileName = jTable1.getValueAt(jTable1.getSelectedRow(), 7).toString();
             String[] caseNumber = jTable1.getValueAt(jTable1.getSelectedRow(), 2).toString().trim().split("-");
 
             if(evt.getClickCount() == 2 && !fileName.equals("")) {
