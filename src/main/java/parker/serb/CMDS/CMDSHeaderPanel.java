@@ -5,6 +5,7 @@
  */
 package parker.serb.CMDS;
 
+import com.alee.laf.optionpane.WebOptionPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.util.Date;
@@ -17,6 +18,7 @@ import parker.serb.Global;
 import parker.serb.sql.Audit;
 import parker.serb.sql.CMDSCase;
 import parker.serb.sql.CaseParty;
+import parker.serb.sql.CaseType;
 import parker.serb.sql.User;
 import parker.serb.util.CaseInEditModeDialog;
 import parker.serb.util.CaseNotFoundDialog;
@@ -40,14 +42,14 @@ public class CMDSHeaderPanel extends javax.swing.JPanel {
 
     private void addListeners() {
         caseNumberComboBox.addActionListener((ActionEvent e) -> {
-            if(caseNumberComboBox.getSelectedItem() != null) {
+            if (caseNumberComboBox.getSelectedItem() != null) {
 //                Global.root.getcMDSRootPanel1().getjTabbedPane1().setSelectedIndex(0);
-                if(caseNumberComboBox.getSelectedItem().toString().trim().equals("")) {
-                    if(Global.root != null) {
+                if (caseNumberComboBox.getSelectedItem().toString().trim().equals("")) {
+                    if (Global.root != null) {
                         Global.root.getjButton2().setText("Update");
                         Global.root.getjButton2().setEnabled(false);
                         Global.root.getjButton4().setEnabled(false);
-                        if(Global.caseNumber == null) {
+                        if (Global.caseNumber == null) {
                             Global.root.getjButton9().setVisible(false);
                             Global.caseNumber = null;
                             Global.caseMonth = null;
@@ -57,31 +59,40 @@ public class CMDSHeaderPanel extends javax.swing.JPanel {
                         Global.root.getcMDSRootPanel1().clearAll();
                     }
                 } else {
-                    caseNumberComboBox.setSelectedItem(caseNumberComboBox.getSelectedItem().toString().toUpperCase());
-                    loadInformation();
+                        caseNumberComboBox.setSelectedItem(caseNumberComboBox.getSelectedItem().toString().toUpperCase());
+                        loadInformation();
 //                    if(Global.root.getcMDSRootPanel1().getjTabbedPane1().getSelectedIndex() == 0) {
-////                        Global.root.getcMDSRootPanel1().getActivityPanel1().loadAllActivity();
-////                        Global.root.getjButton2().setText("Add Entry");
-////                        Global.root.getjButton2().setEnabled(true);
-                        Global.root.getjButton4().setText("Documents");
-                        Global.root.getjButton4().setEnabled(true);
-                        
+//                        Global.root.getcMDSRootPanel1().getActivityPanel1().loadAllActivity();
+//                        Global.root.getjButton2().setText("Add Entry");
+//                        Global.root.getjButton2().setEnabled(true);
 //                    }
-                    Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
+                        Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
+                    }
                 }
-            }
         });
     }
 
     private void loadInformation() {
-        if(caseNumberComboBox.getSelectedItem().toString().trim().length() == 16) {
+        if (caseNumberComboBox.getSelectedItem().toString().trim().length() == 16) {
             NumberFormatService.parseFullCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim());
-            User.updateLastCaseNumber();
-            loadHeaderInformation();
-            Global.root.getcMDSRootPanel1().loadInformation();
-            Global.root.getcMDSRootPanel1().setButtons();
+            String selectedSection = CaseType.getSectionFromCaseType(Global.caseType);
+            if (Global.activeSection.equalsIgnoreCase(selectedSection)) {
+                User.updateLastCaseNumber();
+                loadHeaderInformation();
+                Global.root.getcMDSRootPanel1().loadInformation();
+                Global.root.getcMDSRootPanel1().setButtons();
+                Global.root.getjButton4().setText("Documents");
+                Global.root.getjButton4().setEnabled(true);
+            } else {
+                caseNumberComboBox.setSelectedItem("");
+                Global.root.getcMDSRootPanel1().clearAll();
+                WebOptionPane.showMessageDialog(Global.root,
+                        "<html><center>Unable to load case, invalid case section<br><br>Please use the " + selectedSection + " tab</center></html>",
+                        "Error", WebOptionPane.ERROR_MESSAGE);
+            }
         } else {
             new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
+            Global.root.getcMDSRootPanel1().clearAll();
         }
     }
 

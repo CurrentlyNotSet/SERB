@@ -5,6 +5,7 @@
  */
 package parker.serb.MED;
 
+import com.alee.laf.optionpane.WebOptionPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.util.Date;
@@ -14,9 +15,9 @@ import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import parker.serb.Global;
-import parker.serb.Hearing.HearingCaseSearch;
 import parker.serb.sql.Audit;
 import parker.serb.sql.CaseParty;
+import parker.serb.sql.CaseType;
 import parker.serb.sql.MEDCase;
 import parker.serb.sql.Mediator;
 import parker.serb.sql.User;
@@ -33,7 +34,7 @@ import parker.serb.util.NumberFormatService;
 public class MEDHeaderPanel extends javax.swing.JPanel {
 
     MEDCaseSearch search = null;
-    
+
     /**
      * Creates new form REPHeaderPanel
      */
@@ -41,7 +42,7 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
         initComponents();
         addListeners();
     }
-    
+
     private void addListeners() {
         caseNumberComboBox.addActionListener((ActionEvent e) -> {
             if(caseNumberComboBox.getSelectedItem() != null) {
@@ -66,34 +67,44 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
 //                    if(Global.root.getmEDRootPanel1().getjTabbedPane1().getSelectedIndex() == 0) {
 //                        Global.root.getjButton2().setText("Add Entry");
 //                        Global.root.getjButton2().setEnabled(true);
-//                        Global.root.getmEDRootPanel1().getActivityPanel1().loadAllActivity(); 
+//                        Global.root.getmEDRootPanel1().getActivityPanel1().loadAllActivity();
 //                        Global.root.getjButton9().setVisible(true);
 //                    }
-                        
+
                     Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
                 }
             }
         });
     }
-    
+
     private void loadInformation() {
-        if(caseNumberComboBox.getSelectedItem().toString().trim().length() == 16) {
+        if (caseNumberComboBox.getSelectedItem().toString().trim().length() == 16) {
             NumberFormatService.parseFullCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim());
-            User.updateLastCaseNumber();
-            loadHeaderInformation();
-            Global.root.getmEDRootPanel1().loadInformation();
-            Global.root.getmEDRootPanel1().setButtons();
+            String selectedSection = CaseType.getSectionFromCaseType(Global.caseType);
+            if (Global.activeSection.equalsIgnoreCase(selectedSection)) {
+                User.updateLastCaseNumber();
+                loadHeaderInformation();
+                Global.root.getmEDRootPanel1().loadInformation();
+                Global.root.getmEDRootPanel1().setButtons();
+            } else {
+                caseNumberComboBox.setSelectedItem("");
+                Global.root.getmEDRootPanel1().clearAll();
+                WebOptionPane.showMessageDialog(Global.root,
+                        "<html><center>Unable to load case, invalid case section<br><br>Please use the " + selectedSection + " tab</center></html>",
+                        "Error", WebOptionPane.ERROR_MESSAGE);
+            }
         } else {
-            new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());  
+            new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
+            Global.root.getmEDRootPanel1().clearAll();
         }
     }
-    
+
     public void loadHeaderInformation() {
         String employer = "";
         String employerREP = "";
         String employeeOrg = "";
         String employeeOrgREP = "";
-        
+
         if(Global.caseNumber != null) {
             MEDCase med = MEDCase.loadHeaderInformation();
             if(med == null) {
@@ -103,24 +114,24 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
                 if(med.FMCSMediatorAppointedID == null &&
                     med.stateMediatorAppointedID != null) {
                     mediatorTextBox.setText(Mediator.getMediatorNameByID(med.stateMediatorAppointedID));
-                    mediatorPhoneNumber.setText(NumberFormatService.convertStringToPhoneNumber(Mediator.getMediatorPhoneByID(med.stateMediatorAppointedID)));  
+                    mediatorPhoneNumber.setText(NumberFormatService.convertStringToPhoneNumber(Mediator.getMediatorPhoneByID(med.stateMediatorAppointedID)));
                 } else if(med.FMCSMediatorAppointedID != null &&
                     med.stateMediatorAppointedID == null) {
                     mediatorTextBox.setText(Mediator.getMediatorNameByID(med.FMCSMediatorAppointedID));
-                    mediatorPhoneNumber.setText(NumberFormatService.convertStringToPhoneNumber(Mediator.getMediatorPhoneByID(med.FMCSMediatorAppointedID)));  
+                    mediatorPhoneNumber.setText(NumberFormatService.convertStringToPhoneNumber(Mediator.getMediatorPhoneByID(med.FMCSMediatorAppointedID)));
                 } else {
                     mediatorTextBox.setText("");
-                    mediatorPhoneNumber.setText("");  
+                    mediatorPhoneNumber.setText("");
                 }
                 statusTextBox.setText(med.caseStatus != null ? med.caseStatus : "");
-                
+
                 List caseParties = CaseParty.loadPartiesByCase();
 
                 for(Object caseParty: caseParties) {
                     CaseParty partyInformation = (CaseParty) caseParty;
-                    
+
                     String name;
-                    
+
                     if(partyInformation.firstName.equals("") && partyInformation.lastName.equals("")) {
                         name = partyInformation.companyName;
                     } else {
@@ -130,7 +141,7 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
                         + (partyInformation.lastName.equals("") ? "" : (partyInformation.lastName))
                         + (partyInformation.suffix.equals("") ? "" : (" " + partyInformation.suffix))
                         + (partyInformation.nameTitle.equals("") ? "" : (", " + partyInformation.nameTitle));
-                    }       
+                    }
 
                     switch (partyInformation.caseRelation) {
                         case "Employer":
@@ -174,18 +185,18 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
             }
         }
     }
-    
+
     public void loadCases() {
         caseNumberComboBox.removeAllItems();
         caseNumberComboBox.addItem("");
 
         List caseNumberList = MEDCase.loadMEDCaseNumbers();
-        
+
         caseNumberList.stream().forEach((caseNumber) -> {
             caseNumberComboBox.addItem(caseNumber.toString());
         });
     }
-    
+
     void clearAll() {
         Global.caseYear = null;
         Global.caseType = null;
@@ -213,7 +224,7 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
     public JTextField getEmployerTextBox() {
         return employerTextBox;
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
