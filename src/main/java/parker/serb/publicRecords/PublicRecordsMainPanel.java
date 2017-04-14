@@ -18,6 +18,7 @@ import javax.swing.table.TableCellRenderer;
 import parker.serb.Global;
 import parker.serb.sql.Activity;
 import parker.serb.sql.CSCCase;
+import parker.serb.sql.CaseType;
 import parker.serb.sql.ORGCase;
 import parker.serb.util.FileService;
 import parker.serb.util.NumberFormatService;
@@ -193,10 +194,17 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
             case "ULP":
             case "MED":
             case "CMDS":
-            case "Hearings":
                 activtyList = Activity.loadActivityDocumentsByGlobalCasePublicRecords();
                 path = Global.activityPath + File.separatorChar
                         + Global.activeSection + File.separatorChar
+                        + Global.caseYear + File.separatorChar
+                        + NumberFormatService.generateFullCaseNumber()
+                        + File.separatorChar;
+                break;
+            case "Hearings":
+                activtyList = Activity.loadActivityDocumentsByGlobalCasePublicRecords();
+                path = Global.activityPath + File.separatorChar
+                        + CaseType.getSectionFromCaseType(Global.caseType) + File.separatorChar
                         + Global.caseYear + File.separatorChar
                         + NumberFormatService.generateFullCaseNumber()
                         + File.separatorChar;
@@ -333,6 +341,12 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
             path = Global.activityPath
                     + (Global.activeSection.equals("Civil Service Commission")
                     ? Global.caseType : Global.activeSection) + File.separator + Global.caseNumber + File.separatorChar;
+        } else if (Global.activeSection.equalsIgnoreCase("Hearings")){
+            path = Global.activityPath + File.separatorChar
+                    + CaseType.getSectionFromCaseType(Global.caseType) + File.separatorChar
+                    + Global.caseYear + File.separatorChar
+                    + (Global.caseYear + "-" + Global.caseType + "-" + Global.caseMonth + "-" + Global.caseNumber)
+                    + File.separatorChar;
         } else {
             path = Global.activityPath + File.separatorChar
                     + Global.activeSection + File.separatorChar
@@ -372,6 +386,7 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
                     Global.root.getmEDRootPanel1().getActivityPanel1().loadAllActivity();
                     break;
                 case "Hearings":
+                    Global.root.getHearingRootPanel1().getActivityPanel1().loadAllHearingActivity();
                     break;
                 case "Civil Service Commission":
                     Global.root.getcSCRootPanel1().getActivityPanel1().loadAllActivity();
@@ -649,6 +664,9 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
                 case "ORG":
                     FileService.openFileWithORGNumber("ORG", Global.caseNumber, fileName);
                     break;
+                case "Hearings":
+                    FileService.openFileWithCaseNumber(CaseType.getSectionFromCaseType(Global.caseType), Global.caseYear, Global.caseType, Global.caseMonth, Global.caseNumber, fileName);
+                    break;
                 default:
                     FileService.openFileWithCaseNumber(Global.activeSection, Global.caseYear, Global.caseType, Global.caseMonth, Global.caseNumber, fileName);
                     break;
@@ -667,6 +685,10 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
                     break;
                 case "ORG":
                     FileService.openFileWithORGNumber("ORG", awaitingTable.getValueAt(awaitingTable.getSelectedRow(), 2).toString(), fileName);
+                    break;
+                case "Hearings":
+                    String[] hearingCaseNumber = awaitingTable.getValueAt(awaitingTable.getSelectedRow(), 2).toString().split("-");
+                    FileService.openFileWithCaseNumber(CaseType.getSectionFromCaseType(Global.caseType), hearingCaseNumber[0], hearingCaseNumber[1], hearingCaseNumber[2], hearingCaseNumber[3], fileName);
                     break;
                 default:
                     String[] caseNumber = awaitingTable.getValueAt(awaitingTable.getSelectedRow(), 2).toString().split("-");
