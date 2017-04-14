@@ -90,7 +90,7 @@ public class HearingRootPanel extends javax.swing.JPanel {
                 Global.root.getjButton4().setText("Documents");
                 Global.root.getjButton4().setEnabled(true);
                 Global.root.getjButton9().setVisible(true);
-                
+
                 break;
             case "Parties":
                 Global.root.getjButton2().setText("Add Party");
@@ -201,7 +201,7 @@ public class HearingRootPanel extends javax.swing.JPanel {
                     activityPanel1.getActvityTable().getValueAt
                     (
                         activityPanel1.getActvityTable().getSelectedRow(),
-                        6
+                        5
                     ).toString()
                 );
                 activityPanel1.loadAllActivity();

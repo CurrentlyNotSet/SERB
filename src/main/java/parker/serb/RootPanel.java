@@ -98,6 +98,11 @@ public class RootPanel extends javax.swing.JFrame {
         enableButtons();
         letterQueueThread();
         Global.activeUser.activeLogIn = true;
+        if (DBConnectionInfo.url.contains("SERB-Development")){
+            this.setTitle("State Employment Relations Board - DEVELOPMENT");
+        } else if (DBConnectionInfo.url.contains("SERB-Training")){
+            this.setTitle("State Employment Relations Board - TRAINING");
+        }
         setLocationRelativeTo(null);
         setVisible(true);
     }
@@ -134,7 +139,7 @@ public class RootPanel extends javax.swing.JFrame {
                 && !Global.activeUserRoles.contains("MED")
                 && !Global.activeUserRoles.contains("ULP")) {
             jMenuBar1.remove(batchCloseCasesSubMenu);
-            
+
             if(!Global.activeUserRoles.contains("REP")) {
                 jMenuBar1.remove(batchCloseREPMenuItem);
             }
@@ -180,7 +185,7 @@ public class RootPanel extends javax.swing.JFrame {
         CardLayout card = (CardLayout)jPanel9.getLayout();
 
         String firstCaseNumber = "";
-        
+
         if (Global.activeSection.equalsIgnoreCase("Civil Service Commission")
                 ||Global.activeSection.equalsIgnoreCase("CSC")
                 ||Global.activeSection.equalsIgnoreCase("ORG")){
@@ -188,9 +193,9 @@ public class RootPanel extends javax.swing.JFrame {
         } else {
             firstCaseNumber = NumberFormatService.generateFullCaseNumberNonGlobal(Global.caseYear, Global.caseType, Global.caseMonth, Global.caseNumber);
         }
-        
-        
-        
+
+
+
         switch (Global.activeSection) {
             case "Docketing":
                 card.show(jPanel9, "card2");

@@ -48,8 +48,9 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
     }
 
     private void setRenderer() {
-        jTable1.setDefaultRenderer(Object.class, new TableCellRenderer(){
-            private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
+        jTable1.setDefaultRenderer(Object.class, new TableCellRenderer() {
+            private DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
+
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                 Component c = DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
@@ -65,9 +66,9 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
     private void setDefaults() {
         headerLabel.setText(Global.activeSection + " Mail Log Viewer");
 
-        if(Global.activeSection.equals("ORG") || Global.activeSection.equals("Civil Service Commission")){
+        if (Global.activeSection.equals("ORG") || Global.activeSection.equals("Civil Service Commission")) {
             jTable1.getColumnModel().getColumn(2).setHeaderValue("Org Number");
-        } else if (Global.activeSection.equals("CMDS")){
+        } else if (Global.activeSection.equals("CMDS")) {
             jTable1.getColumnModel().getColumn(3).setHeaderValue("ALJ");
         }
 
@@ -80,14 +81,14 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
         loadTable();
     }
 
-    private void loadDropdown(){
+    private void loadDropdown() {
         DefaultComboBoxModel dt = new DefaultComboBoxModel();
         assignedToCombobox.setModel(dt);
         assignedToCombobox.addItem(new Item<>("%", "All"));
 
         List<User> userList = null;
 
-        if(Global.activeSection.equals("REP") || Global.activeSection.equals("MED") || Global.activeSection.equals("ULP")) {
+        if (Global.activeSection.equals("REP") || Global.activeSection.equals("MED") || Global.activeSection.equals("ULP")) {
             userList = User.loadSectionDropDownsPlusALJWithID(Global.activeSection);
         } else {
             userList = User.loadSectionUsersWithID(Global.activeSection);
@@ -131,7 +132,7 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
         jTable1.getColumnModel().getColumn(2).setMaxWidth(80);
 
         //Case Number
-        if (Global.activeSection.equals("ORG") || Global.activeSection.equals("Civil Service Commission")){
+        if (Global.activeSection.equals("ORG") || Global.activeSection.equals("Civil Service Commission")) {
             jTable1.getColumnModel().getColumn(3).setMinWidth(125);
             jTable1.getColumnModel().getColumn(3).setPreferredWidth(125);
             jTable1.getColumnModel().getColumn(3).setMaxWidth(125);
@@ -147,7 +148,7 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
         jTable1.getColumnModel().getColumn(4).setMaxWidth(150);
 
         //FROM
-        if (Global.activeSection.equals("CMDS")){
+        if (Global.activeSection.equals("CMDS")) {
             jTable1.getColumnModel().getColumn(5).setMinWidth(0);
             jTable1.getColumnModel().getColumn(5).setPreferredWidth(0);
             jTable1.getColumnModel().getColumn(5).setMaxWidth(0);
@@ -159,7 +160,7 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
         jTable1.getColumnModel().getColumn(7).setMaxWidth(0);
     }
 
-    private void loadTable(){
+    private void loadTable() {
 
         List<Activity> activityList = Activity.loadMailLogBySection(
                 Global.SQLDateFormat.format(startDateField.getDate()),
@@ -196,7 +197,6 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
         SMDSDocuments doc = new SMDSDocuments();
         doc.section = "ALL";
         doc.fileName = "MailLog.jasper";
-
 
         GenerateReport.generateMailLogReport(Global.SQLDateFormat.format(startDateField.getDate()),
                 Global.SQLDateFormat.format(endDateField.getDate()),
@@ -392,11 +392,11 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
     }//GEN-LAST:event_PrintButtonActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-        if (jTable1.getSelectedRow() > -1){
-            String fileName = jTable1.getValueAt(jTable1.getSelectedRow(), 6).toString();
-            String[] caseNumber = jTable1.getValueAt(jTable1.getSelectedRow(), 2).toString().trim().split("-");
+        if (jTable1.getSelectedRow() > -1) {
+            String fileName = jTable1.getValueAt(jTable1.getSelectedRow(), 7).toString();
+            String[] caseNumber = jTable1.getValueAt(jTable1.getSelectedRow(), 3).toString().trim().split("-");
 
-            if(evt.getClickCount() == 2 && !fileName.equals("")) {
+            if (evt.getClickCount() == 2 && !fileName.equals("")) {
                 switch (Global.activeSection) {
                     case "ORG":
                         FileService.openFileWithORGNumber("ORG", jTable1.getValueAt(jTable1.getSelectedRow(), 2).toString(), fileName);
