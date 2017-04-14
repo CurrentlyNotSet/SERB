@@ -24,11 +24,13 @@ import parker.serb.util.SlackNotification;
 public class CMDSCaseHistoryEntryTypes {
 
     public static String entryCategory = "";
+    public static String entryDirection = "";
 
     public static void updateCaseHistory(String category, String entryDescription,
             String extraText, String partyType, String mailType, String entryDate,
-            java.awt.Dialog dialog, String filePath) {
+            java.awt.Dialog dialog, String filePath, String direction) {
         entryCategory = category;
+        entryDirection = direction;
 
         switch(category) {
             case "A":
@@ -145,7 +147,7 @@ public class CMDSCaseHistoryEntryTypes {
 
         try {
 
-            String activity = "Notice of " + entryDescription;
+            String activity = entryDirection + "Notice of " + entryDescription;
             activity += (partyType.equals("") ? "" : " " + partyType);
             activity += (mailType.equals("") ? "" : " " + mailType);
 
@@ -196,7 +198,7 @@ public class CMDSCaseHistoryEntryTypes {
 
         try {
 
-            String activity = "R & R mailed " + entryDescription;
+            String activity = entryDirection + "R & R mailed " + entryDescription;
             activity += (partyType.equals("") ? "" : " " + partyType);
             activity += (mailType.equals("") ? "" : " " + mailType);
 
@@ -277,7 +279,7 @@ public class CMDSCaseHistoryEntryTypes {
             }
 
             if(!result.getResult().equals("")) {
-                String activity = "Board Order mailed " + entryDescription;
+                String activity = entryDirection + "Board Order mailed " + entryDescription;
                 activity += " Code " + result.getResult();
                 activity += (partyType.equals("") ? "" : " " + partyType);
                 activity += (mailType.equals("") ? "" : " " + mailType);
@@ -382,7 +384,7 @@ public class CMDSCaseHistoryEntryTypes {
                 }
             }
 
-            String activity = entryDescription;
+            String activity = entryDirection + entryDescription;
             activity += (certified.isCertified() ? " - (Certified)" : "");
             activity += (partyType.equals("") ? "" : " " + partyType);
             activity += (mailType.equals("") ? "" : " " + mailType);
@@ -471,7 +473,7 @@ public class CMDSCaseHistoryEntryTypes {
                 pullDate.dispose();
             }
 
-            String activity = entryDescription;
+            String activity = entryDirection + entryDescription;
             activity += (partyType.equals("") ? "" : " " + partyType);
             activity += (mailType.equals("") ? "" : " " + mailType);
 
@@ -541,7 +543,7 @@ public class CMDSCaseHistoryEntryTypes {
                 );
             }
 
-            String activity = entryDescription;
+            String activity = entryDirection + entryDescription;
             activity += (dueDate.getResponseDueDate() == null ? "" : " " + Global.mmddyyyy.format(new Date(dueDate.getResponseDueDate().getTime())));
             activity += (partyType.equals("") ? "" : " " + partyType);
             activity += (mailType.equals("") ? "" : " " + mailType);
@@ -608,7 +610,7 @@ public class CMDSCaseHistoryEntryTypes {
                 );
             }
 
-            String activity = entryDescription;
+            String activity = entryDirection + entryDescription;
             activity += (dueDate.getResponseDueDate() == null ? "" : " Response Due " + Global.mmddyyyy.format(new Date(dueDate.getResponseDueDate().getTime())));
             activity += (partyType.equals("") ? "" : " " + partyType);
             activity += (mailType.equals("") ? "" : " " + mailType);
@@ -659,7 +661,7 @@ public class CMDSCaseHistoryEntryTypes {
 
         try {
 
-            String activity = entryDescription;
+            String activity = entryDirection + entryDescription;
             activity += (partyType.equals("") ? "" : " " + partyType);
             activity += (mailType.equals("") ? "" : " " + mailType);
 
@@ -725,7 +727,7 @@ public class CMDSCaseHistoryEntryTypes {
                 );
             }
 
-            String activity = entryDescription;
+            String activity = entryDirection + entryDescription;
             activity += (dueDate.getResponseDueDate() == null ? "" : " Response Due " + Global.mmddyyyy.format(new Date(dueDate.getResponseDueDate().getTime())));
             activity += (partyType.equals("") ? "" : " " + partyType);
             activity += (mailType.equals("") ? "" : " " + mailType);
@@ -776,7 +778,7 @@ public class CMDSCaseHistoryEntryTypes {
 
         try {
 
-            String activity = entryDescription;
+            String activity = entryDirection + entryDescription;
             activity += (partyType.equals("") ? "" : " " + partyType);
             activity += (mailType.equals("") ? "" : " " + mailType);
 
@@ -826,7 +828,7 @@ public class CMDSCaseHistoryEntryTypes {
 
         try {
 
-            String activity = entryDescription;
+            String activity = entryDirection + entryDescription;
             activity += (partyType.equals("") ? "" : " " + partyType);
             activity += (mailType.equals("") ? "" : " " + mailType);
 
@@ -884,7 +886,7 @@ public class CMDSCaseHistoryEntryTypes {
 
             CMDSAppealsCourtDialog court = new CMDSAppealsCourtDialog(dialog, true);
 
-            String activity = entryDescription;
+            String activity = entryDirection + entryDescription;
             activity += (court.getSelection() == null ? "" : " - Appealed to " + court.getSelection());
             activity += (court.getCaseNumber().equals("") ? "" : " - Case Number " + court.getCaseNumber());
             activity += (partyType.equals("") ? "" : " " + partyType);
@@ -949,7 +951,7 @@ public class CMDSCaseHistoryEntryTypes {
 
             CMDSClearDateDialog clear = new CMDSClearDateDialog(dialog, true);
 
-            String activity = entryDescription;
+            String activity = entryDirection + entryDescription;
             activity += (partyType.equals("") ? "" : " " + partyType);
             activity += (mailType.equals("") ? "" : " " + mailType);
 
@@ -1025,7 +1027,7 @@ public class CMDSCaseHistoryEntryTypes {
                 );
             }
 
-            String activity = entryDescription;
+            String activity = entryDirection + entryDescription;
             activity += (dueDate.getResponseDueDate() == null ? "" : " Response Due " + Global.mmddyyyy.format(new Date(dueDate.getResponseDueDate().getTime())));
             activity += (partyType.equals("") ? "" : " " + partyType);
             activity += (mailType.equals("") ? "" : " " + mailType);
@@ -1083,7 +1085,7 @@ public class CMDSCaseHistoryEntryTypes {
 
         try {
 
-            String activity = entryDescription;
+            String activity = entryDirection + entryDescription;
             activity += (partyType.equals("") ? "" : " " + partyType);
             activity += (mailType.equals("") ? "" : " " + mailType);
 
@@ -1141,7 +1143,7 @@ public class CMDSCaseHistoryEntryTypes {
 
             CMDSWhichGreenCardDialog pullDate = new CMDSWhichGreenCardDialog(dialog, true);
 
-            String activity = entryDescription;
+            String activity = entryDirection + entryDescription;
             activity += (partyType.equals("") ? "" : " " + partyType);
             activity += (mailType.equals("") ? "" : " " + mailType);
 
@@ -1218,7 +1220,7 @@ public class CMDSCaseHistoryEntryTypes {
 
         try {
 
-            String activity = entryDescription;
+            String activity = entryDirection + entryDescription;
             activity += (partyType.equals("") ? "" : " " + partyType);
             activity += (mailType.equals("") ? "" : " " + mailType);
 
@@ -1279,7 +1281,7 @@ public class CMDSCaseHistoryEntryTypes {
 
         try {
 
-            String activity = entryDescription;
+            String activity = entryDirection + entryDescription;
             activity += (partyType.equals("") ? "" : " " + partyType);
             activity += (mailType.equals("") ? "" : " " + mailType);
 
@@ -1337,7 +1339,7 @@ public class CMDSCaseHistoryEntryTypes {
 
             CMDSPBRBoxDialog pbr = new CMDSPBRBoxDialog(dialog, true);
 
-            String activity = entryDescription;
+            String activity = entryDirection + entryDescription;
             activity += (pbr.getPbrBox().equals("") ? "" : " " + pbr.getPbrBox());
             activity += (partyType.equals("") ? "" : " " + partyType);
             activity += (mailType.equals("") ? "" : " " + mailType);
@@ -1411,7 +1413,7 @@ public class CMDSCaseHistoryEntryTypes {
                 pulldate = new CMDSPullDateDialog(dialog, true);
             }
 
-            String activity = entryDescription;
+            String activity = entryDirection + entryDescription;
             activity += (partyType.equals("") ? "" : " " + partyType);
             activity += (mailType.equals("") ? "" : " " + mailType);
 
@@ -1484,7 +1486,7 @@ public class CMDSCaseHistoryEntryTypes {
 
         try {
 
-            String activity = entryDescription;
+            String activity = entryDirection + entryDescription;
             activity += (partyType.equals("") ? "" : " " + partyType);
             activity += (mailType.equals("") ? "" : " " + mailType);
 

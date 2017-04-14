@@ -150,7 +150,7 @@ public class CMDSAddHistoryEntryDialog extends javax.swing.JDialog {
         jLabel7 = new javax.swing.JLabel();
         documnetLinkTextBox = new javax.swing.JTextField();
         saveButton = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        cancelButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -236,10 +236,10 @@ public class CMDSAddHistoryEntryDialog extends javax.swing.JDialog {
                 }
             });
 
-            jButton2.setText("Cancel");
-            jButton2.addActionListener(new java.awt.event.ActionListener() {
+            cancelButton.setText("Cancel");
+            cancelButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    jButton2ActionPerformed(evt);
+                    cancelButtonActionPerformed(evt);
                 }
             });
 
@@ -283,7 +283,7 @@ public class CMDSAddHistoryEntryDialog extends javax.swing.JDialog {
                                             .addComponent(appelleeButton)))
                                     .addGap(0, 0, Short.MAX_VALUE))))
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addContainerGap())
@@ -328,16 +328,16 @@ public class CMDSAddHistoryEntryDialog extends javax.swing.JDialog {
                     .addGap(18, 18, 18)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(saveButton)
-                        .addComponent(jButton2))
+                        .addComponent(cancelButton))
                     .addContainerGap())
             );
 
             pack();
         }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         dispose();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void mailTypeComboBoxPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_mailTypeComboBoxPropertyChange
         enableSaveButton();
@@ -363,6 +363,14 @@ public class CMDSAddHistoryEntryDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_entryDescriptionComboBoxActionPerformed
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
+        String direction = "";
+        if (mailTypeComboBox.getSelectedItem().toString().equals("I")){
+            direction = "IN - ";
+        } else if (mailTypeComboBox.getSelectedItem().toString().equals("O")){
+            direction = "OUT - ";
+        }
+
+
         CMDSCaseHistoryEntryTypes.updateCaseHistory(
             entryTypeComboBox.getSelectedItem().toString().split("-")[0].trim(),
             entryDescriptionComboBox.getSelectedItem().toString(),
@@ -371,7 +379,8 @@ public class CMDSAddHistoryEntryDialog extends javax.swing.JDialog {
             originalButton.isSelected() ? "" : "Faxed",
             entryDateTextBox.getText().trim(),
             this,
-            documnetLinkTextBox.getText().trim()
+            documnetLinkTextBox.getText().trim(),
+            direction
         );
 
         dispose();
@@ -396,13 +405,13 @@ public class CMDSAddHistoryEntryDialog extends javax.swing.JDialog {
     private javax.swing.JRadioButton appelleeButton;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
+    private javax.swing.JButton cancelButton;
     private javax.swing.JTextField documnetLinkTextBox;
     private com.alee.extended.date.WebDateField entryDateTextBox;
     private javax.swing.JComboBox<String> entryDescriptionComboBox;
     private javax.swing.JComboBox<String> entryTypeComboBox;
     private javax.swing.JTextField extraTextBox;
     private javax.swing.JRadioButton faxedButton;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
