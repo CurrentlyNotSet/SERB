@@ -234,6 +234,7 @@ public class DocketRootPanel extends javax.swing.JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 searchTextBox.setText("");
+                docketTable.getRowSorter().setSortKeys(null);
                 Global.docketSection = SectionComboBox.getSelectedItem().toString();
                 Global.root.getDocketingSectionLabel().setText(SectionComboBox.getSelectedItem().toString() + " Docketing");
                 docs.clear();
@@ -397,8 +398,13 @@ public class DocketRootPanel extends javax.swing.JPanel {
     }
 
     private void loadTable() {
+        
+        
+        
         DefaultTableModel model = (DefaultTableModel) docketTable.getModel();
 
+        
+        
         model.setRowCount(0);
 
         for (Object docketItem : docs) {

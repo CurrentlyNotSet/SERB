@@ -83,6 +83,7 @@ public class companySearchPanel extends javax.swing.JPanel {
             new Runnable() {
                 @Override
                 public void run() {
+                    
                     loadAllCases();
                     if(!employerSearchTerm.getText().equals("")) {
                         limitCaseList();
@@ -241,6 +242,7 @@ public class companySearchPanel extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
+        employerTable.getTableHeader().setReorderingAllowed(false);
         employerTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 employerTableMouseClicked(evt);
@@ -314,12 +316,14 @@ public class companySearchPanel extends javax.swing.JPanel {
         Audit.addAuditEntry("Clicked Refresh Employer Search Button");
         model.setNumRows(0);
         jLayeredPane1.moveToFront(jPanel1);
+        employerTable.getRowSorter().setSortKeys(null);
         activity();
     }//GEN-LAST:event_refreshButtonActionPerformed
 
     private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
         Audit.addAuditEntry("Clicked Clear Employer Search Button");
         statusComboBox.setSelectedItem("All");
+        employerTable.getRowSorter().setSortKeys(null);
         employerSearchTerm.setText("");
     }//GEN-LAST:event_clearButtonActionPerformed
 
@@ -352,6 +356,7 @@ public class companySearchPanel extends javax.swing.JPanel {
 
     private void statusComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statusComboBoxActionPerformed
         Audit.addAuditEntry("Changed Status Combobox to " + statusComboBox.getSelectedItem().toString() + " on Employer Search");
+        employerTable.getRowSorter().setSortKeys(null);
         limitCaseList();    
     }//GEN-LAST:event_statusComboBoxActionPerformed
 
