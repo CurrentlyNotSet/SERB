@@ -190,6 +190,7 @@ public class ActivityPanel extends javax.swing.JPanel {
         for (Object activty1 : activty) {
             Activity act = (Activity) activty1;
             if(act.action.toLowerCase().contains(searchTerm.toLowerCase())
+                    || act.comment.toLowerCase().contains(searchTerm.toLowerCase())
                     || act.from.toLowerCase().contains(searchTerm.toLowerCase())
                     || act.user.toLowerCase().contains(searchTerm.toLowerCase())) {
                 if(act.fileName == null) {
