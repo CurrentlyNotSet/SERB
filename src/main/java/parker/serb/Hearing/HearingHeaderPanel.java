@@ -5,6 +5,7 @@
  */
 package parker.serb.Hearing;
 
+import com.alee.laf.optionpane.WebOptionPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.util.Date;
@@ -15,6 +16,7 @@ import javax.swing.SwingUtilities;
 import parker.serb.Global;
 import parker.serb.sql.Audit;
 import parker.serb.sql.CaseParty;
+import parker.serb.sql.CaseType;
 import parker.serb.sql.HearingCase;
 import parker.serb.sql.HearingsMediation;
 import parker.serb.sql.User;
@@ -79,12 +81,23 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
     }
 
     private void loadInformation() {
-        if(caseNumberComboBox.getSelectedItem().toString().trim().length() == 16) {
+        if (caseNumberComboBox.getSelectedItem().toString().trim().length() == 16) {
             NumberFormatService.parseFullCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim());
-            User.updateLastCaseNumber();
-            loadHeaderInformation();
-            Global.root.getHearingRootPanel1().loadInformation();
-            Global.root.getHearingRootPanel1().setButtons();
+            String selectedSection = CaseType.getSectionFromCaseType(Global.caseType);
+            if ("MED".equalsIgnoreCase(selectedSection)
+                    || "REP".equalsIgnoreCase(selectedSection)
+                    || "ULP".equalsIgnoreCase(selectedSection)) {
+                User.updateLastCaseNumber();
+                loadHeaderInformation();
+                Global.root.getHearingRootPanel1().loadInformation();
+                Global.root.getHearingRootPanel1().setButtons();
+            } else {
+                caseNumberComboBox.setSelectedItem("");
+                Global.root.getHearingRootPanel1().clearAll();
+                WebOptionPane.showMessageDialog(Global.root,
+                        "<html><center>Unable to load case, invalid case section<br><br>Please use the " + selectedSection + " tab</center></html>",
+                        "Error", WebOptionPane.ERROR_MESSAGE);
+            }
         } else {
             new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
         }
