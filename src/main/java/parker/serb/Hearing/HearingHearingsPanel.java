@@ -80,6 +80,8 @@ public class HearingHearingsPanel extends javax.swing.JPanel {
     public void clearTable() {
         DefaultTableModel model = (DefaultTableModel) hearingTable.getModel();
         model.setRowCount(0);
+        
+        hearingTable.getRowSorter().setSortKeys(null);
     }
     
     public void loadInformation() {
