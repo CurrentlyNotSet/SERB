@@ -560,6 +560,9 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         aljComboBox.setSelectedItem("");
         filedDateTextBox.setText("");
         probableCauseCheckBox.setSelected(false);
+        
+        boardMeetingTable.getRowSorter().setSortKeys(null);
+        relatedCaseTable.getRowSorter().setSortKeys(null);
     }
 
     /**
