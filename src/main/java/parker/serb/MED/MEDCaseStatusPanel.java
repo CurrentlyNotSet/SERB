@@ -97,6 +97,8 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
         motionCheckBox.setSelected(false);
         dismissedCheckBox.setSelected(false);
         relatedCaseModel.setRowCount(0);
+        
+        relatedCaseTable.getRowSorter().setSortKeys(null);
     }
     
     public void enableUpdate() {
