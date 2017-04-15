@@ -79,6 +79,8 @@ public class ORGParentChildPanel extends javax.swing.JPanel {
     public void clearAll() {
         DefaultTableModel model = (DefaultTableModel) parentChildTable.getModel();
         model.setRowCount(0);
+        
+        parentChildTable.getRowSorter().setSortKeys(null);
     }
     
     public void loadInformation() {
