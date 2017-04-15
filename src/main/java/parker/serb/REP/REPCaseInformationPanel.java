@@ -225,6 +225,8 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
         actualClerksClosedDate.setText("");
         clerksClosedUser.setSelectedItem("");
         relatedCaseModel.setRowCount(0);
+        
+        relatedCaseTable.getRowSorter().setSortKeys(null);
     }
 
     void loadInformation() {

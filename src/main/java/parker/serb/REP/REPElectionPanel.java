@@ -889,6 +889,9 @@ public class REPElectionPanel extends javax.swing.JPanel {
         resultsChallengedBallots.setText("");
         resultsTotalBallotsCast.setText("");
         whoPrevailedComboBox.setSelectedItem("");
+        
+        sitesTable.getRowSorter().setSortKeys(null);
+        multiCaseElectionTable.getRowSorter().setSortKeys(null);
 
     }
 
