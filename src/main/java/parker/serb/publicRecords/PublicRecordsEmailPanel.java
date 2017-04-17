@@ -21,6 +21,7 @@ import javax.swing.table.DefaultTableModel;
 import org.apache.commons.io.FilenameUtils;
 import parker.serb.Global;
 import parker.serb.sql.Activity;
+import parker.serb.sql.CaseType;
 import parker.serb.sql.EmailOut;
 import parker.serb.sql.EmailOutAttachment;
 import parker.serb.util.ClearDateDialog;
@@ -226,6 +227,12 @@ public class PublicRecordsEmailPanel extends javax.swing.JDialog {
                     + (Global.activeSection.equals("Civil Service Commission")
                     ? Global.caseType : Global.activeSection) + File.separator
                     + Global.caseNumber + File.separator;
+        } else if (Global.activeSection.equalsIgnoreCase("Hearings")) {
+            path = Global.activityPath + File.separatorChar
+                    + CaseType.getSectionFromCaseType(Global.caseType) + File.separatorChar
+                    + Global.caseYear + File.separatorChar
+                    + NumberFormatService.generateFullCaseNumber()
+                    + File.separatorChar;
         } else {
             path = Global.activityPath + File.separatorChar
                     + Global.activeSection + File.separatorChar
@@ -511,6 +518,9 @@ public class PublicRecordsEmailPanel extends javax.swing.JDialog {
                     break;
                 case "ORG":
                     FileService.openFileWithORGNumber("ORG", Global.caseNumber, fileName);
+                    break;
+                case "Hearings":
+                    FileService.openFileWithCaseNumber(CaseType.getSectionFromCaseType(Global.caseType), Global.caseYear, Global.caseType, Global.caseMonth, Global.caseNumber, fileName);
                     break;
                 default:
                     FileService.openFileWithCaseNumber(Global.activeSection, Global.caseYear, Global.caseType, Global.caseMonth, Global.caseNumber, fileName);

@@ -5,7 +5,7 @@
  */
 package parker.serb.REP;
 
-import parker.serb.util.CaseNotFoundDialog;
+import com.alee.laf.optionpane.WebOptionPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.util.Date;
@@ -15,12 +15,13 @@ import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import parker.serb.Global;
-import parker.serb.ORG.ORGNumberSearchDialog;
 import parker.serb.sql.Audit;
 import parker.serb.sql.CaseParty;
+import parker.serb.sql.CaseType;
 import parker.serb.sql.REPCase;
 import parker.serb.sql.User;
 import parker.serb.util.CaseInEditModeDialog;
+import parker.serb.util.CaseNotFoundDialog;
 import parker.serb.util.NumberFormatService;
 
 //
@@ -39,7 +40,7 @@ public class REPHeaderPanel extends javax.swing.JPanel {
         initComponents();
         addListeners();
     }
-    
+
     private void addListeners() {
         caseNumberComboBox.addActionListener((ActionEvent e) -> {
             if(caseNumberComboBox.getSelectedItem() != null) {
@@ -70,26 +71,36 @@ public class REPHeaderPanel extends javax.swing.JPanel {
             }
         });
     }
-    
+
     private void loadInformation() {
-        if(caseNumberComboBox.getSelectedItem().toString().trim().length() == 16) {
+        if (caseNumberComboBox.getSelectedItem().toString().trim().length() == 16) {
             NumberFormatService.parseFullCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim());
-            User.updateLastCaseNumber();
-            loadHeaderInformation();
-            Global.root.getrEPRootPanel1().loadInformation();
-            Global.root.getrEPRootPanel1().setButtons();
+            String selectedSection = CaseType.getSectionFromCaseType(Global.caseType);
+            if (Global.activeSection.equalsIgnoreCase(selectedSection)) {
+                User.updateLastCaseNumber();
+                loadHeaderInformation();
+                Global.root.getrEPRootPanel1().loadInformation();
+                Global.root.getrEPRootPanel1().setButtons();
+            } else {
+                caseNumberComboBox.setSelectedItem("");
+                Global.root.getrEPRootPanel1().clearAll();
+                WebOptionPane.showMessageDialog(Global.root,
+                        "<html><center>Unable to load case, invalid case section<br><br>Please use the " + selectedSection + " tab</center></html>",
+                        "Error", WebOptionPane.ERROR_MESSAGE);
+            }
         } else {
-            new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());  
+            new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
+            Global.root.getrEPRootPanel1().clearAll();
         }
     }
-    
+
     public void loadHeaderInformation() {
         String employer = "";
         String employeeOrg = "";
         String incumbentEEO = "";
         String rivalEEO = "";
-        
-        
+
+
         if(Global.caseNumber != null) {
             REPCase rep = REPCase.loadHeaderInformation();
             if(rep == null) {
@@ -106,9 +117,9 @@ public class REPHeaderPanel extends javax.swing.JPanel {
 
                 for(Object caseParty: caseParties) {
                     CaseParty partyInformation = (CaseParty) caseParty;
-                    
+
                     String name;
-                    
+
                     if(partyInformation.firstName.equals("") && partyInformation.lastName.equals("")) {
                         name = partyInformation.companyName;
                     } else {
@@ -162,20 +173,20 @@ public class REPHeaderPanel extends javax.swing.JPanel {
             }
         }
     }
-    
+
     public void loadCases() {
         caseNumberComboBox.removeAllItems();
         caseNumberComboBox.addItem("");
 
         List caseNumberList = REPCase.loadREPCaseNumbers();
-        
+
         caseNumberList.stream().forEach((caseNumber) -> {
             caseNumberComboBox.addItem(caseNumber.toString());
         });
     }
-    
+
     /**
-     * 
+     *
      */
     void clearAll() {
         Global.caseYear = null;
@@ -208,13 +219,13 @@ public class REPHeaderPanel extends javax.swing.JPanel {
     public JTextField getIncumbentEEOTextBox() {
         return incumbentEEOTextBox;
     }
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

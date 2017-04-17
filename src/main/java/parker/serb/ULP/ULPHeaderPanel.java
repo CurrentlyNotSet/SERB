@@ -5,6 +5,7 @@
  */
 package parker.serb.ULP;
 
+import com.alee.laf.optionpane.WebOptionPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.util.Date;
@@ -14,9 +15,9 @@ import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import parker.serb.Global;
-import parker.serb.REP.REPCaseSearch;
 import parker.serb.sql.Audit;
 import parker.serb.sql.CaseParty;
+import parker.serb.sql.CaseType;
 import parker.serb.sql.ULPCase;
 import parker.serb.sql.User;
 import parker.serb.util.CaseInEditModeDialog;
@@ -29,12 +30,12 @@ import parker.serb.util.NumberFormatService;
 public class ULPHeaderPanel extends javax.swing.JPanel {
 
     ULPCaseSearch search = null;
-    
+
     public ULPHeaderPanel() {
         initComponents();
         addListeners();
     }
-    
+
     private void addListeners() {
         caseNumberComboBox.addActionListener((ActionEvent e) -> {
             if(caseNumberComboBox.getSelectedItem() != null) {
@@ -66,30 +67,39 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
             }
         });
     }
-    
+
     private void loadInformation() {
         if(caseNumberComboBox.getSelectedItem().toString().trim().length() == 16) {
             NumberFormatService.parseFullCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim());
-            User.updateLastCaseNumber();
-            loadHeaderInformation();
-            Global.root.getuLPRootPanel1().loadInformation();
-            Global.root.getuLPRootPanel1().setButtons();
+            String selectedSection = CaseType.getSectionFromCaseType(Global.caseType);
+            if (Global.activeSection.equalsIgnoreCase(selectedSection)) {
+                User.updateLastCaseNumber();
+                loadHeaderInformation();
+                Global.root.getuLPRootPanel1().loadInformation();
+                Global.root.getuLPRootPanel1().setButtons();
+            } else {
+                caseNumberComboBox.setSelectedItem("");
+                Global.root.getuLPRootPanel1().clearAll();
+                WebOptionPane.showMessageDialog(Global.root,
+                        "<html><center>Unable to load case, invalid case section<br><br>Please use the " + selectedSection + " tab</center></html>",
+                        "Error", WebOptionPane.ERROR_MESSAGE);
+            }
         } else {
-            new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());  
+            new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
             Global.root.getuLPRootPanel1().clearAll();
         }
     }
-    
+
     public void loadHeaderInformation() {
         String chargingParty = "";
         String chargingPartyREP = "";
         String chargedParty = "";
         String chargedPartyREP = "";
-        
+
         ULPCase ulp = ULPCase.loadHeaderInformation();
-        
+
         if(ulp == null) {
-            new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());          
+            new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
         } else {
             filedDateTextBox.setText(ulp.fileDate != null ? Global.mmddyyyy.format(new Date(ulp.fileDate.getTime())) : "");
             currentStatusTextBox.setText(ulp.currentStatus != null ? ulp.currentStatus : "");
@@ -112,7 +122,7 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
                     + (partyInformation.lastName.equals("") ? "" : (partyInformation.lastName))
                     + (partyInformation.suffix.equals("") ? "" : (" " + partyInformation.suffix))
                     + (partyInformation.nameTitle.equals("") ? "" : (", " + partyInformation.nameTitle));
-                }    
+                }
 
                 switch (partyInformation.caseRelation) {
                     case "Charging Party":
@@ -149,25 +159,25 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
             chargingPartyREPTextBox.setText(chargingPartyREP);
             chargedPartyTextBox.setText(chargedParty);
             chargedPartyREPTextBox.setText(chargedPartyREP);
-            
+
             chargingPartyTextBox.setCaretPosition(0);
             chargingPartyREPTextBox.setCaretPosition(0);
             chargedPartyTextBox.setCaretPosition(0);
             chargedPartyREPTextBox.setCaretPosition(0);
         }
     }
-    
+
     public void loadCases() {
         caseNumberComboBox.removeAllItems();
         caseNumberComboBox.addItem("");
 
         List caseNumberList = ULPCase.loadULPCaseNumbers();
-        
+
         caseNumberList.stream().forEach((caseNumber) -> {
             caseNumberComboBox.addItem(caseNumber.toString());
         });
     }
-    
+
     void clearAll() {
         Global.caseYear = null;
         Global.caseType = null;
@@ -194,7 +204,7 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
     public JTextField getChargingPartyTextBox() {
         return chargingPartyTextBox;
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

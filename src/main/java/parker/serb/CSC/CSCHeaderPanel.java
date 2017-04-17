@@ -5,19 +5,19 @@
  */
 package parker.serb.CSC;
 
+import com.alee.laf.optionpane.WebOptionPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.util.List;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
-import parker.serb.CMDS.CMDSCaseSearch;
 import parker.serb.Global;
-import parker.serb.MED.MEDCaseSearch;
 import parker.serb.sql.Audit;
 import parker.serb.sql.CSCCase;
+import parker.serb.sql.CaseType;
 import parker.serb.sql.User;
 import parker.serb.util.CaseInEditModeDialog;
+import parker.serb.util.NumberFormatService;
 
 //
 
@@ -28,7 +28,7 @@ import parker.serb.util.CaseInEditModeDialog;
 public class CSCHeaderPanel extends javax.swing.JPanel {
 
     CSCCaseSearch search = null;
-    
+
     /**
      * Creates new form REPHeaderPanel
      */
@@ -36,7 +36,7 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
         initComponents();
         addListeners();
     }
-    
+
     private void addListeners() {
         caseNumberComboBox.addActionListener((ActionEvent e) -> {
             if(caseNumberComboBox.getSelectedItem() != null) {
@@ -56,7 +56,7 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
                         Global.root.getcSCRootPanel1().clearAll();
                     }
                 } else {
-                    caseNumberComboBox.setSelectedItem(caseNumberComboBox.getSelectedItem().toString().toUpperCase());
+//                    caseNumberComboBox.setSelectedItem(caseNumberComboBox.getSelectedItem().toString().toUpperCase());
                     loadInformation();
 //                    if(Global.root.getcSCRootPanel1().getjTabbedPane1().getSelectedIndex() == 0) {
 //                        Global.root.getjButton2().setText("Add Entry");
@@ -65,13 +65,13 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
 //                        Global.root.getjButton4().setEnabled(true);
 //                        Global.root.getjButton9().setVisible(true);
 //                        Global.root.getcSCRootPanel1().getActivityPanel1().loadAllActivity();
-//                    } 
+//                    }
                     Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
                 }
             }
         });
     }
-    
+
     private void loadInformation() {
         Global.caseYear = null;
         Global.caseType = "CSC";
@@ -79,14 +79,25 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
         Global.caseNumber = caseNumberComboBox.getSelectedItem().toString().trim();
         loadHeaderInformation();
     }
-    
+
     public void loadHeaderInformation() {
-        
+
         if(Global.caseNumber != null) {
             CSCCase csc = CSCCase.loadHeaderInformation();
             if(csc == null) {
 //                new ORG((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
-                caseNumberComboBox.setSelectedItem(Global.caseNumber);
+
+                if (caseNumberComboBox.getSelectedItem().toString().trim().length() == 16){
+                    NumberFormatService.parseFullCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim());
+                    String selectedSection = CaseType.getSectionFromCaseType(Global.caseType);
+                    if (!selectedSection.equals("")){
+                        WebOptionPane.showMessageDialog(Global.root,
+                            "<html><center>Unable to load case, invalid case section<br><br>Please use the " + selectedSection + " tab</center></html>",
+                            "Error", WebOptionPane.ERROR_MESSAGE);
+                    }
+                }
+                caseNumberComboBox.setSelectedItem("");
+                Global.root.getcSCRootPanel1().clearAll();
             } else {
                 Global.caseNumber = csc.cscNumber != null ? csc.cscNumber : "";
                 Global.caseType = "CSC";
@@ -97,9 +108,9 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
             }
         }
     }
-    
+
     public void loadUpdatedHeaderInformation() {
-        
+
         if(Global.caseNumber != null) {
             Global.caseNumber = CSCCase.getCSCName();
             CSCCase org = CSCCase.loadHeaderInformation();
@@ -114,18 +125,18 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
             }
         }
     }
-    
+
     public void loadCases() {
         caseNumberComboBox.removeAllItems();
         caseNumberComboBox.addItem("");
 
         List caseNumberList = CSCCase.loadCSCNames();
-        
+
         caseNumberList.stream().forEach((caseNumber) -> {
             caseNumberComboBox.addItem(caseNumber);
         });
     }
-    
+
     void clearAll() {
         Global.caseYear = null;
         Global.caseType = null;
@@ -137,7 +148,7 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
     public JComboBox getjComboBox2() {
         return caseNumberComboBox;
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

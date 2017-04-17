@@ -16,13 +16,13 @@ import parker.serb.util.SlackNotification;
  * @author parkerjohnston
  */
 public class CaseType {
-    
+
     public int id;
     public boolean active;
     public String section;
     public String caseType;
     public String description;
-    
+
     /**
      * Return a list of all case types that are possible for a section.  The
      * current selection is gathered from the global file
@@ -30,9 +30,9 @@ public class CaseType {
      */
     public static List<String> getCaseType() {
         Statement stmt = null;
-        
+
         List activityList = new ArrayList<>();
-            
+
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -42,11 +42,11 @@ public class CaseType {
             preparedStatement.setString(1, Global.activeSection);
 
             ResultSet caseType = preparedStatement.executeQuery();
-            
+
             while(caseType.next()) {
                 activityList.add(caseType.getString("caseType"));
             }
-            
+
             switch(Global.activeSection) {
                 case "ORG":
                     activityList.add("ORG");
@@ -56,24 +56,55 @@ public class CaseType {
                     break;
                 default:
                     break;
-            }   
-            
+            }
+
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 getCaseType();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return activityList;
     }
-    
+
+    public static String getSectionFromCaseType(String type) {
+        String fullType = "";
+
+        Statement stmt = null;
+
+        try {
+
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "select section from CaseType"
+                    + " where CaseType = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, type);
+
+            ResultSet activityTypeListRS = preparedStatement.executeQuery();
+
+            while(activityTypeListRS.next()) {
+                fullType = activityTypeListRS.getString("section");
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getSectionFromCaseType(type);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return fullType;
+    }
+
     public static List<String> getCaseTypeBySection(String section) {
         Statement stmt = null;
-        
+
         List activityList = new ArrayList<>();
-            
+
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -83,11 +114,11 @@ public class CaseType {
             preparedStatement.setString(1, section);
 
             ResultSet caseType = preparedStatement.executeQuery();
-            
+
             while(caseType.next()) {
                 activityList.add(caseType.getString("caseType"));
             }
-            
+
             switch(section) {
                 case "ORG":
                     activityList.add("ORG");
@@ -97,24 +128,24 @@ public class CaseType {
                     break;
                 default:
                     break;
-            }   
-            
+            }
+
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 getCaseTypeBySection(section);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return activityList;
     }
-    
+
     public static List<String> getCaseTypeHearings() {
         Statement stmt = null;
-        
+
         List activityList = new ArrayList<>();
-            
+
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -123,26 +154,26 @@ public class CaseType {
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
             ResultSet caseType = preparedStatement.executeQuery();
-            
+
             while(caseType.next()) {
                 activityList.add(caseType.getString("caseType"));
-            }        
+            }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 getCaseTypeHearings();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return activityList;
     }
-    
+
     public static List<CaseType> loadAllCaseTypes(String[] param) {
         List<CaseType> list = new ArrayList<>();
 
         Statement stmt = null;
-        
+
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -164,7 +195,7 @@ public class CaseType {
             for (int i = 0; i < param.length; i++) {
                 ps.setString((i + 1), "%" + param[i].trim() + "%");
             }
-            
+
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -180,18 +211,18 @@ public class CaseType {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadAllCaseTypes(param);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return list;
     }
-    
+
     public static CaseType getTypeByID(int id) {
         CaseType item = new CaseType();
 
         Statement stmt = null;
-        
+
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -213,7 +244,7 @@ public class CaseType {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 getTypeByID(id);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -222,7 +253,7 @@ public class CaseType {
 
     public static void createStatusType(CaseType item) {
         Statement stmt = null;
-        
+
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -240,7 +271,7 @@ public class CaseType {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 createStatusType(item);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -248,7 +279,7 @@ public class CaseType {
 
     public static void updateCaseType(CaseType item) {
         Statement stmt = null;
-        
+
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -271,7 +302,7 @@ public class CaseType {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateCaseType(item);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }

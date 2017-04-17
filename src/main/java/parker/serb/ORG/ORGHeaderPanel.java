@@ -5,19 +5,20 @@
  */
 package parker.serb.ORG;
 
+import com.alee.laf.optionpane.WebOptionPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import parker.serb.Global;
-import parker.serb.MED.MEDCaseSearch;
 import parker.serb.sql.Audit;
+import parker.serb.sql.CaseType;
 import parker.serb.sql.ORGCase;
 import parker.serb.sql.User;
 import parker.serb.util.CaseInEditModeDialog;
+import parker.serb.util.NumberFormatService;
 
 //
 
@@ -58,7 +59,7 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
                     }
                 } else {
                     Global.root.getjButton2().setEnabled(true);
-                    caseNumberComboBox.setSelectedItem(caseNumberComboBox.getSelectedItem().toString().toUpperCase());
+//                    caseNumberComboBox.setSelectedItem(caseNumberComboBox.getSelectedItem().toString().toUpperCase());
                     loadInformation();
 //                    if(Global.root.getoRGRootPanel1().getjTabbedPane1().getSelectedIndex() == 0) {
 //                        Global.root.getjButton2().setText("Add Entry");
@@ -82,17 +83,24 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
         Global.caseNumber = caseNumberComboBox.getSelectedItem().toString().trim();
 
         loadHeaderInformation();
-        Global.root.getoRGRootPanel1().loadInformation();
-        Global.root.getoRGRootPanel1().setButtons();
     }
 
     public void loadHeaderInformation() {
-
         if(Global.caseNumber != null) {
             ORGCase org = ORGCase.loadHeaderInformation();
             if(org == null) {
 //                new ORG((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
-                caseNumberComboBox.setSelectedItem(Global.caseNumber);
+                if (caseNumberComboBox.getSelectedItem().toString().trim().length() == 16){
+                    NumberFormatService.parseFullCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim());
+                    String selectedSection = CaseType.getSectionFromCaseType(Global.caseType);
+                    if (!selectedSection.equals("")){
+                        WebOptionPane.showMessageDialog(Global.root,
+                            "<html><center>Unable to load case, invalid case section<br><br>Please use the " + selectedSection + " tab</center></html>",
+                            "Error", WebOptionPane.ERROR_MESSAGE);
+                    }
+                }
+                caseNumberComboBox.setSelectedItem("");
+                Global.root.getoRGRootPanel1().clearAll();
             } else {
                 Global.caseNumber = org.orgNumber != null ? org.orgNumber : "";
                 Global.caseType = "ORG";
@@ -105,6 +113,9 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
                 registrationReportTextBox.setText(org.registrationReport != null ? Global.mmddyyyy.format(new Date(org.registrationReport.getTime())) : "");
                 constructionAndByLawsTextBox.setText(org.constructionAndByLaws != null ? Global.mmddyyyy.format(new Date(org.constructionAndByLaws.getTime())) : "");
                 filedByParentTextBox.setText(org.filedByParent == true ? "Yes" : "No");
+
+                Global.root.getoRGRootPanel1().loadInformation();
+                Global.root.getoRGRootPanel1().setButtons();
             }
         }
     }
