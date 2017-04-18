@@ -136,6 +136,69 @@
             <Property name="text" type="java.lang.String" value="Help"/>
           </Properties>
           <SubComponents>
+            <Menu class="javax.swing.JMenu" name="jMenu4">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Documentation"/>
+              </Properties>
+              <SubComponents>
+                <MenuItem class="javax.swing.JMenuItem" name="docketingDocumentationMenuItem">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Docketing"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="docketingDocumentationMenuItemActionPerformed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="REPDocumentationMenuItem">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="REP"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="REPDocumentationMenuItemActionPerformed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="ORGDocumentationMenuItem">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="ORG"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ORGDocumentationMenuItemActionPerformed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="ULPDocumentationMenuItem">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="ULP"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ULPDocumentationMenuItemActionPerformed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="CSCDocumentationMenuItem">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Civil Service Commission"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CSCDocumentationMenuItemActionPerformed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="CMDSDocumentationMenuItem">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="CMDS"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CMDSDocumentationMenuItemActionPerformed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="HearingsDocumentationMenuItem">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Hearings"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="HearingsDocumentationMenuItemActionPerformed"/>
+                  </Events>
+                </MenuItem>
+              </SubComponents>
+            </Menu>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem6">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Release Notes"/>
