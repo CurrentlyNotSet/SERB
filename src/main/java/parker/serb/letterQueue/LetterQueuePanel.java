@@ -26,6 +26,8 @@ import parker.serb.sql.PostalOutAttachment;
  */
 public class LetterQueuePanel extends javax.swing.JDialog {
 
+    private List<LetterQueue> queueList;
+    
     public LetterQueuePanel(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -53,6 +55,7 @@ public class LetterQueuePanel extends javax.swing.JDialog {
     private void loadPanel() {
         headerLabel.setText(Global.activeSection + " Letter Queue");
         setColumnWidth();
+        queueList = LetterQueue.getLetterQueueByGlobalSection();
         loadLetterQueue();
     }
 
@@ -106,25 +109,26 @@ public class LetterQueuePanel extends javax.swing.JDialog {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
 
-        List<LetterQueue> queueList = LetterQueue.getLetterQueueByGlobalSection();
+        if (queueList != null) {
+            for (LetterQueue item : queueList) {
+                if (item.type.contains(searchTerm.toLowerCase())
+                        || item.fullCaseNumber.toLowerCase().contains(searchTerm.toLowerCase())
+                        || item.userName.toLowerCase().contains(searchTerm.toLowerCase())
+                        || item.to.toLowerCase().contains(searchTerm.toLowerCase())
+                        || item.subject.toLowerCase().contains(searchTerm.toLowerCase())) {
 
-        for (LetterQueue item : queueList){
-            if (       item.type.contains(searchTerm.toLowerCase())
-                    || item.fullCaseNumber.toLowerCase().contains(searchTerm.toLowerCase())
-                    || item.to.toLowerCase().contains(searchTerm.toLowerCase())
-                    || item.subject.toLowerCase().contains(searchTerm.toLowerCase())) {
-
-                model.addRow(new Object[]{
-                    item.id, // ID
-                    item.type, // Type
-                    item.fullCaseNumber, // CaseNumber
-                    item.creationDate, //Date Created
-                    item.userName, //UserName
-                    item.to, // To:
-                    item.subject, // Subject
-                    item.attachementCount,// Attachments
-                    item.suggestedSendDate // Suggest Send Date
-                });
+                    model.addRow(new Object[]{
+                        item.id, // ID
+                        item.type, // Type
+                        item.fullCaseNumber, // CaseNumber
+                        item.creationDate, //Date Created
+                        item.userName, //UserName
+                        item.to, // To:
+                        item.subject, // Subject
+                        item.attachementCount,// Attachments
+                        item.suggestedSendDate // Suggest Send Date
+                    });
+                }
             }
         }
     }
@@ -150,6 +154,7 @@ public class LetterQueuePanel extends javax.swing.JDialog {
             new ConfirmationDialog(Global.root, true,
                     jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString(),
                     (int) jTable1.getValueAt(jTable1.getSelectedRow(), 0));
+            queueList = LetterQueue.getLetterQueueByGlobalSection();
             loadLetterQueue();
         }
     }
@@ -167,6 +172,7 @@ public class LetterQueuePanel extends javax.swing.JDialog {
                 PostalOutAttachment.removeEntry(rowID);
             }
         }
+        queueList = LetterQueue.getLetterQueueByGlobalSection();
         loadLetterQueue();
     }
 
