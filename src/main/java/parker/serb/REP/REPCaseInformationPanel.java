@@ -7,6 +7,7 @@ package parker.serb.REP;
 
 import com.alee.extended.date.WebCalendar;
 import com.alee.extended.date.WebDateField;
+import com.alee.laf.optionpane.WebOptionPane;
 import com.alee.utils.swing.Customizer;
 import java.awt.Color;
 import java.awt.Component;
@@ -1159,7 +1160,7 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_addRelatedCaseButtonActionPerformed
 
     private void employerIDNumberTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_employerIDNumberTextBoxMouseClicked
-        if(evt.getClickCount() == 2) {
+        if(evt.getClickCount() == 2 && evt.getButton() == MouseEvent.BUTTON1) {
             if(employerIDNumberTextBox.isEnabled()) {
                 employerSearch search = new employerSearch(
                         (JFrame) Global.root.getRootPane().getParent(),
@@ -1172,6 +1173,17 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
             } else {
                 if(employerIDNumberTextBox.getText().equals("")) {
                     new employerDetail((JFrame) Global.root.getRootPane().getParent(), true, employerIDNumberTextBox.getText().trim());
+                }
+            }
+        } else if(evt.getClickCount() == 1 && evt.getButton() == MouseEvent.BUTTON3) {
+            if(bargainingUnitNumberTextBox.isEnabled()) {
+                int answer = WebOptionPane.showConfirmDialog(this, "Would you like to clear the Employer Information", "Clear", WebOptionPane.YES_NO_OPTION);
+                if (answer == WebOptionPane.YES_OPTION) {
+                    employerIDNumberTextBox.setText("");
+                    countyComboBox.setSelectedItem("");
+                    bargainingUnitNumberTextBox.setText("");
+                    bargainingUnitNameTextBox.setText("");
+                    setBUNumberCheckBoxes("");
                 }
             }
         }
@@ -1255,6 +1267,15 @@ public class REPCaseInformationPanel extends javax.swing.JPanel {
                     employerIDNumberTextBox.setText(search.getBuNumber().split("-")[0]);
                 }
                 search.dispose();
+            }
+        } else if(evt.getClickCount() == 1 && evt.getButton() == MouseEvent.BUTTON3) {
+            if(bargainingUnitNumberTextBox.isEnabled()) {
+                int answer = WebOptionPane.showConfirmDialog(this, "Would You Like to Clear the Bargaining Unit Information", "Clear", WebOptionPane.YES_NO_OPTION);
+                if (answer == WebOptionPane.YES_OPTION) {
+                    bargainingUnitNumberTextBox.setText("");
+                    bargainingUnitNameTextBox.setText("");
+                    setBUNumberCheckBoxes("");
+                }
             }
         }
     }//GEN-LAST:event_bargainingUnitNumberTextBoxMouseClicked

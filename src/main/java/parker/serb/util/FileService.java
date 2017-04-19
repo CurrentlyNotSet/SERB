@@ -45,26 +45,20 @@ public class FileService {
                     Global.mediaPath = "/Users/parkerjohnston/Desktop/SERB/Media/";
                     Global.templatePath = "/Users/parkerjohnston/Desktop/SERB/Template/";
                     Global.reportingPath = "/Users/parkerjohnston/Desktop/SERB/Reporting/";
+                    Global.documentationPath = "/Users/parkerjohnston/Desktop/SERB/Documentation/";
                     break;
-                //TODO: Add in other machines with the correct paths
                 case "Alienware15":
                 case "Optiplex3010":
                 case "Sniper":
+                case "HP-8100":
                     Global.scanPath = "C:\\SERB\\Scan\\";
                     Global.emailPath = "C:\\SERB\\Email\\";
                     Global.activityPath = "C:\\SERB\\Activity\\";
                     Global.mediaPath = "C:\\SERB\\Media\\";
                     Global.templatePath = "C:\\SERB\\Template\\";
                     Global.reportingPath = "C:\\SERB\\Reporting\\";
+                    Global.documentationPath = "C:\\SERB\\Documentation\\";
                     break;
-//                case "NW103087":  //NW Laptop no longer owned
-//                    Global.scanPath = "C:\\Users\\johnp10\\Desktop\\SERB\\Scan\\";
-//                    Global.emailPath = "C:\\Users\\johnp10\\Desktop\\SERB\\Email\\";
-//                    Global.activityPath = "C:\\Users\\johnp10\\Desktop\\SERB\\Activity\\";
-//                    Global.mediaPath = "C:\\Users\\johnp10\\Desktop\\SERB\\Media\\";
-//                    Global.templatePath = "C:\\Users\\johnp10\\Desktop\\SERB\\Template\\";
-//                    Global.reportingPath = "C:\\Users\\johnp10\\Desktop\\SERB\\Reporting\\";
-//                    break;
                 default: //SERB LOCATION
                     Global.scanPath = "G:\\SERB\\Scan\\";
                     Global.emailPath = "G:\\SERB\\Email\\";
@@ -72,6 +66,7 @@ public class FileService {
                     Global.mediaPath = "G:\\SERB\\Media\\";
                     Global.templatePath = "G:\\SERB\\Template\\";
                     Global.reportingPath = "G:\\SERB\\Reporting\\";
+                    Global.documentationPath = "G:\\SERB\\Documentation\\";
                     break;
             }
         } catch (UnknownHostException ex) {
@@ -107,6 +102,16 @@ public class FileService {
                     + orgNumber
                     + File.separatorChar
                     + fileName));
+        } catch (IOException | NullPointerException | IllegalArgumentException ex) {
+            new FileNotFoundDialog((JFrame) Global.root.getRootPane().getParent(), true, fileName);
+            SlackNotification.sendNotification(ex);
+        }
+    }
+
+    public static void openDocumentation(String fileName) {
+        try {
+            Audit.addAuditEntry("Opened " + fileName);
+            Desktop.getDesktop().open(new File(Global.documentationPath + fileName));
         } catch (IOException | NullPointerException | IllegalArgumentException ex) {
             new FileNotFoundDialog((JFrame) Global.root.getRootPane().getParent(), true, fileName);
             SlackNotification.sendNotification(ex);

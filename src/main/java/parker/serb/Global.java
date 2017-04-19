@@ -22,8 +22,9 @@ public class Global {
     // Major Version       3 -- will stay 3
     // Minor Version       0 -- update with larger enhancments
     // Maintenence Version 0 -- bug fix releases
-    public static final String APPLICATION_VERSION = "3.1.12";
-    
+
+    public static final String APPLICATION_VERSION = "3.1.13";
+
     //All Date and Time formatters
     public static SimpleDateFormat mmddyyyyhhmma = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
     public static SimpleDateFormat hmma = new SimpleDateFormat("h:mm a");
@@ -92,6 +93,7 @@ public class Global {
     public static String activityPath;
     public static String mediaPath;
     public static String reportingPath;
+    public static String documentationPath;
 
     //boolean about if notigication should be sent
     public static boolean errorNotifications;
