@@ -22,8 +22,9 @@ public class Global {
     // Major Version       3 -- will stay 3
     // Minor Version       0 -- update with larger enhancments
     // Maintenence Version 0 -- bug fix releases
-    public static final String APPLICATION_VERSION = "3.2";
-    
+
+    public static final String APPLICATION_VERSION = "3.1.13";
+
     //All Date and Time formatters
     public static SimpleDateFormat mmddyyyyhhmma = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
     public static SimpleDateFormat hmma = new SimpleDateFormat("h:mm a");
@@ -45,7 +46,7 @@ public class Global {
     public static String caseNumber = null;
 
     //Table striping color, currently will be white until paid
-    public static final Color ALTERNATE_ROW_COLOR = new Color(255, 255, 204); //light yellow
+    public static final Color ALTERNATE_ROW_COLOR = Color.WHITE;//new Color(255, 255, 204); //light yellow
 
     //Stores the current search term to allow data to be retained when leaving and coming back
     public static String employerSearchTerm = null;
@@ -92,6 +93,7 @@ public class Global {
     public static String activityPath;
     public static String mediaPath;
     public static String reportingPath;
+    public static String documentationPath;
 
     //boolean about if notigication should be sent
     public static boolean errorNotifications;

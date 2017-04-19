@@ -6,6 +6,7 @@
 package parker.serb.ULP;
 import com.alee.extended.date.WebCalendar;
 import com.alee.extended.date.WebDateField;
+import com.alee.laf.optionpane.WebOptionPane;
 import com.alee.utils.swing.Customizer;
 import java.awt.Color;
 import java.awt.Component;
@@ -1254,6 +1255,13 @@ public class ULPStatusPanel extends javax.swing.JPanel {
                     employerNumberTextBox.setText(search.getBuNumber().split("-")[0]);
                 }
                 search.dispose();
+            }
+        } else if(evt.getClickCount() == 1 && evt.getButton() == MouseEvent.BUTTON3) {
+            if(barginingUnitNoTextBox.isEnabled()) {
+                int answer = WebOptionPane.showConfirmDialog(this, "Would You Like to Clear the Bargaining Unit Information", "Clear", WebOptionPane.YES_NO_OPTION);
+                if (answer == WebOptionPane.YES_OPTION) {
+                    barginingUnitNoTextBox.setText("");
+                }
             }
         }
     }//GEN-LAST:event_barginingUnitNoTextBoxMouseClicked

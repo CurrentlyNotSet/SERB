@@ -69,6 +69,7 @@ import parker.serb.util.CreateNewCSCDialog;
 import parker.serb.util.CreateNewCaseDialog;
 import parker.serb.util.CreateNewHearingDialog;
 import parker.serb.util.CreateNewOrgDialog;
+import parker.serb.util.FileService;
 import parker.serb.util.NewCaseLockDialog;
 import parker.serb.util.NoAppliedRolesDialog;
 import parker.serb.util.NumberFormatService;
@@ -1213,6 +1214,14 @@ public class RootPanel extends javax.swing.JFrame {
         adminPanelMenuItem = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
+        jMenu4 = new javax.swing.JMenu();
+        docketingDocumentationMenuItem = new javax.swing.JMenuItem();
+        REPDocumentationMenuItem = new javax.swing.JMenuItem();
+        ORGDocumentationMenuItem = new javax.swing.JMenuItem();
+        ULPDocumentationMenuItem = new javax.swing.JMenuItem();
+        CSCDocumentationMenuItem = new javax.swing.JMenuItem();
+        CMDSDocumentationMenuItem = new javax.swing.JMenuItem();
+        HearingsDocumentationMenuItem = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
 
         jMenuItem2.setText("jMenuItem2");
@@ -1748,6 +1757,66 @@ public class RootPanel extends javax.swing.JFrame {
 
         jMenu3.setText("Help");
 
+        jMenu4.setText("Documentation");
+
+        docketingDocumentationMenuItem.setText("Docketing");
+        docketingDocumentationMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                docketingDocumentationMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu4.add(docketingDocumentationMenuItem);
+
+        REPDocumentationMenuItem.setText("REP");
+        REPDocumentationMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                REPDocumentationMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu4.add(REPDocumentationMenuItem);
+
+        ORGDocumentationMenuItem.setText("ORG");
+        ORGDocumentationMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ORGDocumentationMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu4.add(ORGDocumentationMenuItem);
+
+        ULPDocumentationMenuItem.setText("ULP");
+        ULPDocumentationMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ULPDocumentationMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu4.add(ULPDocumentationMenuItem);
+
+        CSCDocumentationMenuItem.setText("Civil Service Commission");
+        CSCDocumentationMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CSCDocumentationMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu4.add(CSCDocumentationMenuItem);
+
+        CMDSDocumentationMenuItem.setText("CMDS");
+        CMDSDocumentationMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CMDSDocumentationMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu4.add(CMDSDocumentationMenuItem);
+
+        HearingsDocumentationMenuItem.setText("Hearings");
+        HearingsDocumentationMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                HearingsDocumentationMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu4.add(HearingsDocumentationMenuItem);
+
+        jMenu3.add(jMenu4);
+
         jMenuItem6.setText("Release Notes");
         jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2124,15 +2193,49 @@ public class RootPanel extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem10ActionPerformed
 
+    private void docketingDocumentationMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_docketingDocumentationMenuItemActionPerformed
+        FileService.openDocumentation("Docketing Section Procedures.pdf");
+    }//GEN-LAST:event_docketingDocumentationMenuItemActionPerformed
+
+    private void REPDocumentationMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_REPDocumentationMenuItemActionPerformed
+        FileService.openDocumentation("REP Section Procedures.pdf");
+    }//GEN-LAST:event_REPDocumentationMenuItemActionPerformed
+
+    private void ORGDocumentationMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ORGDocumentationMenuItemActionPerformed
+        FileService.openDocumentation("ORG Section Procedures.pdf");
+    }//GEN-LAST:event_ORGDocumentationMenuItemActionPerformed
+
+    private void ULPDocumentationMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ULPDocumentationMenuItemActionPerformed
+        FileService.openDocumentation("ULP Section Procedures.pdf");
+    }//GEN-LAST:event_ULPDocumentationMenuItemActionPerformed
+
+    private void CSCDocumentationMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CSCDocumentationMenuItemActionPerformed
+        FileService.openDocumentation("Civil Service Commission Section Procedures.pdf");
+    }//GEN-LAST:event_CSCDocumentationMenuItemActionPerformed
+
+    private void CMDSDocumentationMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CMDSDocumentationMenuItemActionPerformed
+        FileService.openDocumentation("CMDS Section Procedures.pdf");
+    }//GEN-LAST:event_CMDSDocumentationMenuItemActionPerformed
+
+    private void HearingsDocumentationMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HearingsDocumentationMenuItemActionPerformed
+        FileService.openDocumentation("Hearings Section Procedures.pdf");
+    }//GEN-LAST:event_HearingsDocumentationMenuItemActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel CMDS;
+    private javax.swing.JMenuItem CMDSDocumentationMenuItem;
     private javax.swing.JPanel CSC;
+    private javax.swing.JMenuItem CSCDocumentationMenuItem;
     private javax.swing.JPanel Docketing;
     private javax.swing.JPanel Hearing;
+    private javax.swing.JMenuItem HearingsDocumentationMenuItem;
     private javax.swing.JPanel MED;
     private javax.swing.JPanel ORG;
+    private javax.swing.JMenuItem ORGDocumentationMenuItem;
     private javax.swing.JPanel REP;
+    private javax.swing.JMenuItem REPDocumentationMenuItem;
     private javax.swing.JPanel ULP;
+    private javax.swing.JMenuItem ULPDocumentationMenuItem;
     private javax.swing.JMenuItem adminPanelMenuItem;
     private javax.swing.JMenu batchCloseCasesSubMenu;
     private javax.swing.JMenuItem batchCloseMEDMenuItem;
@@ -2145,6 +2248,7 @@ public class RootPanel extends javax.swing.JFrame {
     private parker.serb.companySearch.companySearchPanel companySearchPanel1;
     private parker.serb.docket.DocketRootPanel docketRootPanel;
     private parker.serb.docket.DocketRootPanel docketRootPanel1;
+    private javax.swing.JMenuItem docketingDocumentationMenuItem;
     private javax.swing.JLabel docketingSectionLabel;
     private parker.serb.Hearing.HearingHeaderPanel hearingHeaderPanel1;
     private parker.serb.Hearing.HearingRootPanel hearingRootPanel1;
@@ -2161,6 +2265,7 @@ public class RootPanel extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem10;
