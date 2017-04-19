@@ -27,7 +27,7 @@ import parker.serb.sql.PostalOutAttachment;
 public class LetterQueuePanel extends javax.swing.JDialog {
 
     private List<LetterQueue> queueList;
-    
+
     public LetterQueuePanel(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -55,8 +55,7 @@ public class LetterQueuePanel extends javax.swing.JDialog {
     private void loadPanel() {
         headerLabel.setText(Global.activeSection + " Letter Queue");
         setColumnWidth();
-        loadSQLData();
-        loadLetterQueue();
+        loadPanelInformation();
     }
 
     private void setColumnWidth() {
@@ -158,8 +157,7 @@ public class LetterQueuePanel extends javax.swing.JDialog {
             new ConfirmationDialog(Global.root, true,
                     jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString(),
                     (int) jTable1.getValueAt(jTable1.getSelectedRow(), 0));
-            loadSQLData();
-            loadLetterQueue();
+            loadPanelInformation();
         }
     }
 
@@ -176,25 +174,28 @@ public class LetterQueuePanel extends javax.swing.JDialog {
                 PostalOutAttachment.removeEntry(rowID);
             }
         }
-        loadSQLData();
-        loadLetterQueue();
+        loadPanelInformation();
     }
 
-    private void loadSQLData(){
-        jLayeredPane1.moveToFront(jPanel1);
-        
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.setRowCount(0);
-                
-        queueList = LetterQueue.getLetterQueueByGlobalSection();
-        toggleSearchInteractionHandling(false);
+    private void loadPanelInformation() {
+        Thread temp = new Thread(() -> {
+            toggleSearchInteractionHandling(false);
+            jLayeredPane1.moveToFront(jPanel1);
+            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            model.setRowCount(0);
+
+            queueList = LetterQueue.getLetterQueueByGlobalSection();
+            loadLetterQueue();
+        });
+        temp.start();
     }
-    
+
     private void toggleSearchInteractionHandling(boolean enabled){
         searchTextBox.setEnabled(enabled);
         clearSearchButton.setEnabled(enabled);
+        jScrollPane1.setEnabled(enabled);
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
