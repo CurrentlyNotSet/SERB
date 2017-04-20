@@ -50,6 +50,7 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
                         Global.root.getuLPRootPanel1().clearAll();
                     }
                 } else {
+                    Global.root.getuLPRootPanel1().clearAll();
                     Global.root.getjButton2().setEnabled(true);
 //                    Global.root.getjButton6().setEnabled(true);
                     Global.root.getjButton3().setEnabled(true);

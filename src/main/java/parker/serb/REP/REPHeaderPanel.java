@@ -55,6 +55,7 @@ public class REPHeaderPanel extends javax.swing.JPanel {
                         Global.root.getrEPRootPanel1().clearAll();
                     }
                 } else {
+                    Global.root.getrEPRootPanel1().clearAll();
                     Global.root.getjButton2().setEnabled(true);
                     Global.root.getjButton3().setEnabled(true);
                     caseNumberComboBox.setSelectedItem(caseNumberComboBox.getSelectedItem().toString().toUpperCase());

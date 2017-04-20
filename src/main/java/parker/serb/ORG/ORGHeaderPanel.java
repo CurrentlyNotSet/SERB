@@ -57,6 +57,7 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
                         Global.root.getoRGRootPanel1().clearAll();
                     }
                 } else {
+                    Global.root.getoRGRootPanel1().clearAll();
                     Global.root.getjButton2().setEnabled(true);
                     caseNumberComboBox.setSelectedItem(caseNumberComboBox.getSelectedItem().toString().toUpperCase());
                     loadInformation();
