@@ -37,12 +37,12 @@ public class LetterQueue {
 
     public static List<LetterQueue> getLetterQueueByGlobalSection() {
         List<LetterQueue> emailList = new ArrayList<>();
-        List<String> casetypes = null;
+        String casetypes = "";
 
         if (Global.activeSection.equals("Hearings")){
-            casetypes = CaseType.getCaseTypeHearings();
+            casetypes = "(C.section = 'MED' OR C.section = 'REP' OR C.section = 'ULP') ";
         } else {
-            casetypes = CaseType.getCaseType();
+            casetypes = "C.section = '" + Global.activeSection + "' ";
         }
 
         Statement stmt = null;
@@ -53,54 +53,35 @@ public class LetterQueue {
             // Email Out Table
             String sql = "SELECT C.id, 'Email' AS type, C.caseYear, C.caseType, "
                     + "C.caseMonth, C.caseNumber, C.creationDate, C.[TO], C.subject, "
-                    + "COUNT(S.id) AS attachments, C.suggestedSendDate, C.userID, C.section "
+                    + "COUNT(S.id) AS attachments, C.suggestedSendDate, "
+                    + "(U.firstName + ' ' + LEFT(U.lastName, 1) + '.') AS userName, C.section "
                     + "FROM EmailOut C "
                     + "LEFT JOIN EmailOutAttachment S ON C.id = S.emailoutid "
-                    + "WHERE C.okToSend = 0 ";
+                    + "LEFT JOIN users U ON C.userID = U.id "
+                    + "WHERE C.okToSend = 0 AND " + casetypes + " "
+                    + "GROUP BY C.id, C.section, C.caseYear, C.caseType, "
+                    + "C.caseMonth,  C.caseNumber, C.[TO], C.subject, "
+                    + "C.suggestedSendDate, C.creationDate, U.firstName, U.lastName ";
 
-                    if (!casetypes.isEmpty()) {
-                        sql += "AND (";
-
-                        for (String casetype : casetypes) {
-
-                            sql += " caseType = '" + casetype + "' OR";
-                        }
-
-                        sql = sql.substring(0, (sql.length() - 2)) + ") ";
-                    }
-
-                    sql += " GROUP BY C.id, C.section, C.caseYear, C.caseType, "
-                            + "C.caseMonth,  C.caseNumber, C.[TO], C.subject, "
-                            + "C.userID, C.suggestedSendDate, C.creationDate";
-
-                    sql += " UNION ALL ";
+            //Union the two tables
+            sql += " UNION ALL ";
 
             // Postal Out Table
             sql += "SELECT C.id, 'Postal' AS type, C.caseYear, C.caseType, "
                     + "C.caseMonth, C.caseNumber, C.creationDate, C.person AS [TO], "
                     + "C.historyDescription AS subject, COUNT(S.id) AS attachments, "
-                    + "C.suggestedSendDate, C.userID, C.section "
+                    + "C.suggestedSendDate, (U.firstName + ' ' + LEFT(U.lastName, 1) + '.') AS userName, "
+                    + "C.section "
                     + "FROM PostalOut C "
                     + "LEFT JOIN PostalOutAttachment S ON C.id = S.postaloutid "
-                    + "WHERE ";
+                    + "LEFT JOIN users U ON C.userID = U.id "
+                    + "WHERE " + casetypes + " "
+                    + "GROUP BY C.id, C.section, C.caseYear, C.caseType, "
+                    + "C.caseMonth, C.caseNumber, C.person, C.suggestedSendDate, "
+                    + "C.historyDescription, C.creationDate, U.firstName, U.lastName ";
 
-                    if (!casetypes.isEmpty()) {
-                        sql += "(";
-
-                        for (String casetype : casetypes) {
-
-                            sql += " caseType = '" + casetype + "' OR";
-                        }
-
-                        sql = sql.substring(0, (sql.length() - 2)) + ") ";
-                    }
-
-                    sql += "GROUP BY C.id, C.section, C.caseYear, C.caseType, "
-                            + "C.caseMonth, C.caseNumber, C.person, C.userID, "
-                            + "C.suggestedSendDate, C.historyDescription, "
-                            + "C.creationDate";
-
-                    sql += " ORDER BY creationDate, caseYear, CaseMonth, caseNumber ASC";
+            //Group the two tables
+            sql += " ORDER BY creationDate, caseYear, CaseMonth, caseNumber ASC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             ResultSet rs = preparedStatement.executeQuery();
@@ -114,13 +95,12 @@ public class LetterQueue {
                 } else {
                     eml.fullCaseNumber = rs.getString("caseYear") + "-" + rs.getString("caseType") + "-" + rs.getString("caseMonth") + "-" + rs.getString("caseNumber");
                 }
-
                 eml.creationDate = rs.getDate("creationDate") == null ? "" : Global.mmddyyyy.format(rs.getDate("creationDate"));
                 eml.to = rs.getString("TO");
                 eml.subject = rs.getString("subject") == null ? "" : rs.getString("subject");
                 eml.attachementCount = rs.getInt("attachments");
                 eml.suggestedSendDate = rs.getDate("suggestedSendDate") == null ? "" : Global.mmddyyyy.format(rs.getDate("suggestedSendDate"));
-                eml.userName = User.getNameLastInitialByID(rs.getInt("userID"));
+                eml.userName = rs.getString("userName");
                 eml.section = rs.getString("section");
                 emailList.add(eml);
             }
