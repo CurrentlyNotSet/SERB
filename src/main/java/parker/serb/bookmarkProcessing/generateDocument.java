@@ -366,6 +366,8 @@ public class generateDocument {
                     StringUtilities.buildFullName(Global.activeUser.firstName, Global.activeUser.middleInitial, Global.activeUser.lastName),
                     Document);
             processBookmark.process("LOGGEDINUSERTITLE" + (i == 0 ? "" : i), Global.activeUser.jobTitle, Document);
+            processBookmark.process("LOGGEDINUSERPHONE" + (i == 0 ? "" : i), Global.activeUser.workPhone, Document);
+            processBookmark.process("LOGGEDINUSEREMAIL" + (i == 0 ? "" : i), Global.activeUser.emailAddress, Document);
 
             //Made up stuff
             processBookmark.process("TODAYSDATE" + (i == 0 ? "" : i), Global.MMMMdyyyy.format(today), Document);
@@ -527,6 +529,8 @@ public class generateDocument {
                     StringUtilities.buildFullName(Global.activeUser.firstName, Global.activeUser.middleInitial, Global.activeUser.lastName),
                     Document);
             processBookmark.process("LOGGEDINUSERTITLE" + (i == 0 ? "" : i), Global.activeUser.jobTitle, Document);
+            processBookmark.process("LOGGEDINUSERPHONE" + (i == 0 ? "" : i), Global.activeUser.workPhone, Document);
+            processBookmark.process("LOGGEDINUSEREMAIL" + (i == 0 ? "" : i), Global.activeUser.emailAddress, Document);
 
             //Made up stuff
             processBookmark.process("TODAYSDATE" + (i == 0 ? "" : i), Global.MMMMdyyyy.format(today), Document);
