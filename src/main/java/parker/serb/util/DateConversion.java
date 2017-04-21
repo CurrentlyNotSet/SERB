@@ -13,14 +13,14 @@ import java.util.Calendar;
  * @author parkerjohnston
  */
 public class DateConversion {
-    
+
     public static Timestamp generateReminderStartDate(Timestamp reminderDate) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(reminderDate);
-        cal.set(Calendar.HOUR_OF_DAY,9);
+        cal.set(Calendar.HOUR_OF_DAY,8);
         cal.set(Calendar.MINUTE,0);
         cal.set(Calendar.SECOND,0);
         return new Timestamp(cal.getTimeInMillis());
     }
-    
+
 }
