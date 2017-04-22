@@ -29,5 +29,4 @@ public class EmailValidation {
         }
         return valid;    
     }
-    
 }

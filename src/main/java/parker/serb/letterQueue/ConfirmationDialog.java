@@ -325,7 +325,7 @@ public class ConfirmationDialog extends javax.swing.JDialog {
 
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
         if (verifyFilesExist()) {
-            if (Global.EmailSizeLimit >= attachmentSize) {
+            if (Global.EMAIL_SIZE_LIMIT >= attachmentSize) {
                 if (fileInUse) {
                     filesInUseMessage();
                 } else {

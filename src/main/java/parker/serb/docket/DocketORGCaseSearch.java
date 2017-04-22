@@ -30,6 +30,7 @@ public class DocketORGCaseSearch extends javax.swing.JDialog {
     Object[][] tableData;
     public String orgNumber;
     public String orgName;
+    
     /**
      * Creates new form REPCaseSearch
      * @param parent
@@ -63,7 +64,6 @@ public class DocketORGCaseSearch extends javax.swing.JDialog {
 
     private void addListeners() {
         searchTextBox.getDocument().addDocumentListener(new DocumentListener() {
-
             @Override
             public void insertUpdate(DocumentEvent e) {
                 limitCaseList();
@@ -81,7 +81,6 @@ public class DocketORGCaseSearch extends javax.swing.JDialog {
         });
 
         caseSearchTable.addMouseListener(new MouseListener() {
-
             @Override
             public void mouseClicked(MouseEvent e) {
                 if(e.getClickCount() >= 2) {
@@ -141,7 +140,6 @@ public class DocketORGCaseSearch extends javax.swing.JDialog {
         getTableData();
         caseSearchTable.setModel(model);
         jLayeredPane1.moveToBack(jPanel1);
-
     }
 
     private void limitCaseList() {

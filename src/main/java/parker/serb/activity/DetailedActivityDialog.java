@@ -40,17 +40,10 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
         initComponents();
         passedID = id;
         passedUser = userName;
-        //displayUpdateButton();
         loadComboBoxes();
         loadInformation(id, userName);
         setLocationRelativeTo(parent);
         setVisible(true);
-    }
-
-    private void displayUpdateButton() {
-        if(!Global.activeUserRoles.contains("Admin")) {
-            updateButton.setVisible(false);
-        }
     }
 
     private void loadComboBoxes() {

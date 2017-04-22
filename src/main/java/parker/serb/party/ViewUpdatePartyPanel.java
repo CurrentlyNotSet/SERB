@@ -129,7 +129,7 @@ public class ViewUpdatePartyPanel extends javax.swing.JDialog {
         stateComboBox.removeAllItems();
         stateComboBox.addItem("");
 
-        for (String state : Global.states) {
+        for (String state : Global.STATES) {
             stateComboBox.addItem(state);
         }
     }

@@ -370,7 +370,7 @@ public class generateDocument {
             //Made up stuff
             processBookmark.process("TODAYSDATE" + (i == 0 ? "" : i), Global.MMMMdyyyy.format(today), Document);
             processBookmark.process("DAY" + (i == 0 ? "" : i), Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
-                    + Global.daySuffixes[Calendar.getInstance().get(Calendar.DAY_OF_MONTH)], Document);
+                    + Global.DAY_SUFFIXES[Calendar.getInstance().get(Calendar.DAY_OF_MONTH)], Document);
             processBookmark.process("MONTH" + (i == 0 ? "" : i), Global.MMMMM.format(today), Document);
             processBookmark.process("YEAR" + (i == 0 ? "" : i), Global.yyyy.format(today), Document);
             processBookmark.process("DUEDATE" + (i == 0 ? "" : i), Global.MMMMdyyyy.format(dueDate), Document);
@@ -534,7 +534,7 @@ public class generateDocument {
             processBookmark.process("CurrentDate" + (i == 0 ? "" : i), Global.MMMMdyyyy.format(today), Document);
             processBookmark.process("DateMatterCameOn" + (i == 0 ? "" : i), Global.MMMMdyyyy.format(today), Document);
             processBookmark.process("DAY" + (i == 0 ? "" : i), Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
-                    + Global.daySuffixes[Calendar.getInstance().get(Calendar.DAY_OF_MONTH)], Document);
+                    + Global.DAY_SUFFIXES[Calendar.getInstance().get(Calendar.DAY_OF_MONTH)], Document);
             processBookmark.process("MONTH" + (i == 0 ? "" : i), Global.MMMMM.format(new Date()), Document);
             processBookmark.process("Year" + (i == 0 ? "" : i), Global.yyyy.format(new Date()), Document);
             processBookmark.process("PLUS7" + (i == 0 ? "" : i), Global.MMMMdyyyy.format(sevenDayOut), Document);

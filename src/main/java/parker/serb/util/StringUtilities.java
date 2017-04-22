@@ -153,7 +153,6 @@ public class StringUtilities {
                 fullName = fullName.trim() + (item.companyName.equals("") ? "" : System.lineSeparator() + item.companyName.trim());
             }
         }
-
         return fullName.trim();
     }
 

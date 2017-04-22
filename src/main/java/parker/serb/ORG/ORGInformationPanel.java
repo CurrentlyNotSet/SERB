@@ -77,7 +77,7 @@ public class ORGInformationPanel extends javax.swing.JPanel {
         orgStateComboBox.removeAllItems();
         orgStateComboBox.addItem("");
         
-        for (String state : Global.states) {
+        for (String state : Global.STATES) {
             orgStateComboBox.addItem(state);
         }
     }

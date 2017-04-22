@@ -72,7 +72,7 @@ public class CSCInformationPanel extends javax.swing.JPanel {
         cscStateComboBox.removeAllItems();
         cscStateComboBox.addItem("");
         
-        for (String state : Global.states) {
+        for (String state : Global.STATES) {
             cscStateComboBox.addItem(state);
         }
     }

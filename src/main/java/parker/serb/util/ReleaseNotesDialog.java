@@ -50,13 +50,10 @@ public class ReleaseNotesDialog extends javax.swing.JDialog {
     }
 
     private void loadReleaseInformation() {
-        ReleaseNotes release = ReleaseNotes.loadReleaseInformation(versionListing.getSelectedValue().toString());
-
+        ReleaseNotes release = ReleaseNotes.loadReleaseInformation(versionListing.getSelectedValue());
         releaseDateTextBox.setText("Release Date: " + release.releaseDate);
         notesPane.setText(release.releaseNotes);
     }
-
-
 
     /**
      * This method is called from within the constructor to initialize the form.

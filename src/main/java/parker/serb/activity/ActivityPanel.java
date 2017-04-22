@@ -59,7 +59,6 @@ public class ActivityPanel extends javax.swing.JPanel {
         });
 
         searchTextBox.getDocument().addDocumentListener(new DocumentListener() {
-
             @Override
             public void insertUpdate(DocumentEvent e) {
                 loadActivity(searchTextBox.getText().trim());
@@ -84,14 +83,11 @@ public class ActivityPanel extends javax.swing.JPanel {
             }
         });
 
-
         actvityTable.addMouseListener(new MouseListener() {
-
             @Override
             public void mouseClicked(MouseEvent e) {
                 if(actvityTable.getSelectedRow() >= 0) {
                     String filePath = actvityTable.getValueAt(actvityTable.getSelectedRow(), 6) != null ? actvityTable.getValueAt(actvityTable.getSelectedRow(), 6).toString() : "";
-
 
                     if (e.getClickCount() == 2 && !filePath.equals("") && actvityTable.getSelectedColumn() == 0 && e.getButton() == MouseEvent.BUTTON1) {
 
@@ -123,7 +119,6 @@ public class ActivityPanel extends javax.swing.JPanel {
                                 actvityTable.getValueAt(actvityTable.getSelectedRow(), 5).toString(),
                                 actvityTable.getValueAt(actvityTable.getSelectedRow(), 4).toString());
                         }
-
                         loadAllActivity();
                     }
                 }
@@ -179,8 +174,6 @@ public class ActivityPanel extends javax.swing.JPanel {
      * @param searchTerm a string of a value, if blank pass ""
      */
     private void loadActivity(String searchTerm) {
-
-
         Audit.addAuditEntry("Searched Activty for " + searchTerm);
 
         DefaultTableModel model = (DefaultTableModel) actvityTable.getModel();
@@ -231,7 +224,6 @@ public class ActivityPanel extends javax.swing.JPanel {
      * Will be removed in future releases
      */
     public void loadAllActivity() {
-
         searchTextBox.setText("");
 
         DefaultTableModel model = (DefaultTableModel) actvityTable.getModel();
@@ -264,7 +256,6 @@ public class ActivityPanel extends javax.swing.JPanel {
     }
 
     public void loadAllHearingActivity() {
-
         searchTextBox.setText("");
 
         DefaultTableModel model = (DefaultTableModel) actvityTable.getModel();
@@ -421,7 +412,6 @@ public class ActivityPanel extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
 
     class ImageRenderer extends DefaultTableCellRenderer {
-
         JLabel lbl = new JLabel();
 
         ImageIcon icon = new ImageIcon(getClass().getResource("/file-icon.png"));

@@ -1025,7 +1025,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
 
     private void generateLetterButton() {
         if (checkActivityTable() && checkAdditionalDocsTable()) {
-            if (Global.EmailSizeLimit >= attachmentSize) {
+            if (Global.EMAIL_SIZE_LIMIT >= attachmentSize) {
                 processThread();
                 loadingPanel.setVisible(true);
                 InfoPanel.setVisible(false);

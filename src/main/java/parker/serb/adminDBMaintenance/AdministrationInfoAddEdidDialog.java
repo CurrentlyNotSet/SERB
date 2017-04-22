@@ -46,7 +46,7 @@ public class AdministrationInfoAddEdidDialog extends javax.swing.JDialog {
     private void loadStateComboBox() {
         stateComboBox.removeAllItems();
         
-        for (String state : Global.states) {
+        for (String state : Global.STATES) {
             stateComboBox.addItem(state);
         }
         stateComboBox.setSelectedItem("OH");

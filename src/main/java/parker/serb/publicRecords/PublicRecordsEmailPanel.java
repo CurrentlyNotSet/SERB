@@ -129,7 +129,7 @@ public class PublicRecordsEmailPanel extends javax.swing.JDialog {
 
     private void sendButtonProcess() {
         if (verifyFilesExist()) {
-            if (Global.EmailSizeLimit >= attachmentSize) {
+            if (Global.EMAIL_SIZE_LIMIT >= attachmentSize) {
                 if (fileInUse) {
                     filesInUseMessage();
                 } else {
