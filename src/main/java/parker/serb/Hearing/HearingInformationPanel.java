@@ -265,11 +265,6 @@ public class HearingInformationPanel extends javax.swing.JPanel {
     public void loadInformation() {
         loadALJComboBox();
         loadFinalResultComboBox();
-//        loadMediatorComboBox();
-//        loadGroupTypeComboBox();
-//        loadCaseStatusComboBox();
-//        loadReclassComboBox();
-//        loadResultComboBox();
 
         loadMediationTable();
 
@@ -519,11 +514,6 @@ public class HearingInformationPanel extends javax.swing.JPanel {
                             draftComplaintToHearingTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
                                 public void mouseClicked(java.awt.event.MouseEvent evt) {
                                     draftComplaintToHearingTextBoxMouseClicked(evt);
-                                }
-                            });
-                            draftComplaintToHearingTextBox.addActionListener(new java.awt.event.ActionListener() {
-                                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                    draftComplaintToHearingTextBoxActionPerformed(evt);
                                 }
                             });
 
@@ -1138,10 +1128,6 @@ public class HearingInformationPanel extends javax.swing.JPanel {
     private void issuanceOfOPDirDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_issuanceOfOPDirDateTextBoxMouseClicked
         clearDate(issuanceOfOPDirDateTextBox, evt);
     }//GEN-LAST:event_issuanceOfOPDirDateTextBoxMouseClicked
-
-    private void draftComplaintToHearingTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_draftComplaintToHearingTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_draftComplaintToHearingTextBoxActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

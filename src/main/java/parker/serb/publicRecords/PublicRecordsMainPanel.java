@@ -281,7 +281,7 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
         if (docsList.size() > 0) {
             //SEND panel
             if (verifyFilesExist(docsList)) {
-                if (Global.EmailSizeLimit >= attachmentSize) {
+                if (Global.EMAIL_SIZE_LIMIT >= attachmentSize) {
                     new PublicRecordsEmailPanel(Global.root, true, docsList);
                     loadCaseDocsTable();
                 } else {

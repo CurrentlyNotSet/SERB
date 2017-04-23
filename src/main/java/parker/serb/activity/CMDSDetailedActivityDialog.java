@@ -54,7 +54,7 @@ public class CMDSDetailedActivityDialog extends javax.swing.JDialog {
     }
 
     private void loadToComboBox() {
-        List userList = userList = User.loadSectionDropDowns("CMDS");
+        List userList = User.loadSectionDropDowns("CMDS");
 
         toComboBox.setMaximumRowCount(6);
         toComboBox.removeAllItems();
@@ -422,7 +422,6 @@ public class CMDSDetailedActivityDialog extends javax.swing.JDialog {
                 loadEntryDescriptionComboBox();
                 descriptionComboBox.setEnabled(false);
             }
-//            enableSaveButton();
         }
     }//GEN-LAST:event_typeComboBoxActionPerformed
 

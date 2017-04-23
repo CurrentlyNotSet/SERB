@@ -64,7 +64,6 @@ public class DocketCSCCaseSearch extends javax.swing.JDialog {
 
     private void addListeners() {
         searchTextBox.getDocument().addDocumentListener(new DocumentListener() {
-
             @Override
             public void insertUpdate(DocumentEvent e) {
                 limitCaseList();
@@ -82,7 +81,6 @@ public class DocketCSCCaseSearch extends javax.swing.JDialog {
         });
 
         caseSearchTable.addMouseListener(new MouseListener() {
-
             @Override
             public void mouseClicked(MouseEvent e) {
                 if(e.getClickCount() >= 2) {
@@ -122,7 +120,6 @@ public class DocketCSCCaseSearch extends javax.swing.JDialog {
     }
 
     private void loadAllCases() {
-
         model = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {

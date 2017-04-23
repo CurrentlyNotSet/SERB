@@ -246,8 +246,7 @@ public class CMDSRootPanel extends javax.swing.JPanel {
     public ActivityPanel getActivityPanel1() {
         return activityPanel1;
     }
-
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

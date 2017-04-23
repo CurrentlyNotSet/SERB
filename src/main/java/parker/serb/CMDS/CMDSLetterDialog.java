@@ -247,12 +247,12 @@ public class CMDSLetterDialog extends javax.swing.JDialog {
             selectionName = specialtyDocumentsComboBox.getSelectedItem().toString().trim();
             if (selectionName.equalsIgnoreCase("Initial Case Letter")){
                 if (Global.caseType.equalsIgnoreCase("INV")){
-                        selectionName = "Notice of Request for Investigation";
-                        selectionID = 0;
-                    } else {
-                        selectionName = "Notice of Appeal";
-                        selectionID = 0;
-                    }
+                    selectionName = "Notice of Request for Investigation";
+                    selectionID = 0;
+                } else {
+                    selectionName = "Notice of Appeal";
+                    selectionID = 0;
+                }
             }
         }
 

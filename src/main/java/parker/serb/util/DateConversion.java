@@ -22,5 +22,4 @@ public class DateConversion {
         cal.set(Calendar.SECOND,0);
         return new Timestamp(cal.getTimeInMillis());
     }
-
 }

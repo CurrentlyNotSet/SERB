@@ -161,8 +161,6 @@ public class MEDAddDuplicateCaseDialog extends javax.swing.JDialog {
             }
             else if(CaseValidation.validateCaseNumber(caseNumberTextBox.getText().trim().toUpperCase())) {
                 duplicateCase = caseNumberTextBox.getText().trim().toUpperCase();
-//                RelatedCase.addNewMultiCase(caseNumberTextBox.getText().trim().toUpperCase());
-//                dispose();    
                 setVisible(false);
             }
             else {

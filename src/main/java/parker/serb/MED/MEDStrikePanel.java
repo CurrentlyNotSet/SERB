@@ -100,10 +100,8 @@ public class MEDStrikePanel extends javax.swing.JPanel {
         
         strikeFileDateTextBox.setEnabled(true);
         strikeFileDateTextBox.setBackground(Color.white);
-        //skip med case number
         relatedCaseNumberTextBox.setEnabled(true);
         relatedCaseNumberTextBox.setBackground(Color.white);
-//        medCaseNumberTextBox.setBackground(Color.white); //remove ability to edit per Andrew
         descriptionTextBox.setEnabled(true);
         descriptionTextBox.setBackground(Color.white);
         unitSizeTextBox.setEnabled(true);
@@ -124,7 +122,6 @@ public class MEDStrikePanel extends javax.swing.JPanel {
         strikeBeganTextBox.setBackground(Color.white);
         strikeEndedTextBox.setEnabled(true);
         strikeEndedTextBox.setBackground(Color.white);
-        //skip total number of days
         mediatorAppointedComboBox.setEnabled(true);
         strikeNotesTextArea.setEnabled(true);
         strikeNotesTextArea.setBackground(Color.white);
@@ -137,10 +134,8 @@ public class MEDStrikePanel extends javax.swing.JPanel {
         
         strikeFileDateTextBox.setEnabled(false);
         strikeFileDateTextBox.setBackground(new Color(238,238,238));
-        //skip med case number
-        relatedCaseNumberTextBox.setEnabled(false); //remove ability to edit per Andrew
+        relatedCaseNumberTextBox.setEnabled(false); 
         relatedCaseNumberTextBox.setBackground(new Color(238,238,238));
-//        medCaseNumberTextBox.setBackground(Color.white); //remove ability to edit per Andrew
         descriptionTextBox.setEnabled(false);
         descriptionTextBox.setBackground(new Color(238,238,238));
         unitSizeTextBox.setEnabled(false);
@@ -161,7 +156,6 @@ public class MEDStrikePanel extends javax.swing.JPanel {
         strikeBeganTextBox.setBackground(new Color(238,238,238));
         strikeEndedTextBox.setEnabled(false);
         strikeEndedTextBox.setBackground(new Color(238,238,238));
-        //skip total number of days
         mediatorAppointedComboBox.setEnabled(false);
         strikeNotesTextArea.setEnabled(false);
         strikeNotesTextArea.setBackground(new Color(238,238,238));
@@ -195,7 +189,6 @@ public class MEDStrikePanel extends javax.swing.JPanel {
         
         strikeFileDateTextBox.setText(orginalInformation.strikeFileDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.strikeFileDate.getTime())) : "");
         relatedCaseNumberTextBox.setText(orginalInformation.relatedCaseNumber != null ? orginalInformation.relatedCaseNumber : "");
-//        medCaseNumberTextBox.setText(orginalInformation.medCaseNumber != null ? orginalInformation.medCaseNumber : "");
         descriptionTextBox.setText(orginalInformation.description != null ? orginalInformation.description : "");
         unitSizeTextBox.setText(orginalInformation.unitSize != null ? orginalInformation.unitSize : "");
         unauthorizedStrikeCheckBox.setSelected(orginalInformation.unauthorizedStrike == true);
@@ -220,7 +213,6 @@ public class MEDStrikePanel extends javax.swing.JPanel {
         
         newCaseInformation.strikeFileDate = strikeFileDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(strikeFileDateTextBox.getText()));
         newCaseInformation.relatedCaseNumber = relatedCaseNumberTextBox.getText().equals("") ? null : relatedCaseNumberTextBox.getText();
-//        newCaseInformation.medCaseNumber = medCaseNumberTextBox.getText().equals("") ? null : medCaseNumberTextBox.getText();
         newCaseInformation.description = descriptionTextBox.getText().equals("") ? null : descriptionTextBox.getText();
         newCaseInformation.unitSize = unitSizeTextBox.getText().equals("") ? null : unitSizeTextBox.getText();
         newCaseInformation.unauthorizedStrike = unauthorizedStrikeCheckBox.isSelected();
@@ -246,7 +238,6 @@ public class MEDStrikePanel extends javax.swing.JPanel {
     public void clearAll() {
         strikeFileDateTextBox.setText("");
         relatedCaseNumberTextBox.setText("");
-//        relatedCaseNumberTextBox.setText("");
         descriptionTextBox.setText("");
         unitSizeTextBox.setText("");
         unauthorizedStrikeCheckBox.setSelected(false);
@@ -387,11 +378,6 @@ public class MEDStrikePanel extends javax.swing.JPanel {
                         intendedDatePicketTextBoxMouseClicked(evt);
                     }
                 });
-                intendedDatePicketTextBox.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        intendedDatePicketTextBoxActionPerformed(evt);
-                    }
-                });
 
                 noticeOfIntentToStrikeAndPicketCheckBox.setEnabled(false);
 
@@ -419,11 +405,6 @@ public class MEDStrikePanel extends javax.swing.JPanel {
                     intendedDateStrikeTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
                         public void mouseClicked(java.awt.event.MouseEvent evt) {
                             intendedDateStrikeTextBoxMouseClicked(evt);
-                        }
-                    });
-                    intendedDateStrikeTextBox.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                            intendedDateStrikeTextBoxActionPerformed(evt);
                         }
                     });
 
@@ -715,10 +696,6 @@ public class MEDStrikePanel extends javax.swing.JPanel {
         clearDate(strikeEndedTextBox, evt);
     }//GEN-LAST:event_strikeEndedTextBoxMouseClicked
 
-    private void intendedDatePicketTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_intendedDatePicketTextBoxActionPerformed
-//        clearDate(intendedDatePicketTextBox, evt);
-    }//GEN-LAST:event_intendedDatePicketTextBoxActionPerformed
-
     private void intendedDateStrikeTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_intendedDateStrikeTextBoxMouseClicked
         clearDate(intendedDateStrikeTextBox, evt);
     }//GEN-LAST:event_intendedDateStrikeTextBoxMouseClicked
@@ -742,10 +719,6 @@ public class MEDStrikePanel extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_relatedCaseNumberTextBoxMouseClicked
-
-    private void intendedDateStrikeTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_intendedDateStrikeTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_intendedDateStrikeTextBoxActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

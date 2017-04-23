@@ -57,8 +57,6 @@ public class HearingAddHistoryEntryDialog extends javax.swing.JDialog {
                 enableSaveButton();
             }
         });
-        
-        
     }
     
     private void enableSaveButton() {
@@ -107,20 +105,6 @@ public class HearingAddHistoryEntryDialog extends javax.swing.JDialog {
         }
     }
     
-    private String partyName() {
-        String party = "";
-        
-        if (appellantButton.isSelected()) {
-            party = "Appellant";
-        } else if(appelleeButton.isSelected()) {
-            party = "Appellee";
-        } else {
-            party = "";
-        }
-        
-        return party;
-    }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -174,11 +158,6 @@ public class HearingAddHistoryEntryDialog extends javax.swing.JDialog {
                     calendar.setStartWeekFromSunday ( true );
                 }
             } );
-            entryDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-                public void mouseClicked(java.awt.event.MouseEvent evt) {
-                    entryDateTextBoxMouseClicked(evt);
-                }
-            });
 
             jLabel3.setText("Mail Type:");
 
@@ -192,11 +171,6 @@ public class HearingAddHistoryEntryDialog extends javax.swing.JDialog {
             buttonGroup1.add(originalButton);
             originalButton.setSelected(true);
             originalButton.setText("Original");
-            originalButton.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    originalButtonActionPerformed(evt);
-                }
-            });
 
             buttonGroup1.add(faxedButton);
             faxedButton.setText("Faxed");
@@ -226,11 +200,6 @@ public class HearingAddHistoryEntryDialog extends javax.swing.JDialog {
 
             buttonGroup2.add(appellantButton);
             appellantButton.setText("Appellant");
-            appellantButton.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    appellantButtonActionPerformed(evt);
-                }
-            });
 
             buttonGroup2.add(appelleeButton);
             appelleeButton.setText("Appellee");
@@ -350,18 +319,6 @@ public class HearingAddHistoryEntryDialog extends javax.swing.JDialog {
 
             pack();
         }// </editor-fold>//GEN-END:initComponents
-
-    private void entryDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_entryDateTextBoxMouseClicked
-//        clearDate(entryDateTextBox, evt);
-    }//GEN-LAST:event_entryDateTextBoxMouseClicked
-
-    private void originalButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_originalButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_originalButtonActionPerformed
-
-    private void appellantButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_appellantButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_appellantButtonActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         dispose();

@@ -163,7 +163,6 @@ public class ResetPasswordDialog extends javax.swing.JDialog {
                     newPasswordTextBox.setText("");
                     confirmPasswordTextBox.setText("");    
                 }
-                
             } else {
                 PopoverService.singleLinePopoverOnTextField(newPasswordTextBox, "Passwords do not match");
                 newPasswordTextBox.setText("");
@@ -175,8 +174,6 @@ public class ResetPasswordDialog extends javax.swing.JDialog {
             confirmPasswordTextBox.setText("");
             PopoverService.singleLinePopoverOnTextField(currentPasswordTextBox, "Password does not match");
         }
-        
-        
     }//GEN-LAST:event_jButton1ActionPerformed
 
 

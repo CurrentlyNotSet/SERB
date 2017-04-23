@@ -194,9 +194,7 @@ public class RootPanel extends javax.swing.JFrame {
         } else {
             firstCaseNumber = NumberFormatService.generateFullCaseNumberNonGlobal(Global.caseYear, Global.caseType, Global.caseMonth, Global.caseNumber);
         }
-
-
-
+        
         switch (Global.activeSection) {
             case "Docketing":
                 card.show(jPanel9, "card2");

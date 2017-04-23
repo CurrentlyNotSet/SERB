@@ -90,11 +90,6 @@ public class CMDSWhichGreenCardDialog extends javax.swing.JDialog {
                     calendar.setStartWeekFromSunday ( true );
                 }
             } );
-            responseDueDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
-                public void mouseClicked(java.awt.event.MouseEvent evt) {
-                    responseDueDateTextBoxMouseClicked(evt);
-                }
-            });
 
             responseDueDateTextBox1.setCaretColor(new java.awt.Color(0, 0, 0));
             responseDueDateTextBox1.setDisabledTextColor(new java.awt.Color(0, 0, 0));
@@ -108,11 +103,6 @@ public class CMDSWhichGreenCardDialog extends javax.swing.JDialog {
                         calendar.setStartWeekFromSunday ( true );
                     }
                 } );
-                responseDueDateTextBox1.addMouseListener(new java.awt.event.MouseAdapter() {
-                    public void mouseClicked(java.awt.event.MouseEvent evt) {
-                        responseDueDateTextBox1MouseClicked(evt);
-                    }
-                });
 
                 jButton1.setText("OK");
                 jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -166,14 +156,6 @@ public class CMDSWhichGreenCardDialog extends javax.swing.JDialog {
 
                 pack();
             }// </editor-fold>//GEN-END:initComponents
-
-    private void responseDueDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_responseDueDateTextBoxMouseClicked
-
-    }//GEN-LAST:event_responseDueDateTextBoxMouseClicked
-
-    private void responseDueDateTextBox1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_responseDueDateTextBox1MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_responseDueDateTextBox1MouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {

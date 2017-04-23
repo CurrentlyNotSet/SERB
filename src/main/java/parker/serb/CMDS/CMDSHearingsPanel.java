@@ -85,7 +85,7 @@ public class CMDSHearingsPanel extends javax.swing.JPanel {
         DefaultTableModel model = (DefaultTableModel) hearingTable.getModel();
         model.setRowCount(0);
         
-         List hearing = CMDSHearing.loadHearingsByCaseNumber();
+        List hearing = CMDSHearing.loadHearingsByCaseNumber();
         
         for (Object hearing1 : hearing) {
             CMDSHearing act = (CMDSHearing) hearing1;

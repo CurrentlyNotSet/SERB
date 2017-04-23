@@ -161,7 +161,6 @@ public class HearingHearingsPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_hearingTableMouseClicked
 
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable hearingTable;
     private javax.swing.JScrollPane jScrollPane1;

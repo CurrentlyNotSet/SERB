@@ -45,7 +45,6 @@ public class LogInDialog extends javax.swing.JFrame {
     private void addListeners() {
 
         jLabel1.addMouseListener(new MouseListener() {
-
             @Override
             public void mouseClicked(MouseEvent e) {
                 if(e.getClickCount() == 2) {
@@ -72,7 +71,6 @@ public class LogInDialog extends javax.swing.JFrame {
         });
 
         UsernameTextBox.getDocument().addDocumentListener(new DocumentListener() {
-
             @Override
             public void insertUpdate(DocumentEvent e) {
                 enableLogInButton();
@@ -90,7 +88,6 @@ public class LogInDialog extends javax.swing.JFrame {
         });
 
         PasswordTextBox.getDocument().addDocumentListener(new DocumentListener() {
-
             @Override
             public void insertUpdate(DocumentEvent e) {
                 enableLogInButton();

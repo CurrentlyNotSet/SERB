@@ -18,6 +18,9 @@ public class CMDSAddCaseToGroupDialog extends javax.swing.JDialog {
     String groupNumber = "";
     /**
      * Creates new form CMDSAddCaseToGroupDialog
+     * @param parent
+     * @param modal
+     * @param passedGroupNumber
      */
     public CMDSAddCaseToGroupDialog(java.awt.Dialog parent, boolean modal, String passedGroupNumber) {
         super(parent, modal);
@@ -153,7 +156,6 @@ public class CMDSAddCaseToGroupDialog extends javax.swing.JDialog {
         if(groupNumber.equals("")) {
             groupNumber = jTextField1.getText().trim().split("-")[0] + jTextField1.getText().trim().split("-")[3];
         }
-        
         CMDSCase.updateCMDSGroupNumber(jTextField1.getText().trim(), groupNumber);
         setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed

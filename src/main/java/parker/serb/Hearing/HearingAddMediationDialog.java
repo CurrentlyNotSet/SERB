@@ -244,11 +244,6 @@ public class HearingAddMediationDialog extends javax.swing.JDialog {
 
                 outcomeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Settled", "Not Settled", " " }));
                 outcomeComboBox.setSelectedIndex(2);
-                outcomeComboBox.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        outcomeComboBoxActionPerformed(evt);
-                    }
-                });
 
                 javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
                 getContentPane().setLayout(layout);
@@ -336,10 +331,6 @@ public class HearingAddMediationDialog extends javax.swing.JDialog {
     private void pcPreDComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pcPreDComboBoxActionPerformed
         enableSaveButton();
     }//GEN-LAST:event_pcPreDComboBoxActionPerformed
-
-    private void outcomeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_outcomeComboBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_outcomeComboBoxActionPerformed
 
     private void mediatorComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediatorComboBoxActionPerformed
         enableSaveButton();

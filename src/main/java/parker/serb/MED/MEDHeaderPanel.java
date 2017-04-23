@@ -46,17 +46,12 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
     private void addListeners() {
         caseNumberComboBox.addActionListener((ActionEvent e) -> {
             if(caseNumberComboBox.getSelectedItem() != null) {
-//                Global.root.getmEDRootPanel1().getjTabbedPane1().setSelectedIndex(0);
                 if(caseNumberComboBox.getSelectedItem().toString().trim().equals("")) {
                     if(Global.root != null) {
                         Global.root.getjButton2().setText("Update");
                         Global.root.getjButton2().setEnabled(false);
                         Global.root.getjButton3().setEnabled(false);
                         Global.root.getjButton9().setVisible(false);
-//                        Global.caseYear = null;
-//                        Global.caseType = null;
-//                        Global.caseMonth = null;
-//                        Global.caseNumber = null;
                         Global.root.getmEDRootPanel1().clearAll();
                     }
                 } else {
@@ -64,13 +59,6 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
                     Global.root.getjButton3().setEnabled(true);
                     caseNumberComboBox.setSelectedItem(caseNumberComboBox.getSelectedItem().toString().toUpperCase());
                     loadInformation();
-//                    if(Global.root.getmEDRootPanel1().getjTabbedPane1().getSelectedIndex() == 0) {
-//                        Global.root.getjButton2().setText("Add Entry");
-//                        Global.root.getjButton2().setEnabled(true);
-//                        Global.root.getmEDRootPanel1().getActivityPanel1().loadAllActivity();
-//                        Global.root.getjButton9().setVisible(true);
-//                    }
-
                     Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
                 }
             }
@@ -280,11 +268,6 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
 
         employerTextBox.setEditable(false);
         employerTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        employerTextBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                employerTextBoxActionPerformed(evt);
-            }
-        });
 
         employerRepTextBox.setEditable(false);
         employerRepTextBox.setBackground(new java.awt.Color(238, 238, 238));
@@ -413,10 +396,6 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
 
         add(jPanel2);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void employerTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employerTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_employerTextBoxActionPerformed
 
     private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
         if(caseNumberComboBox.isEnabled()) {

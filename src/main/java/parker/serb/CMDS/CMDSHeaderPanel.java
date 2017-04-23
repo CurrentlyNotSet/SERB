@@ -43,7 +43,6 @@ public class CMDSHeaderPanel extends javax.swing.JPanel {
     private void addListeners() {
         caseNumberComboBox.addActionListener((ActionEvent e) -> {
             if (caseNumberComboBox.getSelectedItem() != null) {
-//                Global.root.getcMDSRootPanel1().getjTabbedPane1().setSelectedIndex(0);
                 if (caseNumberComboBox.getSelectedItem().toString().trim().equals("")) {
                     if (Global.root != null) {
                         Global.root.getjButton2().setText("Update");
@@ -59,16 +58,11 @@ public class CMDSHeaderPanel extends javax.swing.JPanel {
                         Global.root.getcMDSRootPanel1().clearAll();
                     }
                 } else {
-                        caseNumberComboBox.setSelectedItem(caseNumberComboBox.getSelectedItem().toString().toUpperCase());
-                        loadInformation();
-//                    if(Global.root.getcMDSRootPanel1().getjTabbedPane1().getSelectedIndex() == 0) {
-//                        Global.root.getcMDSRootPanel1().getActivityPanel1().loadAllActivity();
-//                        Global.root.getjButton2().setText("Add Entry");
-//                        Global.root.getjButton2().setEnabled(true);
-//                    }
-                        Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
-                    }
+                    caseNumberComboBox.setSelectedItem(caseNumberComboBox.getSelectedItem().toString().toUpperCase());
+                    loadInformation();
+                    Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
                 }
+            }
         });
     }
 

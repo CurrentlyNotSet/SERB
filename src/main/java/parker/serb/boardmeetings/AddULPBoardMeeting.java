@@ -68,13 +68,6 @@ public class AddULPBoardMeeting extends javax.swing.JDialog {
                 enableAddButton();
             }
         });
-        
-//        recommendationComboBox.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                enableAddButton();
-//            }
-//        });
     }
     
     private void loadRecComboBox() {
