@@ -518,11 +518,6 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
                 reclassCodeComboBox.setEnabled(false);
 
                 resultComboBox.setEnabled(false);
-                resultComboBox.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        resultComboBoxActionPerformed(evt);
-                    }
-                });
 
                 jLabel11.setText("Reclass Code:");
 
@@ -705,11 +700,6 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
                 boPullDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
                 boPullDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
                 boPullDateTextBox.setEnabled(false);
-                boPullDateTextBox.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        boPullDateTextBoxActionPerformed(evt);
-                    }
-                });
 
                 javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
                 jPanel10.setLayout(jPanel10Layout);
@@ -794,11 +784,6 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
                 po2MailedTextBox.setBackground(new java.awt.Color(238, 238, 238));
                 po2MailedTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
                 po2MailedTextBox.setEnabled(false);
-                po2MailedTextBox.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        po2MailedTextBoxActionPerformed(evt);
-                    }
-                });
 
                 po2RemailedTextBox.setBackground(new java.awt.Color(238, 238, 238));
                 po2RemailedTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
@@ -1021,18 +1006,6 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
     private void openDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_openDateTextBoxMouseClicked
         clearDate(openDateTextBox, evt);
     }//GEN-LAST:event_openDateTextBoxMouseClicked
-
-    private void resultComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resultComboBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_resultComboBoxActionPerformed
-
-    private void boPullDateTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boPullDateTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_boPullDateTextBoxActionPerformed
-
-    private void po2MailedTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_po2MailedTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_po2MailedTextBoxActionPerformed
 
     private void closeDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closeDateTextBoxMouseClicked
         clearDate(closeDateTextBox, evt);

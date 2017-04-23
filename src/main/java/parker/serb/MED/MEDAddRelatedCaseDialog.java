@@ -67,8 +67,6 @@ public class MEDAddRelatedCaseDialog extends javax.swing.JDialog {
         return relatedCase;
     }
     
-    
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -163,8 +161,6 @@ public class MEDAddRelatedCaseDialog extends javax.swing.JDialog {
             }
             else if(CaseValidation.validateCaseNumber(caseNumberTextBox.getText().trim().toUpperCase())) {
                 relatedCase = caseNumberTextBox.getText().trim().toUpperCase();
-//                RelatedCase.addNewMultiCase(caseNumberTextBox.getText().trim().toUpperCase());
-//                dispose();    
                 setVisible(false);
             }
             else {

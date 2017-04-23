@@ -725,11 +725,6 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
 
                 asAgreedToByPartiesCheckBox.setText("As Agreed To By Parties");
                 asAgreedToByPartiesCheckBox.setEnabled(false);
-                asAgreedToByPartiesCheckBox.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        asAgreedToByPartiesCheckBoxActionPerformed(evt);
-                    }
-                });
 
                 javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
                 jPanel1.setLayout(jPanel1Layout);
@@ -1064,11 +1059,6 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
                                     });
 
                                     MediatedSettlementCheckBox.setEnabled(false);
-                                    MediatedSettlementCheckBox.addActionListener(new java.awt.event.ActionListener() {
-                                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                            MediatedSettlementCheckBoxActionPerformed(evt);
-                                        }
-                                    });
 
                                     javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
                                     jPanel4.setLayout(jPanel4Layout);
@@ -1345,17 +1335,9 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_FFTypeComboBoxActionPerformed
 
-    private void asAgreedToByPartiesCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_asAgreedToByPartiesCheckBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_asAgreedToByPartiesCheckBoxActionPerformed
-
     private void FFReportIssueDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FFReportIssueDateTextBoxMouseClicked
         clearDate(FFReportIssueDateTextBox, evt);
     }//GEN-LAST:event_FFReportIssueDateTextBoxMouseClicked
-
-    private void MediatedSettlementCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MediatedSettlementCheckBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_MediatedSettlementCheckBoxActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> AcceptedByComboBox;

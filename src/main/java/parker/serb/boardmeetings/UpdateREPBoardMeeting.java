@@ -19,7 +19,6 @@ import javax.swing.event.DocumentListener;
 import parker.serb.Global;
 import parker.serb.sql.BoardMeeting;
 import parker.serb.sql.REPRecommendation;
-import parker.serb.sql.ULPRecommendation;
 import parker.serb.util.CancelUpdate;
 import parker.serb.util.ClearDateDialog;
 

@@ -459,11 +459,6 @@ public class CSCInformationPanel extends javax.swing.JPanel {
 
         cscCountyComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cscCountyComboBox.setEnabled(false);
-        cscCountyComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cscCountyComboBoxActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -600,11 +595,6 @@ public class CSCInformationPanel extends javax.swing.JPanel {
                     activitiesLastFiledTextBoxMouseClicked(evt);
                 }
             });
-            activitiesLastFiledTextBox.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    activitiesLastFiledTextBoxActionPerformed(evt);
-                }
-            });
 
             dateFiledTextBox.setEditable(false);
             dateFiledTextBox.setBackground(new java.awt.Color(238, 238, 238));
@@ -629,19 +619,9 @@ public class CSCInformationPanel extends javax.swing.JPanel {
 
                 statutoryCheckBox.setText("Statutory");
                 statutoryCheckBox.setEnabled(false);
-                statutoryCheckBox.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        statutoryCheckBoxActionPerformed(evt);
-                    }
-                });
 
                 validCheckBox.setText("Valid");
                 validCheckBox.setEnabled(false);
-                validCheckBox.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        validCheckBoxActionPerformed(evt);
-                    }
-                });
 
                 lastNotificationTextBox.setBackground(new java.awt.Color(238, 238, 238));
                 lastNotificationTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
@@ -649,11 +629,6 @@ public class CSCInformationPanel extends javax.swing.JPanel {
 
                 dueDateComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
                 dueDateComboBox.setEnabled(false);
-                dueDateComboBox.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        dueDateComboBoxActionPerformed(evt);
-                    }
-                });
 
                 jLabel18.setText("Previous File Date:");
 
@@ -677,19 +652,9 @@ public class CSCInformationPanel extends javax.swing.JPanel {
                             previousFileDateTextBoxMouseClicked(evt);
                         }
                     });
-                    previousFileDateTextBox.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                            previousFileDateTextBoxActionPerformed(evt);
-                        }
-                    });
 
                     charterCheckBox.setText("Home Rule (Charter)");
                     charterCheckBox.setEnabled(false);
-                    charterCheckBox.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                            charterCheckBoxActionPerformed(evt);
-                        }
-                    });
 
                     javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
                     jPanel2.setLayout(jPanel2Layout);
@@ -783,14 +748,6 @@ public class CSCInformationPanel extends javax.swing.JPanel {
         clearDate(dateFiledTextBox, evt);
     }//GEN-LAST:event_dateFiledTextBoxMouseClicked
 
-    private void statutoryCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statutoryCheckBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_statutoryCheckBoxActionPerformed
-
-    private void validCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_validCheckBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_validCheckBoxActionPerformed
-
     private void cscStateComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cscStateComboBoxActionPerformed
         if(cscStateComboBox.getSelectedItem() != null) {
             if(cscStateComboBox.getSelectedItem().toString().equals("")) {
@@ -808,10 +765,6 @@ public class CSCInformationPanel extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_cscStateComboBoxActionPerformed
-
-    private void cscCountyComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cscCountyComboBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cscCountyComboBoxActionPerformed
 
     private void cscNameTextBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cscNameTextBoxKeyPressed
         if(cscNameTextBox.getText().trim().equals("")) {
@@ -837,26 +790,9 @@ public class CSCInformationPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_cscNameTextBoxKeyReleased
 
-    private void activitiesLastFiledTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_activitiesLastFiledTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_activitiesLastFiledTextBoxActionPerformed
-
-    private void dueDateComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dueDateComboBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_dueDateComboBoxActionPerformed
-
     private void previousFileDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_previousFileDateTextBoxMouseClicked
        clearDate(activitiesLastFiledTextBox, evt);
     }//GEN-LAST:event_previousFileDateTextBoxMouseClicked
-
-    private void previousFileDateTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_previousFileDateTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_previousFileDateTextBoxActionPerformed
-
-    private void charterCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_charterCheckBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_charterCheckBoxActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.alee.extended.date.WebDateField activitiesLastFiledTextBox;

@@ -49,12 +49,6 @@ public class CMDSPBRBoxDialog extends javax.swing.JDialog {
 
         jLabel2.setText("PBR Box:");
 
-        pbrBoxTextBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                pbrBoxTextBoxActionPerformed(evt);
-            }
-        });
-
         jButton1.setText("OK");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -99,10 +93,6 @@ public class CMDSPBRBoxDialog extends javax.swing.JDialog {
         pbrBox = pbrBoxTextBox.getText().trim();
         setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void pbrBoxTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pbrBoxTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_pbrBoxTextBoxActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

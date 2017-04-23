@@ -19,8 +19,6 @@ import parker.serb.sql.User;
 import parker.serb.util.CaseInEditModeDialog;
 import parker.serb.util.NumberFormatService;
 
-//
-
 /**
  *
  * @author parker
@@ -40,7 +38,6 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
     private void addListeners() {
         caseNumberComboBox.addActionListener((ActionEvent e) -> {
             if(caseNumberComboBox.getSelectedItem() != null) {
-//                Global.root.getcSCRootPanel1().getjTabbedPane1().setSelectedIndex(0);
                 if(caseNumberComboBox.getSelectedItem().toString().trim().equals("")) {
                     if(Global.root != null) {
                         Global.root.getjButton2().setText("Update");
@@ -56,16 +53,7 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
                         Global.root.getcSCRootPanel1().clearAll();
                     }
                 } else {
-//                    caseNumberComboBox.setSelectedItem(caseNumberComboBox.getSelectedItem().toString().toUpperCase());
                     loadInformation();
-//                    if(Global.root.getcSCRootPanel1().getjTabbedPane1().getSelectedIndex() == 0) {
-//                        Global.root.getjButton2().setText("Add Entry");
-//                        Global.root.getjButton2().setEnabled(true);
-//                        Global.root.getjButton4().setText("Single Letter");
-//                        Global.root.getjButton4().setEnabled(true);
-//                        Global.root.getjButton9().setVisible(true);
-//                        Global.root.getcSCRootPanel1().getActivityPanel1().loadAllActivity();
-//                    }
                     Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
                 }
             }
@@ -85,8 +73,6 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
         if(Global.caseNumber != null) {
             CSCCase csc = CSCCase.loadHeaderInformation();
             if(csc == null) {
-//                new ORG((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
-
                 if (caseNumberComboBox.getSelectedItem().toString().trim().length() == 16){
                     NumberFormatService.parseFullCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim());
                     String selectedSection = CaseType.getSectionFromCaseType(Global.caseType);
@@ -115,7 +101,6 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
             Global.caseNumber = CSCCase.getCSCName();
             CSCCase org = CSCCase.loadHeaderInformation();
             if(org == null) {
-//                new ORG((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
                 caseNumberComboBox.setSelectedItem(Global.caseNumber);
             } else {
                 Global.caseNumber = org.cscNumber != null ? org.cscNumber : "";
@@ -190,11 +175,6 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
                 CSCNumberTextBoxMouseClicked(evt);
             }
         });
-        CSCNumberTextBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CSCNumberTextBoxActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -243,10 +223,6 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
         add(jPanel2);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void CSCNumberTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CSCNumberTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_CSCNumberTextBoxActionPerformed
-
     private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
         if(caseNumberComboBox.isEnabled()) {
             if(SwingUtilities.isRightMouseButton(evt) || evt.getButton() == MouseEvent.BUTTON3) {
@@ -272,7 +248,6 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
             new CaseInEditModeDialog(Global.root, true);
         }
     }//GEN-LAST:event_CSCNumberTextBoxMouseClicked
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField CSCNumberTextBox;

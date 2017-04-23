@@ -267,9 +267,6 @@
             <Property name="text" type="java.lang.String" value="As Agreed To By Parties"/>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="asAgreedToByPartiesCheckBoxActionPerformed"/>
-          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -821,9 +818,6 @@
           <Properties>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="MediatedSettlementCheckBoxActionPerformed"/>
-          </Events>
         </Component>
       </SubComponents>
     </Container>

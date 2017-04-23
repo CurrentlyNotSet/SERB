@@ -415,11 +415,6 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
 
         boardCertifiedCheckBox.setText("Board Certified");
         boardCertifiedCheckBox.setEnabled(false);
-        boardCertifiedCheckBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                boardCertifiedCheckBoxActionPerformed(evt);
-            }
-        });
 
         jLabel4.setText("BUN Number:");
 
@@ -437,11 +432,6 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
         approxNumberOfEmployeesTextBox.setBackground(new java.awt.Color(238, 238, 238));
         approxNumberOfEmployeesTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         approxNumberOfEmployeesTextBox.setEnabled(false);
-        approxNumberOfEmployeesTextBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                approxNumberOfEmployeesTextBoxActionPerformed(evt);
-            }
-        });
 
         jLabel10.setText("Duplicate Case Number:");
 
@@ -458,11 +448,6 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
 
         deemedCertifiedCheckBox.setText("Deemed Certified");
         deemedCertifiedCheckBox.setEnabled(false);
-        deemedCertifiedCheckBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deemedCertifiedCheckBoxActionPerformed(evt);
-            }
-        });
 
         jLabel7.setText("Approx Number of Employees:");
 
@@ -649,21 +634,11 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
 
             multiUnitBargainingRequestedCheckBox.setText("Multi-Unit Bargaining Requested");
             multiUnitBargainingRequestedCheckBox.setEnabled(false);
-            multiUnitBargainingRequestedCheckBox.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    multiUnitBargainingRequestedCheckBoxActionPerformed(evt);
-                }
-            });
 
             jLabel13.setText("Mediator Appointed Date:");
 
             mediatorReplacementCheckBox.setText("Mediator Replacement");
             mediatorReplacementCheckBox.setEnabled(false);
-            mediatorReplacementCheckBox.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    mediatorReplacementCheckBoxActionPerformed(evt);
-                }
-            });
 
             jLabel15.setText("State Mediator Appointed:");
 
@@ -675,11 +650,6 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
 
             sendToBoardToCloseCheckBox.setText("Send To Board To Close");
             sendToBoardToCloseCheckBox.setEnabled(false);
-            sendToBoardToCloseCheckBox.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    sendToBoardToCloseCheckBoxActionPerformed(evt);
-                }
-            });
 
             jLabel22.setText("Board Final Date:");
 
@@ -687,19 +657,9 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
 
             lateFilingCheckBox.setText("Late Filing");
             lateFilingCheckBox.setEnabled(false);
-            lateFilingCheckBox.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    lateFilingCheckBoxActionPerformed(evt);
-                }
-            });
 
             settledCheckBox.setText("Settled");
             settledCheckBox.setEnabled(false);
-            settledCheckBox.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    settledCheckBoxActionPerformed(evt);
-                }
-            });
 
             impasseCheckBox.setText("Impasse");
             impasseCheckBox.setEnabled(false);
@@ -715,11 +675,6 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
 
             motionCheckBox.setText("Motion");
             motionCheckBox.setEnabled(false);
-            motionCheckBox.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    motionCheckBoxActionPerformed(evt);
-                }
-            });
 
             dismissedCheckBox.setText("Dismissed");
             dismissedCheckBox.setEnabled(false);
@@ -777,18 +732,8 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
                     });
 
                     stateMediatorAppointedComboBox.setEnabled(false);
-                    stateMediatorAppointedComboBox.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                            stateMediatorAppointedComboBoxActionPerformed(evt);
-                        }
-                    });
 
                     FCMSMediatorAppointedComboBox.setEnabled(false);
-                    FCMSMediatorAppointedComboBox.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                            FCMSMediatorAppointedComboBoxActionPerformed(evt);
-                        }
-                    });
 
                     settlementDateTextBox.setEditable(false);
                     settlementDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
@@ -847,11 +792,6 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
                                 retentionTicklerDateTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
                                     public void mouseClicked(java.awt.event.MouseEvent evt) {
                                         retentionTicklerDateTextBoxMouseClicked(evt);
-                                    }
-                                });
-                                retentionTicklerDateTextBox.addActionListener(new java.awt.event.ActionListener() {
-                                    public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                        retentionTicklerDateTextBoxActionPerformed(evt);
                                     }
                                 });
 
@@ -1024,29 +964,9 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
         loadRelatedCasesTable();
     }//GEN-LAST:event_addMultiCaseButtonActionPerformed
 
-    private void boardCertifiedCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boardCertifiedCheckBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_boardCertifiedCheckBoxActionPerformed
-
-    private void deemedCertifiedCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deemedCertifiedCheckBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_deemedCertifiedCheckBoxActionPerformed
-
     private void filingDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_filingDateTextBoxMouseClicked
         clearDate(filingDateTextBox, evt);
     }//GEN-LAST:event_filingDateTextBoxMouseClicked
-
-    private void multiUnitBargainingRequestedCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_multiUnitBargainingRequestedCheckBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_multiUnitBargainingRequestedCheckBoxActionPerformed
-
-    private void mediatorReplacementCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediatorReplacementCheckBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_mediatorReplacementCheckBoxActionPerformed
-
-    private void sendToBoardToCloseCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendToBoardToCloseCheckBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_sendToBoardToCloseCheckBoxActionPerformed
 
     private void expirationDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_expirationDateTextBoxMouseClicked
         clearDate(expirationDateTextBox, evt);
@@ -1067,26 +987,6 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
     private void retentionTicklerDateTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_retentionTicklerDateTextBoxMouseClicked
         clearDate(retentionTicklerDateTextBox, evt);
     }//GEN-LAST:event_retentionTicklerDateTextBoxMouseClicked
-
-    private void lateFilingCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lateFilingCheckBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_lateFilingCheckBoxActionPerformed
-
-    private void retentionTicklerDateTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_retentionTicklerDateTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_retentionTicklerDateTextBoxActionPerformed
-
-    private void approxNumberOfEmployeesTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_approxNumberOfEmployeesTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_approxNumberOfEmployeesTextBoxActionPerformed
-
-    private void settledCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settledCheckBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_settledCheckBoxActionPerformed
-
-    private void motionCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_motionCheckBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_motionCheckBoxActionPerformed
 
     private void employerIDNumberTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_employerIDNumberTextBoxMouseClicked
         if(evt.getClickCount() == 2) {
@@ -1115,14 +1015,6 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_bargainingUnitTextBoxMouseClicked
-
-    private void stateMediatorAppointedComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stateMediatorAppointedComboBoxActionPerformed
-        
-    }//GEN-LAST:event_stateMediatorAppointedComboBoxActionPerformed
-
-    private void FCMSMediatorAppointedComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FCMSMediatorAppointedComboBoxActionPerformed
-         
-    }//GEN-LAST:event_FCMSMediatorAppointedComboBoxActionPerformed
 
     private void relatedCaseTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_relatedCaseTableMouseClicked
         if(relatedCaseTable.getSelectedRow() > -1) {

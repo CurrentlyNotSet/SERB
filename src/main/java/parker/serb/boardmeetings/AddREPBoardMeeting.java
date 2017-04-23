@@ -38,7 +38,6 @@ public class AddREPBoardMeeting extends javax.swing.JDialog {
         initComponents();
         addListeners();
         loadRecComboBox();
-//        jScrollPane1.setVisible(false);
         setLocationRelativeTo(parent);
         setVisible(true);
     }
@@ -98,8 +97,8 @@ public class AddREPBoardMeeting extends javax.swing.JDialog {
     }
 
     private void handleRecommendationSelection(String recText) {
-        recText = recText.replaceAll("«", "<<");
-        recText = recText.replaceAll("»", ">>");
+        recText = recText.replaceAll("ï¿½", "<<");
+        recText = recText.replaceAll("ï¿½", ">>");
 
         //Party Information loading
         if (recText.contains("<<Petitioner>>")
@@ -120,7 +119,6 @@ public class AddREPBoardMeeting extends javax.swing.JDialog {
         if (recText.contains("<<CaseNumbers>>")) {
             recText = processCaseNumberReplacements(recText);
         }
-
         recommendationTextArea.setText(recText);
     }
 

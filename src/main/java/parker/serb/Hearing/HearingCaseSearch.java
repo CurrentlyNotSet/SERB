@@ -5,7 +5,6 @@
  */
 package parker.serb.Hearing;
 
-//import parker.serb.MED.*;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
@@ -19,7 +18,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import parker.serb.Global;
 import parker.serb.sql.HearingCaseSearchData;
-//import parker.serb.sql.MEDCaseSearchData;
 
 /**
  *
@@ -30,6 +28,7 @@ public class HearingCaseSearch extends javax.swing.JDialog {
     DefaultTableModel model;
     List caseList;
     Object[][] tableData;
+    
     /**
      * Creates new form REPCaseSearch
      */
@@ -370,11 +369,6 @@ public class HearingCaseSearch extends javax.swing.JDialog {
         jLabel3.setText("Case Search:");
 
         caseYearTextBox.setEnabled(false);
-        caseYearTextBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                caseYearTextBoxActionPerformed(evt);
-            }
-        });
 
         jLabel5.setText("-");
 
@@ -383,20 +377,10 @@ public class HearingCaseSearch extends javax.swing.JDialog {
         jLabel6.setText("-");
 
         caseMonthTextBox.setEnabled(false);
-        caseMonthTextBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                caseMonthTextBoxActionPerformed(evt);
-            }
-        });
 
         jLabel7.setText("-");
 
         caseNumberTextBox.setEnabled(false);
-        caseNumberTextBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                caseNumberTextBoxActionPerformed(evt);
-            }
-        });
 
         jButton2.setText("Refresh");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -470,18 +454,6 @@ public class HearingCaseSearch extends javax.swing.JDialog {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void caseYearTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_caseYearTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_caseYearTextBoxActionPerformed
-
-    private void caseMonthTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_caseMonthTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_caseMonthTextBoxActionPerformed
-
-    private void caseNumberTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_caseNumberTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_caseNumberTextBoxActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         caseYearTextBox.setText("");

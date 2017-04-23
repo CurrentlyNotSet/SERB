@@ -73,8 +73,6 @@ public class HearingAddHearingDialog extends javax.swing.JDialog {
         }
     }
     
-    
-    
     private void addListeners() {
         
         hourTextBox.getDocument().addDocumentListener(new DocumentListener() {
@@ -307,19 +305,7 @@ public class HearingAddHearingDialog extends javax.swing.JDialog {
 
             jLabel3.setText("Time:");
 
-            hourTextBox.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    hourTextBoxActionPerformed(evt);
-                }
-            });
-
             jLabel4.setText(":");
-
-            minuteTextBox.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    minuteTextBoxActionPerformed(evt);
-                }
-            });
 
             amPMComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "AM", "PM", " " }));
             amPMComboBox.setSelectedIndex(2);
@@ -461,14 +447,6 @@ public class HearingAddHearingDialog extends javax.swing.JDialog {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void hourTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hourTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_hourTextBoxActionPerformed
-
-    private void minuteTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minuteTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_minuteTextBoxActionPerformed
 
     private void aljComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aljComboBoxActionPerformed
         enableSaveButton();

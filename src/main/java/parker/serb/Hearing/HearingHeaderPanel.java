@@ -42,38 +42,19 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
     private void addListeners() {
         caseNumberComboBox.addActionListener((ActionEvent e) -> {
             if(caseNumberComboBox.getSelectedItem() != null) {
-//                Global.root.getHearingRootPanel1().getjTabbedPane1().setSelectedIndex(0);
                 if(caseNumberComboBox.getSelectedItem().toString().trim().equals("")) {
                     Global.root.getHearingRootPanel1().clearAll();
                     if(Global.root != null) {
-//                        if(Global.caseNumber == null) {
-                            Global.root.getjButton2().setText("Add Entry");
-                            Global.root.getjButton2().setEnabled(false);
-                            Global.root.getjButton4().setEnabled(false);
-                            Global.root.getjButton9().setVisible(false);
-//                        } else {
-//                            Global.root.getjButton2().setText("Add Entry");
-//                            Global.root.getjButton2().setEnabled(true);
-//                        }
-
-//                        Global.caseNumber = null;
-//                        Global.caseMonth = null;
-//                        Global.caseType = null;
-//                        Global.caseYear = null;
+                        Global.root.getjButton2().setText("Add Entry");
+                        Global.root.getjButton2().setEnabled(false);
+                        Global.root.getjButton4().setEnabled(false);
+                        Global.root.getjButton9().setVisible(false);
                         Global.root.getHearingRootPanel1().clearAll();
                     }
                 } else {
                     Global.root.getHearingRootPanel1().clearAll();
                     caseNumberComboBox.setSelectedItem(caseNumberComboBox.getSelectedItem().toString().toUpperCase());
                     loadInformation();
-//                    if(Global.root.getHearingRootPanel1().getjTabbedPane1().getSelectedIndex() == 0) {
-//                        Global.root.getHearingRootPanel1().getActivityPanel1().loadAllHearingActivity();
-//                        Global.root.getjButton2().setText("Add Entry");
-//                        Global.root.getjButton2().setEnabled(true);
-//                        Global.root.getjButton4().setText("Documents");
-//                        Global.root.getjButton4().setEnabled(true);
-//                        Global.root.getjButton9().setVisible(true);
-//                    }
                     Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
                 }
             }
@@ -214,7 +195,6 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
             case "ULP":
             case "ERC":
             case "JWD":
-                //ulp
                 party1Label.setText("Intervenor Party:");
                 party2Label.setText("Intervenor Rep:");
                 party3Label.setText("Respondent Party:");
@@ -250,9 +230,6 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
         });
     }
 
-    /**
-     *
-     */
     void clearAll() {
         Global.caseYear = null;
         Global.caseType = null;
@@ -272,8 +249,6 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
     public JComboBox getjComboBox2() {
         return caseNumberComboBox;
     }
-
-
 
     /**
      * This method is called from within the constructor to initialize the form.

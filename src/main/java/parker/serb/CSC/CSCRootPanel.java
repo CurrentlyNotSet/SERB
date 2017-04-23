@@ -138,9 +138,6 @@ public class CSCRootPanel extends javax.swing.JPanel {
      */
     public void cscUpdate(String buttonText) {
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
-            case "Activity":
-//                activityPanel1.loadAllActivity();
-                break;
             case "Parties":
                 Audit.addAuditEntry("Clicked CSC Add Party Button");
                 new PartySearchDialog((JFrame) this.getRootPane().getParent(), true);

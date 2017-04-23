@@ -26,8 +26,6 @@ public class CMDSRemoveStayDialog extends javax.swing.JDialog {
         return removeStay;
     }
     
-    
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -105,7 +103,6 @@ public class CMDSRemoveStayDialog extends javax.swing.JDialog {
         removeStay = true;
         setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

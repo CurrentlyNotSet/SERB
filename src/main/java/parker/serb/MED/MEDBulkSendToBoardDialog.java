@@ -164,8 +164,6 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
             jLayeredPane1.moveToBack(jPanel1);
         });
         temp.start();
-        
-        
     }
         
     /**

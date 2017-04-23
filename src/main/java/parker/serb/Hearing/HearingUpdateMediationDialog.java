@@ -155,11 +155,6 @@ public class HearingUpdateMediationDialog extends javax.swing.JDialog {
 
         pcPreDComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "PC", "Pre-D", " " }));
         pcPreDComboBox.setSelectedIndex(2);
-        pcPreDComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                pcPreDComboBoxActionPerformed(evt);
-            }
-        });
 
         dateAssignedTextBox.setEditable(false);
         dateAssignedTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
@@ -177,11 +172,6 @@ public class HearingUpdateMediationDialog extends javax.swing.JDialog {
             dateAssignedTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
                 public void mouseClicked(java.awt.event.MouseEvent evt) {
                     dateAssignedTextBoxMouseClicked(evt);
-                }
-            });
-            dateAssignedTextBox.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    dateAssignedTextBoxActionPerformed(evt);
                 }
             });
 
@@ -208,11 +198,6 @@ public class HearingUpdateMediationDialog extends javax.swing.JDialog {
 
                 outcomeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Settled", "Not Settled", " " }));
                 outcomeComboBox.setSelectedIndex(2);
-                outcomeComboBox.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        outcomeComboBoxActionPerformed(evt);
-                    }
-                });
 
                 javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
                 getContentPane().setLayout(layout);
@@ -296,18 +281,6 @@ public class HearingUpdateMediationDialog extends javax.swing.JDialog {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void pcPreDComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pcPreDComboBoxActionPerformed
-//        enableSaveButton();
-    }//GEN-LAST:event_pcPreDComboBoxActionPerformed
-
-    private void outcomeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_outcomeComboBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_outcomeComboBoxActionPerformed
-
-    private void dateAssignedTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateAssignedTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_dateAssignedTextBoxActionPerformed
 
     private void dateAssignedTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dateAssignedTextBoxMouseClicked
         clearDate(dateAssignedTextBox, evt);

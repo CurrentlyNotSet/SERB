@@ -56,8 +56,6 @@ public class CMDSAddHistoryEntryDialog extends javax.swing.JDialog {
                 enableSaveButton();
             }
         });
-
-
     }
 
     private void enableSaveButton() {
@@ -369,7 +367,6 @@ public class CMDSAddHistoryEntryDialog extends javax.swing.JDialog {
         } else if (mailTypeComboBox.getSelectedItem().toString().equals("O")){
             direction = "OUT - ";
         }
-
 
         CMDSCaseHistoryEntryTypes.updateCaseHistory(
             entryTypeComboBox.getSelectedItem().toString().split("-")[0].trim(),
