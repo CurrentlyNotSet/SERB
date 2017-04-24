@@ -595,10 +595,10 @@ public class questionsCMDSPanel extends JDialog {
         JPanel panel = new JPanel();
         JLabel titleLabel = new JLabel(), actionLabel = new JLabel(), action2Label = new JLabel();
         actionAppealedOtherTextField = new JTextField();
-        actionAppealedOtherTextField.setPreferredSize(new Dimension(150, 25));
+        actionAppealedOtherTextField.setPreferredSize(new Dimension(200, 25));
         actionAppealedComboBox = new JComboBox();
-        actionAppealedComboBox.setPreferredSize(new Dimension(150, 25));
-        actionAppealedComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { 
+        actionAppealedComboBox.setPreferredSize(new Dimension(200, 25));
+        actionAppealedComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] {
             "abolishment",
             "layoff",
             "transfer",
@@ -614,7 +614,7 @@ public class questionsCMDSPanel extends JDialog {
             "forced resignation",
             "investigation",
             "miscellaneous",
-            "Other" 
+            "Other"
         }));
         panel.setBorder(BorderFactory.createEtchedBorder());
         panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
