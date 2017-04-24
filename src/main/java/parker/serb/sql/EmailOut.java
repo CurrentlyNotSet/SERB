@@ -277,12 +277,12 @@ public class EmailOut {
     public static int getEmailCount() {
         int count = 0;
 
-        List<String> casetypes = null;
+        String casetypes = "";
 
-        if (Global.activeSection.equals("Hearings")){
-            casetypes = CaseType.getCaseTypeHearings();
+        if (Global.activeSection.equals("Hearings")) {
+            casetypes = " WHERE (C.section = 'MED' OR C.section = 'REP' OR C.section = 'ULP') ";
         } else {
-            casetypes = CaseType.getCaseType();
+            casetypes = " WHERE C.section = '" + Global.activeSection + "' ";
         }
 
         Statement stmt = null;
@@ -290,42 +290,20 @@ public class EmailOut {
         try {
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "SELECT COUNT(*) AS [count] FROM emailout ";
-
-                    if (!casetypes.isEmpty()) {
-                        sql += " WHERE (";
-
-                        for (String casetype : casetypes) {
-
-                            sql += " Section = '" + casetype + "' OR";
-                        }
-
-                        sql = sql.substring(0, (sql.length() - 2)) + ") ";
-                    }
-
-                    sql += " UNION ALL SELECT COUNT(*) AS [count] FROM postalOut ";
-
-                    if (!casetypes.isEmpty()) {
-                        sql += " WHERE (";
-
-                        for (String casetype : casetypes) {
-
-                            sql += " Section = '" + casetype + "' OR";
-                        }
-
-                        sql = sql.substring(0, (sql.length() - 2)) + ") ";
-                    }
+            String sql = "SELECT COUNT(*) AS [count] FROM emailout AS C " + casetypes
+                    + " UNION ALL "
+                    + " SELECT COUNT(*) AS [count] FROM postalOut AS C " + casetypes;
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
             ResultSet emailListRS = preparedStatement.executeQuery();
 
-            while(emailListRS.next()) {
+            while (emailListRS.next()) {
                 count += emailListRS.getInt("count");
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
-            if(ex.getCause() instanceof SQLServerException) {
+            if (ex.getCause() instanceof SQLServerException) {
                 getEmailCount();
             }
         } finally {

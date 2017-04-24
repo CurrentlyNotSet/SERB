@@ -82,7 +82,6 @@ public class CMDSTemplateAddEditDialog extends javax.swing.JDialog {
         requestingPartyCheckBox.setSelected(item.RequestingParty);
         depositionCheckBox.setSelected(item.Deposition);
         repHimOrHerCheckBox.setSelected(item.RepHimOrHer);
-        typeOfActionCheckBox.setSelected(item.TypeOfAction);
         codeSectionFillInCheckBox.setSelected(item.CodeSectionFillIn);
         documentNameCheckBox.setSelected(item.DocumentName);
         dateFiledCheckBox.setSelected(item.DateFiled);
@@ -137,7 +136,7 @@ public class CMDSTemplateAddEditDialog extends javax.swing.JDialog {
         item.RequestingParty = requestingPartyCheckBox.isSelected();
         item.Deposition = depositionCheckBox.isSelected();
         item.RepHimOrHer = repHimOrHerCheckBox.isSelected();
-        item.TypeOfAction = typeOfActionCheckBox.isSelected();
+        item.TypeOfAction = false;
         item.CodeSectionFillIn = codeSectionFillInCheckBox.isSelected();
         item.DocumentName = documentNameCheckBox.isSelected();
         item.DateFiled = dateFiledCheckBox.isSelected();
@@ -214,7 +213,6 @@ public class CMDSTemplateAddEditDialog extends javax.swing.JDialog {
         casePendingResolutionCheckBox = new javax.swing.JCheckBox();
         lastUpdateCheckBox = new javax.swing.JCheckBox();
         repHimOrHerCheckBox = new javax.swing.JCheckBox();
-        typeOfActionCheckBox = new javax.swing.JCheckBox();
         settlementDueCheckBox = new javax.swing.JCheckBox();
         filingPartyCheckBox = new javax.swing.JCheckBox();
         respondingPartyCheckBox = new javax.swing.JCheckBox();
@@ -355,8 +353,6 @@ public class CMDSTemplateAddEditDialog extends javax.swing.JDialog {
         lastUpdateCheckBox.setText("Last Update");
 
         repHimOrHerCheckBox.setText("Rep Him or Her");
-
-        typeOfActionCheckBox.setText("Type of Action");
 
         settlementDueCheckBox.setText("Settlement Due");
 
@@ -500,7 +496,6 @@ public class CMDSTemplateAddEditDialog extends javax.swing.JDialog {
                                     .addComponent(stayDateCheckBox)
                                     .addComponent(memorandumContraCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(matterContinuedCheckBox)
-                                    .addComponent(typeOfActionCheckBox)
                                     .addComponent(settlementDueCheckBox))
                                 .addGap(0, 19, Short.MAX_VALUE)))))
                 .addContainerGap())
@@ -508,7 +503,7 @@ public class CMDSTemplateAddEditDialog extends javax.swing.JDialog {
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {dateFiledCheckBox, dateGrantedCheckBox, datePOSentCheckBox, dateRequestedCheckBox, depositionCheckBox, documentNameCheckBox, filingPartyCheckBox, firstLetterSentCheckBox, genderCheckBox, hearingDateCheckBox, hearingServedCheckBox, hearingTimeCheckBox, infoRedactedCheckBox, lastUpdateCheckBox});
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {matterContinuedCheckBox, memorandumContraCheckBox, multiplePrintCheckBox, probationaryPeriodCheckBox, purposeOfExtensionCheckBox, redactorNameCheckBox, redactorTitleCheckBox, repHimOrHerCheckBox, requestingPartyCCheckBox, requestingPartyCheckBox, respondingPartyCheckBox, responseDueCheckBox, settlementDueCheckBox, stayDateCheckBox, typeOfActionCheckBox});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {matterContinuedCheckBox, memorandumContraCheckBox, multiplePrintCheckBox, probationaryPeriodCheckBox, purposeOfExtensionCheckBox, redactorNameCheckBox, redactorTitleCheckBox, repHimOrHerCheckBox, requestingPartyCCheckBox, requestingPartyCheckBox, respondingPartyCheckBox, responseDueCheckBox, settlementDueCheckBox, stayDateCheckBox});
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {actionAppealedCheckBox, addressBlockCheckBox, appealType2CheckBox, appealTypeCheckBox, appealTypeLSCheckBox, appealTypeUFCheckBox, appellantAppointedCheckBox, barginingUnitCheckBox, casePendingResolutionCheckBox, classificationNumberCheckBox, classificationTitleCheckBox, codeSectionCheckBox, codeSectionFillInCheckBox, countyNameCheckBox});
 
@@ -628,9 +623,7 @@ public class CMDSTemplateAddEditDialog extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(stayDateCheckBox)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(settlementDueCheckBox)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(typeOfActionCheckBox)))
+                        .addComponent(settlementDueCheckBox)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(editButton)
@@ -640,7 +633,7 @@ public class CMDSTemplateAddEditDialog extends javax.swing.JDialog {
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {emailSubjectTextField, jLabel4, jLabel5, jLabel6, jLabel7, jLabel8, jLabel9, letterNameTextField, locationTextField, mainCategoryTextField, subCategoryTextField});
 
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {actionAppealedCheckBox, addressBlockCheckBox, appealType2CheckBox, appealTypeCheckBox, appealTypeLSCheckBox, appealTypeUFCheckBox, appellantAppointedCheckBox, barginingUnitCheckBox, casePendingResolutionCheckBox, classificationNumberCheckBox, classificationTitleCheckBox, codeSectionCheckBox, codeSectionFillInCheckBox, countyNameCheckBox, dateFiledCheckBox, dateGrantedCheckBox, datePOSentCheckBox, dateRequestedCheckBox, depositionCheckBox, documentNameCheckBox, filingPartyCheckBox, firstLetterSentCheckBox, genderCheckBox, hearingDateCheckBox, hearingServedCheckBox, hearingTimeCheckBox, infoRedactedCheckBox, lastUpdateCheckBox, matterContinuedCheckBox, memorandumContraCheckBox, multiplePrintCheckBox, probationaryPeriodCheckBox, purposeOfExtensionCheckBox, redactorNameCheckBox, redactorTitleCheckBox, repHimOrHerCheckBox, requestingPartyCCheckBox, requestingPartyCheckBox, respondingPartyCheckBox, responseDueCheckBox, settlementDueCheckBox, stayDateCheckBox, typeOfActionCheckBox});
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {actionAppealedCheckBox, addressBlockCheckBox, appealType2CheckBox, appealTypeCheckBox, appealTypeLSCheckBox, appealTypeUFCheckBox, appellantAppointedCheckBox, barginingUnitCheckBox, casePendingResolutionCheckBox, classificationNumberCheckBox, classificationTitleCheckBox, codeSectionCheckBox, codeSectionFillInCheckBox, countyNameCheckBox, dateFiledCheckBox, dateGrantedCheckBox, datePOSentCheckBox, dateRequestedCheckBox, depositionCheckBox, documentNameCheckBox, filingPartyCheckBox, firstLetterSentCheckBox, genderCheckBox, hearingDateCheckBox, hearingServedCheckBox, hearingTimeCheckBox, infoRedactedCheckBox, lastUpdateCheckBox, matterContinuedCheckBox, memorandumContraCheckBox, multiplePrintCheckBox, probationaryPeriodCheckBox, purposeOfExtensionCheckBox, redactorNameCheckBox, redactorTitleCheckBox, repHimOrHerCheckBox, requestingPartyCCheckBox, requestingPartyCheckBox, respondingPartyCheckBox, responseDueCheckBox, settlementDueCheckBox, stayDateCheckBox});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -733,6 +726,5 @@ public class CMDSTemplateAddEditDialog extends javax.swing.JDialog {
     private javax.swing.JCheckBox stayDateCheckBox;
     private javax.swing.JTextField subCategoryTextField;
     private javax.swing.JLabel titleLabel;
-    private javax.swing.JCheckBox typeOfActionCheckBox;
     // End of variables declaration//GEN-END:variables
 }
