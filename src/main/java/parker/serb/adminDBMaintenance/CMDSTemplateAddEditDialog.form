@@ -115,7 +115,6 @@
                                   <Component id="stayDateCheckBox" linkSize="6" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="memorandumContraCheckBox" linkSize="6" alignment="0" min="-2" pref="143" max="-2" attributes="0"/>
                                   <Component id="matterContinuedCheckBox" linkSize="6" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="typeOfActionCheckBox" linkSize="6" min="-2" max="-2" attributes="0"/>
                                   <Component id="settlementDueCheckBox" linkSize="6" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="0" pref="19" max="32767" attributes="0"/>
@@ -262,8 +261,6 @@
                       <Component id="stayDateCheckBox" linkSize="9" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="settlementDueCheckBox" linkSize="9" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="typeOfActionCheckBox" linkSize="9" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace pref="52" max="32767" attributes="0"/>
@@ -501,11 +498,6 @@
     <Component class="javax.swing.JCheckBox" name="repHimOrHerCheckBox">
       <Properties>
         <Property name="text" type="java.lang.String" value="Rep Him or Her"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JCheckBox" name="typeOfActionCheckBox">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Type of Action"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JCheckBox" name="settlementDueCheckBox">

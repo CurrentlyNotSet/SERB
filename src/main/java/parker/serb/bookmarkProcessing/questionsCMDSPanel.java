@@ -598,7 +598,24 @@ public class questionsCMDSPanel extends JDialog {
         actionAppealedOtherTextField.setPreferredSize(new Dimension(150, 25));
         actionAppealedComboBox = new JComboBox();
         actionAppealedComboBox.setPreferredSize(new Dimension(150, 25));
-        actionAppealedComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "Removal", "Reduction", "Suspension", "Other" }));
+        actionAppealedComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { 
+            "abolishment",
+            "layoff",
+            "transfer",
+            "involuntary disability separation",
+            "removal",
+            "suspension",
+            "reduction in pay or position",
+            "reclassification",
+            "suspension",
+            "fine",
+            "whistleblower",
+            "OSHA",
+            "forced resignation",
+            "investigation",
+            "miscellaneous",
+            "Other" 
+        }));
         panel.setBorder(BorderFactory.createEtchedBorder());
         panel.setPreferredSize(new Dimension(panelWidth, panelHeight));
 
