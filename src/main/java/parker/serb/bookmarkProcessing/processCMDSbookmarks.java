@@ -119,6 +119,23 @@ public class processCMDSbookmarks {
 
                         CMDSCCNameList += (CMDSCCNameList.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameCMDSCCBlock(party);
                         break;
+                    case "Appellant Rep":
+                        if (!"".equals(appellantRep1Names.trim())) {
+                            appellantRep1Names += ", ";
+                        }
+                        if (!"".equals(appellantRep1AddressBlock.trim())) {
+                            appellantRep1AddressBlock += "\n\n";
+                        }
+                        appellantRep1Names += StringUtilities.buildCasePartyNameNoPreFix(party);
+                        appellantRep1Title += party.jobTitle;
+                        appellantRep1AddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
+
+                        CCList += (CCList.trim().equals("") ? "" : System.lineSeparator() + System.lineSeparator())
+                                + StringUtilities.buildCasePartyNameCMDSCCBlock(party) + " " + party.caseRelation;
+                        CCList += System.lineSeparator() + StringUtilities.buildCasePartyAddressBlock(party);
+
+                        CMDSCCNameList += (CMDSCCNameList.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameCMDSCCBlock(party);
+                        break;
                     case "Appellant Rep 1":
                         if (!"".equals(appellantRep1Names.trim())) {
                             appellantRep1Names += ", ";
@@ -161,6 +178,22 @@ public class processCMDSbookmarks {
                         }
                         appelleeNames += StringUtilities.buildCasePartyNameNoPreFix(party);
                         appelleeAddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
+
+                        CCList += (CCList.trim().equals("") ? "" : System.lineSeparator() + System.lineSeparator())
+                                + StringUtilities.buildCasePartyNameCMDSCCBlock(party) + " " + party.caseRelation;
+                        CCList += System.lineSeparator() + StringUtilities.buildCasePartyAddressBlock(party);
+
+                        CMDSCCNameList += (CMDSCCNameList.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameCMDSCCBlock(party);
+                        break;
+                    case "Appellee Rep":
+                        if (!"".equals(appelleeRep1Names.trim())) {
+                            appelleeRep1Names += ", ";
+                        }
+                        if (!"".equals(appelleeRep1AddressBlock.trim())) {
+                            appelleeRep1AddressBlock += "\n\n";
+                        }
+                        appelleeRep1Names += StringUtilities.buildCasePartyNameNoPreFix(party);
+                        appelleeRep1AddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
 
                         CCList += (CCList.trim().equals("") ? "" : System.lineSeparator() + System.lineSeparator())
                                 + StringUtilities.buildCasePartyNameCMDSCCBlock(party) + " " + party.caseRelation;
@@ -216,6 +249,22 @@ public class processCMDSbookmarks {
 
                         CMDSCCNameList += (CMDSCCNameList.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameCMDSCCBlock(party);
                         break;
+                    case "Appellee 2 Rep":
+                        if (!"".equals(appellee2Rep1Names.trim())) {
+                            appellee2Rep1Names += ", ";
+                        }
+                        if (!"".equals(appellee2Rep1AddressBlock.trim())) {
+                            appellee2Rep1AddressBlock += "\n\n";
+                        }
+                        appellee2Rep1Names += StringUtilities.buildCasePartyNameNoPreFix(party);
+                        appellee2Rep1AddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
+
+                        CCList += (CCList.trim().equals("") ? "" : System.lineSeparator() + System.lineSeparator())
+                                + StringUtilities.buildCasePartyNameCMDSCCBlock(party) + " " + party.caseRelation;
+                        CCList += System.lineSeparator() + StringUtilities.buildCasePartyAddressBlock(party);
+
+                        CMDSCCNameList += (CMDSCCNameList.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameCMDSCCBlock(party);;
+                        break;
                     case "Appellee 2 Rep 1":
                         if (!"".equals(appellee2Rep1Names.trim())) {
                             appellee2Rep1Names += ", ";
@@ -241,6 +290,22 @@ public class processCMDSbookmarks {
                         }
                         appellee2Rep2Names += StringUtilities.buildCasePartyNameNoPreFix(party);
                         appellee2Rep2AddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
+
+                        CCList += (CCList.trim().equals("") ? "" : System.lineSeparator() + System.lineSeparator())
+                                + StringUtilities.buildCasePartyNameCMDSCCBlock(party) + " " + party.caseRelation;
+                        CCList += System.lineSeparator() + StringUtilities.buildCasePartyAddressBlock(party);
+
+                        CMDSCCNameList += (CMDSCCNameList.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameCMDSCCBlock(party);
+                        break;
+                    case "Courtesy Copy":
+                        if (!"".equals(courtesyCopy1Names.trim())) {
+                            courtesyCopy1Names += ", ";
+                        }
+                        if (!"".equals(courtesyCopy1AddressBlock.trim())) {
+                            courtesyCopy1AddressBlock += "\n\n";
+                        }
+                        courtesyCopy1Names += StringUtilities.buildCasePartyNameNoPreFix(party);
+                        courtesyCopy1AddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
 
                         CCList += (CCList.trim().equals("") ? "" : System.lineSeparator() + System.lineSeparator())
                                 + StringUtilities.buildCasePartyNameCMDSCCBlock(party) + " " + party.caseRelation;
