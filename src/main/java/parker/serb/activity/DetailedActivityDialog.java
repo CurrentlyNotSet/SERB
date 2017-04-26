@@ -389,12 +389,13 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
             updateButton.setText("Save");
             closeButton.setText("Cancel");
         } else if(updateButton.getText().equals("Save")) {
+            Audit.addAuditEntry("Clicked Save Button for Activity: " + passedID);
             if (okToRenameFile()) {
-                Audit.addAuditEntry("Clicked Save Button for Activity: " + passedID);
                 updateFileName();
                 updateAction();
                 enableInputs(false);
                 Audit.addAuditEntry("Updated Information for Activity: " + passedID);
+                loadInformation(passedID, passedUser);
                 updateButton.setText("Update");
                 closeButton.setText("Close");
             }

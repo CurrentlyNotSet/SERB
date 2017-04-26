@@ -38,6 +38,9 @@ public class GenerateReport {
                 case "EmployerID":
                     new RequestedInfoEmployerIDPanel(Global.root, true, report);
                     break;
+                case "Board Meeting Date":
+                    new RequestedInfoOneDatePanel(Global.root, true, report);
+                    break;
                 case "date":
                     new RequestedInfoOneDatePanel(Global.root, true, report);
                     break;

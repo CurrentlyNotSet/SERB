@@ -32,11 +32,11 @@ public class RequestedInfoOneDatePanel extends javax.swing.JDialog {
         report = reportPassed;
         initComponents();
         addListener();
-        setText(report.fileName);
+        setText();
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }
-    
+
     private void addListener() {
         startDateField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -56,8 +56,19 @@ public class RequestedInfoOneDatePanel extends javax.swing.JDialog {
         });
     }
 
-    private void setText(String reportName) {
-        jLabel3.setText(reportName);
+    private void setText() {
+        jLabel3.setText(report.fileName);
+        
+        switch (report.parameters) {
+            case "date":
+                jLabel7.setText("Date: ");
+                break;
+            case "Board Meeting Date":
+                jLabel7.setText("Board Meeting Date: ");
+                break;
+            default:
+                break;
+        }
     }
 
     private void generateButton() {
@@ -115,7 +126,7 @@ public class RequestedInfoOneDatePanel extends javax.swing.JDialog {
             });
 
             jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-            jLabel7.setText("Start Date:");
+            jLabel7.setText("Date:");
 
             GenerateReportButton.setText("Generate Report");
             GenerateReportButton.setEnabled(false);
@@ -147,8 +158,7 @@ public class RequestedInfoOneDatePanel extends javax.swing.JDialog {
                         .addComponent(GenerateReportButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addGap(0, 0, Short.MAX_VALUE)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(startDateField, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addContainerGap())
