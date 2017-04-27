@@ -84,6 +84,7 @@ public class processREPbookmarks {
         String polling = "";
         String multiCaseElection = "";
         String longMeetDate = "";
+        String pollingEnd = "";
 
         for (CaseParty party : partyList) {
 
@@ -329,6 +330,10 @@ public class processREPbookmarks {
             polling += " through " + Global.MMMMMdyyyy.format(caseInfo.pollingEndDate);
         }
 
+        if (caseInfo.pollingEndDate != null){
+            pollingEnd = Global.MMMMMdyyyy.format(caseInfo.pollingEndDate);
+        }
+
         //MultiCase Election
         for (Object relatedCase : multicaseElection) {
             if (!multiCaseElection.trim().equals("")) {
@@ -384,6 +389,7 @@ public class processREPbookmarks {
             processBookmark.process("CASE3INCLUDED" + (i == 0 ? "" : i), caseInfo.bargainingUnitIncluded, Document);
             processBookmark.process("CASE3EXCLUDED" + (i == 0 ? "" : i), caseInfo.bargainingUnitExcluded, Document);
             processBookmark.process("POLLINGPERIOD" + (i == 0 ? "" : i), polling.trim(), Document);
+            processBookmark.process("POLLINGEND" + (i == 0 ? "" : i), pollingEnd.trim(), Document);
             processBookmark.process("WHOPREVAILED" + (i == 0 ? "" : i), caseInfo.resultWHoPrevailed, Document);
             processBookmark.process("MAILKITDATE" + (i == 0 ? "" : i), caseInfo.mailKitDate  == null ? ""
                     : Global.MMMMMdyyyy.format(caseInfo.mailKitDate), Document);
