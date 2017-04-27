@@ -97,9 +97,24 @@ public class CaseNotFoundDialog extends javax.swing.JDialog {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         NumberFormatService.clearCaseNumberInformation();
-        if(Global.activeSection.equals("REP")) {
-        } else if(Global.activeSection.equals("ULP")) {
-            Global.root.getuLPHeaderPanel1().getjComboBox2().setSelectedItem("");
+        switch (Global.activeSection) {
+            case "REP":
+                Global.root.getrEPHeaderPanel1().getjComboBox2().setSelectedItem("");
+                break;
+            case "ULP":
+                Global.root.getuLPHeaderPanel1().getjComboBox2().setSelectedItem("");
+                break;
+            case "MED":
+                Global.root.getmEDHeaderPanel1().getjComboBox2().setSelectedItem("");
+//        } else if(Global.activeSection.equals("ORG")) {
+//            
+//        } else if(Global.activeSection.equals("Hearings")) {
+//            
+//        } else if(Global.activeSection.equals("MED")) {
+//            
+                break;
+            default:
+                break;
         }
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
