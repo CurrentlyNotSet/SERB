@@ -36,7 +36,7 @@ public class MEDRootPanel extends javax.swing.JPanel {
     /**
      * Removes all content from previous stored cases
      */
-    void clearAll() {
+    public void clearAll() {
         Global.root.getmEDHeaderPanel1().clearAll();
         activityPanel1.clearAll();
         partiesPanel1.clearAll();
