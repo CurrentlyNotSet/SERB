@@ -5,7 +5,6 @@
  */
 package parker.serb.REP;
 
-import com.alee.laf.optionpane.WebOptionPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.util.Date;
@@ -17,8 +16,6 @@ import javax.swing.SwingUtilities;
 import parker.serb.Global;
 import parker.serb.sql.Audit;
 import parker.serb.sql.CaseParty;
-import parker.serb.sql.CaseType;
-import parker.serb.sql.MEDCase;
 import parker.serb.sql.REPCase;
 import parker.serb.sql.User;
 import parker.serb.util.CaseInEditModeDialog;
@@ -66,7 +63,7 @@ public class REPHeaderPanel extends javax.swing.JPanel {
 
     private void loadInformation() {
         if (caseNumberComboBox.getSelectedItem().toString().trim().length() == 16) {
-            if(MEDCase.validateCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim())) {
+            if(REPCase.validateCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim())) {
                 NumberFormatService.parseFullCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim());
                 User.updateLastCaseNumber();
                 loadHeaderInformation();
