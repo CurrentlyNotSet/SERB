@@ -20,7 +20,7 @@ public class MediatorAddEdidDialog extends javax.swing.JDialog {
 
     private int ID;
     private Mediator item;
-    
+
     /**
      * Creates new form MediatorAddEdidDialog
      * @param parent
@@ -33,7 +33,7 @@ public class MediatorAddEdidDialog extends javax.swing.JDialog {
         addListeners();
         setDefaults(itemIDpassed);
     }
-    
+
     private void addListeners() {
         EmailTextBox.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -68,16 +68,16 @@ public class MediatorAddEdidDialog extends javax.swing.JDialog {
         this.setLocationRelativeTo(Global.root);
         this.setVisible(true);
     }
-        
+
     private void loadInformation() {
         item = Mediator.getMediatorByID(ID);
-        
+
         EmailTextBox.setText(item.email);
         FirstNameTextField.setText(item.firstName);
         MiddleNameTextField.setText(item.middleName);
         LastNameTextField.setText(item.lastName);
         PhoneTextBox.setText(item.phone);
-        
+
         //Type ComboBox Selection
         switch (item.type) {
             case "State":
@@ -91,7 +91,7 @@ public class MediatorAddEdidDialog extends javax.swing.JDialog {
                 break;
         }
     }
-   
+
     private void saveInformation() {
         item.firstName = FirstNameTextField.getText().trim();
         item.middleName = MiddleNameTextField.getText().trim();
@@ -99,17 +99,17 @@ public class MediatorAddEdidDialog extends javax.swing.JDialog {
         item.email = EmailTextBox.getText().trim();
         item.phone = PhoneTextBox.getText().trim();
         item.id = ID;
-        
+
         if (null != TypeComboBox.getSelectedItem().toString().trim()) {
             switch (TypeComboBox.getSelectedItem().toString().trim()) {
-                case "Status":
-                    item.type = "Status";
+                case "State":
+                    item.type = "State";
                     break;
                 case "FMCS":
                     item.type = "FMCS";
                     break;
                 default:
-                    item.type = null;
+                    item.type = "";
                     break;
             }
         }
@@ -129,7 +129,7 @@ public class MediatorAddEdidDialog extends javax.swing.JDialog {
             editButton.setEnabled(true);
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
