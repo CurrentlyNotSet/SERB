@@ -56,6 +56,18 @@ public class RequestedInfoMonthYearPanel extends javax.swing.JDialog {
         }
     }
 
+    private void GenerateReport(){
+        if (report.fileName.equalsIgnoreCase("All Organizations Noncompliance Report All Months.jasper")){
+            GenerateReport.generateExactStringReport(
+                    ORGNonComplianceAllWhereStatement.oneYearPriorData(ComboBox.getSelectedItem().toString(), TextField.getText().trim()),
+                    report
+            );
+        } else {
+            GenerateReport.generateMonthYearReport(ComboBox.getSelectedItem().toString(), TextField.getText().trim(), report);
+        }
+    }
+
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -176,7 +188,7 @@ public class RequestedInfoMonthYearPanel extends javax.swing.JDialog {
     }//GEN-LAST:event_CancelButtonActionPerformed
 
     private void GenerateReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GenerateReportButtonActionPerformed
-        GenerateReport.generateMonthYearReport(ComboBox.getSelectedItem().toString(), TextField.getText().trim(), report);
+        GenerateReport();
     }//GEN-LAST:event_GenerateReportButtonActionPerformed
 
     private void ComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxActionPerformed
