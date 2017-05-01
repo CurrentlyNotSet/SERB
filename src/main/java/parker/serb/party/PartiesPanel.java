@@ -16,6 +16,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -3493,6 +3494,7 @@ public class PartiesPanel extends javax.swing.JPanel {
         jTable1 = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         missingParties = new javax.swing.JLabel();
+        EnvelopeInsertButton = new javax.swing.JButton();
 
         jLabel1.setText("Search:");
 
@@ -3529,11 +3531,18 @@ public class PartiesPanel extends javax.swing.JPanel {
         missingParties.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         missingParties.setText("jLabel2");
 
+        EnvelopeInsertButton.setText("Envelope Inserts");
+        EnvelopeInsertButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EnvelopeInsertButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 581, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3543,7 +3552,9 @@ public class PartiesPanel extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextField1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1)))
+                        .addComponent(jButton1)
+                        .addGap(60, 60, 60)
+                        .addComponent(EnvelopeInsertButton)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -3553,7 +3564,8 @@ public class PartiesPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(jButton1)
+                    .addComponent(EnvelopeInsertButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(missingParties)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -3566,8 +3578,14 @@ public class PartiesPanel extends javax.swing.JPanel {
         jTextField1.setText("");
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void EnvelopeInsertButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EnvelopeInsertButtonActionPerformed
+        Audit.addAuditEntry("Envelope Insert Button Clicked");
+        new EnvelopeInsertSelectionDialog((JFrame) this.getRootPane().getParent(), true);
+    }//GEN-LAST:event_EnvelopeInsertButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton EnvelopeInsertButton;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;

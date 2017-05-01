@@ -739,14 +739,8 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void includeAllCheckBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_includeAllCheckBoxMouseClicked
-        if (includeAllCheckBox.isSelected()) {
-            for (int i = 0; i < caseDocsTable.getRowCount(); i++) {
-                caseDocsTable.getModel().setValueAt(true, i, 1);
-            }
-        } else {
-            for (int i = 0; i < caseDocsTable.getRowCount(); i++) {
-                caseDocsTable.getModel().setValueAt(false, i, 1);
-            }
+        for (int i = 0; i < caseDocsTable.getRowCount(); i++) {
+            caseDocsTable.getModel().setValueAt(includeAllCheckBox.isSelected(), i, 1);
         }
     }//GEN-LAST:event_includeAllCheckBoxMouseClicked
 

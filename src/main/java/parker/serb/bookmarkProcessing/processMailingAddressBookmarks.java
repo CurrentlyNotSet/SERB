@@ -15,7 +15,6 @@ import parker.serb.fileOperations.WordToPDF;
 import parker.serb.sql.AdministrationInformation;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.PostalOut;
-import parker.serb.util.FileService;
 import parker.serb.util.JacobCOMBridge;
 import parker.serb.util.StringUtilities;
 
@@ -96,7 +95,7 @@ public class processMailingAddressBookmarks {
         return saveDocName;
     }
 
-    public static void processSingleEnvelopeInsert(String templatePath, String templateName, CaseParty item) {
+    public static String processSingleEnvelopeInsert(String templatePath, String templateName, CaseParty item) {
         String dept = StringUtilities.getDepartment();
         AdministrationInformation sysAdminInfo = AdministrationInformation.loadAdminInfo(dept);
 
@@ -145,9 +144,8 @@ public class processMailingAddressBookmarks {
         JacobCOMBridge.setWordActive(false, false, eolWord);
 
         //Convert Envelope
-        String envelopeFilePDF = WordToPDF.createPDF(docPath.toString() + File.separator, saveDocName);
+        return WordToPDF.createPDF(docPath.toString() + File.separator, saveDocName);
 
-        FileService.openFileFullPath(new File(System.getProperty("java.io.tmpdir") + envelopeFilePDF));
     }
 
 }
