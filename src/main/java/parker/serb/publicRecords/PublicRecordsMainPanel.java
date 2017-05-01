@@ -435,6 +435,8 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         caseDocsTable = new javax.swing.JTable();
         caseDocsLabel = new javax.swing.JLabel();
+        includeAllCheckBox = new javax.swing.JCheckBox();
+        jLabel1 = new javax.swing.JLabel();
         awaitingRedactPanel = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         awaitingTable = new javax.swing.JTable();
@@ -499,24 +501,40 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
         caseDocsLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         caseDocsLabel.setText("Documents for <<CASENUMBER>>");
 
+        includeAllCheckBox.setText("Include All");
+        includeAllCheckBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                includeAllCheckBoxMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout caseDocsPanelLayout = new javax.swing.GroupLayout(caseDocsPanel);
         caseDocsPanel.setLayout(caseDocsPanelLayout);
         caseDocsPanelLayout.setHorizontalGroup(
             caseDocsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(caseDocsPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(caseDocsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(includeAllCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(caseDocsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 679, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 877, Short.MAX_VALUE)
+            .addComponent(jScrollPane1)
         );
         caseDocsPanelLayout.setVerticalGroup(
             caseDocsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, caseDocsPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(caseDocsLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 544, Short.MAX_VALUE))
+                .addGroup(caseDocsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(caseDocsLabel)
+                    .addComponent(includeAllCheckBox)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 540, Short.MAX_VALUE))
         );
+
+        caseDocsPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {caseDocsLabel, includeAllCheckBox, jLabel1});
 
         jTabbedPane1.addTab("Case Documents", caseDocsPanel);
 
@@ -719,6 +737,18 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void includeAllCheckBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_includeAllCheckBoxMouseClicked
+        if (includeAllCheckBox.isSelected()) {
+            for (int i = 0; i < caseDocsTable.getRowCount(); i++) {
+                caseDocsTable.getModel().setValueAt(true, i, 1);
+            }
+        } else {
+            for (int i = 0; i < caseDocsTable.getRowCount(); i++) {
+                caseDocsTable.getModel().setValueAt(false, i, 1);
+            }
+        }
+    }//GEN-LAST:event_includeAllCheckBoxMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CloseButton;
     private javax.swing.JPanel awaitingRedactPanel;
@@ -727,8 +757,10 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
     private javax.swing.JPanel caseDocsPanel;
     private javax.swing.JTable caseDocsTable;
     private javax.swing.JLabel headerLabel;
+    private javax.swing.JCheckBox includeAllCheckBox;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
