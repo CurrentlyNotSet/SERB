@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.util.List;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import parker.serb.Global;
 import parker.serb.sql.Audit;
@@ -17,6 +18,7 @@ import parker.serb.sql.CSCCase;
 import parker.serb.sql.CaseType;
 import parker.serb.sql.User;
 import parker.serb.util.CaseInEditModeDialog;
+import parker.serb.util.CaseNotFoundDialog;
 import parker.serb.util.NumberFormatService;
 
 /**
@@ -73,16 +75,7 @@ public class CSCHeaderPanel extends javax.swing.JPanel {
         if(Global.caseNumber != null) {
             CSCCase csc = CSCCase.loadHeaderInformation();
             if(csc == null) {
-                if (caseNumberComboBox.getSelectedItem().toString().trim().length() == 16){
-                    NumberFormatService.parseFullCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim());
-                    String selectedSection = CaseType.getSectionFromCaseType(Global.caseType);
-                    if (!selectedSection.equals("")){
-                        WebOptionPane.showMessageDialog(Global.root,
-                            "<html><center>Unable to load case, invalid case section<br><br>Please use the " + selectedSection + " tab</center></html>",
-                            "Error", WebOptionPane.ERROR_MESSAGE);
-                    }
-                }
-                caseNumberComboBox.setSelectedItem("");
+                new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
                 Global.root.getcSCRootPanel1().clearAll();
             } else {
                 Global.caseNumber = csc.cscNumber != null ? csc.cscNumber : "";

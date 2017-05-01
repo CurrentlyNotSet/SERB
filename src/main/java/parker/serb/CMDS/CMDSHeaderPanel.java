@@ -68,9 +68,8 @@ public class CMDSHeaderPanel extends javax.swing.JPanel {
 
     private void loadInformation() {
         if (caseNumberComboBox.getSelectedItem().toString().trim().length() == 16) {
-            NumberFormatService.parseFullCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim());
-            String selectedSection = CaseType.getSectionFromCaseType(Global.caseType);
-            if (Global.activeSection.equalsIgnoreCase(selectedSection)) {
+            if(CMDSCase.validateCase(caseNumberComboBox.getSelectedItem().toString().trim())) {
+                NumberFormatService.parseFullCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim());
                 User.updateLastCaseNumber();
                 loadHeaderInformation();
                 Global.root.getcMDSRootPanel1().loadInformation();
@@ -78,11 +77,8 @@ public class CMDSHeaderPanel extends javax.swing.JPanel {
                 Global.root.getjButton4().setText("Documents");
                 Global.root.getjButton4().setEnabled(true);
             } else {
-                caseNumberComboBox.setSelectedItem("");
+                new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
                 Global.root.getcMDSRootPanel1().clearAll();
-                WebOptionPane.showMessageDialog(Global.root,
-                        "<html><center>Unable to load case, invalid case section<br><br>Please use the " + selectedSection + " tab</center></html>",
-                        "Error", WebOptionPane.ERROR_MESSAGE);
             }
         } else {
             new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());

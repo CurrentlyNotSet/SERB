@@ -18,13 +18,12 @@ import parker.serb.Global;
 import parker.serb.sql.Audit;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.CaseType;
+import parker.serb.sql.MEDCase;
 import parker.serb.sql.REPCase;
 import parker.serb.sql.User;
 import parker.serb.util.CaseInEditModeDialog;
 import parker.serb.util.CaseNotFoundDialog;
 import parker.serb.util.NumberFormatService;
-
-//
 
 /**
  *
@@ -44,7 +43,6 @@ public class REPHeaderPanel extends javax.swing.JPanel {
     private void addListeners() {
         caseNumberComboBox.addActionListener((ActionEvent e) -> {
             if(caseNumberComboBox.getSelectedItem() != null) {
-//                Global.root.getrEPRootPanel1().getjTabbedPane1().setSelectedIndex(0);
                 if(caseNumberComboBox.getSelectedItem().toString().trim().equals("")) {
                     Global.root.getjButton9().setVisible(false);
                     if(Global.root != null) {
@@ -60,12 +58,6 @@ public class REPHeaderPanel extends javax.swing.JPanel {
                     Global.root.getjButton3().setEnabled(true);
                     caseNumberComboBox.setSelectedItem(caseNumberComboBox.getSelectedItem().toString().toUpperCase());
                     loadInformation();
-//                    if(Global.root.getrEPRootPanel1().getjTabbedPane1().getSelectedIndex() == 0) {
-//                        Global.root.getjButton2().setText("Add Entry");
-//                        Global.root.getjButton2().setEnabled(true);
-//                        Global.root.getrEPRootPanel1().getActivityPanel1().loadAllActivity();
-//                        Global.root.getjButton9().setVisible(true);
-//                    }
                     Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
                 }
             }
@@ -74,19 +66,15 @@ public class REPHeaderPanel extends javax.swing.JPanel {
 
     private void loadInformation() {
         if (caseNumberComboBox.getSelectedItem().toString().trim().length() == 16) {
-            NumberFormatService.parseFullCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim());
-            String selectedSection = CaseType.getSectionFromCaseType(Global.caseType);
-            if (Global.activeSection.equalsIgnoreCase(selectedSection)) {
+            if(MEDCase.validateCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim())) {
+                NumberFormatService.parseFullCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim());
                 User.updateLastCaseNumber();
                 loadHeaderInformation();
                 Global.root.getrEPRootPanel1().loadInformation();
                 Global.root.getrEPRootPanel1().setButtons();
             } else {
-                caseNumberComboBox.setSelectedItem("");
+                new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
                 Global.root.getrEPRootPanel1().clearAll();
-                WebOptionPane.showMessageDialog(Global.root,
-                        "<html><center>Unable to load case, invalid case section<br><br>Please use the " + selectedSection + " tab</center></html>",
-                        "Error", WebOptionPane.ERROR_MESSAGE);
             }
         } else {
             new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
