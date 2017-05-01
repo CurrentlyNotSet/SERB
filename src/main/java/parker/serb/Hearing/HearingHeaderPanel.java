@@ -63,24 +63,19 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
 
     private void loadInformation() {
         if (caseNumberComboBox.getSelectedItem().toString().trim().length() == 16) {
-            NumberFormatService.parseFullCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim());
-            String selectedSection = CaseType.getSectionFromCaseType(Global.caseType);
-            if ("MED".equalsIgnoreCase(selectedSection)
-                    || "REP".equalsIgnoreCase(selectedSection)
-                    || "ULP".equalsIgnoreCase(selectedSection)) {
+            if(HearingCase.validateCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim())) {
+                NumberFormatService.parseFullCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim());
                 User.updateLastCaseNumber();
                 loadHeaderInformation();
                 Global.root.getHearingRootPanel1().loadInformation();
                 Global.root.getHearingRootPanel1().setButtons();
             } else {
-                caseNumberComboBox.setSelectedItem("");
+                new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
                 Global.root.getHearingRootPanel1().clearAll();
-                WebOptionPane.showMessageDialog(Global.root,
-                        "<html><center>Unable to load case, invalid case section<br><br>Please use the " + selectedSection + " tab</center></html>",
-                        "Error", WebOptionPane.ERROR_MESSAGE);
             }
         } else {
             new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
+            Global.root.getHearingRootPanel1().clearAll();
         }
     }
 
@@ -91,7 +86,6 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
         String party2 = "";
         String party3 = "";
         String party4 = "";
-
 
         if(Global.caseNumber != null) {
             HearingCase hearings = HearingCase.loadHeaderInformation();

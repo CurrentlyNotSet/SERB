@@ -39,29 +39,20 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
     private void addListeners() {
         caseNumberComboBox.addActionListener((ActionEvent e) -> {
             if(caseNumberComboBox.getSelectedItem() != null) {
-//                Global.root.getuLPRootPanel1().getjTabbedPane1().setSelectedIndex(0);
                 if(caseNumberComboBox.getSelectedItem().toString().trim().equals("")) {
                     if(Global.root != null) {
                         Global.root.getjButton2().setText("Update");
                         Global.root.getjButton2().setEnabled(false);
                         Global.root.getjButton3().setEnabled(false);
-//                        Global.root.getjButton6().setEnabled(false);
                         Global.root.getjButton9().setEnabled(false);
                         Global.root.getjButton9().setVisible(false);
                         Global.root.getuLPRootPanel1().clearAll();
                     }
                 } else {
                     Global.root.getjButton2().setEnabled(true);
-//                    Global.root.getjButton6().setEnabled(true);
                     Global.root.getjButton3().setEnabled(true);
                     caseNumberComboBox.setSelectedItem(caseNumberComboBox.getSelectedItem().toString().toUpperCase());
                     loadInformation();
-//                    if(Global.root.getuLPRootPanel1().getjTabbedPane1().getSelectedIndex() == 0) {
-//                        Global.root.getjButton2().setText("Add Entry");
-//                        Global.root.getjButton2().setEnabled(true);
-//                        Global.root.getuLPRootPanel1().getActivityPanel1().loadAllActivity();
-//                        Global.root.getjButton9().setVisible(true);
-//                    }
                     Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
                 }
             }
@@ -70,19 +61,15 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
 
     private void loadInformation() {
         if(caseNumberComboBox.getSelectedItem().toString().trim().length() == 16) {
-            NumberFormatService.parseFullCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim());
-            String selectedSection = CaseType.getSectionFromCaseType(Global.caseType);
-            if (Global.activeSection.equalsIgnoreCase(selectedSection)) {
+            if(ULPCase.validateCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim())) {
+                NumberFormatService.parseFullCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim());
                 User.updateLastCaseNumber();
                 loadHeaderInformation();
                 Global.root.getuLPRootPanel1().loadInformation();
                 Global.root.getuLPRootPanel1().setButtons();
             } else {
-                caseNumberComboBox.setSelectedItem("");
+                new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
                 Global.root.getuLPRootPanel1().clearAll();
-                WebOptionPane.showMessageDialog(Global.root,
-                        "<html><center>Unable to load case, invalid case section<br><br>Please use the " + selectedSection + " tab</center></html>",
-                        "Error", WebOptionPane.ERROR_MESSAGE);
             }
         } else {
             new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());

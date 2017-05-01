@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import parker.serb.Global;
 import parker.serb.sql.Audit;
@@ -18,9 +19,8 @@ import parker.serb.sql.CaseType;
 import parker.serb.sql.ORGCase;
 import parker.serb.sql.User;
 import parker.serb.util.CaseInEditModeDialog;
+import parker.serb.util.CaseNotFoundDialog;
 import parker.serb.util.NumberFormatService;
-
-//
 
 /**
  *
@@ -41,7 +41,6 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
     private void addListeners() {
         caseNumberComboBox.addActionListener((ActionEvent e) -> {
             if(caseNumberComboBox.getSelectedItem() != null) {
-//                Global.root.getoRGRootPanel1().getjTabbedPane1().setSelectedIndex(0);
                 if(caseNumberComboBox.getSelectedItem().toString().trim().equals("")) {
                     if(Global.root != null) {
                         Global.root.getjButton2().setText("Update");
@@ -59,17 +58,7 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
                     }
                 } else {
                     Global.root.getjButton2().setEnabled(true);
-//                    caseNumberComboBox.setSelectedItem(caseNumberComboBox.getSelectedItem().toString().toUpperCase());
                     loadInformation();
-//                    if(Global.root.getoRGRootPanel1().getjTabbedPane1().getSelectedIndex() == 0) {
-//                        Global.root.getjButton2().setText("Add Entry");
-//                        Global.root.getjButton2().setEnabled(true);
-//                        Global.root.getjButton4().setText("Single Letter");
-//                        Global.root.getjButton4().setEnabled(true);
-//                        Global.root.getjButton9().setVisible(true);
-//                        Global.root.getoRGRootPanel1().getActivityPanel1().loadAllActivity();
-//                    }
-
                     Audit.addAuditEntry("Loaded Case: " + caseNumberComboBox.getSelectedItem().toString().trim());
                 }
             }
@@ -89,17 +78,7 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
         if(Global.caseNumber != null) {
             ORGCase org = ORGCase.loadHeaderInformation();
             if(org == null) {
-//                new ORG((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
-                if (caseNumberComboBox.getSelectedItem().toString().trim().length() == 16){
-                    NumberFormatService.parseFullCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim());
-                    String selectedSection = CaseType.getSectionFromCaseType(Global.caseType);
-                    if (!selectedSection.equals("")){
-                        WebOptionPane.showMessageDialog(Global.root,
-                            "<html><center>Unable to load case, invalid case section<br><br>Please use the " + selectedSection + " tab</center></html>",
-                            "Error", WebOptionPane.ERROR_MESSAGE);
-                    }
-                }
-                caseNumberComboBox.setSelectedItem("");
+                new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
                 Global.root.getoRGRootPanel1().clearAll();
             } else {
                 Global.caseNumber = org.orgNumber != null ? org.orgNumber : "";
@@ -126,7 +105,6 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
             Global.caseNumber = ORGCase.getORGName();
             ORGCase org = ORGCase.loadHeaderInformation();
             if(org == null) {
-//                new ORG((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
                 caseNumberComboBox.setSelectedItem(Global.caseNumber);
             } else {
                 Global.caseNumber = org.orgNumber != null ? org.orgNumber : "";

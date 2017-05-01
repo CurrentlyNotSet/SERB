@@ -69,24 +69,14 @@ public class MEDHeaderPanel extends javax.swing.JPanel {
         if (caseNumberComboBox.getSelectedItem().toString().trim().length() == 16) {
             if(MEDCase.validateCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim())) {
                 NumberFormatService.parseFullCaseNumber(caseNumberComboBox.getSelectedItem().toString().trim());
-                String selectedSection = CaseType.getSectionFromCaseType(Global.caseType);
-                if (Global.activeSection.equalsIgnoreCase(selectedSection)) {
-                    User.updateLastCaseNumber();
-                    loadHeaderInformation();
-                    Global.root.getmEDRootPanel1().loadInformation();
-                    Global.root.getmEDRootPanel1().setButtons();
-                } else {
-                    caseNumberComboBox.setSelectedItem("");
-                    Global.root.getmEDRootPanel1().clearAll();
-                    WebOptionPane.showMessageDialog(Global.root,
-                            "<html><center>Unable to load case, invalid case section<br><br>Please use the " + selectedSection + " tab</center></html>",
-                            "Error", WebOptionPane.ERROR_MESSAGE);
-                }
+                User.updateLastCaseNumber();
+                loadHeaderInformation();
+                Global.root.getmEDRootPanel1().loadInformation();
+                Global.root.getmEDRootPanel1().setButtons();
             } else {
                 new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
                 Global.root.getmEDRootPanel1().clearAll();
             }
-            
         } else {
             new CaseNotFoundDialog((JFrame) getRootPane().getParent(), true, caseNumberComboBox.getSelectedItem().toString());
             Global.root.getmEDRootPanel1().clearAll();

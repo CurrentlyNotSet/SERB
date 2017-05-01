@@ -6,8 +6,12 @@
 package parker.serb.util;
 
 import javax.swing.JFrame;
+import parker.serb.CMDS.CMDSCaseSearch;
+import parker.serb.CSC.CSCCaseSearch;
 import parker.serb.Global;
 import parker.serb.Hearing.HearingCaseSearch;
+import parker.serb.MED.MEDCaseSearch;
+import parker.serb.ORG.ORGCaseSearch;
 import parker.serb.REP.REPCaseSearch;
 import parker.serb.ULP.ULPCaseSearch;
 
@@ -97,37 +101,69 @@ public class CaseNotFoundDialog extends javax.swing.JDialog {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         NumberFormatService.clearCaseNumberInformation();
-        switch (Global.activeSection) {
+        switch(Global.activeSection) {
             case "REP":
                 Global.root.getrEPHeaderPanel1().getjComboBox2().setSelectedItem("");
+                break;
+            case "ORG":
+                Global.root.getoRGHeaderPanel2().getjComboBox2().setSelectedItem("");
                 break;
             case "ULP":
                 Global.root.getuLPHeaderPanel1().getjComboBox2().setSelectedItem("");
                 break;
             case "MED":
                 Global.root.getmEDHeaderPanel1().getjComboBox2().setSelectedItem("");
-//        } else if(Global.activeSection.equals("ORG")) {
-//            
-//        } else if(Global.activeSection.equals("Hearings")) {
-//            
-//        } else if(Global.activeSection.equals("MED")) {
-//            
                 break;
-            default:
+            case "Civil Service Commision":
+                Global.root.getcSCHeaderPanel1().getjComboBox2().setSelectedItem("");
                 break;
+            case "CSC":
+                Global.root.getcSCHeaderPanel1().getjComboBox2().setSelectedItem("");
+                break;
+            case "CMDS":
+                Global.root.getcMDSHeaderPanel1().getjComboBox2().setSelectedItem("");
+                break;  
+            case "Hearings":
+                Global.root.getHearingHeaderPanel1().getjComboBox2().setSelectedItem("");
+                break;  
         }
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if(Global.activeSection.equals("REP")) {
-            new REPCaseSearch((JFrame) Global.root.getParent(), true);
-        } else if(Global.activeSection.equals("ULP")) {
-            Global.root.getuLPHeaderPanel1().getjComboBox2().setSelectedItem("");
-            new ULPCaseSearch((JFrame) Global.root.getParent(), true);
-        } else if(Global.activeSection.equals("Hearings")) {
-            Global.root.getHearingHeaderPanel1().getjComboBox2().setSelectedItem("");
-            new HearingCaseSearch((JFrame) Global.root.getParent(), true);
+        switch(Global.activeSection) {
+            case "REP":
+                Global.root.getrEPHeaderPanel1().getjComboBox2().setSelectedItem("");
+                new REPCaseSearch((JFrame) Global.root.getParent(), true); 
+                break;
+            case "ORG":
+                Global.root.getoRGHeaderPanel2().getjComboBox2().setSelectedItem("");
+                new ORGCaseSearch((JFrame) Global.root.getParent(), true); 
+                break;
+            case "ULP":
+                Global.root.getuLPHeaderPanel1().getjComboBox2().setSelectedItem("");
+                new ULPCaseSearch((JFrame) Global.root.getParent(), true); 
+                break;
+            case "MED":
+                Global.root.getmEDHeaderPanel1().getjComboBox2().setSelectedItem("");
+                new MEDCaseSearch((JFrame) Global.root.getParent(), true); 
+                break;
+            case "Civil Service Commision":
+                Global.root.getcSCHeaderPanel1().getjComboBox2().setSelectedItem("");
+                new CSCCaseSearch((JFrame) Global.root.getParent(), true); 
+                break;
+            case "CSC":
+                Global.root.getcSCHeaderPanel1().getjComboBox2().setSelectedItem("");
+                new CSCCaseSearch((JFrame) Global.root.getParent(), true); 
+                break;
+            case "CMDS":
+                Global.root.getcMDSHeaderPanel1().getjComboBox2().setSelectedItem("");
+                new CMDSCaseSearch((JFrame) Global.root.getParent(), true); 
+                break;  
+            case "Hearings":
+                Global.root.getHearingHeaderPanel1().getjComboBox2().setSelectedItem("");
+                new HearingCaseSearch((JFrame) Global.root.getParent(), true); 
+                break;  
         }
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
