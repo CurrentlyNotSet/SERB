@@ -30,7 +30,7 @@ import parker.serb.util.FileService;
  *
  * @author parkerjohnston
  */
-public class scanCMDSFileDialog extends javax.swing.JDialog {
+public class mediaCMDSFileDialog_NEW extends javax.swing.JDialog {
 
     String selectedSection = "";
     boolean orgProcess = false;
@@ -42,7 +42,7 @@ public class scanCMDSFileDialog extends javax.swing.JDialog {
      * @param time
      * @param section
      */
-    public scanCMDSFileDialog(java.awt.Frame parent, boolean modal, String file, String section, String time) {
+    public mediaCMDSFileDialog_NEW(java.awt.Frame parent, boolean modal, String file, String section, String time) {
         super(parent, modal);
         initComponents();
         selectedSection = section;
@@ -312,7 +312,7 @@ public class scanCMDSFileDialog extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Scan Filing");
+        jLabel1.setText("Media Filing");
 
         jLabel2.setText("File Name:");
 
@@ -506,7 +506,7 @@ public class scanCMDSFileDialog extends javax.swing.JDialog {
     private void fileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileButtonActionPerformed
         String[] caseNumbers = caseNumberTextBox.getText().trim().split(",");
 
-        FileService.docketCMDSScan(caseNumbers, //caseNumber
+        FileService.docketCMDSMediaWithTime(caseNumbers, //caseNumber
             selectedSection,
             fromTextBox.getText(),
             toComboBox.getSelectedItem().toString(),
@@ -515,7 +515,7 @@ public class scanCMDSFileDialog extends javax.swing.JDialog {
             descriptionComboBox.getSelectedItem().toString(), //fileType2
             commentTextBox.getText().trim(),
             directionComboBox.getSelectedItem().toString(),
-            this, 
+            this,
             generateDate()
         );
         dispose();

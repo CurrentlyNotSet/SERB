@@ -434,7 +434,7 @@ public class mediaFileDialog_NEW extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Scan Filing");
+        jLabel1.setText("Media Filing");
 
         jLabel2.setText("File Name:");
 

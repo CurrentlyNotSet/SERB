@@ -798,6 +798,61 @@ public class FileService {
         docketFile.delete();
     }
 
+    public static void docketCMDSMediaWithTime(String[] caseNumbers,
+            String section,
+            String from,
+            String to,
+            String fileName,
+            String type,
+            String type2,
+            String comment,
+            String direction,
+            Dialog parent,
+            Date activityDate) {
+
+        File docketFile = new File(Global.mediaPath + section + File.separatorChar + fileName.trim());
+
+        if (docketFile.exists()) {
+            for (String caseNumber : caseNumbers) {
+                File caseArchiveFile;
+
+                String[] caseNumberParts = caseNumber.trim().split("-");
+                caseArchiveFile = new File(
+                        Global.activityPath
+                        + section
+                        + File.separatorChar
+                        + caseNumberParts[0]
+                        + File.separatorChar
+                        + caseNumber.trim()
+                );
+
+                caseArchiveFile.mkdirs();
+
+                String fileDate = String.valueOf(new Date().getTime());
+
+                String fileExtenstion = fileName.substring(fileName.lastIndexOf(".")); //. included
+
+                FileUtils.copyFile(docketFile, new File(caseArchiveFile + File.separator + fileDate + fileExtenstion));
+
+                NumberFormatService.parseFullCaseNumber(caseNumber);
+
+                CMDSCaseDocketEntryTypes.updateCaseHistory(
+                    type.split("-")[0].trim(),
+                    type2,
+                    comment,
+                    activityDate,
+                    parent,
+                    caseArchiveFile + File.separator + fileDate + fileExtenstion,
+                    direction,
+                    caseNumber,
+                    from,
+                    to
+                );
+            }
+        }
+        docketFile.delete();
+    }
+
     public static void renameActivtyFile(String fileName, String updatedType) {
 
         FileUtils.copyFile(new File(Global.activityPath + Global.activeSection
