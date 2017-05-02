@@ -69,18 +69,13 @@ public class processCSCbookmarks {
         for (int i = 0; i < Global.BOOKMARK_LIMIT; i++) {
             processBookmark.process("RepSalutation" + (i == 0 ? "" : i), repNames, Document);
 
+            processBookmark.process("CommissionAddressBlock" + (i == 0 ? "" : i), orgAddressBlock, Document);
             processBookmark.process("CommissionName" + (i == 0 ? "" : i), item.name, Document);
             processBookmark.process("CommissionAddress1" + (i == 0 ? "" : i), item.address1, Document);
             processBookmark.process("CommissionAddress2" + (i == 0 ? "" : i), item.address2, Document);
             processBookmark.process("CommissionCity" + (i == 0 ? "" : i), item.city, Document);
             processBookmark.process("CommissionState" + (i == 0 ? "" : i), item.state, Document);
             processBookmark.process("CommissionZip" + (i == 0 ? "" : i), item.zipCode, Document);
-            processBookmark.process("OrgAddressBlock" + (i == 0 ? "" : i), orgAddressBlock, Document);
-            processBookmark.process("OrgAddress1" + (i == 0 ? "" : i), item.address1, Document);
-            processBookmark.process("OrgAddress2" + (i == 0 ? "" : i), item.address2, Document);
-            processBookmark.process("OrgCity" + (i == 0 ? "" : i), item.city, Document);
-            processBookmark.process("OrgState" + (i == 0 ? "" : i), item.state, Document);
-            processBookmark.process("OrgZipPlusFour" + (i == 0 ? "" : i), item.zipCode, Document);
         }
 
         return Document;

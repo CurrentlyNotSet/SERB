@@ -448,7 +448,7 @@ public class CSCAllLettersPanel extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Generate Letters For All Organizations");
+        jLabel1.setText("Generate Letters For All Civil Service Commissions");
 
         letterComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
