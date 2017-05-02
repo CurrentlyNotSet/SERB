@@ -229,6 +229,7 @@
     <Component class="javax.swing.JButton" name="GenerateButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Generate Letters"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="GenerateButtonActionPerformed"/>
@@ -246,23 +247,17 @@
             <Component class="javax.swing.JTable" name="jTable1">
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                  <Table columnCount="7" rowCount="0">
+                  <Table columnCount="6" rowCount="0">
                     <Column editable="false" title="id" type="java.lang.Object"/>
-                    <Column editable="false" title="Org #" type="java.lang.Object"/>
-                    <Column editable="false" title="Organization Name" type="java.lang.Object"/>
-                    <Column editable="false" title="Org Via" type="java.lang.Object"/>
-                    <Column editable="false" title="Rep Via" type="java.lang.Object"/>
-                    <Column editable="false" title="AR Last" type="java.lang.Object"/>
-                    <Column editable="false" title="Previous File" type="java.lang.Object"/>
+                    <Column editable="false" title="CSC ID" type="java.lang.Object"/>
+                    <Column editable="false" title="Civil Service Commission Name" type="java.lang.Object"/>
+                    <Column editable="false" title="CSC" type="java.lang.Object"/>
+                    <Column editable="false" title="Chairman" type="java.lang.Object"/>
+                    <Column editable="false" title="Date Filed" type="java.lang.Object"/>
                   </Table>
                 </Property>
                 <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                   <TableColumnModel selectionModel="0">
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
                     <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                       <Title/>
                       <Editor/>
