@@ -28,6 +28,7 @@ import parker.serb.Global;
 import parker.serb.sql.Audit;
 import parker.serb.sql.CMDSCaseSearchData;
 import parker.serb.sql.CaseParty;
+import parker.serb.sql.HearingCaseSearchData;
 import parker.serb.sql.MEDCaseSearchData;
 import parker.serb.sql.REPCaseSearchData;
 import parker.serb.sql.ULPCaseSearchData;
@@ -232,6 +233,10 @@ public class PartiesPanel extends javax.swing.JPanel {
                         Global.root.getcMDSHeaderPanel1().getAppelleeTextBox().getText(),
                         CaseParty.loadCMDSRepByCase("Appellant"),
                         CaseParty.loadCMDSRepByCase("Appellee"));
+                break;
+            case "Hearings":
+                Global.root.getHearingHeaderPanel1().loadHeaderInformation();
+                HearingCaseSearchData.updateCaseEntryFromParties(Global.root.getHearingHeaderPanel1().getjComboBox2().getSelectedItem().toString().trim());
                 break;
         }
     }
