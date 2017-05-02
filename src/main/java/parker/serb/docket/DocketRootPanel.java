@@ -346,7 +346,7 @@ public class DocketRootPanel extends javax.swing.JPanel {
             } else {
                 new DocketLockDialog((JFrame) Global.root.getRootPane().getParent(), true, docketLock);
             }
-        } else if(docketTable.getValueAt(docketTable.getSelectedRow(), 2).equals("Media")){
+        } else if (docketTable.getValueAt(docketTable.getSelectedRow(), 2).equals("Media")) {
             DocketLock docketLock = DocketLock.checkLock(section, docketTable.getValueAt(docketTable.getSelectedRow(), 4).toString());
             if (docketLock == null) {
                 String value = docketTable.getValueAt(docketTable.getSelectedRow(), 4).toString();
@@ -356,9 +356,10 @@ public class DocketRootPanel extends javax.swing.JPanel {
                             true,
                             docketTable.getValueAt(docketTable.getSelectedRow(), 4).toString(), section);
                 } else {
-                    new mediaFileDialog((JFrame) Global.root.getRootPane().getParent(),
+                    new mediaFileDialog_NEW((JFrame) Global.root.getRootPane().getParent(),
                             true,
-                            docketTable.getValueAt(docketTable.getSelectedRow(), 4).toString(), section);
+                            docketTable.getValueAt(docketTable.getSelectedRow(), 4).toString(), section,
+                            docketTable.getValueAt(docketTable.getSelectedRow(), 1).toString());
                 }
                 DocketLock.removeLock(section, value);
                 reloadTableAfterFiling();
