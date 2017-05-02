@@ -15,6 +15,7 @@ import javax.swing.table.TableCellRenderer;
 import parker.serb.Global;
 import parker.serb.report.GenerateReport;
 import parker.serb.sql.Activity;
+import parker.serb.sql.Audit;
 import parker.serb.sql.MEDCase;
 import parker.serb.sql.SMDSDocuments;
 import parker.serb.util.NumberFormatService;
@@ -138,9 +139,9 @@ public class MEDBulkClosedCasesDialog extends javax.swing.JFrame {
         String caseNumber = NumberFormatService.generateFullCaseNumberNonGlobal(
                     item.caseYear, item.caseType, item.caseMonth, item.caseNumber);
 
-
         MEDCase.updateClosedMedCases(item, selectedDate);
         Activity.addNewCaseActivty(caseNumber, "Case Closed");
+        Audit.addAuditEntry("Closed Case: " + caseNumber + " from ULP Bulk Case Close");
     }
 
     private void printList() {

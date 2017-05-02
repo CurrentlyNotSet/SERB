@@ -17,6 +17,7 @@ import javax.swing.table.TableCellRenderer;
 import parker.serb.Global;
 import parker.serb.report.GenerateReport;
 import parker.serb.sql.Activity;
+import parker.serb.sql.Audit;
 import parker.serb.sql.REPCase;
 import parker.serb.sql.SMDSDocuments;
 import parker.serb.util.NumberFormatService;
@@ -151,6 +152,7 @@ public class REPBulkCloseCasesDialog extends javax.swing.JFrame {
 
                 REPCase.updateClosedCases(caseNumberID);
                 Activity.addNewCaseActivty(caseTable.getValueAt(i, 2).toString(), "Case Closed");
+                Audit.addAuditEntry("Closed Case: " + caseTable.getValueAt(i, 2).toString() + " from REP Bulk Case Close");
             }
         }
     }
