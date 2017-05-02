@@ -38,6 +38,7 @@ public class LetterQueue {
     public static List<LetterQueue> getLetterQueueByGlobalSection() {
         List<LetterQueue> emailList = new ArrayList<>();
         String casetypes = "";
+        String sql = "";
 
         if (Global.activeSection.equals("Hearings")){
             casetypes = "(C.section = 'MED' OR C.section = 'REP' OR C.section = 'ULP') ";
@@ -50,8 +51,11 @@ public class LetterQueue {
         try {
             stmt = Database.connectToDB().createStatement();
 
+            //Start Out Master Table
+            sql += "Select * FROM (";
+
             // Email Out Table
-            String sql = "SELECT C.id, 'Email' AS type, C.caseYear, C.caseType, "
+            sql += "SELECT C.id, 'Email' AS type, C.caseYear, C.caseType, "
                     + "C.caseMonth, C.caseNumber, C.creationDate, C.[TO], C.subject, "
                     + "COUNT(S.id) AS attachments, C.suggestedSendDate, "
                     + "(U.firstName + ' ' + LEFT(U.lastName, 1) + '.') AS userName, C.section "
@@ -80,8 +84,12 @@ public class LetterQueue {
                     + "C.caseMonth, C.caseNumber, C.person, C.suggestedSendDate, "
                     + "C.historyDescription, C.creationDate, U.firstName, U.lastName ";
 
-            //Group the two tables
-            sql += " ORDER BY creationDate, caseYear, CaseMonth, caseNumber ASC";
+            //End Massive Table
+            sql += " ) AS MasterTable ";
+
+            //Order "NEW" Table
+            sql += " ORDER BY CASE WHEN suggestedSendDate IS NULL THEN 1 ELSE 0 END ASC, suggestedSendDate ASC, "
+                    + "creationDate ASC, caseYear ASC, CaseMonth ASC, caseNumber ASC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             ResultSet rs = preparedStatement.executeQuery();
