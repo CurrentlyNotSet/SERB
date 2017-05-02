@@ -686,6 +686,7 @@ public class ORGCase {
             int success = preparedStatement.executeUpdate();
 
             if (success == 1) {
+                Global.root.getoRGHeaderPanel2().loadUpdatedHeaderInformation();
                 detailedSaveOrgInformation(newCaseInformation, caseInformation);
             }
         } catch (SQLException ex) {

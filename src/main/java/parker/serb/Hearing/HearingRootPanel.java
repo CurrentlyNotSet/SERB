@@ -12,6 +12,7 @@ import parker.serb.Global;
 import parker.serb.activity.ActivityPanel;
 import parker.serb.activity.RemoveActivityEntryDialog;
 import parker.serb.party.PartySearchDialog;
+import parker.serb.sql.HearingCaseSearchData;
 import parker.serb.util.CancelUpdate;
 
 /**
@@ -155,6 +156,7 @@ public class HearingRootPanel extends javax.swing.JPanel {
             case "Parties":
                 new PartySearchDialog((JFrame) this.getRootPane().getParent(), true);
                 partiesPanel1.loadHearingParties();
+                HearingCaseSearchData.updateCaseEntryFromParties(Global.root.getHearingHeaderPanel1().getjComboBox2().getSelectedItem().toString().trim());
                 Global.root.getHearingHeaderPanel1().loadHeaderInformation();
                 break;
             case "Case Information":
@@ -209,6 +211,8 @@ public class HearingRootPanel extends javax.swing.JPanel {
             case "Parties":
                 partiesPanel1.removeParty();
                 partiesPanel1.loadHearingParties();
+                HearingCaseSearchData.updateCaseEntryFromParties(Global.root.getHearingHeaderPanel1().getjComboBox2().getSelectedItem().toString().trim());
+                Global.root.getHearingHeaderPanel1().loadHeaderInformation();
                 break;
             case "Case Information":
                 cancel = new CancelUpdate(Global.root, true);

@@ -56,7 +56,7 @@ public class MEDConciliationPanel extends javax.swing.JPanel {
                     Date startDate = Global.mmddyyyy.parse(conciliation1OrderDate.getText());
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(startDate);
-                    cal.add(Calendar.DATE, 4);
+                    cal.add(Calendar.DATE, 5);
                     if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
                         cal.add(Calendar.DATE, 2);
                     } 
@@ -75,7 +75,7 @@ public class MEDConciliationPanel extends javax.swing.JPanel {
                     Date startDate = Global.mmddyyyy.parse(conciliation1OrderDate.getText());
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(startDate);
-                    cal.add(Calendar.DATE, 4);
+                    cal.add(Calendar.DATE, 5);
                     if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
                         cal.add(Calendar.DATE, 2);
                     } else if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
@@ -93,7 +93,7 @@ public class MEDConciliationPanel extends javax.swing.JPanel {
                     Date startDate = Global.mmddyyyy.parse(conciliation1OrderDate.getText());
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(startDate);
-                    cal.add(Calendar.DATE, 4);
+                    cal.add(Calendar.DATE, 5);
                     if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
                         cal.add(Calendar.DATE, 2);
                     } else if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
@@ -113,7 +113,7 @@ public class MEDConciliationPanel extends javax.swing.JPanel {
                     Date startDate = Global.mmddyyyy.parse(conciliation2OrderDateTextBox.getText());
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(startDate);
-                    cal.add(Calendar.DATE, 4);
+                    cal.add(Calendar.DATE, 5);
                     if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
                         cal.add(Calendar.DATE, 2);
                     } 
@@ -132,7 +132,7 @@ public class MEDConciliationPanel extends javax.swing.JPanel {
                     Date startDate = Global.mmddyyyy.parse(conciliation2OrderDateTextBox.getText());
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(startDate);
-                    cal.add(Calendar.DATE, 4);
+                    cal.add(Calendar.DATE, 5);
                     if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
                         cal.add(Calendar.DATE, 2);
                     } else if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
@@ -150,7 +150,7 @@ public class MEDConciliationPanel extends javax.swing.JPanel {
                     Date startDate = Global.mmddyyyy.parse(conciliation2OrderDateTextBox.getText());
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(startDate);
-                    cal.add(Calendar.DATE, 4);
+                    cal.add(Calendar.DATE, 5);
                     if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
                         cal.add(Calendar.DATE, 2);
                     } else if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {

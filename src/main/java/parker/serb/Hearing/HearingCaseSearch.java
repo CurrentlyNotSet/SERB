@@ -35,27 +35,11 @@ public class HearingCaseSearch extends javax.swing.JDialog {
     public HearingCaseSearch(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        addRenderer();
         jLayeredPane1.moveToFront(jPanel1);
         activity();
         addListeners();
         setLocationRelativeTo(parent);
         setVisible(true);
-    }
-    
-    private void addRenderer() {
-        caseSearchTable.setDefaultRenderer(Object.class, new TableCellRenderer(){
-            private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                Component c = DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-
-                if (!isSelected) {
-                    c.setBackground(row % 2 == 0 ? Color.WHITE : Global.ALTERNATE_ROW_COLOR);
-                }
-                return c;
-            }
-        });
     }
     
     private void addListeners() {
@@ -208,6 +192,8 @@ public class HearingCaseSearch extends javax.swing.JDialog {
         model.addColumn("Board Action PC Date");
         model.addColumn("ALJ");
         model.addColumn("Board Action Date");
+        
+        model.setRowCount(0);
         
         caseList = HearingCaseSearchData.loadCaseSearchData();
         

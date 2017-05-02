@@ -794,7 +794,6 @@ public class MEDCase {
     }
 
     public static void saveConciliationList1(DefaultListModel concilList1Model) {
-        MEDCase med = null;
 
         Statement stmt = null;
         try {
@@ -832,6 +831,8 @@ public class MEDCase {
                 names += ", " + concilList1Model.get(4).toString().substring(0, 1) + "." + concilList1Model.get(4).toString().substring(concilList1Model.get(4).toString().lastIndexOf(" "));
 
                 Activity.addActivty("Generated Conciliator List (" + names + ")", null);
+                
+                saveGroupedConciliationList1(concilList1Model);
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
@@ -842,11 +843,63 @@ public class MEDCase {
             DbUtils.closeQuietly(stmt);
         }
     }
+    
+    public static void saveGroupedConciliationList1(DefaultListModel concilList1Model) {
+        List<String> relatedCases = RelatedCase.loadRelatedCases();
+        
+        for(int i = 0; i < relatedCases.size(); i++) {
+            Statement stmt = null;
+            try {
+                stmt = Database.connectToDB().createStatement();
+
+                String sql = "Update MEDCase set"
+                        + " concilList1Name1 = ?,"
+                        + " concilList1Name2 = ?,"
+                        + " concilList1Name3 = ?,"
+                        + " concilList1Name4 = ?,"
+                        + " concilList1Name5 = ?"
+                        + " where caseYear = ? "
+                        + " AND caseType = ? "
+                        + " AND caseMonth = ? "
+                        + " AND caseNumber = ?";
+
+                PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+                preparedStatement.setString(1, concilList1Model.get(0).toString());
+                preparedStatement.setString(2, concilList1Model.get(1).toString());
+                preparedStatement.setString(3, concilList1Model.get(2).toString());
+                preparedStatement.setString(4, concilList1Model.get(3).toString());
+                preparedStatement.setString(5, concilList1Model.get(4).toString());
+                preparedStatement.setString(6, relatedCases.get(i).split("-")[0]);
+                preparedStatement.setString(7, relatedCases.get(i).split("-")[1]);
+                preparedStatement.setString(8, relatedCases.get(i).split("-")[2]);
+                preparedStatement.setString(9, relatedCases.get(i).split("-")[3]);
+
+//                int success = 
+                preparedStatement.executeUpdate();
+
+//                if(success == 1) {
+//                    String names = concilList1Model.get(0).toString().substring(0, 1) + "." + concilList1Model.get(0).toString().substring(concilList1Model.get(0).toString().lastIndexOf(" "));
+//                    names += ", " + concilList1Model.get(1).toString().substring(0, 1) + "." + concilList1Model.get(1).toString().substring(concilList1Model.get(1).toString().lastIndexOf(" "));
+//                    names += ", " + concilList1Model.get(2).toString().substring(0, 1) + "." + concilList1Model.get(2).toString().substring(concilList1Model.get(2).toString().lastIndexOf(" "));
+//                    names += ", " + concilList1Model.get(3).toString().substring(0, 1) + "." + concilList1Model.get(3).toString().substring(concilList1Model.get(3).toString().lastIndexOf(" "));
+//                    names += ", " + concilList1Model.get(4).toString().substring(0, 1) + "." + concilList1Model.get(4).toString().substring(concilList1Model.get(4).toString().lastIndexOf(" "));
+
+//                    Activity.addActivty("Generated Conciliator List (" + names + ")", null);
+//                }
+            } catch (SQLException ex) {
+                SlackNotification.sendNotification(ex);
+                if(ex.getCause() instanceof SQLServerException) {
+                    saveGroupedConciliationList1(concilList1Model);
+                }
+            } finally {
+                DbUtils.closeQuietly(stmt);
+            }
+        }
+    }
 
     public static void saveConciliationList2(DefaultListModel concilList2Model) {
-        MEDCase med = null;
-
         Statement stmt = null;
+        
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -882,6 +935,8 @@ public class MEDCase {
                 names += ", " + concilList2Model.get(4).toString().substring(0, 1) + "." + concilList2Model.get(4).toString().substring(concilList2Model.get(4).toString().lastIndexOf(" "));
 
                 Activity.addActivty("Generated Conciliator List (" + names + ")", null);
+                
+                saveGroupedConciliationList2(concilList2Model);
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
@@ -892,11 +947,65 @@ public class MEDCase {
             DbUtils.closeQuietly(stmt);
         }
     }
+    
+    public static void saveGroupedConciliationList2(DefaultListModel concilList2Model) {
+        List<String> relatedCases = RelatedCase.loadRelatedCases();
+        
+        for(int i = 0; i < relatedCases.size(); i++) {
+
+            Statement stmt = null;
+            
+            try {
+                stmt = Database.connectToDB().createStatement();
+
+                String sql = "Update MEDCase set"
+                        + " concilList2Name1 = ?,"
+                        + " concilList2Name2 = ?,"
+                        + " concilList2Name3 = ?,"
+                        + " concilList2Name4 = ?,"
+                        + " concilList2Name5 = ?"
+                        + " where caseYear = ? "
+                        + " AND caseType = ? "
+                        + " AND caseMonth = ? "
+                        + " AND caseNumber = ?";
+
+                PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+                preparedStatement.setString(1, concilList2Model.get(0).toString());
+                preparedStatement.setString(2, concilList2Model.get(1).toString());
+                preparedStatement.setString(3, concilList2Model.get(2).toString());
+                preparedStatement.setString(4, concilList2Model.get(3).toString());
+                preparedStatement.setString(5, concilList2Model.get(4).toString());
+                preparedStatement.setString(6, relatedCases.get(i).split("-")[0]);
+                preparedStatement.setString(7, relatedCases.get(i).split("-")[1]);
+                preparedStatement.setString(8, relatedCases.get(i).split("-")[2]);
+                preparedStatement.setString(9, relatedCases.get(i).split("-")[3]);
+
+//                int success = 
+                preparedStatement.executeUpdate();
+
+//                if(success == 1) {
+//                    String names = concilList2Model.get(0).toString().substring(0, 1) + "." + concilList2Model.get(0).toString().substring(concilList2Model.get(0).toString().lastIndexOf(" "));
+//                    names += ", " + concilList2Model.get(1).toString().substring(0, 1) + "." + concilList2Model.get(1).toString().substring(concilList2Model.get(1).toString().lastIndexOf(" "));
+//                    names += ", " + concilList2Model.get(2).toString().substring(0, 1) + "." + concilList2Model.get(2).toString().substring(concilList2Model.get(2).toString().lastIndexOf(" "));
+//                    names += ", " + concilList2Model.get(3).toString().substring(0, 1) + "." + concilList2Model.get(3).toString().substring(concilList2Model.get(3).toString().lastIndexOf(" "));
+//                    names += ", " + concilList2Model.get(4).toString().substring(0, 1) + "." + concilList2Model.get(4).toString().substring(concilList2Model.get(4).toString().lastIndexOf(" "));
+//
+//                    Activity.addActivty("Generated Conciliator List (" + names + ")", null);
+//                }
+            } catch (SQLException ex) {
+                SlackNotification.sendNotification(ex);
+                if(ex.getCause() instanceof SQLServerException) {
+                    saveGroupedConciliationList2(concilList2Model);
+                }
+            } finally {
+                DbUtils.closeQuietly(stmt);
+            }
+        }
+    }
 
     public static void replaceList2Concil(int location, String newName, String oldName) {
-        MEDCase med = null;
-
         Statement stmt = null;
+        
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -918,6 +1027,7 @@ public class MEDCase {
 
             if(success == 1) {
                 Activity.addActivty("Replaced " + oldName + " with " + newName, null);
+                replaceGroupedList2Concil(location, newName, oldName);
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
@@ -926,6 +1036,47 @@ public class MEDCase {
             }
         } finally {
             DbUtils.closeQuietly(stmt);
+        }
+    }
+    
+    public static void replaceGroupedList2Concil(int location, String newName, String oldName) {
+        List<String> relatedCases = RelatedCase.loadRelatedCases();
+        
+        for(int i = 0; i < relatedCases.size(); i++) {
+            
+            Statement stmt = null;
+
+            try {
+                stmt = Database.connectToDB().createStatement();
+
+                String sql = "Update MEDCase set"
+                        + " concilList2Name" + String.valueOf(location + 1) + " = ?"
+                        + " where caseYear = ? "
+                        + " AND caseType = ? "
+                        + " AND caseMonth = ? "
+                        + " AND caseNumber = ?";
+
+                PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+                preparedStatement.setString(1, newName);
+                preparedStatement.setString(2, relatedCases.get(i).split("-")[0]);
+                preparedStatement.setString(3, relatedCases.get(i).split("-")[1]);
+                preparedStatement.setString(4, relatedCases.get(i).split("-")[2]);
+                preparedStatement.setString(5, relatedCases.get(i).split("-")[3]);
+
+    //            int success = 
+                preparedStatement.executeUpdate();
+
+    //            if(success == 1) {
+    //                Activity.addActivty("Replaced " + oldName + " with " + newName, null);
+    //            }
+            } catch (SQLException ex) {
+                SlackNotification.sendNotification(ex);
+                if(ex.getCause() instanceof SQLServerException) {
+                    replaceGroupedList2Concil(location, newName, oldName);
+                }
+            } finally {
+                DbUtils.closeQuietly(stmt);
+            }
         }
     }
 
@@ -954,6 +1105,7 @@ public class MEDCase {
 
             if(success == 1) {
                 Activity.addActivty("Replaced " + oldName + " with " + newName, null);
+                replaceGroupedList1Concil(location, newName, oldName);
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
@@ -964,11 +1116,50 @@ public class MEDCase {
             DbUtils.closeQuietly(stmt);
         }
     }
+    
+    public static void replaceGroupedList1Concil(int location, String newName, String oldName) {
+        List<String> relatedCases = RelatedCase.loadRelatedCases();
+        
+        for(int i = 0; i < relatedCases.size(); i++) {
+            Statement stmt = null;
+            
+            try {
+                stmt = Database.connectToDB().createStatement();
+
+                String sql = "Update MEDCase set"
+                        + " concilList1Name" + String.valueOf(location + 1) + " = ?"
+                        + " where caseYear = ? "
+                        + " AND caseType = ? "
+                        + " AND caseMonth = ? "
+                        + " AND caseNumber = ?";
+
+                PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+                preparedStatement.setString(1, newName);
+                preparedStatement.setString(2, relatedCases.get(i).split("-")[0]);
+                preparedStatement.setString(3, relatedCases.get(i).split("-")[1]);
+                preparedStatement.setString(4, relatedCases.get(i).split("-")[2]);
+                preparedStatement.setString(5, relatedCases.get(i).split("-")[3]);
+
+//                int success = 
+                preparedStatement.executeUpdate();
+
+//                if(success == 1) {
+//                    Activity.addActivty("Replaced " + oldName + " with " + newName, null);
+//                }
+            } catch (SQLException ex) {
+                SlackNotification.sendNotification(ex);
+                if(ex.getCause() instanceof SQLServerException) {
+                    replaceGroupedList1Concil(location, newName, oldName);
+                }
+            } finally {
+                DbUtils.closeQuietly(stmt);
+            }
+        }
+    }
 
     public static void saveFFList1(DefaultListModel concilList1Model) {
-        MEDCase med = null;
-
         Statement stmt = null;
+        
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -1004,6 +1195,8 @@ public class MEDCase {
                 names += ", " + concilList1Model.get(4).toString().substring(0, 1) + "." + concilList1Model.get(4).toString().substring(concilList1Model.get(4).toString().lastIndexOf(" "));
 
                 Activity.addActivty("Generated Fact Finder List (" + names + ")", null);
+                
+                saveGroupedFFList1(concilList1Model);
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
@@ -1012,6 +1205,60 @@ public class MEDCase {
             }
         } finally {
             DbUtils.closeQuietly(stmt);
+        }
+    }
+    
+    public static void saveGroupedFFList1(DefaultListModel concilList1Model) {
+        List<String> relatedCases = RelatedCase.loadRelatedCases();
+        
+        for(int i = 0; i < relatedCases.size(); i++) {        
+            Statement stmt = null;
+
+            try {
+                stmt = Database.connectToDB().createStatement();
+
+                String sql = "Update MEDCase set"
+                        + " FFList1Name1 = ?,"
+                        + " FFList1Name2 = ?,"
+                        + " FFList1Name3 = ?,"
+                        + " FFList1Name4 = ?,"
+                        + " FFList1Name5 = ?"
+                        + " where caseYear = ? "
+                        + " AND caseType = ? "
+                        + " AND caseMonth = ? "
+                        + " AND caseNumber = ?";
+
+                PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+                preparedStatement.setString(1, concilList1Model.get(0).toString());
+                preparedStatement.setString(2, concilList1Model.get(1).toString());
+                preparedStatement.setString(3, concilList1Model.get(2).toString());
+                preparedStatement.setString(4, concilList1Model.get(3).toString());
+                preparedStatement.setString(5, concilList1Model.get(4).toString());
+                preparedStatement.setString(6, relatedCases.get(i).split("-")[0]);
+                preparedStatement.setString(7, relatedCases.get(i).split("-")[1]);
+                preparedStatement.setString(8, relatedCases.get(i).split("-")[2]);
+                preparedStatement.setString(9, relatedCases.get(i).split("-")[3]);
+
+    //            int success = 
+                preparedStatement.executeUpdate();
+
+    //            if(success == 1) {
+    //                String names = concilList1Model.get(0).toString().substring(0, 1) + "." + concilList1Model.get(0).toString().substring(concilList1Model.get(0).toString().lastIndexOf(" "));
+    //                names += ", " + concilList1Model.get(1).toString().substring(0, 1) + "." + concilList1Model.get(1).toString().substring(concilList1Model.get(1).toString().lastIndexOf(" "));
+    //                names += ", " + concilList1Model.get(2).toString().substring(0, 1) + "." + concilList1Model.get(2).toString().substring(concilList1Model.get(2).toString().lastIndexOf(" "));
+    //                names += ", " + concilList1Model.get(3).toString().substring(0, 1) + "." + concilList1Model.get(3).toString().substring(concilList1Model.get(3).toString().lastIndexOf(" "));
+    //                names += ", " + concilList1Model.get(4).toString().substring(0, 1) + "." + concilList1Model.get(4).toString().substring(concilList1Model.get(4).toString().lastIndexOf(" "));
+    //
+    //                Activity.addActivty("Generated Fact Finder List (" + names + ")", null);
+    //            }
+            } catch (SQLException ex) {
+                SlackNotification.sendNotification(ex);
+                if(ex.getCause() instanceof SQLServerException) {
+                    saveGroupedFFList1(concilList1Model);
+                }
+            } finally {
+                DbUtils.closeQuietly(stmt);
+            }
         }
     }
 
@@ -1054,6 +1301,8 @@ public class MEDCase {
                 names += ", " + concilList2Model.get(4).toString().substring(0, 1) + "." + concilList2Model.get(4).toString().substring(concilList2Model.get(4).toString().lastIndexOf(" "));
 
                 Activity.addActivty("Generated Fact Finder List (" + names + ")", null);
+                
+                saveGroupedFFList2(concilList2Model);
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
@@ -1062,6 +1311,60 @@ public class MEDCase {
             }
         } finally {
             DbUtils.closeQuietly(stmt);
+        }
+    }
+    
+    public static void saveGroupedFFList2(DefaultListModel concilList2Model) {
+        List<String> relatedCases = RelatedCase.loadRelatedCases();
+        
+        for(int i = 0; i < relatedCases.size(); i++) {
+            Statement stmt = null;
+            
+            try {
+                stmt = Database.connectToDB().createStatement();
+
+                String sql = "Update MEDCase set"
+                        + " FFList2Name1 = ?,"
+                        + " FFList2Name2 = ?,"
+                        + " FFList2Name3 = ?,"
+                        + " FFList2Name4 = ?,"
+                        + " FFList2Name5 = ?"
+                        + " where caseYear = ? "
+                        + " AND caseType = ? "
+                        + " AND caseMonth = ? "
+                        + " AND caseNumber = ?";
+
+                PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+                preparedStatement.setString(1, concilList2Model.get(0).toString());
+                preparedStatement.setString(2, concilList2Model.get(1).toString());
+                preparedStatement.setString(3, concilList2Model.get(2).toString());
+                preparedStatement.setString(4, concilList2Model.get(3).toString());
+                preparedStatement.setString(5, concilList2Model.get(4).toString());
+                preparedStatement.setString(6, relatedCases.get(i).split("-")[0]);
+                preparedStatement.setString(7, relatedCases.get(i).split("-")[1]);
+                preparedStatement.setString(8, relatedCases.get(i).split("-")[2]);
+                preparedStatement.setString(9, relatedCases.get(i).split("-")[3]);
+
+    //            int success = 
+                preparedStatement.executeUpdate();
+
+    //            if(success == 1) {
+    //                String names = concilList2Model.get(0).toString().substring(0, 1) + "." + concilList2Model.get(0).toString().substring(concilList2Model.get(0).toString().lastIndexOf(" "));
+    //                names += ", " + concilList2Model.get(1).toString().substring(0, 1) + "." + concilList2Model.get(1).toString().substring(concilList2Model.get(1).toString().lastIndexOf(" "));
+    //                names += ", " + concilList2Model.get(2).toString().substring(0, 1) + "." + concilList2Model.get(2).toString().substring(concilList2Model.get(2).toString().lastIndexOf(" "));
+    //                names += ", " + concilList2Model.get(3).toString().substring(0, 1) + "." + concilList2Model.get(3).toString().substring(concilList2Model.get(3).toString().lastIndexOf(" "));
+    //                names += ", " + concilList2Model.get(4).toString().substring(0, 1) + "." + concilList2Model.get(4).toString().substring(concilList2Model.get(4).toString().lastIndexOf(" "));
+    //
+    //                Activity.addActivty("Generated Fact Finder List (" + names + ")", null);
+    //            }
+            } catch (SQLException ex) {
+                SlackNotification.sendNotification(ex);
+                if(ex.getCause() instanceof SQLServerException) {
+                    saveGroupedFFList2(concilList2Model);
+                }
+            } finally {
+                DbUtils.closeQuietly(stmt);
+            }
         }
     }
 
@@ -1090,6 +1393,7 @@ public class MEDCase {
 
             if(success == 1) {
                 Activity.addActivty("Replaced " + oldName + " with " + newName, null);
+                replaceGroupedList2FF(location, newName, oldName);
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
@@ -1098,6 +1402,46 @@ public class MEDCase {
             }
         } finally {
             DbUtils.closeQuietly(stmt);
+        }
+    }
+    
+    public static void replaceGroupedList2FF(int location, String newName, String oldName) {
+        List<String> relatedCases = RelatedCase.loadRelatedCases();
+        
+        for(int i = 0; i < relatedCases.size(); i++) {
+
+            Statement stmt = null;
+            try {
+                stmt = Database.connectToDB().createStatement();
+
+                String sql = "Update MEDCase set"
+                        + " FFList2Name" + String.valueOf(location + 1) + " = ?"
+                        + " where caseYear = ? "
+                        + " AND caseType = ? "
+                        + " AND caseMonth = ? "
+                        + " AND caseNumber = ?";
+
+                PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+                preparedStatement.setString(1, newName);
+                preparedStatement.setString(2, relatedCases.get(i).split("-")[0]);
+                preparedStatement.setString(3, relatedCases.get(i).split("-")[1]);
+                preparedStatement.setString(4, relatedCases.get(i).split("-")[2]);
+                preparedStatement.setString(5, relatedCases.get(i).split("-")[3]);
+
+    //            int success = 
+                preparedStatement.executeUpdate();
+
+    //            if(success == 1) {
+    //                Activity.addActivty("Replaced " + oldName + " with " + newName, null);
+    //            }
+            } catch (SQLException ex) {
+                SlackNotification.sendNotification(ex);
+                if(ex.getCause() instanceof SQLServerException) {
+                    replaceGroupedList2FF(location, newName, oldName);
+                }
+            } finally {
+                DbUtils.closeQuietly(stmt);
+            }
         }
     }
 
@@ -1126,6 +1470,7 @@ public class MEDCase {
 
             if(success == 1) {
                 Activity.addActivty("Replaced " + oldName + " with " + newName, null);
+                replaceGroupedList1FF(location, newName, oldName);
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
@@ -1134,6 +1479,45 @@ public class MEDCase {
             }
         } finally {
             DbUtils.closeQuietly(stmt);
+        }
+    }
+    
+    public static void replaceGroupedList1FF(int location, String newName, String oldName) {
+        List<String> relatedCases = RelatedCase.loadRelatedCases();
+        
+        for(int i = 0; i < relatedCases.size(); i++) {
+            Statement stmt = null;
+            try {
+                stmt = Database.connectToDB().createStatement();
+
+                String sql = "Update MEDCase set"
+                        + " FFList1Name" + String.valueOf(location + 1) + " = ?"
+                        + " where caseYear = ? "
+                        + " AND caseType = ? "
+                        + " AND caseMonth = ? "
+                        + " AND caseNumber = ?";
+
+                PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+                preparedStatement.setString(1, newName);
+                preparedStatement.setString(2, relatedCases.get(i).split("-")[0]);
+                preparedStatement.setString(3, relatedCases.get(i).split("-")[1]);
+                preparedStatement.setString(4, relatedCases.get(i).split("-")[2]);
+                preparedStatement.setString(5, relatedCases.get(i).split("-")[3]);
+
+    //            int success = 
+                preparedStatement.executeUpdate();
+
+    //            if(success == 1) {
+    //                Activity.addActivty("Replaced " + oldName + " with " + newName, null);
+    //            }
+            } catch (SQLException ex) {
+                SlackNotification.sendNotification(ex);
+                if(ex.getCause() instanceof SQLServerException) {
+                    replaceGroupedList1FF(location, newName, oldName);
+                }
+            } finally {
+                DbUtils.closeQuietly(stmt);
+            }
         }
     }
 
@@ -1159,7 +1543,7 @@ public class MEDCase {
                     + " AND caseType = ? "
                     + " AND caseMonth = ? "
                     + " AND caseNumber = ?";
-//
+
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setTimestamp(1, newCaseInformation.concilList1OrderDate);
             preparedStatement.setTimestamp(2, newCaseInformation.concilList1SelectionDueDate);
@@ -1180,6 +1564,7 @@ public class MEDCase {
 
             if(success == 1) {
                 detailedConciliationDetailSaveInformation(newCaseInformation, caseInformation);
+                updateGroupedConciliation(newCaseInformation);
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
@@ -1188,6 +1573,60 @@ public class MEDCase {
             }
         } finally {
             DbUtils.closeQuietly(stmt);
+        }
+    }
+    
+    public static void updateGroupedConciliation(MEDCase newCaseInformation) {
+        List<String> relatedCases = RelatedCase.loadRelatedCases();
+                
+        for(int i = 0; i < relatedCases.size(); i++) {
+
+            Statement stmt = null;
+        
+            try {
+                stmt = Database.connectToDB().createStatement();
+
+                String sql = "Update MEDCase set"
+                        + " concilList1OrderDate = ?,"
+                        + " concilList1SelectionDueDate = ?,"
+                        + " concilAppointmentDate = ?,"
+                        + " concilType = ?,"
+                        + " concilSelection = ?,"
+                        + " concilReplacement = ?,"
+                        + " concilOriginalConciliator = ?,"
+                        + " concilOriginalConcilDate = ?,"
+                        + " concilList2OrderDate = ?,"
+                        + " concilList2SelectionDueDate = ?"
+                        + " where caseYear = ? "
+                        + " AND caseType = ? "
+                        + " AND caseMonth = ? "
+                        + " AND caseNumber = ?";
+
+                PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+                preparedStatement.setTimestamp(1, newCaseInformation.concilList1OrderDate);
+                preparedStatement.setTimestamp(2, newCaseInformation.concilList1SelectionDueDate);
+                preparedStatement.setTimestamp(3, newCaseInformation.concilAppointmentDate);
+                preparedStatement.setString(4, newCaseInformation.concilType);
+                preparedStatement.setString(5, newCaseInformation.concilSelection);
+                preparedStatement.setString(6, newCaseInformation.concilReplacement);
+                preparedStatement.setString(7, newCaseInformation.concilOriginalConciliator);
+                preparedStatement.setTimestamp(8, newCaseInformation.concilOriginalConcilDate);
+                preparedStatement.setTimestamp(9, newCaseInformation.concilList2OrderDate);
+                preparedStatement.setTimestamp(10, newCaseInformation.concilList2SelectionDueDate);
+                preparedStatement.setString(11, relatedCases.get(i).split("-")[0]);
+                preparedStatement.setString(12, relatedCases.get(i).split("-")[1]);
+                preparedStatement.setString(13, relatedCases.get(i).split("-")[2]);
+                preparedStatement.setString(14, relatedCases.get(i).split("-")[3]);
+
+                preparedStatement.executeUpdate();
+            } catch (SQLException ex) {
+                SlackNotification.sendNotification(ex);
+                if(ex.getCause() instanceof SQLServerException) {
+                    updateGroupedConciliation(newCaseInformation);
+                }
+            } finally {
+                DbUtils.closeQuietly(stmt);
+            }
         }
     }
 
@@ -1351,6 +1790,7 @@ public class MEDCase {
 
             if(success == 1) {
                 detailedFFDetailSaveInformation(newCaseInformation, caseInformation);
+                updateGroupedFF(newCaseInformation);
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
@@ -1359,6 +1799,84 @@ public class MEDCase {
             }
         } finally {
             DbUtils.closeQuietly(stmt);
+        }
+    }
+    
+    public static void updateGroupedFF(MEDCase newCaseInformation) {
+        List<String> relatedCases = RelatedCase.loadRelatedCases();
+        
+        for(int i = 0; i < relatedCases.size(); i++) {
+            Statement stmt = null;
+            
+            try {
+                stmt = Database.connectToDB().createStatement();
+
+                String sql = "Update MEDCase set"
+                        + " FFList1OrderDate = ?,"
+                        + " FFList1SelectionDueDate = ?,"
+                        + " FFAppointmentDate = ?,"
+                        + " FFType = ?,"
+                        + " FFSelection = ?,"
+                        + " FFReplacement = ?,"
+                        + " FFOriginalFactFinder = ?,"
+                        + " FFOriginalFactFinderDate = ?,"
+                        + " asAgreedToByParties = ?,"
+                        + " FFList2OrderDate = ?,"
+                        + " FFList2SelectionDueDate = ?,"
+                        + " FFEmployerType = ?,"
+                        + " FFEmployeeType = ?,"
+                        + " FFReportIssueDate = ?,"
+                        + " FFMediatedSettlement = ?,"
+                        + " FFAcceptedBy = ?,"
+                        + " FFDeemedAcceptedBy = ?,"
+                        + " FFRejectedBy = ?,"
+                        + " FFOverallResult = ?,"
+                        + " FFNote = ?"
+                        + " where caseYear = ? "
+                        + " AND caseType = ? "
+                        + " AND caseMonth = ? "
+                        + " AND caseNumber = ?";
+    //
+                PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+                preparedStatement.setTimestamp(1, newCaseInformation.FFList1OrderDate);
+                preparedStatement.setTimestamp(2, newCaseInformation.FFList1SelectionDueDate);
+                preparedStatement.setTimestamp(3, newCaseInformation.FFAppointmentDate);
+                preparedStatement.setString(4, newCaseInformation.FFType);
+                preparedStatement.setString(5, newCaseInformation.FFSelection);
+                preparedStatement.setString(6, newCaseInformation.FFReplacement);
+                preparedStatement.setString(7, newCaseInformation.FFOriginalFactFinder);
+                preparedStatement.setTimestamp(8, newCaseInformation.FFOriginalFactFinderDate);
+                preparedStatement.setBoolean(9, newCaseInformation.asAgreedToByParties);
+                preparedStatement.setTimestamp(10, newCaseInformation.FFList2OrderDate);
+                preparedStatement.setTimestamp(11, newCaseInformation.FFList2SelectionDueDate);
+                preparedStatement.setString(12, newCaseInformation.FFEmployerType);
+                preparedStatement.setString(13, newCaseInformation.FFEmployeeType);
+                preparedStatement.setTimestamp(14, newCaseInformation.FFReportIssueDate);
+                preparedStatement.setBoolean(15, newCaseInformation.FFMediatedSettlement);
+                preparedStatement.setString(16, newCaseInformation.FFAcceptedBy);
+                preparedStatement.setString(17, newCaseInformation.FFDeemedAcceptedBy);
+                preparedStatement.setString(18, newCaseInformation.FFRejectedBy);
+                preparedStatement.setString(19, newCaseInformation.FFOverallResult);
+                preparedStatement.setString(20, newCaseInformation.FFNote);
+                preparedStatement.setString(21, relatedCases.get(i).split("-")[0]);
+                preparedStatement.setString(22, relatedCases.get(i).split("-")[1]);
+                preparedStatement.setString(23, relatedCases.get(i).split("-")[2]);
+                preparedStatement.setString(24, relatedCases.get(i).split("-")[3]);
+
+    //            int success = 
+                preparedStatement.executeUpdate();
+    //
+    //            if(success == 1) {
+    //                detailedGrupFFDetailSaveInformation(newCaseInformation, caseInformation);
+    //            }
+            } catch (SQLException ex) {
+                SlackNotification.sendNotification(ex);
+                if(ex.getCause() instanceof SQLServerException) {
+                    updateGroupedFF(newCaseInformation);
+                }
+            } finally {
+                DbUtils.closeQuietly(stmt);
+            }
         }
     }
 

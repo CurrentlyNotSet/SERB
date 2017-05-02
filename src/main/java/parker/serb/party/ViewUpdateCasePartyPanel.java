@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -25,6 +26,7 @@ import parker.serb.sql.NamePrefix;
 import parker.serb.sql.PartyType;
 import parker.serb.util.CancelUpdate;
 import parker.serb.util.EmailValidation;
+import parker.serb.util.FileService;
 import parker.serb.util.NumberFormatService;
 import parker.serb.util.SlackNotification;
 
@@ -635,7 +637,8 @@ public class ViewUpdateCasePartyPanel extends javax.swing.JDialog {
     }//GEN-LAST:event_updateButtonActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        processMailingAddressBookmarks.processSingleEnvelopeInsert(Global.templatePath, "EnvelopeInsert.docx", partyInformation);
+        String envelopeFilePDF = processMailingAddressBookmarks.processSingleEnvelopeInsert(Global.templatePath, "EnvelopeInsert.docx", partyInformation);
+        FileService.openFileFullPath(new File(System.getProperty("java.io.tmpdir") + envelopeFilePDF));
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void emailAddressTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_emailAddressTextBoxMouseClicked
