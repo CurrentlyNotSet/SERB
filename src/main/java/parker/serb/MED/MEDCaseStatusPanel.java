@@ -47,7 +47,7 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
         relatedCaseModel = (DefaultTableModel) relatedCaseTable.getModel();
         addMultiCaseButton.setVisible(false);
     }
-    
+
     private void addRenderer() {
         relatedCaseTable.setDefaultRenderer(Object.class, new TableCellRenderer(){
             private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
@@ -62,9 +62,9 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
             }
         });
     }
-    
+
     public void clearAll() {
-        
+
         filingDateTextBox.setText("");
         employerIDNumberTextBox.setText("");
         bargainingUnitTextBox.setText("");
@@ -73,7 +73,7 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
         approxNumberOfEmployeesTextBox.setText("");
         duplicateCaseNumberTextBox.setText("");
         relatedCaseNumberTextBox.setText("");
-        
+
         negotiationTypeComboBox.setSelectedItem(" ");
         expirationDateTextBox.setText("");
         NTNFiledByComboBox.setSelectedItem("");
@@ -98,18 +98,18 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
         dismissedCheckBox.setSelected(false);
         relatedCaseModel.setRowCount(0);
     }
-    
+
     public void enableUpdate() {
         Global.root.getjButton2().setText("Save");
         Global.root.getjButton9().setVisible(true);
-        
+
         filingDateTextBox.setEnabled(true);
         filingDateTextBox.setBackground(Color.white);
         employerIDNumberTextBox.setEnabled(true);
         employerIDNumberTextBox.setBackground(Color.white);
         bargainingUnitTextBox.setEnabled(true);
         bargainingUnitTextBox.setBackground(Color.white);
-        
+
         approxNumberOfEmployeesTextBox.setEnabled(true);
         approxNumberOfEmployeesTextBox.setBackground(Color.white);
         duplicateCaseNumberTextBox.setEnabled(true);
@@ -117,7 +117,7 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
         relatedCaseNumberTextBox.setEnabled(true);
         relatedCaseNumberTextBox.setBackground(Color.white);
         addMultiCaseButton.setVisible(true);
-        
+
         negotiationTypeComboBox.setEnabled(true);
         expirationDateTextBox.setEnabled(true);
         expirationDateTextBox.setBackground(Color.white);
@@ -144,19 +144,19 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
         motionCheckBox.setEnabled(true);
         dismissedCheckBox.setEnabled(true);
     }
-    
-    
+
+
     public void disableUpdate(boolean save) {
         Global.root.getjButton2().setText("Update");
         Global.root.getjButton9().setVisible(false);
-        
+
         filingDateTextBox.setEnabled(false);
         filingDateTextBox.setBackground(new Color(238,238,238));
         employerIDNumberTextBox.setEnabled(false);
         employerIDNumberTextBox.setBackground(new Color(238,238,238));
         bargainingUnitTextBox.setEnabled(false);
         bargainingUnitTextBox.setBackground(new Color(238,238,238));
-        
+
         approxNumberOfEmployeesTextBox.setEnabled(false);
         approxNumberOfEmployeesTextBox.setBackground(new Color(238,238,238));
         duplicateCaseNumberTextBox.setEnabled(false);
@@ -164,7 +164,7 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
         relatedCaseNumberTextBox.setEnabled(false);
         relatedCaseNumberTextBox.setBackground(new Color(238,238,238));
         addMultiCaseButton.setVisible(false);
-        
+
         negotiationTypeComboBox.setEnabled(false);
         expirationDateTextBox.setEnabled(false);
         expirationDateTextBox.setBackground(new Color(238,238,238));
@@ -190,26 +190,26 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
         withdrawlCheckBox.setEnabled(false);
         motionCheckBox.setEnabled(false);
         dismissedCheckBox.setEnabled(false);
-        
+
         if(save) {
             saveInformation();
         }
-        
+
         loadInformation();
     }
-    
+
     private void saveInformation() {
         MEDCase newInformation = new MEDCase();
-        
+
         newInformation.fileDate = filingDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(filingDateTextBox.getText()));
 
         newInformation.employerIDNumber = employerIDNumberTextBox.getText().equals("") ? null : employerIDNumberTextBox.getText();
         newInformation.bargainingUnitNumber = bargainingUnitTextBox.getText().equals("") ? null : bargainingUnitTextBox.getText();
-        
+
         newInformation.approxNumberOfEmployees = approxNumberOfEmployeesTextBox.getText().equals("") ? null : approxNumberOfEmployeesTextBox.getText();
-        
+
         newInformation.duplicateCaseNumber = duplicateCaseNumberTextBox.getText().equals("") ? null : duplicateCaseNumberTextBox.getText();
-        newInformation.relatedCaseNumber = relatedCaseNumberTextBox.getText().equals("") ? null : relatedCaseNumberTextBox.getText();       
+        newInformation.relatedCaseNumber = relatedCaseNumberTextBox.getText().equals("") ? null : relatedCaseNumberTextBox.getText();
 
         newInformation.negotiationType = negotiationTypeComboBox.getSelectedItem().toString().trim().equals("") ? null : negotiationTypeComboBox.getSelectedItem().toString();
         newInformation.expirationDate = expirationDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(expirationDateTextBox.getText()));
@@ -233,58 +233,58 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
         newInformation.withdrawl = withdrawlCheckBox.isSelected();
         newInformation.motion = motionCheckBox.isSelected();
         newInformation.dismissed = dismissedCheckBox.isSelected();
-        
+
         MEDCase.updateStatusInformation(newInformation, orginalInformation);
     }
-    
+
     public void loadStateMediators() {
         stateMediatorAppointedComboBox.removeAllItems();
-        
+
         stateMediatorAppointedComboBox.addItem("");
-        
+
         List currentOwnerList = Mediator.loadMediators("State");
-        
+
         for (Object currentOwners : currentOwnerList) {
             Mediator med = (Mediator) currentOwners;
-            
+
             stateMediatorAppointedComboBox.addItem(med.firstName + " " + med.lastName);
         }
     }
-    
+
     public void loadFMCSMediators() {
         FCMSMediatorAppointedComboBox.removeAllItems();
-        
+
         FCMSMediatorAppointedComboBox.addItem("");
-        
+
         List currentOwnerList = Mediator.loadMediators("FMCS");
-        
+
         for (Object currentOwners : currentOwnerList) {
             Mediator med = (Mediator) currentOwners;
-            
+
             FCMSMediatorAppointedComboBox.addItem(med.firstName + " " + med.lastName);
         }
     }
-    
+
     public void loadInformation() {
         orginalInformation = MEDCase.loadStatusInformation();
-        
+
         loadStateMediators();
         loadFMCSMediators();
         loadRelatedCasesTable();
-        
+
         filingDateTextBox.setText(orginalInformation.fileDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.fileDate.getTime())) : "");
         employerIDNumberTextBox.setText(orginalInformation.employerIDNumber != null ? orginalInformation.employerIDNumber : "");
         bargainingUnitTextBox.setText(orginalInformation.bargainingUnitNumber != null ? orginalInformation.bargainingUnitNumber : "");
-        
+
         if(orginalInformation.bargainingUnitNumber != null) {
             setBUNumberCheckBoxes(BargainingUnit.getCertStatus(orginalInformation.bargainingUnitNumber));
         }
-        
+
         approxNumberOfEmployeesTextBox.setText((orginalInformation.approxNumberOfEmployees != null ? orginalInformation.approxNumberOfEmployees : ""));
-        
+
         duplicateCaseNumberTextBox.setText(orginalInformation.duplicateCaseNumber != null ? orginalInformation.duplicateCaseNumber : "");
         relatedCaseNumberTextBox.setText(orginalInformation.relatedCaseNumber != null ? orginalInformation.relatedCaseNumber : "");
-        
+
         negotiationTypeComboBox.setSelectedItem(orginalInformation.negotiationType != null ? orginalInformation.negotiationType : " ");
         expirationDateTextBox.setText(orginalInformation.expirationDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.expirationDate.getTime())) : "");
         NTNFiledByComboBox.setSelectedItem(orginalInformation.NTNFiledBy != null ? orginalInformation.NTNFiledBy : " ");
@@ -308,7 +308,7 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
         dismissedCheckBox.setSelected(orginalInformation.dismissed == true);
         statusComboBox.setSelectedItem(orginalInformation.caseStatus == null ? "" : orginalInformation.caseStatus);
     }
-    
+
     private void setBUNumberCheckBoxes(String certStatus) {
 
         switch(certStatus) {
@@ -326,19 +326,19 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
                 break;
         }
     }
-    
+
     public void loadRelatedCasesTable() {
-     
+
         relatedCaseModel.setRowCount(0);
-        
+
         List relatedCases = RelatedCase.loadRelatedCases();
-        
+
         for (Object relatedCase : relatedCases) {
             relatedCaseModel.addRow(new Object[] {relatedCase});
         }
         relatedCaseTable.clearSelection();
     }
-    
+
     private void clearDate(WebDateField dateField, MouseEvent evt) {
         if(evt.getButton() == MouseEvent.BUTTON3 && dateField.isEnabled()) {
             ClearDateDialog dialog = new ClearDateDialog((JFrame) Global.root, true);
@@ -452,7 +452,6 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
         jLabel7.setText("Approx Number of Employees:");
 
         jPanel4.setPreferredSize(new java.awt.Dimension(409, 107));
-        jPanel4.setSize(new java.awt.Dimension(409, 107));
 
         jLabel2.setText("Multi Case Numbers:");
 
@@ -484,7 +483,6 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
         addMultiCaseButton.setMaximumSize(new java.awt.Dimension(29, 91));
         addMultiCaseButton.setMinimumSize(new java.awt.Dimension(29, 91));
         addMultiCaseButton.setPreferredSize(new java.awt.Dimension(29, 91));
-        addMultiCaseButton.setSize(new java.awt.Dimension(29, 91));
         addMultiCaseButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addMultiCaseButtonActionPerformed(evt);
@@ -509,7 +507,7 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(addMultiCaseButton, javax.swing.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE)
+                    .addComponent(addMultiCaseButton, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addGap(0, 0, 0))
         );
@@ -561,7 +559,7 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
             jPanel1Layout.setHorizontalGroup(
                 jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                    .addContainerGap(10, Short.MAX_VALUE)
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 433, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(jPanel1Layout.createSequentialGroup()
@@ -651,7 +649,7 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
             sendToBoardToCloseCheckBox.setText("Send To Board To Close");
             sendToBoardToCloseCheckBox.setEnabled(false);
 
-            jLabel22.setText("Board Final Date:");
+            jLabel22.setText("Board Close Date:");
 
             jLabel23.setText("Retention Tickler Date:");
 
@@ -850,7 +848,7 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
                                                                     .addComponent(dismissedCheckBox)
                                                                     .addComponent(withdrawlCheckBox)
                                                                     .addComponent(TACheckBox))))
-                                                        .addGap(0, 30, Short.MAX_VALUE))
+                                                        .addGap(0, 128, Short.MAX_VALUE))
                                                     .addComponent(expirationDateTextBox, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                     .addComponent(NTNFiledByComboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                     .addComponent(negotiationPeriodComboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -933,7 +931,7 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
                                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                             .addComponent(dismissedCheckBox)
                                             .addComponent(motionCheckBox))
-                                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addContainerGap(40, Short.MAX_VALUE))
                                 );
 
                                 javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -954,7 +952,7 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 553, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 );
                             }// </editor-fold>//GEN-END:initComponents
@@ -997,7 +995,7 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
             } else {
                 new employerDetail((JFrame) Global.root.getRootPane().getParent(), true, employerIDNumberTextBox.getText().trim());
             }
-        }    
+        }
     }//GEN-LAST:event_employerIDNumberTextBoxMouseClicked
 
     private void bargainingUnitTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bargainingUnitTextBoxMouseClicked

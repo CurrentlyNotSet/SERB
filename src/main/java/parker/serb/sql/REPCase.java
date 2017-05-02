@@ -2140,11 +2140,11 @@ public class REPCase {
             String sql = "SELECT repcase.id, repcase.caseYear, repcase.caseType, "
                     + "repcase.caseMonth, repcase.caseNumber, repcase.employerIDNumber, "
                     + "repcase.bargainingUnitNumber, repcase.fileDate, repcase.status1, repcase.status2 "
-                    + "FROM boardMeeting LEFT JOIN repcase ON boardMeeting.caseYear = repcase.caseYear "
+                    + "FROM boardMeeting INNER JOIN repcase ON boardMeeting.caseYear = repcase.caseYear "
                     + "AND boardMeeting.caseType = repcase.caseType "
                     + "AND boardMeeting.caseMonth = repcase.caseMonth "
                     + "AND boardMeeting.caseNumber = repcase.caseNumber "
-                    + "WHERE boardMeetingDate = ? ";
+                    + "WHERE boardMeetingDate = ? AND REPCase.actualClerksClosedDate IS NULL ";
 
             if (!casetypes.isEmpty()) {
                 sql += "AND (";
@@ -2196,7 +2196,7 @@ public class REPCase {
 
             String sql = "UPDATE repcase SET "
                     + "status1 = 'Closed', "
-                    + "actualREPClosedDate = GETDATE(), "
+                    + "actualClerksClosedDate = GETDATE(), "
                     + "REPClosedUser = ? "
                     + "WHERE id = ? ";
 

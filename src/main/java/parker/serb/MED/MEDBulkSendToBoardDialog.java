@@ -30,7 +30,7 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
     DefaultTableModel model;
     String startDate = "";
     String endDate = "";
-    
+
     /**
      * Creates new form MEDsettleCases
      * @param parent
@@ -43,7 +43,7 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }
-    
+
     private void addRenderer() {
         caseTable.setDefaultRenderer(Object.class, new TableCellRenderer(){
             private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
@@ -63,15 +63,15 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
         setTableSize();
         addListeners();
     }
-  
-    private void addListeners() {        
+
+    private void addListeners() {
         startDateField.addDateSelectionListener((Date date) -> {
             if (!startDateField.getText().equals(startDate)){
                 startDate = startDateField.getText();
                 checkIfTableIsLoadable();
             }
         });
-        
+
         endDateField.addDateSelectionListener((Date date) -> {
             if (!endDateField.getText().equals(endDate)){
                 endDate = endDateField.getText();
@@ -80,13 +80,13 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
         });
     }
 
-    
+
     private void setTableSize(){
         //CheckBox
         caseTable.getColumnModel().getColumn(0).setMinWidth(35);
         caseTable.getColumnModel().getColumn(0).setPreferredWidth(35);
         caseTable.getColumnModel().getColumn(0).setMaxWidth(35);
-        
+
         //Case Number
         caseTable.getColumnModel().getColumn(1).setMinWidth(125);
         caseTable.getColumnModel().getColumn(1).setPreferredWidth(125);
@@ -96,7 +96,7 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
         caseTable.getColumnModel().getColumn(3).setMinWidth(80);
         caseTable.getColumnModel().getColumn(3).setPreferredWidth(80);
         caseTable.getColumnModel().getColumn(3).setMaxWidth(80);
-        
+
         //get Table
         model = (DefaultTableModel) caseTable.getModel();
     }
@@ -106,7 +106,7 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
         model.setRowCount(0);
         countLabel.setText(" ");
     }
-    
+
     private void loadTableThread() {
         clearTable();
         jLayeredPane1.moveToFront(jPanel1);
@@ -115,7 +115,7 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
         });
         temp.start();
     }
-    
+
     private void checkIfTableIsLoadable(){
         if(!"".equals(startDate) && !"".equals(endDate)){
             loadTableThread();
@@ -123,12 +123,12 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
             clearTable();
         }
     }
-    
+
     private void loadTable(){
         Date start = new Date(NumberFormatService.convertMMDDYYYY(startDateField.getText()));
         Date end = new Date(NumberFormatService.convertMMDDYYYY(endDateField.getText()));
 
-        List<MEDCase> caseList = MEDCase.getCloseList(start, end);
+        List<MEDCase> caseList = MEDCase.getSendToBoardList(start, end);
 
         for (MEDCase item : caseList) {
             String caseNumber = NumberFormatService.generateFullCaseNumberNonGlobal(
@@ -144,20 +144,20 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
         jLayeredPane1.moveToBack(jPanel1);
         countLabel.setText("Entries: " + caseTable.getRowCount());
     }
-        
+
     private void updateList(){
         for (int i = 0; i < caseTable.getRowCount(); i++) {
             if (caseTable.getValueAt(i, 0).equals(true)) {
                 String caseNumber = caseTable.getValueAt(i, 1).toString();
-                
-                MEDCase.updateClosedCases(caseNumber);
+
+                MEDCase.updateSendToBoardCases(caseNumber);
             }
         }
     }
-    
+
     private void printList(){
         jLayeredPane1.moveToFront(jPanel1);
-        
+
         Thread temp = new Thread(() -> {
             SMDSDocuments report = SMDSDocuments.findDocumentByFileName("MED Cases to be Closed by Board.jasper");
             GenerateReport.runReport(report);
@@ -165,7 +165,7 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
         });
         temp.start();
     }
-        
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -206,7 +206,7 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
             }
         });
 
-        printButton.setText("Print Processed Records");
+        printButton.setText("Print Board to Close List");
         printButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 printButtonActionPerformed(evt);

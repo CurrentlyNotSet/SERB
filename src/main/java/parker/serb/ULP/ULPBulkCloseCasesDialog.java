@@ -30,7 +30,7 @@ public class ULPBulkCloseCasesDialog extends javax.swing.JFrame {
 
     DefaultTableModel model;
     String startDate = "";
-    
+
     /**
      * Creates new form MEDsettleCases
      * @param parent
@@ -40,11 +40,11 @@ public class ULPBulkCloseCasesDialog extends javax.swing.JFrame {
         initComponents();
         setRenderer();
         setActive();
-        
+
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }
-    
+
     private void setRenderer() {
         caseTable.setDefaultRenderer(Object.class, new TableCellRenderer(){
             private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
@@ -64,8 +64,8 @@ public class ULPBulkCloseCasesDialog extends javax.swing.JFrame {
         setTableSize();
         addListeners();
     }
-  
-    private void addListeners() {        
+
+    private void addListeners() {
         startDateField.addDateSelectionListener((Date date) -> {
             if (!startDateField.getText().equals(startDate)){
                 startDate = startDateField.getText();
@@ -74,18 +74,18 @@ public class ULPBulkCloseCasesDialog extends javax.swing.JFrame {
         });
     }
 
-    
+
     private void setTableSize(){
         //CheckBox
         caseTable.getColumnModel().getColumn(0).setMinWidth(35);
         caseTable.getColumnModel().getColumn(0).setPreferredWidth(35);
         caseTable.getColumnModel().getColumn(0).setMaxWidth(35);
-        
+
         //ID
         caseTable.getColumnModel().getColumn(1).setMinWidth(0);
         caseTable.getColumnModel().getColumn(1).setPreferredWidth(0);
         caseTable.getColumnModel().getColumn(1).setMaxWidth(0);
-        
+
 //        //Case Number
 //        caseTable.getColumnModel().getColumn(2).setMinWidth(125);
 //        caseTable.getColumnModel().getColumn(2).setPreferredWidth(125);
@@ -95,7 +95,7 @@ public class ULPBulkCloseCasesDialog extends javax.swing.JFrame {
 //        caseTable.getColumnModel().getColumn(4).setMinWidth(80);
 //        caseTable.getColumnModel().getColumn(4).setPreferredWidth(80);
 //        caseTable.getColumnModel().getColumn(4).setMaxWidth(80);
-        
+
         //Status
         caseTable.getColumnModel().getColumn(5).setMinWidth(0);
         caseTable.getColumnModel().getColumn(5).setPreferredWidth(0);
@@ -107,7 +107,7 @@ public class ULPBulkCloseCasesDialog extends javax.swing.JFrame {
         model.setRowCount(0);
         countLabel.setText(" ");
     }
-    
+
     private void loadTableThread() {
         clearTable();
         jLayeredPane1.moveToFront(jPanel1);
@@ -116,7 +116,7 @@ public class ULPBulkCloseCasesDialog extends javax.swing.JFrame {
         });
         temp.start();
     }
-    
+
     private void checkIfTableIsLoadable(){
         if(!"".equals(startDate)){
             loadTableThread();
@@ -124,7 +124,7 @@ public class ULPBulkCloseCasesDialog extends javax.swing.JFrame {
             clearTable();
         }
     }
-    
+
     private void loadTable(){
         Date start = new Date(NumberFormatService.convertMMDDYYYY(startDateField.getText()));
 
@@ -133,7 +133,7 @@ public class ULPBulkCloseCasesDialog extends javax.swing.JFrame {
         for (ULPCase item : caseList) {
             String caseNumber = NumberFormatService.generateFullCaseNumberNonGlobal(
                     item.caseYear, item.caseType, item.caseMonth, item.caseNumber);
-            
+
             model.addRow(new Object[]{
                 false,
                 item.id,
@@ -146,23 +146,22 @@ public class ULPBulkCloseCasesDialog extends javax.swing.JFrame {
         jLayeredPane1.moveToBack(jPanel1);
         countLabel.setText("Entries: " + caseTable.getRowCount());
     }
-        
+
     private void updateList(){
         for (int i = 0; i < caseTable.getRowCount(); i++) {
             if (caseTable.getValueAt(i, 0).equals(true)) {
                 int caseNumberID = Integer.valueOf(caseTable.getValueAt(i, 1).toString());
-                String[] caseNumber = caseTable.getValueAt(i, 2).toString().split("-");
-                                
+
                 ULPCase.updateClosedCases(caseNumberID);
-                Activity.addActivtyFromDocket("Case Closed", "", caseNumber, "", "", "", "", false, false);
-                Audit.addAuditEntry("Closed Case: " + caseNumber + " from ULP Bulk Case Close");
+                Activity.addNewCaseActivty(caseTable.getValueAt(i, 2).toString(), "Case Closed");
+                Audit.addAuditEntry("Closed Case: " + caseTable.getValueAt(i, 2).toString() + " from ULP Bulk Case Close");
             }
         }
     }
-    
+
     private void printList(){
         jLayeredPane1.moveToFront(jPanel1);
-        
+
         Thread temp = new Thread(() -> {
             SMDSDocuments report = SMDSDocuments.findDocumentByFileName("ULP Cases Closed.jasper");
             GenerateReport.runReport(report);
@@ -170,7 +169,7 @@ public class ULPBulkCloseCasesDialog extends javax.swing.JFrame {
         });
         temp.start();
     }
-        
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -209,7 +208,7 @@ public class ULPBulkCloseCasesDialog extends javax.swing.JFrame {
             }
         });
 
-        printButton.setText("Print Processed Records");
+        printButton.setText("Print Closed Case List");
         printButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 printButtonActionPerformed(evt);
@@ -221,7 +220,7 @@ public class ULPBulkCloseCasesDialog extends javax.swing.JFrame {
         jLabel1.setText("Bulk Close ULP Cases");
 
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel3.setText("Start Date:");
+        jLabel3.setText("Board Meeting Date: ");
 
         countLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         countLabel.setVerticalAlignment(javax.swing.SwingConstants.TOP);
@@ -307,8 +306,8 @@ public class ULPBulkCloseCasesDialog extends javax.swing.JFrame {
                     .addContainerGap()
                     .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                         .add(layout.createSequentialGroup()
-                            .add(jLabel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 64, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                            .add(jLabel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 126, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                             .add(startDateField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 150, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                             .add(0, 0, Short.MAX_VALUE))
                         .add(org.jdesktop.layout.GroupLayout.TRAILING, countLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)

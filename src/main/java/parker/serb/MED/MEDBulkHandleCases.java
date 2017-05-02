@@ -9,7 +9,7 @@ package parker.serb.MED;
  * @author parker.johnston
  */
 public class MEDBulkHandleCases extends javax.swing.JFrame {
-    
+
     /**
      * Creates new form MEDBulkHandleCases
      * @param parent
@@ -20,7 +20,7 @@ public class MEDBulkHandleCases extends javax.swing.JFrame {
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }
-            
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -34,8 +34,10 @@ public class MEDBulkHandleCases extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         SettleCasesButton = new javax.swing.JButton();
         SendtoBoardButton = new javax.swing.JButton();
+        SendtoBoardButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         closeButton.setText("Close");
         closeButton.addActionListener(new java.awt.event.ActionListener() {
@@ -62,6 +64,13 @@ public class MEDBulkHandleCases extends javax.swing.JFrame {
             }
         });
 
+        SendtoBoardButton1.setText("Close Cases");
+        SendtoBoardButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SendtoBoardButton1ActionPerformed(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -70,15 +79,18 @@ public class MEDBulkHandleCases extends javax.swing.JFrame {
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jLabel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 307, Short.MAX_VALUE)
-                    .add(closeButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(layout.createSequentialGroup()
-                        .add(SettleCasesButton)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .add(SendtoBoardButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 125, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                    .add(closeButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
+            .add(layout.createSequentialGroup()
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(SettleCasesButton)
+                    .add(SendtoBoardButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 125, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(SendtoBoardButton1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 125, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        layout.linkSize(new java.awt.Component[] {SendtoBoardButton, SettleCasesButton}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
+        layout.linkSize(new java.awt.Component[] {SendtoBoardButton, SendtoBoardButton1, SettleCasesButton}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
 
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -86,15 +98,17 @@ public class MEDBulkHandleCases extends javax.swing.JFrame {
                 .addContainerGap()
                 .add(jLabel1)
                 .add(30, 30, 30)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(SettleCasesButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 46, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(SendtoBoardButton))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 34, Short.MAX_VALUE)
+                .add(SettleCasesButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 46, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(18, 18, 18)
+                .add(SendtoBoardButton)
+                .add(18, 18, 18)
+                .add(SendtoBoardButton1)
+                .add(33, 33, 33)
                 .add(closeButton)
                 .addContainerGap())
         );
 
-        layout.linkSize(new java.awt.Component[] {SendtoBoardButton, SettleCasesButton}, org.jdesktop.layout.GroupLayout.VERTICAL);
+        layout.linkSize(new java.awt.Component[] {SendtoBoardButton, SendtoBoardButton1, SettleCasesButton}, org.jdesktop.layout.GroupLayout.VERTICAL);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -111,8 +125,13 @@ public class MEDBulkHandleCases extends javax.swing.JFrame {
         new MEDBulkSendToBoardDialog(this, true);
     }//GEN-LAST:event_SendtoBoardButtonActionPerformed
 
+    private void SendtoBoardButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SendtoBoardButton1ActionPerformed
+        new MEDBulkClosedCasesDialog(this, true);
+    }//GEN-LAST:event_SendtoBoardButton1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton SendtoBoardButton;
+    private javax.swing.JButton SendtoBoardButton1;
     private javax.swing.JButton SettleCasesButton;
     private javax.swing.JButton closeButton;
     private javax.swing.JLabel jLabel1;

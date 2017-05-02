@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultListModel;
@@ -831,7 +832,7 @@ public class MEDCase {
                 names += ", " + concilList1Model.get(4).toString().substring(0, 1) + "." + concilList1Model.get(4).toString().substring(concilList1Model.get(4).toString().lastIndexOf(" "));
 
                 Activity.addActivty("Generated Conciliator List (" + names + ")", null);
-                
+
                 saveGroupedConciliationList1(concilList1Model);
             }
         } catch (SQLException ex) {
@@ -843,10 +844,10 @@ public class MEDCase {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void saveGroupedConciliationList1(DefaultListModel concilList1Model) {
         List<String> relatedCases = RelatedCase.loadRelatedCases();
-        
+
         for(int i = 0; i < relatedCases.size(); i++) {
             Statement stmt = null;
             try {
@@ -874,7 +875,7 @@ public class MEDCase {
                 preparedStatement.setString(8, relatedCases.get(i).split("-")[2]);
                 preparedStatement.setString(9, relatedCases.get(i).split("-")[3]);
 
-//                int success = 
+//                int success =
                 preparedStatement.executeUpdate();
 
 //                if(success == 1) {
@@ -899,7 +900,7 @@ public class MEDCase {
 
     public static void saveConciliationList2(DefaultListModel concilList2Model) {
         Statement stmt = null;
-        
+
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -935,7 +936,7 @@ public class MEDCase {
                 names += ", " + concilList2Model.get(4).toString().substring(0, 1) + "." + concilList2Model.get(4).toString().substring(concilList2Model.get(4).toString().lastIndexOf(" "));
 
                 Activity.addActivty("Generated Conciliator List (" + names + ")", null);
-                
+
                 saveGroupedConciliationList2(concilList2Model);
             }
         } catch (SQLException ex) {
@@ -947,14 +948,14 @@ public class MEDCase {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void saveGroupedConciliationList2(DefaultListModel concilList2Model) {
         List<String> relatedCases = RelatedCase.loadRelatedCases();
-        
+
         for(int i = 0; i < relatedCases.size(); i++) {
 
             Statement stmt = null;
-            
+
             try {
                 stmt = Database.connectToDB().createStatement();
 
@@ -980,7 +981,7 @@ public class MEDCase {
                 preparedStatement.setString(8, relatedCases.get(i).split("-")[2]);
                 preparedStatement.setString(9, relatedCases.get(i).split("-")[3]);
 
-//                int success = 
+//                int success =
                 preparedStatement.executeUpdate();
 
 //                if(success == 1) {
@@ -1005,7 +1006,7 @@ public class MEDCase {
 
     public static void replaceList2Concil(int location, String newName, String oldName) {
         Statement stmt = null;
-        
+
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -1038,12 +1039,12 @@ public class MEDCase {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void replaceGroupedList2Concil(int location, String newName, String oldName) {
         List<String> relatedCases = RelatedCase.loadRelatedCases();
-        
+
         for(int i = 0; i < relatedCases.size(); i++) {
-            
+
             Statement stmt = null;
 
             try {
@@ -1063,7 +1064,7 @@ public class MEDCase {
                 preparedStatement.setString(4, relatedCases.get(i).split("-")[2]);
                 preparedStatement.setString(5, relatedCases.get(i).split("-")[3]);
 
-    //            int success = 
+    //            int success =
                 preparedStatement.executeUpdate();
 
     //            if(success == 1) {
@@ -1116,13 +1117,13 @@ public class MEDCase {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void replaceGroupedList1Concil(int location, String newName, String oldName) {
         List<String> relatedCases = RelatedCase.loadRelatedCases();
-        
+
         for(int i = 0; i < relatedCases.size(); i++) {
             Statement stmt = null;
-            
+
             try {
                 stmt = Database.connectToDB().createStatement();
 
@@ -1140,7 +1141,7 @@ public class MEDCase {
                 preparedStatement.setString(4, relatedCases.get(i).split("-")[2]);
                 preparedStatement.setString(5, relatedCases.get(i).split("-")[3]);
 
-//                int success = 
+//                int success =
                 preparedStatement.executeUpdate();
 
 //                if(success == 1) {
@@ -1159,7 +1160,7 @@ public class MEDCase {
 
     public static void saveFFList1(DefaultListModel concilList1Model) {
         Statement stmt = null;
-        
+
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -1195,7 +1196,7 @@ public class MEDCase {
                 names += ", " + concilList1Model.get(4).toString().substring(0, 1) + "." + concilList1Model.get(4).toString().substring(concilList1Model.get(4).toString().lastIndexOf(" "));
 
                 Activity.addActivty("Generated Fact Finder List (" + names + ")", null);
-                
+
                 saveGroupedFFList1(concilList1Model);
             }
         } catch (SQLException ex) {
@@ -1207,11 +1208,11 @@ public class MEDCase {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void saveGroupedFFList1(DefaultListModel concilList1Model) {
         List<String> relatedCases = RelatedCase.loadRelatedCases();
-        
-        for(int i = 0; i < relatedCases.size(); i++) {        
+
+        for(int i = 0; i < relatedCases.size(); i++) {
             Statement stmt = null;
 
             try {
@@ -1239,7 +1240,7 @@ public class MEDCase {
                 preparedStatement.setString(8, relatedCases.get(i).split("-")[2]);
                 preparedStatement.setString(9, relatedCases.get(i).split("-")[3]);
 
-    //            int success = 
+    //            int success =
                 preparedStatement.executeUpdate();
 
     //            if(success == 1) {
@@ -1301,7 +1302,7 @@ public class MEDCase {
                 names += ", " + concilList2Model.get(4).toString().substring(0, 1) + "." + concilList2Model.get(4).toString().substring(concilList2Model.get(4).toString().lastIndexOf(" "));
 
                 Activity.addActivty("Generated Fact Finder List (" + names + ")", null);
-                
+
                 saveGroupedFFList2(concilList2Model);
             }
         } catch (SQLException ex) {
@@ -1313,13 +1314,13 @@ public class MEDCase {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void saveGroupedFFList2(DefaultListModel concilList2Model) {
         List<String> relatedCases = RelatedCase.loadRelatedCases();
-        
+
         for(int i = 0; i < relatedCases.size(); i++) {
             Statement stmt = null;
-            
+
             try {
                 stmt = Database.connectToDB().createStatement();
 
@@ -1345,7 +1346,7 @@ public class MEDCase {
                 preparedStatement.setString(8, relatedCases.get(i).split("-")[2]);
                 preparedStatement.setString(9, relatedCases.get(i).split("-")[3]);
 
-    //            int success = 
+    //            int success =
                 preparedStatement.executeUpdate();
 
     //            if(success == 1) {
@@ -1404,10 +1405,10 @@ public class MEDCase {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void replaceGroupedList2FF(int location, String newName, String oldName) {
         List<String> relatedCases = RelatedCase.loadRelatedCases();
-        
+
         for(int i = 0; i < relatedCases.size(); i++) {
 
             Statement stmt = null;
@@ -1428,7 +1429,7 @@ public class MEDCase {
                 preparedStatement.setString(4, relatedCases.get(i).split("-")[2]);
                 preparedStatement.setString(5, relatedCases.get(i).split("-")[3]);
 
-    //            int success = 
+    //            int success =
                 preparedStatement.executeUpdate();
 
     //            if(success == 1) {
@@ -1481,10 +1482,10 @@ public class MEDCase {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void replaceGroupedList1FF(int location, String newName, String oldName) {
         List<String> relatedCases = RelatedCase.loadRelatedCases();
-        
+
         for(int i = 0; i < relatedCases.size(); i++) {
             Statement stmt = null;
             try {
@@ -1504,7 +1505,7 @@ public class MEDCase {
                 preparedStatement.setString(4, relatedCases.get(i).split("-")[2]);
                 preparedStatement.setString(5, relatedCases.get(i).split("-")[3]);
 
-    //            int success = 
+    //            int success =
                 preparedStatement.executeUpdate();
 
     //            if(success == 1) {
@@ -1575,14 +1576,14 @@ public class MEDCase {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void updateGroupedConciliation(MEDCase newCaseInformation) {
         List<String> relatedCases = RelatedCase.loadRelatedCases();
-                
+
         for(int i = 0; i < relatedCases.size(); i++) {
 
             Statement stmt = null;
-        
+
             try {
                 stmt = Database.connectToDB().createStatement();
 
@@ -1801,13 +1802,13 @@ public class MEDCase {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void updateGroupedFF(MEDCase newCaseInformation) {
         List<String> relatedCases = RelatedCase.loadRelatedCases();
-        
+
         for(int i = 0; i < relatedCases.size(); i++) {
             Statement stmt = null;
-            
+
             try {
                 stmt = Database.connectToDB().createStatement();
 
@@ -1863,7 +1864,7 @@ public class MEDCase {
                 preparedStatement.setString(23, relatedCases.get(i).split("-")[2]);
                 preparedStatement.setString(24, relatedCases.get(i).split("-")[3]);
 
-    //            int success = 
+    //            int success =
                 preparedStatement.executeUpdate();
     //
     //            if(success == 1) {
@@ -2718,7 +2719,7 @@ public class MEDCase {
         }
     }
 
-    public static void updateClosedCases(String caseNumber) {
+    public static void updateSendToBoardCases(String caseNumber) {
         NumberFormatService num = NumberFormatService.parseFullCaseNumberNoNGlobal(caseNumber);
 
         Statement stmt = null;
@@ -2742,7 +2743,7 @@ public class MEDCase {
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                updateClosedCases(caseNumber);
+                updateSendToBoardCases(caseNumber);
             }
         } finally {
             DbUtils.closeQuietly(stmt);
@@ -2806,7 +2807,7 @@ public class MEDCase {
         return medcaseList;
     }
 
-     public static List<MEDCase> getCloseList(Date startDate, Date endDate) {
+     public static List<MEDCase> getSendToBoardList(Date startDate, Date endDate) {
         List<MEDCase> medcaseList = new ArrayList<>();
 
         Statement stmt = null;
@@ -2853,7 +2854,59 @@ public class MEDCase {
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                getCloseList(startDate, endDate);
+                getSendToBoardList(startDate, endDate);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return medcaseList;
+    }
+
+     public static List<MEDCase> getCloseList() {
+        List<MEDCase> medcaseList = new ArrayList<>();
+
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT "
+                    + "MEDCase.caseYear AS CaseYear, "
+                    + "MEDCase.caseType AS CaseType, "
+                    + "MEDCase.caseMonth AS CaseMonth, "
+                    + "MEDCase.caseNumber AS CaseNumber,"
+
+                    + "EmployerName = STUFF((SELECT ';  ' + CASE WHEN (CaseParty.\"firstName\" IS NULL AND CaseParty.\"lastName\" IS NULL) "
+                    + "THEN (CaseParty.\"companyName\") ELSE ((ISNULL(CaseParty.\"firstName\" + ' ', '')) + (ISNULL(CaseParty.\"middleInitial\" + ' ', '')) "
+                    + "+ (ISNULL(CaseParty.\"lastName\" + ' ', '')) + (ISNULL(CaseParty.\"suffix\" + ' ', '')) + (ISNULL(CaseParty.\"nameTitle\" + ' ', '')) "
+                    + "+ (ISNULL(CaseParty.\"jobTitle\", ''))) END AS EmployerName FROM caseparty "
+                    + "WHERE CaseParty.caseYear = medcase.caseYear AND CaseParty.caseType = medcase.caseType "
+                    + "AND CaseParty.caseMonth = medcase.caseMonth AND CaseParty.caseNumber = medcase.caseNumber "
+                    + "AND CaseParty.caseRelation = 'Employer' FOR XML PATH(''), TYPE).value('.', 'NVARCHAR(MAX)'), 1, 1, ''), "
+
+                    + "MEDCase.fileDate AS FileDate "
+                    + "FROM  MEDCase "
+                    + "WHERE MEDCase.SendToBoardToClose = 1 "
+                    + "AND MEDCase.caseStatus = 'Open' "
+                    + "ORDER BY MEDCase.caseYear, MEDCase.caseMonth, MEDCase.caseNumber";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while(rs.next()) {
+                MEDCase item = new MEDCase();
+
+                item.caseYear = rs.getString("caseYear");
+                item.caseType = rs.getString("caseType");
+                item.caseMonth = rs.getString("caseMonth");
+                item.caseNumber = rs.getString("caseNumber");
+                item.employerIDNumber = rs.getString("EmployerName");
+                item.fileDate = rs.getTimestamp("fileDate");
+                medcaseList.add(item);
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getCloseList();
             }
         } finally {
             DbUtils.closeQuietly(stmt);
@@ -2997,4 +3050,43 @@ public class MEDCase {
         }
         return med;
     }
+
+    public static void updateClosedMedCases(MEDCase item, java.sql.Date selectedDate) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date(selectedDate.getTime()));
+        cal.add(Calendar.YEAR, 1);
+        cal.add(Calendar.DATE, 45);
+
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Update MEDCase set "
+                    + "caseStatus = 'Closed', "
+                    + "sendToBoardToClose = 0, "
+                    + "boardFinalDate = ?, "
+                    + "retentionTicklerDate = ? "
+                    + "WHERE caseYear = ? "
+                    + "AND caseType = ? "
+                    + "AND caseMonth = ? "
+                    + "AND caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setDate(1, selectedDate);
+            preparedStatement.setDate(2, new java.sql.Date(cal.getTimeInMillis()));
+            preparedStatement.setString(3, item.caseYear);
+            preparedStatement.setString(4, item.caseType);
+            preparedStatement.setString(5, item.caseMonth);
+            preparedStatement.setString(6, item.caseNumber);
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if (ex.getCause() instanceof SQLServerException) {
+                updateClosedMedCases(item, selectedDate);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+    }
+
 }

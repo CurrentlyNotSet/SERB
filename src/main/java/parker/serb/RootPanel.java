@@ -1664,7 +1664,7 @@ public class RootPanel extends javax.swing.JFrame {
 
         batchCloseCasesSubMenu.setText("Batch Handle Cases");
 
-        batchCloseMEDMenuItem.setText("MED");
+        batchCloseMEDMenuItem.setText("MED                 ");
         batchCloseMEDMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 batchCloseMEDMenuItemActionPerformed(evt);
