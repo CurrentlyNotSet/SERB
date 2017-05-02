@@ -41,7 +41,7 @@ public class MEDBulkSettleCasesDialog extends javax.swing.JFrame {
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }
-    
+
     private void addRenderer() {
         caseTable.setDefaultRenderer(Object.class, new TableCellRenderer(){
             private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
@@ -67,9 +67,9 @@ public class MEDBulkSettleCasesDialog extends javax.swing.JFrame {
         settleDateField.addDateSelectionListener((Date date) -> {
             checkProcessable();
         });
-        
+
     }
-    
+
     private void loadYearsComboBox() {
         List<String> yearList = MEDCase.getSettleCaseYears();
         for (String year : yearList) {
@@ -151,7 +151,7 @@ public class MEDBulkSettleCasesDialog extends javax.swing.JFrame {
         model.setRowCount(0);
         countLabel.setText(" ");
     }
-    
+
     private void loadTableThread() {
         clearTable();
         jLayeredPane1.moveToFront(jPanel1);
@@ -192,10 +192,10 @@ public class MEDBulkSettleCasesDialog extends javax.swing.JFrame {
             }
         }
     }
-    
+
     private void checkProcessable(){
         if (yearComboBox.getSelectedItem() != null && monthComboBox.getSelectedItem() != null){
-            if (!yearComboBox.getSelectedItem().toString().equals("") 
+            if (!yearComboBox.getSelectedItem().toString().equals("")
                     && !monthComboBox.getSelectedItem().toString().equals("")
                     && !settleDateField.getText().equals("")){
                 updateButton.setEnabled(true);
@@ -206,7 +206,7 @@ public class MEDBulkSettleCasesDialog extends javax.swing.JFrame {
             updateButton.setEnabled(false);
         }
     }
-    
+
     private void printList() {
         jLayeredPane1.moveToFront(jPanel1);
 
@@ -261,7 +261,7 @@ public class MEDBulkSettleCasesDialog extends javax.swing.JFrame {
             }
         });
 
-        printButton.setText("Print Processed Records");
+        printButton.setText("Print Settled Cases");
         printButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 printButtonActionPerformed(evt);

@@ -29,7 +29,7 @@
           <Group type="102" attributes="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-                  <Component id="jPanel2" min="-2" pref="553" max="-2" attributes="0"/>
+                  <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
@@ -43,7 +43,7 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace pref="10" max="32767" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
                       <Component id="jPanel4" alignment="1" min="-2" pref="433" max="-2" attributes="0"/>
                       <Group type="102" attributes="0">
@@ -206,9 +206,6 @@
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[409, 107]"/>
             </Property>
-            <Property name="size" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[409, 107]"/>
-            </Property>
           </Properties>
 
           <Layout>
@@ -231,7 +228,7 @@
                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="addMultiCaseButton" alignment="0" pref="147" max="32767" attributes="0"/>
+                          <Component id="addMultiCaseButton" alignment="0" pref="149" max="32767" attributes="0"/>
                           <Component id="jScrollPane2" alignment="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
@@ -280,9 +277,6 @@
                   <Dimension value="[29, 91]"/>
                 </Property>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[29, 91]"/>
-                </Property>
-                <Property name="size" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[29, 91]"/>
                 </Property>
               </Properties>
@@ -407,7 +401,7 @@
                                           </Group>
                                       </Group>
                                   </Group>
-                                  <EmptySpace min="0" pref="30" max="32767" attributes="0"/>
+                                  <EmptySpace min="0" pref="128" max="32767" attributes="0"/>
                               </Group>
                               <Component id="expirationDateTextBox" alignment="0" max="32767" attributes="0"/>
                               <Component id="NTNFiledByComboBox" alignment="0" max="32767" attributes="0"/>
@@ -514,7 +508,7 @@
                       <Component id="dismissedCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="motionCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="40" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -585,7 +579,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel22">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Board Final Date:"/>
+            <Property name="text" type="java.lang.String" value="Board Close Date:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel23">

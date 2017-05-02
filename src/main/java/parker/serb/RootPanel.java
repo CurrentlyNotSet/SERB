@@ -194,7 +194,7 @@ public class RootPanel extends javax.swing.JFrame {
         } else {
             firstCaseNumber = NumberFormatService.generateFullCaseNumberNonGlobal(Global.caseYear, Global.caseType, Global.caseMonth, Global.caseNumber);
         }
-        
+
         switch (Global.activeSection) {
             case "Docketing":
                 card.show(jPanel9, "card2");
@@ -1664,7 +1664,7 @@ public class RootPanel extends javax.swing.JFrame {
 
         batchCloseCasesSubMenu.setText("Batch Handle Cases");
 
-        batchCloseMEDMenuItem.setText("MED");
+        batchCloseMEDMenuItem.setText("MED                 ");
         batchCloseMEDMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 batchCloseMEDMenuItemActionPerformed(evt);
