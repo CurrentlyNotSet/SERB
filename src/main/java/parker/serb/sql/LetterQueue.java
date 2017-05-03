@@ -43,7 +43,7 @@ public class LetterQueue {
         if (Global.activeSection.equals("Hearings")){
             casetypes = "(C.section = 'MED' OR C.section = 'REP' OR C.section = 'ULP') ";
         } else {
-            casetypes = "C.section = '" + Global.activeSection + "' ";
+            casetypes = "C.section = '" + (Global.activeSection.equals("Civil Service Commission") ? "CSC" : Global.activeSection) + "' ";
         }
 
         Statement stmt = null;

@@ -41,7 +41,7 @@ import parker.serb.util.StringUtilities;
 public class CSCAllLettersPanel extends javax.swing.JDialog {
 
     List<CSCCase> cscCaseList;
-    List<CaseParty> partyList;
+
 
     /**
      * Creates new form ORGAllLettersPanel
@@ -124,7 +124,6 @@ public class CSCAllLettersPanel extends javax.swing.JDialog {
 
     private void processComboBoxSelection() {
         cscCaseList = null;
-        partyList = null;
 
         if (letterComboBox.getSelectedItem().toString().toLowerCase().contains("past due")){
             cscCaseList = CSCCase.getCSCCasesPastDueLettersDefault();
@@ -163,7 +162,7 @@ public class CSCAllLettersPanel extends javax.swing.JDialog {
 
         if (cscCaseList != null) {
             for (CSCCase item : cscCaseList) {
-                partyList = CaseParty.loadORGPartiesByCase("CSC", item.cscNumber);
+                List<CaseParty> partyList = CaseParty.loadORGPartiesByCase("CSC", item.cscNumber);
                 String orgVia = "";
                 String repVia = "";
 
@@ -238,51 +237,50 @@ public class CSCAllLettersPanel extends javax.swing.JDialog {
 
                     String docName = generateDocument.generateSMDSdocument(template, 0, null, null, null, item, true);
 
-                    if (template.questionsFileName != null) {
-                        attachDocName = copyAttachmentToCaseFolder(item, template.questionsFileName);
-                    }
+                    attachDocName = copyAttachmentToCaseFolder(item, "CSCReport.pdf");
 
                     Activity.addActivtyORGCase("CSC", item.cscNumber,
                             "Created " + (template.historyDescription == null ? template.description : template.historyDescription),
                              docName);
 
-                    partyList = CaseParty.loadORGPartiesByCase("CSC", item.cscNumber);
-                    for (CaseParty party : partyList) {
-                        if (party.caseRelation.equals("Representative")) {
-
-                            if (item.email != null) {
-                                int emailID = insertEmail(template, item.cscNumber, party.emailAddress);
-                                insertGeneratedAttachementEmail(emailID, docName, true);
-                                if (!attachDocName.equals("")) {
-                                    insertGeneratedAttachementEmail(emailID, attachDocName, false);
-                                }
-
-                            } else if (party.address1 != null & party.city != null & party.stateCode != null && party.zipcode != null) {
-                                int postalID = insertPostal(template, item.cscNumber, party);
-                                insertGeneratedAttachementPostal(postalID, docName, true);
-                                if (!attachDocName.equals("")) {
-                                    insertGeneratedAttachementPostal(postalID, attachDocName, false);
-                                }
-                            }
-                        }
-                    }
-
-                    if (item.email != null) {
+                    //CSC Org Info
+                    if (!item.email.equals("")) {
                         int emailID = insertEmail(template, item.cscNumber, item.email);
                         insertGeneratedAttachementEmail(emailID, docName, true);
                         if (!attachDocName.equals("")) {
                             insertGeneratedAttachementEmail(emailID, attachDocName, false);
                         }
-                    } else if (item.address1 != null & item.city != null & item.state != null && item.zipCode != null) {
+                    } else if (!item.address1.equals("") & !item.city.equals("") & !item.state.equals("") & !item.zipCode.equals("")) {
                         int postalID = insertPostalORG(template, item);
                         insertGeneratedAttachementPostal(postalID, docName, true);
                         if (!attachDocName.equals("")) {
                             insertGeneratedAttachementPostal(postalID, attachDocName, false);
                         }
                     }
+
+                    //Party List
+                    List<CaseParty> partyList = CaseParty.loadORGPartiesByCase("CSC", item.cscNumber);
+                    for (CaseParty party : partyList) {
+                        if (party.caseRelation.equalsIgnoreCase("Chairman")) {
+                            if (party.emailAddress != null) {
+                                if (!party.emailAddress.equals("")) {
+                                    if (!item.email.equalsIgnoreCase(party.emailAddress)) {
+                                        int emailID = insertEmail(template, item.cscNumber, party.emailAddress);
+                                        insertGeneratedAttachementEmail(emailID, docName, true);
+                                        if (!attachDocName.equals("")) {
+                                            insertGeneratedAttachementEmail(emailID, attachDocName, false);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             } else {
-                WebOptionPane.showMessageDialog(Global.root, "<html><center> Sorry, unable to locate template. <br><br>" + template.fileName + "</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
+                WebOptionPane.showMessageDialog(Global.root,
+                        "<html><center> Sorry, unable to locate template. <br><br>" + template.fileName + "</center></html>",
+                        "Error",
+                        WebOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -315,9 +313,9 @@ public class CSCAllLettersPanel extends javax.swing.JDialog {
 
         EmailOut eml = new EmailOut();
 
-        eml.section = "ORG";
+        eml.section = "CSC";
         eml.caseYear = null;
-        eml.caseType = "ORG";
+        eml.caseType = "CSC";
         eml.caseMonth = null;
         eml.caseNumber = orgNumber;
         eml.to = toEmail.trim().equals("") ? null : toEmail.trim();
@@ -625,10 +623,11 @@ public class CSCAllLettersPanel extends javax.swing.JDialog {
 
     private void GenerateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GenerateButtonActionPerformed
         jLayeredPane1.moveToFront(jPanel1);
-
+        toggleSearchInteractionHandling(false);
         Thread temp = new Thread(() -> {
             generateLetters();
             jLayeredPane1.moveToBack(jPanel1);
+            toggleSearchInteractionHandling(true);
         });
         temp.start();
     }//GEN-LAST:event_GenerateButtonActionPerformed
