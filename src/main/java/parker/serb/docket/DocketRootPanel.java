@@ -303,7 +303,7 @@ public class DocketRootPanel extends javax.swing.JPanel {
                 String value = docketTable.getValueAt(docketTable.getSelectedRow(), 4).toString();
                 DocketLock.addLock(section, value);
                 if (section.equals("CMDS")) {
-                    new mediaCMDSFileDialog_NEW((JFrame) Global.root.getRootPane().getParent(),
+                    new scanCMDSFileDialog((JFrame) Global.root.getRootPane().getParent(),
                         true,
                         docketTable.getValueAt(docketTable.getSelectedRow(), 4).toString(),section,
                         docketTable.getValueAt(docketTable.getSelectedRow(), 1).toString());
