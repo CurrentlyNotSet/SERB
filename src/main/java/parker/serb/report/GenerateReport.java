@@ -8,6 +8,7 @@ package parker.serb.report;
 import com.alee.laf.optionpane.WebOptionPane;
 import java.io.File;
 import java.sql.Connection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import net.sf.jasperreports.engine.JRException;
@@ -266,6 +267,12 @@ public class GenerateReport {
         hash.put("caseTypeULP", generateCaseTypeListBySection("ULP"));
         hash.put("caseTypeCMDS", generateCaseTypeListBySection("CMDS"));
         hash.put("activeSection", Global.activeSection);
+        hash.put("CurrentCaseYear", Global.caseYear);
+        hash.put("CurrentCaseType", Global.caseType);
+        hash.put("CurrentCaseMonth", Global.caseMonth);
+        hash.put("CurrentCaseNumber", Global.caseNumber);
+        hash.put("CurrentYear", Global.yyyy.format(new Date()));
+
 
         String jasperFileName = Global.reportingPath  + report.section + File.separator + report.fileName;
 
