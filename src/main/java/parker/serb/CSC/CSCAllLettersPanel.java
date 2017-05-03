@@ -13,9 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -116,51 +114,44 @@ public class CSCAllLettersPanel extends javax.swing.JDialog {
 
         DefaultComboBoxModel dt = new DefaultComboBoxModel();
         letterComboBox.setModel(dt);
-        letterComboBox.addItem(new Item<>("0", ""));
+        letterComboBox.addItem(new Item<>(-1, ""));
 
         for (SMDSDocuments letter : letterList) {
-            letterComboBox.addItem(new Item<>(String.valueOf(letter.id), letter.description));
+            letterComboBox.addItem(new Item<>(letter, letter.description));
         }
-        letterComboBox.setSelectedItem(new Item<>("0", ""));
+        letterComboBox.setSelectedItem(new Item<>(-1, ""));
     }
 
     private void processComboBoxSelection() {
         cscCaseList = null;
         partyList = null;
-        Calendar cal = Calendar.getInstance();
 
-        switch (letterComboBox.getSelectedItem().toString()) {
-            case "Tickler 45 days":
-                cal.set(Calendar.DAY_OF_MONTH, 15);
-                cal.add(Calendar.MONTH, 1);
-                cal.add(Calendar.MONTH, -5);
-                processOverdueNumbers(cal);
-                break;
-            case "Tickler 10 days":
-                cal.set(Calendar.DAY_OF_MONTH, 15);
-                cal.add(Calendar.MONTH, -5);
-                processOverdueNumbers(cal);
-                break;
-            case "Tickler 31 days overdue":
-                cal.set(Calendar.DAY_OF_MONTH, 15);
-                cal.add(Calendar.MONTH, -5);
-                cal.add(Calendar.MONTH, -1);
-                processOverdueNumbers(cal);
-                break;
-            default:
-                cscCaseList = CSCCase.getCSCCasesAllLettersDefault();
-                break;
+        if (letterComboBox.getSelectedItem().toString().toLowerCase().contains("past due")){
+            cscCaseList = CSCCase.getCSCCasesPastDueLettersDefault();
+        } else if (!letterComboBox.getSelectedItem().toString().trim().equals("")){
+            cscCaseList = CSCCase.getCSCCasesAllLettersDefault();
         }
 
-        FYEDuringTextField.setText(letterComboBox.getSelectedItem().toString().equals("")
-                ? "" : cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH));
-        loadTable();
+        loadTableInformation();
     }
 
-    private void processOverdueNumbers(Calendar cal) {
-        String FYEMonthName = cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH);
+    private void loadTableInformation() {
+        Thread temp = new Thread(() -> {
+            toggleSearchInteractionHandling(false);
+            jLayeredPane1.moveToFront(jPanel1);
+            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            model.setRowCount(0);
+            loadTable();
+        });
+        temp.start();
+    }
 
-        cscCaseList = CSCCase.getCSCCasesAllLettersDefault();
+    private void toggleSearchInteractionHandling(boolean enabled){
+        jTable1.setVisible(enabled);
+        jTable1.setEnabled(enabled);
+        letterComboBox.setEnabled(enabled);
+        GenerateButton.setEnabled(enabled);
+        jScrollPane1.setEnabled(enabled);
     }
 
     private void loadTable() {
@@ -172,35 +163,35 @@ public class CSCAllLettersPanel extends javax.swing.JDialog {
 
         if (cscCaseList != null) {
             for (CSCCase item : cscCaseList) {
+                partyList = CaseParty.loadORGPartiesByCase("CSC", item.cscNumber);
                 String orgVia = "";
                 String repVia = "";
 
-//                partyList = CaseParty.loadORGPartiesByCase("CSC", item.cscNumber);
-//                for (CaseParty party : partyList) {
-//                    if (party.caseRelation.equals("Representative")) {
-//                        if (item.email != null) {
-//                            EmailNumber++;
-//                            if (!repVia.trim().equals("")) {
-//                                repVia += ", ";
-//                            }
-//                            repVia += "Email";
-//                        } else if (item.address1 != null & item.city != null & item.state != null && item.zipCode != null) {
-//                            postalNumber++;
-//                            if (!repVia.trim().equals("")) {
-//                                repVia += ", ";
-//                            }
-//                            repVia += "Postal";
-//                        }
-//                    }
-//                }
-//
-//                if (item.email != null) {
-//                    EmailNumber++;
-//                    orgVia = "Email";
-//                } else if (item.address1 != null & item.city != null & item.state != null && item.zipCode != null) {
-//                    postalNumber++;
-//                    orgVia = "Postal";
-//                }
+                //CSC Org Info
+                if (!item.email.equals("")) {
+                    EmailNumber++;
+                    orgVia = "Email";
+                } else if (!item.address1.equals("") & !item.city.equals("") & !item.state.equals("") & !item.zipCode.equals("")) {
+                    postalNumber++;
+                    orgVia = "Postal";
+                }
+
+                //Party List
+                for (CaseParty party : partyList) {
+                    if (party.caseRelation.equalsIgnoreCase("Chairman")) {
+                        if (party.emailAddress != null) {
+                            if (!party.emailAddress.equals("")) {
+                                if (!item.email.equalsIgnoreCase(party.emailAddress)) {
+                                    EmailNumber++;
+                                    if (!repVia.trim().equals("")) {
+                                        repVia += ", ";
+                                    }
+                                    repVia += "Email";
+                                }
+                            }
+                        }
+                    }
+                }
 
                 model.addRow(new Object[]{
                     item.id, //id
@@ -221,30 +212,27 @@ public class CSCAllLettersPanel extends javax.swing.JDialog {
             EMailTextField.setText(letterComboBox.getSelectedItem().toString().equals("")
                     ? "" : String.valueOf(EmailNumber));
         }
+
+        jLayeredPane1.moveToBack(jPanel1);
+        toggleSearchInteractionHandling(true);
     }
 
     private void enableGenerateButton() {
-//        if (letterComboBox.getSelectedItem().toString().equals("") || cscCaseList.isEmpty()) {
-//            GenerateButton.setEnabled(false);
-//        } else {
-//            GenerateButton.setEnabled(true);
-//        }
+        if (letterComboBox.getSelectedItem().toString().equals("") || cscCaseList.isEmpty()) {
+            GenerateButton.setEnabled(false);
+        } else {
+            GenerateButton.setEnabled(true);
+        }
     }
 
     private void generateLetters() {
-        int selection = 0;
+        Item selection = (Item) letterComboBox.getSelectedItem();
+        SMDSDocuments template = (SMDSDocuments) selection.getValue();
 
-        if (!letterComboBox.getSelectedItem().toString().trim().equals("")) {
-            Item item = (Item) letterComboBox.getSelectedItem();
-            selection = Integer.parseInt(item.getValue().toString());
-        }
-
-        if (selection > 0) {
-            SMDSDocuments template = SMDSDocuments.findDocumentByID(selection);
+        if (template != null) {
             File templateFile = new File(Global.templatePath + "CSC" + File.separator + template.fileName);
 
             if (templateFile.exists()) {
-
                 for (CSCCase item : cscCaseList) {
                     String attachDocName = "";
 
@@ -457,6 +445,7 @@ public class CSCAllLettersPanel extends javax.swing.JDialog {
         jLabel3.setText("Fiscal Year Ending During:");
 
         FYEDuringTextField.setBackground(new java.awt.Color(238, 238, 238));
+        FYEDuringTextField.setText("December");
         FYEDuringTextField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         FYEDuringTextField.setEnabled(false);
 
