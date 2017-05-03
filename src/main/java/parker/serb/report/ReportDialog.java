@@ -58,6 +58,7 @@ public class ReportDialog extends javax.swing.JDialog {
             case "ORG":
             case "Hearings":
             case "Civil Service Commission":
+            case "CSC":
             case "CMDS":
                 Agendalabel.setVisible(false);
                 AgendaComboBox.setVisible(false);
