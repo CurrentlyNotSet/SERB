@@ -43,6 +43,8 @@ import parker.serb.ULP.ULPLetterDialog;
 import parker.serb.ULP.ULPRootPanel;
 import parker.serb.admin.SystemMontiorDialog;
 import parker.serb.adminDBMaintenance.AdminMainMenuPanel;
+import parker.serb.adminDBMaintenance.FactFinderConciliatorSearchDialog;
+import parker.serb.adminDBMaintenance.MediatorSearchDialog;
 import parker.serb.bookmarkProcessing.AnnualReportTwoDatePanel;
 import parker.serb.bunumber.BUNumberFileAddUpdateDeleteDialog;
 import parker.serb.letterQueue.LetterQueuePanel;
@@ -152,6 +154,11 @@ public class RootPanel extends javax.swing.JFrame {
             if(!Global.activeUserRoles.contains("ULP")) {
                 jMenuBar1.remove(batchCloseULPMenuItem);
             }
+        }
+
+        //MED Maintenance Menu Item
+        if (!Global.activeUserRoles.contains("ULP") || !Global.activeUserRoles.contains("Admin")){
+            jMenuBar1.remove(medMaintenanceMenu);
         }
     }
 
@@ -1205,6 +1212,9 @@ public class RootPanel extends javax.swing.JFrame {
         jMenuItem7 = new javax.swing.JMenuItem();
         jMenuItem10 = new javax.swing.JMenuItem();
         jMenuItem8 = new javax.swing.JMenuItem();
+        medMaintenanceMenu = new javax.swing.JMenu();
+        jMenuItem12 = new javax.swing.JMenuItem();
+        FFandConcMenuItme = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
@@ -1713,6 +1723,26 @@ public class RootPanel extends javax.swing.JFrame {
             }
         });
         jMenu1.add(jMenuItem8);
+
+        medMaintenanceMenu.setText("MED Maintenance");
+
+        jMenuItem12.setText("Fact Finders & Conciliators");
+        jMenuItem12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem12ActionPerformed(evt);
+            }
+        });
+        medMaintenanceMenu.add(jMenuItem12);
+
+        FFandConcMenuItme.setText("Mediators");
+        FFandConcMenuItme.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                FFandConcMenuItmeActionPerformed(evt);
+            }
+        });
+        medMaintenanceMenu.add(FFandConcMenuItme);
+
+        jMenu1.add(medMaintenanceMenu);
         jMenu1.add(jSeparator2);
 
         jMenuItem3.setText("Log Off");
@@ -2219,12 +2249,23 @@ public class RootPanel extends javax.swing.JFrame {
         FileService.openDocumentation("Hearings Section Procedures.pdf");
     }//GEN-LAST:event_HearingsDocumentationMenuItemActionPerformed
 
+    private void FFandConcMenuItmeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FFandConcMenuItmeActionPerformed
+        Audit.addAuditEntry("Opened MED Maintenance for Fact Finders & Conciliators");
+        new FactFinderConciliatorSearchDialog(Global.root, true);
+    }//GEN-LAST:event_FFandConcMenuItmeActionPerformed
+
+    private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
+        Audit.addAuditEntry("Opened MED Maintenance for Mediators");
+        new MediatorSearchDialog(Global.root, true);
+    }//GEN-LAST:event_jMenuItem12ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel CMDS;
     private javax.swing.JMenuItem CMDSDocumentationMenuItem;
     private javax.swing.JPanel CSC;
     private javax.swing.JMenuItem CSCDocumentationMenuItem;
     private javax.swing.JPanel Docketing;
+    private javax.swing.JMenuItem FFandConcMenuItme;
     private javax.swing.JPanel Hearing;
     private javax.swing.JMenuItem HearingsDocumentationMenuItem;
     private javax.swing.JPanel MED;
@@ -2267,6 +2308,7 @@ public class RootPanel extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem10;
+    private javax.swing.JMenuItem jMenuItem12;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
@@ -2294,6 +2336,7 @@ public class RootPanel extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private parker.serb.MED.MEDHeaderPanel mEDHeaderPanel1;
     private parker.serb.MED.MEDRootPanel mEDRootPanel1;
+    private javax.swing.JMenu medMaintenanceMenu;
     private parker.serb.ORG.ORGHeaderPanel oRGHeaderPanel1;
     private parker.serb.ORG.ORGHeaderPanel oRGHeaderPanel2;
     private parker.serb.ORG.ORGRootPanel oRGRootPanel1;
