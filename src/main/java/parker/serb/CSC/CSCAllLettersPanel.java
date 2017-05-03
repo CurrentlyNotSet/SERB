@@ -109,11 +109,6 @@ public class CSCAllLettersPanel extends javax.swing.JDialog {
         jTable1.getColumnModel().getColumn(5).setMinWidth(80);
         jTable1.getColumnModel().getColumn(5).setWidth(80);
         jTable1.getColumnModel().getColumn(5).setMaxWidth(80);
-
-        //FS Last
-        jTable1.getColumnModel().getColumn(6).setMinWidth(80);
-        jTable1.getColumnModel().getColumn(6).setWidth(80);
-        jTable1.getColumnModel().getColumn(6).setMaxWidth(80);
     }
 
     private void loadReports() {
@@ -180,32 +175,32 @@ public class CSCAllLettersPanel extends javax.swing.JDialog {
                 String orgVia = "";
                 String repVia = "";
 
-                partyList = CaseParty.loadORGPartiesByCase("CSC", item.cscNumber);
-                for (CaseParty party : partyList) {
-                    if (party.caseRelation.equals("Representative")) {
-                        if (item.email != null) {
-                            EmailNumber++;
-                            if (!repVia.trim().equals("")) {
-                                repVia += ", ";
-                            }
-                            repVia += "Email";
-                        } else if (item.address1 != null & item.city != null & item.state != null && item.zipCode != null) {
-                            postalNumber++;
-                            if (!repVia.trim().equals("")) {
-                                repVia += ", ";
-                            }
-                            repVia += "Postal";
-                        }
-                    }
-                }
-
-                if (item.email != null) {
-                    EmailNumber++;
-                    orgVia = "Email";
-                } else if (item.address1 != null & item.city != null & item.state != null && item.zipCode != null) {
-                    postalNumber++;
-                    orgVia = "Postal";
-                }
+//                partyList = CaseParty.loadORGPartiesByCase("CSC", item.cscNumber);
+//                for (CaseParty party : partyList) {
+//                    if (party.caseRelation.equals("Representative")) {
+//                        if (item.email != null) {
+//                            EmailNumber++;
+//                            if (!repVia.trim().equals("")) {
+//                                repVia += ", ";
+//                            }
+//                            repVia += "Email";
+//                        } else if (item.address1 != null & item.city != null & item.state != null && item.zipCode != null) {
+//                            postalNumber++;
+//                            if (!repVia.trim().equals("")) {
+//                                repVia += ", ";
+//                            }
+//                            repVia += "Postal";
+//                        }
+//                    }
+//                }
+//
+//                if (item.email != null) {
+//                    EmailNumber++;
+//                    orgVia = "Email";
+//                } else if (item.address1 != null & item.city != null & item.state != null && item.zipCode != null) {
+//                    postalNumber++;
+//                    orgVia = "Postal";
+//                }
 
                 model.addRow(new Object[]{
                     item.id, //id
@@ -213,8 +208,7 @@ public class CSCAllLettersPanel extends javax.swing.JDialog {
                     item.name, //org Name
                     orgVia, //org via
                     repVia, //rep via
-                    Global.mmddyyyy.format(item.lastNotification), //AR Last
-                    Global.mmddyyyy.format(item.previousFileDate)//FS Last
+                    (item.filed == null ? "" : Global.mmddyyyy.format(item.filed)) //AR Last
                 });
             }
 
@@ -230,11 +224,11 @@ public class CSCAllLettersPanel extends javax.swing.JDialog {
     }
 
     private void enableGenerateButton() {
-        if (letterComboBox.getSelectedItem().toString().equals("") || cscCaseList.isEmpty()) {
-            GenerateButton.setEnabled(false);
-        } else {
-            GenerateButton.setEnabled(true);
-        }
+//        if (letterComboBox.getSelectedItem().toString().equals("") || cscCaseList.isEmpty()) {
+//            GenerateButton.setEnabled(false);
+//        } else {
+//            GenerateButton.setEnabled(true);
+//        }
     }
 
     private void generateLetters() {
@@ -448,7 +442,7 @@ public class CSCAllLettersPanel extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Generate Letters For All Organizations");
+        jLabel1.setText("Generate Letters For All Civil Service Commissions");
 
         letterComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -495,6 +489,7 @@ public class CSCAllLettersPanel extends javax.swing.JDialog {
         });
 
         GenerateButton.setText("Generate Letters");
+        GenerateButton.setEnabled(false);
         GenerateButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 GenerateButtonActionPerformed(evt);
@@ -508,11 +503,11 @@ public class CSCAllLettersPanel extends javax.swing.JDialog {
 
             },
             new String [] {
-                "id", "Org #", "Organization Name", "Org Via", "Rep Via", "AR Last", "Previous File"
+                "id", "CSC ID", "Civil Service Commission Name", "CSC", "Chairman", "Date Filed"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {

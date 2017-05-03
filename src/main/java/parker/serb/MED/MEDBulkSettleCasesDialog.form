@@ -124,7 +124,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="printButton">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Print Processed Records"/>
+        <Property name="text" type="java.lang.String" value="Print Settled Cases"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="printButtonActionPerformed"/>

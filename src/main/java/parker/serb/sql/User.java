@@ -544,6 +544,7 @@ public class User {
                 sectionColumnName = "hearingscaseworker";
                 break;
             case "CSC":
+            case "Civil Service Commission":
                 sectionColumnName = "csccaseworker";
                 break;
             case "CMDS":

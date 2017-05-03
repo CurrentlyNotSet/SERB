@@ -186,7 +186,7 @@ public class Mediator {
     }
 
     public static String getMediatorIDByName(String name) {
-        String[] nameParts = name.split(" ");
+        String[] nameParts = name.split(" ", 2);
         String id = "";
 
         Statement stmt = null;

@@ -1190,7 +1190,7 @@ public class ULPCase {
                     + "AND boardMeeting.caseType = ulpcase.caseType "
                     + "AND boardMeeting.caseMonth = ulpcase.caseMonth "
                     + "AND boardMeeting.caseNumber = ulpcase.caseNumber "
-                    + "WHERE boardMeetingDate = ? ";
+                    + "WHERE boardMeetingDate = ? AND ulpcase.finalDispositionStatus != 'Closed' ";
 
             if (!casetypes.isEmpty()) {
                 sql += "AND (";
@@ -1240,7 +1240,8 @@ public class ULPCase {
             stmt = Database.connectToDB().createStatement();
 
             String sql = "UPDATE ulpcase SET "
-                    + "currentstatus = 'Closed' "
+                    + "currentstatus = 'Closed', "
+                    + "finalDispositionStatus = 'Closed' "
                     + "WHERE id = ? ";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);

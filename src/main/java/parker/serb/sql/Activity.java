@@ -869,7 +869,7 @@ public class Activity {
                 act.user = caseActivity.getString("firstName") + " " + caseActivity.getString("lastName");
                 act.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
                 act.action = caseActivity.getString("action");
-                act.comment = caseActivity.getString("comment");
+                act.comment = caseActivity.getString("comment") == null ? "" : caseActivity.getString("comment");
                 act.caseYear = caseActivity.getString("caseYear");
                 act.caseType = caseActivity.getString("caseType");
                 act.caseMonth = caseActivity.getString("caseMonth");

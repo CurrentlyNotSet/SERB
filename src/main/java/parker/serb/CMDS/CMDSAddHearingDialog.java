@@ -46,27 +46,27 @@ public class CMDSAddHearingDialog extends javax.swing.JDialog {
         setLocationRelativeTo(parent);
         setVisible(true);
     }
-    
+
     private void loadTypeComboBox() {
         hearingTypeComboBox.removeAllItems();
         hearingTypeComboBox.addItem("");
-        
+
         for (HearingType type : HearingType.loadActiveHearingTypesBySection("CMDS")){
             hearingTypeComboBox.addItem(type.hearingType);
         }
     }
-    
+
     private void loadRoomComboBox() {
         hearingRoomComboBox.removeAllItems();
         hearingRoomComboBox.addItem("");
-        
+
         for (HearingRoom room : HearingRoom.loadActiveHearingRooms()){
             hearingRoomComboBox.addItem(room.roomAbbreviation);
         }
     }
-    
+
     private void addListeners() {
-        
+
         hourTextBox.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -101,11 +101,11 @@ public class CMDSAddHearingDialog extends javax.swing.JDialog {
                 }
             }
         });
-        
+
         hourTextBox.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
-                
+
                 if (hourTextBox.getText().length() == 2) {
                     e.consume();
                 } else {
@@ -124,7 +124,7 @@ public class CMDSAddHearingDialog extends javax.swing.JDialog {
             @Override
             public void keyReleased(KeyEvent e) {}
         });
-        
+
         minuteTextBox.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -146,7 +146,7 @@ public class CMDSAddHearingDialog extends javax.swing.JDialog {
             @Override
             public void keyReleased(KeyEvent e) {}
         });
-        
+
         dateTextBox.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -163,7 +163,7 @@ public class CMDSAddHearingDialog extends javax.swing.JDialog {
                 enableSaveButton();
             }
         });
-        
+
         minuteTextBox.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -180,21 +180,21 @@ public class CMDSAddHearingDialog extends javax.swing.JDialog {
                 enableSaveButton();
             }
         });
-        
+
         amPMComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 enableSaveButton();
             }
         });
-        
+
         hearingTypeComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 enableSaveButton();
             }
         });
-        
+
         hearingRoomComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -202,14 +202,14 @@ public class CMDSAddHearingDialog extends javax.swing.JDialog {
             }
         });
     }
-    
+
     private void enableSaveButton() {
         if(dateTextBox.getText().equals("") ||
             hourTextBox.getText().trim().equals("") ||
             minuteTextBox.getText().trim().equals("") ||
             amPMComboBox.getSelectedItem().equals("") ||
             hearingTypeComboBox.getSelectedItem().equals("") ||
-            hearingRoomComboBox.getSelectedItem().equals("")) 
+            hearingRoomComboBox.getSelectedItem().equals(""))
         {
             saveButton.setEnabled(false);
         } else {
@@ -223,11 +223,10 @@ public class CMDSAddHearingDialog extends javax.swing.JDialog {
             }
         }
     }
-    
 
     private Date generateDate() {
         int hour = Integer.valueOf(hourTextBox.getText().trim());
-   
+
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, Integer.valueOf(dateTextBox.getText().split("/")[2]));
         cal.set(Calendar.MONTH, Integer.valueOf(dateTextBox.getText().split("/")[0]) - 1);
@@ -236,24 +235,37 @@ public class CMDSAddHearingDialog extends javax.swing.JDialog {
         cal.set(Calendar.MINUTE, Integer.valueOf(minuteTextBox.getText().trim()));
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
-        
+
         return cal.getTime();
     }
-    
-    private void saveButton(){
+
+    private void saveButton() {
         CMDSHearing.addHearing(generateDate(),
                 hearingTypeComboBox.getSelectedItem().toString(),
                 hearingRoomComboBox.getSelectedItem().toString()
         );
-        int answer = WebOptionPane.showConfirmDialog(this, "Would you like to Generate a Letter for this Hearing", "Generate", WebOptionPane.YES_NO_OPTION);
-        if (answer == WebOptionPane.YES_OPTION) {
-            generateLetter();
-            this.dispose();
+
+        switch (hearingTypeComboBox.getSelectedItem().toString()) {
+            case "PH":
+            case "RH":
+            case "SE":
+            case "ST":
+            case "MC":
+            case "TC":
+                int answer = WebOptionPane.showConfirmDialog(this, "Would you like to Generate a Letter for this Hearing",
+                        "Generate", WebOptionPane.YES_NO_OPTION);
+                if (answer == WebOptionPane.YES_OPTION) {
+                    generateLetter();
+                    this.dispose();
+                }
+                break;
+            default:
+                break;
         }
-        
+
         this.dispose();
     }
-    
+
     private void generateLetter(){
         CMDSDocuments docToGenerate = null;
         switch (hearingTypeComboBox.getSelectedItem().toString()) {
@@ -269,10 +281,16 @@ public class CMDSAddHearingDialog extends javax.swing.JDialog {
             case "ST":
                 docToGenerate = CMDSDocuments.findDocumentByNameAndCategory("General", "Notices", "Status Conference Notice");
                 break;
+            case "MC":
+                docToGenerate = CMDSDocuments.findDocumentByNameAndCategory("General", "Notices", "Mediation Conference Notice");
+                break;
+            case "TC":
+                docToGenerate = CMDSDocuments.findDocumentByNameAndCategory("General", "Notices", "Telephone Conference Notice");
+                break;
             default:
                 break;
         }
-        
+
         if (docToGenerate != null){
             File templateFile = new File(Global.templatePath + Global.activeSection + File.separator + docToGenerate.Location);
             if (templateFile.exists()){
@@ -283,14 +301,14 @@ public class CMDSAddHearingDialog extends javax.swing.JDialog {
             }
         } else {
             WebOptionPane.showMessageDialog(
-                    Global.root, 
-                    "<html><center> Sorry, unable to locate letter. <br><br>For: " + hearingTypeComboBox.getSelectedItem().toString() + " hearing type.</center></html>", 
-                    "Error", 
+                    Global.root,
+                    "<html><center> Sorry, unable to locate letter. <br><br>For: " + hearingTypeComboBox.getSelectedItem().toString() + " hearing type.</center></html>",
+                    "Error",
                     WebOptionPane.ERROR_MESSAGE
             );
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
