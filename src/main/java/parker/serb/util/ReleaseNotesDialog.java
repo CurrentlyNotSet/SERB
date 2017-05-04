@@ -9,6 +9,7 @@ import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import parker.serb.Global;
 import parker.serb.sql.ReleaseNotes;
 
 /**
@@ -21,6 +22,7 @@ public class ReleaseNotesDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         addListeners();
+        this.setTitle("Current Version: " + Global.APPLICATION_VERSION);
         loadVersions();
         setLocationRelativeTo(parent);
         setVisible(true);
@@ -81,6 +83,9 @@ public class ReleaseNotesDialog extends javax.swing.JDialog {
         jLabel1.setText("Release Notes");
 
         notesPane.setEditable(false);
+        notesPane.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        notesPane.setEnabled(false);
+        notesPane.setFocusable(false);
         jScrollPane2.setViewportView(notesPane);
 
         releaseDateTextBox.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
