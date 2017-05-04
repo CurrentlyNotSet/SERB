@@ -446,7 +446,7 @@ public class MEDConciliationPanel extends javax.swing.JPanel {
     private void populateConciliatorSelection() {
         String currentSelectedConcil = "";
         
-        currentSelectedConcil = conciliatorSelectionComboBox.getSelectedItem() == null ? "" : conciliatorSelectionComboBox.getSelectedItem().toString();
+        currentSelectedConcil = orginalInformation.concilSelection == null ? "" : orginalInformation.concilSelection;
 
         conciliatorSelectionComboBox.removeAllItems();
         conciliatorSelectionComboBox.addItem("");
@@ -465,7 +465,7 @@ public class MEDConciliationPanel extends javax.swing.JPanel {
     private void populateFullConciliatorSelection() {
         String currentSelectedConcil = "";
         
-        currentSelectedConcil = conciliatorSelectionComboBox.getSelectedItem() == null ? "" : conciliatorSelectionComboBox.getSelectedItem().toString();
+       currentSelectedConcil = orginalInformation.concilSelection == null ? "" : orginalInformation.concilSelection;
        
         conciliatorSelectionComboBox.removeAllItems();
         conciliatorSelectionComboBox.addItem("");
@@ -480,7 +480,7 @@ public class MEDConciliationPanel extends javax.swing.JPanel {
     private void populateFullConciliatorReplacement() {
         String currentSelectedConcil = "";
         
-        currentSelectedConcil = replacementConciliatorComboBox.getSelectedItem() == null ? "" : replacementConciliatorComboBox.getSelectedItem().toString();
+        currentSelectedConcil = orginalInformation.concilReplacement == null ? "" : orginalInformation.concilReplacement;
        
         replacementConciliatorComboBox.removeAllItems();
         replacementConciliatorComboBox.addItem("");
@@ -500,7 +500,7 @@ public class MEDConciliationPanel extends javax.swing.JPanel {
     private void populateConciliatorReplacement() {
         String currentSelectedConcil = "";
         
-        currentSelectedConcil = replacementConciliatorComboBox.getSelectedItem() == null ? "" : replacementConciliatorComboBox.getSelectedItem().toString();
+        currentSelectedConcil = orginalInformation.concilReplacement == null ? "" : orginalInformation.concilReplacement;
         
         replacementConciliatorComboBox.removeAllItems();
         replacementConciliatorComboBox.addItem("");
