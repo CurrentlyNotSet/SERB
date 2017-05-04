@@ -60,20 +60,22 @@ public class postalSend {
                         + File.separatorChar;
             }
 
+        //Envelope Insert
+        if (!(Global.activeSection.equalsIgnoreCase("CSC") || Global.activeSection.equalsIgnoreCase("Civil Service Commission"))){
+            //Generate Envelope Insert
+            String envelopeFileName = processMailingAddressBookmarks.processDoAEnvelopeInsert(Global.templatePath, "EnvelopeInsert.docx", postalEntry);
 
-        //Generate Envelope Insert
-        String envelopeFileName = processMailingAddressBookmarks.processDoAEnvelopeInsert(Global.templatePath, "EnvelopeInsert.docx", postalEntry);
+            //Convert Envelope
+            String envelopeFilePDF = WordToPDF.createPDF(casePath, envelopeFileName);
 
-        //Convert Envelope
-        String envelopeFilePDF = WordToPDF.createPDF(casePath, envelopeFileName);
-
-        //Add Envelope To PDF Merge
-        try {
-            ut.addSource(casePath + envelopeFilePDF);
-            tempPDFList.add(casePath + envelopeFilePDF);
-            tempPDFList.add(casePath + envelopeFileName);
-        } catch (FileNotFoundException ex) {
-            SlackNotification.sendNotification(ex);
+            //Add Envelope To PDF Merge
+            try {
+                ut.addSource(casePath + envelopeFilePDF);
+                tempPDFList.add(casePath + envelopeFilePDF);
+                tempPDFList.add(casePath + envelopeFileName);
+            } catch (FileNotFoundException ex) {
+                SlackNotification.sendNotification(ex);
+            }
         }
 
         //Convert Attachments
