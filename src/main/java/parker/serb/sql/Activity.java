@@ -88,6 +88,49 @@ public class Activity {
             DbUtils.closeQuietly(stmt);
         }
     }
+    
+    public static void addActivtyNonGlobalCaseNumber(
+            String action,
+            String fileName,
+            String caseNumber) {
+        Statement stmt = null;
+
+        try {
+
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, caseNumber.split("-")[0]);
+            preparedStatement.setString(2, caseNumber.split("-")[1]);
+            preparedStatement.setString(3, caseNumber.split("-")[2]);
+            preparedStatement.setString(4, caseNumber.split("-")[3]);
+            preparedStatement.setInt(5, Global.activeUser.id);
+            preparedStatement.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
+            preparedStatement.setString(7, action.equals("") ? null : action);
+            preparedStatement.setString(8, fileName == null ? null : fileName);
+            preparedStatement.setString(9, null); //from
+            preparedStatement.setString(10, null); //to
+            preparedStatement.setString(11, null); //type
+            preparedStatement.setString(12, null); //comment
+            preparedStatement.setBoolean(13, false); //redacted
+            preparedStatement.setBoolean(14, false); //awaiting timestamp
+            preparedStatement.setBoolean(15, true); //active
+            preparedStatement.setTimestamp(16, null); //mailLog
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException ex) {
+            if(ex.getCause() instanceof SQLServerException) {
+                addActivty(action, fileName);
+            } else {
+                SlackNotification.sendNotification(ex);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+    }
 
     public static void addActivtyORGCase( String caseType, String orgNumber, String action, String fileName) {
         Statement stmt = null;
