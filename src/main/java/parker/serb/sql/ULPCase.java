@@ -596,7 +596,7 @@ public class ULPCase {
             Date startDate = new Date(System.currentTimeMillis());
             Calendar cal = Calendar.getInstance();
             cal.setTime(startDate);
-            cal.add(Calendar.MONTH, 4);
+            cal.add(Calendar.MONTH, 5);
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, caseYear);
