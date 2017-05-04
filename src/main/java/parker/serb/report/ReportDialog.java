@@ -104,18 +104,11 @@ public class ReportDialog extends javax.swing.JDialog {
                 ReportComboBox.setSelectedItem(new Item<>("0", ""));
                 break;
             case "ORG":
+            case "CSC":
+            case "Civil Service Commission":
                 smdsletterList = SMDSDocuments.loadDocumentNamesByTypeAndSection(section, "Report");
 
                 for (SMDSDocuments letter : smdsletterList) {
-                    ReportComboBox.addItem(new Item<>(String.valueOf(letter.id), letter.description));
-                }
-                ReportComboBox.setSelectedItem(new Item<>("0", ""));
-                break;
-            case "CSC":
-            case "Civil Service Commission":
-                cmdsletterList = CMDSReport.loadActiveReportsBySection(section);
-
-                for (CMDSReport letter : cmdsletterList) {
                     ReportComboBox.addItem(new Item<>(String.valueOf(letter.id), letter.description));
                 }
                 ReportComboBox.setSelectedItem(new Item<>("0", ""));
