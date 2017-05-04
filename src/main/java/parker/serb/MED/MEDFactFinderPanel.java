@@ -477,7 +477,7 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
     private void populateFFSelection() {
         String currentSelectedFF = "";
         
-        currentSelectedFF = FFSelectionComboBox.getSelectedItem() == null ? "" : FFSelectionComboBox.getSelectedItem().toString();
+        currentSelectedFF = orginalInformation.FFSelection == null ? "" : orginalInformation.FFSelection;
         
         FFSelectionComboBox.removeAllItems();
         FFSelectionComboBox.addItem("");
@@ -496,7 +496,7 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
     private void populateFullFFSelection() {
         String currentSelectedFF = "";
         
-        currentSelectedFF = FFSelectionComboBox.getSelectedItem() == null ? "" : FFSelectionComboBox.getSelectedItem().toString();
+        currentSelectedFF = orginalInformation.FFSelection == null ? "" : orginalInformation.FFSelection;
         
         FFSelectionComboBox.removeAllItems();
         FFSelectionComboBox.addItem("");
@@ -511,7 +511,7 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
     private void populateFullFFReplacement() {
         String currentSelectedFF = "";
         
-        currentSelectedFF = replacementFFComboBox.getSelectedItem() == null ? "" : replacementFFComboBox.getSelectedItem().toString();
+        currentSelectedFF = orginalInformation.FFReplacement == null ? "" : orginalInformation.FFReplacement;
         
         replacementFFComboBox.removeAllItems();
         replacementFFComboBox.addItem("");
@@ -531,7 +531,7 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
     private void populateFFReplacement() {
         String currentSelectedFF = "";
         
-        currentSelectedFF = replacementFFComboBox.getSelectedItem() == null ? "" : replacementFFComboBox.getSelectedItem().toString();
+        currentSelectedFF = orginalInformation.FFReplacement == null ? "" : orginalInformation.FFReplacement;
         
         replacementFFComboBox.removeAllItems();
         replacementFFComboBox.addItem("");
