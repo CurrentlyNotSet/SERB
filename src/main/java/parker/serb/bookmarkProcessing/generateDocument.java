@@ -88,6 +88,7 @@ public class generateDocument {
                     document = processORGbookmarks.processDoAORGWordLetter(document, toRep, toParties, ccParties, orgCase);
                     break;
                 case "CSC":
+                case "Civil Service Commission":
                     document = defaultCMDSBookmarks(document);
                     document = processCSCbookmarks.processDoACSCWordLetter(document, toParties, ccParties, cscCase);
                     break;
@@ -147,7 +148,7 @@ public class generateDocument {
         String saveDocName = null;
         ActiveXComponent eolWord = null;
 
-        if (boarddate != null){
+        if (boarddate != null) {
             eolWord = JacobCOMBridge.setWordActive(true, false, eolWord);
             if (eolWord != null) {
                 String section = Global.activeSection;
@@ -156,10 +157,9 @@ public class generateDocument {
                 }
 
                 //Setup Document
-
-                    docPath = new File(Global.activityPath
-                            + section + File.separator
-                            + "Agenda");
+                docPath = new File(Global.activityPath
+                        + section + File.separator
+                        + "Agenda");
 
                 docPath.mkdirs();
                 saveDocName = String.valueOf(new Date().getTime()) + "_"
