@@ -35,11 +35,10 @@ public class SlackNotification {
                 .displayName(Global.SLACK_USER)
                 .push(new SlackMessage(message));
 
-            SystemError.addSystemErrorEntry
-            (
+            SystemError.addSystemErrorEntry(
                     Thread.currentThread().getStackTrace()[2].getClassName(),
                     Thread.currentThread().getStackTrace()[2].getMethodName(),
-                    ex.getClass().getSimpleName(),
+                    detailedExceptionType(ex),
                     ex.toString(),
                     convertStackTrace(ex)
             );
@@ -53,4 +52,20 @@ public class SlackNotification {
         ex.printStackTrace(new PrintWriter(sw));
         return sw.toString();
     }
+
+    private static String detailedExceptionType(Exception ex) {
+        String exceptionType = ex.getClass().getSimpleName();
+
+        switch (exceptionType) {
+            case "IOException":
+                if (ex.toString().toLowerCase().contains("fatal error during installation")) {
+                    if (ex.toString().toLowerCase().contains(".dcr")) {
+                        exceptionType += " - Error Opening Default DCR Application";
+                    }
+                }
+                break;
+        }
+        return exceptionType;
+    }
+
 }
