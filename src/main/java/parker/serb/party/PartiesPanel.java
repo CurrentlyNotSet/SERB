@@ -3585,7 +3585,12 @@ public class PartiesPanel extends javax.swing.JPanel {
 
     private void EnvelopeInsertButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EnvelopeInsertButtonActionPerformed
         Audit.addAuditEntry("Envelope Insert Button Clicked");
-        new EnvelopeInsertSelectionDialog((JFrame) this.getRootPane().getParent(), true);
+        if (Global.caseNumber != null){
+            if (!Global.caseNumber.equals("")) {
+                new EnvelopeInsertSelectionDialog((JFrame) this.getRootPane().getParent(), true);
+            }
+        }
+
     }//GEN-LAST:event_EnvelopeInsertButtonActionPerformed
 
 

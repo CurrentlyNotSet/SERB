@@ -22,7 +22,9 @@ import org.apache.pdfbox.multipdf.PDFMergerUtility;
 import parker.serb.Global;
 import parker.serb.bookmarkProcessing.processMailingAddressBookmarks;
 import parker.serb.sql.Audit;
+import parker.serb.sql.CSCCase;
 import parker.serb.sql.CaseParty;
+import parker.serb.sql.ORGCase;
 import parker.serb.util.FileService;
 import parker.serb.util.NumberFormatService;
 import parker.serb.util.SlackNotification;
@@ -89,17 +91,31 @@ public class EnvelopeInsertSelectionDialog extends javax.swing.JDialog {
         DefaultTableModel model = (DefaultTableModel) personTable.getModel();
         model.setRowCount(0);
 
+        CaseParty orgObject = null;
         List<CaseParty> partyList = null;
 
         switch (Global.activeSection) {
             case "CSC":
             case "Civil Service Commission":
+                orgObject = convertCSCToCaseParty(CSCCase.loadCSCInformation());
+                partyList = CaseParty.loadORGPartiesByCase();
+                break;
             case "ORG":
+                orgObject = convertOrgToCaseParty(ORGCase.loadORGInformation());
                 partyList = CaseParty.loadORGPartiesByCase();
                 break;
             default:
                 partyList = CaseParty.loadPartiesByCaseForLetterGeneration();
                 break;
+        }
+
+        if (orgObject != null){
+            model.addRow(new Object[]{
+                orgObject,
+                SelectAllCheckBox.isSelected(),
+                orgObject.caseRelation,
+                StringUtilities.buildCasePartyNameNoPreFix(orgObject)
+            });
         }
 
         for (CaseParty party : partyList) {
@@ -132,7 +148,6 @@ public class EnvelopeInsertSelectionDialog extends javax.swing.JDialog {
         }
 
         Audit.addAuditEntry("Generted Envelope Inserts for " + CaseNumber);
-
 
         processThread();
         loadingPanel.setVisible(true);
@@ -191,6 +206,35 @@ public class EnvelopeInsertSelectionDialog extends javax.swing.JDialog {
         }
 
         FileService.openFileFullPath(new File(tempFolderPath + savedDoc));
+    }
+
+    private CaseParty convertOrgToCaseParty(ORGCase org){
+        CaseParty item = new CaseParty();
+
+        item.caseRelation = "Organization";
+
+        item.companyName = org.orgName;
+        item.address1 = org.orgAddress1;
+        item.address2 = org.orgAddress2;
+        item.city = org.orgCity;
+        item.stateCode = org.orgState;
+        item.zipcode = org.orgZip;
+
+        return item;
+    }
+
+    private CaseParty convertCSCToCaseParty(CSCCase csc){
+        CaseParty item = new CaseParty();
+
+        item.caseRelation = "Civil Service Commission";
+
+        item.companyName = csc.name;
+        item.address1 = csc.address1;
+        item.address2 = csc.address2;
+        item.city = csc.city;
+        item.stateCode = csc.state;
+        item.zipcode = csc.zipCode;
+        return item;
     }
 
     /**
