@@ -102,8 +102,8 @@ public class processCMDSbookmarks {
             }
 
             if (null != party.caseRelation) {
-                switch (party.caseRelation) {
-                    case "Appellant":
+                switch (party.caseRelation.toLowerCase()) {
+                    case "appellant":
                         if (!"".equals(appellantNames.trim())) {
                             appellantNames += ", ";
                         }
@@ -119,7 +119,7 @@ public class processCMDSbookmarks {
 
                         CMDSCCNameList += (CMDSCCNameList.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameCMDSCCBlock(party);
                         break;
-                    case "Appellant Rep":
+                    case "appellant rep":
                         if (!"".equals(appellantRep1Names.trim())) {
                             appellantRep1Names += ", ";
                         }
@@ -136,7 +136,7 @@ public class processCMDSbookmarks {
 
                         CMDSCCNameList += (CMDSCCNameList.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameCMDSCCBlock(party);
                         break;
-                    case "Appellant Rep 1":
+                    case "appellant rep 1":
                         if (!"".equals(appellantRep1Names.trim())) {
                             appellantRep1Names += ", ";
                         }
@@ -153,7 +153,7 @@ public class processCMDSbookmarks {
 
                         CMDSCCNameList += (CMDSCCNameList.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameCMDSCCBlock(party);
                         break;
-                    case "Appellant Rep 2":
+                    case "appellant rep 2":
                         if (!"".equals(appellantRep2Names.trim())) {
                             appellantRep2Names += ", ";
                         }
@@ -169,7 +169,7 @@ public class processCMDSbookmarks {
 
                         CMDSCCNameList += (CMDSCCNameList.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameCMDSCCBlock(party);
                         break;
-                    case "Appellee":
+                    case "appellee":
                         if (!"".equals(appelleeNames.trim())) {
                             appelleeNames += ", ";
                         }
@@ -185,7 +185,7 @@ public class processCMDSbookmarks {
 
                         CMDSCCNameList += (CMDSCCNameList.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameCMDSCCBlock(party);
                         break;
-                    case "Appellee Rep":
+                    case "appellee rep":
                         if (!"".equals(appelleeRep1Names.trim())) {
                             appelleeRep1Names += ", ";
                         }
@@ -201,7 +201,7 @@ public class processCMDSbookmarks {
 
                         CMDSCCNameList += (CMDSCCNameList.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameCMDSCCBlock(party);
                         break;
-                    case "Appellee Rep 1":
+                    case "appellee rep 1":
                         if (!"".equals(appelleeRep1Names.trim())) {
                             appelleeRep1Names += ", ";
                         }
@@ -217,7 +217,7 @@ public class processCMDSbookmarks {
 
                         CMDSCCNameList += (CMDSCCNameList.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameCMDSCCBlock(party);
                         break;
-                    case "Appellee Rep 2":
+                    case "appellee rep 2":
                         if (!"".equals(appelleeRep2Names.trim())) {
                             appelleeRep2Names += ", ";
                         }
@@ -233,7 +233,7 @@ public class processCMDSbookmarks {
 
                         CMDSCCNameList += (CMDSCCNameList.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameCMDSCCBlock(party);
                         break;
-                    case "Appellee 2":
+                    case "appellee 2":
                         if (!"".equals(appellee2Names.trim())) {
                             appellee2Names += ", ";
                         }
@@ -249,7 +249,7 @@ public class processCMDSbookmarks {
 
                         CMDSCCNameList += (CMDSCCNameList.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameCMDSCCBlock(party);
                         break;
-                    case "Appellee 2 Rep":
+                    case "appellee 2 rep":
                         if (!"".equals(appellee2Rep1Names.trim())) {
                             appellee2Rep1Names += ", ";
                         }
@@ -265,7 +265,7 @@ public class processCMDSbookmarks {
 
                         CMDSCCNameList += (CMDSCCNameList.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameCMDSCCBlock(party);;
                         break;
-                    case "Appellee 2 Rep 1":
+                    case "appellee 2 rep 1":
                         if (!"".equals(appellee2Rep1Names.trim())) {
                             appellee2Rep1Names += ", ";
                         }
@@ -281,7 +281,7 @@ public class processCMDSbookmarks {
 
                         CMDSCCNameList += (CMDSCCNameList.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameCMDSCCBlock(party);;
                         break;
-                    case "Appellee 2 Rep 2":
+                    case "appellee 2 rep 2":
                         if (!"".equals(appellee2Rep2Names.trim())) {
                             appellee2Rep2Names += ", ";
                         }
@@ -297,7 +297,7 @@ public class processCMDSbookmarks {
 
                         CMDSCCNameList += (CMDSCCNameList.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameCMDSCCBlock(party);
                         break;
-                    case "Courtesy Copy":
+                    case "courtesy copy":
                         if (!"".equals(courtesyCopy1Names.trim())) {
                             courtesyCopy1Names += ", ";
                         }
@@ -313,7 +313,7 @@ public class processCMDSbookmarks {
 
                         CMDSCCNameList += (CMDSCCNameList.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameCMDSCCBlock(party);
                         break;
-                    case "Courtesy Copy 1":
+                    case "courtesy copy 1":
                         if (!"".equals(courtesyCopy1Names.trim())) {
                             courtesyCopy1Names += ", ";
                         }
@@ -329,7 +329,7 @@ public class processCMDSbookmarks {
 
                         CMDSCCNameList += (CMDSCCNameList.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameCMDSCCBlock(party);
                         break;
-                    case "Courtesy Copy 2":
+                    case "courtesy copy 2":
                         if (!"".equals(courtesyCopy2Names.trim())) {
                             courtesyCopy2Names += ", ";
                         }
@@ -345,7 +345,7 @@ public class processCMDSbookmarks {
 
                         CMDSCCNameList += (CMDSCCNameList.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameCMDSCCBlock(party);
                         break;
-                    case "Courtesy Copy 3":
+                    case "courtesy copy 3":
                         if (!"".equals(courtesyCopy3Names.trim())) {
                             courtesyCopy3Names += ", ";
                         }
@@ -361,7 +361,7 @@ public class processCMDSbookmarks {
 
                         CMDSCCNameList += (CMDSCCNameList.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameCMDSCCBlock(party);
                         break;
-                    case "Courtesy Copy 4":
+                    case "courtesy copy 4":
                         if (!"".equals(courtesyCopy4Names.trim())) {
                             courtesyCopy4Names += ", ";
                         }
@@ -377,7 +377,7 @@ public class processCMDSbookmarks {
 
                         CMDSCCNameList += (CMDSCCNameList.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameCMDSCCBlock(party);
                         break;
-                    case "Other Interested Parties":
+                    case "other interested parties":
                         if (!"".equals(otherInterestedPartiesNames.trim())) {
                             otherInterestedPartiesNames += ", ";
                         }
@@ -393,6 +393,14 @@ public class processCMDSbookmarks {
 
                         CMDSCCNameList += (CMDSCCNameList.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameCMDSCCBlock(party);
                         break;
+                    default:
+                        CCList += (CCList.trim().equals("") ? "" : System.lineSeparator() + System.lineSeparator())
+                                + StringUtilities.buildCasePartyNameCMDSCCBlock(party) + " " + party.caseRelation;
+                        CCList += System.lineSeparator() + StringUtilities.buildCasePartyAddressBlock(party);
+
+                        CMDSCCNameList += (CMDSCCNameList.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameCMDSCCBlock(party);
+                        break;
+
                 }
             }
         }
