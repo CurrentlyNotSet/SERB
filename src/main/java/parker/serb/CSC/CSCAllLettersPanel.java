@@ -13,9 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -43,7 +41,7 @@ import parker.serb.util.StringUtilities;
 public class CSCAllLettersPanel extends javax.swing.JDialog {
 
     List<CSCCase> cscCaseList;
-    List<CaseParty> partyList;
+
 
     /**
      * Creates new form ORGAllLettersPanel
@@ -116,51 +114,43 @@ public class CSCAllLettersPanel extends javax.swing.JDialog {
 
         DefaultComboBoxModel dt = new DefaultComboBoxModel();
         letterComboBox.setModel(dt);
-        letterComboBox.addItem(new Item<>("0", ""));
+        letterComboBox.addItem(new Item<>(-1, ""));
 
         for (SMDSDocuments letter : letterList) {
-            letterComboBox.addItem(new Item<>(String.valueOf(letter.id), letter.description));
+            letterComboBox.addItem(new Item<>(letter, letter.description));
         }
-        letterComboBox.setSelectedItem(new Item<>("0", ""));
+        letterComboBox.setSelectedItem(new Item<>(-1, ""));
     }
 
     private void processComboBoxSelection() {
         cscCaseList = null;
-        partyList = null;
-        Calendar cal = Calendar.getInstance();
 
-        switch (letterComboBox.getSelectedItem().toString()) {
-            case "Tickler 45 days":
-                cal.set(Calendar.DAY_OF_MONTH, 15);
-                cal.add(Calendar.MONTH, 1);
-                cal.add(Calendar.MONTH, -5);
-                processOverdueNumbers(cal);
-                break;
-            case "Tickler 10 days":
-                cal.set(Calendar.DAY_OF_MONTH, 15);
-                cal.add(Calendar.MONTH, -5);
-                processOverdueNumbers(cal);
-                break;
-            case "Tickler 31 days overdue":
-                cal.set(Calendar.DAY_OF_MONTH, 15);
-                cal.add(Calendar.MONTH, -5);
-                cal.add(Calendar.MONTH, -1);
-                processOverdueNumbers(cal);
-                break;
-            default:
-                cscCaseList = CSCCase.getCSCCasesAllLettersDefault();
-                break;
+        if (letterComboBox.getSelectedItem().toString().toLowerCase().contains("past due")){
+            cscCaseList = CSCCase.getCSCCasesPastDueLettersDefault();
+        } else if (!letterComboBox.getSelectedItem().toString().trim().equals("")){
+            cscCaseList = CSCCase.getCSCCasesAllLettersDefault();
         }
 
-        FYEDuringTextField.setText(letterComboBox.getSelectedItem().toString().equals("")
-                ? "" : cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH));
-        loadTable();
+        loadTableInformation();
     }
 
-    private void processOverdueNumbers(Calendar cal) {
-        String FYEMonthName = cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH);
+    private void loadTableInformation() {
+        Thread temp = new Thread(() -> {
+            toggleSearchInteractionHandling(false);
+            jLayeredPane1.moveToFront(jPanel1);
+            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            model.setRowCount(0);
+            loadTable();
+        });
+        temp.start();
+    }
 
-        cscCaseList = CSCCase.getCSCCasesAllLettersDefault();
+    private void toggleSearchInteractionHandling(boolean enabled){
+        jTable1.setVisible(enabled);
+        jTable1.setEnabled(enabled);
+        letterComboBox.setEnabled(enabled);
+        GenerateButton.setEnabled(enabled);
+        jScrollPane1.setEnabled(enabled);
     }
 
     private void loadTable() {
@@ -172,35 +162,35 @@ public class CSCAllLettersPanel extends javax.swing.JDialog {
 
         if (cscCaseList != null) {
             for (CSCCase item : cscCaseList) {
+                List<CaseParty> partyList = CaseParty.loadORGPartiesByCase("CSC", item.cscNumber);
                 String orgVia = "";
                 String repVia = "";
 
-//                partyList = CaseParty.loadORGPartiesByCase("CSC", item.cscNumber);
-//                for (CaseParty party : partyList) {
-//                    if (party.caseRelation.equals("Representative")) {
-//                        if (item.email != null) {
-//                            EmailNumber++;
-//                            if (!repVia.trim().equals("")) {
-//                                repVia += ", ";
-//                            }
-//                            repVia += "Email";
-//                        } else if (item.address1 != null & item.city != null & item.state != null && item.zipCode != null) {
-//                            postalNumber++;
-//                            if (!repVia.trim().equals("")) {
-//                                repVia += ", ";
-//                            }
-//                            repVia += "Postal";
-//                        }
-//                    }
-//                }
-//
-//                if (item.email != null) {
-//                    EmailNumber++;
-//                    orgVia = "Email";
-//                } else if (item.address1 != null & item.city != null & item.state != null && item.zipCode != null) {
-//                    postalNumber++;
-//                    orgVia = "Postal";
-//                }
+                //CSC Org Info
+                if (!item.email.equals("")) {
+                    EmailNumber++;
+                    orgVia = "Email";
+                } else if (!item.address1.equals("") & !item.city.equals("") & !item.state.equals("") & !item.zipCode.equals("")) {
+                    postalNumber++;
+                    orgVia = "Postal";
+                }
+
+                //Party List
+                for (CaseParty party : partyList) {
+                    if (party.caseRelation.equalsIgnoreCase("Chairman")) {
+                        if (party.emailAddress != null) {
+                            if (!party.emailAddress.equals("")) {
+                                if (!item.email.equalsIgnoreCase(party.emailAddress)) {
+                                    EmailNumber++;
+                                    if (!repVia.trim().equals("")) {
+                                        repVia += ", ";
+                                    }
+                                    repVia += "Email";
+                                }
+                            }
+                        }
+                    }
+                }
 
                 model.addRow(new Object[]{
                     item.id, //id
@@ -221,80 +211,76 @@ public class CSCAllLettersPanel extends javax.swing.JDialog {
             EMailTextField.setText(letterComboBox.getSelectedItem().toString().equals("")
                     ? "" : String.valueOf(EmailNumber));
         }
+
+        jLayeredPane1.moveToBack(jPanel1);
+        toggleSearchInteractionHandling(true);
     }
 
     private void enableGenerateButton() {
-//        if (letterComboBox.getSelectedItem().toString().equals("") || cscCaseList.isEmpty()) {
-//            GenerateButton.setEnabled(false);
-//        } else {
-//            GenerateButton.setEnabled(true);
-//        }
+        if (letterComboBox.getSelectedItem().toString().equals("") || cscCaseList.isEmpty()) {
+            GenerateButton.setEnabled(false);
+        } else {
+            GenerateButton.setEnabled(true);
+        }
     }
 
     private void generateLetters() {
-        int selection = 0;
+        Item selection = (Item) letterComboBox.getSelectedItem();
+        SMDSDocuments template = (SMDSDocuments) selection.getValue();
 
-        if (!letterComboBox.getSelectedItem().toString().trim().equals("")) {
-            Item item = (Item) letterComboBox.getSelectedItem();
-            selection = Integer.parseInt(item.getValue().toString());
-        }
-
-        if (selection > 0) {
-            SMDSDocuments template = SMDSDocuments.findDocumentByID(selection);
+        if (template != null) {
             File templateFile = new File(Global.templatePath + "CSC" + File.separator + template.fileName);
 
             if (templateFile.exists()) {
-
                 for (CSCCase item : cscCaseList) {
                     String attachDocName = "";
 
                     String docName = generateDocument.generateSMDSdocument(template, 0, null, null, null, item, true);
 
-                    if (template.questionsFileName != null) {
-                        attachDocName = copyAttachmentToCaseFolder(item, template.questionsFileName);
-                    }
+                    attachDocName = copyAttachmentToCaseFolder(item, "CSCReport.pdf");
 
                     Activity.addActivtyORGCase("CSC", item.cscNumber,
                             "Created " + (template.historyDescription == null ? template.description : template.historyDescription),
                              docName);
 
-                    partyList = CaseParty.loadORGPartiesByCase("CSC", item.cscNumber);
-                    for (CaseParty party : partyList) {
-                        if (party.caseRelation.equals("Representative")) {
-
-                            if (item.email != null) {
-                                int emailID = insertEmail(template, item.cscNumber, party.emailAddress);
-                                insertGeneratedAttachementEmail(emailID, docName, true);
-                                if (!attachDocName.equals("")) {
-                                    insertGeneratedAttachementEmail(emailID, attachDocName, false);
-                                }
-
-                            } else if (party.address1 != null & party.city != null & party.stateCode != null && party.zipcode != null) {
-                                int postalID = insertPostal(template, item.cscNumber, party);
-                                insertGeneratedAttachementPostal(postalID, docName, true);
-                                if (!attachDocName.equals("")) {
-                                    insertGeneratedAttachementPostal(postalID, attachDocName, false);
-                                }
-                            }
-                        }
-                    }
-
-                    if (item.email != null) {
+                    //CSC Org Info
+                    if (!item.email.equals("")) {
                         int emailID = insertEmail(template, item.cscNumber, item.email);
                         insertGeneratedAttachementEmail(emailID, docName, true);
                         if (!attachDocName.equals("")) {
                             insertGeneratedAttachementEmail(emailID, attachDocName, false);
                         }
-                    } else if (item.address1 != null & item.city != null & item.state != null && item.zipCode != null) {
+                    } else if (!item.address1.equals("") & !item.city.equals("") & !item.state.equals("") & !item.zipCode.equals("")) {
                         int postalID = insertPostalORG(template, item);
                         insertGeneratedAttachementPostal(postalID, docName, true);
                         if (!attachDocName.equals("")) {
                             insertGeneratedAttachementPostal(postalID, attachDocName, false);
                         }
                     }
+
+                    //Party List
+                    List<CaseParty> partyList = CaseParty.loadORGPartiesByCase("CSC", item.cscNumber);
+                    for (CaseParty party : partyList) {
+                        if (party.caseRelation.equalsIgnoreCase("Chairman")) {
+                            if (party.emailAddress != null) {
+                                if (!party.emailAddress.equals("")) {
+                                    if (!item.email.equalsIgnoreCase(party.emailAddress)) {
+                                        int emailID = insertEmail(template, item.cscNumber, party.emailAddress);
+                                        insertGeneratedAttachementEmail(emailID, docName, true);
+                                        if (!attachDocName.equals("")) {
+                                            insertGeneratedAttachementEmail(emailID, attachDocName, false);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             } else {
-                WebOptionPane.showMessageDialog(Global.root, "<html><center> Sorry, unable to locate template. <br><br>" + template.fileName + "</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
+                WebOptionPane.showMessageDialog(Global.root,
+                        "<html><center> Sorry, unable to locate template. <br><br>" + template.fileName + "</center></html>",
+                        "Error",
+                        WebOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -327,9 +313,9 @@ public class CSCAllLettersPanel extends javax.swing.JDialog {
 
         EmailOut eml = new EmailOut();
 
-        eml.section = "ORG";
+        eml.section = "CSC";
         eml.caseYear = null;
-        eml.caseType = "ORG";
+        eml.caseType = "CSC";
         eml.caseMonth = null;
         eml.caseNumber = orgNumber;
         eml.to = toEmail.trim().equals("") ? null : toEmail.trim();
@@ -457,6 +443,7 @@ public class CSCAllLettersPanel extends javax.swing.JDialog {
         jLabel3.setText("Fiscal Year Ending During:");
 
         FYEDuringTextField.setBackground(new java.awt.Color(238, 238, 238));
+        FYEDuringTextField.setText("December");
         FYEDuringTextField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         FYEDuringTextField.setEnabled(false);
 
@@ -636,10 +623,11 @@ public class CSCAllLettersPanel extends javax.swing.JDialog {
 
     private void GenerateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GenerateButtonActionPerformed
         jLayeredPane1.moveToFront(jPanel1);
-
+        toggleSearchInteractionHandling(false);
         Thread temp = new Thread(() -> {
             generateLetters();
             jLayeredPane1.moveToBack(jPanel1);
+            toggleSearchInteractionHandling(true);
         });
         temp.start();
     }//GEN-LAST:event_GenerateButtonActionPerformed

@@ -280,9 +280,9 @@ public class EmailOut {
         String casetypes = "";
 
         if (Global.activeSection.equals("Hearings")) {
-            casetypes = " WHERE (C.section = 'MED' OR C.section = 'REP' OR C.section = 'ULP') ";
+            casetypes = "(C.section = 'MED' OR C.section = 'REP' OR C.section = 'ULP') ";
         } else {
-            casetypes = " WHERE C.section = '" + Global.activeSection + "' ";
+            casetypes = "C.section = '" + (Global.activeSection.equals("Civil Service Commission") ? "CSC" : Global.activeSection) + "' ";
         }
 
         Statement stmt = null;
@@ -290,9 +290,9 @@ public class EmailOut {
         try {
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "SELECT COUNT(*) AS [count] FROM emailout AS C " + casetypes
+            String sql = "SELECT COUNT(*) AS [count] FROM emailout AS C WHERE " + casetypes
                     + " UNION ALL "
-                    + " SELECT COUNT(*) AS [count] FROM postalOut AS C " + casetypes;
+                    + " SELECT COUNT(*) AS [count] FROM postalOut AS C WHERE " + casetypes;
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 

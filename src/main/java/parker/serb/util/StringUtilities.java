@@ -89,10 +89,18 @@ public class StringUtilities {
             fullName = fullName.trim() + (item.suffix.equals("") ? "" : ", " + item.suffix.trim());
         }
         if (item.nameTitle != null) {
-            fullName = fullName.trim() + (item.nameTitle.equals("") ? "" : ", " + item.nameTitle.trim());
+            if (fullName.trim().equals("")){
+                fullName = fullName.trim() + (item.nameTitle.equals("") ? "" : item.nameTitle.trim());
+            } else {
+                fullName = fullName.trim() + (item.nameTitle.equals("") ? "" : ", " + item.nameTitle.trim());
+            }
         }
         if (item.companyName != null){
+            if (fullName.trim().equals("")){
+                fullName = fullName.trim() + (item.companyName.equals("") ? "" : item.companyName.trim());
+            } else {
                 fullName = fullName.trim() + (item.companyName.equals("") ? "" : ", " + item.companyName.trim());
+            }
         }
         return fullName.trim();
     }

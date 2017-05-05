@@ -51,6 +51,7 @@ public class SMDSDocumentAddEditDialog extends javax.swing.JDialog {
     private void loadSectionComboBox() {
         sectionComboBox.removeAllItems();
         sectionComboBox.addItem("");
+        sectionComboBox.addItem("CSC");
         sectionComboBox.addItem("HRG");
         sectionComboBox.addItem("MED");
         sectionComboBox.addItem("ORG");
