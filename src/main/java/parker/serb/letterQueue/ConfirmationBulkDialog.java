@@ -5,54 +5,80 @@
  */
 package parker.serb.letterQueue;
 
-import com.alee.laf.optionpane.WebOptionPane;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-import org.apache.commons.io.FilenameUtils;
-import parker.serb.Global;
-import parker.serb.sql.EmailOut;
-import parker.serb.sql.EmailOutAttachment;
-import parker.serb.sql.PostalOut;
-import parker.serb.sql.PostalOutAttachment;
+import java.util.Date;
+import javax.swing.JTable;
+import org.apache.pdfbox.io.MemoryUsageSetting;
+import org.apache.pdfbox.multipdf.PDFMergerUtility;
 import parker.serb.util.FileService;
+import parker.serb.util.SlackNotification;
 
 /**
  *
  * @author parker
  */
-public class ConfirmationDialog extends javax.swing.JDialog {
+public class ConfirmationBulkDialog extends javax.swing.JDialog {
 
-    String type;
-    int letterID;
-    double attachmentSize = 0.0;
-    List<String> filesMissing = new ArrayList<>();
-    boolean fileInUse = false;
-    List<String> fileInUseList = new ArrayList<>();
+    JTable jTable1;
+    int failedToSendCount = 0;
 
-    public ConfirmationDialog(java.awt.Frame parent, boolean modal, String typePassed, int letterIDPassed) {
+    public ConfirmationBulkDialog(java.awt.Frame parent, boolean modal, JTable jTablePassed) {
         super(parent, modal);
         initComponents();
-        loadPanel(typePassed, letterIDPassed);
+        loadPanel(jTablePassed);
         setLocationRelativeTo(parent);
         setVisible(true);
     }
 
-    private void loadPanel(String typePassed, int letterIDPassed) {
+    private void loadPanel(JTable jTablePassed) {
         loadingPanel.setVisible(false);
-        type = typePassed;
-        letterID = letterIDPassed;
+        jTable1 = jTablePassed;
     }
 
     private void sendLetter() {
-        if (type.equals("Email")) {
-            EmailOut.markEmailReadyToSend(letterID);
-            WebOptionPane.showMessageDialog(Global.root, "<html><center>Email added to Outgoing Mail Queue</center></html>", "Process Complete", WebOptionPane.INFORMATION_MESSAGE);
-        } else if (type.equals("Postal")) {
-            String fullFilePath = postalSend.sendPostal(letterID);
+        ArrayList<String> postalList = new ArrayList<>();
+
+        for (int i = 0; i < jTable1.getRowCount(); i++) {
+            if (jTable1.getValueAt(i, 1).equals(true)) {
+                if (jTable1.getValueAt(i, 2).toString().equals("Email")){
+                    boolean success = ProcessSendingEmail.sendEmail((int) jTable1.getValueAt(i, 0));
+                    if (!success){
+                        failedToSendCount++;
+                    }
+                } else if (jTable1.getValueAt(i, 2).toString().equals("Postal")) {
+                    String file = ProcessSendingPostal.sendPostal((int) jTable1.getValueAt(i, 0));
+                    if (file.equals("")){
+                        failedToSendCount++;
+                    } else {
+                        postalList.add(file);
+                    }
+                }
+            }
+        }
+
+        if (postalList.size() > 0) {
+            String savedDoc = String.valueOf(new Date().getTime()) + "_BulkPostal.pdf";
+            PDFMergerUtility ut = new PDFMergerUtility();
+            for (String file : postalList) {
+                try {
+                    ut.addSource(new File(file));
+                } catch (FileNotFoundException ex) {
+                    SlackNotification.sendNotification(ex);
+                }
+            }
+            ut.setDestinationFileName(System.getProperty("java.io.tmpdir") + savedDoc);
+
+            try {
+                ut.mergeDocuments(MemoryUsageSetting.setupMainMemoryOnly());
+            } catch (IOException ex) {
+                SlackNotification.sendNotification(ex);
+            }
 
             //Open File
-            FileService.openFileFullPath(new File(fullFilePath));
+            FileService.openFileFullPath(new File(System.getProperty("java.io.tmpdir") + savedDoc));
         }
     }
 
@@ -62,117 +88,6 @@ public class ConfirmationDialog extends javax.swing.JDialog {
             dispose();
         });
         temp.start();
-    }
-
-    private boolean verifyFilesExist() {
-        boolean allExist = true;
-        fileInUse = false;
-        String path = "";
-        if (type.equals("Email")) {
-            EmailOut eml = EmailOut.getEmailByID(letterID);
-            List<EmailOutAttachment> attachList = EmailOutAttachment.getEmailAttachments(letterID);
-            if (Global.activeSection.equalsIgnoreCase("Civil Service Commission")
-                    || Global.activeSection.equalsIgnoreCase("CSC")
-                    || Global.activeSection.equalsIgnoreCase("ORG")) {
-                path = Global.activityPath
-                        + (Global.activeSection.equals("Civil Service Commission")
-                        ? eml.caseType : Global.activeSection) + File.separator + eml.caseNumber + File.separator;
-            } else {
-                path = Global.activityPath + File.separatorChar
-                        + Global.activeSection + File.separatorChar
-                        + eml.caseYear + File.separatorChar
-                        + (eml.caseYear + "-" + eml.caseType + "-" + eml.caseMonth + "-" + eml.caseNumber)
-                        + File.separatorChar;
-            }
-
-            for (EmailOutAttachment attach : attachList) {
-                File attachment = new File(path + attach.fileName);
-                if (!attachment.exists()) {
-                    allExist = false;
-                    filesMissing.add(attach.fileName);
-                } else {
-                    if ("docx".equalsIgnoreCase(FilenameUtils.getExtension(attach.fileName))
-                            || "doc".equalsIgnoreCase(FilenameUtils.getExtension(attach.fileName))) {
-                        if (!attachment.renameTo(attachment)) {
-                            fileInUse = true;
-                            fileInUseList.add(attach.fileName);
-                        }
-                        attachmentSize += attachment.length();
-                    }
-                }
-            }
-
-        } else if (type.equals("Postal")) {
-            PostalOut post = PostalOut.getPostalOutByID(letterID);
-            List<PostalOutAttachment> postList = PostalOutAttachment.getPostalOutAttachments(letterID);
-            if (Global.activeSection.equalsIgnoreCase("Civil Service Commission")
-                    || Global.activeSection.equalsIgnoreCase("CSC")
-                    || Global.activeSection.equalsIgnoreCase("ORG")) {
-                path = Global.activityPath
-                        + (Global.activeSection.equals("Civil Service Commission")
-                        ? post.caseType : Global.activeSection) + File.separator + post.caseNumber + File.separator;
-            } else {
-                path = Global.activityPath + File.separatorChar
-                        + Global.activeSection + File.separatorChar
-                        + post.caseYear + File.separatorChar
-                        + (post.caseYear + "-" + post.caseType + "-" + post.caseMonth + "-" + post.caseNumber)
-                        + File.separatorChar;
-            }
-
-            for (PostalOutAttachment attach : postList) {
-                File attachment = new File(path + attach.fileName);
-                if (!attachment.exists()) {
-                    allExist = false;
-                    filesMissing.add(attach.fileName);
-                } else {
-                    if ("docx".equalsIgnoreCase(FilenameUtils.getExtension(attach.fileName))
-                            || "doc".equalsIgnoreCase(FilenameUtils.getExtension(attach.fileName))) {
-                        if (!attachment.renameTo(attachment)) {
-                            fileInUse = true;
-                            fileInUseList.add(attach.fileName);
-                        }
-                        attachmentSize += attachment.length();
-                    }
-                }
-            }
-
-        }
-        return allExist;
-    }
-
-    private void missingFilesMessage() {
-        String listOfFiles = "";
-        for (String file : filesMissing) {
-            listOfFiles += "<br>" + file;
-        }
-        WebOptionPane.showMessageDialog(
-                Global.root,
-                "<html><center> Sorry, unable to locate file(s) required to send.<br>" + listOfFiles + "</center></html>",
-                "Error",
-                WebOptionPane.ERROR_MESSAGE
-        );
-    }
-
-    private void tooLargeMessage() {
-        WebOptionPane.showMessageDialog(
-                Global.root,
-                "<html><center> Sorry, email size exceeds server limit unable to send.</center></html>",
-                "Error",
-                WebOptionPane.ERROR_MESSAGE
-        );
-    }
-
-    private void filesInUseMessage() {
-        String listOfFiles = "";
-        for (String file : fileInUseList) {
-            listOfFiles += "<br>" + file;
-        }
-        WebOptionPane.showMessageDialog(
-                Global.root,
-                "<html><center> Sorry, files in use. Please close documents before sending.<br>" + listOfFiles + "</center></html>",
-                "Error",
-                WebOptionPane.ERROR_MESSAGE
-        );
     }
 
     @SuppressWarnings("unchecked")
@@ -192,7 +107,6 @@ public class ConfirmationDialog extends javax.swing.JDialog {
         jLabel9 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(340, 300));
         setMinimumSize(new java.awt.Dimension(340, 300));
         setResizable(false);
 
@@ -213,7 +127,7 @@ public class ConfirmationDialog extends javax.swing.JDialog {
             }
         });
 
-        generateButton.setText("Send Letter");
+        generateButton.setText("Send Letter(s)");
         generateButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 generateButtonActionPerformed(evt);
@@ -226,7 +140,7 @@ public class ConfirmationDialog extends javax.swing.JDialog {
 
         headerLabel2.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
         headerLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        headerLabel2.setText("to send this letter?");
+        headerLabel2.setText("to send the letter(s)?");
 
         javax.swing.GroupLayout InfoPanelLayout = new javax.swing.GroupLayout(InfoPanel);
         InfoPanel.setLayout(InfoPanelLayout);
@@ -238,7 +152,7 @@ public class ConfirmationDialog extends javax.swing.JDialog {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, InfoPanelLayout.createSequentialGroup()
                         .addComponent(cancelButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(generateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(generateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(headerLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(headerLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 320, Short.MAX_VALUE)
                     .addComponent(headerLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -328,24 +242,9 @@ public class ConfirmationDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
-        if (verifyFilesExist()) {
-            if (Global.EMAIL_SIZE_LIMIT >= attachmentSize) {
-                if (fileInUse) {
-                    filesInUseMessage();
-                } else {
-                    processThread();
-                    loadingPanel.setVisible(true);
-                    InfoPanel.setVisible(false);
-                    jLayeredPane.moveToFront(loadingPanel);
-                    generateButton.setEnabled(false);
-                    cancelButton.setEnabled(false);
-                }
-            } else {
-                tooLargeMessage();
-            }
-        } else {
-            missingFilesMessage();
-        }
+        loadingPanel.setVisible(true);
+        jLayeredPane.moveToFront(loadingPanel);
+        processThread();
     }//GEN-LAST:event_generateButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed

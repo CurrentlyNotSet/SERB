@@ -100,6 +100,8 @@ public class Global {
     //bookmark loop limit
     public static final int BOOKMARK_LIMIT = 10;
 
+    public static final int LETTER_QUEUE_SELECT_LIMIT = 50;
+
     //email File size Limit (22MB  25MB is the max, leaving overhead for conversions)
     public static final double EMAIL_SIZE_LIMIT = 22000000;
 
