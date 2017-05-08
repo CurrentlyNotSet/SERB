@@ -54,8 +54,20 @@ public class LetterQueuePanel extends javax.swing.JDialog {
 
     private void loadPanel() {
         headerLabel.setText(Global.activeSection + " Letter Queue");
+        setCheckboxText();
         setColumnWidth();
         loadPanelInformation();
+    }
+
+    private void setCheckboxText() {
+        switch (typeComboBox.getSelectedItem().toString()) {
+            case "Email":
+                selectAllCheckBox.setText("Select All");
+                break;
+            default:
+                selectAllCheckBox.setText("Select Top " + Global.LETTER_QUEUE_SELECT_LIMIT);
+                break;
+        }
     }
 
     private void setColumnWidth() {
@@ -64,41 +76,46 @@ public class LetterQueuePanel extends javax.swing.JDialog {
         jTable1.getColumnModel().getColumn(0).setPreferredWidth(0);
         jTable1.getColumnModel().getColumn(0).setMaxWidth(0);
 
+        //Active (Yes/No)
+        jTable1.getColumnModel().getColumn(1).setMinWidth(40);
+        jTable1.getColumnModel().getColumn(1).setWidth(40);
+        jTable1.getColumnModel().getColumn(1).setMaxWidth(40);
+
         // Type
-        jTable1.getColumnModel().getColumn(1).setMinWidth(60);
-        jTable1.getColumnModel().getColumn(1).setPreferredWidth(60);
-        jTable1.getColumnModel().getColumn(1).setMaxWidth(60);
+        jTable1.getColumnModel().getColumn(2).setMinWidth(60);
+        jTable1.getColumnModel().getColumn(2).setPreferredWidth(60);
+        jTable1.getColumnModel().getColumn(2).setMaxWidth(60);
 
         // Case Number
-        jTable1.getColumnModel().getColumn(2).setMinWidth(125);
-        jTable1.getColumnModel().getColumn(2).setPreferredWidth(125);
-        jTable1.getColumnModel().getColumn(2).setMaxWidth(125);
+        jTable1.getColumnModel().getColumn(3).setMinWidth(125);
+        jTable1.getColumnModel().getColumn(3).setPreferredWidth(125);
+        jTable1.getColumnModel().getColumn(3).setMaxWidth(125);
 
         // Creation Date
-        jTable1.getColumnModel().getColumn(3).setMinWidth(100);
-        jTable1.getColumnModel().getColumn(3).setPreferredWidth(100);
-        jTable1.getColumnModel().getColumn(3).setMaxWidth(100);
-
-        //UserID (4)
         jTable1.getColumnModel().getColumn(4).setMinWidth(100);
         jTable1.getColumnModel().getColumn(4).setPreferredWidth(100);
         jTable1.getColumnModel().getColumn(4).setMaxWidth(100);
 
-        //To  (5)
+        //UserID (5)
+        jTable1.getColumnModel().getColumn(5).setMinWidth(100);
+        jTable1.getColumnModel().getColumn(5).setPreferredWidth(100);
+        jTable1.getColumnModel().getColumn(5).setMaxWidth(100);
+
+        //To  (6)
         //NO Preference
 
-        //Subject  (6)
+        //Subject  (7)
         //NO Preference
 
         // Attachment Number
-        jTable1.getColumnModel().getColumn(7).setMinWidth(100);
-        jTable1.getColumnModel().getColumn(7).setPreferredWidth(100);
-        jTable1.getColumnModel().getColumn(7).setMaxWidth(100);
-
-        // Suggested Send Date
         jTable1.getColumnModel().getColumn(8).setMinWidth(100);
         jTable1.getColumnModel().getColumn(8).setPreferredWidth(100);
         jTable1.getColumnModel().getColumn(8).setMaxWidth(100);
+
+        // Suggested Send Date
+        jTable1.getColumnModel().getColumn(9).setMinWidth(100);
+        jTable1.getColumnModel().getColumn(9).setPreferredWidth(100);
+        jTable1.getColumnModel().getColumn(9).setMaxWidth(100);
 
     }
 
@@ -118,6 +135,7 @@ public class LetterQueuePanel extends javax.swing.JDialog {
 
                     model.addRow(new Object[]{
                         item.id, // ID
+                        selectAllCheckBox.isSelected(),
                         item.type, // Type
                         item.fullCaseNumber, // CaseNumber
                         item.creationDate, //Date Created
@@ -132,49 +150,45 @@ public class LetterQueuePanel extends javax.swing.JDialog {
         }
         jLayeredPane1.moveToBack(jPanel1);
         toggleSearchInteractionHandling(true);
-        deleteButton.setEnabled(false);
-        sendButton.setEnabled(false);
     }
 
     private void processTableAction(java.awt.event.MouseEvent evt) {
-        if(evt.getClickCount() == 1) {
-            deleteButton.setEnabled(true);
-            sendButton.setEnabled(true);
-        } else if(evt.getClickCount() >= 2) {
-            deleteButton.setEnabled(false);
-            sendButton.setEnabled(false);
-            if (jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().equals("Email")){
+        if(evt.getClickCount() >= 2) {
+            if (jTable1.getValueAt(jTable1.getSelectedRow(), 2).toString().equals("Email")){
                 new DetailedEmailOutPanel(Global.root, true, (int) jTable1.getValueAt(jTable1.getSelectedRow(), 0));
-            } else if (jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().equals("Postal")) {
+            } else if (jTable1.getValueAt(jTable1.getSelectedRow(), 2).toString().equals("Postal")) {
                 new DetailedPostalOutPanel(Global.root, true, (int) jTable1.getValueAt(jTable1.getSelectedRow(), 0));
             }
-            loadLetterQueue();
         }
     }
 
     private void processSendButton() {
-        if (jTable1.getSelectedRow() >= 0){
-            new ConfirmationDialog(Global.root, true,
-                    jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString(),
-                    (int) jTable1.getValueAt(jTable1.getSelectedRow(), 0));
-            loadPanelInformation();
-        }
+            //OLD Way, Single Use only
+            new ConfirmationBulkDialog(Global.root, true, jTable1);
+
+//            //OLD Way, Single Use only
+//            new ConfirmationDialog(Global.root, true,
+//                    jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString(),
+//                    (int) jTable1.getValueAt(jTable1.getSelectedRow(), 0));
     }
 
     private void processDeleteButton() {
-        int answer = WebOptionPane.showConfirmDialog(this, "Are you sure you wish to remove this message from queue.", "Remove", WebOptionPane.YES_NO_OPTION);
+        int answer = WebOptionPane.showConfirmDialog(this, "Are you sure you wish to remove the message(s) from queue.", "Remove", WebOptionPane.YES_NO_OPTION);
         if (answer == WebOptionPane.YES_OPTION) {
-            int rowID = (int) jTable1.getValueAt(jTable1.getSelectedRow(), 0);
+            for (int i = 0; i < jTable1.getRowCount(); i++) {
+                if (jTable1.getValueAt(i, 1).equals(true)) {
+                    int rowID = (int) jTable1.getValueAt(jTable1.getSelectedRow(), 0);
 
-            if (jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().equals("Email")){
-                EmailOut.removeEmail(rowID);
-                EmailOutAttachment.removeEmailAttachment(rowID);
-            } else if (jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().equals("Postal")) {
-                PostalOut.removeEntry(rowID);
-                PostalOutAttachment.removeEntry(rowID);
+                    if (jTable1.getValueAt(i, 2).toString().equals("Email")) {
+                        EmailOut.removeEmail(rowID);
+                        EmailOutAttachment.removeEmailAttachment(rowID);
+                    } else if (jTable1.getValueAt(i, 2).toString().equals("Postal")) {
+                        PostalOut.removeEntry(rowID);
+                        PostalOutAttachment.removeEntry(rowID);
+                    }
+                }
             }
         }
-        loadPanelInformation();
     }
 
     private void loadPanelInformation() {
@@ -184,7 +198,17 @@ public class LetterQueuePanel extends javax.swing.JDialog {
             DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
             model.setRowCount(0);
 
-            queueList = LetterQueue.getLetterQueueByGlobalSection();
+            switch (typeComboBox.getSelectedItem().toString()) {
+                case "Email":
+                    queueList = LetterQueue.getLetterQueueEmailByGlobalSection();
+                    break;
+                case "Postal":
+                    queueList = LetterQueue.getLetterQueuePostalByGlobalSection();
+                    break;
+                default:
+                    queueList = LetterQueue.getLetterQueueAllByGlobalSection();
+                    break;
+            }
             loadLetterQueue();
         });
         temp.start();
@@ -194,6 +218,43 @@ public class LetterQueuePanel extends javax.swing.JDialog {
         searchTextBox.setEnabled(enabled);
         clearSearchButton.setEnabled(enabled);
         jScrollPane1.setEnabled(enabled);
+    }
+
+    private boolean verifySelectionSize() {
+        int count = 0;
+        if (typeComboBox.getSelectedItem().toString().equals("Both") || typeComboBox.getSelectedItem().toString().equals("Postal")) {
+            //Get Count from table
+            for (int i = 0; i < jTable1.getRowCount(); i++) {
+                if (jTable1.getValueAt(i, 1).equals(true)) {
+                    count++;
+                }
+            }
+            if (count == 0){
+                WebOptionPane.showMessageDialog(
+                        Global.root,
+                        "<html><center> Sorry, unable to process. "
+                                + "<br><br>No items are currently selected.</center></html>",
+                        "No Items Selected",
+                        WebOptionPane.WARNING_MESSAGE
+                );
+                return false;
+            }
+
+
+            //Compare Count
+            if (count > Global.LETTER_QUEUE_SELECT_LIMIT) {
+                WebOptionPane.showMessageDialog(
+                        Global.root,
+                        "<html><center> Sorry, unable to process. "
+                                + "<br><br>Maximum message selection limit exceeded"
+                                + "<br><br>Please remove " + (count - Global.LETTER_QUEUE_SELECT_LIMIT) + " items</center></html>",
+                        "Too Large",
+                        WebOptionPane.WARNING_MESSAGE
+                );
+                return false;
+            }
+        }
+        return true;
     }
 
     @SuppressWarnings("unchecked")
@@ -212,6 +273,9 @@ public class LetterQueuePanel extends javax.swing.JDialog {
         jLabel4 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jLabel2 = new javax.swing.JLabel();
+        typeComboBox = new javax.swing.JComboBox<>();
+        selectAllCheckBox = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -220,7 +284,6 @@ public class LetterQueuePanel extends javax.swing.JDialog {
         headerLabel.setText("<<Letter Queue>>");
 
         sendButton.setText("Send");
-        sendButton.setEnabled(false);
         sendButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 sendButtonActionPerformed(evt);
@@ -234,6 +297,7 @@ public class LetterQueuePanel extends javax.swing.JDialog {
             }
         });
 
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel1.setText("Search:");
 
         searchTextBox.addCaretListener(new javax.swing.event.CaretListener() {
@@ -250,7 +314,6 @@ public class LetterQueuePanel extends javax.swing.JDialog {
         });
 
         deleteButton.setText("Delete");
-        deleteButton.setEnabled(false);
         deleteButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 deleteButtonActionPerformed(evt);
@@ -288,12 +351,19 @@ public class LetterQueuePanel extends javax.swing.JDialog {
 
             },
             new String [] {
-                "ID", "Type", "Case Number", "Created", "Created By", "To", "Subject", "Attachments", "Send Date"
+                "ID", "", "Type", "Case Number", "Created", "Created By", "To", "Subject", "Attachments", "Send Date"
             }
         ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, true, false, false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -306,8 +376,28 @@ public class LetterQueuePanel extends javax.swing.JDialog {
             }
         });
         jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(1).setResizable(false);
+        }
 
         jLayeredPane1.add(jScrollPane1);
+
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel2.setText("Type:");
+
+        typeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Both", "Email", "Postal" }));
+        typeComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                typeComboBoxActionPerformed(evt);
+            }
+        });
+
+        selectAllCheckBox.setText("Select All");
+        selectAllCheckBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                selectAllCheckBoxMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -316,20 +406,30 @@ public class LetterQueuePanel extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(headerLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(cancelButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 402, Short.MAX_VALUE)
-                        .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 402, Short.MAX_VALUE)
-                        .addComponent(sendButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(searchTextBox)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(clearSearchButton)))
-                .addContainerGap())
+                        .addGap(10, 10, 10)
+                        .addComponent(selectAllCheckBox)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(headerLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(cancelButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 402, Short.MAX_VALUE)
+                                .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 402, Short.MAX_VALUE)
+                                .addComponent(sendButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(typeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(searchTextBox)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(clearSearchButton)))
+                        .addContainerGap())))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addContainerGap()
@@ -344,12 +444,16 @@ public class LetterQueuePanel extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(headerLabel)
-                .addGap(22, 22, 22)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
+                    .addComponent(clearSearchButton)
                     .addComponent(searchTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(clearSearchButton))
-                .addGap(472, 472, 472)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2)
+                    .addComponent(typeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(selectAllCheckBox)
+                .addGap(458, 458, 458)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(sendButton)
                     .addComponent(cancelButton)
@@ -366,7 +470,10 @@ public class LetterQueuePanel extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
+    if(verifySelectionSize()){
         processSendButton();
+        loadPanelInformation();
+    }
     }//GEN-LAST:event_sendButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
@@ -387,7 +494,28 @@ public class LetterQueuePanel extends javax.swing.JDialog {
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         processDeleteButton();
+        loadPanelInformation();
     }//GEN-LAST:event_deleteButtonActionPerformed
+
+    private void typeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_typeComboBoxActionPerformed
+        setCheckboxText();
+        loadPanelInformation();
+    }//GEN-LAST:event_typeComboBoxActionPerformed
+
+    private void selectAllCheckBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_selectAllCheckBoxMouseClicked
+        switch (typeComboBox.getSelectedItem().toString()) {
+            case "Email":
+                for (int i = 0; i < jTable1.getRowCount(); i++) {
+                    jTable1.getModel().setValueAt(selectAllCheckBox.isSelected(), i, 1);
+                }
+                break;
+            default:
+                for (int i = 0; i < Global.LETTER_QUEUE_SELECT_LIMIT; i++) {
+                    jTable1.getModel().setValueAt(selectAllCheckBox.isSelected(), i, 1);
+                }
+                break;
+        }
+    }//GEN-LAST:event_selectAllCheckBoxMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;
@@ -395,12 +523,15 @@ public class LetterQueuePanel extends javax.swing.JDialog {
     private javax.swing.JButton deleteButton;
     private javax.swing.JLabel headerLabel;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField searchTextBox;
+    private javax.swing.JCheckBox selectAllCheckBox;
     private javax.swing.JButton sendButton;
+    private javax.swing.JComboBox<String> typeComboBox;
     // End of variables declaration//GEN-END:variables
 }
