@@ -22,7 +22,7 @@ public class Global {
     // Major Version       3 -- will stay 3
     // Minor Version       0 -- update with larger enhancments
     // Maintenence Version 0 -- bug fix releases
-    public static final String APPLICATION_VERSION = "3.1.25";
+    public static final String APPLICATION_VERSION = "3.1.26";
 
     //All Date and Time formatters
     public static SimpleDateFormat mmddyyyyhhmma = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
@@ -99,6 +99,8 @@ public class Global {
 
     //bookmark loop limit
     public static final int BOOKMARK_LIMIT = 10;
+
+    public static final int LETTER_QUEUE_SELECT_LIMIT = 50;
 
     //email File size Limit (22MB  25MB is the max, leaving overhead for conversions)
     public static final double EMAIL_SIZE_LIMIT = 22000000;

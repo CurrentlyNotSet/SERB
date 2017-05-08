@@ -32,7 +32,7 @@ import parker.serb.util.SlackNotification;
  */
 public class postalSend {
 
-    public static void sendPostal(int sendID) {
+    public static String sendPostal(int sendID) {
 
         //Set up Initial Merge Utility
         PDFMergerUtility ut = new PDFMergerUtility();
@@ -144,9 +144,6 @@ public class postalSend {
             SlackNotification.sendNotification(ex);
         }
 
-        //Open File
-        FileService.openFileFullPath(new File(casePath + savedDoc));
-
         //Clean up temp PDFs
         for (String tempPDF : tempPDFList) {
             new File(tempPDF).delete();
@@ -203,6 +200,7 @@ public class postalSend {
 //                    break;
 //            }
 //        }
+        return casePath + savedDoc;
     }
 
 }

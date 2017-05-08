@@ -147,7 +147,7 @@ public class mediaCMDSFileDialog_NEW extends javax.swing.JDialog {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if(e.getClickCount() == 2) {
-                    FileService.openScanFile(fileNameTextBox.getText().trim(), selectedSection);
+                    FileService.openMediaFile(fileNameTextBox.getText().trim(), selectedSection);
                 }
             }
 
