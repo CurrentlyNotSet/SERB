@@ -20,8 +20,7 @@ public class processCSCbookmarks {
 
     public static Dispatch processDoACSCWordLetter(Dispatch Document, List<Integer> toParties, List<Integer> ccParties, CSCCase cscCase) {
         //get basic information
-        CSCCase item = CSCCase.loadCSCInformation();
-        List<CaseParty> partyList = CaseParty.loadPartiesByCase(null, "CSC", null, item.cscNumber);
+        List<CaseParty> partyList = CaseParty.loadPartiesByCase(null, "CSC", null, cscCase.cscNumber);
 
         String repNames = "";
         String officerNames = "";
@@ -56,11 +55,11 @@ public class processCSCbookmarks {
         String orgAddressBlock = "";
         CaseParty cscAddress = new CaseParty();
 
-        cscAddress.address1 = item.address1;
-        cscAddress.address2 = item.address2;
-        cscAddress.city = item.city;
-        cscAddress.stateCode = item.state;
-        cscAddress.zipcode = item.zipCode;
+        cscAddress.address1 = cscCase.address1;
+        cscAddress.address2 = cscCase.address2;
+        cscAddress.city = cscCase.city;
+        cscAddress.stateCode = cscCase.state;
+        cscAddress.zipcode = cscCase.zipCode;
         orgAddressBlock = StringUtilities.buildAddressBlockWithLineBreaks(cscAddress);
 
 
@@ -70,12 +69,12 @@ public class processCSCbookmarks {
             processBookmark.process("RepSalutation" + (i == 0 ? "" : i), repNames, Document);
 
             processBookmark.process("CommissionAddressBlock" + (i == 0 ? "" : i), orgAddressBlock, Document);
-            processBookmark.process("CommissionName" + (i == 0 ? "" : i), item.name, Document);
-            processBookmark.process("CommissionAddress1" + (i == 0 ? "" : i), item.address1, Document);
-            processBookmark.process("CommissionAddress2" + (i == 0 ? "" : i), item.address2, Document);
-            processBookmark.process("CommissionCity" + (i == 0 ? "" : i), item.city, Document);
-            processBookmark.process("CommissionState" + (i == 0 ? "" : i), item.state, Document);
-            processBookmark.process("CommissionZip" + (i == 0 ? "" : i), item.zipCode, Document);
+            processBookmark.process("CommissionName" + (i == 0 ? "" : i), cscCase.name, Document);
+            processBookmark.process("CommissionAddress1" + (i == 0 ? "" : i), cscCase.address1, Document);
+            processBookmark.process("CommissionAddress2" + (i == 0 ? "" : i), cscCase.address2, Document);
+            processBookmark.process("CommissionCity" + (i == 0 ? "" : i), cscCase.city, Document);
+            processBookmark.process("CommissionState" + (i == 0 ? "" : i), cscCase.state, Document);
+            processBookmark.process("CommissionZip" + (i == 0 ? "" : i), cscCase.zipCode, Document);
         }
 
         return Document;

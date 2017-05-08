@@ -177,7 +177,7 @@ public class LetterQueuePanel extends javax.swing.JDialog {
         if (answer == WebOptionPane.YES_OPTION) {
             for (int i = 0; i < jTable1.getRowCount(); i++) {
                 if (jTable1.getValueAt(i, 1).equals(true)) {
-                    int rowID = (int) jTable1.getValueAt(jTable1.getSelectedRow(), 0);
+                    int rowID = (int) jTable1.getValueAt(i, 0);
 
                     if (jTable1.getValueAt(i, 2).toString().equals("Email")) {
                         EmailOut.removeEmail(rowID);
@@ -194,6 +194,7 @@ public class LetterQueuePanel extends javax.swing.JDialog {
     private void loadPanelInformation() {
         Thread temp = new Thread(() -> {
             toggleSearchInteractionHandling(false);
+            selectAllCheckBox.setSelected(false);
             jLayeredPane1.moveToFront(jPanel1);
             DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
             model.setRowCount(0);
@@ -510,7 +511,9 @@ public class LetterQueuePanel extends javax.swing.JDialog {
                 }
                 break;
             default:
-                for (int i = 0; i < Global.LETTER_QUEUE_SELECT_LIMIT; i++) {
+                for (int i = 0;
+                        i < (jTable1.getRowCount() > Global.LETTER_QUEUE_SELECT_LIMIT ? Global.LETTER_QUEUE_SELECT_LIMIT : jTable1.getRowCount());
+                        i++) {
                     jTable1.getModel().setValueAt(selectAllCheckBox.isSelected(), i, 1);
                 }
                 break;
