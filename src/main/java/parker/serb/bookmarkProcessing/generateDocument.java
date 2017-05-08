@@ -96,6 +96,10 @@ public class generateDocument {
                     break;
             }
 
+            if (Global.activeSection.equals("Hearings")){
+                document = processHearingsbookmarks.processDoAHearingsWordLetter(document, section);
+            }
+
             Dispatch WordBasic = (Dispatch) Dispatch.call(eolWord, "WordBasic").getDispatch();
             String newFilePath = docPath + File.separator + saveDocName;
             Dispatch.call(WordBasic, "FileSaveAs", newFilePath, new Variant(16));
