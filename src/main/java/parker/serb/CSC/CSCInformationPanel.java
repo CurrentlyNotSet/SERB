@@ -41,7 +41,7 @@ public class CSCInformationPanel extends javax.swing.JPanel {
         loadFiscalYearEndingComboBox();
         loadDueDateComboBox();
     }
-    
+
     private void addListeners() {
         cscEmailTextBox.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -60,23 +60,23 @@ public class CSCInformationPanel extends javax.swing.JPanel {
             }
         });
     }
-    
+
     private void loadOrgTypeComboBox() {
         cscTypeComboBox.removeAllItems();
         cscTypeComboBox.addItem("");
         cscTypeComboBox.addItem("Municipal");
         cscTypeComboBox.addItem("Township");
     }
-    
+
     private void loadStateComboBox() {
         cscStateComboBox.removeAllItems();
         cscStateComboBox.addItem("");
-        
+
         for (String state : Global.STATES) {
             cscStateComboBox.addItem(state);
         }
     }
-    
+
     private void loadFiscalYearEndingComboBox() {
         fiscalYearEndingComboBox.removeAllItems();
         fiscalYearEndingComboBox.addItem("");
@@ -93,7 +93,7 @@ public class CSCInformationPanel extends javax.swing.JPanel {
         fiscalYearEndingComboBox.addItem("November");
         fiscalYearEndingComboBox.addItem("December");
     }
-    
+
     private void loadDueDateComboBox() {
         dueDateComboBox.removeAllItems();
         dueDateComboBox.addItem("");
@@ -110,7 +110,7 @@ public class CSCInformationPanel extends javax.swing.JPanel {
         dueDateComboBox.addItem("November");
         dueDateComboBox.addItem("December");
     }
-    
+
     public void clearAll() {
         cscNameTextBox.setText("");
         alsoKnownAsTextBox.setText("");
@@ -126,7 +126,7 @@ public class CSCInformationPanel extends javax.swing.JPanel {
         cscZipTextBox.setText("");
         cscCountyComboBox.setSelectedItem("");
         cscEmailTextBox.setText("");
-        
+
         fiscalYearEndingComboBox.setSelectedItem("");
         activitiesLastFiledTextBox.setText("");
         lastNotificationTextBox.setText("");
@@ -137,11 +137,11 @@ public class CSCInformationPanel extends javax.swing.JPanel {
         previousFileDateTextBox.setText("");
         charterCheckBox.setSelected(false);
     }
-    
+
     public void enableUpdate() {
         Global.root.getjButton2().setText("Save");
         Global.root.getjButton9().setVisible(true);
-        
+
         cscNameTextBox.setEnabled(true);
         cscNameTextBox.setBackground(Color.white);
         alsoKnownAsTextBox.setEnabled(true);
@@ -167,7 +167,7 @@ public class CSCInformationPanel extends javax.swing.JPanel {
         cscCountyComboBox.setEnabled(true);
         cscEmailTextBox.setEnabled(true);
         cscEmailTextBox.setBackground(Color.white);
-        
+
         fiscalYearEndingComboBox.setEnabled(true);
         dueDateComboBox.setEnabled(true);
         activitiesLastFiledTextBox.setEnabled(true);
@@ -182,11 +182,11 @@ public class CSCInformationPanel extends javax.swing.JPanel {
         previousFileDateTextBox.setEnabled(true);
         charterCheckBox.setEnabled(true);
     }
-    
+
     public void disableUpdate(boolean save) {
         Global.root.getjButton2().setText("Update");
         Global.root.getjButton9().setVisible(false);
-        
+
         cscNameTextBox.setEnabled(false);
         cscNameTextBox.setBackground(new Color(238,238,238));
         alsoKnownAsTextBox.setEnabled(false);
@@ -212,7 +212,7 @@ public class CSCInformationPanel extends javax.swing.JPanel {
         cscCountyComboBox.setEnabled(false);
         cscEmailTextBox.setEnabled(false);
         cscEmailTextBox.setBackground(new Color(238,238,238));
-        
+
         fiscalYearEndingComboBox.setEnabled(false);
         dueDateComboBox.setEnabled(false);
         activitiesLastFiledTextBox.setEnabled(false);
@@ -230,19 +230,19 @@ public class CSCInformationPanel extends javax.swing.JPanel {
         if(save) {
             saveInformation();
         }
-        
+
         loadInformation();
     }
-    
+
     private void saveInformation() {
         CSCCase newInformation = new CSCCase();
-        
+
         newInformation.name = cscNameTextBox.getText().trim().equals("") ? null : cscNameTextBox.getText().trim();
         newInformation.alsoKnownAs = alsoKnownAsTextBox.getText().trim().equals("") ? null : alsoKnownAsTextBox.getText().trim();
         newInformation.type = cscTypeComboBox.getSelectedItem().toString().trim().equals("") ? null : cscTypeComboBox.getSelectedItem().toString();
         newInformation.cscNumber = cscNumberTextBox.getText().trim().equals("") ? null : cscNumberTextBox.getText().trim();
-        newInformation.address1 = cscAddress1TextBox.getText().trim().equals("") ? null : NumberFormatService.convertPhoneNumberToString(cscAddress1TextBox.getText());
-        newInformation.address2 = cscAddress2TextBox.getText().trim().equals("") ? null : NumberFormatService.convertPhoneNumberToString(cscAddress2TextBox.getText());
+        newInformation.address1 = cscAddress1TextBox.getText().trim().equals("") ? null : cscAddress1TextBox.getText();
+        newInformation.address2 = cscAddress2TextBox.getText().trim().equals("") ? null : cscAddress2TextBox.getText();
         newInformation.city = cscCityTextBox.getText().trim().equals("") ? null : cscCityTextBox.getText().trim();
         newInformation.state = cscStateComboBox.getSelectedItem().toString().trim().equals("") ? null : cscStateComboBox.getSelectedItem().toString();
         newInformation.zipCode = cscZipTextBox.getText().trim().equals("") ? null : cscZipTextBox.getText().trim();
@@ -261,16 +261,16 @@ public class CSCInformationPanel extends javax.swing.JPanel {
         newInformation.valid = validCheckBox.isSelected();
         newInformation.county = cscCountyComboBox.getSelectedItem().toString().trim().equals("") ? null : cscCountyComboBox.getSelectedItem().toString();
         CSCCase.updateCSCInformation(newInformation, orginalInformation);
-        
+
         if(!newInformation.name.equals(orginalInformation.name)) {
             Global.root.getcSCHeaderPanel1().loadCases();
             Global.root.getcSCHeaderPanel1().getjComboBox2().setSelectedItem(newInformation.name);
         }
     }
-    
+
     public void loadInformation() {
         orginalInformation = CSCCase.loadCSCInformation();
-        
+
         cscNameTextBox.setText(orginalInformation.name != null ? orginalInformation.name : "");
         alsoKnownAsTextBox.setText(orginalInformation.alsoKnownAs != null ? orginalInformation.alsoKnownAs : "");
         cscNumberTextBox.setText(orginalInformation.cscNumber != null ? orginalInformation.cscNumber : "");
@@ -285,7 +285,7 @@ public class CSCInformationPanel extends javax.swing.JPanel {
         cscZipTextBox.setText(orginalInformation.zipCode != null ? orginalInformation.zipCode : "");
         cscCountyComboBox.setSelectedItem(orginalInformation.county != null ? orginalInformation.county : "");
         cscEmailTextBox.setText(orginalInformation.email != null ? orginalInformation.email : "");
-        
+
         //right side
         fiscalYearEndingComboBox.setSelectedItem(orginalInformation.fiscalYearEnding != null ? orginalInformation.fiscalYearEnding : "");
         dueDateComboBox.setSelectedItem(orginalInformation.dueDate != null ? orginalInformation.dueDate : "");
@@ -297,7 +297,7 @@ public class CSCInformationPanel extends javax.swing.JPanel {
         statutoryCheckBox.setSelected(orginalInformation.statutory == true);
         validCheckBox.setSelected(orginalInformation.valid == true);
     }
-    
+
     private void clearDate(WebDateField dateField, MouseEvent evt) {
         if(evt.getButton() == MouseEvent.BUTTON3 && dateField.isEnabled()) {
             ClearDateDialog dialog = new ClearDateDialog((JFrame) Global.root, true);
