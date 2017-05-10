@@ -21,6 +21,8 @@ public class DocketNotifications {
 
     public static void addNotification(String caseNumber, String section, int mediatorID) {
         Statement stmt = null;
+        String userEmail = User.getEmailByID(mediatorID);
+
 
         try {
             stmt = Database.connectToDB().createStatement();
@@ -29,10 +31,13 @@ public class DocketNotifications {
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, section);
-            preparedStatement.setString(2, User.getEmailByID(mediatorID));
+            preparedStatement.setString(2, userEmail);
             preparedStatement.setString(3, "New Documents for " + caseNumber);
             preparedStatement.setString(4, "New Documents have been filed for " + caseNumber + ".\n\nPlease check SMDS for more information.");
-            preparedStatement.executeUpdate();
+
+            if (!userEmail.equals("")){
+                preparedStatement.executeUpdate();
+            }
 
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);

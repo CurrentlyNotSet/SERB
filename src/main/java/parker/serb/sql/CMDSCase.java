@@ -644,8 +644,8 @@ public class CMDSCase {
         try {
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "Select emailAddress "
-                    + "from Users"
+            String sql = "Select emailAddress"
+                    + " from Users"
                     + " INNER JOIN CMDSCase"
                     + " ON CMDSCase.aljID = Users.id"
                     + " where caseYear = ? and caseNumber = ?";

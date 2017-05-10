@@ -63,6 +63,7 @@ public class CMDSAddHearingDialog extends javax.swing.JDialog {
         for (HearingRoom room : HearingRoom.loadActiveHearingRooms()){
             hearingRoomComboBox.addItem(room.roomAbbreviation);
         }
+        hearingRoomComboBox.addItem("None");
     }
 
     private void addListeners() {
@@ -191,6 +192,11 @@ public class CMDSAddHearingDialog extends javax.swing.JDialog {
         hearingTypeComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (hearingTypeComboBox.getSelectedItem() != null){
+                    if (hearingTypeComboBox.getSelectedItem().toString().equals("TC")){
+                        hearingRoomComboBox.setSelectedItem("None");
+                    }
+                }
                 enableSaveButton();
             }
         });

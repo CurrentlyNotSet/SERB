@@ -157,11 +157,12 @@ public class processAnnualReport {
                 + "OR REPCase.boardActionType LIKE '%approve rbt%')");
         processBookmark.process("threezero", String.valueOf(threezero), Document);
         //31
-        long threeone = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM BoardMeeting LEFT JOIN ULPCase ON (BoardMeeting.caseYear = ULPCase.caseYear "
+        long threeone = AnnualReport.getCount("SELECT COUNT(*) FROM BoardMeeting LEFT JOIN ULPCase ON (BoardMeeting.caseYear = ULPCase.caseYear "
                 + "AND BoardMeeting.caseType = ULPCase.caseType AND BoardMeeting.caseMonth = ULPCase.caseMonth "
-                + "AND BoardMeeting.caseNumber = ULPCase.caseNumber) WHERE ((BoardMeeting.boardMeetingDate BETWEEN '"
-                + startDate + "' AND '" + endDate + "') AND BoardMeeting.recommendation LIKE 'DM%') "
-                + "AND BoardMeeting.caseType = 'ULP' AND ULPCase.dismissalDate IS NOT NULL");
+                + "AND BoardMeeting.caseNumber = ULPCase.caseNumber) WHERE (BoardMeeting.boardMeetingDate BETWEEN '"
+                + startDate + "' AND '" + endDate + "') AND (BoardMeeting.recommendation LIKE 'DM%') AND "
+                        + "(BoardMeeting.caseType = 'ULP' OR BoardMeeting.caseType = 'ERC' OR BoardMeeting.caseType = 'JWD') "
+                        + "AND (ULPCase.dismissalDate IS NOT NULL)");
         processBookmark.process("threeone", String.valueOf(threeone), Document);
         //32
         long threetwo = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM ULPCase WHERE (ULPCase.dismissalDate BETWEEN '"
@@ -439,11 +440,11 @@ public class processAnnualReport {
                 + startDate + "' AND '" + endDate + "') AND (ULPCase.caseType = 'ULP')");
         processBookmark.process("ninetwo", String.valueOf(ninetwo), Document);
         //93
-        long ninethree = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM BoardMeeting LEFT JOIN ULPCase "
-                + "ON (BoardMeeting.caseYear = ULPCase.caseYear AND BoardMeeting.caseType = ULPCase.caseType "
-                + "AND BoardMeeting.caseMonth = ULPCase.caseMonth AND BoardMeeting.caseNumber = ULPCase.caseNumber) "
-                + "WHERE (BoardMeeting.boardMeetingDate BETWEEN '" + startDate + "' AND '" + endDate + "') "
-                + "AND (BoardMeeting.recommendation LIKE 'DM%') AND (ULPCase.caseType = 'ULP') "
+        long ninethree = AnnualReport.getCount("SELECT COUNT(*) FROM BoardMeeting LEFT JOIN ULPCase ON (BoardMeeting.caseYear = ULPCase.caseYear "
+                + "AND BoardMeeting.caseType = ULPCase.caseType AND BoardMeeting.caseMonth = ULPCase.caseMonth "
+                + "AND BoardMeeting.caseNumber = ULPCase.caseNumber) WHERE (BoardMeeting.boardMeetingDate BETWEEN '"
+                + startDate + "' AND '" + endDate + "') AND (BoardMeeting.recommendation LIKE 'DM%') AND "
+                + "(BoardMeeting.caseType = 'ULP' OR BoardMeeting.caseType = 'ERC' OR BoardMeeting.caseType = 'JWD') "
                 + "AND (ULPCase.dismissalDate IS NOT NULL)");
         processBookmark.process("ninethree", String.valueOf(ninethree), Document);
         //94

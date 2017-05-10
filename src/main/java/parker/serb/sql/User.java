@@ -1101,7 +1101,7 @@ public class User {
             ResultSet success = preparedStatement.executeQuery();
 
             while (success.next()) {
-                userEmail = success.getString("emailAddress");
+                userEmail = success.getString("emailAddress") == null ? "" : success.getString("emailAddress");
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
