@@ -362,11 +362,13 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                 ffList = FactFinder.loadActiveFF();
                 break;
             case "Hearings":
+                documentList = SMDSDocuments.loadDocumentNamesByTypeAndSection(Global.activeSection, "Quest");
                 break;
             case "Civil Service Commission":
                 documentList = SMDSDocuments.loadDocumentNamesByTypeAndSection("CSC", "Quest");
                 break;
             case "CMDS":
+                documentList = SMDSDocuments.loadDocumentNamesByTypeAndSection(Global.activeSection, "Quest");
                 break;
         }
 
