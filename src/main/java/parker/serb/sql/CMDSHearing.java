@@ -55,8 +55,8 @@ public class CMDSHearing {
             
             if(process == 1) {
                 EmailOutInvites.addNewHearing("CMDS",
-                        CMDSCase.getALJemail(),
-                        HearingRoom.getHearingRoomEmailByName(hearingRoom),
+                        generateHearingToAddress(CMDSCase.getALJemail(), HearingRoom.getHearingRoomEmailByName(hearingRoom)),
+                        null,
                         "An upcoming " + hearingType + " is booked in " + hearingRoom + " at " + Global.mmddyyyyhhmma.format(hearingTime),
                         NumberFormatService.generateFullCaseNumber(),
                         hearingType,
@@ -73,6 +73,21 @@ public class CMDSHearing {
         } finally {
             DbUtils.closeQuietly(stmt);
         }
+    }
+    
+    private static String generateHearingToAddress(String alj, String hearingRoom) {
+        String emailTo = "";
+        
+        if(alj.equals("")) {
+            emailTo = hearingRoom;
+        } else {
+            if(hearingRoom.equals("")) {
+                emailTo = alj;
+            } else {
+                emailTo = alj + ";" + hearingRoom;
+            }
+        }
+        return emailTo;
     }
     
     public static List loadHearingsByCaseNumber() {

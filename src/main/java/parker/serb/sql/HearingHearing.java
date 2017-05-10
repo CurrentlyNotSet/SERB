@@ -60,8 +60,8 @@ public class HearingHearing {
             
             if(process == 1) {
                 EmailOutInvites.addNewHearing(getCaseSection(),
-                        User.getEmailByID(User.getUserID(alj)),
-                        HearingRoom.getHearingRoomEmailByName(hearingRoom),
+                        generateHearingToAddress(CMDSCase.getALJemail(), HearingRoom.getHearingRoomEmailByName(hearingRoom)),
+                        null,
                         "An upcoming " + hearingType + " is booked in " + hearingRoom + " at " + Global.mmddyyyyhhmma.format(hearingTime),
                         NumberFormatService.generateFullCaseNumber(),
                         hearingType,
@@ -79,6 +79,21 @@ public class HearingHearing {
         } finally {
             DbUtils.closeQuietly(stmt);
         }
+    }
+    
+    private static String generateHearingToAddress(String alj, String hearingRoom) {
+        String emailTo = "";
+        
+        if(alj.equals("")) {
+            emailTo = hearingRoom;
+        } else {
+            if(hearingRoom.equals("")) {
+                emailTo = alj;
+            } else {
+                emailTo = alj + ";" + hearingRoom;
+            }
+        }
+        return emailTo;
     }
     
     private static String getCaseSection() {
