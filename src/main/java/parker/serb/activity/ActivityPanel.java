@@ -119,7 +119,11 @@ public class ActivityPanel extends javax.swing.JPanel {
                                 actvityTable.getValueAt(actvityTable.getSelectedRow(), 5).toString(),
                                 actvityTable.getValueAt(actvityTable.getSelectedRow(), 4).toString());
                         }
-                        loadAllActivity();
+                        if (Global.activeSection.equals("Hearings")){
+                            loadAllHearingActivity();
+                        } else {
+                            loadAllActivity();
+                        }
                     }
                 }
             }

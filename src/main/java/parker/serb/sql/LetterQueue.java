@@ -41,7 +41,7 @@ public class LetterQueue {
         String sql = "";
 
         if (Global.activeSection.equals("Hearings")){
-            casetypes = "(C.section = 'MED' OR C.section = 'REP' OR C.section = 'ULP') ";
+            casetypes = "(C.section = 'MED' OR C.section = 'REP' OR C.section = 'ULP' OR C.section = 'Hearings') ";
         } else {
             casetypes = "C.section = '" + (Global.activeSection.equals("Civil Service Commission") ? "CSC" : Global.activeSection) + "' ";
         }
@@ -129,7 +129,7 @@ public class LetterQueue {
         String sql = "";
 
         if (Global.activeSection.equals("Hearings")){
-            casetypes = "(C.section = 'MED' OR C.section = 'REP' OR C.section = 'ULP') ";
+            casetypes = "(C.section = 'MED' OR C.section = 'REP' OR C.section = 'ULP' OR C.section = 'Hearings') ";
         } else {
             casetypes = "C.section = '" + (Global.activeSection.equals("Civil Service Commission") ? "CSC" : Global.activeSection) + "' ";
         }
@@ -200,7 +200,7 @@ public class LetterQueue {
         String sql = "";
 
         if (Global.activeSection.equals("Hearings")){
-            casetypes = "(C.section = 'MED' OR C.section = 'REP' OR C.section = 'ULP') ";
+            casetypes = "(C.section = 'MED' OR C.section = 'REP' OR C.section = 'ULP' OR C.section = 'Hearings') ";
         } else {
             casetypes = "C.section = '" + (Global.activeSection.equals("Civil Service Commission") ? "CSC" : Global.activeSection) + "' ";
         }
