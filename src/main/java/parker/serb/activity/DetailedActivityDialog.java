@@ -93,6 +93,7 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
 
     private void loadInformation(String id, String userName) {
         origActivity = Activity.loadActivityByID(id, userName);
+        updatedActivity = origActivity;
 
         dateTextBox.setText(origActivity.date);
         actionTextBox.setText(origActivity.action);
@@ -157,6 +158,8 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
             } else {
                 updatedActivity.fileName = origActivity.fileName;
             }
+        } else {
+            updatedActivity.fileName = origActivity.fileName;
         }
     }
 
