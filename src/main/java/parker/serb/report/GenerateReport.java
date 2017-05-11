@@ -171,6 +171,12 @@ public class GenerateReport {
         hash.put("section", section);
         generateReport(report, hash);
     }
+    
+    public static void generateMailLogFROMReport(String String, SMDSDocuments report) {
+        HashMap hash = new HashMap();
+        hash.put("string", String);
+        generateReport(report, hash);
+    }
 
     public static void generateIDStringReport(String ID, String exact, SMDSDocuments report) {
         HashMap hash = new HashMap();
