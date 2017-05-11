@@ -934,7 +934,7 @@ public class ORGCase {
             }
         }
 
-        //constitutionAndByLaws
+        //constitutionAndByLaws (changed from Construction to Constitiution PROD149)
         if (newCaseInformation.constitutionAndByLaws == null && oldCaseInformation.constitutionAndByLaws != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.constitutionAndByLaws.getTime())) + " from Constitution and By Laws Filed", null);
         } else if (newCaseInformation.constitutionAndByLaws != null && oldCaseInformation.constitutionAndByLaws == null) {
