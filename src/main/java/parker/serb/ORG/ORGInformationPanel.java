@@ -307,7 +307,7 @@ public class ORGInformationPanel extends javax.swing.JPanel {
         newInformation.annualReport = annualReportLastFiledTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(annualReportLastFiledTextBox.getText()));
         newInformation.financialReport = financialStatementLastFiledTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(financialStatementLastFiledTextBox.getText()));
         newInformation.registrationReport = regiestionReportLastFiledTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(regiestionReportLastFiledTextBox.getText()));
-        newInformation.constructionAndByLaws = constrctionAndByLawsFiledTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(constrctionAndByLawsFiledTextBox.getText()));
+        newInformation.constitutionAndByLaws = constrctionAndByLawsFiledTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(constrctionAndByLawsFiledTextBox.getText()));
         newInformation.lastNotification = lastNotificationTextBox.getText().trim().equals("") ? null : lastNotificationTextBox.getText().trim();
         newInformation.deemedCertified = deemedCertifiedCheckBox.isSelected();
         newInformation.boardCertified = boardCertifiedCheckBox.isSelected();
@@ -354,7 +354,7 @@ public class ORGInformationPanel extends javax.swing.JPanel {
         annualReportLastFiledTextBox.setText(orginalInformation.annualReport != null ? Global.mmddyyyy.format(new Date(orginalInformation.annualReport.getTime())) : "");
         financialStatementLastFiledTextBox.setText(orginalInformation.financialReport != null ? Global.mmddyyyy.format(new Date(orginalInformation.financialReport.getTime())) : "");
         regiestionReportLastFiledTextBox.setText(orginalInformation.registrationReport != null ? Global.mmddyyyy.format(new Date(orginalInformation.registrationReport.getTime())) : "");
-        constrctionAndByLawsFiledTextBox.setText(orginalInformation.constructionAndByLaws != null ? Global.mmddyyyy.format(new Date(orginalInformation.constructionAndByLaws.getTime())) : "");
+        constrctionAndByLawsFiledTextBox.setText(orginalInformation.constitutionAndByLaws != null ? Global.mmddyyyy.format(new Date(orginalInformation.constitutionAndByLaws.getTime())) : "");
         lastNotificationTextBox.setText(orginalInformation.lastNotification != null ? orginalInformation.lastNotification : "");
         deemedCertifiedCheckBox.setSelected(orginalInformation.deemedCertified == true);
         boardCertifiedCheckBox.setSelected(orginalInformation.boardCertified == true);

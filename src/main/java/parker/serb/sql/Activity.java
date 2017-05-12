@@ -1338,28 +1338,63 @@ public class Activity {
         return activityList;
     }
 
-    public static List<Activity> loadMailLogBySection(String startDate, String endDate, String to, String section) {
+    public static List<Activity> loadMailLogBySectionActiveSection(String startDate, String endDate, String to, String section) {
         List<Activity> activityList = new ArrayList<>();
 
+        String sql = "";
         Statement stmt = null;
+        PreparedStatement preparedStatement = null;
 
         try {
             stmt = Database.connectToDB().createStatement();
+            switch (section) {
+                case "Hearings":
+                    sql = "SELECT Activity.* FROM Activity "
+                            + "INNER JOIN HearingCase ON HearingCase.caseYear = Activity.caseYear "
+                            + "AND HearingCase.caseType = Activity.caseType "
+                            + "AND HearingCase.caseMonth = Activity.caseMonth "
+                            + "AND HearingCase.caseNumber = Activity.caseNumber "
+                            + "WHERE Activity.mailLog >= ?  AND Activity.mailLog <= ? "
+                            + "AND Activity.fileName IS NOT NULL AND Activity.fileName != '' "
+                            + "AND Activity.active = 1 AND Activity.[to] LIKE ? "
+                            + "ORDER BY Activity.CaseYear DESC, Activity.caseMonth DESC, Activity.caseNumber DESC, activity.id DESC";
+                    preparedStatement = stmt.getConnection().prepareStatement(sql);
 
-            String sql = "SELECT Activity.* FROM Activity LEFT JOIN caseType ON activity.casetype = casetype.casetype "
-                    + "WHERE Activity.mailLog >= ?  AND Activity.mailLog <= ? "
-                    + "AND Activity.fileName IS NOT NULL AND Activity.fileName != '' "
-                    + "AND Activity.active = 1 AND Activity.[to] LIKE ? "
-                    + "AND CaseType.section = ? "
-                    + "ORDER BY Activity.CaseYear DESC, Activity.caseMonth DESC, Activity.caseNumber DESC, activity.id DESC";
+                    preparedStatement.setString(1, startDate);
+                    preparedStatement.setString(2, endDate);
+                    preparedStatement.setString(3, "%" + to + "%");
+                    break;
+                case "CSC":
+                case "ORG":
+                    sql = "SELECT Activity.* FROM Activity "
+                            + "WHERE Activity.mailLog >= ?  AND Activity.mailLog <= ? "
+                            + "AND Activity.fileName IS NOT NULL AND Activity.fileName != '' "
+                            + "AND Activity.active = 1 AND Activity.[to] LIKE ? "
+                            + "AND activity.casetype = ? "
+                            + "ORDER BY Activity.CaseYear DESC, Activity.caseMonth DESC, Activity.caseNumber DESC, activity.id DESC";
+                    preparedStatement = stmt.getConnection().prepareStatement(sql);
 
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+                    preparedStatement.setString(1, startDate);
+                    preparedStatement.setString(2, endDate);
+                    preparedStatement.setString(3, "%" + to + "%");
+                    preparedStatement.setString(4, section);
+                    break;
+                default:
+                    sql = "SELECT Activity.* FROM Activity LEFT JOIN caseType ON activity.casetype = casetype.casetype "
+                            + "WHERE Activity.mailLog >= ?  AND Activity.mailLog <= ? "
+                            + "AND Activity.fileName IS NOT NULL AND Activity.fileName != '' "
+                            + "AND Activity.active = 1 AND Activity.[to] LIKE ? "
+                            + "AND CaseType.section = ? "
+                            + "ORDER BY Activity.CaseYear DESC, Activity.caseMonth DESC, Activity.caseNumber DESC, activity.id DESC";
+                    preparedStatement = stmt.getConnection().prepareStatement(sql);
 
-            preparedStatement.setString(1, startDate);
-            preparedStatement.setString(2, endDate);
-            preparedStatement.setString(3, "%" + to + "%");
-            preparedStatement.setString(4, section);
-
+                    preparedStatement.setString(1, startDate);
+                    preparedStatement.setString(2, endDate);
+                    preparedStatement.setString(3, "%" + to + "%");
+                    preparedStatement.setString(4, section);
+                    break;
+            }
+            
             ResultSet caseActivity = preparedStatement.executeQuery();
 
             while(caseActivity.next()) {
@@ -1381,7 +1416,7 @@ public class Activity {
             }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                loadMailLogBySection(startDate, endDate, to, section);
+                loadMailLogBySectionActiveSection(startDate, endDate, to, section);
             } else {
                 SlackNotification.sendNotification(ex);
             }

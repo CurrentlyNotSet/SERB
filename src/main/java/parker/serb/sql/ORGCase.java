@@ -29,7 +29,7 @@ public class ORGCase {
     public Timestamp annualReport;
     public Timestamp financialReport;
     public Timestamp registrationReport;
-    public Timestamp constructionAndByLaws;
+    public Timestamp constitutionAndByLaws;
     public boolean filedByParent;
 
     public String alsoKnownAs;
@@ -372,7 +372,7 @@ public class ORGCase {
                 org.annualReport = caseHeader.getTimestamp("annualReport");
                 org.financialReport = caseHeader.getTimestamp("financialReport");
                 org.registrationReport = caseHeader.getTimestamp("registrationReport");
-                org.constructionAndByLaws = caseHeader.getTimestamp("constructionAndByLaws");
+                org.constitutionAndByLaws = caseHeader.getTimestamp("constructionAndByLaws");
                 org.filedByParent = caseHeader.getBoolean("filedByParent");
             }
         } catch (SQLException ex) {
@@ -454,7 +454,7 @@ public class ORGCase {
                 org.annualReport = caseInformation.getTimestamp("annualReport");
                 org.financialReport = caseInformation.getTimestamp("financialReport");
                 org.registrationReport = caseInformation.getTimestamp("registrationReport");
-                org.constructionAndByLaws = caseInformation.getTimestamp("constructionAndByLaws");
+                org.constitutionAndByLaws = caseInformation.getTimestamp("constructionAndByLaws");
                 org.lastNotification = caseInformation.getString("lastNotification");
                 org.deemedCertified = caseInformation.getBoolean("deemedCertified");
                 org.boardCertified = caseInformation.getBoolean("boardCertified");
@@ -513,7 +513,7 @@ public class ORGCase {
                 org.annualReport = rs.getTimestamp("annualReport");
                 org.financialReport = rs.getTimestamp("financialReport");
                 org.registrationReport = rs.getTimestamp("registrationReport");
-                org.constructionAndByLaws = rs.getTimestamp("constructionAndByLaws");
+                org.constitutionAndByLaws = rs.getTimestamp("constructionAndByLaws");
                 org.lastNotification = rs.getString("lastNotification");
                 org.deemedCertified = rs.getBoolean("deemedCertified");
                 org.boardCertified = rs.getBoolean("boardCertified");
@@ -580,7 +580,7 @@ public class ORGCase {
                 org.annualReport = rs.getTimestamp("annualReport");
                 org.financialReport = rs.getTimestamp("financialReport");
                 org.registrationReport = rs.getTimestamp("registrationReport");
-                org.constructionAndByLaws = rs.getTimestamp("constructionAndByLaws");
+                org.constitutionAndByLaws = rs.getTimestamp("constructionAndByLaws");
                 org.lastNotification = rs.getString("lastNotification");
                 org.deemedCertified = rs.getBoolean("deemedCertified");
                 org.boardCertified = rs.getBoolean("boardCertified");
@@ -668,7 +668,7 @@ public class ORGCase {
             preparedStatement.setTimestamp(17, newCaseInformation.annualReport);
             preparedStatement.setTimestamp(18, newCaseInformation.financialReport);
             preparedStatement.setTimestamp(19, newCaseInformation.registrationReport);
-            preparedStatement.setTimestamp(20, newCaseInformation.constructionAndByLaws);
+            preparedStatement.setTimestamp(20, newCaseInformation.constitutionAndByLaws);
             preparedStatement.setString(21, newCaseInformation.lastNotification);
             preparedStatement.setBoolean(22, newCaseInformation.deemedCertified);
             preparedStatement.setBoolean(23, newCaseInformation.boardCertified);
@@ -934,14 +934,14 @@ public class ORGCase {
             }
         }
 
-        //constructionAndByLaws
-        if (newCaseInformation.constructionAndByLaws == null && oldCaseInformation.constructionAndByLaws != null) {
-            Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.constructionAndByLaws.getTime())) + " from Construction and By Laws Filed", null);
-        } else if (newCaseInformation.constructionAndByLaws != null && oldCaseInformation.constructionAndByLaws == null) {
-            Activity.addActivty("Set Construction and By Laws Filed to " + Global.mmddyyyy.format(new Date(newCaseInformation.constructionAndByLaws.getTime())), null);
-        } else if (newCaseInformation.constructionAndByLaws != null && oldCaseInformation.constructionAndByLaws != null) {
-            if (!Global.mmddyyyy.format(new Date(oldCaseInformation.constructionAndByLaws.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.constructionAndByLaws.getTime())))) {
-                Activity.addActivty("Changed Construction and By Laws Filed from " + Global.mmddyyyy.format(new Date(oldCaseInformation.constructionAndByLaws.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.constructionAndByLaws.getTime())), null);
+        //constitutionAndByLaws (changed from Construction to Constitiution PROD149)
+        if (newCaseInformation.constitutionAndByLaws == null && oldCaseInformation.constitutionAndByLaws != null) {
+            Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.constitutionAndByLaws.getTime())) + " from Constitution and By Laws Filed", null);
+        } else if (newCaseInformation.constitutionAndByLaws != null && oldCaseInformation.constitutionAndByLaws == null) {
+            Activity.addActivty("Set Constitution and By Laws Filed to " + Global.mmddyyyy.format(new Date(newCaseInformation.constitutionAndByLaws.getTime())), null);
+        } else if (newCaseInformation.constitutionAndByLaws != null && oldCaseInformation.constitutionAndByLaws != null) {
+            if (!Global.mmddyyyy.format(new Date(oldCaseInformation.constitutionAndByLaws.getTime())).equals(Global.mmddyyyy.format(new Date(newCaseInformation.constitutionAndByLaws.getTime())))) {
+                Activity.addActivty("Changed Constitution and By Laws Filed from " + Global.mmddyyyy.format(new Date(oldCaseInformation.constitutionAndByLaws.getTime())) + " to " + Global.mmddyyyy.format(new Date(newCaseInformation.constitutionAndByLaws.getTime())), null);
             }
         }
 

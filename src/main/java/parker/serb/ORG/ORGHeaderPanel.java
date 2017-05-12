@@ -90,7 +90,7 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
                 annualReportTextBox.setText(org.annualReport != null ? Global.mmddyyyy.format(new Date(org.annualReport.getTime())) : "");
                 financialReportTextBox.setText(org.financialReport != null ? Global.mmddyyyy.format(new Date(org.financialReport.getTime())) : "");
                 registrationReportTextBox.setText(org.registrationReport != null ? Global.mmddyyyy.format(new Date(org.registrationReport.getTime())) : "");
-                constructionAndByLawsTextBox.setText(org.constructionAndByLaws != null ? Global.mmddyyyy.format(new Date(org.constructionAndByLaws.getTime())) : "");
+                constructionAndByLawsTextBox.setText(org.constitutionAndByLaws != null ? Global.mmddyyyy.format(new Date(org.constitutionAndByLaws.getTime())) : "");
                 filedByParentTextBox.setText(org.filedByParent == true ? "Yes" : "No");
 
                 Global.root.getoRGRootPanel1().loadInformation();
@@ -115,7 +115,7 @@ public class ORGHeaderPanel extends javax.swing.JPanel {
                 annualReportTextBox.setText(org.annualReport != null ? Global.mmddyyyy.format(new Date(org.annualReport.getTime())) : "");
                 financialReportTextBox.setText(org.financialReport != null ? Global.mmddyyyy.format(new Date(org.financialReport.getTime())) : "");
                 registrationReportTextBox.setText(org.registrationReport != null ? Global.mmddyyyy.format(new Date(org.registrationReport.getTime())) : "");
-                constructionAndByLawsTextBox.setText(org.constructionAndByLaws != null ? Global.mmddyyyy.format(new Date(org.constructionAndByLaws.getTime())) : "");
+                constructionAndByLawsTextBox.setText(org.constitutionAndByLaws != null ? Global.mmddyyyy.format(new Date(org.constitutionAndByLaws.getTime())) : "");
                 filedByParentTextBox.setText(org.filedByParent == true ? "Yes" : "No");
             }
         }
