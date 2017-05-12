@@ -5,7 +5,6 @@
  */
 package parker.serb.Hearing;
 
-import com.alee.laf.optionpane.WebOptionPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.util.Date;
@@ -16,7 +15,6 @@ import javax.swing.SwingUtilities;
 import parker.serb.Global;
 import parker.serb.sql.Audit;
 import parker.serb.sql.CaseParty;
-import parker.serb.sql.CaseType;
 import parker.serb.sql.HearingCase;
 import parker.serb.sql.HearingsMediation;
 import parker.serb.sql.User;
@@ -86,6 +84,8 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
         String party2 = "";
         String party3 = "";
         String party4 = "";
+        String IEO = "";
+        String IEOREP = "";
 
         if(Global.caseNumber != null) {
             HearingCase hearings = HearingCase.loadHeaderInformation();
@@ -174,8 +174,28 @@ public class HearingHeaderPanel extends javax.swing.JPanel {
                                 party4 += ", " + name;
                             }
                             break;
+                        case "Incumbent Employee Organization":
+                            if(IEO.equals("")) {
+                                IEO += name;
+                            } else {
+                                IEO += ", " + name;
+                            }
+                            break;
+                        case "Incumbent Employee Organization REP":
+                            if(IEOREP.equals("")) {
+                                IEOREP += name;
+                            } else {
+                                IEOREP += ", " + name;
+                            }
+                            break;
                     }
                 }
+
+                if (Global.caseType.equals("REP")) {
+                    party3 += IEO;
+                    party4 += IEOREP;
+                }
+
                 party1TextBox.setText(party1);
                 party2TextBox.setText(party2);
                 party3TextBox.setText(party3);

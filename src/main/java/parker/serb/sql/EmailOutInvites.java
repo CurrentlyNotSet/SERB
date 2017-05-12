@@ -54,8 +54,8 @@ public class EmailOutInvites {
             preparedStatement.setString(6, hearingType);
             preparedStatement.setString(7, hearingRoomAbv);
             preparedStatement.setString(8, hearingDescription);
-            preparedStatement.setTimestamp(9, generateHearingTimeTenAM(hearingStartDateTime));
-            preparedStatement.setTimestamp(10, generateHearingTimeFivePM(hearingStartDateTime));
+            preparedStatement.setTimestamp(9, hearingStartDateTime);
+            preparedStatement.setTimestamp(10, generateHearingEndTimeSevenHours(hearingStartDateTime));
 
             if(!toAddress.equals("")) {
                 preparedStatement.executeUpdate();
@@ -106,14 +106,11 @@ public class EmailOutInvites {
         return new Timestamp(cal.getTimeInMillis());
     }
 
-    public static Timestamp generateHearingTimeFivePM(Timestamp startDateTime){
+    public static Timestamp generateHearingEndTimeSevenHours(Timestamp startDateTime){
         Timestamp time = new Timestamp(startDateTime.getTime());
         Calendar cal = Calendar.getInstance();
         cal.setTime(time);
-        cal.set(Calendar.HOUR_OF_DAY, 17);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
+        cal.add(Calendar.HOUR, 7);
         return new Timestamp(cal.getTimeInMillis());
     }
 }
