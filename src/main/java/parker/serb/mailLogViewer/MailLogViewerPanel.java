@@ -210,7 +210,7 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
 //                doc
 //        );
 //    }
-    
+
     private void generateReport() {
         SMDSDocuments doc = new SMDSDocuments();
         doc.section = "ALL";
@@ -229,27 +229,33 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
                         + "AND HearingCase.caseNumber = Activity.caseNumber "
                         + "WHERE Activity.mailLog >= '" + Global.SQLDateFormat.format(startDateField.getDate()) + "'  AND Activity.mailLog <= '" + Global.SQLDateFormat.format(endDateField.getDate()) + "' "
                         + "AND Activity.fileName IS NOT NULL AND Activity.fileName != '' "
-                        + "AND Activity.active = 1 AND Activity.[to] LIKE %" + to + "%' "
+                        + "AND Activity.active = 1 AND Activity.[to] LIKE '%" + to + "%' "
                         + "ORDER BY Activity.CaseYear DESC, Activity.caseMonth DESC, Activity.caseNumber DESC, activity.id DESC";
                 break;
             case "CSC":
             case "ORG":
                 where = " WHERE Activity.mailLog >= '" + Global.SQLDateFormat.format(startDateField.getDate()) + "'  AND Activity.mailLog <= '" + Global.SQLDateFormat.format(endDateField.getDate()) + "' "
                         + "AND Activity.fileName IS NOT NULL AND Activity.fileName != '' "
-                        + "AND Activity.active = 1 AND Activity.[to] LIKE %" + to + "%' "
-                        + "AND activity.casetype = '" + section + "'"
+                        + "AND Activity.active = 1 AND Activity.[to] LIKE '%" + to + "%' "
+                        + "AND activity.casetype = '" + section + "' "
                         + "ORDER BY Activity.CaseYear DESC, Activity.caseMonth DESC, Activity.caseNumber DESC, activity.id DESC";
                 break;
             default:
                 where = " LEFT JOIN caseType ON activity.casetype = casetype.casetype "
                         + "WHERE Activity.mailLog >= '" + Global.SQLDateFormat.format(startDateField.getDate()) + "'  AND Activity.mailLog <= '" + Global.SQLDateFormat.format(endDateField.getDate()) + "' "
                         + "AND Activity.fileName IS NOT NULL AND Activity.fileName != '' "
-                        + "AND Activity.active = 1 AND Activity.[to] LIKE %" + to + "%' "
-                        + "AND CaseType.section = '" + section + "'"
+                        + "AND Activity.active = 1 AND Activity.[to] LIKE '%" + to + "%' "
+                        + "AND CaseType.section = '" + section + "' "
                         + "ORDER BY Activity.CaseYear DESC, Activity.caseMonth DESC, Activity.caseNumber DESC, activity.id DESC";
                 break;
         }
-        GenerateReport.generateMailLogFROMReport(where, doc);
+        GenerateReport.generateMailLogFROMReport(where,
+                Global.mmddyyyy.format(startDateField.getDate()),
+                Global.mmddyyyy.format(endDateField.getDate()),
+                assignedToCombobox.getSelectedItem().toString().trim().equals("All") ? "" : assignedToCombobox.getSelectedItem().toString().trim(),
+                Global.activeSection,
+                doc
+        );
     }
 
     /**

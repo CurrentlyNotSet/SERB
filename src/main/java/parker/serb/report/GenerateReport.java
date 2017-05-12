@@ -171,10 +171,14 @@ public class GenerateReport {
         hash.put("section", section);
         generateReport(report, hash);
     }
-    
-    public static void generateMailLogFROMReport(String String, SMDSDocuments report) {
+
+    public static void generateMailLogFROMReport(String String, String Start, String End, String to, String section, SMDSDocuments report) {
         HashMap hash = new HashMap();
         hash.put("string", String);
+        hash.put("begin date", Start);
+        hash.put("end date", End);
+        hash.put("assignedTo", to);
+        hash.put("section", section);
         generateReport(report, hash);
     }
 
