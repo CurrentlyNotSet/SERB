@@ -61,7 +61,7 @@
                       <Component id="cscAddress2TextBox" max="32767" attributes="0"/>
                       <Component id="cscNameTextBox" max="32767" attributes="0"/>
                       <Component id="cscNumberTextBox" max="32767" attributes="0"/>
-                      <Component id="cscTypeComboBox" alignment="0" pref="422" max="32767" attributes="0"/>
+                      <Component id="cscTypeComboBox" alignment="0" pref="424" max="32767" attributes="0"/>
                       <Component id="cscPhone1TextBox" alignment="1" max="32767" attributes="0"/>
                       <Component id="cscPhone2TextBox" alignment="1" max="32767" attributes="0"/>
                       <Component id="cscFaxTextBox" alignment="1" max="32767" attributes="0"/>
@@ -493,7 +493,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel17">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Activites Last Filed:"/>
+            <Property name="text" type="java.lang.String" value="Activities Last Filed:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel21">

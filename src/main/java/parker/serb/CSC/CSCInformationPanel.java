@@ -487,7 +487,7 @@ public class CSCInformationPanel extends javax.swing.JPanel {
                     .addComponent(cscAddress2TextBox)
                     .addComponent(cscNameTextBox)
                     .addComponent(cscNumberTextBox)
-                    .addComponent(cscTypeComboBox, 0, 422, Short.MAX_VALUE)
+                    .addComponent(cscTypeComboBox, 0, 424, Short.MAX_VALUE)
                     .addComponent(cscPhone1TextBox, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(cscPhone2TextBox, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(cscFaxTextBox, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -564,7 +564,7 @@ public class CSCInformationPanel extends javax.swing.JPanel {
 
         jLabel16.setText("Fiscal Year Ending:");
 
-        jLabel17.setText("Activites Last Filed:");
+        jLabel17.setText("Activities Last Filed:");
 
         jLabel21.setText("Last Notification:");
 
@@ -682,7 +682,7 @@ public class CSCInformationPanel extends javax.swing.JPanel {
                                         .addComponent(charterCheckBox)
                                         .addComponent(statutoryCheckBox)
                                         .addComponent(validCheckBox))
-                                    .addGap(0, 0, Short.MAX_VALUE)))
+                                    .addGap(0, 279, Short.MAX_VALUE)))
                             .addContainerGap())
                     );
                     jPanel2Layout.setVerticalGroup(
