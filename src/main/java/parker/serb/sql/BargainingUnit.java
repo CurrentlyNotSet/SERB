@@ -16,7 +16,7 @@ import parker.serb.util.SlackNotification;
  * @author parkerjohnston
  */
 public class BargainingUnit {
-    
+
     public int id;
     public boolean active;
     public String employerNumber;
@@ -37,26 +37,26 @@ public class BargainingUnit {
     public String caseRefSequence;
     public String unitDescription;
     public String notes;
-    
+
     public static String getCertStatus(String number) {
-        
+
         String[] buNumberParts = number.split("-");
         String certStatus = "";
-        
+
         Statement stmt = null;
-        
+
         try {
 
             stmt = Database.connectToDB().createStatement();
 
             String sql = "select cert from BarginingUnit where EmployerNumber = ? and UnitNumber = ?";
-                    
+
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, buNumberParts[0]);
             preparedStatement.setString(2, buNumberParts[1]);
 
             ResultSet caseActivity = preparedStatement.executeQuery();
-            
+
             while(caseActivity.next()) {
                 certStatus = caseActivity.getString("cert");
             }
@@ -64,7 +64,7 @@ public class BargainingUnit {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 getCertStatus(number);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
@@ -73,13 +73,13 @@ public class BargainingUnit {
 
     public static List loadBUList() {
         List<BargainingUnit> employerList = new ArrayList<>();
-            
+
         Statement stmt = null;
-        
+
         try {
 
             stmt = Database.connectToDB().createStatement();
-            
+
             String sql = "select id, employerNumber, unitNumber, buEmployerName,"
                     + " lUnion, county, unitDescription, caseRefYear,"
                     + " caseRefSection, caseRefMonth, caseRefSequence, local, cert, notes"
@@ -89,7 +89,7 @@ public class BargainingUnit {
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             ResultSet employerListRS = preparedStatement.executeQuery();
-            
+
             while(employerListRS.next()) {
                 BargainingUnit emp = new BargainingUnit();
                 emp.id = employerListRS.getInt("id");
@@ -113,30 +113,30 @@ public class BargainingUnit {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 loadBUList();
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return employerList;
     }
-    
+
     public static String getUnitDescription(String buNumber) {
         String[] buNumberParts = buNumber.split("-");
         String unitDesc = "";
-            
+
         Statement stmt = null;
-        
+
         try {
             stmt = Database.connectToDB().createStatement();
 
             String sql = "select unitDescription from BarginingUnit where EmployerNumber = ? and UnitNumber = ?";
-                    
+
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, buNumberParts[0]);
             preparedStatement.setString(2, buNumberParts[1]);
 
             ResultSet caseActivity = preparedStatement.executeQuery();
-            
+
             while(caseActivity.next()) {
                 unitDesc = caseActivity.getString("unitDescription");
             }
@@ -144,34 +144,34 @@ public class BargainingUnit {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 getUnitDescription(buNumber);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return unitDesc;
     }
-    
+
     public static BargainingUnit getBUbyID(String id) {
         BargainingUnit bu = new BargainingUnit();
-            
+
         Statement stmt = null;
-        
+
         try {
             stmt = Database.connectToDB().createStatement();
 
             String sql = "select * from BarginingUnit where id = ?";
-                    
+
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, id);
 
             ResultSet caseActivity = preparedStatement.executeQuery();
-            
+
             while(caseActivity.next()) {
                 bu.id = caseActivity.getInt("id");
                 bu.active = caseActivity.getBoolean("active");
                 bu.employerNumber = caseActivity.getString("employerNumber");
                 bu.unitNumber = caseActivity.getString("unitNumber");
-                bu.cert = caseActivity.getString("cert");
+                bu.cert = caseActivity.getString("cert") == null ? "" : caseActivity.getString("cert");
                 bu.buEmployerName = caseActivity.getString("buEmployerName");
                 bu.jurisdiction = caseActivity.getString("jurisdiction");
                 bu.county = caseActivity.getString("county");
@@ -192,16 +192,16 @@ public class BargainingUnit {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 getBUbyID(id);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
         return bu;
     }
-    
+
     public static void updateBUByID(BargainingUnit bu) {
         Statement stmt = null;
-        
+
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -225,7 +225,7 @@ public class BargainingUnit {
                     + "unitDescription = ?, "
                     + "notes = ? "
                     + "where id = ?";
-                    
+
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, bu.employerNumber.equals("") ? null : bu.employerNumber);
             preparedStatement.setString(2, bu.unitNumber.equals("") ? null : bu.unitNumber);
@@ -246,45 +246,45 @@ public class BargainingUnit {
             preparedStatement.setString(17, bu.unitDescription.equals("") ? null : bu.unitDescription);
             preparedStatement.setString(18, bu.notes.equals("") ? null : bu.notes);
             preparedStatement.setInt(19, bu.id);
-            
+
             preparedStatement.executeUpdate();
-            
+
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateBUByID(bu);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void disableBU(String id) {
         Statement stmt = null;
-        
+
         try {
             stmt = Database.connectToDB().createStatement();
 
             String sql = "update BarginingUnit set active = 0 where id = ?";
-                    
+
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setInt(1, Integer.valueOf(id));
-            
+
             preparedStatement.executeUpdate();
-            
+
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 disableBU(id);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void createBU(BargainingUnit bu) {
         Statement stmt = null;
-        
+
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -308,7 +308,7 @@ public class BargainingUnit {
                     + "?, "
                     + "?, "
                     + "?)";
-                    
+
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setBoolean(1, true);
             preparedStatement.setString(2, bu.employerNumber.equals("") ? null : bu.employerNumber);
@@ -329,14 +329,14 @@ public class BargainingUnit {
             preparedStatement.setString(17, bu.caseRefSequence);
             preparedStatement.setString(18, bu.unitDescription.equals("") ? null : bu.unitDescription);
             preparedStatement.setString(19, bu.notes.equals("") ? null : bu.notes);
-            
+
             preparedStatement.executeUpdate();
-            
+
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 updateBUByID(bu);
-            } 
+            }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
