@@ -66,25 +66,27 @@ public class BUInformationUpdateDialog extends javax.swing.JDialog {
     private String getCertStatus(String certString) {
         String cert = "";
         
-        switch(certString) {
-            case "B":
-                cert = "Board";
-                break;
-            case "D":
-                cert = "Deemed";
-                break;
-            case "U":
-                cert = "Unknown";
-                break;
-            case "Board":
-                cert = "B";
-                break;
-            case "Deemed":
-                cert = "D";
-                break;
-            case "Unknown":
-                cert = "U";
-                break;
+        if (certString != null){
+            switch(certString) {
+                case "B":
+                    cert = "Board";
+                    break;
+                case "D":
+                    cert = "Deemed";
+                    break;
+                case "U":
+                    cert = "Unknown";
+                    break;
+                case "Board":
+                    cert = "B";
+                    break;
+                case "Deemed":
+                    cert = "D";
+                    break;
+                case "Unknown":
+                    cert = "U";
+                    break;
+            }
         }
         
         return cert;

@@ -593,7 +593,7 @@ public class FileService {
 
                 String fileExtenstion = fileName.substring(fileName.lastIndexOf(".")); //. included
 
-                String fullType = ActivityType.getFullType(type);
+                String fullType = ActivityType.getFullType(type, section);
 
                 FileUtils.copyFile(docketFile, new File(caseArchiveFile + File.separator + fileDate + "_" + type + fileExtenstion));
 

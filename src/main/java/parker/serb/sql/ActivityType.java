@@ -103,7 +103,7 @@ public class ActivityType {
         return activityTypeList;
     }
 
-    public static String getFullType(String typeAbbrv) {
+    public static String getFullType(String typeAbbrv, String section) {
         String fullType = "";
 
         Statement stmt = null;
@@ -113,10 +113,12 @@ public class ActivityType {
             stmt = Database.connectToDB().createStatement();
 
             String sql = "select * from ActivityType"
-                    + " where descriptionAbbrv = ?";
+                    + " where descriptionAbbrv = ? AND "
+                    + " section = ?";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, typeAbbrv);
+            preparedStatement.setString(2, section);
 
             ResultSet activityTypeListRS = preparedStatement.executeQuery();
 
@@ -126,7 +128,7 @@ public class ActivityType {
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                getFullType(typeAbbrv);
+                getFullType(typeAbbrv, section);
             }
         } finally {
             DbUtils.closeQuietly(stmt);
