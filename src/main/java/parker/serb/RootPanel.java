@@ -1213,8 +1213,8 @@ public class RootPanel extends javax.swing.JFrame {
         jMenuItem10 = new javax.swing.JMenuItem();
         jMenuItem8 = new javax.swing.JMenuItem();
         medMaintenanceMenu = new javax.swing.JMenu();
-        jMenuItem12 = new javax.swing.JMenuItem();
-        FFandConcMenuItme = new javax.swing.JMenuItem();
+        FFConcMenuItem = new javax.swing.JMenuItem();
+        MediatorMenuItem = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
@@ -1726,21 +1726,21 @@ public class RootPanel extends javax.swing.JFrame {
 
         medMaintenanceMenu.setText("MED Maintenance");
 
-        jMenuItem12.setText("Fact Finders & Conciliators");
-        jMenuItem12.addActionListener(new java.awt.event.ActionListener() {
+        FFConcMenuItem.setText("Fact Finders & Conciliators");
+        FFConcMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem12ActionPerformed(evt);
+                FFConcMenuItemActionPerformed(evt);
             }
         });
-        medMaintenanceMenu.add(jMenuItem12);
+        medMaintenanceMenu.add(FFConcMenuItem);
 
-        FFandConcMenuItme.setText("Mediators");
-        FFandConcMenuItme.addActionListener(new java.awt.event.ActionListener() {
+        MediatorMenuItem.setText("Mediators");
+        MediatorMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                FFandConcMenuItmeActionPerformed(evt);
+                MediatorMenuItemActionPerformed(evt);
             }
         });
-        medMaintenanceMenu.add(FFandConcMenuItme);
+        medMaintenanceMenu.add(MediatorMenuItem);
 
         jMenu1.add(medMaintenanceMenu);
         jMenu1.add(jSeparator2);
@@ -2249,15 +2249,15 @@ public class RootPanel extends javax.swing.JFrame {
         FileService.openDocumentation("Hearings Section Procedures.pdf");
     }//GEN-LAST:event_HearingsDocumentationMenuItemActionPerformed
 
-    private void FFandConcMenuItmeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FFandConcMenuItmeActionPerformed
-        Audit.addAuditEntry("Opened MED Maintenance for Fact Finders & Conciliators");
-        new FactFinderConciliatorSearchDialog(Global.root, true);
-    }//GEN-LAST:event_FFandConcMenuItmeActionPerformed
-
-    private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
+    private void MediatorMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MediatorMenuItemActionPerformed
         Audit.addAuditEntry("Opened MED Maintenance for Mediators");
         new MediatorSearchDialog(Global.root, true);
-    }//GEN-LAST:event_jMenuItem12ActionPerformed
+    }//GEN-LAST:event_MediatorMenuItemActionPerformed
+
+    private void FFConcMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FFConcMenuItemActionPerformed
+        Audit.addAuditEntry("Opened MED Maintenance for Fact Finders & Conciliators");
+        new FactFinderConciliatorSearchDialog(Global.root, true);
+    }//GEN-LAST:event_FFConcMenuItemActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel CMDS;
@@ -2265,10 +2265,11 @@ public class RootPanel extends javax.swing.JFrame {
     private javax.swing.JPanel CSC;
     private javax.swing.JMenuItem CSCDocumentationMenuItem;
     private javax.swing.JPanel Docketing;
-    private javax.swing.JMenuItem FFandConcMenuItme;
+    private javax.swing.JMenuItem FFConcMenuItem;
     private javax.swing.JPanel Hearing;
     private javax.swing.JMenuItem HearingsDocumentationMenuItem;
     private javax.swing.JPanel MED;
+    private javax.swing.JMenuItem MediatorMenuItem;
     private javax.swing.JPanel ORG;
     private javax.swing.JMenuItem ORGDocumentationMenuItem;
     private javax.swing.JPanel REP;
@@ -2308,7 +2309,6 @@ public class RootPanel extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem10;
-    private javax.swing.JMenuItem jMenuItem12;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;

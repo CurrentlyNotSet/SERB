@@ -93,20 +93,20 @@
                 <Property name="text" type="java.lang.String" value="MED Maintenance"/>
               </Properties>
               <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem12">
+                <MenuItem class="javax.swing.JMenuItem" name="FFConcMenuItem">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Fact Finders &amp; Conciliators"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem12ActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="FFConcMenuItemActionPerformed"/>
                   </Events>
                 </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="FFandConcMenuItme">
+                <MenuItem class="javax.swing.JMenuItem" name="MediatorMenuItem">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Mediators"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="FFandConcMenuItmeActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="MediatorMenuItemActionPerformed"/>
                   </Events>
                 </MenuItem>
               </SubComponents>
