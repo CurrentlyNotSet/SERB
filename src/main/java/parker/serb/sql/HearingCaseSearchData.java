@@ -100,7 +100,12 @@ public class HearingCaseSearchData {
         Statement stmt = null;
         
         try {
-            List<CaseParty> caseParties = CaseParty.loadPartiesByCase();
+            List<CaseParty> caseParties = CaseParty.loadPartiesByCase(
+                    caseNumber.split("-")[0], 
+                    caseNumber.split("-")[1], 
+                    caseNumber.split("-")[2], 
+                    caseNumber.split("-")[3]
+            );
         
             for(CaseParty caseParty: caseParties) {
                 if(parties.equals("")) {
