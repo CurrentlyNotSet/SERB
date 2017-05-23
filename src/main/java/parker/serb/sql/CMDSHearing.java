@@ -34,7 +34,9 @@ public class CMDSHearing {
     
     public static void addHearing(Date hearingTime, String hearingType, String hearingRoom) {
         Statement stmt = null;
-            
+
+        HearingType type = HearingType.getHearingTypeByTypeCode(hearingType);
+        
         try {
 
             stmt = Database.connectToDB().createStatement();
@@ -57,12 +59,13 @@ public class CMDSHearing {
                 EmailOutInvites.addNewHearing("CMDS",
                         generateHearingToAddress(CMDSCase.getALJemail(), HearingRoom.getHearingRoomEmailByName(hearingRoom)),
                         null,
-                        "An upcoming " + hearingType + " is booked in " + hearingRoom + " at " + Global.mmddyyyyhhmma.format(hearingTime),
+                        "An upcoming " + (type.hearingDescription.equals("") ? hearingType : type.hearingDescription) + " is booked in " + hearingRoom + " at " + Global.mmddyyyyhhmma.format(hearingTime),
                         NumberFormatService.generateFullCaseNumber(),
                         hearingType,
                         hearingRoom,
-                        hearingType,
+                        type.hearingDescription.equals("") ? hearingType : type.hearingDescription,
                         new Timestamp(hearingTime.getTime()));
+                
                 Activity.addActivty("Created a " + hearingType + " on " + Global.mmddyyyyhhmma.format(hearingTime) + " in " + hearingRoom, null);
             }
         } catch (SQLException ex) {
