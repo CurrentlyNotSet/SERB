@@ -106,6 +106,38 @@ public class HearingType {
         }
         return item;
     }
+    
+    public static HearingType getHearingTypeByTypeCode(String type) {
+        HearingType item = new HearingType();
+
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT * FROM HearingType WHERE hearingType = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, type);
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                item.id = rs.getInt("id");
+                item.active = rs.getBoolean("active");
+                item.section = rs.getString("section") == null ? "" : rs.getString("section").trim();
+                item.hearingType = rs.getString("hearingType") == null ? "" : rs.getString("hearingType").trim();
+                item.hearingDescription = rs.getString("hearingDescription") == null ? "" : rs.getString("hearingDescription").trim();
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getHearingTypeByTypeCode(type);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return item;
+    }
 
     public static void createHearingType(HearingType item) {
         Statement stmt = null;
