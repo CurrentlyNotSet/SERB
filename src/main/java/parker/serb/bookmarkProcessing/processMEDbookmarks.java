@@ -132,11 +132,12 @@ public class processMEDbookmarks {
                         }
                         employerREPAddresses += StringUtilities.buildAddressBlockWithLineBreaks(party);
                         employerREPNames += StringUtilities.buildCasePartyNameWithPrefix(party);
-                        employerRepSalutation += party.prefix != null ? party.prefix : "";
-                        employerRepLastName += party.lastName != null ? party.lastName : "";
-                        employerRepEmail += party.emailAddress != null ? party.emailAddress : "";
-                        employerRepPhoneNumber += party.phone1 != null ? party.phone1 : "";
-                        employerRepPhoneNumber += party.phone2 != null ? ", " + party.phone2 : "";
+                        employerRepSalutation += !party.prefix.equals("") ? party.prefix : "";
+                        employerRepLastName += !party.lastName.equals("") ? party.lastName : "";
+                        employerRepEmail += !party.emailAddress.equals("") ? party.emailAddress : "";
+                        employerRepPhoneNumber += !party.phone1.equals("") ? party.phone1 : "";
+                        employerRepPhoneNumber += !party.phone2.equals("") ? ""
+                                : (employerRepPhoneNumber.equals("") ? party.phone2 : ", " + party.phone2);
 
                         break;
                     case "Employee Organization":
