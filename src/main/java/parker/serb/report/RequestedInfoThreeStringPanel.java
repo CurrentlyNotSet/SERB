@@ -38,8 +38,8 @@ public class RequestedInfoThreeStringPanel extends javax.swing.JDialog {
         switch (IDType) {
             case "Multi Case Party":
                 TextField1Label.setText("Case Year: ");
-                TextField2Label.setText("Starting Case Number: ");
-                TextField3Label.setText("Ending Case Number: ");
+                TextField2Label.setText("Starting Case Sequence Number: ");
+                TextField3Label.setText("Ending Case Sequence Number: ");
                 break;
             default:
                 break;
