@@ -66,10 +66,11 @@ public class MailLogViewerPanel extends javax.swing.JDialog {
     private void setDefaults() {
         headerLabel.setText(Global.activeSection + " Mail Log Viewer");
 
-        if (Global.activeSection.equals("ORG") || Global.activeSection.equals("Civil Service Commission")) {
-            jTable1.getColumnModel().getColumn(2).setHeaderValue("Org Number");
+        if (Global.activeSection.equals("ORG") || Global.activeSection.equals("CSC") 
+                || Global.activeSection.equals("Civil Service Commission")) {
+            jTable1.getColumnModel().getColumn(3).setHeaderValue("Org Number");
         } else if (Global.activeSection.equals("CMDS")) {
-            jTable1.getColumnModel().getColumn(3).setHeaderValue("ALJ");
+            jTable1.getColumnModel().getColumn(4).setHeaderValue("ALJ");
         }
 
         jTable1.getTableHeader().repaint();

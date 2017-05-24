@@ -316,7 +316,8 @@ public class fileEmailDialog extends javax.swing.JDialog {
 
         if(!caseNumberFail.equals("")) {
             new docketingCaseNotFound((JFrame) Global.root.getRootPane().getParent(), true, caseNumberFail);
-            caseNumberTextBox.requestFocus();
+            caseNumberTextBox.setText("");
+//            caseNumberTextBox.requestFocus();
         }
 
         if(!caseNumberTextBox.getText().equals("")) {

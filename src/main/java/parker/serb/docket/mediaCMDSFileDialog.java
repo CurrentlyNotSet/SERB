@@ -5,11 +5,15 @@
  */
 package parker.serb.docket;
 
+import com.alee.extended.date.WebCalendar;
+import com.alee.utils.swing.Customizer;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.event.DocumentEvent;
@@ -35,28 +39,48 @@ public class mediaCMDSFileDialog extends javax.swing.JDialog {
      * @param parent
      * @param modal
      * @param file
+     * @param time
      * @param section
      */
-    public mediaCMDSFileDialog(java.awt.Frame parent, boolean modal, String file, String section) {
+    public mediaCMDSFileDialog(java.awt.Frame parent, boolean modal, String file, String section, String time) {
         super(parent, modal);
         initComponents();
         selectedSection = section;
-        loadData(section, file);
-        addListeners();
+        loadData(section, file, time);
+        addListeners(section);
         this.pack();
         setLocationRelativeTo(parent);
         setVisible(true);
     }
 
-
-
-    private void loadData(String section, String file) {
+    private void loadData(String section, String file, String time) {
         fileNameTextBox.setText(file);
         loadToComboBox(section);
         loadTypeComboBox();
+        scanDateTextBox.setText(time.split(" ")[0]);
+        hourTextBox.setText(time.split(" ")[1].split(":")[0]);
+        minuteTextBox.setText(time.split(" ")[1].split(":")[1]);
+        amPMComboBox.setSelectedItem(time.split(" ")[2]);
     }
 
-    private void addListeners() {
+    private void addListeners(String section) {
+        hourTextBox.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                autoCompleteTimeOfDay();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                autoCompleteTimeOfDay();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                autoCompleteTimeOfDay();
+            }
+        });
+
         caseNumberTextBox.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {}
@@ -141,6 +165,16 @@ public class mediaCMDSFileDialog extends javax.swing.JDialog {
         });
     }
 
+    private void autoCompleteTimeOfDay() {
+        if(hourTextBox.getText().equals("")) {
+            //place holder
+        } else if(Integer.parseInt(hourTextBox.getText()) >= 7 && Integer.parseInt(hourTextBox.getText()) <= 11) {
+            amPMComboBox.setSelectedItem("AM");
+        } else {
+            amPMComboBox.setSelectedItem("PM");
+        }
+    }
+
     private void enableButton() {
         if(caseNumberTextBox.getText().equals("")
                 || fromTextBox.getText().equals("")
@@ -154,8 +188,8 @@ public class mediaCMDSFileDialog extends javax.swing.JDialog {
     }
 
     private void loadToComboBox(String section) {
-        List userList = null;
-        userList = User.loadSectionDropDowns(section);
+        List userList = User.loadSectionDropDowns(section);
+
         toComboBox.setMaximumRowCount(6);
         toComboBox.removeAllItems();
         toComboBox.addItem("");
@@ -193,6 +227,7 @@ public class mediaCMDSFileDialog extends javax.swing.JDialog {
 
     private void validateCaseNumber() {
         String[] caseNumbers = caseNumberTextBox.getText().split(",");
+
         String caseNumberFail = "";
 
         switch(selectedSection) {
@@ -203,17 +238,39 @@ public class mediaCMDSFileDialog extends javax.swing.JDialog {
 
         if(!caseNumberFail.equals("")) {
             new docketingCaseNotFound((JFrame) Global.root.getRootPane().getParent(), true, caseNumberFail);
-            caseNumberTextBox.requestFocus();
+            caseNumberTextBox.setText("");
+//            caseNumberTextBox.requestFocus();
         }
 
         if(!caseNumberTextBox.getText().equals("")) {
-            switch (selectedSection) {
-                case "CMDS":
-                    toComboBox.setSelectedItem(CMDSCase.DocketTo(caseNumberTextBox.getText()));
-                    break;
-            }
+            if(!caseNumberTextBox.getText().equals("")) {
 
+                switch (selectedSection) {
+                    case "CMDS":
+                        toComboBox.setSelectedItem(CMDSCase.DocketTo(caseNumberTextBox.getText()));
+                        break;
+                }
+            }
         }
+    }
+
+    private Date generateDate() {
+        int hour = Integer.valueOf(hourTextBox.getText().trim());
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, Integer.valueOf(scanDateTextBox.getText().split("/")[2]));
+        cal.set(Calendar.MONTH, Integer.valueOf(scanDateTextBox.getText().split("/")[0]) - 1);
+        cal.set(Calendar.DAY_OF_MONTH, Integer.valueOf(scanDateTextBox.getText().split("/")[1]));
+        if (amPMComboBox.getSelectedItem().toString().equalsIgnoreCase("PM") && hour == 12){
+            cal.set(Calendar.HOUR_OF_DAY, hour);
+        } else {
+            cal.set(Calendar.HOUR_OF_DAY, amPMComboBox.getSelectedItem().toString().equalsIgnoreCase("AM") ? hour : hour + 12);
+        }
+        cal.set(Calendar.MINUTE, Integer.valueOf(minuteTextBox.getText().trim()));
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+
+        return cal.getTime();
     }
 
     /**
@@ -241,10 +298,16 @@ public class mediaCMDSFileDialog extends javax.swing.JDialog {
         caseNumberTextBox = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         commentTextBox = new javax.swing.JTextArea();
-        jLabel7 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        scanDateTextBox = new com.alee.extended.date.WebDateField();
+        hourTextBox = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        minuteTextBox = new javax.swing.JTextField();
+        amPMComboBox = new javax.swing.JComboBox<>();
+        jLabel11 = new javax.swing.JLabel();
         directionComboBox = new javax.swing.JComboBox<>();
         descriptionComboBox = new javax.swing.JComboBox<>();
-        jLabel9 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -265,6 +328,11 @@ public class mediaCMDSFileDialog extends javax.swing.JDialog {
         fileNameTextBox.setEditable(false);
         fileNameTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         fileNameTextBox.setEnabled(false);
+        fileNameTextBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fileNameTextBoxActionPerformed(evt);
+            }
+        });
 
         cancelButton.setText("Cancel");
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
@@ -288,98 +356,149 @@ public class mediaCMDSFileDialog extends javax.swing.JDialog {
         commentTextBox.setRows(5);
         jScrollPane1.setViewportView(commentTextBox);
 
-        jLabel7.setText("In or Out:");
+        jLabel9.setText("Date:");
 
-        directionComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "IN", "OUT" }));
+        scanDateTextBox.setEditable(false);
+        scanDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
+        scanDateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        scanDateTextBox.setDateFormat(Global.mmddyyyy);
 
-        jLabel9.setText("Description:");
+        scanDateTextBox.setCalendarCustomizer(new Customizer<WebCalendar> ()
+            {
+                @Override
+                public void customize ( final WebCalendar calendar )
+                {
+                    calendar.setStartWeekFromSunday ( true );
+                }
+            } );
+            scanDateTextBox.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    scanDateTextBoxActionPerformed(evt);
+                }
+            });
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(fileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel8)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel9))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(descriptionComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(caseNumberTextBox)
-                            .addComponent(fileNameTextBox)
-                            .addComponent(fromTextBox)
-                            .addComponent(toComboBox, 0, 279, Short.MAX_VALUE)
-                            .addComponent(typeComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1)
-                            .addComponent(directionComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(caseNumberTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(fileNameTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(fromTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(toComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(typeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(descriptionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(directionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(4, 4, 4)
-                        .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(fileButton)
-                    .addComponent(cancelButton))
-                .addContainerGap())
-        );
+            hourTextBox.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    hourTextBoxActionPerformed(evt);
+                }
+            });
 
-        pack();
-    }// </editor-fold>//GEN-END:initComponents
+            jLabel10.setText(":");
+
+            minuteTextBox.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    minuteTextBoxActionPerformed(evt);
+                }
+            });
+
+            amPMComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "AM", "PM" }));
+
+            jLabel11.setText("In or Out:");
+
+            directionComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "IN", "OUT" }));
+
+            jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+            jLabel12.setText("Description:");
+
+            javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+            getContentPane().setLayout(layout);
+            layout.setHorizontalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(fileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jLabel2)
+                                .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel3)
+                                .addComponent(jLabel4)
+                                .addComponent(jLabel5)
+                                .addComponent(jLabel6)
+                                .addComponent(jLabel9)
+                                .addComponent(jLabel11)
+                                .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(descriptionComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(caseNumberTextBox)
+                                .addComponent(fileNameTextBox)
+                                .addComponent(fromTextBox)
+                                .addComponent(toComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(typeComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jScrollPane1)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(scanDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(hourTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(0, 0, 0)
+                                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(0, 0, 0)
+                                    .addComponent(minuteTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(amPMComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(directionComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addContainerGap())
+            );
+            layout.setVerticalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jLabel1)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel8)
+                        .addComponent(caseNumberTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel2)
+                        .addComponent(fileNameTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel9)
+                        .addComponent(scanDateTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(hourTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel10)
+                        .addComponent(minuteTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(amPMComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(fromTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel3))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(toComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(typeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(descriptionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(directionComboBox)
+                        .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel6)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGap(18, 18, 18)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(fileButton)
+                        .addComponent(cancelButton))
+                    .addContainerGap())
+            );
+
+            pack();
+        }// </editor-fold>//GEN-END:initComponents
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         dispose();
@@ -388,22 +507,40 @@ public class mediaCMDSFileDialog extends javax.swing.JDialog {
     private void fileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileButtonActionPerformed
         String[] caseNumbers = caseNumberTextBox.getText().trim().split(",");
 
-        FileService.docketCMDSMedia(caseNumbers, //caseNumber
+        FileService.docketCMDSMediaWithTime(caseNumbers, //caseNumber
             selectedSection,
             fromTextBox.getText(),
             toComboBox.getSelectedItem().toString(),
             fileNameTextBox.getText(), //fileName
             typeComboBox.getSelectedItem().toString(), //fileType1
             descriptionComboBox.getSelectedItem().toString(), //fileType2
-            commentTextBox.getText().trim().equals("") ? null : commentTextBox.getText().trim(),
+            commentTextBox.getText().trim(),
             directionComboBox.getSelectedItem().toString(),
-            this
+            this,
+            generateDate()
         );
-
         dispose();
     }//GEN-LAST:event_fileButtonActionPerformed
 
+    private void scanDateTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scanDateTextBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_scanDateTextBoxActionPerformed
+
+    private void hourTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hourTextBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_hourTextBoxActionPerformed
+
+    private void minuteTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minuteTextBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_minuteTextBoxActionPerformed
+
+    private void fileNameTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileNameTextBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fileNameTextBoxActionPerformed
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> amPMComboBox;
     private javax.swing.JButton cancelButton;
     private javax.swing.JTextField caseNumberTextBox;
     private javax.swing.JTextArea commentTextBox;
@@ -412,16 +549,21 @@ public class mediaCMDSFileDialog extends javax.swing.JDialog {
     private javax.swing.JButton fileButton;
     private javax.swing.JTextField fileNameTextBox;
     private javax.swing.JTextField fromTextBox;
+    private javax.swing.JTextField hourTextBox;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField minuteTextBox;
+    private com.alee.extended.date.WebDateField scanDateTextBox;
     private javax.swing.JComboBox<String> toComboBox;
     private javax.swing.JComboBox<String> typeComboBox;
     // End of variables declaration//GEN-END:variables
