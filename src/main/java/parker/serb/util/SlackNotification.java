@@ -63,6 +63,17 @@ public class SlackNotification {
                         exceptionType += " - Error Opening Default DCR Application";
                     }
                 }
+                if (ex.toString().toLowerCase().contains("doesn't exist")) {
+                        exceptionType += " - File Does Not Exist";
+                }
+                if (ex.toString().toLowerCase().contains("failed to open ")) {
+                        exceptionType += " - Unable To Open File";
+                }
+                break;
+            case "IllegalArgumentException":
+                if (ex.toString().toLowerCase().contains("doesn't exist")) {
+                        exceptionType += " - File Does Not Exist";
+                }
                 break;
         }
         return exceptionType;
