@@ -189,29 +189,36 @@ public class Mediator {
         String[] nameParts = name.split(" ", 2);
         String id = "";
 
-        Statement stmt = null;
-        try {
-            stmt = Database.connectToDB().createStatement();
+        if (nameParts.length > 0) {
+            Statement stmt = null;
+            try {
+                stmt = Database.connectToDB().createStatement();
 
-            String sql = "select id from mediator where firstName = ? and lastName = ?";
+                String sql = "select id from mediator where firstName = ? and lastName = ?";
 
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, nameParts[0]);
-            preparedStatement.setString(2, nameParts[1]);
+                PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+                preparedStatement.setString(1, nameParts[0]);
+                if (nameParts.length > 1) {
+                    preparedStatement.setString(2, nameParts[1]);
+                } else {
+                    preparedStatement.setString(2, "");
+                }
 
-            ResultSet caseActivity = preparedStatement.executeQuery();
+                ResultSet caseActivity = preparedStatement.executeQuery();
 
-            while(caseActivity.next()) {
-                id = caseActivity.getString("id");
+                while (caseActivity.next()) {
+                    id = caseActivity.getString("id");
+                }
+            } catch (SQLException ex) {
+                SlackNotification.sendNotification(ex);
+                if (ex.getCause() instanceof SQLServerException) {
+                    getMediatorIDByName(name);
+                }
+            } finally {
+                DbUtils.closeQuietly(stmt);
             }
-        } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex);
-            if(ex.getCause() instanceof SQLServerException) {
-                getMediatorIDByName(name);
-            }
-        } finally {
-            DbUtils.closeQuietly(stmt);
         }
+
         return id;
     }
 
