@@ -1219,8 +1219,6 @@ public class REPElectionPanel extends javax.swing.JPanel {
                 .addComponent(addMultiCaseElectionButton))
         );
 
-        jPanel2.setSize(new java.awt.Dimension(489, 85));
-
         jLabel9.setText("Site Information:");
 
         addSiteInformation.setText("+");
@@ -1474,16 +1472,22 @@ public class REPElectionPanel extends javax.swing.JPanel {
 
                 jPanel14.add(jPanel15, "card2");
 
+                jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
                 jLabel17.setText("Ballot Three:");
 
+                jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
                 jLabel16.setText("Ballot Two:");
 
+                jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
                 jLabel14.setText("Eligibility Date:");
 
+                jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
                 jLabel18.setText("Ballot Four:");
 
+                jLabel19.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
                 jLabel19.setText("Mail Kit Date:");
 
+                jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
                 jLabel15.setText("Ballot One:");
 
                 ballotOne.setBackground(new java.awt.Color(238, 238, 238));
@@ -1539,14 +1543,19 @@ public class REPElectionPanel extends javax.swing.JPanel {
                             .addComponent(jLabel19))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(mailKitDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(ballotFour)
-                            .addComponent(ballotThree)
-                            .addComponent(ballotTwo)
-                            .addComponent(ballotOne)
-                            .addComponent(eligibilityDate, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE))
+                            .addComponent(mailKitDate, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ballotFour, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ballotThree, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ballotTwo, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ballotOne, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(eligibilityDate, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap())
                 );
+
+                jPanel7Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel14, jLabel15, jLabel16, jLabel17, jLabel18, jLabel19});
+
+                jPanel7Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {ballotFour, ballotOne, ballotThree, ballotTwo, eligibilityDate, mailKitDate});
+
                 jPanel7Layout.setVerticalGroup(
                     jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel7Layout.createSequentialGroup()
@@ -1577,17 +1586,27 @@ public class REPElectionPanel extends javax.swing.JPanel {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 );
 
+                jPanel7Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel14, jLabel15, jLabel16, jLabel17, jLabel18, jLabel19});
+
+                jPanel7Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {ballotFour, ballotOne, ballotThree, ballotTwo, eligibilityDate, mailKitDate});
+
+                jLabel20.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
                 jLabel20.setText("Polling Start Date:");
 
+                jLabel23.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
                 jLabel23.setText("Polling End Date:");
 
+                jLabel24.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
                 jLabel24.setText("Ballots Count Day:");
 
+                jLabel25.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
                 jLabel25.setText("Ballots Count Date:");
 
+                jLabel26.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
                 jLabel26.setText("Ballots Count Time:");
 
-                jLabel27.setText("Eligiblity List Date:");
+                jLabel27.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+                jLabel27.setText("Eligibility List Date:");
 
                 ballotsCountDay.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", " " }));
                 ballotsCountDay.setSelectedIndex(7);
@@ -1620,10 +1639,10 @@ public class REPElectionPanel extends javax.swing.JPanel {
                     }
                 });
                 pollingStartDate.addInputMethodListener(new java.awt.event.InputMethodListener() {
-                    public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
-                    }
                     public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
                         pollingStartDateCaretPositionChanged(evt);
+                    }
+                    public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
                     }
                 });
                 pollingStartDate.addActionListener(new java.awt.event.ActionListener() {
@@ -1677,31 +1696,30 @@ public class REPElectionPanel extends javax.swing.JPanel {
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel8Layout.createSequentialGroup()
-                                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel27)
-                                    .addComponent(jLabel26))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel27)
+                                .addComponent(jLabel26))
+                            .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel8Layout.createSequentialGroup()
-                                        .addComponent(ballotsCountTime)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(amPMComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(eligibilityListDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .addComponent(jLabel25)
+                                    .addComponent(jLabel24, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel20, javax.swing.GroupLayout.Alignment.TRAILING))
+                                .addComponent(jLabel23, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(eligibilityListDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel8Layout.createSequentialGroup()
-                                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel25)
-                                        .addComponent(jLabel24, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel20, javax.swing.GroupLayout.Alignment.TRAILING))
-                                    .addComponent(jLabel23, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(ballotsCountTime)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(pollingStartDate, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(pollingEndDate, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(ballotsCountDate, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(ballotsCountDay, 0, 300, Short.MAX_VALUE)))))
+                                .addComponent(amPMComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(ballotsCountDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(ballotsCountDay, 0, 300, Short.MAX_VALUE)
+                            .addComponent(pollingEndDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(pollingStartDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 );
+
+                jPanel8Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel20, jLabel23, jLabel24, jLabel25, jLabel26, jLabel27});
+
                 jPanel8Layout.setVerticalGroup(
                     jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel8Layout.createSequentialGroup()
@@ -1735,6 +1753,8 @@ public class REPElectionPanel extends javax.swing.JPanel {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 );
 
+                jPanel8Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel20, jLabel23, jLabel24, jLabel25, jLabel26, jLabel27});
+
                 javax.swing.GroupLayout jPanel16Layout = new javax.swing.GroupLayout(jPanel16);
                 jPanel16.setLayout(jPanel16Layout);
                 jPanel16Layout.setHorizontalGroup(
@@ -1747,11 +1767,8 @@ public class REPElectionPanel extends javax.swing.JPanel {
                 );
                 jPanel16Layout.setVerticalGroup(
                     jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel16Layout.createSequentialGroup()
-                        .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jPanel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 );
 
                 jPanel14.add(jPanel16, "card3");
@@ -1763,14 +1780,14 @@ public class REPElectionPanel extends javax.swing.JPanel {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel14, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
                 );
                 jPanel3Layout.setVerticalGroup(
                     jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGap(0, 0, 0)
-                        .addComponent(jPanel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jPanel14, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE))
                 );
 
                 jPanel4.setLayout(new java.awt.CardLayout());
