@@ -43,7 +43,22 @@ public class EmailOutInvites {
 
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "Insert INTO EmailOutInvites VALUES (?,?,?,?,?,?,?,?,?,?)";
+            String sql = "Insert INTO EmailOutInvites ("
+                    + "section, "           //01
+                    + "TOaddress, "         //02
+                    + "CCaddress, "         //03
+                    + "emailBody, "         //04
+                    + "caseNumber, "        //05
+                    + "hearingType, "       //06
+                    + "hearingRoomAbv, "    //07
+                    + "hearingdescription, "//08
+                    + "hearingStartTime, "  //09
+                    + "hearingEndtime"      //10
+                    + ") VALUES (";
+                    for(int i=0; i<9; i++){
+                        sql += "?, ";   //01-09
+                    }
+                     sql += "?)"; //10
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, section);
