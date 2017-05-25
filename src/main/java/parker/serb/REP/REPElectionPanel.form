@@ -244,11 +244,6 @@
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="jPanel2">
-      <Properties>
-        <Property name="size" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[489, 85]"/>
-        </Property>
-      </Properties>
 
       <Layout>
         <DimensionLayout dim="0">
@@ -383,7 +378,7 @@
               <Group type="102" alignment="0" attributes="0">
                   <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                  <Component id="jPanel14" max="32767" attributes="0"/>
+                  <Component id="jPanel14" pref="190" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -685,13 +680,8 @@
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                              <Component id="jPanel8" alignment="0" pref="0" max="32767" attributes="0"/>
-                              <Component id="jPanel7" alignment="0" max="32767" attributes="0"/>
-                          </Group>
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                      </Group>
+                      <Component id="jPanel8" alignment="0" max="32767" attributes="0"/>
+                      <Component id="jPanel7" alignment="0" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>
@@ -704,21 +694,21 @@
                           <Group type="102" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="jLabel14" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel15" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel16" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel17" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel18" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel19" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel14" linkSize="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel15" linkSize="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel16" linkSize="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel17" linkSize="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel18" linkSize="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel19" linkSize="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="mailKitDate" max="32767" attributes="0"/>
-                                  <Component id="ballotFour" max="32767" attributes="0"/>
-                                  <Component id="ballotThree" max="32767" attributes="0"/>
-                                  <Component id="ballotTwo" max="32767" attributes="0"/>
-                                  <Component id="ballotOne" max="32767" attributes="0"/>
-                                  <Component id="eligibilityDate" pref="267" max="32767" attributes="0"/>
+                                  <Component id="mailKitDate" linkSize="5" alignment="0" min="-2" pref="267" max="-2" attributes="0"/>
+                                  <Component id="ballotFour" linkSize="5" alignment="0" min="-2" pref="267" max="-2" attributes="0"/>
+                                  <Component id="ballotThree" linkSize="5" alignment="0" min="-2" pref="267" max="-2" attributes="0"/>
+                                  <Component id="ballotTwo" linkSize="5" alignment="0" min="-2" pref="267" max="-2" attributes="0"/>
+                                  <Component id="ballotOne" linkSize="5" alignment="0" min="-2" pref="267" max="-2" attributes="0"/>
+                                  <Component id="eligibilityDate" linkSize="5" alignment="0" min="-2" pref="267" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
@@ -729,33 +719,33 @@
                           <Group type="102" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="jLabel14" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="eligibilityDate" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel14" linkSize="4" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="eligibilityDate" linkSize="6" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="jLabel15" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="ballotOne" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel15" linkSize="4" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="ballotOne" linkSize="6" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="jLabel16" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="ballotTwo" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel16" linkSize="4" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="ballotTwo" linkSize="6" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="jLabel17" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="ballotThree" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel17" linkSize="4" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="ballotThree" linkSize="6" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="jLabel18" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="ballotFour" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel18" linkSize="4" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="ballotFour" linkSize="6" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="jLabel19" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="mailKitDate" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel19" linkSize="4" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="mailKitDate" linkSize="6" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="32767" attributes="0"/>
                           </Group>
@@ -765,31 +755,37 @@
                   <SubComponents>
                     <Component class="javax.swing.JLabel" name="jLabel17">
                       <Properties>
+                        <Property name="horizontalAlignment" type="int" value="11"/>
                         <Property name="text" type="java.lang.String" value="Ballot Three:"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel16">
                       <Properties>
+                        <Property name="horizontalAlignment" type="int" value="11"/>
                         <Property name="text" type="java.lang.String" value="Ballot Two:"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel14">
                       <Properties>
+                        <Property name="horizontalAlignment" type="int" value="11"/>
                         <Property name="text" type="java.lang.String" value="Eligibility Date:"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel18">
                       <Properties>
+                        <Property name="horizontalAlignment" type="int" value="11"/>
                         <Property name="text" type="java.lang.String" value="Ballot Four:"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel19">
                       <Properties>
+                        <Property name="horizontalAlignment" type="int" value="11"/>
                         <Property name="text" type="java.lang.String" value="Mail Kit Date:"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel15">
                       <Properties>
+                        <Property name="horizontalAlignment" type="int" value="11"/>
                         <Property name="text" type="java.lang.String" value="Ballot One:"/>
                       </Properties>
                     </Component>
@@ -883,38 +879,31 @@
                           <Group type="102" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <Group type="103" groupAlignment="1" attributes="0">
-                                          <Component id="jLabel27" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jLabel26" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" attributes="0">
-                                              <Component id="ballotsCountTime" max="32767" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="amPMComboBox" min="-2" pref="64" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Component id="eligibilityListDate" max="32767" attributes="0"/>
-                                      </Group>
+                                  <Group type="103" alignment="0" groupAlignment="1" attributes="0">
+                                      <Component id="jLabel27" linkSize="2" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jLabel26" linkSize="2" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <Group type="102" attributes="0">
+                                  <Group type="103" alignment="0" groupAlignment="0" attributes="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="jLabel25" alignment="0" min="-2" max="-2" attributes="0"/>
-                                              <Component id="jLabel24" alignment="1" min="-2" pref="116" max="-2" attributes="0"/>
-                                              <Component id="jLabel20" alignment="1" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Component id="jLabel23" alignment="1" min="-2" pref="107" max="-2" attributes="0"/>
+                                          <Component id="jLabel25" linkSize="2" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jLabel24" linkSize="2" alignment="1" min="-2" pref="116" max="-2" attributes="0"/>
+                                          <Component id="jLabel20" linkSize="2" alignment="1" min="-2" max="-2" attributes="0"/>
                                       </Group>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="1" attributes="0">
-                                          <Component id="pollingStartDate" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="pollingEndDate" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="ballotsCountDate" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="ballotsCountDay" alignment="1" pref="300" max="32767" attributes="0"/>
-                                      </Group>
+                                      <Component id="jLabel23" linkSize="2" alignment="1" min="-2" pref="107" max="-2" attributes="0"/>
                                   </Group>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="eligibilityListDate" alignment="0" max="32767" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="ballotsCountTime" max="32767" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="amPMComboBox" min="-2" pref="64" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="ballotsCountDate" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="ballotsCountDay" alignment="0" pref="300" max="32767" attributes="0"/>
+                                  <Component id="pollingEndDate" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="pollingStartDate" alignment="0" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -924,12 +913,12 @@
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="jLabel20" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel20" linkSize="1" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="pollingStartDate" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="jLabel23" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel23" linkSize="1" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="pollingEndDate" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
@@ -937,23 +926,23 @@
                                   <Component id="ballotsCountDay" min="-2" max="-2" attributes="0"/>
                                   <Group type="102" attributes="0">
                                       <EmptySpace min="4" pref="4" max="-2" attributes="0"/>
-                                      <Component id="jLabel24" min="-2" pref="21" max="-2" attributes="0"/>
+                                      <Component id="jLabel24" linkSize="1" min="-2" pref="21" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="jLabel25" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel25" linkSize="1" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="ballotsCountDate" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="jLabel26" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel26" linkSize="1" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="ballotsCountTime" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="amPMComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="jLabel27" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel27" linkSize="1" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="eligibilityListDate" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="32767" attributes="0"/>
@@ -964,32 +953,38 @@
                   <SubComponents>
                     <Component class="javax.swing.JLabel" name="jLabel20">
                       <Properties>
+                        <Property name="horizontalAlignment" type="int" value="11"/>
                         <Property name="text" type="java.lang.String" value="Polling Start Date:"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel23">
                       <Properties>
+                        <Property name="horizontalAlignment" type="int" value="11"/>
                         <Property name="text" type="java.lang.String" value="Polling End Date:"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel24">
                       <Properties>
+                        <Property name="horizontalAlignment" type="int" value="11"/>
                         <Property name="text" type="java.lang.String" value="Ballots Count Day:"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel25">
                       <Properties>
+                        <Property name="horizontalAlignment" type="int" value="11"/>
                         <Property name="text" type="java.lang.String" value="Ballots Count Date:"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel26">
                       <Properties>
+                        <Property name="horizontalAlignment" type="int" value="11"/>
                         <Property name="text" type="java.lang.String" value="Ballots Count Time:"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel27">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Eligiblity List Date:"/>
+                        <Property name="horizontalAlignment" type="int" value="11"/>
+                        <Property name="text" type="java.lang.String" value="Eligibility List Date:"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JComboBox" name="ballotsCountDay">

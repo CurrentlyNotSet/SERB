@@ -107,7 +107,7 @@ public class HearingsMediation {
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
-                mediator = User.getNameByID(rs.getInt("mediator"));
+                mediator = Mediator.getMediatorNameByID(rs.getString("mediator"));
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
