@@ -1236,7 +1236,7 @@ public class RootPanel extends javax.swing.JFrame {
 
         jMenuItem9.setText("jMenuItem9");
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("State Employment Relations Board");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setMinimumSize(new java.awt.Dimension(1199, 704));
@@ -1861,7 +1861,7 @@ public class RootPanel extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1296, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1332, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -2088,11 +2088,12 @@ public class RootPanel extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        DocketLock.removeUserLocks();
-        NewCaseLock.removeUserLocks();
-        User.updateActiveLogIn();
-        Audit.addAuditEntry("Logged Off");
-        System.exit(0);
+//        DocketLock.removeUserLocks();
+//        NewCaseLock.removeUserLocks();
+//        User.updateActiveLogIn();
+//        Audit.addAuditEntry("Logged Off");
+//        System.exit(0);
+        new ExitVerification((JFrame) getRootPane().getParent(), true, "Quit");
     }//GEN-LAST:event_formWindowClosing
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
