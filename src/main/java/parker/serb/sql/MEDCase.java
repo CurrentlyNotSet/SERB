@@ -3279,8 +3279,7 @@ public class MEDCase {
                     + "MEDCase.fileDate AS FileDate "
                     + "FROM  MEDCase "
                     + "WHERE MEDCase.SendToBoardToClose != 1 "
-                    + "AND MEDCase.SettlementDate > ? "
-                    + "AND MEDCase.SettlementDate < ? "
+                    + "AND (MEDCase.SettlementDate >= CAST(? AS DATE) AND MEDCase.SettlementDate <= CAST(? AS DATE)) "
                     + "ORDER BY MEDCase.caseYear, MEDCase.caseMonth, MEDCase.caseNumber";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
