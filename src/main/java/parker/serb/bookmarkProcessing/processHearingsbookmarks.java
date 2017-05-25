@@ -116,12 +116,12 @@ public class processHearingsbookmarks {
                 switch (party.caseRelation.toLowerCase()) {
                     case "complaintant":
                     case "complainant":
-                        complaintant += (complaintant.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party);
+                        complaintant += (complaintant.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party) + ", ";
                         break;
                     case "respondent":
                     case "respondant":
                     case "charged party":
-                        respondent += (respondent.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party);
+                        respondent += (respondent.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party) + ", ";
                         break;
                 }
             }
@@ -129,13 +129,13 @@ public class processHearingsbookmarks {
         
         String HEARINGPARTIES = "";
 
-        HEARINGPARTIES += complaintant.toUpperCase() + ",";
+        HEARINGPARTIES += complaintant.toUpperCase();
         HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
         HEARINGPARTIES += "Complainant,";
         HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
         HEARINGPARTIES += "    v.";
         HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
-        HEARINGPARTIES += respondent.toUpperCase() + ",";
+        HEARINGPARTIES += respondent.toUpperCase();
         HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
         HEARINGPARTIES += "Respondent.";
 
