@@ -347,7 +347,8 @@ public class CMDSCaseHistoryEntryTypes {
                     null,
                     null,
                     null,
-                    DateConversion.generateReminderStartDate(dueDate.getResponseDueDate())
+                    DateConversion.generateReminderStartDate(dueDate.getResponseDueDate()),
+                    "Response due for " + NumberFormatService.generateFullCaseNumber()
                 );
             }
 
@@ -539,7 +540,8 @@ public class CMDSCaseHistoryEntryTypes {
                     null,
                     null,
                     null,
-                    DateConversion.generateReminderStartDate(dueDate.getResponseDueDate())
+                    DateConversion.generateReminderStartDate(dueDate.getResponseDueDate()),
+                    "Response due for " + NumberFormatService.generateFullCaseNumber()
                 );
             }
 
@@ -606,7 +608,8 @@ public class CMDSCaseHistoryEntryTypes {
                     null,
                     null,
                     null,
-                    DateConversion.generateReminderStartDate(dueDate.getResponseDueDate())
+                    DateConversion.generateReminderStartDate(dueDate.getResponseDueDate()),
+                    "Response due for " + NumberFormatService.generateFullCaseNumber()
                 );
             }
 
@@ -723,7 +726,8 @@ public class CMDSCaseHistoryEntryTypes {
                     null,
                     null,
                     null,
-                    DateConversion.generateReminderStartDate(dueDate.getResponseDueDate())
+                    DateConversion.generateReminderStartDate(dueDate.getResponseDueDate()),
+                    "Response due for " + NumberFormatService.generateFullCaseNumber()
                 );
             }
 
@@ -849,11 +853,7 @@ public class CMDSCaseHistoryEntryTypes {
                 if(groupList.size() > 0) {
                     CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
 
-                    if(update.isUpdateStatus()) {
-                        updateAllCases = true;
-                    } else {
-                        updateAllCases = false;
-                    }
+                    updateAllCases = update.isUpdateStatus();
 
                     for(int i = 0; i < groupList.size(); i++) {
                         Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, entryCategory, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
@@ -910,11 +910,7 @@ public class CMDSCaseHistoryEntryTypes {
                 if(groupList.size() > 0) {
                     CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
 
-                    if(update.isUpdateStatus()) {
-                        updateAllCases = true;
-                    } else {
-                        updateAllCases = false;
-                    }
+                    updateAllCases = update.isUpdateStatus();
 
                     for(int i = 0; i < groupList.size(); i++) {
                         Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, entryCategory, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
@@ -973,11 +969,7 @@ public class CMDSCaseHistoryEntryTypes {
                 if(groupList.size() > 0) {
                     CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
 
-                    if(update.isUpdateStatus()) {
-                        updateAllCases = true;
-                    } else {
-                        updateAllCases = false;
-                    }
+                    updateAllCases = update.isUpdateStatus();
 
                     for(int i = 0; i < groupList.size(); i++) {
                         Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, entryCategory, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
@@ -1023,7 +1015,8 @@ public class CMDSCaseHistoryEntryTypes {
                     null,
                     null,
                     null,
-                    DateConversion.generateReminderStartDate(dueDate.getResponseDueDate())
+                    DateConversion.generateReminderStartDate(dueDate.getResponseDueDate()),
+                    "Response due for " + NumberFormatService.generateFullCaseNumber()
                 );
             }
 
@@ -1049,11 +1042,7 @@ public class CMDSCaseHistoryEntryTypes {
                 if(groupList.size() > 0) {
                     CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
 
-                    if(update.isUpdateStatus()) {
-                        updateAllCases = true;
-                    } else {
-                        updateAllCases = false;
-                    }
+                    updateAllCases = update.isUpdateStatus();
 
                     for(int i = 0; i < groupList.size(); i++) {
                         Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, entryCategory, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
@@ -1106,11 +1095,7 @@ public class CMDSCaseHistoryEntryTypes {
                 if(groupList.size() > 0) {
                     CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
 
-                    if(update.isUpdateStatus()) {
-                        updateAllCases = true;
-                    } else {
-                        updateAllCases = false;
-                    }
+                    updateAllCases = update.isUpdateStatus();
 
                     for(int i = 0; i < groupList.size(); i++) {
                         Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, entryCategory, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
@@ -1169,11 +1154,7 @@ public class CMDSCaseHistoryEntryTypes {
                 if(groupList.size() > 0) {
                     CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
 
-                    if(update.isUpdateStatus()) {
-                        updateAllCases = true;
-                    } else {
-                        updateAllCases = false;
-                    }
+                    updateAllCases = update.isUpdateStatus();
 
                     for(int i = 0; i < groupList.size(); i++) {
                         Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, entryCategory, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
@@ -1242,11 +1223,7 @@ public class CMDSCaseHistoryEntryTypes {
                 if(groupList.size() > 0) {
                     CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
 
-                    if(update.isUpdateStatus()) {
-                        updateAllCases = true;
-                    } else {
-                        updateAllCases = false;
-                    }
+                    updateAllCases = update.isUpdateStatus();
 
                     for(int i = 0; i < groupList.size(); i++) {
                         Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, entryCategory, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
@@ -1302,11 +1279,7 @@ public class CMDSCaseHistoryEntryTypes {
                 if(groupList.size() > 0) {
                     CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
 
-                    if(update.isUpdateStatus()) {
-                        updateAllCases = true;
-                    } else {
-                        updateAllCases = false;
-                    }
+                    updateAllCases = update.isUpdateStatus();
 
                     for(int i = 0; i < groupList.size(); i++) {
                         Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, entryCategory, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
@@ -1363,11 +1336,7 @@ public class CMDSCaseHistoryEntryTypes {
                 if(groupList.size() > 0) {
                     CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
 
-                    if(update.isUpdateStatus()) {
-                        updateAllCases = true;
-                    } else {
-                        updateAllCases = false;
-                    }
+                    updateAllCases = update.isUpdateStatus();
 
                     for(int i = 0; i < groupList.size(); i++) {
                         Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, entryCategory, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
@@ -1438,11 +1407,7 @@ public class CMDSCaseHistoryEntryTypes {
                 if(groupList.size() > 0) {
                     CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
 
-                    if(update.isUpdateStatus()) {
-                        updateAllCases = true;
-                    } else {
-                        updateAllCases = false;
-                    }
+                    updateAllCases = update.isUpdateStatus();
 
                     for(int i = 0; i < groupList.size(); i++) {
                         Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, entryCategory, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
@@ -1507,11 +1472,7 @@ public class CMDSCaseHistoryEntryTypes {
                 if(groupList.size() > 0) {
                     CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
 
-                    if(update.isUpdateStatus()) {
-                        updateAllCases = true;
-                    } else {
-                        updateAllCases = false;
-                    }
+                    updateAllCases = update.isUpdateStatus();
 
                     for(int i = 0; i < groupList.size(); i++) {
                         Activity.addCMDSActivty(activity, filePath, date, groupList.get(i).toString(), null, null, entryCategory, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));

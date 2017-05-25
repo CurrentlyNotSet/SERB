@@ -584,7 +584,8 @@ public class processCMDSbookmarks {
                             null,
                             null,
                             null,
-                            DateConversion.generateReminderStartDate(parsedDate)
+                            DateConversion.generateReminderStartDate(parsedDate),
+                            "Response due for " + NumberFormatService.generateFullCaseNumber()
                     );
                 }
             }

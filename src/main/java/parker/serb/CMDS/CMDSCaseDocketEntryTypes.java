@@ -13,6 +13,7 @@ import parker.serb.sql.Activity;
 import parker.serb.sql.CMDSCase;
 import parker.serb.sql.EmailOutInvites;
 import parker.serb.util.DateConversion;
+import parker.serb.util.NumberFormatService;
 
 /**
  *
@@ -303,7 +304,8 @@ public class CMDSCaseDocketEntryTypes {
                 null,
                 null,
                 null,
-                DateConversion.generateReminderStartDate(dueDate.getResponseDueDate())
+                DateConversion.generateReminderStartDate(dueDate.getResponseDueDate()),
+                "Response due for " + caseNumber
             );
         }
 
@@ -481,7 +483,8 @@ public class CMDSCaseDocketEntryTypes {
                 null,
                 null,
                 null,
-                DateConversion.generateReminderStartDate(dueDate.getResponseDueDate())
+                DateConversion.generateReminderStartDate(dueDate.getResponseDueDate()),
+                "Response due for " + caseNumber
             );
         }
 
@@ -541,7 +544,8 @@ public class CMDSCaseDocketEntryTypes {
                 null,
                 null,
                 null,
-                DateConversion.generateReminderStartDate(dueDate.getResponseDueDate())
+                DateConversion.generateReminderStartDate(dueDate.getResponseDueDate()),
+                "Response due for " + caseNumber
             );
         }
 
@@ -642,7 +646,8 @@ public class CMDSCaseDocketEntryTypes {
                 null,
                 null,
                 null,
-                DateConversion.generateReminderStartDate(dueDate.getResponseDueDate())
+                DateConversion.generateReminderStartDate(dueDate.getResponseDueDate()),
+                "Response due for " + caseNumber
             );
         }
 
@@ -748,11 +753,7 @@ public class CMDSCaseDocketEntryTypes {
             if(groupList.size() > 0) {
                 CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
 
-                if(update.isUpdateStatus()) {
-                    updateAllCases = true;
-                } else {
-                    updateAllCases = false;
-                }
+                updateAllCases = update.isUpdateStatus();
 
                 for(int i = 0; i < groupList.size(); i++) {
                     Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
@@ -801,11 +802,7 @@ public class CMDSCaseDocketEntryTypes {
             if(groupList.size() > 0) {
                 CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
 
-                if(update.isUpdateStatus()) {
-                    updateAllCases = true;
-                } else {
-                    updateAllCases = false;
-                }
+                updateAllCases = update.isUpdateStatus();
 
                 for(int i = 0; i < groupList.size(); i++) {
                     Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
@@ -856,11 +853,7 @@ public class CMDSCaseDocketEntryTypes {
             if(groupList.size() > 0) {
                 CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
 
-                if(update.isUpdateStatus()) {
-                    updateAllCases = true;
-                } else {
-                    updateAllCases = false;
-                }
+                updateAllCases = update.isUpdateStatus();
 
                 for(int i = 0; i < groupList.size(); i++) {
                     Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
@@ -902,7 +895,8 @@ public class CMDSCaseDocketEntryTypes {
                 null,
                 null,
                 null,
-                DateConversion.generateReminderStartDate(dueDate.getResponseDueDate())
+                DateConversion.generateReminderStartDate(dueDate.getResponseDueDate()),
+                "Response due for " + caseNumber
             );
         }
 
@@ -924,11 +918,7 @@ public class CMDSCaseDocketEntryTypes {
             if(groupList.size() > 0) {
                 CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
 
-                if(update.isUpdateStatus()) {
-                    updateAllCases = true;
-                } else {
-                    updateAllCases = false;
-                }
+                updateAllCases = update.isUpdateStatus();
 
                 for(int i = 0; i < groupList.size(); i++) {
                     Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
@@ -972,11 +962,7 @@ public class CMDSCaseDocketEntryTypes {
             if(groupList.size() > 0) {
                 CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
 
-                if(update.isUpdateStatus()) {
-                    updateAllCases = true;
-                } else {
-                    updateAllCases = false;
-                }
+                updateAllCases = update.isUpdateStatus();
 
                 for(int i = 0; i < groupList.size(); i++) {
                     Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
@@ -1027,11 +1013,7 @@ public class CMDSCaseDocketEntryTypes {
             if(groupList.size() > 0) {
                 CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
 
-                if(update.isUpdateStatus()) {
-                    updateAllCases = true;
-                } else {
-                    updateAllCases = false;
-                }
+                updateAllCases = update.isUpdateStatus();
 
                 for(int i = 0; i < groupList.size(); i++) {
                     Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
@@ -1094,11 +1076,7 @@ public class CMDSCaseDocketEntryTypes {
             if(groupList.size() > 0) {
                 CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
 
-                if(update.isUpdateStatus()) {
-                    updateAllCases = true;
-                } else {
-                    updateAllCases = false;
-                }
+                updateAllCases = update.isUpdateStatus();
 
                 for(int i = 0; i < groupList.size(); i++) {
                     Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
@@ -1146,11 +1124,7 @@ public class CMDSCaseDocketEntryTypes {
             if(groupList.size() > 0) {
                 CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
 
-                if(update.isUpdateStatus()) {
-                    updateAllCases = true;
-                } else {
-                    updateAllCases = false;
-                }
+                updateAllCases = update.isUpdateStatus();
 
                 for(int i = 0; i < groupList.size(); i++) {
                     Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
@@ -1199,11 +1173,7 @@ public class CMDSCaseDocketEntryTypes {
             if(groupList.size() > 0) {
                 CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
 
-                if(update.isUpdateStatus()) {
-                    updateAllCases = true;
-                } else {
-                    updateAllCases = false;
-                }
+                updateAllCases = update.isUpdateStatus();
 
                 for(int i = 0; i < groupList.size(); i++) {
                     Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
@@ -1267,11 +1237,7 @@ public class CMDSCaseDocketEntryTypes {
             if(groupList.size() > 0) {
                 CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
 
-                if(update.isUpdateStatus()) {
-                    updateAllCases = true;
-                } else {
-                    updateAllCases = false;
-                }
+                updateAllCases = update.isUpdateStatus();
 
                 for(int i = 0; i < groupList.size(); i++) {
                     Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
@@ -1328,11 +1294,7 @@ public class CMDSCaseDocketEntryTypes {
             if(groupList.size() > 0) {
                 CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(dialog, true);
 
-                if(update.isUpdateStatus()) {
-                    updateAllCases = true;
-                } else {
-                    updateAllCases = false;
-                }
+                updateAllCases = update.isUpdateStatus();
 
                 for(int i = 0; i < groupList.size(); i++) {
                     Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));

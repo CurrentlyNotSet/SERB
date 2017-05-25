@@ -26,6 +26,7 @@ public class EmailOutInvites {
     public String hearinDescription;
     public String hearingStartTime;
     public String hearingEndTime;
+    public String emailSubject;
 
     public static void addNewHearing(
             String section,
@@ -36,7 +37,8 @@ public class EmailOutInvites {
             String hearingType,
             String hearingRoomAbv,
             String hearingDescription,
-            Timestamp hearingStartDateTime) {
+            Timestamp hearingStartDateTime,
+            String emailSubject) {
         Statement stmt = null;
 
         try {
@@ -53,12 +55,13 @@ public class EmailOutInvites {
                     + "hearingRoomAbv, "    //07
                     + "hearingdescription, "//08
                     + "hearingStartTime, "  //09
-                    + "hearingEndtime"      //10
+                    + "hearingEndtime, "    //10
+                    + "emailSubject"        //11
                     + ") VALUES (";
-                    for(int i=0; i<9; i++){
-                        sql += "?, ";   //01-09
+                    for(int i=0; i<10; i++){
+                        sql += "?, ";   //01-10
                     }
-                     sql += "?)"; //10
+                     sql += "?)"; //11
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, section);
@@ -71,14 +74,15 @@ public class EmailOutInvites {
             preparedStatement.setString(8, hearingDescription);
             preparedStatement.setTimestamp(9, hearingStartDateTime);
             preparedStatement.setTimestamp(10, generateHearingEndTimeSevenHours(hearingStartDateTime));
-
+            preparedStatement.setString(11, emailSubject);
+            
             if(!toAddress.equals("")) {
                 preparedStatement.executeUpdate();
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                addNewHearing(section, toAddress, ccAddress, emailBody, caseNumber, hearingType, hearingRoomAbv, hearingDescription, hearingStartDateTime);
+                addNewHearing(section, toAddress, ccAddress, emailBody, caseNumber, hearingType, hearingRoomAbv, hearingDescription, hearingStartDateTime, emailSubject);
             }
         } finally {
             DbUtils.closeQuietly(stmt);
