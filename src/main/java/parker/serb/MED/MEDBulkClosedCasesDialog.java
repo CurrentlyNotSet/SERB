@@ -353,10 +353,10 @@ public class MEDBulkClosedCasesDialog extends javax.swing.JFrame {
 
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
         int answer = WebOptionPane.showConfirmDialog(this, "Did You Print Cases To Be Closed List?",
-                        "Print?", WebOptionPane.YES_NO_OPTION);
-                if (answer == WebOptionPane.YES_OPTION) {
-                    processTableThread();
-                }
+                "Print?", WebOptionPane.YES_NO_OPTION);
+        if (answer == WebOptionPane.YES_OPTION) {
+            processTableThread();
+        }
     }//GEN-LAST:event_updateButtonActionPerformed
 
     private void selectAllCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectAllCheckBoxActionPerformed
