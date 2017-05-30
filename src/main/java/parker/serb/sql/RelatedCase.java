@@ -91,7 +91,7 @@ public class RelatedCase {
                     + " caseType = ? AND"
                     + " caseMonth = ? AND"
                     + " caseNumber = ? ORDER BY"
-                    + " caseYear ASC, caseMonth ASC, caseNumber ASC";
+                    + " relatedCaseNumber ASC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, Global.caseYear);
