@@ -102,10 +102,10 @@ public class Activity {
             String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, caseNumber.split("-")[0]);
-            preparedStatement.setString(2, caseNumber.split("-")[1]);
-            preparedStatement.setString(3, caseNumber.split("-")[2]);
-            preparedStatement.setString(4, caseNumber.split("-")[3]);
+            preparedStatement.setString(1, caseNumber.split("-")[0].trim());
+            preparedStatement.setString(2, caseNumber.split("-")[1].trim());
+            preparedStatement.setString(3, caseNumber.split("-")[2].trim());
+            preparedStatement.setString(4, caseNumber.split("-")[3].trim());
             preparedStatement.setInt(5, Global.activeUser.id);
             preparedStatement.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
             preparedStatement.setString(7, action.equals("") ? null : action);
@@ -145,7 +145,7 @@ public class Activity {
             preparedStatement.setString(1, null);
             preparedStatement.setString(2, caseType);
             preparedStatement.setString(3, null);
-            preparedStatement.setString(4, orgNumber);
+            preparedStatement.setString(4, orgNumber.trim());
             preparedStatement.setInt(5, Global.activeUser.id);
             preparedStatement.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
             preparedStatement.setString(7, action.equals("") ? null : action);
@@ -194,10 +194,10 @@ public class Activity {
                 String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
                 PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-                preparedStatement.setString(1, caseNumber.split("-")[0]); //caseYear
-                preparedStatement.setString(2, caseNumber.split("-")[1]); //caseType
-                preparedStatement.setString(3, caseNumber.split("-")[2]); //caseMonth
-                preparedStatement.setString(4, caseNumber.split("-")[3]); //caseNumber
+                preparedStatement.setString(1, caseNumber.split("-")[0].trim()); //caseYear
+                preparedStatement.setString(2, caseNumber.split("-")[1].trim()); //caseType
+                preparedStatement.setString(3, caseNumber.split("-")[2].trim()); //caseMonth
+                preparedStatement.setString(4, caseNumber.split("-")[3].trim()); //caseNumber
                 preparedStatement.setInt(5, Global.activeUser.id); //user
                 preparedStatement.setTimestamp(6, new Timestamp(date.getTime())); //date
                 preparedStatement.setString(7, action.equals("") ? null : action); //action
@@ -250,10 +250,10 @@ public class Activity {
             String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setString(1, caseNumber.split("-")[0]);
-            preparedStatement.setString(2, caseNumber.split("-")[1]);
-            preparedStatement.setString(3, caseNumber.split("-")[2]);
-            preparedStatement.setString(4, caseNumber.split("-")[3]);
+            preparedStatement.setString(1, caseNumber.split("-")[0].trim());
+            preparedStatement.setString(2, caseNumber.split("-")[1].trim());
+            preparedStatement.setString(3, caseNumber.split("-")[2].trim());
+            preparedStatement.setString(4, caseNumber.split("-")[3].trim());
             preparedStatement.setInt(5, Global.activeUser.id);
             preparedStatement.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
             preparedStatement.setString(7, action.equals("") ? null : action);
@@ -424,9 +424,9 @@ public class Activity {
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, null);
-            preparedStatement.setString(2, caseSection);
+            preparedStatement.setString(2, caseSection.trim());
             preparedStatement.setString(3, null);
-            preparedStatement.setString(4, caseNumber);
+            preparedStatement.setString(4, caseNumber.trim());
             preparedStatement.setInt(5, Global.activeUser.id);
             preparedStatement.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
             preparedStatement.setString(7, action.equals("") ? null : action);
@@ -523,7 +523,7 @@ public class Activity {
             preparedStatement.setString(1, null);
             preparedStatement.setString(2, section.equalsIgnoreCase("Civil Service Commission") ? "CSC" : section);
             preparedStatement.setString(3, null);
-            preparedStatement.setString(4, caseNumber);
+            preparedStatement.setString(4, caseNumber.trim());
             preparedStatement.setInt(5, Global.activeUser.id);
             preparedStatement.setTimestamp(6, new Timestamp(fileDate.getTime()));
             preparedStatement.setString(7, action.equals("") ? null : action);
@@ -572,7 +572,7 @@ public class Activity {
             preparedStatement.setString(1, null);
             preparedStatement.setString(2, section);
             preparedStatement.setString(3, null);
-            preparedStatement.setString(4, caseNumber);
+            preparedStatement.setString(4, caseNumber.trim());
             preparedStatement.setInt(5, Global.activeUser.id);
             preparedStatement.setTimestamp(6, new Timestamp(activityDate.getTime()));
             preparedStatement.setString(7, action.equals("") ? null : action);
@@ -663,10 +663,10 @@ public class Activity {
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             String[] parsedCaseNumber = caseNumber.split("-");
-            preparedStatement.setString(1, parsedCaseNumber[0]);
-            preparedStatement.setString(2, parsedCaseNumber[1]);
-            preparedStatement.setString(3, parsedCaseNumber[2]);
-            preparedStatement.setString(4, parsedCaseNumber[3]);
+            preparedStatement.setString(1, parsedCaseNumber[0].trim());
+            preparedStatement.setString(2, parsedCaseNumber[1].trim());
+            preparedStatement.setString(3, parsedCaseNumber[2].trim());
+            preparedStatement.setString(4, parsedCaseNumber[3].trim());
             preparedStatement.setInt(5, Global.activeUser.id);
             preparedStatement.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
             preparedStatement.setString(7, message.equals("") ? null : message);

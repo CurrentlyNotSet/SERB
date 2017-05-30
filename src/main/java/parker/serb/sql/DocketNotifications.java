@@ -48,7 +48,7 @@ public class DocketNotifications {
             DbUtils.closeQuietly(stmt);
         }
     }
-
+    
     public static void addNewCaseNotification(String caseNumber, String section, int userID) {
         Statement stmt = null;
 
