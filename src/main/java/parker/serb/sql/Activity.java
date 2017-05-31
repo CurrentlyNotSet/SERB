@@ -1586,4 +1586,206 @@ public class Activity {
             DbUtils.closeQuietly(stmt);
         }
     }
+    
+    public static List loadPurgeCMDSActivities() {
+        List<Activity> activityList = new ArrayList<>();
+
+        Statement stmt = null;
+
+        try {
+
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "select TOP 50 Activity.*,"
+                    + " Users.firstName,"
+                    + " Users.lastName"
+                    + " from Activity"
+                    + " INNER JOIN Users"
+                    + " ON Activity.userID = Users.id"
+                    + " INNER JOIN caseType"
+                    + " ON Activity.caseType = CaseType.caseType"
+                    + " WHERE Activity.active = 1 AND CaseType.section = 'CMDS'"
+                    + " ORDER BY date DESC, activity.id DESC ";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+
+            ResultSet caseActivity = preparedStatement.executeQuery();
+
+            while(caseActivity.next()) {
+                Activity act = new Activity();
+                act.id = caseActivity.getInt("id");
+                act.user = caseActivity.getString("firstName") + " " + caseActivity.getString("lastName");
+                act.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
+                act.action = caseActivity.getString("action");
+                act.comment = caseActivity.getString("comment");
+                act.from = caseActivity.getString("from") == null ? "" : caseActivity.getString("from");
+                act.caseYear = caseActivity.getString("caseYear");
+                act.caseType = caseActivity.getString("caseType");
+                act.caseMonth = caseActivity.getString("caseMonth");
+                act.caseNumber = caseActivity.getString("caseNumber");
+                act.fileName = caseActivity.getString("fileName");
+                activityList.add(act);
+            }
+        } catch (SQLException ex) {
+            if(ex.getCause() instanceof SQLServerException) {
+                loadAllActivity();
+            } else {
+                SlackNotification.sendNotification(ex);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return activityList;
+    }
+    
+    public static List loadPurgeULPActivities() {
+        List<Activity> activityList = new ArrayList<>();
+
+        Statement stmt = null;
+
+        try {
+
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "select TOP 50 Activity.*,"
+                    + " Users.firstName,"
+                    + " Users.lastName"
+                    + " from Activity"
+                    + " INNER JOIN Users"
+                    + " ON Activity.userID = Users.id"
+                    + " INNER JOIN caseType"
+                    + " ON Activity.caseType = CaseType.caseType"
+                    + " WHERE Activity.active = 1 AND CaseType.section = 'ULP'"
+                    + " ORDER BY date DESC, activity.id DESC ";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+
+            ResultSet caseActivity = preparedStatement.executeQuery();
+
+            while(caseActivity.next()) {
+                Activity act = new Activity();
+                act.id = caseActivity.getInt("id");
+                act.user = caseActivity.getString("firstName") + " " + caseActivity.getString("lastName");
+                act.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
+                act.action = caseActivity.getString("action");
+                act.comment = caseActivity.getString("comment");
+                act.from = caseActivity.getString("from") == null ? "" : caseActivity.getString("from");
+                act.caseYear = caseActivity.getString("caseYear");
+                act.caseType = caseActivity.getString("caseType");
+                act.caseMonth = caseActivity.getString("caseMonth");
+                act.caseNumber = caseActivity.getString("caseNumber");
+                act.fileName = caseActivity.getString("fileName");
+                activityList.add(act);
+            }
+        } catch (SQLException ex) {
+            if(ex.getCause() instanceof SQLServerException) {
+                loadAllActivity();
+            } else {
+                SlackNotification.sendNotification(ex);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return activityList;
+    }
+    
+    public static List loadPurgeMEDActivities() {
+        List<Activity> activityList = new ArrayList<>();
+
+        Statement stmt = null;
+
+        try {
+
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "select TOP 50 Activity.*,"
+                    + " Users.firstName,"
+                    + " Users.lastName"
+                    + " from Activity"
+                    + " INNER JOIN Users"
+                    + " ON Activity.userID = Users.id"
+                    + " INNER JOIN caseType"
+                    + " ON Activity.caseType = CaseType.caseType"
+                    + " WHERE Activity.active = 1 AND CaseType.section = 'MED'"
+                    + " ORDER BY date DESC, activity.id DESC ";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+
+            ResultSet caseActivity = preparedStatement.executeQuery();
+
+            while(caseActivity.next()) {
+                Activity act = new Activity();
+                act.id = caseActivity.getInt("id");
+                act.user = caseActivity.getString("firstName") + " " + caseActivity.getString("lastName");
+                act.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
+                act.action = caseActivity.getString("action");
+                act.comment = caseActivity.getString("comment");
+                act.from = caseActivity.getString("from") == null ? "" : caseActivity.getString("from");
+                act.caseYear = caseActivity.getString("caseYear");
+                act.caseType = caseActivity.getString("caseType");
+                act.caseMonth = caseActivity.getString("caseMonth");
+                act.caseNumber = caseActivity.getString("caseNumber");
+                act.fileName = caseActivity.getString("fileName");
+                activityList.add(act);
+            }
+        } catch (SQLException ex) {
+            if(ex.getCause() instanceof SQLServerException) {
+                loadAllActivity();
+            } else {
+                SlackNotification.sendNotification(ex);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return activityList;
+    }
+    
+    public static List loadPurgeORGActivities() {
+        List<Activity> activityList = new ArrayList<>();
+
+        Statement stmt = null;
+
+        try {
+
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "select TOP 50 Activity.*,"
+                    + " Users.firstName,"
+                    + " Users.lastName"
+                    + " from Activity"
+                    + " INNER JOIN Users"
+                    + " ON Activity.userID = Users.id"
+                    + " WHERE Activity.active = 1 AND Activity.caseType = 'ORG'"
+                    + " ORDER BY date DESC, activity.id DESC ";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+
+            ResultSet caseActivity = preparedStatement.executeQuery();
+
+            while(caseActivity.next()) {
+                Activity act = new Activity();
+                act.id = caseActivity.getInt("id");
+                act.user = caseActivity.getString("firstName") + " " + caseActivity.getString("lastName");
+                act.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
+                act.action = caseActivity.getString("action");
+                act.comment = caseActivity.getString("comment");
+                act.from = caseActivity.getString("from") == null ? "" : caseActivity.getString("from");
+                act.caseYear = caseActivity.getString("caseYear");
+                act.caseType = caseActivity.getString("caseType");
+                act.caseMonth = caseActivity.getString("caseMonth");
+                act.caseNumber = caseActivity.getString("caseNumber");
+                act.fileName = caseActivity.getString("fileName");
+                activityList.add(act);
+            }
+        } catch (SQLException ex) {
+            if(ex.getCause() instanceof SQLServerException) {
+                loadAllActivity();
+            } else {
+                SlackNotification.sendNotification(ex);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return activityList;
+    }
 }
