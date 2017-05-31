@@ -693,13 +693,8 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                     String ffLastName = "";
                     String[] ffName = factFinderSelectionName.split(" ");
 
-                    if (ffName.length == 2) {
-                        ffFirstName = ffName[0];
-                        ffLastName = ffName[1];
-                    } else if (ffName.length == 3) {
-                        ffFirstName = ffName[0];
-                        ffLastName = ffName[2];
-                    }
+                    ffFirstName = ffName[0];
+                    ffLastName = ffName[ffName.length -1];
 
                     FactFinder ffDetails = FactFinder.getFactFinderLikeName(ffFirstName, ffLastName);
                     if (!ffDetails.email.equals("")) {
@@ -720,14 +715,9 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                     String concLastName = "";
                     String[] concName = concilSelectionName.split(" ");
 
-                    if (concName.length == 2) {
-                        concFirstName = concName[0];
-                        concLastName = concName[1];
-                    } else if (concName.length == 3) {
-                        concFirstName = concName[0];
-                        concLastName = concName[2];
-                    }
-
+                    concFirstName = concName[0];
+                    concLastName = concName[concName.length - 1];
+                    
                     FactFinder concDetails = FactFinder.getFactFinderLikeName(concFirstName, concLastName);
 
                     if (!concDetails.email.equals("")) {
