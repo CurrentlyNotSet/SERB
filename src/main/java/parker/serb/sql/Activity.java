@@ -1652,19 +1652,39 @@ public class Activity {
             stmt = Database.connectToDB().createStatement();
 
             String excludeList = " AND ("
-                    + "    Activity.action NOT LIKE '%%'"
-                    + " AND Activity.action NOT LIKE '%%'"
+                    + "    Activity.action NOT LIKE '%Initial Charge%'"
+                    + " AND Activity.action NOT LIKE '%Investigator Report%'"
+                    + " AND Activity.action NOT LIKE '%Directive%'"
                     + ")";
-            
-            String sql = "SELECT TOP 50 Activity.*,"
+
+            String sql = "SELECT Activity.*,"
                     + " ISNULL(Users.firstName, '') + ' ' + ISNULL(Users.lastName, '') AS userName"
                     + " FROM Activity"
+                    //Join to Users To Get UserName
                     + " INNER JOIN Users"
                     + " ON Activity.userID = Users.id"
-                    + " INNER JOIN caseType"
-                    + " ON Activity.caseType = CaseType.caseType"
-                    + " WHERE Activity.active = 1 AND CaseType.section = 'ULP'"
-                    + " ORDER BY date DESC, activity.id DESC ";
+                    //Join to MEDCase to get Case Status
+                    + " INNER JOIN ULPCase"
+                    + " ON (ULPCase.caseYear = Activity.caseYear "
+                    + " AND ULPCase.caseType = Activity.caseType "
+                    + " AND ULPCase.caseMonth = Activity.caseMonth "
+                    + " AND ULPCase.caseNumber = Activity.caseNumber)"
+                    //Join to Hearings to get (opinion, PC-Date, Pre-D-Date)
+                    + " LEFT JOIN HearingCase"
+                    + " ON (HearingCase.caseYear = Activity.caseYear AND HearingCase.caseType = Activity.caseType "
+                    + " AND HearingCase.caseMonth = Activity.caseMonth "
+                    + " AND HearingCase.caseNumber = Activity.caseNumber)"
+                    //Where statement
+                    + " WHERE Activity.active = 1"
+                    + " AND ULPCase.currentStatus = 'Closed'"
+                    + " AND ULPCase.finalDispositionStatus = 'Closed'"
+                    + " AND ISNULL(ULPCase.appealDateSent, '') = ''"
+                    + " AND ISNULL(ULPCase.appealDateReceived, '') = ''"
+                    + " AND ISNULL(HearingCase.opinion, '') = ''"
+                    + " AND ISNULL(HearingCase.boardActionPCDate, '') = ''"
+                    + " AND ISNULL(HearingCase.boardActionPreDDate, '') = ''"
+                    + excludeList
+                    + " ORDER BY date DESC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
@@ -1719,7 +1739,8 @@ public class Activity {
                     + " ON Activity.userID = Users.id"
                     //Join to MEDCase to get Case Status
                     + " INNER JOIN MEDCase"
-                    + " ON (MEDCase.caseYear = Activity.caseYear AND MEDCase.caseType = Activity.caseType "
+                    + " ON (MEDCase.caseYear = Activity.caseYear "
+                    + " AND MEDCase.caseType = Activity.caseType "
                     + " AND MEDCase.caseMonth = Activity.caseMonth "
                     + " AND MEDCase.caseNumber = Activity.caseNumber)"
                     //Join to Hearings to get (opinion, PC-Date, Pre-D-Date)

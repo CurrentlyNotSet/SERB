@@ -7,6 +7,7 @@ package parker.serb.recordRetention;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
+import java.text.NumberFormat;
 import java.util.List;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -126,9 +127,11 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
                 break;
         }
         
+        countLabel.setText("Gathering Entries");
+        
         switch (section) {
             case "CMDS":
-                caseList = Activity.loadPurgeCMDSActivities();
+                //caseList = Activity.loadPurgeCMDSActivities();
                 break;
             case "MED":
                 caseList = Activity.loadPurgeMEDActivities();
@@ -140,6 +143,8 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
                 caseList = Activity.loadPurgeULPActivities();
                 break;
         }
+        
+        countLabel.setText("Populating Table");
         
         if (caseList != null){
             for (Activity item : caseList) {
@@ -167,6 +172,9 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
                     item.user
                 });
             }
+            countLabel.setText("Count: " + NumberFormat.getIntegerInstance().format(caseList.size()));
+        } else {
+            countLabel.setText("No Entries");
         }
     }
 
@@ -222,6 +230,7 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        countLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -324,6 +333,9 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
                 .add(org.jdesktop.layout.GroupLayout.TRAILING, jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE))
         );
 
+        countLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        countLabel.setText("No Entries");
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -337,7 +349,8 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
                         .add(jLabel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 64, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(sectionComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 161, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(0, 0, Short.MAX_VALUE))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .add(countLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 136, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                     .add(layout.createSequentialGroup()
                         .add(closeButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 100, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 812, Short.MAX_VALUE)
@@ -355,7 +368,8 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(sectionComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jLabel3))
+                    .add(jLabel3)
+                    .add(countLabel))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jLayeredPane1)
                 .add(18, 18, 18)
@@ -390,6 +404,7 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton closeButton;
+    private javax.swing.JLabel countLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
