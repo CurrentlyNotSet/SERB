@@ -4,6 +4,7 @@
  */
 package parker.serb.recordRetention;
 
+import com.alee.laf.optionpane.WebOptionPane;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
@@ -67,7 +68,6 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
         sectionComboBox.addItem("ORG");
         sectionComboBox.addItem("ULP");
     }
-
 
     private void setTableSize() {
         //ID
@@ -211,6 +211,21 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
         }
     }
     
+    private void purgeDocumentsThread() {
+        setPanelEnabled(false);
+        
+        Thread temp = new Thread(() -> {
+            purgeRecords();
+            setPanelEnabled(true);
+            WebOptionPane.showMessageDialog(Global.root, "Record Purge Complete", "Purged", WebOptionPane.INFORMATION_MESSAGE);
+        });
+        temp.start();
+    } 
+    
+    private void purgeRecords(){
+        //TODO: Need Direction from Justin in Order to Complete
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -233,6 +248,7 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
         countLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Record Retention");
 
         closeButton.setText("Close");
         closeButton.addActionListener(new java.awt.event.ActionListener() {
@@ -389,7 +405,11 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
     }//GEN-LAST:event_closeButtonActionPerformed
 
     private void purgeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_purgeButtonActionPerformed
-        
+        int answer = WebOptionPane.showConfirmDialog(this, "Are you sure you want to purge these records?",
+                "Purge?", WebOptionPane.YES_NO_OPTION);
+        if (answer == WebOptionPane.YES_OPTION) {
+            purgeDocumentsThread();
+        }
     }//GEN-LAST:event_purgeButtonActionPerformed
 
     private void sectionComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sectionComboBoxActionPerformed
