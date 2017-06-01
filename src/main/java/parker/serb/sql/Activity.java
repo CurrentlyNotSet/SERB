@@ -1609,7 +1609,7 @@ public class Activity {
                     + " INNER JOIN caseType"
                     + " ON Activity.caseType = CaseType.caseType"
                     + " WHERE Activity.active = 1 AND CaseType.section = 'CMDS'"
-                    + " ORDER BY date DESC, activity.id DESC ";
+                    + " ORDER BY Activity.caseYear ASC, Activity.caseMonth ASC, Activity.caseNumber ASC, date ASC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
@@ -1684,7 +1684,7 @@ public class Activity {
                     + " AND ISNULL(HearingCase.boardActionPCDate, '') = ''"
                     + " AND ISNULL(HearingCase.boardActionPreDDate, '') = ''"
                     + excludeList
-                    + " ORDER BY date DESC";
+                    + " ORDER BY ULPCase.caseYear ASC, ULPCase.caseMonth ASC, ULPCase.caseNumber ASC, date ASC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
@@ -1755,7 +1755,7 @@ public class Activity {
                     + " AND ISNULL(HearingCase.boardActionPCDate, '') = ''"
                     + " AND ISNULL(HearingCase.boardActionPreDDate, '') = ''"
                     + excludeList
-                    + " ORDER BY date DESC, activity.id DESC ";
+                    + " ORDER BY MEDCase.caseYear ASC, MEDCase.caseMonth ASC, MEDCase.caseNumber ASC, date ASC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
@@ -1816,7 +1816,7 @@ public class Activity {
                     + " WHERE Activity.active = 1 AND Activity.caseType = 'ORG'"
                     + " AND Activity.date < CAST(REPLACE(ORGCase.filingDueDate, RIGHT(ORGCase.filingDueDate, 2), ' ') + CONVERT(varchar(4), (YEAR(GETDATE()) - 7), 4) AS datetime)"
                     + excludeList                    
-                    + " ORDER BY date DESC, activity.id DESC ";
+                    + " ORDER BY RIGHT('0000'+CAST(ORGCase.orgNumber AS VARCHAR(4)),4) ASC, date ASC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
