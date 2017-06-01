@@ -1749,13 +1749,23 @@ public class Activity {
 
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "select TOP 50 Activity.*,"
-                    + " Users.firstName,"
-                    + " Users.lastName"
-                    + " from Activity"
+            String excludeList = " AND ("
+                    + "    Activity.action NOT LIKE '%Annual Report%'"
+                    + " AND Activity.action NOT LIKE '%Financial Statement%'"
+                    + " AND Activity.action NOT LIKE '%Registration Report%'"
+                    + " AND Activity.action NOT LIKE '%Constitution and Bylaws%'"
+                    + ")";
+            
+            String sql = "SELECT Activity.*,"
+                    + " ISNULL(Users.firstName, '') + ' ' + ISNULL(Users.lastName, '') AS userName"
+                    + " FROM Activity"
                     + " INNER JOIN Users"
                     + " ON Activity.userID = Users.id"
+                    + " INNER JOIN ORGCase"
+                    + " ON Activity.caseNumber = ORGCase.orgNumber"
                     + " WHERE Activity.active = 1 AND Activity.caseType = 'ORG'"
+                    + " AND Activity.date < CAST(REPLACE(ORGCase.filingDueDate, RIGHT(ORGCase.filingDueDate, 2), ' ') + CONVERT(varchar(4), (YEAR(GETDATE()) - 7), 4) AS datetime)"
+                    + excludeList                    
                     + " ORDER BY date DESC, activity.id DESC ";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
@@ -1765,7 +1775,7 @@ public class Activity {
             while(caseActivity.next()) {
                 Activity act = new Activity();
                 act.id = caseActivity.getInt("id");
-                act.user = caseActivity.getString("firstName") + " " + caseActivity.getString("lastName");
+                act.user = caseActivity.getString("userName");
                 act.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
                 act.action = caseActivity.getString("action");
                 act.comment = caseActivity.getString("comment");
