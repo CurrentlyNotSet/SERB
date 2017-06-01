@@ -180,12 +180,12 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
     
     
     private void openFile(MouseEvent evt){
-        if (jTable1.getSelectedRow() > -1) {
+        if (jTable1.getSelectedRow() > -1 && jTable1.getSelectedColumn() != 1 && evt.getClickCount() == 2) {
             Activity rowObject = (Activity) jTable1.getValueAt(jTable1.getSelectedRow(), 0);
             String section = sectionComboBox.getSelectedItem().toString().trim();
 
-            if (evt.getClickCount() == 2 && !rowObject.fileName.equals("")) {
-                switch (Global.activeSection) {
+            if (!rowObject.fileName.equals("")) {
+                switch (section) {
                     case "ORG":
                         FileService.openFileWithORGNumber("ORG", rowObject.caseNumber, rowObject.fileName);
                         break;
