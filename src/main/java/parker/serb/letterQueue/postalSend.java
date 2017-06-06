@@ -132,7 +132,8 @@ public class postalSend {
         }
 
         //DocumentFileName
-        String savedDoc = String.valueOf(new Date().getTime()) + "_" + postalEntry.historyDescription + ".pdf";
+        String savedDoc = String.valueOf(new Date().getTime()) + "_" 
+                + postalEntry.historyDescription.replaceAll("[:\\\\/*?|<>]", "_") + ".pdf";
 
         //Set Merge File Destination
         ut.setDestinationFileName(casePath + savedDoc);
