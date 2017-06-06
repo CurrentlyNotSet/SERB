@@ -1332,6 +1332,7 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
                     FFSelectionComboBox.setEnabled(false);
                     replacementFFComboBox.setEnabled(false);
                     FFOriginalFactFinder.setEnabled(false);
+                    FFOriginalFactFinder.setSelectedItem("");
                     originalFFDateTextBox.setEnabled(false);
                     originalFFDateTextBox.setBackground(new Color(238,238,238));
                     FFSelectionComboBox.setSelectedItem("");

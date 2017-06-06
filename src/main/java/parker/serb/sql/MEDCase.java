@@ -2101,6 +2101,16 @@ public class MEDCase {
             if(!newCaseInformation.concilSelection.equals(oldCaseInformation.concilSelection))
                 Activity.addActivty("Changed Conciliator Selected from " + oldCaseInformation.concilSelection + " to " + newCaseInformation.concilSelection, null);
         }
+        
+        //originalconciliationSelection
+        if(newCaseInformation.concilOriginalConciliator == null && oldCaseInformation.concilOriginalConciliator != null) {
+            Activity.addActivty("Removed " + oldCaseInformation.concilOriginalConciliator + " from Original Conciliator Selected", null);
+        } else if(newCaseInformation.concilOriginalConciliator != null && oldCaseInformation.concilOriginalConciliator == null) {
+            Activity.addActivty("Set Original Conciliator Selected to " + newCaseInformation.concilOriginalConciliator, null);
+        } else if(newCaseInformation.concilOriginalConciliator != null && oldCaseInformation.concilOriginalConciliator != null) {
+            if(!newCaseInformation.concilOriginalConciliator.equals(oldCaseInformation.concilOriginalConciliator))
+                Activity.addActivty("Changed Original Conciliator Selected from " + oldCaseInformation.concilOriginalConciliator + " to " + newCaseInformation.concilOriginalConciliator, null);
+        }
 
         //replacementConciliation
         if(newCaseInformation.concilReplacement == null && oldCaseInformation.concilReplacement != null) {
