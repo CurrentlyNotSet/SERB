@@ -1595,17 +1595,21 @@ public class Activity {
         try {
 
             stmt = Database.connectToDB().createStatement();
+            
+            String excludeList = " AND ("
+                    + "    Activity.action NOT LIKE '%%'"
+                    + " AND Activity.action NOT LIKE '%%'"
+                    + ")";
 
-            String sql = "select TOP 50 Activity.*,"
-                    + " Users.firstName,"
-                    + " Users.lastName"
-                    + " from Activity"
+            String sql = "SELECT TOP 50 Activity.*,"
+                    + " ISNULL(Users.firstName, '') + ' ' + ISNULL(Users.lastName, '') AS userName"
+                    + " FROM Activity"
                     + " INNER JOIN Users"
                     + " ON Activity.userID = Users.id"
                     + " INNER JOIN caseType"
                     + " ON Activity.caseType = CaseType.caseType"
                     + " WHERE Activity.active = 1 AND CaseType.section = 'CMDS'"
-                    + " ORDER BY date DESC, activity.id DESC ";
+                    + " ORDER BY Activity.caseYear ASC, Activity.caseMonth ASC, Activity.caseNumber ASC, date ASC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
@@ -1614,7 +1618,7 @@ public class Activity {
             while(caseActivity.next()) {
                 Activity act = new Activity();
                 act.id = caseActivity.getInt("id");
-                act.user = caseActivity.getString("firstName") + " " + caseActivity.getString("lastName");
+                act.user = caseActivity.getString("userName");
                 act.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
                 act.action = caseActivity.getString("action");
                 act.comment = caseActivity.getString("comment");
@@ -1647,16 +1651,40 @@ public class Activity {
 
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "select TOP 50 Activity.*,"
-                    + " Users.firstName,"
-                    + " Users.lastName"
-                    + " from Activity"
+            String excludeList = " AND ("
+                    + "    Activity.action NOT LIKE '%Initial Charge%'"
+                    + " AND Activity.action NOT LIKE '%Investigator Report%'"
+                    + " AND Activity.action NOT LIKE '%Directive%'"
+                    + ")";
+
+            String sql = "SELECT Activity.*,"
+                    + " ISNULL(Users.firstName, '') + ' ' + ISNULL(Users.lastName, '') AS userName"
+                    + " FROM Activity"
+                    //Join to Users To Get UserName
                     + " INNER JOIN Users"
                     + " ON Activity.userID = Users.id"
-                    + " INNER JOIN caseType"
-                    + " ON Activity.caseType = CaseType.caseType"
-                    + " WHERE Activity.active = 1 AND CaseType.section = 'ULP'"
-                    + " ORDER BY date DESC, activity.id DESC ";
+                    //Join to MEDCase to get Case Status
+                    + " INNER JOIN ULPCase"
+                    + " ON (ULPCase.caseYear = Activity.caseYear "
+                    + " AND ULPCase.caseType = Activity.caseType "
+                    + " AND ULPCase.caseMonth = Activity.caseMonth "
+                    + " AND ULPCase.caseNumber = Activity.caseNumber)"
+                    //Join to Hearings to get (opinion, PC-Date, Pre-D-Date)
+                    + " LEFT JOIN HearingCase"
+                    + " ON (HearingCase.caseYear = Activity.caseYear AND HearingCase.caseType = Activity.caseType "
+                    + " AND HearingCase.caseMonth = Activity.caseMonth "
+                    + " AND HearingCase.caseNumber = Activity.caseNumber)"
+                    //Where statement
+                    + " WHERE Activity.active = 1"
+                    + " AND ULPCase.currentStatus = 'Closed'"
+                    + " AND ULPCase.finalDispositionStatus = 'Closed'"
+                    + " AND ISNULL(ULPCase.appealDateSent, '') = ''"
+                    + " AND ISNULL(ULPCase.appealDateReceived, '') = ''"
+                    + " AND ISNULL(HearingCase.opinion, '') = ''"
+                    + " AND ISNULL(HearingCase.boardActionPCDate, '') = ''"
+                    + " AND ISNULL(HearingCase.boardActionPreDDate, '') = ''"
+                    + excludeList
+                    + " ORDER BY ULPCase.caseYear ASC, ULPCase.caseMonth ASC, ULPCase.caseNumber ASC, date ASC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
@@ -1665,7 +1693,7 @@ public class Activity {
             while(caseActivity.next()) {
                 Activity act = new Activity();
                 act.id = caseActivity.getInt("id");
-                act.user = caseActivity.getString("firstName") + " " + caseActivity.getString("lastName");
+                act.user = caseActivity.getString("userName");
                 act.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
                 act.action = caseActivity.getString("action");
                 act.comment = caseActivity.getString("comment");
@@ -1697,17 +1725,37 @@ public class Activity {
         try {
 
             stmt = Database.connectToDB().createStatement();
+            
+            String excludeList = " AND ("
+                    + "    Activity.action NOT LIKE '%Notice to Negotiate%'"
+                    + " AND Activity.action NOT LIKE '%Fact Finding Report%'"
+                    + ")";
 
-            String sql = "select TOP 50 Activity.*,"
-                    + " Users.firstName,"
-                    + " Users.lastName"
-                    + " from Activity"
+            String sql = "SELECT Activity.*,"
+                    + " ISNULL(Users.firstName, '') + ' ' + ISNULL(Users.lastName, '') AS userName"
+                    + " FROM Activity"
+                    //Join to Users To Get UserName
                     + " INNER JOIN Users"
                     + " ON Activity.userID = Users.id"
-                    + " INNER JOIN caseType"
-                    + " ON Activity.caseType = CaseType.caseType"
-                    + " WHERE Activity.active = 1 AND CaseType.section = 'MED'"
-                    + " ORDER BY date DESC, activity.id DESC ";
+                    //Join to MEDCase to get Case Status
+                    + " INNER JOIN MEDCase"
+                    + " ON (MEDCase.caseYear = Activity.caseYear "
+                    + " AND MEDCase.caseType = Activity.caseType "
+                    + " AND MEDCase.caseMonth = Activity.caseMonth "
+                    + " AND MEDCase.caseNumber = Activity.caseNumber)"
+                    //Join to Hearings to get (opinion, PC-Date, Pre-D-Date)
+                    + " LEFT JOIN HearingCase"
+                    + " ON (HearingCase.caseYear = Activity.caseYear AND HearingCase.caseType = Activity.caseType "
+                    + " AND HearingCase.caseMonth = Activity.caseMonth "
+                    + " AND HearingCase.caseNumber = Activity.caseNumber)"
+                    //Where statement
+                    + " WHERE Activity.active = 1"
+                    + " AND MEDCase.caseStatus = 'Closed'"
+                    + " AND ISNULL(HearingCase.opinion, '') = ''"
+                    + " AND ISNULL(HearingCase.boardActionPCDate, '') = ''"
+                    + " AND ISNULL(HearingCase.boardActionPreDDate, '') = ''"
+                    + excludeList
+                    + " ORDER BY MEDCase.caseYear ASC, MEDCase.caseMonth ASC, MEDCase.caseNumber ASC, date ASC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
@@ -1716,7 +1764,7 @@ public class Activity {
             while(caseActivity.next()) {
                 Activity act = new Activity();
                 act.id = caseActivity.getInt("id");
-                act.user = caseActivity.getString("firstName") + " " + caseActivity.getString("lastName");
+                act.user = caseActivity.getString("userName");
                 act.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
                 act.action = caseActivity.getString("action");
                 act.comment = caseActivity.getString("comment");
@@ -1749,14 +1797,26 @@ public class Activity {
 
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "select TOP 50 Activity.*,"
-                    + " Users.firstName,"
-                    + " Users.lastName"
-                    + " from Activity"
+            String excludeList = " AND ("
+                    + "    Activity.action NOT LIKE '%Annual Report%'"
+                    + " AND Activity.action NOT LIKE '%Financial Statement%'"
+                    + " AND Activity.action NOT LIKE '%Registration Report%'"
+                    + " AND Activity.action NOT LIKE '%Constitution and Bylaws%'"
+                    + ")";
+            
+            String sql = "SELECT Activity.*,"
+                    + " ISNULL(Users.firstName, '') + ' ' + ISNULL(Users.lastName, '') AS userName"
+                    + " FROM Activity"
+                    //Join to Users To Get UserName
                     + " INNER JOIN Users"
                     + " ON Activity.userID = Users.id"
+                    //Join to OrgCase to get entries older than [Due Date] minus 7 years
+                    + " INNER JOIN ORGCase"
+                    + " ON Activity.caseNumber = ORGCase.orgNumber"
                     + " WHERE Activity.active = 1 AND Activity.caseType = 'ORG'"
-                    + " ORDER BY date DESC, activity.id DESC ";
+                    + " AND Activity.date < CAST(REPLACE(ORGCase.filingDueDate, RIGHT(ORGCase.filingDueDate, 2), ' ') + CONVERT(varchar(4), (YEAR(GETDATE()) - 7), 4) AS datetime)"
+                    + excludeList                    
+                    + " ORDER BY RIGHT('0000'+CAST(ORGCase.orgNumber AS VARCHAR(4)),4) ASC, date ASC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
@@ -1765,7 +1825,7 @@ public class Activity {
             while(caseActivity.next()) {
                 Activity act = new Activity();
                 act.id = caseActivity.getInt("id");
-                act.user = caseActivity.getString("firstName") + " " + caseActivity.getString("lastName");
+                act.user = caseActivity.getString("userName");
                 act.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
                 act.action = caseActivity.getString("action");
                 act.comment = caseActivity.getString("comment");
