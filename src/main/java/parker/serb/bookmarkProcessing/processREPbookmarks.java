@@ -633,7 +633,7 @@ public class processREPbookmarks {
                 results += "-   There were " + NumberFormatService.convert(ResultsVoidBallots) + "(" + item.resultVoidBallots.trim() + ")" + " void ballots\n";
                 results += "-   There were " + NumberFormatService.convert(ResultsChallenged) + "(" + item.resultChallengedBallots.trim() + ")" + " challenged ballots\n";
                 results += "-   No Representative received " + NumberFormatService.convert(ResultsVotesForNoREP) + "(" + item.resultVotesCastForNoRepresentative.trim() + ")" + " votes\n";
-                results += "-   " + employeeOrganizationName.trim() + " received " + NumberFormatService.convert(ResultsVotesForEEO) + "(" + item.resultVotesCastForEEO.trim() + ") votes\n";
+                results += "-   " + employeeOrganizationName.trim() + " received " + NumberFormatService.convert(ResultsVotesForEEO) + "(" + ResultsVotesForEEO + ") votes\n";
                 if (item.resultVotesCastForRivalEEO1 != null) {
                     results += "-   " + rivalEmployeeOrganizationName.trim() + " received " + NumberFormatService.convert(ResultsVotesForRival) + "(" + item.resultVotesCastForRivalEEO1.trim() + ") votes\n";
                 }
