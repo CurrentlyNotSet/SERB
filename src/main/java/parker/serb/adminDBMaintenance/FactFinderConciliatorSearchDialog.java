@@ -9,6 +9,7 @@ import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
 import parker.serb.sql.ActiveStatus;
+import parker.serb.sql.Audit;
 import parker.serb.sql.FactFinder;
 
 /**
@@ -152,6 +153,10 @@ public class FactFinderConciliatorSearchDialog extends javax.swing.JDialog {
             boolean active = (boolean) SearchTable.getValueAt(SearchTable.getSelectedRow(), 1);
             
             ActiveStatus.updateActiveStatus("FactFinder", active, id);
+            
+            Audit.addAuditEntry("Changed Fact Finder Status for: " 
+                    + SearchTable.getValueAt(SearchTable.getSelectedRow(), 2).toString() 
+                    + " To: " + active);
         }
     }
     

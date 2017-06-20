@@ -51,12 +51,12 @@ import parker.serb.letterQueue.LetterQueuePanel;
 import parker.serb.login.ExitVerification;
 import parker.serb.mailLogViewer.MailLogViewerPanel;
 import parker.serb.publicRecords.PublicRecordsMainPanel;
+import parker.serb.recordRetention.RecordRetentionMainDialog;
 import parker.serb.report.ReportDialog;
 import parker.serb.report.RequestedInfoTwoDatePanel;
 import parker.serb.sql.Audit;
 import parker.serb.sql.CMDSCase;
 import parker.serb.sql.CSCCase;
-import parker.serb.sql.DocketLock;
 import parker.serb.sql.EmailOut;
 import parker.serb.sql.HearingCase;
 import parker.serb.sql.MEDCase;
@@ -119,6 +119,9 @@ public class RootPanel extends javax.swing.JFrame {
      * etc
      */
     public void enableTabs() {
+        //disableMenuItem
+        recordRetentionMenuItem.setVisible(false);        
+        
         //if the user has no applied roles, which should be rare,
         //alert the user and close the application
         if(Global.activeUserRoles.isEmpty()) {
@@ -1220,6 +1223,7 @@ public class RootPanel extends javax.swing.JFrame {
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         adminPanelMenuItem = new javax.swing.JMenuItem();
+        recordRetentionMenuItem = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
@@ -1236,7 +1240,7 @@ public class RootPanel extends javax.swing.JFrame {
 
         jMenuItem9.setText("jMenuItem9");
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("State Employment Relations Board");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setMinimumSize(new java.awt.Dimension(1199, 704));
@@ -1773,6 +1777,14 @@ public class RootPanel extends javax.swing.JFrame {
         });
         jMenu2.add(adminPanelMenuItem);
 
+        recordRetentionMenuItem.setText("Record Retention");
+        recordRetentionMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                recordRetentionMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu2.add(recordRetentionMenuItem);
+
         jMenuItem5.setText("Tracking");
         jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1861,7 +1873,7 @@ public class RootPanel extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1296, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1332, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -2088,11 +2100,12 @@ public class RootPanel extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        DocketLock.removeUserLocks();
-        NewCaseLock.removeUserLocks();
-        User.updateActiveLogIn();
-        Audit.addAuditEntry("Logged Off");
-        System.exit(0);
+//        DocketLock.removeUserLocks();
+//        NewCaseLock.removeUserLocks();
+//        User.updateActiveLogIn();
+//        Audit.addAuditEntry("Logged Off");
+//        System.exit(0);
+        new ExitVerification((JFrame) getRootPane().getParent(), true, "Quit");
     }//GEN-LAST:event_formWindowClosing
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
@@ -2259,6 +2272,11 @@ public class RootPanel extends javax.swing.JFrame {
         new FactFinderConciliatorSearchDialog(Global.root, true);
     }//GEN-LAST:event_FFConcMenuItemActionPerformed
 
+    private void recordRetentionMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recordRetentionMenuItemActionPerformed
+        Audit.addAuditEntry("Opened Record Retention Panel");
+        new RecordRetentionMainDialog(Global.root, true);
+    }//GEN-LAST:event_recordRetentionMenuItemActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel CMDS;
     private javax.swing.JMenuItem CMDSDocumentationMenuItem;
@@ -2342,6 +2360,7 @@ public class RootPanel extends javax.swing.JFrame {
     private parker.serb.ORG.ORGRootPanel oRGRootPanel1;
     private parker.serb.REP.REPHeaderPanel rEPHeaderPanel1;
     private parker.serb.REP.REPRootPanel rEPRootPanel1;
+    private javax.swing.JMenuItem recordRetentionMenuItem;
     private parker.serb.ULP.ULPHeaderPanel uLPHeaderPanel1;
     private parker.serb.ULP.ULPRootPanel uLPRootPanel1;
     // End of variables declaration//GEN-END:variables

@@ -2101,6 +2101,16 @@ public class MEDCase {
             if(!newCaseInformation.concilSelection.equals(oldCaseInformation.concilSelection))
                 Activity.addActivty("Changed Conciliator Selected from " + oldCaseInformation.concilSelection + " to " + newCaseInformation.concilSelection, null);
         }
+        
+        //originalconciliationSelection
+        if(newCaseInformation.concilOriginalConciliator == null && oldCaseInformation.concilOriginalConciliator != null) {
+            Activity.addActivty("Removed " + oldCaseInformation.concilOriginalConciliator + " from Original Conciliator Selected", null);
+        } else if(newCaseInformation.concilOriginalConciliator != null && oldCaseInformation.concilOriginalConciliator == null) {
+            Activity.addActivty("Set Original Conciliator Selected to " + newCaseInformation.concilOriginalConciliator, null);
+        } else if(newCaseInformation.concilOriginalConciliator != null && oldCaseInformation.concilOriginalConciliator != null) {
+            if(!newCaseInformation.concilOriginalConciliator.equals(oldCaseInformation.concilOriginalConciliator))
+                Activity.addActivty("Changed Original Conciliator Selected from " + oldCaseInformation.concilOriginalConciliator + " to " + newCaseInformation.concilOriginalConciliator, null);
+        }
 
         //replacementConciliation
         if(newCaseInformation.concilReplacement == null && oldCaseInformation.concilReplacement != null) {
@@ -2297,7 +2307,17 @@ public class MEDCase {
             if(!newCaseInformation.FFReplacement.equals(oldCaseInformation.FFReplacement))
                 Activity.addActivty("Changed Replacement Fact Finder from " + oldCaseInformation.FFReplacement + " to " + newCaseInformation.FFReplacement, null);
         }
-
+        
+        //FFOrgSelection
+        if(newCaseInformation.FFOriginalFactFinder == null && oldCaseInformation.FFOriginalFactFinder != null) {
+            Activity.addActivty("Removed " + oldCaseInformation.FFOriginalFactFinder + " from Original Fact Finder Selected", null);
+        } else if(newCaseInformation.FFOriginalFactFinder != null && oldCaseInformation.FFOriginalFactFinder == null) {
+            Activity.addActivty("Set Original Fact Finder Selected to " + newCaseInformation.FFOriginalFactFinder, null);
+        } else if(newCaseInformation.FFOriginalFactFinder != null && oldCaseInformation.FFOriginalFactFinder != null) {
+            if(!newCaseInformation.FFOriginalFactFinder.equals(oldCaseInformation.FFOriginalFactFinder))
+                Activity.addActivty("Changed Original Fact Finder Selected from " + oldCaseInformation.FFOriginalFactFinder + " to " + newCaseInformation.FFOriginalFactFinder, null);
+        }
+        
         //orgFFDate
         if(newCaseInformation.FFOriginalFactFinderDate == null && oldCaseInformation.FFOriginalFactFinderDate != null) {
             Activity.addActivty("Removed " + Global.mmddyyyy.format(new Date(oldCaseInformation.FFOriginalFactFinderDate.getTime())) + " from Original Fact Finder Date", null);

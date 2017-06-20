@@ -254,6 +254,7 @@ public class processMEDbookmarks {
         for (int i = 0; i < Global.BOOKMARK_LIMIT; i++) {
             //Case Number Related Information
             processBookmark.process("CASENUM" + (i == 0 ? "" : i), NumberFormatService.generateFullCaseNumber(), Document);
+            processBookmark.process("CaseNumber" + (i == 0 ? "" : i), NumberFormatService.generateFullCaseNumber(), Document);
             processBookmark.process("RELATEDCASENUMBERS" + (i == 0 ? "" : i), relatedCaseNumbers, Document);
             processBookmark.process("NTNFILEDBY" + (i == 0 ? "" : i), item.NTNFiledBy != null ? item.NTNFiledBy : "", Document);
             processBookmark.process("NEGOTIATIONPERIOD" + (i == 0 ? "" : i), item.negotiationPeriod != null ? item.negotiationPeriod : "", Document);

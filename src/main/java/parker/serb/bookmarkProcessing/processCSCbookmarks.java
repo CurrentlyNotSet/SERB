@@ -55,6 +55,7 @@ public class processCSCbookmarks {
         String orgAddressBlock = "";
         CaseParty cscAddress = new CaseParty();
 
+        cscAddress.companyName = cscCase.name;
         cscAddress.address1 = cscCase.address1;
         cscAddress.address2 = cscCase.address2;
         cscAddress.city = cscCase.city;

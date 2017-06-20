@@ -55,7 +55,24 @@ public class CMDSHearing {
 
             int process = preparedStatement.executeUpdate();
             
-            if(process == 1) {
+            if (process == 1) {
+                
+                List<CaseParty> partylist = CaseParty.loadPartiesByCasePartyTypeNoRep(
+                        Global.caseYear, Global.caseType, Global.caseMonth, Global.caseNumber, 
+                        "appellant");
+                
+                String partySet = "";
+                for (CaseParty party : partylist){
+                    partySet += (partySet.trim().equals("") ? "" : " ") + (party.lastName.trim().equals("") ? party.companyName : party.lastName);
+                }
+                
+                String emailSubject = 
+                        hearingType + " " +  //Type Code
+                        CMDSCase.getALJinitials() + " " + //ALJ Initials
+                        partySet + " " + // Appellant
+                        NumberFormatService.generateFullCaseNumber(); // Full Case Number
+                                
+                
                 EmailOutInvites.addNewHearing("CMDS",
                         generateHearingToAddress(CMDSCase.getALJemail(), HearingRoom.getHearingRoomEmailByName(hearingRoom)),
                         null,
@@ -64,8 +81,9 @@ public class CMDSHearing {
                         hearingType,
                         hearingRoom,
                         type.hearingDescription.equals("") ? hearingType : type.hearingDescription,
-                        new Timestamp(hearingTime.getTime()));
-                
+                        new Timestamp(hearingTime.getTime()),
+                        emailSubject);
+
                 Activity.addActivty("Created a " + hearingType + " on " + Global.mmddyyyyhhmma.format(hearingTime) + " in " + hearingRoom, null);
             }
         } catch (SQLException ex) {

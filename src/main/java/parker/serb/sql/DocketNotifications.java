@@ -49,6 +49,36 @@ public class DocketNotifications {
         }
     }
     
+    public static void addFullNotification(String section, int mediatorID, String subject, String body) {
+        Statement stmt = null;
+        String userEmail = User.getEmailByID(mediatorID);
+
+
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Insert INTO DocketNotifications VALUES (?,?,?,?)";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, section);
+            preparedStatement.setString(2, userEmail);
+            preparedStatement.setString(3, subject);
+            preparedStatement.setString(4, body);
+
+            if (!userEmail.equals("")){
+                preparedStatement.executeUpdate();
+            }
+
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                addFullNotification(section, mediatorID, subject, body);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+    }
+    
     public static void addNewCaseNotification(String caseNumber, String section, int userID) {
         Statement stmt = null;
 

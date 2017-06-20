@@ -165,11 +165,13 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
         appointmentDateTextBox.setEnabled(true);
         appointmentDateTextBox.setBackground(Color.white);
         FFTypeComboBox.setEnabled(true);
+        
         asAgreedToByPartiesCheckBox.setEnabled(true);
         
         if(!FFTypeComboBox.getSelectedItem().toString().trim().equals("")) {
             FFSelectionComboBox.setEnabled(true);
             replacementFFComboBox.setEnabled(true);
+            FFOriginalFactFinder.setEnabled(true);
             originalFFDateTextBox.setEnabled(true);
             originalFFDateTextBox.setBackground(Color.white);
         }   
@@ -215,6 +217,7 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
         
         FFSelectionComboBox.setEnabled(false);
         replacementFFComboBox.setEnabled(false);
+        FFOriginalFactFinder.setEnabled(false);
         originalFFDateTextBox.setEnabled(false);
         originalFFDateTextBox.setBackground(new Color(238,238,238));
         
@@ -270,7 +273,7 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
         FFTypeComboBox.setSelectedItem(orginalInformation.FFType != null ? orginalInformation.FFType : "");
         FFSelectionComboBox.setSelectedItem(orginalInformation.FFSelection != null ? orginalInformation.FFSelection : "");
         replacementFFComboBox.setSelectedItem(orginalInformation.FFReplacement != null ? orginalInformation.FFReplacement : "");
-        FFOriginalFactFinder.setText(orginalInformation.FFOriginalFactFinder != null ? orginalInformation.FFOriginalFactFinder : "");
+        FFOriginalFactFinder.setSelectedItem(orginalInformation.FFOriginalFactFinder != null ? orginalInformation.FFOriginalFactFinder : "");
         originalFFDateTextBox.setText(orginalInformation.FFOriginalFactFinderDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.FFOriginalFactFinderDate.getTime())) : "");
         asAgreedToByPartiesCheckBox.setSelected(orginalInformation.asAgreedToByParties);
 
@@ -349,19 +352,10 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
         newMEDCaseInformation.FFSelection = FFSelectionComboBox.getSelectedItem() == null || FFSelectionComboBox.getSelectedItem().toString().equals("") ? null : FFSelectionComboBox.getSelectedItem().toString();
         newMEDCaseInformation.FFReplacement = replacementFFComboBox.getSelectedItem() == null || replacementFFComboBox.getSelectedItem().toString().equals("") ? null : replacementFFComboBox.getSelectedItem().toString();
 
-        //only set the value if it is blank
-        if(FFOriginalFactFinder.getText().equals("")) {
-            if (FFSelectionComboBox.getSelectedItem() == null){
-                newMEDCaseInformation.FFOriginalFactFinder = null;
-            } else {
-                newMEDCaseInformation.FFOriginalFactFinder = 
-                        FFSelectionComboBox.getSelectedItem().toString().equals("") ? null : FFSelectionComboBox.getSelectedItem().toString();
-            }
-        } else if(FFSelectionComboBox.getSelectedItem() == null ||
-            FFSelectionComboBox.getSelectedItem().toString().equals("")) {
+        if(FFOriginalFactFinder.getSelectedItem().equals("")) {
             newMEDCaseInformation.FFOriginalFactFinder = null;
         } else {
-            newMEDCaseInformation.FFOriginalFactFinder = orginalInformation.FFOriginalFactFinder;
+            newMEDCaseInformation.FFOriginalFactFinder = FFOriginalFactFinder.getSelectedItem().toString();
         }
         
         newMEDCaseInformation.FFOriginalFactFinderDate = originalFFDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(originalFFDateTextBox.getText()));
@@ -416,7 +410,7 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
         FFTypeComboBox.setSelectedItem("");
         FFSelectionComboBox.setSelectedItem("");
         replacementFFComboBox.setSelectedItem("");
-        FFOriginalFactFinder.setText("");
+        FFOriginalFactFinder.setSelectedItem("");
         originalFFDateTextBox.setText("");
         asAgreedToByPartiesCheckBox.setSelected(false);
         
@@ -435,6 +429,13 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
     private void loadFullFFList() {
         fullFFList = FactFinder.loadAllFF();
         randomFFList = fullFFList;
+        
+        FFOriginalFactFinder.removeAllItems();
+        FFOriginalFactFinder.addItem("");
+        
+        for(int i = 0; i < fullFFList.size(); i++) {
+            FFOriginalFactFinder.addItem(fullFFList.get(i));
+        }
     }
     
     private void generateRandomFFList(String whichList) {
@@ -603,10 +604,10 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
         FFTypeComboBox = new javax.swing.JComboBox<>();
         FFSelectionComboBox = new javax.swing.JComboBox<>();
         replacementFFComboBox = new javax.swing.JComboBox<>();
-        FFOriginalFactFinder = new javax.swing.JTextField();
         appointmentDateTextBox = new com.alee.extended.date.WebDateField();
         originalFFDateTextBox = new com.alee.extended.date.WebDateField();
         asAgreedToByPartiesCheckBox = new javax.swing.JCheckBox();
+        FFOriginalFactFinder = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         FF1List = new javax.swing.JList<>();
@@ -677,10 +678,6 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
 
         replacementFFComboBox.setEnabled(false);
 
-        FFOriginalFactFinder.setBackground(new java.awt.Color(238, 238, 238));
-        FFOriginalFactFinder.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        FFOriginalFactFinder.setEnabled(false);
-
         appointmentDateTextBox.setEditable(false);
         appointmentDateTextBox.setBackground(new java.awt.Color(238, 238, 238));
         appointmentDateTextBox.setCaretColor(new java.awt.Color(0, 0, 0));
@@ -726,6 +723,9 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
                 asAgreedToByPartiesCheckBox.setText("As Agreed To By Parties");
                 asAgreedToByPartiesCheckBox.setEnabled(false);
 
+                FFOriginalFactFinder.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+                FFOriginalFactFinder.setEnabled(false);
+
                 javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
                 jPanel1.setLayout(jPanel1Layout);
                 jPanel1Layout.setHorizontalGroup(
@@ -740,15 +740,16 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
                             .addComponent(jLabel7))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(asAgreedToByPartiesCheckBox)
-                                .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(FFTypeComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(FFSelectionComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(replacementFFComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(FFOriginalFactFinder)
                             .addComponent(appointmentDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(originalFFDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(originalFFDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(FFOriginalFactFinder, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(asAgreedToByPartiesCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addContainerGap())
                 );
                 jPanel1Layout.setVerticalGroup(
@@ -771,9 +772,9 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
                             .addComponent(replacementFFComboBox)
                             .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel11)
-                            .addComponent(FFOriginalFactFinder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(FFOriginalFactFinder)
+                            .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(originalFFDateTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1287,6 +1288,7 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
                     FFSelectionComboBox.setEnabled(true);
                     replacementFFComboBox.setEnabled(true);
                     originalFFDateTextBox.setEnabled(true);
+                    FFOriginalFactFinder.setEnabled(true);
                     originalFFDateTextBox.setBackground(Color.white);
                     populateFFSelection();
                     populateFFReplacement();
@@ -1295,6 +1297,7 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
                     FFSelectionComboBox.setSelectedItem("");
                     replacementFFComboBox.setSelectedItem("");
                     FFSelectionComboBox.setEnabled(true);
+                    FFOriginalFactFinder.setEnabled(true);
                     replacementFFComboBox.setEnabled(true);
                     originalFFDateTextBox.setEnabled(true);
                     originalFFDateTextBox.setBackground(Color.white);
@@ -1307,6 +1310,7 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
                     FFSelectionComboBox.setEnabled(false);
                     FFSelectionComboBox.setSelectedItem("");
                     replacementFFComboBox.setEnabled(true);
+                    FFOriginalFactFinder.setEnabled(true);
                     originalFFDateTextBox.setEnabled(true);
                     originalFFDateTextBox.setBackground(Color.white);
                     populateFullFFSelection();
@@ -1317,6 +1321,7 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
                     replacementFFComboBox.setSelectedItem("");
                     FFSelectionComboBox.setEnabled(true);
                     replacementFFComboBox.setEnabled(true);
+                    FFOriginalFactFinder.setEnabled(true);
                     originalFFDateTextBox.setEnabled(true);
                     originalFFDateTextBox.setBackground(Color.white);
                     populateFullFFSelection();
@@ -1326,6 +1331,8 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
                 default:
                     FFSelectionComboBox.setEnabled(false);
                     replacementFFComboBox.setEnabled(false);
+                    FFOriginalFactFinder.setEnabled(false);
+                    FFOriginalFactFinder.setSelectedItem("");
                     originalFFDateTextBox.setEnabled(false);
                     originalFFDateTextBox.setBackground(new Color(238,238,238));
                     FFSelectionComboBox.setSelectedItem("");
@@ -1353,7 +1360,7 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
     private com.alee.extended.date.WebDateField FF2OrderDateTextBox;
     private com.alee.extended.date.WebDateField FF2SelectionDateTextBox;
     private javax.swing.JTextArea FFNote;
-    private javax.swing.JTextField FFOriginalFactFinder;
+    private javax.swing.JComboBox<String> FFOriginalFactFinder;
     private com.alee.extended.date.WebDateField FFReportIssueDateTextBox;
     private javax.swing.JComboBox<String> FFSelectionComboBox;
     private javax.swing.JComboBox<String> FFTypeComboBox;
