@@ -60,7 +60,6 @@ public class processHearingsbookmarks {
         return Document;
     }
 
-
     private static String buildHearingParties(List<CaseParty> partyList, String section) {
         switch (section) {
             case "MED":
@@ -82,25 +81,24 @@ public class processHearingsbookmarks {
             if (null != party.caseRelation) {
                 switch (party.caseRelation.toLowerCase()) {
                     case "employee organization":
-                        employeeOrganization += (employeeOrganization.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party);
+                        employeeOrganization += (employeeOrganization.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party) + ", ";
                         break;
                     case "employer":
-                        employer += (employer.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party);
+                        employer += (employer.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party) + ", ";
                         break;
                 }
             }
         }
-        
-        
+                
         String HEARINGPARTIES = "";
 
-        HEARINGPARTIES += employeeOrganization;
+        HEARINGPARTIES += employeeOrganization.toUpperCase();
         HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
         HEARINGPARTIES += "Employee Organization,";
         HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
         HEARINGPARTIES += "    and";
         HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
-        HEARINGPARTIES += employer;
+        HEARINGPARTIES += employer.toUpperCase();
         HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
         HEARINGPARTIES += "Employer.";
 
@@ -182,14 +180,11 @@ public class processHearingsbookmarks {
                 }
             }
         }
-        
-        
+                
         String seperatingText = System.lineSeparator() + System.lineSeparator();
         seperatingText += "    and";
         seperatingText += System.lineSeparator() + System.lineSeparator();
 
-        
-        
         String HEARINGPARTIES = "";
         
         if (!conversionSchool.trim().equals("")) {
@@ -248,6 +243,6 @@ public class processHearingsbookmarks {
             HEARINGPARTIES += "Rival Employee Organization,";
         }
         
-        return HEARINGPARTIES.substring(0, (HEARINGPARTIES.length() - 1));
+        return HEARINGPARTIES.substring(0, (HEARINGPARTIES.length() - 1)) + ".";
     }
 }
