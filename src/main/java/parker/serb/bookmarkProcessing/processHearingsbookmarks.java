@@ -155,28 +155,28 @@ public class processHearingsbookmarks {
         for (CaseParty party : partyList) {
             if (null != party.caseRelation) {
                 switch (party.caseRelation.toLowerCase()) {
-                    case "Conversion School":
+                    case "conversion school":
                         conversionSchool += (conversionSchool.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party);
                         break;
-                    case "Employee Organization":
+                    case "employee organization":
                         employeeOrganization += (employeeOrganization.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party);
                         break;
-                    case "Incumbent Employee Organization":
+                    case "incumbent employee organization":
                         incumbentEmployeeOrganization += (incumbentEmployeeOrganization.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party);
                         break;
-                    case "Petitioner":
+                    case "petitioner":
                         petitioner += (petitioner.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party);
                         break;
-                    case "Rival Employee Organization":
+                    case "rival employee organization":
                         rivalEmployeeOrganization += (rivalEmployeeOrganization.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party);
                         break;
-                    case "Intervener":
+                    case "intervener":
                         intervener += (intervener.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party);
                         break;
-                    case "Rival Employee Organization 2":
+                    case "rival employee organization 2":
                         rivalemployeeOrginizationTwo += (rivalemployeeOrginizationTwo.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party);
                         break;
-                    case "Display Rival Employee Organization 3":
+                    case "rival employee organization 3":
                         rivalemployeeOrginizationThree += (rivalemployeeOrginizationThree.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party);
                         break;
                 }
@@ -247,7 +247,7 @@ public class processHearingsbookmarks {
             HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
             HEARINGPARTIES += "Rival Employee Organization,";
         }
-
-        return HEARINGPARTIES;
+        
+        return HEARINGPARTIES.substring(0, (HEARINGPARTIES.length() - 1));
     }
 }
