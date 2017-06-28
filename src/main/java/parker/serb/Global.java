@@ -22,7 +22,7 @@ public class Global {
     // Major Version       3 -- will stay 3
     // Minor Version       0 -- update with larger enhancments
     // Maintenence Version 0 -- bug fix releases
-    public static final String APPLICATION_VERSION = "3.2";
+    public static final String APPLICATION_VERSION = "3.2.1";
 
     //All Date and Time formatters
     public static SimpleDateFormat mmddyyyyhhmma = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
@@ -73,7 +73,7 @@ public class Global {
     public static RootPanel root;
 
     //list of all states -> can limit this down if client wants
-    public static final String STATES[] = { "AL", "AK", "AS", "AZ", "AR", "CA", "CO",
+    public static final String STATES[] = {"AL", "AK", "AS", "AZ", "AR", "CA", "CO",
         "CT", "DE", "DC", "FL", "FM", "GA", "GU", "HI", "ID", "IL", "IN", "IA",
         "KS", "KY", "LA", "ME", "MH", "MD", "MA", "MI", "MN", "MS", "MO", "MT",
         "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "MP", "OH", "OK", "OR",
@@ -106,13 +106,13 @@ public class Global {
     public static final double EMAIL_SIZE_LIMIT = 22000000;
 
     //format Ending for dates
-    public static final String[] DAY_SUFFIXES =
-  //    0     1     2     3     4     5     6     7     8     9
-     { "th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th",
-  //    10    11    12    13    14    15    16    17    18    19
-       "th", "th", "th", "th", "th", "th", "th", "th", "th", "th",
-  //    20    21    22    23    24    25    26    27    28    29
-       "th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th",
-  //    30    31
-       "th", "st" };
+    public static final String[] DAY_SUFFIXES
+            = //    0     1     2     3     4     5     6     7     8     9
+            {"th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th",
+                //    10    11    12    13    14    15    16    17    18    19
+                "th", "th", "th", "th", "th", "th", "th", "th", "th", "th",
+                //    20    21    22    23    24    25    26    27    28    29
+                "th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th",
+                //    30    31
+                "th", "st"};
 }
