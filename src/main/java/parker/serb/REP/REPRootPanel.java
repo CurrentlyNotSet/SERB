@@ -94,7 +94,7 @@ public class REPRootPanel extends javax.swing.JPanel {
     public void setButtons() {
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
             case "Activity":
-                Global.root.getjButton2().setText("Update");
+                Global.root.getjButton2().setText("Add Entry");
                 Global.root.getjButton2().setEnabled(true);
                 Global.root.getjButton9().setVisible(true);
                 break;
