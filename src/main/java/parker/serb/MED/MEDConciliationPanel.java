@@ -283,6 +283,31 @@ public class MEDConciliationPanel extends javax.swing.JPanel {
         concilOriginalConciliator.setSelectedItem(orginalInformation.concilOriginalConciliator != null ? orginalInformation.concilOriginalConciliator : "");
         originalConciliationDateTextBox.setText(orginalInformation.concilOriginalConcilDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.concilOriginalConcilDate.getTime())) : "");
         
+        if(orginalInformation.concilSelection != null) {
+            conciliatorSelectionComboBox.setSelectedItem(orginalInformation.concilSelection);   
+            if(conciliatorSelectionComboBox.getSelectedIndex() == -1){ 
+                conciliatorSelectionComboBox.addItem(orginalInformation.concilSelection);
+                conciliatorSelectionComboBox.setSelectedItem(orginalInformation.concilSelection != null ? orginalInformation.concilSelection : "");
+            } else {
+                conciliatorSelectionComboBox.setSelectedItem(orginalInformation.concilSelection != null ? orginalInformation.concilSelection : "");
+            }
+        } else {
+            conciliatorSelectionComboBox.setSelectedItem(orginalInformation.concilSelection != null ? orginalInformation.concilSelection : "");
+        }
+        
+        if(orginalInformation.concilReplacement != null) {
+            replacementConciliatorComboBox.setSelectedItem(orginalInformation.concilReplacement);   
+            if(replacementConciliatorComboBox.getSelectedIndex() == -1){ 
+                replacementConciliatorComboBox.addItem(orginalInformation.concilReplacement);
+                replacementConciliatorComboBox.setSelectedItem(orginalInformation.concilReplacement != null ? orginalInformation.concilReplacement : "");
+            } else {
+                replacementConciliatorComboBox.setSelectedItem(orginalInformation.concilReplacement != null ? orginalInformation.concilReplacement : "");
+            }
+        } else {
+            replacementConciliatorComboBox.setSelectedItem(orginalInformation.concilReplacement != null ? orginalInformation.concilReplacement : "");
+        }
+        
+        
         conciliation2OrderDateTextBox.setText(orginalInformation.concilList2OrderDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.concilList2OrderDate.getTime())) : "");
         conciliation2SelectionDateTextBox.setText(orginalInformation.concilList2SelectionDueDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.concilList2SelectionDueDate.getTime())) : "");
        

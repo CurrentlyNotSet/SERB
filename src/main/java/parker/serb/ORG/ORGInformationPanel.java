@@ -86,7 +86,7 @@ public class ORGInformationPanel extends javax.swing.JPanel {
         fiscalYearEndingComboBox.removeAllItems();
         fiscalYearEndingComboBox.addItem("");
         fiscalYearEndingComboBox.addItem("January");
-        fiscalYearEndingComboBox.addItem("Febuary");
+        fiscalYearEndingComboBox.addItem("February");
         fiscalYearEndingComboBox.addItem("March");
         fiscalYearEndingComboBox.addItem("April");
         fiscalYearEndingComboBox.addItem("May");
@@ -1154,7 +1154,7 @@ public class ORGInformationPanel extends javax.swing.JPanel {
                 case "January":
                     dueDateTextBox.setText("June 15th");
                     break;
-                case "Febrary":
+                case "February":
                     dueDateTextBox.setText("July 15th");
                     break;
                 case "March":

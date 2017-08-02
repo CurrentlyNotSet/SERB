@@ -269,11 +269,39 @@ public class MEDFactFinderPanel extends javax.swing.JPanel {
             FF1List.setModel(FFList1Model);
         }
         
+        
+        
         appointmentDateTextBox.setText(orginalInformation.FFAppointmentDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.FFAppointmentDate.getTime())) : "");
         FFTypeComboBox.setSelectedItem(orginalInformation.FFType != null ? orginalInformation.FFType : "");
         FFSelectionComboBox.setSelectedItem(orginalInformation.FFSelection != null ? orginalInformation.FFSelection : "");
         replacementFFComboBox.setSelectedItem(orginalInformation.FFReplacement != null ? orginalInformation.FFReplacement : "");
-        FFOriginalFactFinder.setSelectedItem(orginalInformation.FFOriginalFactFinder != null ? orginalInformation.FFOriginalFactFinder : "");
+        
+        if(orginalInformation.FFSelection != null) {
+            FFSelectionComboBox.setSelectedItem(orginalInformation.FFSelection);   
+            if(FFSelectionComboBox.getSelectedIndex() == -1){ 
+                FFSelectionComboBox.addItem(orginalInformation.FFSelection);
+                FFSelectionComboBox.setSelectedItem(orginalInformation.FFSelection != null ? orginalInformation.FFSelection : "");
+            } else {
+                FFSelectionComboBox.setSelectedItem(orginalInformation.FFSelection != null ? orginalInformation.FFSelection : "");
+            }
+        } else {
+            FFSelectionComboBox.setSelectedItem(orginalInformation.FFSelection != null ? orginalInformation.FFSelection : "");
+        }
+        
+        if(orginalInformation.FFReplacement != null) {
+            replacementFFComboBox.setSelectedItem(orginalInformation.FFReplacement);   
+            if(replacementFFComboBox.getSelectedIndex() == -1){ 
+                replacementFFComboBox.addItem(orginalInformation.FFReplacement);
+                replacementFFComboBox.setSelectedItem(orginalInformation.FFReplacement != null ? orginalInformation.FFReplacement : "");
+            } else {
+                replacementFFComboBox.setSelectedItem(orginalInformation.FFReplacement != null ? orginalInformation.FFReplacement : "");
+            }
+        } else {
+            replacementFFComboBox.setSelectedItem(orginalInformation.FFReplacement != null ? orginalInformation.FFReplacement : "");
+        }
+        
+        
+        
         originalFFDateTextBox.setText(orginalInformation.FFOriginalFactFinderDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.FFOriginalFactFinderDate.getTime())) : "");
         asAgreedToByPartiesCheckBox.setSelected(orginalInformation.asAgreedToByParties);
 
