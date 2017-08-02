@@ -1002,10 +1002,19 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
         if(evt.getClickCount() == 2) {
             if(bargainingUnitTextBox.isEnabled()) {
                 buNumberSearch search = new buNumberSearch((JFrame) Global.root.getRootPane().getParent(), true, employerIDNumberTextBox.getText().trim(), bargainingUnitTextBox.getText().trim(), "");
-                bargainingUnitTextBox.setText(search.getBuNumber());
-                setBUNumberCheckBoxes(search.getCertStatus() != null ? search.getCertStatus() : "");
-                if(employerIDNumberTextBox.getText().equals("")) {
-                    employerIDNumberTextBox.setText(search.getBuNumber().split("-")[0]);
+                
+                if(search.getBuNumber().contains("-")) {
+                    if(BargainingUnit.validateBUNUmber(search.getBuNumber())) {
+                        bargainingUnitTextBox.setText(search.getBuNumber());
+                        setBUNumberCheckBoxes(search.getCertStatus() != null ? search.getCertStatus() : "");
+                        if(employerIDNumberTextBox.getText().equals("")) {
+                            employerIDNumberTextBox.setText(search.getBuNumber().split("-")[0]);
+                        }
+                    } else {
+                        bargainingUnitTextBox.setText("");
+                    }
+                } else {
+                    bargainingUnitTextBox.setText("");
                 }
                 search.dispose();
             } else {

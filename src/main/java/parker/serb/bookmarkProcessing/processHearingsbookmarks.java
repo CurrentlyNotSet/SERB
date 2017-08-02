@@ -47,7 +47,7 @@ public class processHearingsbookmarks {
         }
 
         if (item.aljID > 0) {
-            ALJName = User.getFullNameByID(item.aljID);
+            ALJName = User.getFullNameByID(item.aljID).toUpperCase();
         }
 
         //ProcessBookmarks
@@ -60,96 +60,189 @@ public class processHearingsbookmarks {
         return Document;
     }
 
-
     private static String buildHearingParties(List<CaseParty> partyList, String section) {
-        String employeeOrganization = "";
-        String employer = "";
-        String complaintant = "";
-        String respondent = "";
-        String rivalEmployeeOrganization = "";
-
-        for (CaseParty party : partyList) {
-            if (null != party.caseRelation) {
-                switch (party.caseRelation.toLowerCase()) {
-                    case "employee organization":
-                        employeeOrganization += (employeeOrganization.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party);
-                        break;
-                    case "employer":
-                        employer += (employer.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party);
-                        break;
-                    case "complaintant":
-                    case "complainant":
-                        complaintant += (complaintant.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party);
-                        break;
-                    case "respondent":
-                    case "respondant":
-                    case "charged party":
-                        respondent += (respondent.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party);
-                        break;
-                    case "rival employee organization":
-                        rivalEmployeeOrganization += (rivalEmployeeOrganization.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party);
-                        break;
-                }
-            }
-        }
-
         switch (section) {
             case "MED":
-                return buildMEDHearingParties(employeeOrganization, employer);
+                return buildMEDHearingParties(partyList);
             case "REP":
-                return buildREPHearingParties(rivalEmployeeOrganization, employer);
+                return buildREPHearingParties(partyList);
             case "ULP":
-                return buildULPHearingParties(complaintant, respondent);
+                return buildULPHearingParties(partyList);
             default :
                 return "";
         }
     }
 
-    private static String buildMEDHearingParties(String v1, String v2) {
+    private static String buildMEDHearingParties(List<CaseParty> partyList) {
+        String employeeOrganization = "";
+        String employer = "";
+
+        for (CaseParty party : partyList) {
+            if (null != party.caseRelation) {
+                switch (party.caseRelation.toLowerCase()) {
+                    case "employee organization":
+                        employeeOrganization += (employeeOrganization.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party) + ", ";
+                        break;
+                    case "employer":
+                        employer += (employer.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party) + ", ";
+                        break;
+                }
+            }
+        }
+                
         String HEARINGPARTIES = "";
 
-        HEARINGPARTIES += v1;
+        HEARINGPARTIES += employeeOrganization.toUpperCase();
         HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
         HEARINGPARTIES += "Employee Organization,";
         HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
         HEARINGPARTIES += "    and";
         HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
-        HEARINGPARTIES += v2;
+        HEARINGPARTIES += employer.toUpperCase();
         HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
         HEARINGPARTIES += "Employer.";
 
         return HEARINGPARTIES;
     }
 
-    private static String buildULPHearingParties(String v1, String v2) {
+    private static String buildULPHearingParties(List<CaseParty> partyList) {
+        String complaintant = "";
+        String respondent = "";
+
+        for (CaseParty party : partyList) {
+            if (null != party.caseRelation) {
+                switch (party.caseRelation.toLowerCase()) {
+                    case "complaintant":
+                    case "complainant":
+                        complaintant += (complaintant.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party) + ", ";
+                        break;
+                    case "respondent":
+                    case "respondant":
+                    case "charged party":
+                        respondent += (respondent.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party) + ", ";
+                        break;
+                }
+            }
+        }
+        
         String HEARINGPARTIES = "";
 
-        HEARINGPARTIES += v1;
+        HEARINGPARTIES += complaintant.toUpperCase();
         HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
         HEARINGPARTIES += "Complainant,";
         HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
-        HEARINGPARTIES += "    and";
+        HEARINGPARTIES += "    v.";
         HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
-        HEARINGPARTIES += v2;
+        HEARINGPARTIES += respondent.toUpperCase();
         HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
         HEARINGPARTIES += "Respondent.";
 
         return HEARINGPARTIES;
     }
 
-    private static String buildREPHearingParties(String v1, String v2) {
+    private static String buildREPHearingParties(List<CaseParty> partyList) {
+        String conversionSchool = "";
+        String employeeOrganization = "";
+        String incumbentEmployeeOrganization = "";
+        String petitioner = "";
+        String rivalEmployeeOrganization = "";
+        String intervener = "";
+        String rivalemployeeOrginizationTwo = "";
+        String rivalemployeeOrginizationThree = "";
+
+        for (CaseParty party : partyList) {
+            if (null != party.caseRelation) {
+                switch (party.caseRelation.toLowerCase()) {
+                    case "conversion school":
+                        conversionSchool += (conversionSchool.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party);
+                        break;
+                    case "employee organization":
+                        employeeOrganization += (employeeOrganization.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party);
+                        break;
+                    case "incumbent employee organization":
+                        incumbentEmployeeOrganization += (incumbentEmployeeOrganization.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party);
+                        break;
+                    case "petitioner":
+                        petitioner += (petitioner.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party);
+                        break;
+                    case "rival employee organization":
+                        rivalEmployeeOrganization += (rivalEmployeeOrganization.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party);
+                        break;
+                    case "intervener":
+                        intervener += (intervener.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party);
+                        break;
+                    case "rival employee organization 2":
+                        rivalemployeeOrginizationTwo += (rivalemployeeOrginizationTwo.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party);
+                        break;
+                    case "rival employee organization 3":
+                        rivalemployeeOrginizationThree += (rivalemployeeOrginizationThree.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party);
+                        break;
+                }
+            }
+        }
+                
+        String seperatingText = System.lineSeparator() + System.lineSeparator();
+        seperatingText += "    and";
+        seperatingText += System.lineSeparator() + System.lineSeparator();
+
         String HEARINGPARTIES = "";
+        
+        if (!conversionSchool.trim().equals("")) {
+            HEARINGPARTIES += HEARINGPARTIES.trim().equals("") ? "" : seperatingText;
+            HEARINGPARTIES += conversionSchool;
+            HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
+            HEARINGPARTIES += "Rival Employee Organization,";
+        }
+        
+        if (!employeeOrganization.trim().equals("")) {
+            HEARINGPARTIES += HEARINGPARTIES.trim().equals("") ? "" : seperatingText;
+            HEARINGPARTIES += employeeOrganization;
+            HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
+            HEARINGPARTIES += "Employee Organization,";
+        }
+        
+        if (!incumbentEmployeeOrganization.trim().equals("")) {
+            HEARINGPARTIES += HEARINGPARTIES.trim().equals("") ? "" : seperatingText;
+            HEARINGPARTIES += incumbentEmployeeOrganization;
+            HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
+            HEARINGPARTIES += "Incumbent Employee Organization,";
+        }
+        
+        if (!petitioner.trim().equals("")) {
+            HEARINGPARTIES += HEARINGPARTIES.trim().equals("") ? "" : seperatingText;
+            HEARINGPARTIES += petitioner;
+            HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
+            HEARINGPARTIES += "Petitioner,";
+        }
+        
+        if (!rivalEmployeeOrganization.trim().equals("")) {
+            HEARINGPARTIES += HEARINGPARTIES.trim().equals("") ? "" : seperatingText;
+            HEARINGPARTIES += rivalEmployeeOrganization;
+            HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
+            HEARINGPARTIES += "Rival Employee Organization,";
+        }
 
-        HEARINGPARTIES += v1;
-        HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
-        HEARINGPARTIES += "Rival Employee Organization,";
-        HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
-        HEARINGPARTIES += "    and";
-        HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
-        HEARINGPARTIES += v2;
-        HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
-        HEARINGPARTIES += "Employer";
-
-        return HEARINGPARTIES;
+        if (!intervener.trim().equals("")) {
+            HEARINGPARTIES += HEARINGPARTIES.trim().equals("") ? "" : seperatingText;
+            HEARINGPARTIES += intervener;
+            HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
+            HEARINGPARTIES += "Intervener,";
+        }
+        
+        if (!rivalemployeeOrginizationTwo.trim().equals("")) {
+            HEARINGPARTIES += HEARINGPARTIES.trim().equals("") ? "" : seperatingText;
+            HEARINGPARTIES += rivalemployeeOrginizationTwo;
+            HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
+            HEARINGPARTIES += "Rival Employee Organization,";
+        }
+        
+        if (!rivalemployeeOrginizationThree.trim().equals("")) {
+            HEARINGPARTIES += HEARINGPARTIES.trim().equals("") ? "" : seperatingText;
+            HEARINGPARTIES += rivalemployeeOrginizationThree;
+            HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
+            HEARINGPARTIES += "Rival Employee Organization,";
+        }
+        
+        return HEARINGPARTIES.substring(0, (HEARINGPARTIES.length() - 1)) + ".";
     }
 }

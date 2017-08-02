@@ -4,6 +4,7 @@
  */
 package parker.serb.MED;
 
+import com.alee.laf.optionpane.WebOptionPane;
 import java.awt.Color;
 import java.awt.Component;
 import java.sql.Date;
@@ -122,6 +123,16 @@ public class MEDBulkClosedCasesDialog extends javax.swing.JFrame {
         countLabel.setText("Entries: " + caseTable.getRowCount());
     }
 
+    private void processTableThread() {
+        clearTable();
+        jLayeredPane1.moveToFront(jPanel1);
+        Thread temp = new Thread(() -> {
+            updateList();
+            
+        });
+        temp.start();
+    }
+    
     private void updateList() {
         SingleDateDialog selectedDate = new SingleDateDialog(this, true, "What was the Board Meeting Date?");
 
@@ -132,6 +143,8 @@ public class MEDBulkClosedCasesDialog extends javax.swing.JFrame {
                 }
             }
         }
+        jLayeredPane1.moveToBack(jPanel1);
+        loadTableThread();
     }
 
 
@@ -170,10 +183,11 @@ public class MEDBulkClosedCasesDialog extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         countLabel = new javax.swing.JLabel();
         jLayeredPane1 = new javax.swing.JLayeredPane();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        caseTable = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        caseTable = new javax.swing.JTable();
+        selectAllCheckBox = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -205,6 +219,30 @@ public class MEDBulkClosedCasesDialog extends javax.swing.JFrame {
         countLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
         jLayeredPane1.setLayout(new javax.swing.OverlayLayout(jLayeredPane1));
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setOpaque(false);
+
+        jLabel5.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/loading_spinner.gif"))); // NOI18N
+
+        org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 638, Short.MAX_VALUE)
+            .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                .add(org.jdesktop.layout.GroupLayout.TRAILING, jLabel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 638, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 450, Short.MAX_VALUE)
+            .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                .add(jLabel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE))
+        );
+
+        jLayeredPane1.add(jPanel1);
 
         caseTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -240,35 +278,12 @@ public class MEDBulkClosedCasesDialog extends javax.swing.JFrame {
 
         jLayeredPane1.add(jScrollPane1);
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setOpaque(false);
-
-        jLabel5.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/loading_spinner.gif"))); // NOI18N
-
-        org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 638, Short.MAX_VALUE)
-            .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                .add(jPanel1Layout.createSequentialGroup()
-                    .addContainerGap()
-                    .add(jLabel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 618, Short.MAX_VALUE)
-                    .addContainerGap()))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 455, Short.MAX_VALUE)
-            .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                .add(jPanel1Layout.createSequentialGroup()
-                    .addContainerGap()
-                    .add(jLabel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 433, Short.MAX_VALUE)
-                    .addContainerGap()))
-        );
-
-        jLayeredPane1.add(jPanel1);
+        selectAllCheckBox.setText("Select All");
+        selectAllCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectAllCheckBoxActionPerformed(evt);
+            }
+        });
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -277,15 +292,19 @@ public class MEDBulkClosedCasesDialog extends javax.swing.JFrame {
             .add(layout.createSequentialGroup()
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLabel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jLabel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(layout.createSequentialGroup()
+                        .add(closeButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 100, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .add(updateButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 95, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                         .add(0, 0, Short.MAX_VALUE)
                         .add(printButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 191, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, countLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(layout.createSequentialGroup()
-                        .add(closeButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 100, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 438, Short.MAX_VALUE)
-                        .add(updateButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 95, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                        .add(selectAllCheckBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 87, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .add(countLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 545, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                 .add(layout.createSequentialGroup()
@@ -301,9 +320,11 @@ public class MEDBulkClosedCasesDialog extends javax.swing.JFrame {
             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jLabel1)
-                .add(18, 18, 18)
-                .add(countLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 14, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 510, Short.MAX_VALUE)
+                .add(23, 23, 23)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                    .add(selectAllCheckBox, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(countLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 496, Short.MAX_VALUE)
                 .add(printButton)
                 .add(45, 45, 45)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
@@ -312,10 +333,12 @@ public class MEDBulkClosedCasesDialog extends javax.swing.JFrame {
                 .addContainerGap())
             .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                 .add(layout.createSequentialGroup()
-                    .add(67, 67, 67)
+                    .add(95, 95, 95)
                     .add(jLayeredPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(153, Short.MAX_VALUE)))
+                    .addContainerGap(130, Short.MAX_VALUE)))
         );
+
+        layout.linkSize(new java.awt.Component[] {countLabel, selectAllCheckBox}, org.jdesktop.layout.GroupLayout.VERTICAL);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -329,9 +352,18 @@ public class MEDBulkClosedCasesDialog extends javax.swing.JFrame {
     }//GEN-LAST:event_closeButtonActionPerformed
 
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
-        updateList();
-        loadTableThread();
+        int answer = WebOptionPane.showConfirmDialog(this, "Did You Print Cases To Be Closed List?",
+                "Print?", WebOptionPane.YES_NO_OPTION);
+        if (answer == WebOptionPane.YES_OPTION) {
+            processTableThread();
+        }
     }//GEN-LAST:event_updateButtonActionPerformed
+
+    private void selectAllCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectAllCheckBoxActionPerformed
+        for (int i = 0; i < caseTable.getRowCount(); i++) {
+            caseTable.getModel().setValueAt(selectAllCheckBox.isSelected(), i, 0);
+        }
+    }//GEN-LAST:event_selectAllCheckBoxActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable caseTable;
@@ -343,6 +375,7 @@ public class MEDBulkClosedCasesDialog extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton printButton;
+    private javax.swing.JCheckBox selectAllCheckBox;
     private javax.swing.JButton updateButton;
     // End of variables declaration//GEN-END:variables
 }

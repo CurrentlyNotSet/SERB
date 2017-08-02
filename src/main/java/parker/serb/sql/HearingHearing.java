@@ -38,7 +38,9 @@ public class HearingHearing {
             String alj,
             String comments) {
         Statement stmt = null;
-            
+        
+        HearingType type = HearingType.getHearingTypeByTypeCode(hearingType);
+        
         try {
             stmt = Database.connectToDB().createStatement();
 
@@ -62,12 +64,13 @@ public class HearingHearing {
                 EmailOutInvites.addNewHearing(getCaseSection(),
                         generateHearingToAddress(CMDSCase.getALJemail(), HearingRoom.getHearingRoomEmailByName(hearingRoom)),
                         null,
-                        "An upcoming " + hearingType + " is booked in " + hearingRoom + " at " + Global.mmddyyyyhhmma.format(hearingTime),
+                        "An upcoming " + (type.hearingDescription.equals("") ? hearingType : type.hearingDescription) + " is booked in " + hearingRoom + " at " + Global.mmddyyyyhhmma.format(hearingTime),
                         NumberFormatService.generateFullCaseNumber(),
                         hearingType,
                         hearingRoom,
                         hearingType,
-                        new Timestamp(hearingTime.getTime()));
+                        new Timestamp(hearingTime.getTime()),
+                        generateEmailOutInviteSubject(Global.caseYear, Global.caseType, Global.caseMonth, Global.caseNumber, hearingType));
                 Activity.addActivty("Created a " + hearingType + " on " + Global.mmddyyyyhhmma.format(hearingTime) + " in " + hearingRoom, null);
             }
 
@@ -228,5 +231,37 @@ public class HearingHearing {
         } finally {
             DbUtils.closeQuietly(stmt);
         }
+    }
+    
+    private static String generateEmailOutInviteSubject(String caseYear, 
+            String caseType, String caseMonth, String caseNumber, String hearingType){
+        String subject = "";
+                
+        String partyType = "";
+        
+        if (caseType.equals("ULP")){
+            partyType = "charged";
+        } else if (caseType.equals("REP") || caseType.equals("MED")) {
+            partyType = "employer";
+        }
+                
+        List<CaseParty> partylist = CaseParty.loadPartiesByCasePartyTypeNoRep(
+                        caseYear, caseType, caseMonth, caseNumber, 
+                        partyType);
+                
+                String partySet = "";
+                for (CaseParty party : partylist){
+                    partySet += (partySet.trim().equals("") ? "" : " ") + (party.lastName.trim().equals("") ? party.companyName : party.lastName);
+                }
+                
+                subject = hearingType + " " +  //Type Code
+                        CMDSCase.getALJinitials() + " " + //ALJ Initials
+                        partySet + " " + // Appellant
+                        NumberFormatService.generateFullCaseNumber(); // Full Case Number
+        
+        
+        
+        
+        return subject;
     }
 }

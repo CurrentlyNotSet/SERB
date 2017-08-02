@@ -683,7 +683,14 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
 
             //CC FactFinder
             if (SMDSdocToGenerate.description.toLowerCase().equals("mad fact finder appointment")
-                    || SMDSdocToGenerate.description.toLowerCase().equals("fact finder appointment letter")) {
+                    || SMDSdocToGenerate.description.toLowerCase().equals("fact finder appointment letter")
+                    || SMDSdocToGenerate.description.toLowerCase().equals("accepted fact finder report")
+                    || SMDSdocToGenerate.description.toLowerCase().equals("accepted and deemed accepted fact finder report")
+                    || SMDSdocToGenerate.description.toLowerCase().equals("deemed accepted fact finder report")
+                    || SMDSdocToGenerate.description.toLowerCase().equals("rejection of fact-finding report")
+                    || SMDSdocToGenerate.description.toLowerCase().equals("fact finder appointment serb (discrectionary)")
+                    || SMDSdocToGenerate.description.toLowerCase().equals("fact finder appointment serb (discretionary)")
+                    || SMDSdocToGenerate.description.toLowerCase().equals("fact finder extension")) {
                 if (!medCaseData.FFSelection.equals("") || !medCaseData.FFReplacement.equals("")) {
                     String factFinderSelectionName = medCaseData.FFReplacement == null
                             ? medCaseData.FFSelection
@@ -704,8 +711,10 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
             }
 
             //CCConciliator
-            if(SMDSdocToGenerate.description.toLowerCase().equals("mad conciliation appointment") ||
-                    SMDSdocToGenerate.description.toLowerCase().equals("conciliation appointment letter")){
+            if(SMDSdocToGenerate.description.toLowerCase().equals("mad conciliation appointment") 
+                    || SMDSdocToGenerate.description.toLowerCase().equals("conciliation appointment letter")
+                    || SMDSdocToGenerate.description.toLowerCase().equals("conciliation appointment serb (discrectionary)")
+                    || SMDSdocToGenerate.description.toLowerCase().equals("conciliation appointment serb (discretionary)")){
                 if(!medCaseData.concilSelection.equals("") || !medCaseData.concilReplacement.equals("")){
                     String concilSelectionName = medCaseData.concilReplacement == null
                             ? medCaseData.concilSelection
@@ -783,6 +792,11 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         eml.from = Global.activeUser.emailAddress;
         eml.cc = ccEmail.trim().equals("") ? null : ccEmail.trim();
         eml.bcc = "serbeoarchive@serb.state.oh.us";
+        
+        if(SMDSdocToGenerate.description.equals("Registration Report Letter - EMAIL")) {
+            eml.bcc = "serbeoarchive@serb.state.oh.us;EOReport@serb.state.oh.us";
+        }
+        
         switch (Global.activeSection) {
             case "CMDS":
                 eml.subject = NumberFormatService.generateFullCaseNumber() +

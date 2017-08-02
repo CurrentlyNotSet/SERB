@@ -257,6 +257,75 @@ public class CaseParty {
         return parties;
     }
 
+    public static List<CaseParty> loadPartiesByCasePartyTypeNoRep(String caseYear,
+        String caseType, String caseMonth, String caseNumber, String type) {
+        List<CaseParty> parties = new ArrayList<>();
+
+        Statement stmt = null;
+
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select * from CaseParty"
+                    + " where caseYear = ?"
+                    + " and caseType = ?"
+                    + " and caseMonth = ?"
+                    + " and caseNumber = ?"
+                    + " and caserelation LIKE ?"
+                    + " and caserelation NOT LIKE '%REP%'"
+                    + " order by caseRelation";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, caseYear);
+            preparedStatement.setString(2, caseType);
+            preparedStatement.setString(3, caseMonth);
+            preparedStatement.setString(4, caseNumber);
+            preparedStatement.setString(5, "%" + type + "%");
+
+            ResultSet casePartyRS = preparedStatement.executeQuery();
+
+            while(casePartyRS.next()) {
+                CaseParty party = new CaseParty();
+                party.id = casePartyRS.getInt("id");
+                party.caseYear = casePartyRS.getString("caseYear");
+                party.caseType = casePartyRS.getString("caseType");
+                party.caseMonth = casePartyRS.getString("caseMonth");
+                party.caseNumber = casePartyRS.getString("caseNumber");
+                party.partyID = casePartyRS.getInt("partyID");
+                party.caseRelation = casePartyRS.getString("caseRelation");
+                party.prefix = casePartyRS.getString("prefix") == null ? "" : casePartyRS.getString("prefix");
+                party.firstName = casePartyRS.getString("firstName") == null ? "" : casePartyRS.getString("firstName");
+                party.middleInitial = casePartyRS.getString("middleInitial") == null ? "" : casePartyRS.getString("middleInitial");
+                party.lastName = casePartyRS.getString("lastName") == null ? "" : casePartyRS.getString("lastName");
+                party.suffix = casePartyRS.getString("suffix") == null ? "" : casePartyRS.getString("suffix");
+                party.nameTitle = casePartyRS.getString("nameTitle") == null ? "" : casePartyRS.getString("nameTitle");
+                party.jobTitle = casePartyRS.getString("jobTitle") == null ? "" : casePartyRS.getString("jobTitle");
+                party.companyName = casePartyRS.getString("companyName") == null ? "" : casePartyRS.getString("companyName");
+                party.address1 = casePartyRS.getString("address1") == null ? "" : casePartyRS.getString("address1");
+                party.address2 = casePartyRS.getString("address2") == null ? "" : casePartyRS.getString("address2");
+                party.address3 = casePartyRS.getString("address3") == null ? "" : casePartyRS.getString("address3");
+                party.city = casePartyRS.getString("city") == null ? "" : casePartyRS.getString("city");
+                party.stateCode = casePartyRS.getString("stateCode") == null ? "" : casePartyRS.getString("stateCode");
+                party.zipcode = casePartyRS.getString("zipcode") == null ? "" : casePartyRS.getString("zipcode");
+                party.phone1 = casePartyRS.getString("phone1") == null ? "" : NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("phone1"));
+                party.phone2 = casePartyRS.getString("phone2") == null ? "" : NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("phone2"));
+                party.emailAddress = casePartyRS.getString("email") == null ? "" : casePartyRS.getString("email");
+                party.fax = casePartyRS.getString("fax") == null ? "" : NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("fax"));
+
+                parties.add(party);
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadPartiesByCasePartyTypeNoRep(caseYear, caseType, caseMonth, caseNumber, type);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return parties;
+    }
+    
+    
     public static List<CaseParty> loadPartiesByCaseForLetterGeneration() {
         List<CaseParty> parties = new ArrayList<>();
 

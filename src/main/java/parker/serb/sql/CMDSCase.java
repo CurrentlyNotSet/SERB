@@ -670,6 +670,41 @@ public class CMDSCase {
         }
         return email;
     }
+    
+    public static String getALJinitials() {
+        String email = "";
+
+        Statement stmt = null;
+
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select initials"
+                    + " from Users"
+                    + " INNER JOIN CMDSCase"
+                    + " ON CMDSCase.aljID = Users.id"
+                    + " where caseYear = ? and caseNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, Global.caseYear);
+            preparedStatement.setString(2, Global.caseNumber);
+
+            ResultSet caseNumberRS = preparedStatement.executeQuery();
+
+            if(caseNumberRS.next()) {
+                email = caseNumberRS.getString("initials");
+            }
+            stmt.close();
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getALJemail();
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return email;
+    }
 
     public static void updateCaseInventoryStatusLines(String activty, Date date) {
         Statement stmt = null;
