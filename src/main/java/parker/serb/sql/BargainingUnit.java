@@ -198,6 +198,36 @@ public class BargainingUnit {
         }
         return bu;
     }
+    
+    public static boolean validateBUNUmber(String bunNumber) {
+        boolean valid = false;
+
+        Statement stmt = null;
+
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "select * from BarginingUnit where EmployerNumber = ? and UnitNumber = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, bunNumber.split("-")[0]);
+            preparedStatement.setString(2, bunNumber.split("-")[1]);
+
+            ResultSet caseActivity = preparedStatement.executeQuery();
+
+            while(caseActivity.next()) {
+                valid = true;
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                validateBUNUmber(bunNumber);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return valid;
+    }
 
     public static void updateBUByID(BargainingUnit bu) {
         Statement stmt = null;

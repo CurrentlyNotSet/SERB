@@ -194,7 +194,6 @@ public class ConfirmationDialog extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(340, 300));
         setMinimumSize(new java.awt.Dimension(340, 300));
-        setResizable(false);
 
         jLayeredPane.setLayout(new javax.swing.OverlayLayout(jLayeredPane));
 
@@ -204,16 +203,13 @@ public class ConfirmationDialog extends javax.swing.JDialog {
 
         headerLabel.setFont(new java.awt.Font("Lucida Grande", 1, 18)); // NOI18N
         headerLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        headerLabel.setText("Send Letter");
 
-        cancelButton.setText("Cancel");
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelButtonActionPerformed(evt);
             }
         });
 
-        generateButton.setText("Send Letter");
         generateButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 generateButtonActionPerformed(evt);
@@ -222,11 +218,9 @@ public class ConfirmationDialog extends javax.swing.JDialog {
 
         headerLabel1.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
         headerLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        headerLabel1.setText("Are you sure you want");
 
         headerLabel2.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
         headerLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        headerLabel2.setText("to send this letter?");
 
         javax.swing.GroupLayout InfoPanelLayout = new javax.swing.GroupLayout(InfoPanel);
         InfoPanel.setLayout(InfoPanelLayout);
@@ -275,11 +269,9 @@ public class ConfirmationDialog extends javax.swing.JDialog {
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("Sending Letter");
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setText("Please Wait...");
 
         javax.swing.GroupLayout loadingPanelLayout = new javax.swing.GroupLayout(loadingPanel);
         loadingPanel.setLayout(loadingPanelLayout);

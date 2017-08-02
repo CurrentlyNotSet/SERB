@@ -792,6 +792,11 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         eml.from = Global.activeUser.emailAddress;
         eml.cc = ccEmail.trim().equals("") ? null : ccEmail.trim();
         eml.bcc = "serbeoarchive@serb.state.oh.us";
+        
+        if(SMDSdocToGenerate.description.equals("Registration Report Letter - EMAIL")) {
+            eml.bcc = "serbeoarchive@serb.state.oh.us;EOReport@serb.state.oh.us";
+        }
+        
         switch (Global.activeSection) {
             case "CMDS":
                 eml.subject = NumberFormatService.generateFullCaseNumber() +

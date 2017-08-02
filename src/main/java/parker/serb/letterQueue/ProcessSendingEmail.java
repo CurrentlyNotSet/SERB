@@ -11,6 +11,8 @@ import org.apache.commons.io.FilenameUtils;
 import parker.serb.Global;
 import parker.serb.sql.EmailOut;
 import parker.serb.sql.EmailOutAttachment;
+import parker.serb.sql.HearingCase;
+import static parker.serb.util.FileService.getCaseSectionFolderByCaseType;
 
 /**
  *
@@ -30,6 +32,8 @@ public class ProcessSendingEmail {
                     return true;
                 }
             }
+        } else {
+            
         }
         return false;
     }
@@ -45,6 +49,12 @@ public class ProcessSendingEmail {
             path = Global.activityPath
                     + (Global.activeSection.equals("Civil Service Commission")
                     ? eml.caseType : Global.activeSection) + File.separator + eml.caseNumber + File.separator;
+        } else if(Global.activeSection.equalsIgnoreCase("hearings")) {
+            path = Global.activityPath + File.separatorChar
+                    + getCaseSectionFolderByCaseType(eml.caseType) + File.separatorChar
+                    + eml.caseYear + File.separatorChar
+                    + (eml.caseYear + "-" + getCaseSectionFolderByCaseType(eml.caseType) + "-" + eml.caseMonth + "-" + eml.caseNumber)
+                    + File.separatorChar;
         } else {
             path = Global.activityPath + File.separatorChar
                     + Global.activeSection + File.separatorChar
