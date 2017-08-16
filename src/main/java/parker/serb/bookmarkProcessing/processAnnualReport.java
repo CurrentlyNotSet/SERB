@@ -415,15 +415,15 @@ public class processAnnualReport {
         //89 - Modified due to request R3-030
         long eightnine = AnnualReport.getCount("SELECT (SUM(CASE WHEN REPCase.combinedApproxNumberEligible IS NULL THEN 0 ELSE REPCase.combinedApproxNumberEligible END)  "
                 + "+ SUM(CASE WHEN REPCase.professionalApproxNumberEligible IS NULL THEN 0 ELSE REPCase.professionalApproxNumberEligible END) "
-				+ "+ SUM(CASE WHEN REPCase.nonprofessionalApproxNumberEligible IS NULL THEN 0 ELSE REPCase.nonprofessionalApproxNumberEligible END) "
+                + "+ SUM(CASE WHEN REPCase.nonprofessionalApproxNumberEligible IS NULL THEN 0 ELSE REPCase.nonprofessionalApproxNumberEligible END) "
                 + "+ SUM(CASE WHEN REPCase.resultApproxNumberEligibleVoters IS NULL THEN 0 ELSE REPCase.resultApproxNumberEligibleVoters END)) AS COLUMN1 FROM REPCase WHERE "
-                + "(REPCase.pollingEndDate BETWEEN '" + startDate + "' AND '" + endDate + "')");
+                + "(REPCase.ballotsCountDate BETWEEN '" + startDate + "' AND '" + endDate + "')");
         processBookmark.process("eightnine", String.valueOf(eightnine), Document);
         //90 - Modified due to request R3-030
         long ninezero = AnnualReport.getCount("SELECT (SUM(CASE WHEN REPCase.combinedTotalVotes IS NULL THEN 0 ELSE REPCase.combinedTotalVotes END) "
                 + "+ SUM(CASE WHEN REPCase.professionalTotalVotes IS NULL THEN 0 ELSE REPCase.professionalTotalVotes END ) "
-				+ "+ SUM(CASE WHEN REPCase.nonprofessionalTotalVotes IS NULL THEN 0 ELSE REPCase.nonprofessionalTotalVotes END) "
-                + "+ SUM(CASE WHEN REPCase.resultTotalBallotsCast IS NULL THEN 0 ELSE REPCase.resultTotalBallotsCast END)) AS COLUMN1 FROM REPCase WHERE (REPCase.pollingEndDate "
+                + "+ SUM(CASE WHEN REPCase.nonprofessionalTotalVotes IS NULL THEN 0 ELSE REPCase.nonprofessionalTotalVotes END) "
+                + "+ SUM(CASE WHEN REPCase.resultTotalBallotsCast IS NULL THEN 0 ELSE REPCase.resultTotalBallotsCast END)) AS COLUMN1 FROM REPCase WHERE (REPCase.ballotsCountDate "
                 + "BETWEEN '" + startDate + "' AND '" + endDate + "')");
         processBookmark.process("ninezero", String.valueOf(ninezero), Document);
         //91
