@@ -5,27 +5,13 @@
  */
 package parker.serb.util;
 
-import java.awt.event.ActionEvent;
-import java.text.DateFormatSymbols;
-import java.util.Calendar;
-import java.util.List;
-import javax.swing.JFrame;
+import java.awt.Color;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import parker.serb.Global;
-import parker.serb.sql.CMDSCase;
-import parker.serb.sql.CMDSCaseSearchData;
-import parker.serb.sql.CaseNumber;
-import parker.serb.sql.CaseParty;
-import parker.serb.sql.CaseType;
-import parker.serb.sql.EmployerCaseSearchData;
 import parker.serb.sql.HearingCase;
 import parker.serb.sql.MEDCase;
-import parker.serb.sql.MEDCaseSearchData;
 import parker.serb.sql.REPCase;
-import parker.serb.sql.REPCaseSearchData;
 import parker.serb.sql.ULPCase;
-import parker.serb.sql.ULPCaseSearchData;
 
 /**
  *
@@ -41,6 +27,7 @@ public class CreateNewHearingDialog extends javax.swing.JDialog {
         initComponents();
         loadSections();
         addListeners();
+        clearCaseLabel();
         setLocationRelativeTo(parent);
         setVisible(true);
     }
@@ -53,10 +40,15 @@ public class CreateNewHearingDialog extends javax.swing.JDialog {
         sectionComboBox.addItem("ULP");
     }
     
+    private void clearCaseLabel() {
+        jLabel2.setText(" ");
+    }
+    
     private void addListeners() {
         caseNumberTextBox.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
+                clearCaseLabel();
                 if(caseNumberTextBox.getText().split("-").length == 4) {
                     createHearingButton.setEnabled(validateCase());
                 } else {
@@ -66,6 +58,7 @@ public class CreateNewHearingDialog extends javax.swing.JDialog {
 
             @Override
             public void removeUpdate(DocumentEvent e) {
+                clearCaseLabel();
                 if(caseNumberTextBox.getText().split("-").length == 4) {
                     createHearingButton.setEnabled(validateCase());
                 } else {
@@ -75,6 +68,7 @@ public class CreateNewHearingDialog extends javax.swing.JDialog {
 
             @Override
             public void changedUpdate(DocumentEvent e) {
+                clearCaseLabel();
                 if(caseNumberTextBox.getText().split("-").length == 4) {
                     createHearingButton.setEnabled(validateCase());
                 } else {
@@ -103,8 +97,13 @@ public class CreateNewHearingDialog extends javax.swing.JDialog {
     }
     
     private void createHearing() {
-        HearingCase.createCase(caseNumberTextBox.getText().trim());
-        dispose();
+        if(validateCase()) {
+            jLabel2.setText("Case Already Created!");
+            jLabel2.setForeground(Color.red);
+        } else {
+            HearingCase.createCase(caseNumberTextBox.getText().trim());
+            dispose();
+        }
     }
 
     /**
@@ -123,6 +122,7 @@ public class CreateNewHearingDialog extends javax.swing.JDialog {
         jButton2 = new javax.swing.JButton();
         sectionComboBox = new javax.swing.JComboBox();
         caseNumberTextBox = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -151,6 +151,9 @@ public class CreateNewHearingDialog extends javax.swing.JDialog {
 
         sectionComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("jLabel2");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -172,7 +175,8 @@ public class CreateNewHearingDialog extends javax.swing.JDialog {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(createHearingButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(createHearingButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -180,21 +184,23 @@ public class CreateNewHearingDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(sectionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(4, 4, 4)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(caseNumberTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(createHearingButton)
-                    .addComponent(jButton2))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButton2)
+                    .addComponent(createHearingButton))
+                .addContainerGap())
         );
 
         pack();
@@ -213,6 +219,7 @@ public class CreateNewHearingDialog extends javax.swing.JDialog {
     private javax.swing.JButton createHearingButton;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JComboBox sectionComboBox;

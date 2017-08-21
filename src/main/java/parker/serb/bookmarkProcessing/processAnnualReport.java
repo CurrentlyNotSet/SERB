@@ -54,13 +54,14 @@ public class processAnnualReport {
         //END OF FIRST SECTION
 
         //START OF SECOND SECTION
-        //9
-        long nine = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM MEDCase WHERE (MEDCase.mediatorAppointedDate BETWEEN '" + startDate + "' AND '" + endDate
-                + "') AND (MEDCase.stateMediatorAppointedID IS NOT NULL) AND (MEDCase.mediatorAppointedDate IS NOT NULL)");
+        //9 - Modified due to request R3-030
+        long nine = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM MEDCase WHERE (MEDCase.mediatorAppointedDate BETWEEN '" 
+                + startDate + "' AND '" + endDate + "') AND (MEDCase.stateMediatorAppointedID IS NOT NULL)");
         processBookmark.process("nine", String.valueOf(nine), Document);
-        //10
-        long ten = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM MEDCase WHERE (MEDCase.fileDate BETWEEN '" + startDate + "' AND '" + endDate
-                + "') AND (MEDCase.FMCSMediatorAppointedID IS NOT NULL) AND (MEDCase.mediatorAppointedDate IS NOT NULL)");
+        //10 - Modified due to request R3-030
+        long ten = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM MEDCase WHERE (MEDCase.mediatorAppointedDate BETWEEN '" 
+                + startDate + "' AND '" + endDate + "') AND (MEDCase.FMCSMediatorAppointedID IS NOT NULL) "
+                        + "AND (MEDCase.mediatorAppointedDate IS NOT NULL)");
         processBookmark.process("ten", String.valueOf(ten), Document);
         //11
         long oneone = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM MEDCase WHERE (MEDCase.FFOriginalFactFinderDate BETWEEN '" + startDate + "' AND '" + endDate
@@ -93,17 +94,19 @@ public class processAnnualReport {
         //END OF SECOND SECTION
 
         //START OF THIRD SECTION
-        //19
-        long onenine = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM HearingsMediation WHERE (HearingsMediation.MediationDate BETWEEN '"
-                + startDate + "' AND '" + endDate + "') AND (HearingsMediation.PCPreD = 'PreD') AND (HearingsMediation.caseType = 'ULP')");
+        //19 - Modified due to request R3-030
+        long onenine = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM HearingsMediation WHERE (HearingsMediation.MediationDate BETWEEN '" 
+                + startDate + "' AND '" + endDate + "') AND (HearingsMediation.PCPreD = 'Pre-D' OR HearingsMediation.PCPreD = 'PreD') "
+                        + "AND (HearingsMediation.caseType = 'ULP')");
         processBookmark.process("onenine", String.valueOf(onenine), Document);
         //20
         long twozero = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM HearingsMediation WHERE (HearingsMediation.MediationDate BETWEEN '"
                 + startDate + "' AND '" + endDate + "') AND (HearingsMediation.PCPreD = 'PC') AND (HearingsMediation.caseType = 'ULP')");
         processBookmark.process("twozero", String.valueOf(twozero), Document);
-        //21
-        long twoone = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM HearingsMediation WHERE (HearingsMediation.MediationDate BETWEEN '"
-                + startDate + "' AND '" + endDate + "') AND (HearingsMediation.PCPreD = 'PreD') AND (HearingsMediation.caseType = 'REP')");
+        //21 - Modified due to request R3-030
+        long twoone = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM HearingsMediation WHERE (HearingsMediation.MediationDate BETWEEN '" 
+                + startDate + "' AND '" + endDate + "') AND (HearingsMediation.PCPreD = 'Pre-D' OR HearingsMediation.PCPreD = 'PreD') "
+                        + "AND (HearingsMediation.caseType = 'REP')");
         processBookmark.process("twoone", String.valueOf(twoone), Document);
         //22
         long twotwo = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM HearingsMediation WHERE (HearingsMediation.MediationDate BETWEEN '"
@@ -191,23 +194,20 @@ public class processAnnualReport {
         long threesix = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM MEDCase WHERE (MEDCase.fileDate BETWEEN '"
                 + startDate + "' AND '" + endDate + "') AND (MEDCase.caseType = 'MED')");
         processBookmark.process("threesix", String.valueOf(threesix), Document);
-        //38
-        long threeeight = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM MEDCase WHERE (MEDCase.strikeFileDate BETWEEN '"
-                + startDate + "' AND '" + endDate + "') AND (MEDCase.noticeOfIntentToStrikeAndPicket = 1) AND (MEDCase.noticeOfIntentToStrikeOnly = 1)");
+        //38 - Modified due to request R3-030
+        long threeeight = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM MEDCase WHERE (MEDCase.fileDate BETWEEN '"
+                + startDate + "' AND '" + endDate + "') AND (MEDCase.caseType = 'STK')");
         processBookmark.process("threeeight", String.valueOf(threeeight), Document);
-        //39
-        long threenine = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM MEDCase WHERE (MEDCase.mediatorAppointedDate BETWEEN '"
-                + startDate + "' AND '" + endDate + "') AND (MEDCase.stateMediatorAppointedID IS NOT NULL OR MEDCase.FMCSMediatorAppointedID IS NOT NULL)");
+        //39 - Modified due to request R3-030
+        long threenine = nine + ten;
         processBookmark.process("threenine", String.valueOf(threenine), Document);
-        //40
-        long fourzero = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM MEDCase WHERE (MEDCase.FFOriginalFactFinderDate BETWEEN '"
-                + startDate + "' AND '" + endDate + "') OR (MEDCase.FFAppointmentDate BETWEEN '"
-                + startDate + "' AND '" + endDate + "')");
+        //40 - Modified due to request R3-030
+        long fourzero = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM MEDCase WHERE (MEDCase.FFOriginalFactFinderDate BETWEEN '" + startDate + "' AND '" + endDate
+                + "') OR (MEDCase.FFAppointmentDate BETWEEN '" + startDate + "' AND '" + endDate + "')");
         processBookmark.process("fourzero", String.valueOf(fourzero), Document);
-        //41
-        long fourone = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM MEDCase WHERE (MEDCase.concilOriginalConcilDate BETWEEN '"
-                + startDate + "' AND '" + endDate + "') OR (MEDCase.concilAppointmentDate BETWEEN '"
-                + startDate + "' AND '" + endDate + "')");
+        //41 - Modified due to request R3-030
+        long fourone = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM MEDCase WHERE (MEDCase.concilOriginalConcilDate BETWEEN '" + startDate + "' AND '" + endDate
+                + "') OR (MEDCase.concilAppointmentDate BETWEEN '" + startDate + "' AND '" + endDate + "')");
         processBookmark.process("fourone", String.valueOf(fourone), Document);
         //end of the 5th section
 
@@ -399,7 +399,7 @@ public class processAnnualReport {
 
         //start of the 12th section
         //86
-        long eightsix = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM REPCase WHERE (REPCase.pollingEndDate BETWEEN '"
+        long eightsix = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM REPCase WHERE (REPCase.pollingEndDate BETWEEN '" 
                 + startDate + "' AND '" + endDate + "')");
         processBookmark.process("eightsix", String.valueOf(eightsix), Document);
         //87
@@ -412,16 +412,18 @@ public class processAnnualReport {
                 + "(REPCase.pollingStartDate IS NOT NULL) AND (REPCase.pollingEndDate IS NOT NULL) AND "
                 + "(REPCase.resultWhoPrevailed != 0 AND REPCase.resultWhoPrevailed IS NOT NULL)");
         processBookmark.process("eighteight", String.valueOf(eighteight), Document);
-        //89
-        long eightnine = AnnualReport.getCount("SELECT (SUM(REPCase.combinedApproxNumberEligible) "
-                + "+ SUM(REPCase.professionalApproxNumberEligible) + SUM(REPCase.nonprofessionalApproxNumberEligible) "
-                + "+ SUM(REPCase.resultApproxNumberEligibleVoters)) AS COLUMN1 FROM REPCase WHERE "
-                + "(REPCase.pollingEndDate BETWEEN '" + startDate + "' AND '" + endDate + "')");
+        //89 - Modified due to request R3-030
+        long eightnine = AnnualReport.getCount("SELECT (SUM(CASE WHEN REPCase.combinedApproxNumberEligible IS NULL THEN 0 ELSE REPCase.combinedApproxNumberEligible END)  "
+                + "+ SUM(CASE WHEN REPCase.professionalApproxNumberEligible IS NULL THEN 0 ELSE REPCase.professionalApproxNumberEligible END) "
+                + "+ SUM(CASE WHEN REPCase.nonprofessionalApproxNumberEligible IS NULL THEN 0 ELSE REPCase.nonprofessionalApproxNumberEligible END) "
+                + "+ SUM(CASE WHEN REPCase.resultApproxNumberEligibleVoters IS NULL THEN 0 ELSE REPCase.resultApproxNumberEligibleVoters END)) AS COLUMN1 FROM REPCase WHERE "
+                + "(REPCase.ballotsCountDate BETWEEN '" + startDate + "' AND '" + endDate + "')");
         processBookmark.process("eightnine", String.valueOf(eightnine), Document);
-        //90
-        long ninezero = AnnualReport.getCount("SELECT (SUM(REPCase.combinedTotalVotes) "
-                + "+ SUM(REPCase.professionalTotalVotes) + SUM(REPCase.nonprofessionalTotalVotes) "
-                + "+ SUM(REPCase.resultTotalBallotsCast)) AS COLUMN1 FROM REPCase WHERE (REPCase.pollingEndDate "
+        //90 - Modified due to request R3-030
+        long ninezero = AnnualReport.getCount("SELECT (SUM(CASE WHEN REPCase.combinedTotalVotes IS NULL THEN 0 ELSE REPCase.combinedTotalVotes END) "
+                + "+ SUM(CASE WHEN REPCase.professionalTotalVotes IS NULL THEN 0 ELSE REPCase.professionalTotalVotes END ) "
+                + "+ SUM(CASE WHEN REPCase.nonprofessionalTotalVotes IS NULL THEN 0 ELSE REPCase.nonprofessionalTotalVotes END) "
+                + "+ SUM(CASE WHEN REPCase.resultTotalBallotsCast IS NULL THEN 0 ELSE REPCase.resultTotalBallotsCast END)) AS COLUMN1 FROM REPCase WHERE (REPCase.ballotsCountDate "
                 + "BETWEEN '" + startDate + "' AND '" + endDate + "')");
         processBookmark.process("ninezero", String.valueOf(ninezero), Document);
         //91
@@ -435,9 +437,9 @@ public class processAnnualReport {
         //end of the 12th section
 
         //start of the 13th section
-        //92
+        //92 - Modified due to request R3-030
         long ninetwo = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM ULPCase WHERE (ULPCase.fileDate BETWEEN '"
-                + startDate + "' AND '" + endDate + "') AND (ULPCase.caseType = 'ULP')");
+                + startDate + "' AND '" + endDate + "') AND ((ULPCase.caseType = 'ULP') OR (ULPCase.caseType = 'JWD') OR (ULPCase.caseType = 'ERC'))");
         processBookmark.process("ninetwo", String.valueOf(ninetwo), Document);
         //93
         long ninethree = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM BoardMeeting LEFT JOIN ULPCase ON (BoardMeeting.caseYear = ULPCase.caseYear "
@@ -462,10 +464,10 @@ public class processAnnualReport {
                 + "(BoardMeeting.boardMeetingDate BETWEEN '" + startDate + "' AND '" + endDate + "') "
                 + "AND (BoardMeeting.recommendation LIKE 'DF%') AND (BoardMeeting.caseType = 'ULP')");
         processBookmark.process("ninesix", String.valueOf(ninesix), Document);
-        //97
+        //97 - Modified due to request R3-030
         long nineseven = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM HearingCase WHERE "
                 + "(HearingCase.boardActionDate BETWEEN '" + startDate + "' AND '" + endDate + "') "
-                + "AND (HearingCase.finalResult = 'Settled') AND (HearingCase.complaintIssuedDate IS NOT NULL)");
+                + "AND (HearingCase.finalResult = 'Settled') AND (HearingCase.complaintIssuedDate IS NOT NULL) AND (HearingCase.caseType = 'ULP')");
         processBookmark.process("nineseven", String.valueOf(nineseven), Document);
         //98
         long nineeight = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM HearingCase WHERE (HearingCase.boardActionDate "
@@ -504,9 +506,10 @@ public class processAnnualReport {
         long onezerofour = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM HearingCase WHERE (HearingCase.preHearingDate BETWEEN '"
                 + startDate + "' AND '" + endDate + "')");
         processBookmark.process("onezerofour", String.valueOf(onezerofour), Document);
-        //105
+        //105 - Modified due to request R3-030
         long onezerofive = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM HearingCase WHERE (HearingCase.hearingDate BETWEEN '"
-                + startDate + "' AND '" + endDate + "')");
+                + startDate + "' AND '" + endDate + "') AND (HearingCase.aljID IS NOT NULL AND (HearingCase.aljID != 1385 AND HearingCase.aljID != 1393 "
+				+ "AND HearingCase.aljID != 1449 AND HearingCase.aljID != 0 ))");
         processBookmark.process("onezerofive", String.valueOf(onezerofive), Document);
         //106
         long onezerosix = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM HearingCase WHERE (HearingCase.boardActionDate BETWEEN '"

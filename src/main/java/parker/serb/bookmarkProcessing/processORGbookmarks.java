@@ -33,6 +33,10 @@ public class processORGbookmarks {
         String repNameBookmark = "";
         String repSalutationBookmark = "";
         String orgAddressBookmark = "";
+        String annualReport = "";
+        String financialStatement = "";
+        String constAndBylaws = "";
+        
 
         for (CaseParty party : partyList){
 
@@ -97,6 +101,17 @@ public class processORGbookmarks {
             certifiedDate = Global.MMMMddyyyy.format(item.certifiedDate);
         }
 
+        //PROD178 Additions
+        if (item.annualReport != null){
+            annualReport = Global.mmddyyyy.format(item.annualReport);
+        }
+        if (item.financialReport != null){
+            financialStatement = Global.mmddyyyy.format(item.financialReport);
+        }
+        if (item.constitutionAndByLaws != null){
+            constAndBylaws = Global.mmddyyyy.format(item.constitutionAndByLaws);
+        }
+                
         if (toRep){
             repNameBookmark = repNames;
             repSalutationBookmark = repNames;
@@ -122,6 +137,11 @@ public class processORGbookmarks {
             processBookmark.process("OrgNum" + (i == 0 ? "" : i), item.orgNumber, Document);
             processBookmark.process("CertifiedDate" + (i == 0 ? "" : i), certifiedDate, Document);
             processBookmark.process("CCList" + (i == 0 ? "" : i), ccNameBlock, Document);
+            
+            //PROD178 Additions
+            processBookmark.process("ORGAnnReptLF" + (i == 0 ? "" : i), annualReport, Document);
+            processBookmark.process("ORGFSLF" + (i == 0 ? "" : i), financialStatement, Document);
+            processBookmark.process("ORGCONBYLAWSLF" + (i == 0 ? "" : i), constAndBylaws, Document);
         }
         return Document;
     }

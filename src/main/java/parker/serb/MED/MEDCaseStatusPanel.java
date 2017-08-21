@@ -27,6 +27,7 @@ import parker.serb.sql.BargainingUnit;
 import parker.serb.sql.MEDCase;
 import parker.serb.sql.Mediator;
 import parker.serb.sql.RelatedCase;
+import parker.serb.util.ClearDataDialog;
 import parker.serb.util.ClearDateDialog;
 import parker.serb.util.NumberFormatService;
 
@@ -418,6 +419,7 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
 
         jLabel4.setText("BUN Number:");
 
+        bargainingUnitTextBox.setEditable(false);
         bargainingUnitTextBox.setBackground(new java.awt.Color(238, 238, 238));
         bargainingUnitTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         bargainingUnitTextBox.setEnabled(false);
@@ -437,6 +439,7 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
 
         jLabel3.setText("Employer ID Number:");
 
+        employerIDNumberTextBox.setEditable(false);
         employerIDNumberTextBox.setBackground(new java.awt.Color(238, 238, 238));
         employerIDNumberTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         employerIDNumberTextBox.setEnabled(false);
@@ -559,7 +562,7 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
             jPanel1Layout.setHorizontalGroup(
                 jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addContainerGap(108, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 433, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(jPanel1Layout.createSequentialGroup()
@@ -848,7 +851,7 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
                                                                     .addComponent(dismissedCheckBox)
                                                                     .addComponent(withdrawlCheckBox)
                                                                     .addComponent(TACheckBox))))
-                                                        .addGap(0, 128, Short.MAX_VALUE))
+                                                        .addGap(0, 226, Short.MAX_VALUE))
                                                     .addComponent(expirationDateTextBox, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                     .addComponent(NTNFiledByComboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                     .addComponent(negotiationPeriodComboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -987,7 +990,7 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_retentionTicklerDateTextBoxMouseClicked
 
     private void employerIDNumberTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_employerIDNumberTextBoxMouseClicked
-        if(evt.getClickCount() == 2) {
+        if(evt.getClickCount() == 2 && evt.getButton() == MouseEvent.BUTTON1) {
             if(employerIDNumberTextBox.isEnabled()) {
                 employerSearch search = new employerSearch((JFrame) Global.root.getRootPane().getParent(), true, employerIDNumberTextBox.getText().trim());
                 employerIDNumberTextBox.setText(search.getEmployerNumber());
@@ -995,11 +998,20 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
             } else {
                 new employerDetail((JFrame) Global.root.getRootPane().getParent(), true, employerIDNumberTextBox.getText().trim());
             }
+        } else if(evt.getClickCount() == 2 && evt.getButton() == MouseEvent.BUTTON3) {
+            ClearDataDialog clear = new ClearDataDialog((JFrame) Global.root.getRootPane().getParent(), true);
+            
+            if(clear.isReset()) {
+                employerIDNumberTextBox.setText("");
+                clear.dispose();
+            } else {
+                clear.dispose();
+            }
         }
     }//GEN-LAST:event_employerIDNumberTextBoxMouseClicked
 
     private void bargainingUnitTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bargainingUnitTextBoxMouseClicked
-        if(evt.getClickCount() == 2) {
+        if(evt.getClickCount() == 2 && evt.getButton() == MouseEvent.BUTTON1) {
             if(bargainingUnitTextBox.isEnabled()) {
                 buNumberSearch search = new buNumberSearch((JFrame) Global.root.getRootPane().getParent(), true, employerIDNumberTextBox.getText().trim(), bargainingUnitTextBox.getText().trim(), "");
                 
@@ -1019,6 +1031,15 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
                 search.dispose();
             } else {
 //                new employerDetail((JFrame) Global.root.getRootPane().getParent(), true, employerIDNumberTextBox.getText().trim());
+            }
+        } else if(evt.getClickCount() == 2 && evt.getButton() == MouseEvent.BUTTON3) {
+            ClearDataDialog clear = new ClearDataDialog((JFrame) Global.root.getRootPane().getParent(), true);
+            
+            if(clear.isReset()) {
+                bargainingUnitTextBox.setText("");
+                clear.dispose();
+            } else {
+                clear.dispose();
             }
         }
     }//GEN-LAST:event_bargainingUnitTextBoxMouseClicked

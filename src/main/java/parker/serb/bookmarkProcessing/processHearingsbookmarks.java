@@ -142,6 +142,7 @@ public class processHearingsbookmarks {
 
     private static String buildREPHearingParties(List<CaseParty> partyList) {
         String conversionSchool = "";
+        String employer = "";
         String employeeOrganization = "";
         String incumbentEmployeeOrganization = "";
         String petitioner = "";
@@ -154,28 +155,31 @@ public class processHearingsbookmarks {
             if (null != party.caseRelation) {
                 switch (party.caseRelation.toLowerCase()) {
                     case "conversion school":
-                        conversionSchool += (conversionSchool.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party);
+                        conversionSchool += (conversionSchool.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party) + ",";
+                        break;
+                    case "employer":
+                        employer += (employer.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party) + ",";
                         break;
                     case "employee organization":
-                        employeeOrganization += (employeeOrganization.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party);
+                        employeeOrganization += (employeeOrganization.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party) + ",";
                         break;
                     case "incumbent employee organization":
-                        incumbentEmployeeOrganization += (incumbentEmployeeOrganization.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party);
+                        incumbentEmployeeOrganization += (incumbentEmployeeOrganization.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party) + ",";
                         break;
                     case "petitioner":
-                        petitioner += (petitioner.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party);
+                        petitioner += (petitioner.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party) + ",";
                         break;
                     case "rival employee organization":
-                        rivalEmployeeOrganization += (rivalEmployeeOrganization.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party);
+                        rivalEmployeeOrganization += (rivalEmployeeOrganization.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party) + ",";
                         break;
                     case "intervener":
-                        intervener += (intervener.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party);
+                        intervener += (intervener.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party) + ",";
                         break;
                     case "rival employee organization 2":
-                        rivalemployeeOrginizationTwo += (rivalemployeeOrginizationTwo.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party);
+                        rivalemployeeOrginizationTwo += (rivalemployeeOrginizationTwo.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party) + ",";
                         break;
                     case "rival employee organization 3":
-                        rivalemployeeOrginizationThree += (rivalemployeeOrginizationThree.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party);
+                        rivalemployeeOrginizationThree += (rivalemployeeOrginizationThree.trim().equals("") ? "" : System.lineSeparator()) + StringUtilities.buildCasePartyNameNoPreFix(party) + ",";
                         break;
                 }
             }
@@ -189,59 +193,70 @@ public class processHearingsbookmarks {
         
         if (!conversionSchool.trim().equals("")) {
             HEARINGPARTIES += HEARINGPARTIES.trim().equals("") ? "" : seperatingText;
-            HEARINGPARTIES += conversionSchool;
+            HEARINGPARTIES += conversionSchool.toUpperCase();
             HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
-            HEARINGPARTIES += "Rival Employee Organization,";
-        }
-        
-        if (!employeeOrganization.trim().equals("")) {
-            HEARINGPARTIES += HEARINGPARTIES.trim().equals("") ? "" : seperatingText;
-            HEARINGPARTIES += employeeOrganization;
-            HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
-            HEARINGPARTIES += "Employee Organization,";
-        }
-        
-        if (!incumbentEmployeeOrganization.trim().equals("")) {
-            HEARINGPARTIES += HEARINGPARTIES.trim().equals("") ? "" : seperatingText;
-            HEARINGPARTIES += incumbentEmployeeOrganization;
-            HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
-            HEARINGPARTIES += "Incumbent Employee Organization,";
-        }
-        
-        if (!petitioner.trim().equals("")) {
-            HEARINGPARTIES += HEARINGPARTIES.trim().equals("") ? "" : seperatingText;
-            HEARINGPARTIES += petitioner;
-            HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
-            HEARINGPARTIES += "Petitioner,";
+            HEARINGPARTIES += "Conversion School.";
         }
         
         if (!rivalEmployeeOrganization.trim().equals("")) {
             HEARINGPARTIES += HEARINGPARTIES.trim().equals("") ? "" : seperatingText;
-            HEARINGPARTIES += rivalEmployeeOrganization;
+            HEARINGPARTIES += rivalEmployeeOrganization.toUpperCase();
             HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
-            HEARINGPARTIES += "Rival Employee Organization,";
+            HEARINGPARTIES += "Rival Employee Organization.";
         }
 
-        if (!intervener.trim().equals("")) {
-            HEARINGPARTIES += HEARINGPARTIES.trim().equals("") ? "" : seperatingText;
-            HEARINGPARTIES += intervener;
-            HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
-            HEARINGPARTIES += "Intervener,";
-        }
-        
         if (!rivalemployeeOrginizationTwo.trim().equals("")) {
             HEARINGPARTIES += HEARINGPARTIES.trim().equals("") ? "" : seperatingText;
-            HEARINGPARTIES += rivalemployeeOrginizationTwo;
+            HEARINGPARTIES += rivalemployeeOrginizationTwo.toUpperCase();
             HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
-            HEARINGPARTIES += "Rival Employee Organization,";
+            HEARINGPARTIES += "Rival Employee Organization.";
         }
         
         if (!rivalemployeeOrginizationThree.trim().equals("")) {
             HEARINGPARTIES += HEARINGPARTIES.trim().equals("") ? "" : seperatingText;
-            HEARINGPARTIES += rivalemployeeOrginizationThree;
+            HEARINGPARTIES += rivalemployeeOrginizationThree.toUpperCase();
             HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
-            HEARINGPARTIES += "Rival Employee Organization,";
+            HEARINGPARTIES += "Rival Employee Organization.";
         }
+        
+        if (!incumbentEmployeeOrganization.trim().equals("")) {
+            HEARINGPARTIES += HEARINGPARTIES.trim().equals("") ? "" : seperatingText;
+            HEARINGPARTIES += incumbentEmployeeOrganization.toUpperCase();
+            HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
+            HEARINGPARTIES += "Incumbent Employee Organization.";
+        }
+        
+        if (!employeeOrganization.trim().equals("")) {
+            HEARINGPARTIES += HEARINGPARTIES.trim().equals("") ? "" : seperatingText;
+            HEARINGPARTIES += employeeOrganization.toUpperCase();
+            HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
+            HEARINGPARTIES += "Employee Organization.";
+        }
+        
+        if (!petitioner.trim().equals("")) {
+            HEARINGPARTIES += HEARINGPARTIES.trim().equals("") ? "" : seperatingText;
+            HEARINGPARTIES += petitioner.toUpperCase();
+            HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
+            HEARINGPARTIES += "Petitioner.";
+        }
+        
+        if (!intervener.trim().equals("")) {
+            HEARINGPARTIES += HEARINGPARTIES.trim().equals("") ? "" : seperatingText;
+            HEARINGPARTIES += intervener.toUpperCase();
+            HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
+            HEARINGPARTIES += "Intervener.";
+        }
+        
+        if (!employer.trim().equals("")) {
+            HEARINGPARTIES += HEARINGPARTIES.trim().equals("") ? "" : seperatingText;
+            HEARINGPARTIES += employer.toUpperCase();
+            HEARINGPARTIES += System.lineSeparator() + System.lineSeparator();
+            HEARINGPARTIES += "Employer.";
+        }
+        
+        // Employer NEEEDED
+        
+        
         
         return HEARINGPARTIES.substring(0, (HEARINGPARTIES.length() - 1)) + ".";
     }

@@ -243,11 +243,9 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
 
         chargingPartyTextBox.setEditable(false);
         chargingPartyTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        chargingPartyTextBox.setFocusable(false);
 
         chargingPartyREPTextBox.setEditable(false);
         chargingPartyREPTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        chargingPartyREPTextBox.setFocusable(false);
 
         jLabel3.setText("Charged Party:");
 
@@ -255,11 +253,9 @@ public class ULPHeaderPanel extends javax.swing.JPanel {
 
         chargedPartyTextBox.setEditable(false);
         chargedPartyTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        chargedPartyTextBox.setFocusable(false);
 
         chargedPartyREPTextBox.setEditable(false);
         chargedPartyREPTextBox.setBackground(new java.awt.Color(238, 238, 238));
-        chargedPartyREPTextBox.setFocusable(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
