@@ -81,7 +81,7 @@ public class Global {
         "VI", "WA", "WV", "WI", "WY"};
 
     //List of Months
-    public static final String MONTH_LIST[] = {"January", "Febuary", "March", "April",
+    public static final String MONTH_LIST[] = {"January", "February", "March", "April",
         "May", "June", "July", "August", "September", "October", "November", "December"
     };
 
