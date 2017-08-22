@@ -124,7 +124,6 @@ public class MEDBulkClosedCasesDialog extends javax.swing.JFrame {
     }
 
     private void processTableThread() {
-        clearTable();
         jLayeredPane1.moveToFront(jPanel1);
         Thread temp = new Thread(() -> {
             updateList();
