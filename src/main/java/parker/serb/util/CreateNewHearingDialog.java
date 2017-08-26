@@ -97,7 +97,7 @@ public class CreateNewHearingDialog extends javax.swing.JDialog {
     }
     
     private void createHearing() {
-        if(validateCase()) {
+        if(HearingCase.validateCaseNumber(caseNumberTextBox.getText().trim())) {
             jLabel2.setText("Case Already Created!");
             jLabel2.setForeground(Color.red);
         } else {
