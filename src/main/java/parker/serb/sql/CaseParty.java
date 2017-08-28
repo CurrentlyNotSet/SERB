@@ -958,7 +958,7 @@ public class CaseParty {
                 party.phone1 = casePartyRS.getString("phone1") == null ? "" : NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("phone1"));
                 party.phone2 = casePartyRS.getString("phone2") == null ? "" : NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("phone2"));
                 party.fax = casePartyRS.getString("fax") == null ? "" : NumberFormatService.convertStringToPhoneNumber(casePartyRS.getString("fax"));
-                party.emailAddress = casePartyRS.getString("email");
+                party.emailAddress = casePartyRS.getString("email") == null ? "" : casePartyRS.getString("email");
                 parties.add(party);
             }
         } catch (SQLException ex) {

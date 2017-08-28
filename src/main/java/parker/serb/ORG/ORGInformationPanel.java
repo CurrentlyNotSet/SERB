@@ -85,20 +85,12 @@ public class ORGInformationPanel extends javax.swing.JPanel {
     private void loadFiscalYearEndingComboBox() {
         fiscalYearEndingComboBox.removeAllItems();
         fiscalYearEndingComboBox.addItem("");
-        fiscalYearEndingComboBox.addItem("January");
-        fiscalYearEndingComboBox.addItem("February");
-        fiscalYearEndingComboBox.addItem("March");
-        fiscalYearEndingComboBox.addItem("April");
-        fiscalYearEndingComboBox.addItem("May");
-        fiscalYearEndingComboBox.addItem("June");
-        fiscalYearEndingComboBox.addItem("July");
-        fiscalYearEndingComboBox.addItem("August");
-        fiscalYearEndingComboBox.addItem("September");
-        fiscalYearEndingComboBox.addItem("October");
-        fiscalYearEndingComboBox.addItem("November");
-        fiscalYearEndingComboBox.addItem("December");
+        
+        for (String mo : Global.MONTH_LIST) {
+            fiscalYearEndingComboBox.addItem(mo);
+        }
     }
-//    
+   
 //    private void loadDueDateComboBox() {
 //        fiscalYearEndingComboBox.removeAllItems();
 //        fiscalYearEndingComboBox.addItem("");
