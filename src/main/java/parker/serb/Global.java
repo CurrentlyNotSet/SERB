@@ -22,7 +22,7 @@ public class Global {
     // Major Version       3 -- will stay 3
     // Minor Version       0 -- update with larger enhancments
     // Maintenence Version 0 -- bug fix releases
-    public static final String APPLICATION_VERSION = "3.4";
+    public static final String APPLICATION_VERSION = "3.4.1";
 
     //All Date and Time formatters
     public static SimpleDateFormat mmddyyyyhhmma = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
@@ -81,7 +81,7 @@ public class Global {
         "VI", "WA", "WV", "WI", "WY"};
 
     //List of Months
-    public static final String MONTH_LIST[] = {"January", "Febuary", "March", "April",
+    public static final String MONTH_LIST[] = {"January", "February", "March", "April",
         "May", "June", "July", "August", "September", "October", "November", "December"
     };
 
