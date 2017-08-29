@@ -15,6 +15,7 @@ import parker.serb.fileOperations.WordToPDF;
 import parker.serb.sql.AdministrationInformation;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.PostalOut;
+import parker.serb.util.FileService;
 import parker.serb.util.JacobCOMBridge;
 import parker.serb.util.StringUtilities;
 
@@ -36,6 +37,12 @@ public class processMailingAddressBookmarks {
                 casePath = Global.activityPath
                         + (Global.activeSection.equals("Civil Service Commission")
                         ? item.caseType : Global.activeSection) + File.separator + item.caseNumber + File.separator;
+            } else if (Global.activeSection.equals("Hearings")) {
+                casePath = Global.activityPath
+                        + FileService.getCaseSectionFolderByCaseType(item.caseType) + File.separatorChar
+                        + item.caseYear + File.separatorChar
+                        + (item.caseYear + "-" + item.caseType + "-" + item.caseMonth + "-" + item.caseNumber)
+                        + File.separatorChar;
             } else {
                 casePath = Global.activityPath + File.separatorChar
                         + Global.activeSection + File.separatorChar
