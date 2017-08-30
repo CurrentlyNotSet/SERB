@@ -18,7 +18,11 @@ public class CMDSUpdateInventoryStatusLineDialog extends javax.swing.JDialog {
     public CMDSUpdateInventoryStatusLineDialog(java.awt.Dialog parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        setLocationRelativeTo(parent.getParent());
+        if(parent == null) {
+            setLocationRelativeTo(null);
+        } else {
+            setLocationRelativeTo(parent.getParent());
+        }
         setVisible(true);
     }
 

@@ -9,7 +9,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.swing.JFrame;
 import org.apache.commons.dbutils.DbUtils;
+import parker.serb.CMDS.CMDSUpdateInventoryStatusLineDialog;
 import parker.serb.Global;
 import parker.serb.util.NumberFormatService;
 import parker.serb.util.SlackNotification;
@@ -83,8 +85,19 @@ public class CMDSHearing {
                         type.hearingDescription.equals("") ? hearingType : type.hearingDescription,
                         new Timestamp(hearingTime.getTime()),
                         emailSubject);
+                
+                String activity = "Created a " + hearingType + " on " + Global.mmddyyyyhhmma.format(hearingTime) + " in " + hearingRoom;
 
-                Activity.addActivty("Created a " + hearingType + " on " + Global.mmddyyyyhhmma.format(hearingTime) + " in " + hearingRoom, null);
+                Activity.addActivty(activity, null);
+                
+                CMDSUpdateInventoryStatusLineDialog updateDialog = new CMDSUpdateInventoryStatusLineDialog(null, true);
+        
+                if(updateDialog.isUpdateStatus()) {
+                    CMDSCase.updateCaseInventoryStatusLines(activity, new Date());
+                    updateDialog.dispose();
+                } else {
+                    updateDialog.dispose();
+                }
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
