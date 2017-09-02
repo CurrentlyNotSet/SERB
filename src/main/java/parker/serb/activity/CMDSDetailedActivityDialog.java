@@ -5,12 +5,17 @@
  */
 package parker.serb.activity;
 
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import parker.serb.Global;
 import parker.serb.sql.Activity;
 import parker.serb.sql.ActivityType;
 import parker.serb.sql.Audit;
+import parker.serb.sql.CMDSCase;
 import parker.serb.sql.CMDSHistoryCategory;
 import parker.serb.sql.CMDSHistoryDescription;
 import parker.serb.sql.User;
@@ -40,6 +45,7 @@ public class CMDSDetailedActivityDialog extends javax.swing.JDialog {
         initComponents();
         passedID = id;
         passedUser = userName;
+        updateInventoryStatusLineButton.setVisible(false);
         loadComboBoxes();
         enableInputs(false);
         loadInformation(id, userName);
@@ -137,7 +143,6 @@ public class CMDSDetailedActivityDialog extends javax.swing.JDialog {
     }
 
     private void enableInputs(boolean value) {
-        //typeComboBox.setEnabled(value);
         descriptionComboBox.setEnabled(value);
     }
 
@@ -217,6 +222,7 @@ public class CMDSDetailedActivityDialog extends javax.swing.JDialog {
         jLabel8 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         commentTextArea = new javax.swing.JTextArea();
+        updateInventoryStatusLineButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -241,6 +247,11 @@ public class CMDSDetailedActivityDialog extends javax.swing.JDialog {
         actionTextBox.setEditable(false);
         actionTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         actionTextBox.setEnabled(false);
+        actionTextBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                actionTextBoxActionPerformed(evt);
+            }
+        });
 
         fromTextBox.setEditable(false);
         fromTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
@@ -288,6 +299,13 @@ public class CMDSDetailedActivityDialog extends javax.swing.JDialog {
         commentTextArea.setEnabled(false);
         jScrollPane1.setViewportView(commentTextArea);
 
+        updateInventoryStatusLineButton.setText("Update Inventory Status Line");
+        updateInventoryStatusLineButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateInventoryStatusLineButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -323,7 +341,10 @@ public class CMDSDetailedActivityDialog extends javax.swing.JDialog {
                         .addComponent(updateButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(closeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(closeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(updateInventoryStatusLineButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -359,9 +380,11 @@ public class CMDSDetailedActivityDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel8)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(viewFileButton)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                .addComponent(updateInventoryStatusLineButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(updateButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(closeButton)
@@ -376,6 +399,7 @@ public class CMDSDetailedActivityDialog extends javax.swing.JDialog {
             Audit.addAuditEntry("Clicked Update Button for Activity: " + passedID);
             enableInputs(!typeComboBox.getSelectedItem().toString().equals(""));
             commentTextArea.setEnabled(true);
+            updateInventoryStatusLineButton.setVisible(true);
             updateButton.setText("Save");
             closeButton.setText("Cancel");
         } else if(updateButton.getText().equals("Save")) {
@@ -384,6 +408,7 @@ public class CMDSDetailedActivityDialog extends javax.swing.JDialog {
             updateAction();
             enableInputs(false);
             commentTextArea.setEnabled(false);
+            updateInventoryStatusLineButton.setVisible(false);
             loadInformation(passedID, passedUser);
             Audit.addAuditEntry("Updated Information for Activity: " + passedID);
             updateButton.setText("Update");
@@ -402,6 +427,7 @@ public class CMDSDetailedActivityDialog extends javax.swing.JDialog {
                 Audit.addAuditEntry("Canceled Update of Activity " + passedID);
                 loadInformation(passedID, passedUser);
                 enableInputs(false);
+                updateInventoryStatusLineButton.setVisible(false);
                 updateButton.setText("Update");
                 closeButton.setText("Close");
             }
@@ -425,6 +451,24 @@ public class CMDSDetailedActivityDialog extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_typeComboBoxActionPerformed
 
+    private void updateInventoryStatusLineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateInventoryStatusLineButtonActionPerformed
+        try {
+            CMDSCase.updateCaseInventoryStatusLines(actionTextBox.getText(), Global.mmddyyyyhhmma.parse(dateTextBox.getText()));
+            Global.root.getcMDSHeaderPanel1().loadHeaderInformation();
+            descriptionComboBox.setEnabled(false);
+            commentTextArea.setEnabled(false);
+            updateInventoryStatusLineButton.setVisible(false);
+            updateButton.setText("Update");
+            closeButton.setText("Close");
+        } catch (ParseException ex) {
+            Logger.getLogger(CMDSDetailedActivityDialog.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_updateInventoryStatusLineButtonActionPerformed
+
+    private void actionTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actionTextBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_actionTextBoxActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField actionTextBox;
     private javax.swing.JButton closeButton;
@@ -444,6 +488,7 @@ public class CMDSDetailedActivityDialog extends javax.swing.JDialog {
     private javax.swing.JComboBox<String> toComboBox;
     private javax.swing.JComboBox<String> typeComboBox;
     private javax.swing.JButton updateButton;
+    private javax.swing.JButton updateInventoryStatusLineButton;
     private javax.swing.JButton viewFileButton;
     // End of variables declaration//GEN-END:variables
 }
