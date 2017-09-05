@@ -111,6 +111,15 @@ public class GenerateReport {
                 case "begin date, end date, EmployerType":
                     new RequestedInfoTwoDateComboBoxPanel(Global.root, true, report, "EmployerType");
                     break;
+                case "begin date, end date, Fact Finder":
+                    new RequestedInfoTwoDateComboBoxPanel(Global.root, true, report, "Fact Finder");
+                    break;
+                case "begin date, end date, Conciliator":
+                    new RequestedInfoTwoDateComboBoxPanel(Global.root, true, report, "Conciliator");
+                    break;
+                case "begin date, end date, Mediator":
+                    new RequestedInfoTwoDateComboBoxPanel(Global.root, true, report, "Mediator");
+                    break;                
                 default:
                     HashMap hash = new HashMap();
                     generateReport(report, hash);
