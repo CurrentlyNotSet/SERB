@@ -11,6 +11,8 @@ import java.util.Arrays;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import parker.serb.Global;
+import parker.serb.sql.FactFinder;
+import parker.serb.sql.Mediator;
 import parker.serb.sql.SMDSDocuments;
 
 /**
@@ -45,6 +47,14 @@ public class RequestedInfoTwoDateComboBoxPanel extends javax.swing.JDialog {
             case "EmployerType":
                 comboBoxLabel.setText("Employer Type:");
                 break;
+            case "Conciliator":
+                comboBoxLabel.setText("Conciliator:");
+                break;
+            case "Fact Finder":
+                comboBoxLabel.setText("Fact Finder:");
+                break;
+            case "Mediator":
+                comboBoxLabel.setText("Mediator:");
             default:
                 break;
         }
@@ -63,6 +73,28 @@ public class RequestedInfoTwoDateComboBoxPanel extends javax.swing.JDialog {
                 for (String item : list) {
                     ComboBox.addItem(item);
                 }
+                break;
+            case "Conciliator":
+                ComboBox.addItem("All");
+                List<String> conclist = FactFinder.loadAllConciliators();
+                for (String item : conclist) {
+                    ComboBox.addItem(item);
+                }
+                break;
+            case "Fact Finder":
+                ComboBox.addItem("All");
+                List<String> fflist = FactFinder.loadAllFF();
+                for (String item : fflist) {
+                    ComboBox.addItem(item);
+                }
+                break;
+            case "Mediator":
+                ComboBox.addItem("All");
+                List<Mediator> mediatorList = Mediator.loadAllMediators();
+                for (Mediator med : mediatorList) {
+                    ComboBox.addItem(med.firstName + " " + med.lastName);
+                }
+                break;
             default:
                 break;
         }

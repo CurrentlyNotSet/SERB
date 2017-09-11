@@ -30,9 +30,6 @@ import parker.serb.util.FileService;
 import parker.serb.util.NumberFormatService;
 import parker.serb.util.SlackNotification;
 
-//TODO: Allow for a party to be updated from this panel
-//TODO: Reload Table after changes have been made to name, phone number, email
-
 /**
  *
  * @author parker
@@ -192,39 +189,39 @@ public class ViewUpdateCasePartyPanel extends javax.swing.JDialog {
         closeButton.setText("Cancel");
         partyTypeComboBox.setEnabled(true);
         prefixComboBox.setEnabled(true);
-        firstNameTextBox.setEnabled(true);
+        firstNameTextBox.setEditable(true);
         firstNameTextBox.setBackground(Color.WHITE);
-        middleInitialTextBox.setEnabled(true);
+        middleInitialTextBox.setEditable(true);
         middleInitialTextBox.setBackground(Color.WHITE);
-        lastNameTextBox.setEnabled(true);
+        lastNameTextBox.setEditable(true);
         lastNameTextBox.setBackground(Color.WHITE);
-        suffixTextBox.setEnabled(true);
+        suffixTextBox.setEditable(true);
         suffixTextBox.setBackground(Color.WHITE);
-        nameTitleTextBox.setEnabled(true);
+        nameTitleTextBox.setEditable(true);
         nameTitleTextBox.setBackground(Color.WHITE);
-        jobTitleTextBox.setEnabled(true);
+        jobTitleTextBox.setEditable(true);
         jobTitleTextBox.setBackground(Color.WHITE);
-        companyTextBox.setEnabled(true);
+        companyTextBox.setEditable(true);
         companyTextBox.setBackground(Color.WHITE);
-        address1TextBox.setEnabled(true);
+        address1TextBox.setEditable(true);
         address1TextBox.setBackground(Color.WHITE);
-        address2TextBox.setEnabled(true);
+        address2TextBox.setEditable(true);
         address2TextBox.setBackground(Color.WHITE);
-        address3TextBox.setEnabled(true);
+        address3TextBox.setEditable(true);
         address3TextBox.setBackground(Color.WHITE);
-        phoneNumberTextBox.setEnabled(true);
+        phoneNumberTextBox.setEditable(true);
         phoneNumberTextBox.setBackground(Color.WHITE);
-        phone2NumberTextBox.setEnabled(true);
+        phone2NumberTextBox.setEditable(true);
         phone2NumberTextBox.setBackground(Color.WHITE);
-        emailAddressTextBox.setEnabled(true);
+        emailAddressTextBox.setEditable(true);
         emailAddressTextBox.setBackground(Color.WHITE);
-        cityTextBox.setEnabled(true);
+        cityTextBox.setEditable(true);
         cityTextBox.setBackground(Color.WHITE);
-        zipCodeTextBox.setEnabled(true);
+        zipCodeTextBox.setEditable(true);
         zipCodeTextBox.setBackground(Color.WHITE);
-        stateComboBox.setEnabled(true);
+        stateComboBox.setEditable(true);
         faxNumberTextBox.setBackground(Color.WHITE);
-        faxNumberTextBox.setEnabled(true);
+        faxNumberTextBox.setEditable(true);
     }
 
     private void disableAll() {
@@ -232,39 +229,39 @@ public class ViewUpdateCasePartyPanel extends javax.swing.JDialog {
         closeButton.setText("Close");
         partyTypeComboBox.setEnabled(false);
         prefixComboBox.setEnabled(false);
-        firstNameTextBox.setEnabled(false);
+        firstNameTextBox.setEditable(false);
         firstNameTextBox.setBackground(new Color(238,238,238));
-        middleInitialTextBox.setEnabled(false);
+        middleInitialTextBox.setEditable(false);
         middleInitialTextBox.setBackground(new Color(238,238,238));
-        lastNameTextBox.setEnabled(false);
+        lastNameTextBox.setEditable(false);
         lastNameTextBox.setBackground(new Color(238,238,238));
-        suffixTextBox.setEnabled(false);
+        suffixTextBox.setEditable(false);
         suffixTextBox.setBackground(new Color(238,238,238));
-        nameTitleTextBox.setEnabled(false);
+        nameTitleTextBox.setEditable(false);
         nameTitleTextBox.setBackground(new Color(238,238,238));
-        jobTitleTextBox.setEnabled(false);
+        jobTitleTextBox.setEditable(false);
         jobTitleTextBox.setBackground(new Color(238,238,238));
-        companyTextBox.setEnabled(false);
+        companyTextBox.setEditable(false);
         companyTextBox.setBackground(new Color(238,238,238));
-        address1TextBox.setEnabled(false);
+        address1TextBox.setEditable(false);
         address1TextBox.setBackground(new Color(238,238,238));
-        address2TextBox.setEnabled(false);
+        address2TextBox.setEditable(false);
         address2TextBox.setBackground(new Color(238,238,238));
-        address3TextBox.setEnabled(false);
+        address3TextBox.setEditable(false);
         address3TextBox.setBackground(new Color(238,238,238));
-        phoneNumberTextBox.setEnabled(false);
+        phoneNumberTextBox.setEditable(false);
         phoneNumberTextBox.setBackground(new Color(238,238,238));
-        phone2NumberTextBox.setEnabled(false);
+        phone2NumberTextBox.setEditable(false);
         phone2NumberTextBox.setBackground(new Color(238,238,238));
-        emailAddressTextBox.setEnabled(false);
+        emailAddressTextBox.setEditable(false);
         emailAddressTextBox.setBackground(new Color(238,238,238));
-        cityTextBox.setEnabled(false);
+        cityTextBox.setEditable(false);
         cityTextBox.setBackground(new Color(238,238,238));
-        zipCodeTextBox.setEnabled(false);
+        zipCodeTextBox.setEditable(false);
         zipCodeTextBox.setBackground(new Color(238,238,238));
-        stateComboBox.setEnabled(false);
+        stateComboBox.setEditable(false);
         faxNumberTextBox.setBackground(new Color(238,238,238));
-        faxNumberTextBox.setEnabled(false);
+        faxNumberTextBox.setEditable(false);
     }
 
     private void updatePartyInformation() {
@@ -367,7 +364,6 @@ public class ViewUpdateCasePartyPanel extends javax.swing.JDialog {
 
         firstNameTextBox.setBackground(new java.awt.Color(238, 238, 238));
         firstNameTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        firstNameTextBox.setEnabled(false);
 
         companyTextBox.setBackground(new java.awt.Color(238, 238, 238));
         companyTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
@@ -421,18 +417,15 @@ public class ViewUpdateCasePartyPanel extends javax.swing.JDialog {
 
         middleInitialTextBox.setBackground(new java.awt.Color(238, 238, 238));
         middleInitialTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        middleInitialTextBox.setEnabled(false);
 
         lastNameTextBox.setBackground(new java.awt.Color(238, 238, 238));
         lastNameTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        lastNameTextBox.setEnabled(false);
 
         prefixComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mrs.", "Ms.", "Mr.", "Dr. ", "Hon.", " " }));
         prefixComboBox.setSelectedIndex(5);
 
         suffixTextBox.setBackground(new java.awt.Color(238, 238, 238));
         suffixTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        suffixTextBox.setEnabled(false);
 
         jLabel10.setText("Job Title:");
 

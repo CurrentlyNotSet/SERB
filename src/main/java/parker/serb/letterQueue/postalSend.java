@@ -25,6 +25,7 @@ import parker.serb.sql.PostalOutAttachment;
 import parker.serb.util.FileService;
 import parker.serb.util.NumberFormatService;
 import parker.serb.util.SlackNotification;
+import parker.serb.util.StringUtilities;
 
 /**
  *
@@ -52,6 +53,12 @@ public class postalSend {
                 casePath = Global.activityPath
                         + (Global.activeSection.equals("Civil Service Commission")
                         ? postalEntry.caseType : Global.activeSection) + File.separator + postalEntry.caseNumber + File.separator;
+            } else if (Global.activeSection.equals("Hearings")) {
+                casePath = Global.activityPath
+                        + FileService.getCaseSectionFolderByCaseType(postalEntry.caseType) + File.separatorChar
+                        + postalEntry.caseYear + File.separatorChar
+                        + (postalEntry.caseYear + "-" + postalEntry.caseType + "-" + postalEntry.caseMonth + "-" + postalEntry.caseNumber)
+                        + File.separatorChar;
             } else {
                 casePath = Global.activityPath + File.separatorChar
                         + Global.activeSection + File.separatorChar

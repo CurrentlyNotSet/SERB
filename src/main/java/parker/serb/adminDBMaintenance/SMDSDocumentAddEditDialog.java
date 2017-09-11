@@ -69,11 +69,15 @@ public class SMDSDocumentAddEditDialog extends javax.swing.JDialog {
         parametersComboBox.addItem("UserID");
         parametersComboBox.addItem("SectionUserID");
         parametersComboBox.addItem("begin date, end date");
+        parametersComboBox.addItem("begin date, end date, Conciliator");
+        parametersComboBox.addItem("begin date, end date, EmployerType");
+        parametersComboBox.addItem("begin date, end date, Fact Finder");
         parametersComboBox.addItem("begin date, end date, InvestigatorID");
-        parametersComboBox.addItem("begin date, end date, SectionUserID");
-        parametersComboBox.addItem("begin date, end date, UserID");
         parametersComboBox.addItem("begin date, end date, LikeString");
+        parametersComboBox.addItem("begin date, end date, Mediator");
+        parametersComboBox.addItem("begin date, end date, SectionUserID");
         parametersComboBox.addItem("begin date, end date, String");
+        parametersComboBox.addItem("begin date, end date, UserID");
         parametersComboBox.addItem("ActivityType, Year");
         parametersComboBox.addItem("Year, InvestigatorID");
         parametersComboBox.addItem("ActivityType");
@@ -83,7 +87,6 @@ public class SMDSDocumentAddEditDialog extends javax.swing.JDialog {
         parametersComboBox.addItem("Year");
         parametersComboBox.addItem("OrgNumber");
         parametersComboBox.addItem("Charging Party, Charged Party");
-        parametersComboBox.addItem("begin date, end date, EmployerType");
     }
 
     private void loadInformation() {

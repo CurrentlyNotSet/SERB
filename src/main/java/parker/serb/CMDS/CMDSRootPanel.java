@@ -179,6 +179,7 @@ public class CMDSRootPanel extends javax.swing.JPanel {
                 break;
             case "Hearings":
                 new CMDSAddHearingDialog(Global.root, true);
+                Global.root.getcMDSHeaderPanel1().loadHeaderInformation();
                 cMDSHearingsPanel1.loadInformation();
                 break;
         }

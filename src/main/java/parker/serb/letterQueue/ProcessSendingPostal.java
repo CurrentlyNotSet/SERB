@@ -11,6 +11,7 @@ import org.apache.commons.io.FilenameUtils;
 import parker.serb.Global;
 import parker.serb.sql.PostalOut;
 import parker.serb.sql.PostalOutAttachment;
+import parker.serb.util.FileService;
 
 /**
  *
@@ -41,6 +42,12 @@ public class ProcessSendingPostal {
             path = Global.activityPath
                     + (Global.activeSection.equals("Civil Service Commission")
                     ? post.caseType : Global.activeSection) + File.separator + post.caseNumber + File.separator;
+        } else if (Global.activeSection.equals("Hearings")){
+            path = Global.activityPath
+                    + FileService.getCaseSectionFolderByCaseType(post.caseType) + File.separatorChar
+                    + post.caseYear + File.separatorChar
+                    + (post.caseYear + "-" + post.caseType + "-" + post.caseMonth + "-" + post.caseNumber)
+                    + File.separatorChar;
         } else {
             path = Global.activityPath + File.separatorChar
                     + Global.activeSection + File.separatorChar

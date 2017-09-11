@@ -20,6 +20,7 @@ import javax.swing.event.DocumentListener;
 import parker.serb.Global;
 import parker.serb.letterGeneration.GenerateLetterNoQueuePanel;
 import parker.serb.sql.Audit;
+import parker.serb.sql.CMDSCase;
 import parker.serb.sql.CMDSDocuments;
 import parker.serb.sql.CMDSHearing;
 import parker.serb.sql.HearingRoom;
@@ -268,7 +269,7 @@ public class CMDSAddHearingDialog extends javax.swing.JDialog {
             default:
                 break;
         }
-
+        
         this.dispose();
     }
 
