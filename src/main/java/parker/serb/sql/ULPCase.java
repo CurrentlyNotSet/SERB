@@ -47,7 +47,7 @@ public class ULPCase {
     public String SERBCaseNumber;
     public String finalDispositionStatus;
     public int investigatorID;
-    public int mediatorAssignedID;
+    public String mediatorAssignedID;
     public int aljID;
     public String statement;
     public String recommendation;
@@ -478,7 +478,7 @@ public class ULPCase {
             ulp.SERBCaseNumber = caseNumberRS.getString("serbCaseNumber");
             ulp.finalDispositionStatus = caseNumberRS.getString("finalDispositionStatus");
             ulp.investigatorID = caseNumberRS.getInt("investigatorID");
-            ulp.mediatorAssignedID = caseNumberRS.getInt("mediatorAssignedID");
+            ulp.mediatorAssignedID = caseNumberRS.getString("mediatorAssignedID");
             ulp.aljID = caseNumberRS.getInt("aljID");
             ulp.fileDate = caseNumberRS.getTimestamp("fileDate");
             ulp.probableCause = caseNumberRS.getBoolean("probableCause");
@@ -730,7 +730,7 @@ public class ULPCase {
             preparedStatement.setString(17, newCaseInformation.SERBCaseNumber);
             preparedStatement.setString(18, newCaseInformation.finalDispositionStatus);
             preparedStatement.setInt(19, newCaseInformation.investigatorID);
-            preparedStatement.setInt(20, newCaseInformation.mediatorAssignedID);
+            preparedStatement.setString(20, newCaseInformation.mediatorAssignedID);
             preparedStatement.setInt(21, newCaseInformation.aljID);
             preparedStatement.setTimestamp(22, newCaseInformation.fileDate);
             preparedStatement.setBoolean(23, newCaseInformation.probableCause);
@@ -907,14 +907,22 @@ public class ULPCase {
         }
 
         //mediatorAssignedID
-        if(newCaseInformation.mediatorAssignedID == 0 && oldCaseInformation.mediatorAssignedID != 0) {
-            Activity.addActivty("Removed " + User.getNameByID(oldCaseInformation.mediatorAssignedID) + " from Mediator", null);
-        } else if(newCaseInformation.mediatorAssignedID != 0 && oldCaseInformation.mediatorAssignedID == 0) {
-            Activity.addActivty("Set Mediator to " + User.getNameByID(newCaseInformation.mediatorAssignedID), null);
-        } else if(newCaseInformation.mediatorAssignedID != 0 && oldCaseInformation.mediatorAssignedID != 0) {
-            if(newCaseInformation.mediatorAssignedID != oldCaseInformation.mediatorAssignedID)
-                Activity.addActivty("Changed Mediator from " + User.getNameByID(oldCaseInformation.mediatorAssignedID) + " to " + User.getNameByID(newCaseInformation.mediatorAssignedID), null);
+        if(newCaseInformation.mediatorAssignedID == null && oldCaseInformation.mediatorAssignedID != null) {
+            Activity.addActivty("Removed " + oldCaseInformation.mediatorAssignedID + " from Mediator", null);
+        } else if(newCaseInformation.mediatorAssignedID != null && oldCaseInformation.mediatorAssignedID == null) {
+            Activity.addActivty("Set Mediator to " + newCaseInformation.mediatorAssignedID, null);
+        } else if(newCaseInformation.mediatorAssignedID != null && oldCaseInformation.mediatorAssignedID != null) {
+            if(!newCaseInformation.mediatorAssignedID.equals(oldCaseInformation.mediatorAssignedID))
+                Activity.addActivty("Changed Mediator from " + oldCaseInformation.mediatorAssignedID + " to " + newCaseInformation.mediatorAssignedID, null);
         }
+//        if(newCaseInformation.mediatorAssignedID == 0 && oldCaseInformation.mediatorAssignedID != 0) {
+//            Activity.addActivty("Removed " + User.getNameByID(oldCaseInformation.mediatorAssignedID) + " from Mediator", null);
+//        } else if(newCaseInformation.mediatorAssignedID != 0 && oldCaseInformation.mediatorAssignedID == 0) {
+//            Activity.addActivty("Set Mediator to " + User.getNameByID(newCaseInformation.mediatorAssignedID), null);
+//        } else if(newCaseInformation.mediatorAssignedID != 0 && oldCaseInformation.mediatorAssignedID != 0) {
+//            if(newCaseInformation.mediatorAssignedID != oldCaseInformation.mediatorAssignedID)
+//                Activity.addActivty("Changed Mediator from " + User.getNameByID(oldCaseInformation.mediatorAssignedID) + " to " + User.getNameByID(newCaseInformation.mediatorAssignedID), null);
+//        }
 
         //aljID
         if(newCaseInformation.aljID == 0 && oldCaseInformation.aljID != 0) {
@@ -1158,7 +1166,7 @@ public class ULPCase {
                 ulpCase.SERBCaseNumber = rs.getString("SERBCaseNumber") == null ? "" : rs.getString("SERBCaseNumber").trim();
                 ulpCase.finalDispositionStatus = rs.getString("finalDispositionStatus") == null ? "" : rs.getString("finalDispositionStatus").trim();
                 ulpCase.investigatorID = rs.getInt("investigatorID");
-                ulpCase.mediatorAssignedID = rs.getInt("mediatorAssignedID");
+                ulpCase.mediatorAssignedID = rs.getString("mediatorAssignedID");
                 ulpCase.aljID = rs.getInt("aljID");
                 ulpCase.statement = rs.getString("statement") == null ? "" : rs.getString("statement").trim();
                 ulpCase.recommendation = rs.getString("recommendation") == null ? "" : rs.getString("recommendation").trim();
@@ -1308,7 +1316,7 @@ public class ULPCase {
                 ulpCase.SERBCaseNumber = rs.getString("SERBCaseNumber") == null ? "" : rs.getString("SERBCaseNumber").trim();
                 ulpCase.finalDispositionStatus = rs.getString("finalDispositionStatus") == null ? "" : rs.getString("finalDispositionStatus").trim();
                 ulpCase.investigatorID = rs.getInt("investigatorID");
-                ulpCase.mediatorAssignedID = rs.getInt("mediatorAssignedID");
+                ulpCase.mediatorAssignedID = rs.getString("mediatorAssignedID");
                 ulpCase.aljID = rs.getInt("aljID");
                 ulpCase.statement = rs.getString("statement") == null ? "" : rs.getString("statement").trim();
                 ulpCase.recommendation = rs.getString("recommendation") == null ? "" : rs.getString("recommendation").trim();

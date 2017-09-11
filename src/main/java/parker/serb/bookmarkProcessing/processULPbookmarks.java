@@ -147,12 +147,15 @@ public class processULPbookmarks {
             }
         }
 
+        
         for (User user : userList){
             if (user.id == item.investigatorID){
                 investigatorFullName = StringUtilities.buildFullName(user.firstName, "", user.lastName);
                 investigatorPhone = user.workPhone;
             }
-            if (user.id == item.mediatorAssignedID){
+            
+            
+            if ((user.firstName + " " + user.lastName).equals(item.mediatorAssignedID)){
                 mediatorName = StringUtilities.buildFullName(user.firstName, "", user.lastName);
             }
         }

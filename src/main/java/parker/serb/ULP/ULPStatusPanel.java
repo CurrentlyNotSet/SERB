@@ -13,9 +13,12 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.Timestamp;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
@@ -33,6 +36,7 @@ import parker.serb.relatedcase.RemoveRelatedCaseDialog;
 import parker.serb.sql.Audit;
 import parker.serb.sql.BoardMeeting;
 import parker.serb.sql.DocketNotifications;
+import parker.serb.sql.Mediator;
 import parker.serb.sql.RelatedCase;
 import parker.serb.sql.ULPCase;
 import parker.serb.sql.ULPCaseSearchData;
@@ -373,10 +377,27 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         mediatorAssignedComboBox.removeAllItems();
 
         mediatorAssignedComboBox.addItem("");
+        
+        List mediators = new ArrayList();
 
         List userList = User.loadSectionDropDowns("ULP");
-
+        
+        List stateMediatorList = Mediator.loadMediators("State");
+        
         for (Object user : userList) {
+            mediators.add((String) user);
+        }
+        
+        for (Object user : stateMediatorList) {
+            Mediator med = (Mediator) user;
+            
+            if(!mediators.contains(med.firstName + " " + med.lastName)) {
+                mediators.add(med.firstName + " " + med.lastName);
+            }
+        }
+        Collections.sort(mediators);
+
+        for (Object user : mediators) {
             mediatorAssignedComboBox.addItem((String) user);
         }
 
@@ -431,7 +452,13 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         serbCaseNumberTextBox.setText(currentStatusInformation.SERBCaseNumber);
         finalDispositionComboBox.setSelectedItem(currentStatusInformation.finalDispositionStatus);
         investigatorComboBox.setSelectedItem(currentStatusInformation.investigatorID != 0 ? User.getNameByID(currentStatusInformation.investigatorID) : "");
-        mediatorAssignedComboBox.setSelectedItem(currentStatusInformation.mediatorAssignedID != 0 ? User.getNameByID(currentStatusInformation.mediatorAssignedID) : "");
+        mediatorAssignedComboBox.setSelectedItem(currentStatusInformation.mediatorAssignedID != null ? currentStatusInformation.mediatorAssignedID : "");
+        
+        if(mediatorAssignedComboBox.getSelectedIndex() == -1) {
+            mediatorAssignedComboBox.addItem(currentStatusInformation.mediatorAssignedID);
+            mediatorAssignedComboBox.setSelectedItem(currentStatusInformation.mediatorAssignedID);
+        }
+        
         aljComboBox.setSelectedItem(currentStatusInformation.aljID != 0 ? User.getNameByID(currentStatusInformation.aljID) : "");
         filedDateTextBox.setText(currentStatusInformation.fileDate != null ? Global.mmddyyyy.format(new Date(currentStatusInformation.fileDate.getTime())) : "");
         probableCauseCheckBox.setSelected(currentStatusInformation.probableCause);
@@ -458,7 +485,7 @@ public class ULPStatusPanel extends javax.swing.JPanel {
         newStatusInformation.SERBCaseNumber = serbCaseNumberTextBox.getText().trim().equals("") ? null : serbCaseNumberTextBox.getText().trim();
         newStatusInformation.finalDispositionStatus = (finalDispositionComboBox.getSelectedItem() == null || finalDispositionComboBox.getSelectedItem().equals("")) ? null : finalDispositionComboBox.getSelectedItem().toString();
         newStatusInformation.investigatorID = (investigatorComboBox.getSelectedItem() == null || investigatorComboBox.getSelectedItem().equals("")) ? 0 : (investigatorComboBox.getSelectedItem().toString().equals("") ? 0 : User.getUserID(investigatorComboBox.getSelectedItem().toString().trim()));
-        newStatusInformation.mediatorAssignedID = (mediatorAssignedComboBox.getSelectedItem() == null || mediatorAssignedComboBox.getSelectedItem().equals("")) ? 0 : (mediatorAssignedComboBox.getSelectedItem().toString().equals("") ? 0 : User.getUserID(mediatorAssignedComboBox.getSelectedItem().toString().trim()));
+        newStatusInformation.mediatorAssignedID = (mediatorAssignedComboBox.getSelectedItem() == null || mediatorAssignedComboBox.getSelectedItem().equals("")) ? null : (mediatorAssignedComboBox.getSelectedItem().toString().equals("") ? null : mediatorAssignedComboBox.getSelectedItem().toString().trim());
         newStatusInformation.aljID = (aljComboBox.getSelectedItem() == null || aljComboBox.getSelectedItem().equals("")) ? 0 : (aljComboBox.getSelectedItem().toString().equals("") ? 0 : User.getUserID(aljComboBox.getSelectedItem().toString().trim()));
         newStatusInformation.fileDate = filedDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(filedDateTextBox.getText()));
         newStatusInformation.probableCause = probableCauseCheckBox.isSelected();
