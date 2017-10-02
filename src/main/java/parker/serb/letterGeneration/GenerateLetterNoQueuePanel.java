@@ -104,6 +104,7 @@ public class GenerateLetterNoQueuePanel extends javax.swing.JDialog {
                         case "Misc":
                             break;
                         case "Memo":
+                        case "Invest":
                             activityDocName = docName;
                             break;
                         default:
