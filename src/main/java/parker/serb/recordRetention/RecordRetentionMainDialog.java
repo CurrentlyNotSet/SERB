@@ -4,11 +4,14 @@
  */
 package parker.serb.recordRetention;
 
+import com.alee.extended.date.WebCalendar;
 import com.alee.laf.optionpane.WebOptionPane;
+import com.alee.utils.swing.Customizer;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.text.NumberFormat;
+import java.util.Date;
 import java.util.List;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -57,8 +60,28 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
 
     private void setActive() {
         jPanel1.setVisible(false);
+        addListeners();
         setTableSize();
         loadSectionComboBox();
+    }
+
+    private void addListeners() {
+        startDateField.addDateSelectionListener((Date date) -> {
+            if (!startDateField.getText().equals("")
+                    && !endDateField.getText().equals("")
+                    && !sectionComboBox.getSelectedItem().toString().equals("")) {
+                loadTableThread();
+            }
+        });
+
+        endDateField.addDateSelectionListener((Date date) -> {
+            if (!startDateField.getText().equals("")
+                    && !endDateField.getText().equals("")
+                    && !sectionComboBox.getSelectedItem().toString().equals("")) {
+                
+                loadTableThread();
+            }
+        });
     }
 
     private void loadSectionComboBox() {
@@ -134,7 +157,7 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
                 //caseList = Activity.loadPurgeCMDSActivities();
                 break;
             case "MED":
-                caseList = Activity.loadPurgeMEDActivities();
+                caseList = Activity.loadPurgeMEDActivities(startDateField.getDate(), endDateField.getDate());
                 break;
             case "ORG":
                 caseList = Activity.loadPurgeORGActivities();
@@ -163,7 +186,7 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
                 }
                 model.addRow(new Object[]{
                     item,
-                    false,
+                    item.fileName == null,
                     item.fileName == null ? "" : item.fileName,
                     caseNumber,
                     item.date,
@@ -181,6 +204,8 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
     private void setPanelEnabled(boolean enabled){
         closeButton.setEnabled(enabled);
         purgeButton.setEnabled(enabled);
+        startDateField.setEnabled(enabled);
+        endDateField.setEnabled(enabled);
         sectionComboBox.setEnabled(enabled);
         jTable1.setEnabled(enabled);
         jPanel1.setVisible(!enabled);
@@ -246,6 +271,10 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         countLabel = new javax.swing.JLabel();
+        startDateField = new com.alee.extended.date.WebDateField();
+        jLabel2 = new javax.swing.JLabel();
+        endDateField = new com.alee.extended.date.WebDateField();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Record Retention");
@@ -290,7 +319,7 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jLabel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 519, Short.MAX_VALUE)
+            .add(jLabel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 513, Short.MAX_VALUE)
         );
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -352,53 +381,105 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
         countLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         countLabel.setText("No Entries");
 
-        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(layout.createSequentialGroup()
-                .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLayeredPane1)
-                    .add(jLabel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        startDateField.setEditable(false);
+        startDateField.setCaretColor(new java.awt.Color(0, 0, 0));
+        startDateField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        startDateField.setDateFormat(Global.mmddyyyy);
+
+        startDateField.setCalendarCustomizer(new Customizer<WebCalendar> ()
+            {
+                @Override
+                public void customize ( final WebCalendar calendar )
+                {
+                    calendar.setStartWeekFromSunday ( true );
+                }
+            } );
+
+            jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+            jLabel2.setText("Begin Date:");
+
+            endDateField.setEditable(false);
+            endDateField.setCaretColor(new java.awt.Color(0, 0, 0));
+            endDateField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+            endDateField.setDateFormat(Global.mmddyyyy);
+
+            endDateField.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                {
+                    @Override
+                    public void customize ( final WebCalendar calendar )
+                    {
+                        calendar.setStartWeekFromSunday ( true );
+                    }
+                } );
+
+                jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+                jLabel4.setText("End Date:");
+
+                org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
+                getContentPane().setLayout(layout);
+                layout.setHorizontalGroup(
+                    layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(layout.createSequentialGroup()
-                        .add(jLabel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 64, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap()
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jLayeredPane1)
+                            .add(jLabel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .add(layout.createSequentialGroup()
+                                .add(jLabel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 64, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(sectionComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 161, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .add(36, 36, 36)
+                                .add(jLabel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 70, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(startDateField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 150, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .add(38, 38, 38)
+                                .add(jLabel4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 60, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(endDateField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 150, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .add(countLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 136, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                            .add(layout.createSequentialGroup()
+                                .add(closeButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 100, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 812, Short.MAX_VALUE)
+                                .add(purgeButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 125, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap())
+                );
+
+                layout.linkSize(new java.awt.Component[] {closeButton, purgeButton}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
+
+                layout.setVerticalGroup(
+                    layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .add(jLabel1)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(sectionComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 161, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .add(countLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 136, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(layout.createSequentialGroup()
-                        .add(closeButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 100, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 812, Short.MAX_VALUE)
-                        .add(purgeButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 125, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
-        );
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                                .add(endDateField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .add(jLabel4))
+                            .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                                .add(sectionComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .add(jLabel3)
+                                .add(countLabel)
+                                .add(startDateField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .add(jLabel2)))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .add(jLayeredPane1)
+                        .add(18, 18, 18)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(closeButton)
+                            .add(purgeButton))
+                        .addContainerGap())
+                );
 
-        layout.linkSize(new java.awt.Component[] {closeButton, purgeButton}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
+                layout.linkSize(new java.awt.Component[] {jLabel3, sectionComboBox}, org.jdesktop.layout.GroupLayout.VERTICAL);
 
-        layout.setVerticalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jLabel1)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(sectionComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jLabel3)
-                    .add(countLabel))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(jLayeredPane1)
-                .add(18, 18, 18)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(closeButton)
-                    .add(purgeButton))
-                .addContainerGap())
-        );
+                layout.linkSize(new java.awt.Component[] {jLabel2, startDateField}, org.jdesktop.layout.GroupLayout.VERTICAL);
 
-        layout.linkSize(new java.awt.Component[] {jLabel3, sectionComboBox}, org.jdesktop.layout.GroupLayout.VERTICAL);
+                layout.linkSize(new java.awt.Component[] {endDateField, jLabel4}, org.jdesktop.layout.GroupLayout.VERTICAL);
 
-        pack();
-    }// </editor-fold>//GEN-END:initComponents
+                pack();
+            }// </editor-fold>//GEN-END:initComponents
 
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
         this.dispose();
@@ -413,7 +494,7 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
     }//GEN-LAST:event_purgeButtonActionPerformed
 
     private void sectionComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sectionComboBoxActionPerformed
-        if (!sectionComboBox.getSelectedItem().toString().equals("")){
+        if (!startDateField.getText().equals("") && !endDateField.getText().equals("") && !sectionComboBox.getSelectedItem().toString().equals("")){
             loadTableThread();
         }
     }//GEN-LAST:event_sectionComboBoxActionPerformed
@@ -425,8 +506,11 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton closeButton;
     private javax.swing.JLabel countLabel;
+    private com.alee.extended.date.WebDateField endDateField;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JPanel jPanel1;
@@ -434,5 +518,6 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
     private javax.swing.JTable jTable1;
     private javax.swing.JButton purgeButton;
     private javax.swing.JComboBox sectionComboBox;
+    private com.alee.extended.date.WebDateField startDateField;
     // End of variables declaration//GEN-END:variables
 }

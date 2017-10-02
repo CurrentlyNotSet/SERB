@@ -1717,7 +1717,7 @@ public class Activity {
         return activityList;
     }
     
-    public static List loadPurgeMEDActivities() {
+    public static List loadPurgeMEDActivities(Date startDate, Date endDate) {
         List<Activity> activityList = new ArrayList<>();
 
         Statement stmt = null;
@@ -1728,7 +1728,20 @@ public class Activity {
             
             String excludeList = " AND ("
                     + "    Activity.action NOT LIKE '%Notice to Negotiate%'"
+                    + " AND Activity.action NOT LIKE '%NTN%'"
                     + " AND Activity.action NOT LIKE '%Fact Finding Report%'"
+                    + " AND Activity.action NOT LIKE '%FF REPT%'"
+                    + " AND Activity.action NOT LIKE '%Conciliation Award%'"
+                    + " AND Activity.action NOT LIKE '%CON AWAR%'"
+                    + " AND Activity.action NOT LIKE '%Directive%'"
+                    + " AND Activity.action NOT LIKE '%DIR%'"
+                    + " AND Activity.action NOT LIKE '%Notice of Intent to Strike or Picket%'"
+                    + " AND Activity.action NOT LIKE '%NOT INT STK PKT%'"
+                    + " AND Activity.action NOT LIKE '%Request for Determination of Unauthorized Strike%'"
+                    + " AND Activity.action NOT LIKE '%REQ for DET STK%'"
+                    + " AND Activity.action NOT LIKE '%Combined File transfer from Intellivue%'"
+                    + " AND Activity.action NOT LIKE '%OPN%'"
+                    + " AND Activity.action NOT LIKE '%Opinion%'"
                     + ")";
 
             String sql = "SELECT Activity.*,"
@@ -1749,16 +1762,20 @@ public class Activity {
                     + " AND HearingCase.caseMonth = Activity.caseMonth "
                     + " AND HearingCase.caseNumber = Activity.caseNumber)"
                     //Where statement
-                    + " WHERE Activity.active = 1"
-                    + " AND MEDCase.caseStatus = 'Closed'"
+                    + " WHERE MEDCase.caseStatus = 'Closed'"
                     + " AND ISNULL(HearingCase.opinion, '') = ''"
                     + " AND ISNULL(HearingCase.boardActionPCDate, '') = ''"
                     + " AND ISNULL(HearingCase.boardActionPreDDate, '') = ''"
                     + excludeList
+                    + " AND retentionTicklerDate >= ? "
+                    + " AND retentionTicklerDate <= ? "
                     + " ORDER BY MEDCase.caseYear ASC, MEDCase.caseMonth ASC, MEDCase.caseNumber ASC, date ASC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
+            preparedStatement.setDate(1, new java.sql.Date(startDate.getTime()));
+            preparedStatement.setDate(2, new java.sql.Date(endDate.getTime()));
+            
             ResultSet caseActivity = preparedStatement.executeQuery();
 
             while(caseActivity.next()) {
