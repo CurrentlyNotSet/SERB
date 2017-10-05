@@ -322,6 +322,7 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
             .add(jLabel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 513, Short.MAX_VALUE)
         );
 
+        jTable1.setAutoCreateRowSorter(true);
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
