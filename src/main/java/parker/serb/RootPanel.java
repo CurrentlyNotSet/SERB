@@ -157,7 +157,7 @@ public class RootPanel extends javax.swing.JFrame {
             }
             
             if(!Global.activeUserRoles.contains("Record Retention")) {
-                recordRetentionMenuItem.setVisible(false);        
+                jMenuBar1.remove(recordRetentionMenuItem);        
             }
         }
 
