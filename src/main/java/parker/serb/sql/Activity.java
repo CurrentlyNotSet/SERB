@@ -1726,23 +1726,7 @@ public class Activity {
 
             stmt = Database.connectToDB().createStatement();
             
-            String excludeList = " AND ("
-                    + "    Activity.action NOT LIKE '%Notice to Negotiate%'"
-                    + " AND Activity.action NOT LIKE '%NTN%'"
-                    + " AND Activity.action NOT LIKE '%Fact Finding Report%'"
-                    + " AND Activity.action NOT LIKE '%FF REPT%'"
-                    + " AND Activity.action NOT LIKE '%Conciliation Award%'"
-                    + " AND Activity.action NOT LIKE '%CON AWAR%'"
-                    + " AND Activity.action NOT LIKE '%Directive%'"
-                    + " AND Activity.action NOT LIKE '%DIR%'"
-                    + " AND Activity.action NOT LIKE '%Notice of Intent to Strike or Picket%'"
-                    + " AND Activity.action NOT LIKE '%NOT INT STK PKT%'"
-                    + " AND Activity.action NOT LIKE '%Request for Determination of Unauthorized Strike%'"
-                    + " AND Activity.action NOT LIKE '%REQ for DET STK%'"
-                    + " AND Activity.action NOT LIKE '%Combined File transfer from Intellivue%'"
-                    + " AND Activity.action NOT LIKE '%OPN%'"
-                    + " AND Activity.action NOT LIKE '%Opinion%'"
-                    + ")";
+            List<String> excludeList = RetentionExclusion.getActiveRetentionExclusionBySection("MED");
 
             String sql = "SELECT Activity.*,"
                     + " ISNULL(Users.firstName, '') + ' ' + ISNULL(Users.lastName, '') AS userName"
@@ -1765,16 +1749,30 @@ public class Activity {
                     + " WHERE MEDCase.caseStatus = 'Closed'"
                     + " AND ISNULL(HearingCase.opinion, '') = ''"
                     + " AND ISNULL(HearingCase.boardActionPCDate, '') = ''"
-                    + " AND ISNULL(HearingCase.boardActionPreDDate, '') = ''"
-                    + excludeList
-                    + " AND retentionTicklerDate >= ? "
+                    + " AND ISNULL(HearingCase.boardActionPreDDate, '') = ''";
+                    if (excludeList.size() > 0) {
+                        sql += " AND (";
+
+                        for (int i = 0; i < excludeList.size(); i++) {
+                            if (i > 0) {
+                                sql += " AND ";
+                            }
+                            sql += "Activity.action NOT LIKE ?";
+                        }
+                        sql += ")";
+                    }
+                    sql += " AND retentionTicklerDate >= ? "
                     + " AND retentionTicklerDate <= ? "
                     + " ORDER BY MEDCase.caseYear ASC, MEDCase.caseMonth ASC, MEDCase.caseNumber ASC, date ASC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
-            preparedStatement.setDate(1, new java.sql.Date(startDate.getTime()));
-            preparedStatement.setDate(2, new java.sql.Date(endDate.getTime()));
+            for (int i = 0; i < excludeList.size(); i++) {
+                preparedStatement.setString((i + 1), "%" + excludeList.get(i).trim() + "%");
+            }
+            
+            preparedStatement.setDate(excludeList.size() + 1, new java.sql.Date(startDate.getTime()));
+            preparedStatement.setDate(excludeList.size() + 2, new java.sql.Date(endDate.getTime()));
             
             ResultSet caseActivity = preparedStatement.executeQuery();
 

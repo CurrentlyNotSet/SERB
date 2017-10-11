@@ -106,6 +106,35 @@ public class RetentionExclusion {
         return item;
     }
 
+    public static List<String> getActiveRetentionExclusionBySection(String section) {
+        List<String> list = new ArrayList<>();
+
+        Statement stmt = null;
+        
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT * FROM RetentionExclusion WHERE active = 1 AND section = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, section);
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                list.add(rs.getString("excludeString") == null ? "" : rs.getString("excludeString"));
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getActiveRetentionExclusionBySection(section);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return list;
+    }
+    
     public static void createRetentionExclusion(RetentionExclusion item) {
         Statement stmt = null;
         

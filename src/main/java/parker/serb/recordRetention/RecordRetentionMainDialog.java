@@ -69,20 +69,11 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
 
     private void addListeners() {
         startDateField.addDateSelectionListener((Date date) -> {
-            if (!startDateField.getText().equals("")
-                    && !endDateField.getText().equals("")
-                    && !sectionComboBox.getSelectedItem().toString().equals("")) {
-                loadTableThread();
-            }
+            loadTableListener();
         });
 
         endDateField.addDateSelectionListener((Date date) -> {
-            if (!startDateField.getText().equals("")
-                    && !endDateField.getText().equals("")
-                    && !sectionComboBox.getSelectedItem().toString().equals("")) {
-                
-                loadTableThread();
-            }
+            loadTableListener();
         });
     }
 
@@ -165,7 +156,7 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
                 caseList = Activity.loadPurgeORGActivities();
                 break;
             case "ULP":
-                caseList = Activity.loadPurgeULPActivities();
+                //caseList = Activity.loadPurgeULPActivities();
                 break;
         }
         
@@ -253,6 +244,17 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
         //TODO: Need Direction from Justin in Order to Complete
     }
     
+    private void loadTableListener() {
+        if (sectionComboBox.getSelectedItem().equals("ORG") 
+                || sectionComboBox.getSelectedItem().equals("CSC")) {
+            loadTableThread();
+        } else if (!startDateField.getText().equals("")
+                && !endDateField.getText().equals("")
+                && !sectionComboBox.getSelectedItem().toString().equals("")) {
+            loadTableThread();
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -277,10 +279,10 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         endDateField = new com.alee.extended.date.WebDateField();
         jLabel4 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
         SelectAllCheckBox = new javax.swing.JCheckBox();
         NeedsPurgedReportButton = new javax.swing.JButton();
         PurgedDocumentsReportButton = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Record Retention");
@@ -364,7 +366,7 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jLabel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 494, Short.MAX_VALUE)
+            .add(jLabel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
         );
 
         jLayeredPane1.setLayer(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -422,8 +424,8 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
                 jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
                 jLabel4.setText("End Date:");
 
-                jLabel6.setText("Select All:");
-
+                SelectAllCheckBox.setText("Select All");
+                SelectAllCheckBox.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
                 SelectAllCheckBox.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
                         SelectAllCheckBoxActionPerformed(evt);
@@ -448,12 +450,13 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
                 getContentPane().setLayout(layout);
                 layout.setHorizontalGroup(
                     layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(layout.createSequentialGroup()
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                         .addContainerGap()
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jLayeredPane1)
-                            .add(jLabel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .add(layout.createSequentialGroup()
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                            .add(jSeparator1)
+                            .add(org.jdesktop.layout.GroupLayout.LEADING, jLayeredPane1)
+                            .add(org.jdesktop.layout.GroupLayout.LEADING, jLabel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
                                 .add(closeButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 100, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .add(NeedsPurgedReportButton)
@@ -461,31 +464,30 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
                                 .add(PurgedDocumentsReportButton)
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .add(purgeButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 125, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                            .add(layout.createSequentialGroup()
-                                .add(17, 17, 17)
-                                .add(jLabel6)
+                            .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
+                                .add(SelectAllCheckBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 90, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .add(91, 91, 91)
+                                .add(countLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
+                                .add(0, 165, Short.MAX_VALUE)
+                                .add(jLabel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 64, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(SelectAllCheckBox)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                                .add(countLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .add(sectionComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 161, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .add(36, 36, 36)
+                                .add(jLabel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 70, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(startDateField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 150, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .add(38, 38, 38)
+                                .add(jLabel4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 60, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(endDateField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 150, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .add(0, 165, Short.MAX_VALUE)))
                         .addContainerGap())
-                    .add(layout.createSequentialGroup()
-                        .addContainerGap(175, Short.MAX_VALUE)
-                        .add(jLabel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 64, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(sectionComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 161, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(36, 36, 36)
-                        .add(jLabel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 70, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(startDateField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 150, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(38, 38, 38)
-                        .add(jLabel4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 60, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(endDateField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 150, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(175, Short.MAX_VALUE))
                 );
 
                 layout.linkSize(new java.awt.Component[] {closeButton, purgeButton}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
+
+                layout.linkSize(new java.awt.Component[] {NeedsPurgedReportButton, PurgedDocumentsReportButton}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
 
                 layout.setVerticalGroup(
                     layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -503,10 +505,10 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
                                 .add(startDateField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                                 .add(jLabel2)))
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .add(jSeparator1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 10, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                                .add(jLabel6)
-                                .add(SelectAllCheckBox))
+                            .add(SelectAllCheckBox)
                             .add(countLabel))
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jLayeredPane1)
@@ -525,7 +527,7 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
 
                 layout.linkSize(new java.awt.Component[] {endDateField, jLabel4}, org.jdesktop.layout.GroupLayout.VERTICAL);
 
-                layout.linkSize(new java.awt.Component[] {SelectAllCheckBox, countLabel, jLabel6}, org.jdesktop.layout.GroupLayout.VERTICAL);
+                layout.linkSize(new java.awt.Component[] {SelectAllCheckBox, countLabel}, org.jdesktop.layout.GroupLayout.VERTICAL);
 
                 pack();
             }// </editor-fold>//GEN-END:initComponents
@@ -543,9 +545,7 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
     }//GEN-LAST:event_purgeButtonActionPerformed
 
     private void sectionComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sectionComboBoxActionPerformed
-        if (!startDateField.getText().equals("") && !endDateField.getText().equals("") && !sectionComboBox.getSelectedItem().toString().equals("")){
-            loadTableThread();
-        }
+        loadTableListener();
     }//GEN-LAST:event_sectionComboBoxActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
@@ -592,10 +592,10 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTable1;
     private javax.swing.JButton purgeButton;
     private javax.swing.JComboBox sectionComboBox;
