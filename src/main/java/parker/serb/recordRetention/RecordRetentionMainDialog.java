@@ -159,7 +159,7 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
                 caseList = Activity.loadPurgeORGActivities();
                 break;
             case "ULP":
-                //caseList = Activity.loadPurgeULPActivities();
+                caseList = Activity.loadPurgeULPActivities(startDateField.getDate(), endDateField.getDate());
                 break;
         }
         

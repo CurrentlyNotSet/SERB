@@ -1642,7 +1642,7 @@ public class Activity {
         return activityList;
     }
     
-    public static List loadPurgeULPActivities() {
+    public static List loadPurgeULPActivities(Date startDate, Date endDate) {
         List<Activity> activityList = new ArrayList<>();
 
         Statement stmt = null;
@@ -1651,11 +1651,7 @@ public class Activity {
 
             stmt = Database.connectToDB().createStatement();
 
-            String excludeList = " AND ("
-                    + "    Activity.action NOT LIKE '%Initial Charge%'"
-                    + " AND Activity.action NOT LIKE '%Investigator Report%'"
-                    + " AND Activity.action NOT LIKE '%Directive%'"
-                    + ")";
+            List<String> excludeList = RetentionExclusion.getActiveRetentionExclusionBySection("ULP");
 
             String sql = "SELECT Activity.*,"
                     + " ISNULL(Users.firstName, '') + ' ' + ISNULL(Users.lastName, '') AS userName"
@@ -1671,23 +1667,48 @@ public class Activity {
                     + " AND ULPCase.caseNumber = Activity.caseNumber)"
                     //Join to Hearings to get (opinion, PC-Date, Pre-D-Date)
                     + " LEFT JOIN HearingCase"
-                    + " ON (HearingCase.caseYear = Activity.caseYear AND HearingCase.caseType = Activity.caseType "
+                    + " ON (HearingCase.caseYear = Activity.caseYear "
+                    + " AND HearingCase.caseType = Activity.caseType "
                     + " AND HearingCase.caseMonth = Activity.caseMonth "
-                    + " AND HearingCase.caseNumber = Activity.caseNumber)"
+                    + " AND HearingCase.caseNumber = Activity.caseNumber) "
+                    //Join to Board Meeting to get the date range criteria
+                    + "LEFT JOIN BoardMeeting "
+                    + "ON (BoardMeeting.caseYear = ULPCase.caseYear" 
+                    + " AND BoardMeeting.caseType = ULPCase.caseType" 
+                    + " AND BoardMeeting.caseMonth = ULPCase.caseMonth" 
+                    + " AND BoardMeeting.caseNumber = ULPCase.caseNumber) "
                     //Where statement
-                    + " WHERE Activity.active = 1"
-                    + " AND ULPCase.currentStatus = 'Closed'"
-                    + " AND ULPCase.finalDispositionStatus = 'Closed'"
+                    + " WHERE ULPCase.currentStatus = 'Closed'"
+                    + " AND (ULPCase.finalDispositionStatus = 'Closed' OR ISNULL(ULPCase.appealDateSent, '') = '')"
                     + " AND ISNULL(ULPCase.appealDateSent, '') = ''"
                     + " AND ISNULL(ULPCase.appealDateReceived, '') = ''"
                     + " AND ISNULL(HearingCase.opinion, '') = ''"
                     + " AND ISNULL(HearingCase.boardActionPCDate, '') = ''"
-                    + " AND ISNULL(HearingCase.boardActionPreDDate, '') = ''"
-                    + excludeList
+                    + " AND ISNULL(HearingCase.boardActionPreDDate, '') = ''";
+                    if (excludeList.size() > 0) {
+                        sql += " AND (";
+
+                        for (int i = 0; i < excludeList.size(); i++) {
+                            if (i > 0) {
+                                sql += " AND ";
+                            }
+                            sql += "Activity.action NOT LIKE ?";
+                        }
+                        sql += ")";
+                    }
+                    sql += "AND ((DATEADD(day,411, BoardMeeting.boardMeetingDate)) BETWEEN ? AND ?) "
+                    
                     + " ORDER BY ULPCase.caseYear ASC, ULPCase.caseMonth ASC, ULPCase.caseNumber ASC, date ASC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
+            for (int i = 0; i < excludeList.size(); i++) {
+                preparedStatement.setString((i + 1), "%" + excludeList.get(i).trim() + "%");
+            }
+            
+            preparedStatement.setDate(excludeList.size() + 1, new java.sql.Date(startDate.getTime()));
+            preparedStatement.setDate(excludeList.size() + 2, new java.sql.Date(endDate.getTime()));
+            
             ResultSet caseActivity = preparedStatement.executeQuery();
 
             while(caseActivity.next()) {
@@ -1761,8 +1782,7 @@ public class Activity {
                         }
                         sql += ")";
                     }
-                    sql += " AND retentionTicklerDate >= ? "
-                    + " AND retentionTicklerDate <= ? "
+                    sql += " AND retentionTicklerDate >= ?  AND retentionTicklerDate <= ? "
                     + " ORDER BY MEDCase.caseYear ASC, MEDCase.caseMonth ASC, MEDCase.caseNumber ASC, date ASC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
@@ -1823,7 +1843,7 @@ public class Activity {
                     //Join to OrgCase to get entries older than [Due Date] minus 7 years
                     + " INNER JOIN ORGCase"
                     + " ON Activity.caseNumber = ORGCase.orgNumber"
-                    + " WHERE Activity.active = 1 AND Activity.caseType = 'ORG'"
+                    + " WHERE AND Activity.caseType = 'ORG'"
                     + " AND Activity.date < CAST(REPLACE(ORGCase.filingDueDate, RIGHT(ORGCase.filingDueDate, 2), ' ') + CONVERT(varchar(4), (YEAR(GETDATE()) - 7), 4) AS datetime) ";
                     if (excludeList.size() > 0) {
                         sql += " AND (";
