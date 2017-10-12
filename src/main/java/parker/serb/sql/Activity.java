@@ -1808,18 +1808,13 @@ public class Activity {
 
         Statement stmt = null;
 
+        List<String> excludeList = RetentionExclusion.getActiveRetentionExclusionBySection("ORG");
+        
         try {
 
             stmt = Database.connectToDB().createStatement();
-
-            String excludeList = " AND ("
-                    + "    Activity.action NOT LIKE '%Annual Report%'"
-                    + " AND Activity.action NOT LIKE '%Financial Statement%'"
-                    + " AND Activity.action NOT LIKE '%Registration Report%'"
-                    + " AND Activity.action NOT LIKE '%Constitution and Bylaws%'"
-                    + ")";
             
-            String sql = "SELECT Activity.*,"
+            String sql = "SELECT Activity.*, ORGCase.OrgName, "
                     + " ISNULL(Users.firstName, '') + ' ' + ISNULL(Users.lastName, '') AS userName"
                     + " FROM Activity"
                     //Join to Users To Get UserName
@@ -1829,12 +1824,26 @@ public class Activity {
                     + " INNER JOIN ORGCase"
                     + " ON Activity.caseNumber = ORGCase.orgNumber"
                     + " WHERE Activity.active = 1 AND Activity.caseType = 'ORG'"
-                    + " AND Activity.date < CAST(REPLACE(ORGCase.filingDueDate, RIGHT(ORGCase.filingDueDate, 2), ' ') + CONVERT(varchar(4), (YEAR(GETDATE()) - 7), 4) AS datetime)"
-                    + excludeList                    
-                    + " ORDER BY RIGHT('0000'+CAST(ORGCase.orgNumber AS VARCHAR(4)),4) ASC, date ASC";
+                    + " AND Activity.date < CAST(REPLACE(ORGCase.filingDueDate, RIGHT(ORGCase.filingDueDate, 2), ' ') + CONVERT(varchar(4), (YEAR(GETDATE()) - 7), 4) AS datetime) ";
+                    if (excludeList.size() > 0) {
+                        sql += " AND (";
+
+                        for (int i = 0; i < excludeList.size(); i++) {
+                            if (i > 0) {
+                                sql += " AND ";
+                            }
+                            sql += "Activity.action NOT LIKE ?";
+                        }
+                        sql += ")";
+                    }                    
+                    sql += " ORDER BY OrgName ASC, date ASC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
+            for (int i = 0; i < excludeList.size(); i++) {
+                preparedStatement.setString((i + 1), "%" + excludeList.get(i).trim() + "%");
+            }
+            
             ResultSet caseActivity = preparedStatement.executeQuery();
 
             while(caseActivity.next()) {
@@ -1845,10 +1854,7 @@ public class Activity {
                 act.action = caseActivity.getString("action");
                 act.comment = caseActivity.getString("comment");
                 act.from = caseActivity.getString("from") == null ? "" : caseActivity.getString("from");
-                act.caseYear = caseActivity.getString("caseYear");
-                act.caseType = caseActivity.getString("caseType");
-                act.caseMonth = caseActivity.getString("caseMonth");
-                act.caseNumber = caseActivity.getString("caseNumber");
+                act.caseNumber = caseActivity.getString("OrgName");
                 act.fileName = caseActivity.getString("fileName");
                 activityList.add(act);
             }

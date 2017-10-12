@@ -149,6 +149,9 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
             case "CMDS":
                 //caseList = Activity.loadPurgeCMDSActivities();
                 break;
+            case "CSC":
+                //caseList = Activity.loadPurgeCSCActivities();
+                break;
             case "MED":
                 caseList = Activity.loadPurgeMEDActivities(startDateField.getDate(), endDateField.getDate());
                 break;
@@ -210,8 +213,7 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
             endDateField.setEnabled(enabled);
         }
     }
-    
-    
+        
     private void openFile(MouseEvent evt){
         if (jTable1.getSelectedRow() > -1 && jTable1.getSelectedColumn() != 1 && evt.getClickCount() == 2) {
             Activity rowObject = (Activity) jTable1.getValueAt(jTable1.getSelectedRow(), 0);
@@ -562,7 +564,6 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
             jLabel4.setEnabled(false);
             endDateField.setEnabled(false);
             endDateField.clear();
-
         } else {
             jLabel2.setEnabled(true);
             startDateField.setEnabled(true);
