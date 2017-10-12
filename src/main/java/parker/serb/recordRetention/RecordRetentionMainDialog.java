@@ -197,11 +197,18 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
     private void setPanelEnabled(boolean enabled){
         closeButton.setEnabled(enabled);
         purgeButton.setEnabled(enabled);
-        startDateField.setEnabled(enabled);
-        endDateField.setEnabled(enabled);
         sectionComboBox.setEnabled(enabled);
         jTable1.setEnabled(enabled);
         jPanel1.setVisible(!enabled);
+        
+        if (sectionComboBox.getSelectedItem().equals("ORG")
+                || sectionComboBox.getSelectedItem().equals("CSC")) {
+            startDateField.setEnabled(false);
+            endDateField.setEnabled(false);
+        } else {
+            startDateField.setEnabled(enabled);
+            endDateField.setEnabled(enabled);
+        }
     }
     
     
@@ -546,6 +553,22 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
 
     private void sectionComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sectionComboBoxActionPerformed
         loadTableListener();
+
+        if (sectionComboBox.getSelectedItem().equals("ORG")
+                || sectionComboBox.getSelectedItem().equals("CSC")) {
+            jLabel2.setEnabled(false);
+            startDateField.setEnabled(false);
+            startDateField.clear();
+            jLabel4.setEnabled(false);
+            endDateField.setEnabled(false);
+            endDateField.clear();
+
+        } else {
+            jLabel2.setEnabled(true);
+            startDateField.setEnabled(true);
+            jLabel4.setEnabled(true);
+            endDateField.setEnabled(true);
+        }
     }//GEN-LAST:event_sectionComboBoxActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
