@@ -494,27 +494,6 @@ public class PurgedActivity {
         return false;
     }
     
-    public static void deleteActivityByID(int id) {
-
-        Statement stmt = null;
-
-        try {
-
-            stmt = Database.connectToDB().createStatement();
-
-            String sql = "DELETE FROM Activity WHERE id = ?";
-
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setInt(1, id);
-
-        } catch (SQLException ex) {
-            SlackNotification.sendNotification(ex);
-            if(ex.getCause() instanceof SQLServerException) {
-                deleteActivityByID(id);
-            }
-        } finally {
-            DbUtils.closeQuietly(stmt);
-        }
-    }
+    
     
 }

@@ -137,7 +137,7 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
         
         switch (section) {
             case "ORG":
-                jTable1.getColumnModel().getColumn(3).setHeaderValue("Org Number");
+                jTable1.getColumnModel().getColumn(3).setHeaderValue("Org Name");
                 break;
             default:
                 jTable1.getColumnModel().getColumn(3).setHeaderValue("Case Number");
@@ -536,8 +536,8 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
                 "Purge?", WebOptionPane.YES_NO_OPTION);
         if (answer == WebOptionPane.YES_OPTION) {
             setPanelEnabled(false);
-            new ProcessRecords(this, true, jTable1);
-            setPanelEnabled(true);
+            new ProcessRecords(this, true, jTable1, sectionComboBox.getSelectedItem().toString());
+            loadTableThread();
         }
     }//GEN-LAST:event_purgeButtonActionPerformed
 

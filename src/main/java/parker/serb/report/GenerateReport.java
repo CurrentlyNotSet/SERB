@@ -75,6 +75,9 @@ public class GenerateReport {
                 case "begin date, end date, String":
                     new RequestedInfoTwoDateStringPanel(Global.root, true, report, "exact");
                     break;
+                case "begin date, end date, Section":
+                    new RequestedInfoTwoDateComboBoxPanel(Global.root, true, report, "Section");
+                    break;
                 case "ActivityType, Year":
                     new RequestedInfoComboBoxStringPanel(Global.root, true, report, "ActivityType, Year");
                     break;

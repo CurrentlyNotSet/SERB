@@ -75,6 +75,7 @@ public class SMDSDocumentAddEditDialog extends javax.swing.JDialog {
         parametersComboBox.addItem("begin date, end date, InvestigatorID");
         parametersComboBox.addItem("begin date, end date, LikeString");
         parametersComboBox.addItem("begin date, end date, Mediator");
+        parametersComboBox.addItem("begin date, end date, Section");
         parametersComboBox.addItem("begin date, end date, SectionUserID");
         parametersComboBox.addItem("begin date, end date, String");
         parametersComboBox.addItem("begin date, end date, UserID");

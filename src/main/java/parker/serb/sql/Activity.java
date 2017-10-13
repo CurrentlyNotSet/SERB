@@ -17,6 +17,7 @@ import java.util.List;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.io.FilenameUtils;
 import parker.serb.Global;
+import parker.serb.recordRetention.CaseNumberModel;
 import parker.serb.util.SlackNotification;
 
 /**
@@ -123,7 +124,7 @@ public class Activity {
 
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                addActivty(action, fileName);
+                addActivtyNonGlobalCaseNumber(action, fileName, caseNumber);
             } else {
                 SlackNotification.sendNotification(ex);
             }
@@ -1581,6 +1582,69 @@ public class Activity {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
                 duplicatePublicRecordActivty(item);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+    }
+    
+    public static void deleteActivityByID(int id) {
+
+        Statement stmt = null;
+
+        try {
+
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "DELETE FROM Activity WHERE id = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                deleteActivityByID(id);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+    }
+    
+    public static void addPurgedActivityEntry(String action, CaseNumberModel caseNum) {
+        Statement stmt = null;
+
+        try {
+
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, caseNum.getCaseYear());
+            preparedStatement.setString(2, caseNum.getCaseType());
+            preparedStatement.setString(3, caseNum.getCaseMonth());
+            preparedStatement.setString(4, caseNum.getCaseNumber());
+            preparedStatement.setInt(5, Global.activeUser.id);
+            preparedStatement.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
+            preparedStatement.setString(7, action.equals("") ? null : action);
+            preparedStatement.setString(8, null);
+            preparedStatement.setString(9, null); //from
+            preparedStatement.setString(10, null); //to
+            preparedStatement.setString(11, null); //type
+            preparedStatement.setString(12, null); //comment
+            preparedStatement.setBoolean(13, false); //redacted
+            preparedStatement.setBoolean(14, false); //awaiting timestamp
+            preparedStatement.setBoolean(15, true); //active
+            preparedStatement.setTimestamp(16, null); //mailLog
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException ex) {
+            if(ex.getCause() instanceof SQLServerException) {
+                addPurgedActivityEntry(action, caseNum);
+            } else {
+                SlackNotification.sendNotification(ex);
             }
         } finally {
             DbUtils.closeQuietly(stmt);
