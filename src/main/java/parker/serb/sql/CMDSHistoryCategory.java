@@ -154,9 +154,7 @@ public class CMDSHistoryCategory {
         }
         return list;
     }
-    
-    
-    
+
     public static List<CMDSHistoryCategory> loadActiveHearingHistoryDescriptions() {
         List<CMDSHistoryCategory> list = new ArrayList<>();
 

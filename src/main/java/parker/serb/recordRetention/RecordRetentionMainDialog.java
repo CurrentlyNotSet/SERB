@@ -20,6 +20,7 @@ import javax.swing.table.TableCellRenderer;
 import parker.serb.Global;
 import parker.serb.report.GenerateReport;
 import parker.serb.sql.Activity;
+import parker.serb.sql.PurgedActivity;
 import parker.serb.sql.SMDSDocuments;
 import parker.serb.util.FileService;
 import parker.serb.util.ImageIconRenderer;
@@ -131,7 +132,7 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
         
-        List<Activity> caseList = null;
+        List<PurgedActivity> caseList = null;
         String section = sectionComboBox.getSelectedItem().toString().trim();
         
         switch (section) {
@@ -153,20 +154,20 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
                 //caseList = Activity.loadPurgeCSCActivities();
                 break;
             case "MED":
-                caseList = Activity.loadPurgeMEDActivities(startDateField.getDate(), endDateField.getDate());
+                caseList = PurgedActivity.loadPurgeMEDActivities(startDateField.getDate(), endDateField.getDate());
                 break;
             case "ORG":
-                caseList = Activity.loadPurgeORGActivities();
+                caseList = PurgedActivity.loadPurgeORGActivities();
                 break;
             case "ULP":
-                caseList = Activity.loadPurgeULPActivities(startDateField.getDate(), endDateField.getDate());
+                caseList = PurgedActivity.loadPurgeULPActivities(startDateField.getDate(), endDateField.getDate());
                 break;
         }
         
         countLabel.setText("Populating Table");
         
         if (caseList != null){
-            for (Activity item : caseList) {
+            for (PurgedActivity item : caseList) {
                 String caseNumber = "";
                 
                 if (section.equals("ORG")){
@@ -185,10 +186,10 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
                     item.fileName == null,
                     item.fileName == null ? "" : item.fileName,
                     caseNumber,
-                    item.date,
-                    item.action,
-                    item.from,
-                    item.user
+                    item.date == null ? "" : Global.mmddyyyyhhmma.format(item.date),
+                    item.action == null ? "" : item.action,
+                    item.from == null ? "" : item.from,
+                    item.userName
                 });
             }
             countLabel.setText("Count: " + NumberFormat.getIntegerInstance().format(caseList.size()));
@@ -237,22 +238,7 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
             }
         }
     }
-    
-    private void purgeDocumentsThread() {
-        setPanelEnabled(false);
         
-        Thread temp = new Thread(() -> {
-            purgeRecords();
-            setPanelEnabled(true);
-            WebOptionPane.showMessageDialog(Global.root, "Record Purge Complete", "Purged", WebOptionPane.INFORMATION_MESSAGE);
-        });
-        temp.start();
-    } 
-    
-    private void purgeRecords(){
-        //TODO: Need Direction from Justin in Order to Complete
-    }
-    
     private void loadTableListener() {
         if (sectionComboBox.getSelectedItem().equals("ORG") 
                 || sectionComboBox.getSelectedItem().equals("CSC")) {
@@ -549,7 +535,9 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
         int answer = WebOptionPane.showConfirmDialog(this, "Are you sure you want to purge these records?",
                 "Purge?", WebOptionPane.YES_NO_OPTION);
         if (answer == WebOptionPane.YES_OPTION) {
-            purgeDocumentsThread();
+            setPanelEnabled(false);
+            new ProcessRecords(this, true, jTable1);
+            setPanelEnabled(true);
         }
     }//GEN-LAST:event_purgeButtonActionPerformed
 
