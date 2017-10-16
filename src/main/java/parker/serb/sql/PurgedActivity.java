@@ -56,23 +56,36 @@ public class PurgedActivity {
         try {
 
             stmt = Database.connectToDB().createStatement();
-            
-            String excludeList = " AND ("
-                    + "    Activity.action NOT LIKE '%%'"
-                    + " AND Activity.action NOT LIKE '%%'"
-                    + ")";
+  
+            List<String> excludeList = RetentionExclusion.getActiveRetentionExclusionBySection("CMDS");
 
-            String sql = "SELECT TOP 50 Activity.*,"
+            String sql = "SELECT Activity.*,"
                     + " ISNULL(Users.firstName, '') + ' ' + ISNULL(Users.lastName, '') AS userName"
                     + " FROM Activity"
                     + " INNER JOIN Users"
                     + " ON Activity.userID = Users.id"
                     + " INNER JOIN caseType"
                     + " ON Activity.caseType = CaseType.caseType"
-                    + " WHERE Activity.active = 1 AND CaseType.section = 'CMDS'"
-                    + " ORDER BY Activity.caseYear ASC, Activity.caseMonth ASC, Activity.caseNumber ASC, date ASC";
+                    + " WHERE Activity.active = 1 AND CaseType.section = 'CMDS'";
+            if (excludeList.size() > 0) {
+                sql += " AND (";
+
+                for (int i = 0; i < excludeList.size(); i++) {
+                    if (i > 0) {
+                        sql += " AND ";
+                    }
+                    sql += "Activity.action NOT LIKE ?";
+                }
+                sql += ")";
+            }
+
+            sql += " ORDER BY Activity.caseYear ASC, Activity.caseMonth ASC, Activity.caseNumber ASC, date ASC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            
+            for (int i = 0; i < excludeList.size(); i++) {
+                preparedStatement.setString((i + 1), "%" + excludeList.get(i).trim() + "%");
+            }
 
             ResultSet rs = preparedStatement.executeQuery();
 
@@ -93,6 +106,83 @@ public class PurgedActivity {
                 act.comment      = rs.getString ("comment");
                 act.redacted     = rs.getBoolean("redacted");
                 act.awaitingTimestamp = rs.getBoolean("awaitingScan");
+                act.active       = rs.getBoolean("active");
+                act.mailLog      = rs.getDate   ("mailLog");
+                activityList.add(act);
+            }
+        } catch (SQLException ex) {
+            if(ex.getCause() instanceof SQLServerException) {
+                loadAllActivity();
+            } else {
+                SlackNotification.sendNotification(ex);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return activityList;
+    }
+    
+    public static List loadPurgeCSCActivities() {
+        List<PurgedActivity> activityList = new ArrayList<>();
+
+        Statement stmt = null;
+
+        List<String> excludeList = RetentionExclusion.getActiveRetentionExclusionBySection("CSC");
+        
+        try {
+
+            stmt = Database.connectToDB().createStatement();
+            
+            String sql = "SELECT Activity.*, CivilServiceCommission.CSCName, "
+                    + " ISNULL(Users.firstName, '') + ' ' + ISNULL(Users.lastName, '') AS userName"
+                    + " FROM Activity"
+                    //Join to Users To Get UserName
+                    + " INNER JOIN Users"
+                    + " ON Activity.userID = Users.id"
+                    //Join to OrgCase to get entries older than [Due Date] minus 7 years
+                    + " INNER JOIN CivilServiceCommission"
+                    + " ON Activity.caseNumber = CivilServiceCommission.CSCNumber"
+                    + " WHERE Activity.caseType = 'CSC'"
+                    + " AND Activity.date < CAST(REPLACE(CivilServiceCommission.filingDueDate, RIGHT(CivilServiceCommission.filingDueDate, 2), ' ') + CONVERT(varchar(4), (YEAR(GETDATE()) - 7), 4) AS datetime) ";
+                    if (excludeList.size() > 0) {
+                        sql += " AND (";
+
+                        for (int i = 0; i < excludeList.size(); i++) {
+                            if (i > 0) {
+                                sql += " AND ";
+                            }
+                            sql += "Activity.action NOT LIKE ?";
+                        }
+                        sql += ")";
+                    }                    
+                    sql += " ORDER BY CSCName ASC, date ASC";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+
+            for (int i = 0; i < excludeList.size(); i++) {
+                preparedStatement.setString((i + 1), "%" + excludeList.get(i).trim() + "%");
+            }
+            
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while(rs.next()) {
+                PurgedActivity act = new PurgedActivity();
+                act.activityID   = rs.getInt    ("id");
+                act.caseYear     = rs.getString ("caseYear");
+                act.caseType     = rs.getString ("caseType");
+                act.caseMonth    = rs.getString ("caseMonth");
+                act.caseNumber   = rs.getString ("caseNumber");
+                act.user         = rs.getString ("userID");
+                act.userName     = rs.getString ("userName");
+                act.date         = rs.getTimestamp("date");
+                act.action       = rs.getString ("action");
+                act.fileName     = rs.getString ("fileName");
+                act.from         = rs.getString ("from");
+                act.to           = rs.getString ("to");
+                act.type         = rs.getString ("type");
+                act.comment      = rs.getString ("comment");
+                act.redacted     = rs.getBoolean("redacted");
+                act.awaitingTimestamp = rs.getBoolean("awaitingTimestamp");
                 act.active       = rs.getBoolean("active");
                 act.mailLog      = rs.getDate   ("mailLog");
                 activityList.add(act);
