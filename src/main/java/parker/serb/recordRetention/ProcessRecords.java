@@ -5,7 +5,6 @@
  */
 package parker.serb.recordRetention;
 
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,31 +42,30 @@ public class ProcessRecords extends javax.swing.JDialog {
 
     private void PurgeRecords(JTable table, String sectionSelected) {
         long lStartTime = System.currentTimeMillis();
-        
+
         //Previous Case Number;
         String caseYear = "";
         String caseType = "";
         String caseMonth = "";
         String caseNumber = "";
         List<CaseNumberModel> distinctCaseNumbers = new ArrayList<>();
-        
-        
+
         //Sort on CaseNumber
         TableRowSorter<TableModel> sorter = new TableRowSorter<>(table.getModel());
         List<RowSorter.SortKey> sortKeys = new ArrayList<>(1);
         sortKeys.add(new RowSorter.SortKey(3, SortOrder.ASCENDING)); //Sort On Case Number
         sorter.setSortKeys(sortKeys);
         table.setRowSorter(sorter);
- 
+
         //Gather Selected Records
         for (int i = 0; i < table.getRowCount(); i++) {
             if (table.getValueAt(i, 1).equals(true)) {
                 PurgedActivity item = (PurgedActivity) table.getValueAt(i, 0);
 
                 //ORG/CSC Numbers
-                if (sectionSelected.equalsIgnoreCase("Civil Service Commission") 
-                || sectionSelected.equalsIgnoreCase("CSC") 
-                || sectionSelected.equalsIgnoreCase("ORG")) {
+                if (sectionSelected.equalsIgnoreCase("Civil Service Commission")
+                        || sectionSelected.equalsIgnoreCase("CSC")
+                        || sectionSelected.equalsIgnoreCase("ORG")) {
                     if (!caseType.equalsIgnoreCase(item.caseType)
                             || !caseNumber.equalsIgnoreCase(item.caseNumber)) {
                         caseType = item.caseType;
@@ -99,36 +97,34 @@ public class ProcessRecords extends javax.swing.JDialog {
                     }
                 }
 
-
-
                 //Handle Record
                 handleRecord(item, sectionSelected);
             }
         }
 
         //Update Cases with Purged Entry
-        for (CaseNumberModel caseN : distinctCaseNumbers){
+        for (CaseNumberModel caseN : distinctCaseNumbers) {
             Activity.addPurgedActivityEntry("Records Purged per Retention Policy", caseN);
         }
-        
+
         table.setAutoCreateRowSorter(true);
-        
+
         long lEndTime = System.currentTimeMillis();
         System.out.println("Purge Process Time: " + NumberFormatService.convertLongToTime(lEndTime - lStartTime));
     }
-    
+
     private void handleRecord(PurgedActivity item, String sectionSelected) {
         //insert record
         if (PurgedActivity.insertPurgedRecord(item)) {
             //DeleteFile
             boolean safeToPurge = true;
-            
-            if (item.fileName != null ){
+
+            if (item.fileName != null) {
                 safeToPurge = deleteFile(item, sectionSelected);
             }
-            
+
             //Delete Activity Record
-            if (safeToPurge){
+            if (safeToPurge) {
                 //Activity.deleteActivityByID(item.activityID);
             }
         }
@@ -136,11 +132,11 @@ public class ProcessRecords extends javax.swing.JDialog {
 
     private boolean deleteFile(PurgedActivity item, String sectionSelected) {
         String filePath = Global.activityPath
-                    + (sectionSelected.equals("Civil Service Commission")
-                    ? Global.caseType : sectionSelected) + File.separator;
+                + (sectionSelected.equals("Civil Service Commission")
+                ? Global.caseType : sectionSelected) + File.separator;
 
-        if (sectionSelected.equalsIgnoreCase("Civil Service Commission") 
-                || sectionSelected.equalsIgnoreCase("CSC") 
+        if (sectionSelected.equalsIgnoreCase("Civil Service Commission")
+                || sectionSelected.equalsIgnoreCase("CSC")
                 || sectionSelected.equalsIgnoreCase("ORG")) {
             filePath += item.caseNumber;
         } else {
@@ -148,11 +144,11 @@ public class ProcessRecords extends javax.swing.JDialog {
                     + (item.caseYear + "-" + item.caseType + "-" + item.caseMonth + "-" + item.caseNumber);
         }
         filePath += File.separatorChar + item.fileName;
-        
+
         File purgeFile = new File(filePath);
-        
+
         System.out.println("File Path: " + filePath);
-        
+
         if (purgeFile.exists()) {
             if (purgeFile.renameTo(purgeFile)) {
                 return purgeFile.delete();
@@ -160,7 +156,7 @@ public class ProcessRecords extends javax.swing.JDialog {
         }
         return false;
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
