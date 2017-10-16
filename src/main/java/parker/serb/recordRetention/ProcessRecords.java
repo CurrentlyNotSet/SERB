@@ -58,35 +58,54 @@ public class ProcessRecords extends javax.swing.JDialog {
         sortKeys.add(new RowSorter.SortKey(3, SortOrder.ASCENDING)); //Sort On Case Number
         sorter.setSortKeys(sortKeys);
         table.setRowSorter(sorter);
-        
+ 
         //Gather Selected Records
         for (int i = 0; i < table.getRowCount(); i++) {
             if (table.getValueAt(i, 1).equals(true)) {
                 PurgedActivity item = (PurgedActivity) table.getValueAt(i, 0);
-                
-                if (!caseYear.equalsIgnoreCase(item.caseYear) 
-                    || !caseType.equalsIgnoreCase(item.caseType)
-                    || !caseMonth.equalsIgnoreCase(item.caseMonth)
-                    || !caseNumber.equalsIgnoreCase(item.caseNumber)){
-                caseYear = item.caseYear;
-                caseType = item.caseType;
-                caseMonth = item.caseMonth;
-                caseNumber = item.caseNumber;
-                                
-                CaseNumberModel cNum = new CaseNumberModel();
-                cNum.setCaseYear(caseYear);
-                cNum.setCaseType(caseType);
-                cNum.setCaseMonth(caseMonth);
-                cNum.setCaseNumber(caseNumber);
-                
-                distinctCaseNumbers.add(cNum);
-            }
-                        
-            //Handle Record
-            handleRecord(item, sectionSelected);
+
+                //ORG/CSC Numbers
+                if (sectionSelected.equalsIgnoreCase("Civil Service Commission") 
+                || sectionSelected.equalsIgnoreCase("CSC") 
+                || sectionSelected.equalsIgnoreCase("ORG")) {
+                    if (!caseType.equalsIgnoreCase(item.caseType)
+                            || !caseNumber.equalsIgnoreCase(item.caseNumber)) {
+                        caseType = item.caseType;
+                        caseNumber = item.caseNumber;
+
+                        CaseNumberModel cNum = new CaseNumberModel();
+                        cNum.setCaseType(caseType);
+                        cNum.setCaseNumber(caseNumber);
+
+                        distinctCaseNumbers.add(cNum);
+                    }
+                } else {
+                    if (!caseYear.equalsIgnoreCase(item.caseYear)
+                            || !caseType.equalsIgnoreCase(item.caseType)
+                            || !caseMonth.equalsIgnoreCase(item.caseMonth)
+                            || !caseNumber.equalsIgnoreCase(item.caseNumber)) {
+                        caseYear = item.caseYear;
+                        caseType = item.caseType;
+                        caseMonth = item.caseMonth;
+                        caseNumber = item.caseNumber;
+
+                        CaseNumberModel cNum = new CaseNumberModel();
+                        cNum.setCaseYear(caseYear);
+                        cNum.setCaseType(caseType);
+                        cNum.setCaseMonth(caseMonth);
+                        cNum.setCaseNumber(caseNumber);
+
+                        distinctCaseNumbers.add(cNum);
+                    }
+                }
+
+
+
+                //Handle Record
+                handleRecord(item, sectionSelected);
             }
         }
-        
+
         //Update Cases with Purged Entry
         for (CaseNumberModel caseN : distinctCaseNumbers){
             Activity.addPurgedActivityEntry("Records Purged per Retention Policy", caseN);

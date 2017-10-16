@@ -324,7 +324,7 @@ public class PurgedActivity {
                     //Join to OrgCase to get entries older than [Due Date] minus 7 years
                     + " INNER JOIN ORGCase"
                     + " ON Activity.caseNumber = ORGCase.orgNumber"
-                    + " WHERE AND Activity.caseType = 'ORG'"
+                    + " WHERE Activity.caseType = 'ORG'"
                     + " AND Activity.date < CAST(REPLACE(ORGCase.filingDueDate, RIGHT(ORGCase.filingDueDate, 2), ' ') + CONVERT(varchar(4), (YEAR(GETDATE()) - 7), 4) AS datetime) ";
                     if (excludeList.size() > 0) {
                         sql += " AND (";
