@@ -125,7 +125,7 @@ public class ProcessRecords extends javax.swing.JDialog {
 
             //Delete Activity Record
             if (safeToPurge) {
-                //Activity.deleteActivityByID(item.activityID);
+                Activity.deleteActivityByID(item.activityID);
             }
         }
     }
@@ -146,9 +146,6 @@ public class ProcessRecords extends javax.swing.JDialog {
         filePath += File.separatorChar + item.fileName;
 
         File purgeFile = new File(filePath);
-
-        System.out.println("File Path: " + filePath);
-
         if (purgeFile.exists()) {
             if (purgeFile.renameTo(purgeFile)) {
                 return purgeFile.delete();

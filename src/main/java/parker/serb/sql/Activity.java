@@ -1600,7 +1600,8 @@ public class Activity {
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setInt(1, id);
-
+            preparedStatement.executeUpdate();
+                        
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {

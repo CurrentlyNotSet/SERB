@@ -19,7 +19,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import parker.serb.Global;
 import parker.serb.report.GenerateReport;
-import parker.serb.sql.Activity;
 import parker.serb.sql.PurgedActivity;
 import parker.serb.sql.SMDSDocuments;
 import parker.serb.util.FileService;
@@ -81,6 +80,7 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
     private void loadSectionComboBox() {
         sectionComboBox.addItem("");
         sectionComboBox.addItem("CMDS");
+        sectionComboBox.addItem("CSC");
         sectionComboBox.addItem("MED");
         sectionComboBox.addItem("ORG");
         sectionComboBox.addItem("ULP");
@@ -217,7 +217,7 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
         
     private void openFile(MouseEvent evt){
         if (jTable1.getSelectedRow() > -1 && jTable1.getSelectedColumn() != 1 && evt.getClickCount() == 2) {
-            Activity rowObject = (Activity) jTable1.getValueAt(jTable1.getSelectedRow(), 0);
+            PurgedActivity rowObject = (PurgedActivity) jTable1.getValueAt(jTable1.getSelectedRow(), 0);
             String section = sectionComboBox.getSelectedItem().toString().trim();
 
             if (!rowObject.fileName.equals("")) {
