@@ -102,6 +102,12 @@ public class GenerateReport {
                 case "Year":
                     new RequestedInfoStringPanel(Global.root, true, report, "Year");
                     break;
+                case "NameSearch":
+                    new RequestedInfoStringPanel(Global.root, true, report, "Name");
+                    break;
+                case "AddressSearch":
+                    new RequestedInfoStringPanel(Global.root, true, report, "Address");
+                    break;
                 case "OrgNumber":
                     new RequestedInfoStringPanel(Global.root, true, report, "OrgNumber");
                     break;

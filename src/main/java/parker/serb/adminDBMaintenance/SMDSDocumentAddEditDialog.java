@@ -51,6 +51,7 @@ public class SMDSDocumentAddEditDialog extends javax.swing.JDialog {
     private void loadSectionComboBox() {
         sectionComboBox.removeAllItems();
         sectionComboBox.addItem("");
+        sectionComboBox.addItem("ALL");
         sectionComboBox.addItem("CSC");
         sectionComboBox.addItem("HRG");
         sectionComboBox.addItem("MED");
@@ -62,12 +63,9 @@ public class SMDSDocumentAddEditDialog extends javax.swing.JDialog {
     private void loadParameterComboBox() {
         parametersComboBox.removeAllItems();
         parametersComboBox.addItem("");
-        parametersComboBox.addItem("EmployerID");
-        parametersComboBox.addItem("date");
-        parametersComboBox.addItem("caseNumber");
-        parametersComboBox.addItem("month");
-        parametersComboBox.addItem("UserID");
-        parametersComboBox.addItem("SectionUserID");
+        parametersComboBox.addItem("ActivityType");
+        parametersComboBox.addItem("ActivityType, Year");
+        parametersComboBox.addItem("AddressSearch");
         parametersComboBox.addItem("begin date, end date");
         parametersComboBox.addItem("begin date, end date, Conciliator");
         parametersComboBox.addItem("begin date, end date, EmployerType");
@@ -79,15 +77,20 @@ public class SMDSDocumentAddEditDialog extends javax.swing.JDialog {
         parametersComboBox.addItem("begin date, end date, SectionUserID");
         parametersComboBox.addItem("begin date, end date, String");
         parametersComboBox.addItem("begin date, end date, UserID");
-        parametersComboBox.addItem("ActivityType, Year");
-        parametersComboBox.addItem("Year, InvestigatorID");
-        parametersComboBox.addItem("ActivityType");
-        parametersComboBox.addItem("InvestigatorID");
-        parametersComboBox.addItem("groupNumber");
-        parametersComboBox.addItem("Month, Year");
-        parametersComboBox.addItem("Year");
-        parametersComboBox.addItem("OrgNumber");
+        parametersComboBox.addItem("caseNumber");
         parametersComboBox.addItem("Charging Party, Charged Party");
+        parametersComboBox.addItem("date");
+        parametersComboBox.addItem("EmployerID");
+        parametersComboBox.addItem("groupNumber");
+        parametersComboBox.addItem("InvestigatorID");
+        parametersComboBox.addItem("month");
+        parametersComboBox.addItem("Month, Year");
+        parametersComboBox.addItem("NameSearch");
+        parametersComboBox.addItem("OrgNumber");
+        parametersComboBox.addItem("UserID");
+        parametersComboBox.addItem("SectionUserID");
+        parametersComboBox.addItem("Year");
+        parametersComboBox.addItem("Year, InvestigatorID");
     }
 
     private void loadInformation() {
