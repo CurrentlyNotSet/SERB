@@ -96,7 +96,6 @@ public class ProcessRecords extends javax.swing.JDialog {
                         distinctCaseNumbers.add(cNum);
                     }
                 }
-
                 //Handle Record
                 handleRecord(item, sectionSelected);
             }
@@ -150,6 +149,8 @@ public class ProcessRecords extends javax.swing.JDialog {
             if (purgeFile.renameTo(purgeFile)) {
                 return purgeFile.delete();
             }
+        } else {
+            return true;
         }
         return false;
     }
