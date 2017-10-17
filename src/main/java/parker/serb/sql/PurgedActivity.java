@@ -139,7 +139,7 @@ public class PurgedActivity {
                     //Join to Users To Get UserName
                     + " INNER JOIN Users"
                     + " ON Activity.userID = Users.id"
-                    //Join to OrgCase to get entries older than [Due Date] minus 7 years
+                    //Join to CSCCase to get entries older than [Due Date] minus 7 years
                     + " INNER JOIN CivilServiceCommission"
                     + " ON Activity.caseNumber = CivilServiceCommission.CSCNumber"
                     + " WHERE Activity.caseType = 'CSC'"
