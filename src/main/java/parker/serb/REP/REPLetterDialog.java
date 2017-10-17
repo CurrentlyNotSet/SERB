@@ -245,6 +245,15 @@ public class REPLetterDialog extends javax.swing.JDialog {
                     case "Memo":
                         new GenerateLetterNoQueuePanel(Global.root, true, template, null);
                         break;
+                    case "Misc":
+                        if (!miscComboBox.getSelectedItem().toString().equals("")){
+                            //Top drop down does not go to Queue Per Ticket R3-045
+                            new GenerateLetterNoQueuePanel(Global.root, true, template, null);
+                            break;
+                        } else {
+                            new LetterGenerationPanel(Global.root, true, template, null);
+                            break;
+                        }
                     default:
                         new LetterGenerationPanel(Global.root, true, template, null);
                         break;
