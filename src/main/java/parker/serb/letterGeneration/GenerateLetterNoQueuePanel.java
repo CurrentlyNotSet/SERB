@@ -38,14 +38,19 @@ public class GenerateLetterNoQueuePanel extends javax.swing.JDialog {
         SMDSdocumentToGenerate = SMDSdocumentToGeneratePassed;
         CMDSdocumentToGenerate = CMDSdocumentToGeneratePassed;
 
-        if (SMDSdocumentToGeneratePassed != null){
+        if (SMDSdocumentToGeneratePassed != null) {
             switch (SMDSdocumentToGeneratePassed.type) {
                 case "Directive":
                     HeaderLabel.setText("Generating Directive");
                     break;
                 case "Misc":
-                    HeaderLabel.setText("Generating Misc");
-                    break;
+                    if (SMDSdocumentToGeneratePassed.section.equalsIgnoreCase("REP")) {
+                        HeaderLabel.setText("Generating Election Doc");
+                        break;
+                    } else {
+                        HeaderLabel.setText("Generating Misc");
+                        break;
+                    }
                 case "Memo":
                     HeaderLabel.setText("Generating Memo");
                     break;
@@ -104,12 +109,19 @@ public class GenerateLetterNoQueuePanel extends javax.swing.JDialog {
                         case "Misc":
                             break;
                         case "Memo":
+                        case "Invest":
                             activityDocName = docName;
                             break;
                         default:
                             break;
                     }
-                    Activity.addActivty("Generated " + (SMDSdocumentToGenerate.historyDescription == null ? SMDSdocumentToGenerate.description : SMDSdocumentToGenerate.historyDescription), activityDocName);
+
+                    if (SMDSdocumentToGenerate.section.equalsIgnoreCase("REP") && SMDSdocumentToGenerate.type.equalsIgnoreCase("Misc")) {
+                        // DO NOT GENERATE ACTIVITY
+                    } else {
+                        Activity.addActivty("Generated " + (SMDSdocumentToGenerate.historyDescription == null ? SMDSdocumentToGenerate.description : SMDSdocumentToGenerate.historyDescription), activityDocName);
+                    }
+
                     Audit.addAuditEntry("Generated " + SMDSdocumentToGenerate.historyDescription == null ? SMDSdocumentToGenerate.description : SMDSdocumentToGenerate.historyDescription);
                     break;
             }

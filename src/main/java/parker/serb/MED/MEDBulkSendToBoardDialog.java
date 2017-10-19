@@ -189,6 +189,7 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         endDateField = new com.alee.extended.date.WebDateField();
+        SelectAllCheckBox = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -289,11 +290,11 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
             );
             jPanel1Layout.setVerticalGroup(
                 jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                .add(0, 434, Short.MAX_VALUE)
+                .add(0, 475, Short.MAX_VALUE)
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .add(jLabel6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)
+                        .add(jLabel6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 453, Short.MAX_VALUE)
                         .addContainerGap()))
             );
 
@@ -313,6 +314,13 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
                     }
                 } );
 
+                SelectAllCheckBox.setText("Select All");
+                SelectAllCheckBox.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        SelectAllCheckBoxActionPerformed(evt);
+                    }
+                });
+
                 org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
                 getContentPane().setLayout(layout);
                 layout.setHorizontalGroup(
@@ -330,7 +338,6 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                                 .add(endDateField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 150, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                                 .add(0, 116, Short.MAX_VALUE))
-                            .add(org.jdesktop.layout.GroupLayout.TRAILING, countLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .add(jLabel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                                 .add(0, 0, Short.MAX_VALUE)
@@ -338,7 +345,11 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
                             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                                 .add(closeButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 100, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .add(updateButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 95, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                                .add(updateButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 95, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                                .add(SelectAllCheckBox)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                                .add(countLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addContainerGap())
                     .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                         .add(layout.createSequentialGroup()
@@ -363,8 +374,10 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
                                 .add(jLabel5)
                                 .add(endDateField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(countLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 14, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 471, Short.MAX_VALUE)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(countLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 14, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(SelectAllCheckBox))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 507, Short.MAX_VALUE)
                         .add(printButton)
                         .add(18, 18, 18)
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
@@ -372,13 +385,15 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
                             .add(closeButton))
                         .addContainerGap())
                     .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                        .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                            .add(100, 100, 100)
-                            .add(jLayeredPane1)
-                            .add(100, 100, 100)))
+                        .add(layout.createSequentialGroup()
+                            .add(104, 104, 104)
+                            .add(jLayeredPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 475, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .addContainerGap(100, Short.MAX_VALUE)))
                 );
 
                 layout.linkSize(new java.awt.Component[] {jLabel3, jLabel5, startDateField}, org.jdesktop.layout.GroupLayout.VERTICAL);
+
+                layout.linkSize(new java.awt.Component[] {SelectAllCheckBox, countLabel}, org.jdesktop.layout.GroupLayout.VERTICAL);
 
                 pack();
             }// </editor-fold>//GEN-END:initComponents
@@ -396,7 +411,14 @@ public class MEDBulkSendToBoardDialog extends javax.swing.JFrame {
         loadTableThread();
     }//GEN-LAST:event_updateButtonActionPerformed
 
+    private void SelectAllCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SelectAllCheckBoxActionPerformed
+        for (int i = 0; i < caseTable.getRowCount(); i++) {
+            caseTable.getModel().setValueAt(SelectAllCheckBox.isSelected(), i, 0);
+        }
+    }//GEN-LAST:event_SelectAllCheckBoxActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox SelectAllCheckBox;
     private javax.swing.JTable caseTable;
     private javax.swing.JButton closeButton;
     private javax.swing.JLabel countLabel;

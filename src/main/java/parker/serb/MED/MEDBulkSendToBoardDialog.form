@@ -37,7 +37,6 @@
                       <Component id="endDateField" min="-2" pref="150" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="116" max="32767" attributes="0"/>
                   </Group>
-                  <Component id="countLabel" alignment="1" max="32767" attributes="0"/>
                   <Component id="jLabel1" alignment="0" max="32767" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -47,6 +46,11 @@
                       <Component id="closeButton" linkSize="1" min="-2" pref="100" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                       <Component id="updateButton" linkSize="1" min="-2" pref="95" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Component id="SelectAllCheckBox" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="countLabel" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -77,8 +81,11 @@
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="countLabel" min="-2" pref="14" max="-2" attributes="0"/>
-              <EmptySpace pref="471" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="countLabel" linkSize="3" min="-2" pref="14" max="-2" attributes="0"/>
+                  <Component id="SelectAllCheckBox" linkSize="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace pref="507" max="32767" attributes="0"/>
               <Component id="printButton" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -88,10 +95,10 @@
               <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
           <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace min="-2" pref="100" max="-2" attributes="0"/>
-                  <Component id="jLayeredPane1" max="32767" attributes="0"/>
-                  <EmptySpace min="-2" pref="100" max="-2" attributes="0"/>
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace min="-2" pref="104" max="-2" attributes="0"/>
+                  <Component id="jLayeredPane1" min="-2" pref="475" max="-2" attributes="0"/>
+                  <EmptySpace pref="100" max="32767" attributes="0"/>
               </Group>
           </Group>
       </Group>
@@ -212,11 +219,11 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="434" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="475" max="32767" attributes="0"/>
                   <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jLabel6" pref="412" max="32767" attributes="0"/>
+                          <Component id="jLabel6" pref="453" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -279,6 +286,14 @@
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="endDateField.setDateFormat(Global.mmddyyyy);&#xa;&#xa;endDateField.setCalendarCustomizer(new Customizer&lt;WebCalendar&gt; ()&#xa;{&#xa;    @Override&#xa;    public void customize ( final WebCalendar calendar )&#xa;    {&#xa;        calendar.setStartWeekFromSunday ( true );&#xa;    }&#xa;} );"/>
       </AuxValues>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="SelectAllCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Select All"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="SelectAllCheckBoxActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
