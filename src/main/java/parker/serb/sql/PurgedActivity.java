@@ -64,9 +64,12 @@ public class PurgedActivity {
                     + " FROM Activity"
                     + " INNER JOIN Users"
                     + " ON Activity.userID = Users.id"
-                    + " INNER JOIN caseType"
-                    + " ON Activity.caseType = CaseType.caseType"
-                    + " WHERE Activity.active = 1 AND CaseType.section = 'CMDS'";
+                    + " INNER JOIN CMDSCase"
+                    + " ON (CMDSCase.caseYear = Activity.caseYear "
+                    + " AND CMDSCase.caseType = Activity.caseType "
+                    + " AND CMDSCase.caseMonth = Activity.caseMonth "
+                    + " AND CMDSCase.caseNumber = Activity.caseNumber)"
+                    + " WHERE CMDSCase.closeDate <= DATEADD(DAY, -830, GETDATE())";
             if (excludeList.size() > 0) {
                 sql += " AND (";
 
@@ -105,7 +108,7 @@ public class PurgedActivity {
                 act.type         = rs.getString ("type");
                 act.comment      = rs.getString ("comment");
                 act.redacted     = rs.getBoolean("redacted");
-                act.awaitingTimestamp = rs.getBoolean("awaitingScan");
+                act.awaitingTimestamp = rs.getBoolean("awaitingTimestamp");
                 act.active       = rs.getBoolean("active");
                 act.mailLog      = rs.getDate   ("mailLog");
                 activityList.add(act);

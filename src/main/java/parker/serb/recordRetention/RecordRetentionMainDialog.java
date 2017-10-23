@@ -152,11 +152,11 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
         
         switch (section) {
             case "CMDS":
-                //caseList = Activity.loadPurgeCMDSActivities();
+                caseList = PurgedActivity.loadPurgeCMDSActivities();
                 break;
             case "CSC":
             case "Civil Service Commission":
-                //caseList = Activity.loadPurgeCSCActivities();
+                //caseList = PurgedActivity.loadPurgeCSCActivities();
                 break;
             case "MED":
                 caseList = PurgedActivity.loadPurgeMEDActivities(startDateField.getDate(), endDateField.getDate());
@@ -212,6 +212,7 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
         jPanel1.setVisible(!enabled);
         
         if (sectionComboBox.getSelectedItem().equals("ORG")
+                || sectionComboBox.getSelectedItem().equals("CMDS")
                 || sectionComboBox.getSelectedItem().equals("CSC")
                 || sectionComboBox.getSelectedItem().equals("Civil Service Commission")) {
             startDateField.setEnabled(false);
@@ -249,6 +250,7 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
     private void loadTableListener() {
         if (sectionComboBox.getSelectedItem().equals("ORG") 
                 || sectionComboBox.getSelectedItem().equals("CSC")
+                || sectionComboBox.getSelectedItem().equals("CMDS")
                 || sectionComboBox.getSelectedItem().equals("Civil Service Commission")) {
             loadTableThread();
         } else if (!startDateField.getText().equals("")
@@ -554,7 +556,8 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
 
         if (sectionComboBox.getSelectedItem().equals("ORG")
                 || sectionComboBox.getSelectedItem().equals("CSC")
-                || sectionComboBox.getSelectedItem().equals("Civil Service Commission")) {
+                || sectionComboBox.getSelectedItem().equals("Civil Service Commission")
+                || sectionComboBox.getSelectedItem().equals("CMDS")) {
             jLabel2.setEnabled(false);
             startDateField.setEnabled(false);
             startDateField.clear();
