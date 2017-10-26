@@ -48,7 +48,7 @@ public class PurgedActivity {
     public boolean active;
     public Date mailLog;
         
-    public static List loadPurgeCMDSActivities() {
+    public static List loadPurgeCMDSActivities(java.util.Date startDate, java.util.Date endDate) {
         List<PurgedActivity> activityList = new ArrayList<>();
 
         Statement stmt = null;
@@ -59,29 +59,31 @@ public class PurgedActivity {
   
             List<String> excludeList = RetentionExclusion.getActiveRetentionExclusionBySection("CMDS");
 
-            String sql = "SELECT Activity.*,"
-                    + " ISNULL(Users.firstName, '') + ' ' + ISNULL(Users.lastName, '') AS userName"
-                    + " FROM Activity"
-                    + " INNER JOIN Users"
-                    + " ON Activity.userID = Users.id"
-                    + " INNER JOIN CMDSCase"
+            String sql = "SELECT Activity.*, "
+                    + " ISNULL(Users.firstName, '') + ' ' + ISNULL(Users.lastName, '') AS userName "
+                    + " FROM Activity "
+                    + " INNER JOIN Users "
+                    + " ON Activity.userID = Users.id "
+                    + " INNER JOIN CMDSCase "
                     + " ON (CMDSCase.caseYear = Activity.caseYear "
                     + " AND CMDSCase.caseType = Activity.caseType "
                     + " AND CMDSCase.caseMonth = Activity.caseMonth "
-                    + " AND CMDSCase.caseNumber = Activity.caseNumber)"
-                    + " WHERE CMDSCase.closeDate <= DATEADD(DAY, -830, GETDATE())";
+                    + " AND CMDSCase.caseNumber = Activity.caseNumber) "
+                    + " WHERE CMDSCase.closeDate <= DATEADD(DAY, -731, GETDATE()) "
+                    + " AND CMDSCase.caseStatus = 'C' ";
             if (excludeList.size() > 0) {
-                sql += " AND (";
+                sql += " AND ( ";
 
                 for (int i = 0; i < excludeList.size(); i++) {
                     if (i > 0) {
                         sql += " AND ";
                     }
-                    sql += "Activity.action NOT LIKE ?";
+                    sql += " Activity.action NOT LIKE ? ";
                 }
                 sql += ")";
             }
-
+            
+            sql += " AND (CMDSCase.closeDate BETWEEN ? AND ?) ";
             sql += " ORDER BY Activity.caseYear ASC, Activity.caseMonth ASC, Activity.caseNumber ASC, date ASC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
@@ -89,6 +91,9 @@ public class PurgedActivity {
             for (int i = 0; i < excludeList.size(); i++) {
                 preparedStatement.setString((i + 1), "%" + excludeList.get(i).trim() + "%");
             }
+            
+            preparedStatement.setDate(excludeList.size() + 1, new java.sql.Date(startDate.getTime()));
+            preparedStatement.setDate(excludeList.size() + 2, new java.sql.Date(endDate.getTime()));
 
             ResultSet rs = preparedStatement.executeQuery();
 
