@@ -136,17 +136,17 @@ public class PurgedActivity {
 
             stmt = Database.connectToDB().createStatement();
             
-            String sql = "SELECT Activity.*, CivilServiceCommission.CSCName, "
+            String sql = "SELECT Activity.*, CSCCase.name, "
                     + " ISNULL(Users.firstName, '') + ' ' + ISNULL(Users.lastName, '') AS userName"
                     + " FROM Activity"
                     //Join to Users To Get UserName
                     + " INNER JOIN Users"
                     + " ON Activity.userID = Users.id"
                     //Join to CSCCase to get entries older than [Due Date] minus 7 years
-                    + " INNER JOIN CivilServiceCommission"
-                    + " ON Activity.caseNumber = CivilServiceCommission.CSCNumber"
+                    + " INNER JOIN CSCCase"
+                    + " ON Activity.caseNumber = CSCCase.CSCNumber"
                     + " WHERE Activity.caseType = 'CSC'"
-                    + " AND Activity.date < CAST(REPLACE(CivilServiceCommission.filingDueDate, RIGHT(CivilServiceCommission.filingDueDate, 2), ' ') + CONVERT(varchar(4), (YEAR(GETDATE()) - 7), 4) AS datetime) ";
+                    + " AND Activity.date < CAST((CONVERT(varchar(4), (YEAR(GETDATE()) - 7), 4) + '-04-30 00:00:00.000') AS datetime) ";
                     if (excludeList.size() > 0) {
                         sql += " AND (";
 
@@ -158,7 +158,7 @@ public class PurgedActivity {
                         }
                         sql += ")";
                     }                    
-                    sql += " ORDER BY CSCName ASC, date ASC";
+                    sql += " ORDER BY name ASC, date ASC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
@@ -586,7 +586,5 @@ public class PurgedActivity {
         }
         return false;
     }
-    
-    
     
 }

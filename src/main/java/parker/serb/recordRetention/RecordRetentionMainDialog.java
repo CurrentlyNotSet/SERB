@@ -156,7 +156,7 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
                 break;
             case "CSC":
             case "Civil Service Commission":
-                //caseList = PurgedActivity.loadPurgeCSCActivities();
+                caseList = PurgedActivity.loadPurgeCSCActivities();
                 break;
             case "MED":
                 caseList = PurgedActivity.loadPurgeMEDActivities(startDateField.getDate(), endDateField.getDate());
