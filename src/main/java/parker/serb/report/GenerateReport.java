@@ -21,6 +21,7 @@ import parker.serb.Global;
 import parker.serb.sql.Audit;
 import parker.serb.sql.CaseType;
 import parker.serb.sql.Database;
+import parker.serb.sql.RetentionExclusion;
 import parker.serb.sql.SMDSDocuments;
 import parker.serb.util.FileService;
 import parker.serb.util.NumberFormatService;
@@ -240,6 +241,37 @@ public class GenerateReport {
         generateReport(report, hash);
     }
 
+    public static HashMap generateNeedsPurgedReport(SMDSDocuments report, HashMap hash) {
+        hash.put("MEDblacklist", generateBlackListBySection("MED"));
+        hash.put("ORGblacklist", generateBlackListBySection("ORG"));
+        hash.put("REPblacklist", generateBlackListBySection("REP"));
+        hash.put("ULPblacklist", generateBlackListBySection("ULP"));
+        hash.put("CSCblacklist", generateBlackListBySection("CSC"));
+        hash.put("CMDSblacklist", generateBlackListBySection("CMDS"));
+        
+        return hash;
+    }
+    
+    private static String generateBlackListBySection(String section) {
+        String sqlString = "";
+
+        List<String> excludeList = RetentionExclusion.getActiveRetentionExclusionBySection(section);
+
+        if (excludeList.size() > 0) {
+            sqlString += " AND (";
+            
+            for (int i = 0; i < excludeList.size(); i++) {
+                if (i > 0) {
+                    sqlString += " AND ";
+                }
+                sqlString += "Activity.action NOT LIKE '%" + excludeList.get(i) + "%'";
+            }
+            sqlString += ")";
+        }
+
+        return sqlString;
+    }
+
     private static String generateCaseTypeList(){
         String param = "";
         List casetypes = null;
@@ -300,13 +332,16 @@ public class GenerateReport {
         hash.put("CurrentCaseMonth", Global.caseMonth);
         hash.put("CurrentCaseNumber", Global.caseNumber);
         hash.put("CurrentYear", Global.yyyy.format(new Date()));
-
-
+        
+        
         String jasperFileName = Global.reportingPath  + report.section + File.separator + report.fileName;
 
         if (report.fileName == null || !new File(jasperFileName).exists()) {
             WebOptionPane.showMessageDialog(Global.root, "<html><center> Sorry, unable to locate report. <br><br>" + report.fileName + "</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
         } else {
+            if (report.fileName.equalsIgnoreCase("Cases Needing Purged.jasper")){
+                hash = generateNeedsPurgedReport(report, hash);
+            }
             try {
                 String fileName = report.fileName.substring(0, report.fileName.lastIndexOf("."));
                 if (fileName.length() > 50) {
