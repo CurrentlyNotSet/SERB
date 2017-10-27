@@ -137,7 +137,7 @@ public class DocketRootPanel extends javax.swing.JPanel {
             Files.walk(Paths.get(Global.scanPath + section)).forEach(filePath -> {
                 try {
                     Path file = filePath;
-                    if(file.getFileName().toString().endsWith(".pdf")) {
+                    if(file.getFileName().toString().toLowerCase().endsWith(".pdf")) {
                         BasicFileAttributes attr = Files.readAttributes(file, BasicFileAttributes.class);
                         Email docket = new Email();
                         docket.id = 0;
