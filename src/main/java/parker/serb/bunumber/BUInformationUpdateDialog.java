@@ -7,6 +7,7 @@ package parker.serb.bunumber;
 
 import com.alee.extended.date.WebCalendar;
 import com.alee.extended.date.WebDateField;
+import com.alee.laf.optionpane.WebOptionPane;
 import com.alee.utils.swing.Customizer;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
@@ -181,7 +182,7 @@ public class BUInformationUpdateDialog extends javax.swing.JDialog {
         buUpdate.buEmployerName = employerNameTextBox.getText();
         buUpdate.lUnion = unionTextBox.getText();
         buUpdate.local = localTextBox.getText();
-        buUpdate.county = countyComboBox.getSelectedItem().toString();
+        buUpdate.county = countyComboBox.getSelectedItem() == null ? "" : countyComboBox.getSelectedItem().toString();
         buUpdate.cert = getCertStatus(CertStatusComboBox.getSelectedItem().toString());
         buUpdate.enabled = activeCheckBox.isSelected();
         buUpdate.unitDescription = unitDescriptionTextArea.getText().trim();
@@ -220,6 +221,15 @@ public class BUInformationUpdateDialog extends javax.swing.JDialog {
         }
     }
 
+    private void caseRelatedCaseNumberBoxError(){
+        WebOptionPane.showMessageDialog(
+                Global.root, 
+                "<html><center> Sorry, Case Reference Only Accepts A Single Full Case Number <br><br> Please Re-Enter A Valid Case Number </center></html>", 
+                "Error", 
+                WebOptionPane.ERROR_MESSAGE
+        );
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -577,10 +587,14 @@ public class BUInformationUpdateDialog extends javax.swing.JDialog {
             jButton2.setText("Cancel");
             enableAll();
         } else if(updateButton.getText().equals("Save")) {
-            updateButton.setText("Update");
-            jButton2.setText("Close");
-            saveInformation();
-            disableAll();
+            if (caseReferenceTextBox.getText().trim().equals("") || caseReferenceTextBox.getText().length() == 16){
+                updateButton.setText("Update");
+                jButton2.setText("Close");
+                saveInformation();
+                disableAll();
+            } else {
+                caseRelatedCaseNumberBoxError();
+            }
         }
     }//GEN-LAST:event_updateButtonActionPerformed
 
