@@ -14,6 +14,7 @@ import java.text.NumberFormat;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -30,6 +31,8 @@ import parker.serb.util.NumberFormatService;
  * @author andrew.schmidt
  */
 public class RecordRetentionMainDialog extends javax.swing.JFrame {
+    
+    DefaultTableModel model;
     
     /**
      * Creates new form RecordRetentionMainDialog
@@ -61,6 +64,7 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
     }
 
     private void setActive() {
+        model = (DefaultTableModel) jTable1.getModel();
         jPanel1.setVisible(false);
         addListeners();
         setTableSize();
@@ -119,35 +123,23 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
     }
 
     private void loadTableThread() {
+        model.setRowCount(0);
         setPanelEnabled(false);
-        
+
         Thread temp = new Thread(() -> {
-            loadTable();
-            setPanelEnabled(true);
+        List<PurgedActivity> caseList = gatherRecords();
+            SwingUtilities.invokeLater(() -> {
+                loadTable(caseList);
+                setPanelEnabled(true);
+            });
         });
         temp.start();
     }
-   
-    private void loadTable() {
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.setRowCount(0);
-        
+    
+    private List<PurgedActivity> gatherRecords(){
         List<PurgedActivity> caseList = null;
+        
         String section = sectionComboBox.getSelectedItem().toString().trim();
-        
-        switch (section) {
-            case "ORG":
-                jTable1.getColumnModel().getColumn(3).setHeaderValue("Org Name");
-                break;
-            case "CSC":
-            case "Civil Service Commission":
-                jTable1.getColumnModel().getColumn(3).setHeaderValue("Name");
-                break;
-            default:
-                jTable1.getColumnModel().getColumn(3).setHeaderValue("Case Number");
-                break;
-        }
-        
         countLabel.setText("Gathering Entries");
         
         switch (section) {
@@ -170,6 +162,12 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
         }
         
         countLabel.setText("Populating Table");
+        
+        return caseList;
+    }
+   
+    private void loadTable(List<PurgedActivity> caseList) {
+        String section = sectionComboBox.getSelectedItem().toString().trim();
         
         if (caseList != null){
             for (PurgedActivity item : caseList) {
@@ -202,12 +200,17 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
         } else {
             countLabel.setText("No Entries");
         }
+        validate();
+        repaint();
     }
 
     private void setPanelEnabled(boolean enabled){
         closeButton.setEnabled(enabled);
         purgeButton.setEnabled(enabled);
         sectionComboBox.setEnabled(enabled);
+        NeedsPurgedReportButton.setEnabled(enabled);
+        PurgedDocumentsReportButton.setEnabled(enabled);
+        SelectAllCheckBox.setEnabled(enabled);
         jTable1.setEnabled(enabled);
         jPanel1.setVisible(!enabled);
         
@@ -247,9 +250,11 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
     }
         
     private void loadTableListener() {
-        if (sectionComboBox.getSelectedItem().equals("ORG") 
-                || sectionComboBox.getSelectedItem().equals("CSC")
-                || sectionComboBox.getSelectedItem().equals("Civil Service Commission")) {
+        String section = sectionComboBox.getSelectedItem().toString().trim();
+        
+        if (       section.equals("ORG") 
+                || section.equals("CSC")
+                || section.equals("Civil Service Commission")) {
             loadTableThread();
         } else if (!startDateField.getText().equals("")
                 && !endDateField.getText().equals("")
@@ -550,11 +555,13 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
     }//GEN-LAST:event_purgeButtonActionPerformed
 
     private void sectionComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sectionComboBoxActionPerformed
-        loadTableListener();
-
-        if (sectionComboBox.getSelectedItem().equals("ORG")
-                || sectionComboBox.getSelectedItem().equals("CSC")
-                || sectionComboBox.getSelectedItem().equals("Civil Service Commission")) {
+        String section = sectionComboBox.getSelectedItem().toString().trim();
+        model.setRowCount(0);
+        
+        if (       section.equals("ORG")
+                || section.equals("CSC")
+                || section.equals("Civil Service Commission")) {
+            jTable1.getColumnModel().getColumn(3).setHeaderValue("Name");
             jLabel2.setEnabled(false);
             startDateField.setEnabled(false);
             startDateField.clear();
@@ -562,11 +569,17 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
             endDateField.setEnabled(false);
             endDateField.clear();
         } else {
+            jTable1.getColumnModel().getColumn(3).setHeaderValue("Case Number");
             jLabel2.setEnabled(true);
             startDateField.setEnabled(true);
             jLabel4.setEnabled(true);
             endDateField.setEnabled(true);
         }
+        validate();
+        repaint();
+        
+        
+        loadTableListener();
     }//GEN-LAST:event_sectionComboBoxActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
