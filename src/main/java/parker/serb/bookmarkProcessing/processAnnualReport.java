@@ -452,11 +452,8 @@ public class processAnnualReport {
                 + "(BoardMeeting.caseType = 'ULP' OR BoardMeeting.caseType = 'ERC' OR BoardMeeting.caseType = 'JWD') "
                 + "AND (ULPCase.dismissalDate IS NOT NULL)");
         processBookmark.process("ninethree", String.valueOf(ninethree), Document);
-        //94
-        long ninefour = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM ULPCase WHERE "
-                + "(ULPCase.dismissalDate BETWEEN '" + startDate + "' AND '" + endDate + "') "
-                + "AND (ULPCase.caseType = 'ULP') AND (ULPCase.finalDispositionStatus LIKE 'W%') "
-                + "AND (ULPCase.dismissalDate IS NOT NULL)");
+        //94 - Modified due to request R3-057
+        long ninefour = threefour;
         processBookmark.process("ninefour", String.valueOf(ninefour), Document);
         //95
         long ninefive = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM HearingCase WHERE (HearingCase.boardActionPCDate "
