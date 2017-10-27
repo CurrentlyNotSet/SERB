@@ -16,6 +16,7 @@ import java.util.List;
 import javax.swing.JFrame;
 import parker.serb.Global;
 import parker.serb.sql.BargainingUnit;
+import parker.serb.sql.CaseValidation;
 import parker.serb.sql.County;
 import parker.serb.util.ClearDateDialog;
 import parker.serb.util.NumberFormatService;
@@ -223,7 +224,7 @@ public class BUInformationUpdateDialog extends javax.swing.JDialog {
 
     private void caseRelatedCaseNumberBoxError(){
         WebOptionPane.showMessageDialog(
-                Global.root, 
+                this, 
                 "<html><center> Sorry, Case Reference Only Accepts A Single Full Case Number <br><br> Please Re-Enter A Valid Case Number </center></html>", 
                 "Error", 
                 WebOptionPane.ERROR_MESSAGE
@@ -587,7 +588,8 @@ public class BUInformationUpdateDialog extends javax.swing.JDialog {
             jButton2.setText("Cancel");
             enableAll();
         } else if(updateButton.getText().equals("Save")) {
-            if (caseReferenceTextBox.getText().trim().equals("") || caseReferenceTextBox.getText().length() == 16){
+            if (caseReferenceTextBox.getText().trim().equals("") 
+                    || CaseValidation.validateCaseNumber(caseReferenceTextBox.getText().trim().toUpperCase())){
                 updateButton.setText("Update");
                 jButton2.setText("Close");
                 saveInformation();
