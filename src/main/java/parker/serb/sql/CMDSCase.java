@@ -68,6 +68,10 @@ public class CMDSCase {
     public Timestamp hearingCompletedDate;
     public Timestamp postHearingBriefsDue;
 
+    //for bulk close
+    public String appellant;
+    public String appellee;
+    
     /**
      * Load a list of the most recent 250 REP case numbers
      * @return list of rep case numbers
@@ -1816,10 +1820,15 @@ public class CMDSCase {
         try {
             stmt = Database.connectToDB().createStatement();
 
-            String sql = " SELECT CMDSCase.id, CMDSCase.caseYear, CMDSCase.caseType, "
-                    + " CMDSCase.caseMonth, CMDSCase.caseNumber, CMDSCase.openDate "
-                    + " FROM CMDSCase "
-                    + " WHERE CMDSCase.active = 1 AND CMDSCase.caseStatus = 'O' ";
+            String sql = "SELECT CMDSCase.id,  CMDSCase.caseYear, CMDSCase.caseType, "
+                    + "CMDSCase.caseMonth, CMDSCase.caseNumber, CMDSCaseSearch.appellant, "
+                    + "CMDSCaseSearch.appellee, CMDSCase.openDate "
+                    + "FROM CMDSCase "
+                    + "INNER JOIN CMDSCaseSearch ON CMDSCase.caseYear = CMDSCaseSearch.caseYear "
+                    + "AND CMDSCase.caseType = CMDSCaseSearch.caseType "
+                    + "AND CMDSCase.caseMonth = CMDSCaseSearch.caseMonth "
+                    + "AND CMDSCase.caseNumber = CMDSCaseSearch.caseNumber "
+                    + "WHERE CMDSCase.active = 1 AND CMDSCase.caseStatus = 'O'";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
@@ -1833,6 +1842,8 @@ public class CMDSCase {
                 item.caseType = rs.getString("caseType").trim();
                 item.caseMonth = rs.getString("caseMonth").trim();
                 item.caseNumber = rs.getString("caseNumber").trim();
+                item.appellant = rs.getString("appellant") == null ? "" : rs.getString("appellant").trim();
+                item.appellee = rs.getString("appellee") == null ? "" : rs.getString("appellee").trim();
                 item.openDate = rs.getTimestamp("openDate");
                 CMDSCaseList.add(item);
             }

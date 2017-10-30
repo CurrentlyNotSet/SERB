@@ -90,6 +90,16 @@ public class CMDSBulkCloseCasesDialog extends javax.swing.JFrame {
         caseTable.getColumnModel().getColumn(1).setMinWidth(0);
         caseTable.getColumnModel().getColumn(1).setPreferredWidth(0);
         caseTable.getColumnModel().getColumn(1).setMaxWidth(0);
+        
+        //Case Number
+        caseTable.getColumnModel().getColumn(2).setMinWidth(125);
+        caseTable.getColumnModel().getColumn(2).setPreferredWidth(125);
+        caseTable.getColumnModel().getColumn(2).setMaxWidth(125);
+        
+        //Filed Date
+        caseTable.getColumnModel().getColumn(5).setMinWidth(100);
+        caseTable.getColumnModel().getColumn(5).setPreferredWidth(100);
+        caseTable.getColumnModel().getColumn(5).setMaxWidth(100);
     }
 
     private void clearTable() {
@@ -128,8 +138,8 @@ public class CMDSBulkCloseCasesDialog extends javax.swing.JFrame {
                 false,
                 item.id,
                 caseNumber,
-                "",
-                "",
+                item.appellant,
+                item.appellee,
                 item.openDate == null ? "" : Global.mmddyyyy.format(item.openDate)
             });
         }
@@ -271,11 +281,11 @@ public class CMDSBulkCloseCasesDialog extends javax.swing.JFrame {
             jPanel1.setLayout(jPanel1Layout);
             jPanel1Layout.setHorizontalGroup(
                 jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                .add(0, 678, Short.MAX_VALUE)
+                .add(0, 769, Short.MAX_VALUE)
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .add(jLabel6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 658, Short.MAX_VALUE)
+                        .add(jLabel6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 749, Short.MAX_VALUE)
                         .addContainerGap()))
             );
             jPanel1Layout.setVerticalGroup(
@@ -311,13 +321,8 @@ public class CMDSBulkCloseCasesDialog extends javax.swing.JFrame {
                 .add(layout.createSequentialGroup()
                     .addContainerGap()
                     .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                        .add(layout.createSequentialGroup()
-                            .add(jLabel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 214, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                            .add(startDateField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 168, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(0, 0, Short.MAX_VALUE))
                         .add(org.jdesktop.layout.GroupLayout.TRAILING, countLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .add(jLabel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 678, Short.MAX_VALUE)
+                        .add(jLabel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 769, Short.MAX_VALUE)
                         .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                             .add(PrintCaseListButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 191, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                             .add(18, 18, Short.MAX_VALUE)
@@ -327,7 +332,13 @@ public class CMDSBulkCloseCasesDialog extends javax.swing.JFrame {
                         .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                             .add(closeButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 100, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .add(updateButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 95, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                            .add(updateButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 95, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                        .add(layout.createSequentialGroup()
+                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .add(jLabel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 214, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                            .add(startDateField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 168, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(0, 0, Short.MAX_VALUE)))
                     .addContainerGap())
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(layout.createSequentialGroup()
