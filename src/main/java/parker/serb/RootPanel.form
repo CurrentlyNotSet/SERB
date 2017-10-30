@@ -38,6 +38,14 @@
                 <Property name="text" type="java.lang.String" value="Batch Handle Cases"/>
               </Properties>
               <SubComponents>
+                <MenuItem class="javax.swing.JMenuItem" name="CMDSBulkCloseCaseMenuItem">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="CMDS"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CMDSBulkCloseCaseMenuItemActionPerformed"/>
+                  </Events>
+                </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="batchCloseMEDMenuItem">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="MED                 "/>

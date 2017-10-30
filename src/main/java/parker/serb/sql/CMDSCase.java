@@ -1809,4 +1809,42 @@ public class CMDSCase {
         }
         return to;
     }
+    
+    public static List<CMDSCase> loadCMDSCasesToClose(Date boardDate) {
+        List<CMDSCase> CMDSCaseList = new ArrayList<>();
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = " SELECT CMDSCase.id, CMDSCase.caseYear, CMDSCase.caseType, "
+                    + " CMDSCase.caseMonth, CMDSCase.caseNumber, CMDSCase.openDate "
+                    + " FROM CMDSCase "
+                    + " WHERE CMDSCase.active = 1 AND CMDSCase.caseStatus = 'O' ";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while(rs.next()) {
+                CMDSCase item = new CMDSCase();
+                item.id = rs.getInt("id");
+                item.caseYear = rs.getString("caseYear").trim();
+                item.caseType = rs.getString("caseType").trim();
+                item.caseMonth = rs.getString("caseMonth").trim();
+                item.caseNumber = rs.getString("caseNumber").trim();
+                item.openDate = rs.getTimestamp("openDate");
+                CMDSCaseList.add(item);
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadCMDSCasesToClose(boardDate);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return CMDSCaseList;
+    }
+    
 }

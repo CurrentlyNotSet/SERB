@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
+import parker.serb.CMDS.CMDSBulkCloseCasesDialog;
 import parker.serb.CMDS.CMDSHeaderPanel;
 import parker.serb.CMDS.CMDSLetterDialog;
 import parker.serb.CMDS.CMDSRootPanel;
@@ -1209,6 +1210,7 @@ public class RootPanel extends javax.swing.JFrame {
         jMenuItem1 = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         batchCloseCasesSubMenu = new javax.swing.JMenu();
+        CMDSBulkCloseCaseMenuItem = new javax.swing.JMenuItem();
         batchCloseMEDMenuItem = new javax.swing.JMenuItem();
         batchCloseREPMenuItem = new javax.swing.JMenuItem();
         batchCloseULPMenuItem = new javax.swing.JMenuItem();
@@ -1677,6 +1679,14 @@ public class RootPanel extends javax.swing.JFrame {
         jMenu1.add(jSeparator1);
 
         batchCloseCasesSubMenu.setText("Batch Handle Cases");
+
+        CMDSBulkCloseCaseMenuItem.setText("CMDS");
+        CMDSBulkCloseCaseMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CMDSBulkCloseCaseMenuItemActionPerformed(evt);
+            }
+        });
+        batchCloseCasesSubMenu.add(CMDSBulkCloseCaseMenuItem);
 
         batchCloseMEDMenuItem.setText("MED                 ");
         batchCloseMEDMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -2277,8 +2287,14 @@ public class RootPanel extends javax.swing.JFrame {
         new RecordRetentionMainDialog(Global.root, true);
     }//GEN-LAST:event_recordRetentionMenuItemActionPerformed
 
+    private void CMDSBulkCloseCaseMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CMDSBulkCloseCaseMenuItemActionPerformed
+        Audit.addAuditEntry("Opened CMDS Bulk Close Panel");
+        new CMDSBulkCloseCasesDialog(Global.root, true);
+    }//GEN-LAST:event_CMDSBulkCloseCaseMenuItemActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel CMDS;
+    private javax.swing.JMenuItem CMDSBulkCloseCaseMenuItem;
     private javax.swing.JMenuItem CMDSDocumentationMenuItem;
     private javax.swing.JPanel CSC;
     private javax.swing.JMenuItem CSCDocumentationMenuItem;
