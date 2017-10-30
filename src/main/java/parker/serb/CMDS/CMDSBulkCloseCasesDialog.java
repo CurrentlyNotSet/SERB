@@ -14,6 +14,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import org.apache.commons.lang3.time.DateUtils;
 import parker.serb.Global;
 import parker.serb.report.GenerateReport;
 import parker.serb.sql.Activity;
@@ -63,6 +64,7 @@ public class CMDSBulkCloseCasesDialog extends javax.swing.JFrame {
     private void setActive(){
         setTableSize();
         addListeners();
+        setInitialDate();
     }
 
     private void addListeners() {
@@ -74,6 +76,9 @@ public class CMDSBulkCloseCasesDialog extends javax.swing.JFrame {
         });
     }
 
+    private void setInitialDate() {
+        startDateField.setDate(DateUtils.addDays(new Date(),-90));
+    }
 
     private void setTableSize(){
         //CheckBox
