@@ -1858,4 +1858,36 @@ public class CMDSCase {
         return CMDSCaseList;
     }
     
+    public static void updateClosedCases(int caseNumberID, String boxNumber) {
+
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "UPDATE CMDSCase SET "
+                    + "caseStatus = ?, "
+                    + "closeDate = ?, "
+                    + "inventoryStatusDate = ?, "
+                    + "inventoryStatusLine = ?, "
+                    + "pbrBox = ? "
+                    + "WHERE id = ? ";
+
+            PreparedStatement ps = stmt.getConnection().prepareStatement(sql);
+            ps.setString(1, "C");
+            ps.setDate  (2, new java.sql.Date(System.currentTimeMillis()));
+            ps.setDate  (3, new java.sql.Date(System.currentTimeMillis()));
+            ps.setString(4, "File Stored, PBR Box " + boxNumber);
+            ps.setString(5, boxNumber);
+            ps.setInt   (6, caseNumberID);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateClosedCases(caseNumberID, boxNumber);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+    }
+    
 }

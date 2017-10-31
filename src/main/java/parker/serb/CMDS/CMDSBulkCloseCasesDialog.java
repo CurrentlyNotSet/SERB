@@ -5,11 +5,13 @@
 package parker.serb.CMDS;
 
 import com.alee.extended.date.WebCalendar;
+import com.alee.laf.optionpane.WebOptionPane;
 import com.alee.utils.swing.Customizer;
 import java.awt.Color;
 import java.awt.Component;
 import java.util.Date;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -148,12 +150,23 @@ public class CMDSBulkCloseCasesDialog extends javax.swing.JFrame {
     }
 
     private void updateList(){
+        String boxNumber = (String) WebOptionPane.showInputDialog( 
+                this, 
+                "PBR Box Number:", 
+                "Enter Box Number", 
+                JOptionPane.QUESTION_MESSAGE, 
+                null, 
+                null,
+                "" 
+        );
+        
         for (int i = 0; i < caseTable.getRowCount(); i++) {
             if (caseTable.getValueAt(i, 0).equals(true)) {
                 int caseNumberID = Integer.valueOf(caseTable.getValueAt(i, 1).toString());
 
-//                ULPCase.updateClosedCases(caseNumberID);
-//                Activity.addNewCaseActivty(caseTable.getValueAt(i, 2).toString(), "Case Closed");
+                CMDSCase.updateClosedCases(caseNumberID, boxNumber);
+                Activity.addNewCaseActivty(caseTable.getValueAt(i, 2).toString(), "Case Closed");
+                Activity.addNewCaseActivty(caseTable.getValueAt(i, 2).toString(), "File Stored, PBR Box " + boxNumber);
                 Audit.addAuditEntry("Closed Case: " + caseTable.getValueAt(i, 2).toString() + " from CMDS Bulk Case Close");
             }
         }
