@@ -93,6 +93,9 @@ public class GenerateReport {
                 case "groupNumber":
                     new RequestedInfoStringPanel(Global.root, true, report, "groupNumber");
                     break;
+                case "PBR Box Number":
+                    new RequestedInfoStringPanel(Global.root, true, report, "PBR Box Number");
+                    break;
                 case "Month, Year":
                     new RequestedInfoMonthYearPanel(Global.root, true, report);
                     break;

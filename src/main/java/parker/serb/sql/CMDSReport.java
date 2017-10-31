@@ -147,6 +147,40 @@ public class CMDSReport {
         return item;
     }
 
+    public static CMDSReport getReportByFileName(String fileName) {
+        CMDSReport item = new CMDSReport();
+
+        Statement stmt = null;
+
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT * FROM CMDSReport WHERE fileName = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, fileName);
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                item.id = rs.getInt("id");
+                item.active = rs.getBoolean("active");
+                item.section = rs.getString("section") == null ? "" : rs.getString("section");
+                item.description = rs.getString("description") == null ? "" : rs.getString("description");
+                item.fileName = rs.getString("fileName") == null ? "" : rs.getString("fileName");
+                item.parameters = rs.getString("parameters") == null ? "" : rs.getString("parameters");
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getReportByFileName(fileName);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return item;
+    }
+    
     public static CMDSReport getReportByIDandDescription(int id, String description) {
         CMDSReport item = null;
 

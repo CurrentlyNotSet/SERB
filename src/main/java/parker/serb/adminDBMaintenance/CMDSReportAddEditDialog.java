@@ -63,6 +63,7 @@ public class CMDSReportAddEditDialog extends javax.swing.JDialog {
         parametersComboBox.addItem("month");
         parametersComboBox.addItem("String");
         parametersComboBox.addItem("UserID");
+        parametersComboBox.addItem("PBR Box Number");
     }
         
     private void loadInformation() {

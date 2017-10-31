@@ -50,6 +50,9 @@ public class RequestedInfoStringPanel extends javax.swing.JDialog {
             case "Address":
                 TextFieldLabel.setText("Address: ");
                 break;
+            case "PBR Box Number":
+                TextFieldLabel.setText("PBR Box Number: ");
+                break;
             default:
                 break;
         }

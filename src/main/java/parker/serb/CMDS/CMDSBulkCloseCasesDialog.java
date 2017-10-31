@@ -23,6 +23,7 @@ import parker.serb.sql.Activity;
 import parker.serb.sql.Audit;
 import parker.serb.sql.SMDSDocuments;
 import parker.serb.sql.CMDSCase;
+import parker.serb.sql.CMDSReport;
 import parker.serb.util.NumberFormatService;
 
 /**
@@ -172,12 +173,30 @@ public class CMDSBulkCloseCasesDialog extends javax.swing.JFrame {
         }
     }
 
-    private void PrintReport(String documentName){
+    private void PrintReport(String documentName) {
         jLayeredPane1.moveToFront(jPanel1);
 
         Thread temp = new Thread(() -> {
-            SMDSDocuments report = SMDSDocuments.findDocumentByFileName(documentName);
-            GenerateReport.runReport(report);
+            CMDSReport report = CMDSReport.getReportByFileName(documentName);
+            
+            SMDSDocuments SMDSreport = null;
+
+            if (report != null) {
+                SMDSreport = new SMDSDocuments();
+                SMDSreport.section = report.section;
+                SMDSreport.description = report.description;
+                SMDSreport.fileName = report.fileName;
+                SMDSreport.parameters = report.parameters;
+            }
+
+            if (SMDSreport != null) {
+                if (SMDSreport.fileName.equalsIgnoreCase("CMDS Cases To Close List.jasper")){
+                    GenerateReport.generateSingleDatesReport(startDateField.getText(), SMDSreport);
+                } else {
+                    GenerateReport.runReport(SMDSreport);
+                }
+            }
+            
             jLayeredPane1.moveToBack(jPanel1);
         });
         temp.start();
@@ -397,7 +416,7 @@ public class CMDSBulkCloseCasesDialog extends javax.swing.JFrame {
 
     private void PrintClosedCaseListButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PrintClosedCaseListButtonActionPerformed
         Audit.addAuditEntry("Printed CMDS Bulk Close Processed Records");
-        PrintReport("ULP Cases Closed.jasper");
+        PrintReport("CMDS Cases Closed.jasper");
     }//GEN-LAST:event_PrintClosedCaseListButtonActionPerformed
 
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
@@ -412,12 +431,12 @@ public class CMDSBulkCloseCasesDialog extends javax.swing.JFrame {
 
     private void PrintStorageBoxListButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PrintStorageBoxListButtonActionPerformed
         Audit.addAuditEntry("Printed CMDS Bulk Close Box List Records");
-        PrintReport("ULP Cases Closed.jasper");
+        PrintReport("CMDS Storage Box List.jasper");
     }//GEN-LAST:event_PrintStorageBoxListButtonActionPerformed
 
     private void PrintCaseListButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PrintCaseListButtonActionPerformed
         Audit.addAuditEntry("Printed CMDS Bulk Close List Records");
-        PrintReport("ULP Cases Closed.jasper");
+        PrintReport("CMDS Cases To Close List.jasper");
     }//GEN-LAST:event_PrintCaseListButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
