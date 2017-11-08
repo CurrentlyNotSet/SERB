@@ -1822,16 +1822,18 @@ public class CMDSCase {
 
             String sql = "SELECT CMDSCase.id,  CMDSCase.caseYear, CMDSCase.caseType, "
                     + "CMDSCase.caseMonth, CMDSCase.caseNumber, CMDSCaseSearch.appellant, "
-                    + "CMDSCaseSearch.appellee, CMDSCase.openDate "
+                    + "CMDSCaseSearch.appellee "
                     + "FROM CMDSCase "
                     + "INNER JOIN CMDSCaseSearch ON CMDSCase.caseYear = CMDSCaseSearch.caseYear "
                     + "AND CMDSCase.caseType = CMDSCaseSearch.caseType "
                     + "AND CMDSCase.caseMonth = CMDSCaseSearch.caseMonth "
                     + "AND CMDSCase.caseNumber = CMDSCaseSearch.caseNumber "
-                    + "WHERE CMDSCase.active = 1 AND CMDSCase.caseStatus = 'O'";
+                    + "WHERE CMDSCase.active = 1 AND CMDSCase.caseStatus = 'O' "
+                    + "AND CMDSCase.mailedBO <= ?";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
+            preparedStatement.setDate(1, new java.sql.Date(boardDate.getTime()));
 
             ResultSet rs = preparedStatement.executeQuery();
 
@@ -1844,7 +1846,6 @@ public class CMDSCase {
                 item.caseNumber = rs.getString("caseNumber").trim();
                 item.appellant = rs.getString("appellant") == null ? "" : rs.getString("appellant").trim();
                 item.appellee = rs.getString("appellee") == null ? "" : rs.getString("appellee").trim();
-                item.openDate = rs.getTimestamp("openDate");
                 CMDSCaseList.add(item);
             }
         } catch (SQLException ex) {

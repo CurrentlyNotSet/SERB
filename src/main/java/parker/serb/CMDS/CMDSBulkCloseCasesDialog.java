@@ -98,11 +98,6 @@ public class CMDSBulkCloseCasesDialog extends javax.swing.JFrame {
         caseTable.getColumnModel().getColumn(2).setMinWidth(125);
         caseTable.getColumnModel().getColumn(2).setPreferredWidth(125);
         caseTable.getColumnModel().getColumn(2).setMaxWidth(125);
-        
-        //Filed Date
-        caseTable.getColumnModel().getColumn(5).setMinWidth(100);
-        caseTable.getColumnModel().getColumn(5).setPreferredWidth(100);
-        caseTable.getColumnModel().getColumn(5).setMaxWidth(100);
     }
 
     private void clearTable() {
@@ -142,8 +137,7 @@ public class CMDSBulkCloseCasesDialog extends javax.swing.JFrame {
                 item.id,
                 caseNumber,
                 item.appellant,
-                item.appellee,
-                item.openDate == null ? "" : Global.mmddyyyy.format(item.openDate)
+                item.appellee
             });
         }
         jLayeredPane1.moveToBack(jPanel1);
@@ -168,6 +162,8 @@ public class CMDSBulkCloseCasesDialog extends javax.swing.JFrame {
                 CMDSCase.updateClosedCases(caseNumberID, boxNumber);
                 Activity.addNewCaseActivty(caseTable.getValueAt(i, 2).toString(), "Case Closed");
                 Activity.addNewCaseActivty(caseTable.getValueAt(i, 2).toString(), "File Stored, PBR Box " + boxNumber);
+                CMDSCase.updateCaseInventoryStatusLines("File Stored, PBR Box " + boxNumber, new Date(), caseTable.getValueAt(i, 2).toString());
+                
                 Audit.addAuditEntry("Closed Case: " + caseTable.getValueAt(i, 2).toString() + " from CMDS Bulk Case Close");
             }
         }
@@ -280,14 +276,14 @@ public class CMDSBulkCloseCasesDialog extends javax.swing.JFrame {
 
                 },
                 new String [] {
-                    "", "ID", "Case Number", "Appellant", "Appellee", "File Date"
+                    "", "ID", "Case Number", "Appellant", "Appellee"
                 }
             ) {
                 Class[] types = new Class [] {
-                    java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+                    java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
                 };
                 boolean[] canEdit = new boolean [] {
-                    true, false, false, false, false, false
+                    true, false, false, false, false
                 };
 
                 public Class getColumnClass(int columnIndex) {
@@ -366,7 +362,6 @@ public class CMDSBulkCloseCasesDialog extends javax.swing.JFrame {
                             .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .add(updateButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 95, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                         .add(layout.createSequentialGroup()
-                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .add(jLabel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 214, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                             .add(startDateField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 168, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
