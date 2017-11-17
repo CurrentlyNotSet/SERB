@@ -19,7 +19,7 @@ import parker.serb.util.FileService;
  */
 public class ProcessSendingPostal {
 
-    static boolean fileInUse = false;
+    private static boolean fileInUse = false;
 
     public static String sendPostal(int letterID) {
         PostalOut post = PostalOut.getPostalOutByID(letterID);

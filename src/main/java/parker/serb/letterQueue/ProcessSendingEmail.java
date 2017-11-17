@@ -19,8 +19,8 @@ import static parker.serb.util.FileService.getCaseSectionFolderByCaseType;
  */
 public class ProcessSendingEmail {
 
-    static boolean fileInUse = false;
-    static double attachmentSize = 0.0;
+    private static boolean fileInUse = false;
+    private static double attachmentSize = 0.0;
 
     public static boolean sendEmail(int letterID) {
         EmailOut eml = EmailOut.getEmailByID(letterID);
@@ -40,6 +40,7 @@ public class ProcessSendingEmail {
     private static boolean verifyFilesExist(EmailOut eml) {
         boolean allExist = true;
         fileInUse = false;
+        attachmentSize = 0.0;
         String path = "";
         List<EmailOutAttachment> attachList = EmailOutAttachment.getEmailAttachments(eml.id);
         if (Global.activeSection.equalsIgnoreCase("Civil Service Commission")
