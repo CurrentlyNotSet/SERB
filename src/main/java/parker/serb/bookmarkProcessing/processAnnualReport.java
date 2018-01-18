@@ -471,8 +471,9 @@ public class processAnnualReport {
         processBookmark.process("nineseven", String.valueOf(nineseven), Document);
         //98
         long nineeight = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM HearingCase WHERE (HearingCase.boardActionDate "
-                + "BETWEEN '" + startDate + "' AND '" + endDate + "') AND (HearingCase.finalResult = 'Ajudicated - Violation' "
-                + "OR HearingCase.finalResult = 'Ajudicated - No Violation')");
+                + "BETWEEN '" + startDate + "' AND '" + endDate + "') AND (HearingCase.finalResult = 'Adjudicated - Violation' "
+                + "OR HearingCase.finalResult = 'Adjudicated - No Violation' OR HearingCase.finalResult = 'Adjudicated - Dismissed') "
+                + "AND complaintIssuedDate IS NOT NULL");
         processBookmark.process("nineeight", String.valueOf(nineeight), Document);
         //end of the 13th section
 

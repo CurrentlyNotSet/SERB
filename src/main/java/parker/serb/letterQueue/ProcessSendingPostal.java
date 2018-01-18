@@ -19,13 +19,13 @@ import parker.serb.util.FileService;
  */
 public class ProcessSendingPostal {
 
-    static boolean fileInUse = false;
+    private static boolean fileInUse = false;
 
     public static String sendPostal(int letterID) {
         PostalOut post = PostalOut.getPostalOutByID(letterID);
         if (verifyFilesExist(post)) {
             if (!fileInUse) {
-                    return postalSend.sendPostal(letterID);
+                return postalSend.sendPostal(letterID);
             }
         }
         return "";
@@ -59,11 +59,15 @@ public class ProcessSendingPostal {
         for (PostalOutAttachment attach : attachList) {
             File attachment = new File(path + attach.fileName);
             if (!attachment.exists()) {
+                System.out.println("Attachment for PostalID: " + post.id + " can't be found"  
+                        + System.lineSeparator() + "    (" + path + attach.fileName + ")");
                 allExist = false;
             } else {
                 if ("docx".equalsIgnoreCase(FilenameUtils.getExtension(attach.fileName))
                         || "doc".equalsIgnoreCase(FilenameUtils.getExtension(attach.fileName))) {
                     if (!attachment.renameTo(attachment)) {
+                        System.out.println("Attachment for PostalID: " + post.id + " is in use"  
+                        + System.lineSeparator() + "    (" + path + attach.fileName + ")");
                         fileInUse = true;
                     }
                 }
