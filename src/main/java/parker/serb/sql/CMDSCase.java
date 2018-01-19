@@ -68,6 +68,10 @@ public class CMDSCase {
     public Timestamp hearingCompletedDate;
     public Timestamp postHearingBriefsDue;
 
+    //for bulk close
+    public String appellant;
+    public String appellee;
+    
     /**
      * Load a list of the most recent 250 REP case numbers
      * @return list of rep case numbers
@@ -1809,4 +1813,82 @@ public class CMDSCase {
         }
         return to;
     }
+    
+    public static List<CMDSCase> loadCMDSCasesToClose(Date boardDate) {
+        List<CMDSCase> CMDSCaseList = new ArrayList<>();
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT CMDSCase.id,  CMDSCase.caseYear, CMDSCase.caseType, "
+                    + "CMDSCase.caseMonth, CMDSCase.caseNumber, CMDSCaseSearch.appellant, "
+                    + "CMDSCaseSearch.appellee "
+                    + "FROM CMDSCase "
+                    + "INNER JOIN CMDSCaseSearch ON CMDSCase.caseYear = CMDSCaseSearch.caseYear "
+                    + "AND CMDSCase.caseType = CMDSCaseSearch.caseType "
+                    + "AND CMDSCase.caseMonth = CMDSCaseSearch.caseMonth "
+                    + "AND CMDSCase.caseNumber = CMDSCaseSearch.caseNumber "
+                    + "WHERE CMDSCase.active = 1 AND CMDSCase.caseStatus = 'O' "
+                    + "AND CMDSCase.mailedBO <= ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+
+            preparedStatement.setDate(1, new java.sql.Date(boardDate.getTime()));
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while(rs.next()) {
+                CMDSCase item = new CMDSCase();
+                item.id = rs.getInt("id");
+                item.caseYear = rs.getString("caseYear").trim();
+                item.caseType = rs.getString("caseType").trim();
+                item.caseMonth = rs.getString("caseMonth").trim();
+                item.caseNumber = rs.getString("caseNumber").trim();
+                item.appellant = rs.getString("appellant") == null ? "" : rs.getString("appellant").trim();
+                item.appellee = rs.getString("appellee") == null ? "" : rs.getString("appellee").trim();
+                CMDSCaseList.add(item);
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadCMDSCasesToClose(boardDate);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return CMDSCaseList;
+    }
+    
+    public static void updateClosedCases(int caseNumberID, String boxNumber) {
+
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "UPDATE CMDSCase SET "
+                    + "caseStatus = ?, "
+                    + "closeDate = ?, "
+                    + "inventoryStatusDate = ?, "
+                    + "inventoryStatusLine = ?, "
+                    + "pbrBox = ? "
+                    + "WHERE id = ? ";
+
+            PreparedStatement ps = stmt.getConnection().prepareStatement(sql);
+            ps.setString(1, "C");
+            ps.setDate  (2, new java.sql.Date(System.currentTimeMillis()));
+            ps.setDate  (3, new java.sql.Date(System.currentTimeMillis()));
+            ps.setString(4, "File Stored, PBR Box " + boxNumber);
+            ps.setString(5, boxNumber);
+            ps.setInt   (6, caseNumberID);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateClosedCases(caseNumberID, boxNumber);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+    }
+    
 }
