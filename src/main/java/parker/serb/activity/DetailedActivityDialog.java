@@ -16,6 +16,7 @@ import parker.serb.sql.Audit;
 import parker.serb.sql.User;
 import parker.serb.util.CancelUpdate;
 import parker.serb.util.FileService;
+import static parker.serb.util.FileService.getCaseSectionFolderByCaseType;
 
 /**
  *
@@ -77,7 +78,9 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
     }
 
     private void loadTypeComboBox() {
-        List typeList = ActivityType.loadActiveActivityTypeBySection(Global.activeSection);
+        List typeList = ActivityType.loadActiveActivityTypeBySection(
+                (Global.activeSection.equals("Hearings") ? getCaseSectionFolderByCaseType(Global.caseType) : Global.activeSection)
+        );
 
         typeComboBox.setMaximumRowCount(10);
 
@@ -178,7 +181,8 @@ public class DetailedActivityDialog extends javax.swing.JDialog {
                         ? Global.caseType : Global.activeSection) + File.separator + Global.caseNumber + File.separatorChar;
             } else {
                 path = Global.activityPath + File.separatorChar
-                        + Global.activeSection + File.separatorChar
+                        + (Global.activeSection.equals("Hearings") ? getCaseSectionFolderByCaseType(Global.caseType) : Global.activeSection) 
+                        + File.separatorChar
                         + Global.caseYear + File.separatorChar
                         + (Global.caseYear + "-" + Global.caseType + "-" + Global.caseMonth + "-" + Global.caseNumber)
                         + File.separatorChar;
