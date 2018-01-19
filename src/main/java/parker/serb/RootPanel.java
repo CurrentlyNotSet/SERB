@@ -121,7 +121,8 @@ public class RootPanel extends javax.swing.JFrame {
      */
     public void enableTabs() {
         //disableMenuItem
-        recordRetentionMenuItem.setVisible(false);        
+        recordRetentionMenuItem.setVisible(false);
+        CMDSBulkCloseCaseMenuItem.setVisible(false);
         
         //if the user has no applied roles, which should be rare,
         //alert the user and close the application
