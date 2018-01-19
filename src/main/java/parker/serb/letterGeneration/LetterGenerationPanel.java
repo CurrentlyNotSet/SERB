@@ -852,7 +852,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
             orgAddress.stateCode = cscCase.state;
             orgAddress.zipcode = cscCase.zipCode;
 
-            name = orgCase.orgName;
+            name = cscCase.name;
             address = StringUtilities.buildAddressBlockforPostal(orgAddress);
 
         } else {
