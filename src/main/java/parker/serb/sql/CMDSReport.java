@@ -148,7 +148,7 @@ public class CMDSReport {
     }
 
     public static CMDSReport getReportByFileName(String fileName) {
-        CMDSReport item = new CMDSReport();
+        CMDSReport item = null;
 
         Statement stmt = null;
 
@@ -163,6 +163,7 @@ public class CMDSReport {
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
+                item = new CMDSReport();
                 item.id = rs.getInt("id");
                 item.active = rs.getBoolean("active");
                 item.section = rs.getString("section") == null ? "" : rs.getString("section");
@@ -232,11 +233,11 @@ public class CMDSReport {
                     + "sortOrder "
                     + ") VALUES ("
                     + "1, " // active
-                    + "?, " // section
-                    + "?, " // description
-                    + "?, " // filename
-                    + "?, " // parameters
-                    + "? "  // sortOrder
+                    + "?, " // 01 - section
+                    + "?, " // 02 - description
+                    + "?, " // 03 - filename
+                    + "?, " // 04 - parameters
+                    + "? "  // 05 - sortOrder
                     + ")";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
@@ -244,7 +245,7 @@ public class CMDSReport {
             preparedStatement.setString(2, item.description.equals("") ? null : item.description.trim());
             preparedStatement.setString(3, item.fileName.equals("") ? null : item.fileName.trim());
             preparedStatement.setString(4, item.parameters.equals("") ? null : item.parameters.trim());
-            preparedStatement.setNull  (6, java.sql.Types.DOUBLE);
+            preparedStatement.setNull  (5, java.sql.Types.DOUBLE);
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
