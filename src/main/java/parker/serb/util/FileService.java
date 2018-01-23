@@ -51,6 +51,7 @@ public class FileService {
                 case "Optiplex3010":
                 case "Sniper":
                 case "HP-8100":
+                case "DESKTOP-3G61PRG":
                     Global.scanPath = "C:\\SERB\\Scan\\";
                     Global.emailPath = "C:\\SERB\\Email\\";
                     Global.activityPath = "C:\\SERB\\Activity\\";
