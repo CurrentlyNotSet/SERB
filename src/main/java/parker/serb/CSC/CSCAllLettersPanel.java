@@ -125,7 +125,8 @@ public class CSCAllLettersPanel extends javax.swing.JDialog {
     private void processComboBoxSelection() {
         cscCaseList = null;
 
-        if (letterComboBox.getSelectedItem().toString().toLowerCase().contains("past due")){
+        if (letterComboBox.getSelectedItem().toString().toLowerCase().contains("past due") || 
+                letterComboBox.getSelectedItem().toString().toLowerCase().contains("60 day notice")){
             cscCaseList = CSCCase.getCSCCasesPastDueLettersDefault();
         } else if (!letterComboBox.getSelectedItem().toString().trim().equals("")){
             cscCaseList = CSCCase.getCSCCasesAllLettersDefault();

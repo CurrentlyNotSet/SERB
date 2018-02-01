@@ -149,7 +149,10 @@ public class CMDSDetailedActivityDialog extends javax.swing.JDialog {
     private void updateAction() {
         updatedActivity.id = activityInfo.id;
 
-        if(activityInfo.type == null) {
+        if(activityInfo.type == null ||
+                typeComboBox.getSelectedItem().equals("") ||
+                descriptionComboBox.getSelectedItem().equals("")
+                ) {
             updatedActivity.action = actionTextBox.getText().trim();
         } else {
             String[] activtyTypeSplit = activityInfo.type.split("-", 2);
