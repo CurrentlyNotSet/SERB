@@ -122,7 +122,7 @@ public class RootPanel extends javax.swing.JFrame {
     public void enableTabs() {
         //disableMenuItem
         recordRetentionMenuItem.setVisible(false);
-        
+
         //if the user has no applied roles, which should be rare,
         //alert the user and close the application
         if(Global.activeUserRoles.isEmpty()) {
@@ -139,12 +139,13 @@ public class RootPanel extends javax.swing.JFrame {
                 }
             }
         }
-
+        
         //remove the batch close of cases, role dependent.
         //If none of the proper roles, remove the header option
         if(!Global.activeUserRoles.contains("REP")
                 && !Global.activeUserRoles.contains("MED")
-                && !Global.activeUserRoles.contains("ULP")) {
+                && !Global.activeUserRoles.contains("ULP")
+                && !Global.activeUserRoles.contains("Record Retention")) {
             jMenuBar1.remove(batchCloseCasesSubMenu);
 
             if(!Global.activeUserRoles.contains("REP")) {
@@ -157,6 +158,10 @@ public class RootPanel extends javax.swing.JFrame {
 
             if(!Global.activeUserRoles.contains("ULP")) {
                 jMenuBar1.remove(batchCloseULPMenuItem);
+            }
+            
+            if(!Global.activeUserRoles.contains("Record Retention")) {
+                jMenuBar1.remove(recordRetentionMenuItem);        
             }
         }
 
@@ -1214,6 +1219,7 @@ public class RootPanel extends javax.swing.JFrame {
         batchCloseMEDMenuItem = new javax.swing.JMenuItem();
         batchCloseREPMenuItem = new javax.swing.JMenuItem();
         batchCloseULPMenuItem = new javax.swing.JMenuItem();
+        recordRetentionMenuItem = new javax.swing.JMenuItem();
         jMenuItem7 = new javax.swing.JMenuItem();
         jMenuItem10 = new javax.swing.JMenuItem();
         jMenuItem8 = new javax.swing.JMenuItem();
@@ -1225,7 +1231,6 @@ public class RootPanel extends javax.swing.JFrame {
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         adminPanelMenuItem = new javax.swing.JMenuItem();
-        recordRetentionMenuItem = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
@@ -1712,6 +1717,14 @@ public class RootPanel extends javax.swing.JFrame {
         });
         batchCloseCasesSubMenu.add(batchCloseULPMenuItem);
 
+        recordRetentionMenuItem.setText("Record Retention");
+        recordRetentionMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                recordRetentionMenuItemActionPerformed(evt);
+            }
+        });
+        batchCloseCasesSubMenu.add(recordRetentionMenuItem);
+
         jMenu1.add(batchCloseCasesSubMenu);
 
         jMenuItem7.setText("Annual Report");
@@ -1786,14 +1799,6 @@ public class RootPanel extends javax.swing.JFrame {
             }
         });
         jMenu2.add(adminPanelMenuItem);
-
-        recordRetentionMenuItem.setText("Record Retention");
-        recordRetentionMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                recordRetentionMenuItemActionPerformed(evt);
-            }
-        });
-        jMenu2.add(recordRetentionMenuItem);
 
         jMenuItem5.setText("Tracking");
         jMenuItem5.addActionListener(new java.awt.event.ActionListener() {

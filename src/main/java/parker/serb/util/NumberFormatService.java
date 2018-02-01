@@ -154,8 +154,12 @@ public class NumberFormatService {
                 TimeUnit.MILLISECONDS.toSeconds(millis)
                 - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
         if (TimeUnit.MILLISECONDS.toHours(millis) == 0) {
-            String[] split = duration.split("hr");
-            duration = split[1].trim();
+            String[] hrSplit = duration.split("hr");
+            duration = hrSplit[1].trim();
+            if (TimeUnit.MILLISECONDS.toMinutes(millis) == 0) {
+                String[] minSplit = duration.split("min");
+                duration = minSplit[1].trim();
+            }
         }
         return duration.trim();
     }

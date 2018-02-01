@@ -74,7 +74,7 @@ public class FileService {
             SlackNotification.sendNotification(ex);
         }
     }
-
+    
     public static void openFileWithCaseNumber(String activeSection, String caseYear, String caseType, String caseMonth, String caseNumber, String fileName) {
         try {
             Audit.addAuditEntry("Opened " + fileName + " from Activity Table");

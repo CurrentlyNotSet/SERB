@@ -17,6 +17,7 @@ import java.util.List;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.io.FilenameUtils;
 import parker.serb.Global;
+import parker.serb.recordRetention.CaseNumberModel;
 import parker.serb.util.SlackNotification;
 
 /**
@@ -123,7 +124,7 @@ public class Activity {
 
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                addActivty(action, fileName);
+                addActivtyNonGlobalCaseNumber(action, fileName, caseNumber);
             } else {
                 SlackNotification.sendNotification(ex);
             }
@@ -1587,265 +1588,68 @@ public class Activity {
         }
     }
     
-    public static List loadPurgeCMDSActivities() {
-        List<Activity> activityList = new ArrayList<>();
+    public static void deleteActivityByID(int id) {
 
         Statement stmt = null;
 
         try {
 
             stmt = Database.connectToDB().createStatement();
-            
-            String excludeList = " AND ("
-                    + "    Activity.action NOT LIKE '%%'"
-                    + " AND Activity.action NOT LIKE '%%'"
-                    + ")";
 
-            String sql = "SELECT TOP 50 Activity.*,"
-                    + " ISNULL(Users.firstName, '') + ' ' + ISNULL(Users.lastName, '') AS userName"
-                    + " FROM Activity"
-                    + " INNER JOIN Users"
-                    + " ON Activity.userID = Users.id"
-                    + " INNER JOIN caseType"
-                    + " ON Activity.caseType = CaseType.caseType"
-                    + " WHERE Activity.active = 1 AND CaseType.section = 'CMDS'"
-                    + " ORDER BY Activity.caseYear ASC, Activity.caseMonth ASC, Activity.caseNumber ASC, date ASC";
+            String sql = "DELETE FROM Activity WHERE id = ?";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-
-            ResultSet caseActivity = preparedStatement.executeQuery();
-
-            while(caseActivity.next()) {
-                Activity act = new Activity();
-                act.id = caseActivity.getInt("id");
-                act.user = caseActivity.getString("userName");
-                act.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
-                act.action = caseActivity.getString("action");
-                act.comment = caseActivity.getString("comment");
-                act.from = caseActivity.getString("from") == null ? "" : caseActivity.getString("from");
-                act.caseYear = caseActivity.getString("caseYear");
-                act.caseType = caseActivity.getString("caseType");
-                act.caseMonth = caseActivity.getString("caseMonth");
-                act.caseNumber = caseActivity.getString("caseNumber");
-                act.fileName = caseActivity.getString("fileName");
-                activityList.add(act);
-            }
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+                        
         } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                loadAllActivity();
-            } else {
-                SlackNotification.sendNotification(ex);
+                deleteActivityByID(id);
             }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
-        return activityList;
     }
     
-    public static List loadPurgeULPActivities() {
-        List<Activity> activityList = new ArrayList<>();
-
+    public static void addPurgedActivityEntry(String action, CaseNumberModel caseNum) {
         Statement stmt = null;
 
         try {
 
             stmt = Database.connectToDB().createStatement();
 
-            String excludeList = " AND ("
-                    + "    Activity.action NOT LIKE '%Initial Charge%'"
-                    + " AND Activity.action NOT LIKE '%Investigator Report%'"
-                    + " AND Activity.action NOT LIKE '%Directive%'"
-                    + ")";
-
-            String sql = "SELECT Activity.*,"
-                    + " ISNULL(Users.firstName, '') + ' ' + ISNULL(Users.lastName, '') AS userName"
-                    + " FROM Activity"
-                    //Join to Users To Get UserName
-                    + " INNER JOIN Users"
-                    + " ON Activity.userID = Users.id"
-                    //Join to MEDCase to get Case Status
-                    + " INNER JOIN ULPCase"
-                    + " ON (ULPCase.caseYear = Activity.caseYear "
-                    + " AND ULPCase.caseType = Activity.caseType "
-                    + " AND ULPCase.caseMonth = Activity.caseMonth "
-                    + " AND ULPCase.caseNumber = Activity.caseNumber)"
-                    //Join to Hearings to get (opinion, PC-Date, Pre-D-Date)
-                    + " LEFT JOIN HearingCase"
-                    + " ON (HearingCase.caseYear = Activity.caseYear AND HearingCase.caseType = Activity.caseType "
-                    + " AND HearingCase.caseMonth = Activity.caseMonth "
-                    + " AND HearingCase.caseNumber = Activity.caseNumber)"
-                    //Where statement
-                    + " WHERE Activity.active = 1"
-                    + " AND ULPCase.currentStatus = 'Closed'"
-                    + " AND ULPCase.finalDispositionStatus = 'Closed'"
-                    + " AND ISNULL(ULPCase.appealDateSent, '') = ''"
-                    + " AND ISNULL(ULPCase.appealDateReceived, '') = ''"
-                    + " AND ISNULL(HearingCase.opinion, '') = ''"
-                    + " AND ISNULL(HearingCase.boardActionPCDate, '') = ''"
-                    + " AND ISNULL(HearingCase.boardActionPreDDate, '') = ''"
-                    + excludeList
-                    + " ORDER BY ULPCase.caseYear ASC, ULPCase.caseMonth ASC, ULPCase.caseNumber ASC, date ASC";
+            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, caseNum.getCaseYear());
+            preparedStatement.setString(2, caseNum.getCaseType());
+            preparedStatement.setString(3, caseNum.getCaseMonth());
+            preparedStatement.setString(4, caseNum.getCaseNumber());
+            preparedStatement.setInt(5, Global.activeUser.id);
+            preparedStatement.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
+            preparedStatement.setString(7, action.equals("") ? null : action);
+            preparedStatement.setString(8, null);
+            preparedStatement.setString(9, null); //from
+            preparedStatement.setString(10, null); //to
+            preparedStatement.setString(11, null); //type
+            preparedStatement.setString(12, null); //comment
+            preparedStatement.setBoolean(13, false); //redacted
+            preparedStatement.setBoolean(14, false); //awaiting timestamp
+            preparedStatement.setBoolean(15, true); //active
+            preparedStatement.setTimestamp(16, null); //mailLog
 
-            ResultSet caseActivity = preparedStatement.executeQuery();
+            preparedStatement.executeUpdate();
 
-            while(caseActivity.next()) {
-                Activity act = new Activity();
-                act.id = caseActivity.getInt("id");
-                act.user = caseActivity.getString("userName");
-                act.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
-                act.action = caseActivity.getString("action");
-                act.comment = caseActivity.getString("comment");
-                act.from = caseActivity.getString("from") == null ? "" : caseActivity.getString("from");
-                act.caseYear = caseActivity.getString("caseYear");
-                act.caseType = caseActivity.getString("caseType");
-                act.caseMonth = caseActivity.getString("caseMonth");
-                act.caseNumber = caseActivity.getString("caseNumber");
-                act.fileName = caseActivity.getString("fileName");
-                activityList.add(act);
-            }
         } catch (SQLException ex) {
             if(ex.getCause() instanceof SQLServerException) {
-                loadAllActivity();
+                addPurgedActivityEntry(action, caseNum);
             } else {
                 SlackNotification.sendNotification(ex);
             }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
-        return activityList;
     }
     
-    public static List loadPurgeMEDActivities() {
-        List<Activity> activityList = new ArrayList<>();
-
-        Statement stmt = null;
-
-        try {
-
-            stmt = Database.connectToDB().createStatement();
-            
-            String excludeList = " AND ("
-                    + "    Activity.action NOT LIKE '%Notice to Negotiate%'"
-                    + " AND Activity.action NOT LIKE '%Fact Finding Report%'"
-                    + ")";
-
-            String sql = "SELECT Activity.*,"
-                    + " ISNULL(Users.firstName, '') + ' ' + ISNULL(Users.lastName, '') AS userName"
-                    + " FROM Activity"
-                    //Join to Users To Get UserName
-                    + " INNER JOIN Users"
-                    + " ON Activity.userID = Users.id"
-                    //Join to MEDCase to get Case Status
-                    + " INNER JOIN MEDCase"
-                    + " ON (MEDCase.caseYear = Activity.caseYear "
-                    + " AND MEDCase.caseType = Activity.caseType "
-                    + " AND MEDCase.caseMonth = Activity.caseMonth "
-                    + " AND MEDCase.caseNumber = Activity.caseNumber)"
-                    //Join to Hearings to get (opinion, PC-Date, Pre-D-Date)
-                    + " LEFT JOIN HearingCase"
-                    + " ON (HearingCase.caseYear = Activity.caseYear AND HearingCase.caseType = Activity.caseType "
-                    + " AND HearingCase.caseMonth = Activity.caseMonth "
-                    + " AND HearingCase.caseNumber = Activity.caseNumber)"
-                    //Where statement
-                    + " WHERE Activity.active = 1"
-                    + " AND MEDCase.caseStatus = 'Closed'"
-                    + " AND ISNULL(HearingCase.opinion, '') = ''"
-                    + " AND ISNULL(HearingCase.boardActionPCDate, '') = ''"
-                    + " AND ISNULL(HearingCase.boardActionPreDDate, '') = ''"
-                    + excludeList
-                    + " ORDER BY MEDCase.caseYear ASC, MEDCase.caseMonth ASC, MEDCase.caseNumber ASC, date ASC";
-
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-
-            ResultSet caseActivity = preparedStatement.executeQuery();
-
-            while(caseActivity.next()) {
-                Activity act = new Activity();
-                act.id = caseActivity.getInt("id");
-                act.user = caseActivity.getString("userName");
-                act.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
-                act.action = caseActivity.getString("action");
-                act.comment = caseActivity.getString("comment");
-                act.from = caseActivity.getString("from") == null ? "" : caseActivity.getString("from");
-                act.caseYear = caseActivity.getString("caseYear");
-                act.caseType = caseActivity.getString("caseType");
-                act.caseMonth = caseActivity.getString("caseMonth");
-                act.caseNumber = caseActivity.getString("caseNumber");
-                act.fileName = caseActivity.getString("fileName");
-                activityList.add(act);
-            }
-        } catch (SQLException ex) {
-            if(ex.getCause() instanceof SQLServerException) {
-                loadAllActivity();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
-        } finally {
-            DbUtils.closeQuietly(stmt);
-        }
-        return activityList;
-    }
-    
-    public static List loadPurgeORGActivities() {
-        List<Activity> activityList = new ArrayList<>();
-
-        Statement stmt = null;
-
-        try {
-
-            stmt = Database.connectToDB().createStatement();
-
-            String excludeList = " AND ("
-                    + "    Activity.action NOT LIKE '%Annual Report%'"
-                    + " AND Activity.action NOT LIKE '%Financial Statement%'"
-                    + " AND Activity.action NOT LIKE '%Registration Report%'"
-                    + " AND Activity.action NOT LIKE '%Constitution and Bylaws%'"
-                    + ")";
-            
-            String sql = "SELECT Activity.*,"
-                    + " ISNULL(Users.firstName, '') + ' ' + ISNULL(Users.lastName, '') AS userName"
-                    + " FROM Activity"
-                    //Join to Users To Get UserName
-                    + " INNER JOIN Users"
-                    + " ON Activity.userID = Users.id"
-                    //Join to OrgCase to get entries older than [Due Date] minus 7 years
-                    + " INNER JOIN ORGCase"
-                    + " ON Activity.caseNumber = ORGCase.orgNumber"
-                    + " WHERE Activity.active = 1 AND Activity.caseType = 'ORG'"
-                    + " AND Activity.date < CAST(REPLACE(ORGCase.filingDueDate, RIGHT(ORGCase.filingDueDate, 2), ' ') + CONVERT(varchar(4), (YEAR(GETDATE()) - 7), 4) AS datetime)"
-                    + excludeList                    
-                    + " ORDER BY RIGHT('0000'+CAST(ORGCase.orgNumber AS VARCHAR(4)),4) ASC, date ASC";
-
-            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-
-            ResultSet caseActivity = preparedStatement.executeQuery();
-
-            while(caseActivity.next()) {
-                Activity act = new Activity();
-                act.id = caseActivity.getInt("id");
-                act.user = caseActivity.getString("userName");
-                act.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
-                act.action = caseActivity.getString("action");
-                act.comment = caseActivity.getString("comment");
-                act.from = caseActivity.getString("from") == null ? "" : caseActivity.getString("from");
-                act.caseYear = caseActivity.getString("caseYear");
-                act.caseType = caseActivity.getString("caseType");
-                act.caseMonth = caseActivity.getString("caseMonth");
-                act.caseNumber = caseActivity.getString("caseNumber");
-                act.fileName = caseActivity.getString("fileName");
-                activityList.add(act);
-            }
-        } catch (SQLException ex) {
-            if(ex.getCause() instanceof SQLServerException) {
-                loadAllActivity();
-            } else {
-                SlackNotification.sendNotification(ex);
-            }
-        } finally {
-            DbUtils.closeQuietly(stmt);
-        }
-        return activityList;
-    }
 }

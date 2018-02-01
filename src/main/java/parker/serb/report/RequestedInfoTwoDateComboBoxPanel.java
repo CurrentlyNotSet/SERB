@@ -55,6 +55,10 @@ public class RequestedInfoTwoDateComboBoxPanel extends javax.swing.JDialog {
                 break;
             case "Mediator":
                 comboBoxLabel.setText("Mediator:");
+                break;
+            case "Section":
+                comboBoxLabel.setText("Section:");
+                break;
             default:
                 break;
         }
@@ -93,6 +97,12 @@ public class RequestedInfoTwoDateComboBoxPanel extends javax.swing.JDialog {
                 List<Mediator> mediatorList = Mediator.loadAllMediators();
                 for (Mediator med : mediatorList) {
                     ComboBox.addItem(med.firstName + " " + med.lastName);
+                }
+                break;
+            case "Section":
+                List<String> sectionList = Arrays.asList("CMDS", "CSC", "MED", "REP", "ORG", "ULP");
+                for (String item : sectionList) {
+                    ComboBox.addItem(item);
                 }
                 break;
             default:

@@ -4,18 +4,24 @@
  */
 package parker.serb.recordRetention;
 
+import com.alee.extended.date.WebCalendar;
 import com.alee.laf.optionpane.WebOptionPane;
+import com.alee.utils.swing.Customizer;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.text.NumberFormat;
+import java.util.Date;
 import java.util.List;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import parker.serb.Global;
-import parker.serb.sql.Activity;
+import parker.serb.report.GenerateReport;
+import parker.serb.sql.PurgedActivity;
+import parker.serb.sql.SMDSDocuments;
 import parker.serb.util.FileService;
 import parker.serb.util.ImageIconRenderer;
 import parker.serb.util.NumberFormatService;
@@ -25,6 +31,8 @@ import parker.serb.util.NumberFormatService;
  * @author andrew.schmidt
  */
 public class RecordRetentionMainDialog extends javax.swing.JFrame {
+    
+    DefaultTableModel model;
     
     /**
      * Creates new form RecordRetentionMainDialog
@@ -56,14 +64,27 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
     }
 
     private void setActive() {
+        model = (DefaultTableModel) jTable1.getModel();
         jPanel1.setVisible(false);
+        addListeners();
         setTableSize();
         loadSectionComboBox();
+    }
+
+    private void addListeners() {
+        startDateField.addDateSelectionListener((Date date) -> {
+            loadTableListener();
+        });
+
+        endDateField.addDateSelectionListener((Date date) -> {
+            loadTableListener();
+        });
     }
 
     private void loadSectionComboBox() {
         sectionComboBox.addItem("");
         sectionComboBox.addItem("CMDS");
+        sectionComboBox.addItem("CSC");
         sectionComboBox.addItem("MED");
         sectionComboBox.addItem("ORG");
         sectionComboBox.addItem("ULP");
@@ -102,55 +123,58 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
     }
 
     private void loadTableThread() {
+        model.setRowCount(0);
         setPanelEnabled(false);
-        
+
         Thread temp = new Thread(() -> {
-            loadTable();
-            setPanelEnabled(true);
+        List<PurgedActivity> caseList = gatherRecords();
+            SwingUtilities.invokeLater(() -> {
+                loadTable(caseList);
+                setPanelEnabled(true);
+            });
         });
         temp.start();
     }
-   
-    private void loadTable() {
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.setRowCount(0);
+    
+    private List<PurgedActivity> gatherRecords(){
+        List<PurgedActivity> caseList = null;
         
-        List<Activity> caseList = null;
         String section = sectionComboBox.getSelectedItem().toString().trim();
-        
-        switch (section) {
-            case "ORG":
-                jTable1.getColumnModel().getColumn(3).setHeaderValue("Org Number");
-                break;
-            default:
-                jTable1.getColumnModel().getColumn(3).setHeaderValue("Case Number");
-                break;
-        }
-        
         countLabel.setText("Gathering Entries");
         
         switch (section) {
             case "CMDS":
-                //caseList = Activity.loadPurgeCMDSActivities();
+                caseList = PurgedActivity.loadPurgeCMDSActivities(startDateField.getDate(), endDateField.getDate());
+                break;
+            case "CSC":
+            case "Civil Service Commission":
+                caseList = PurgedActivity.loadPurgeCSCActivities();
                 break;
             case "MED":
-                caseList = Activity.loadPurgeMEDActivities();
+                caseList = PurgedActivity.loadPurgeMEDActivities(startDateField.getDate(), endDateField.getDate());
                 break;
             case "ORG":
-                caseList = Activity.loadPurgeORGActivities();
+                caseList = PurgedActivity.loadPurgeORGActivities();
                 break;
             case "ULP":
-                caseList = Activity.loadPurgeULPActivities();
+                caseList = PurgedActivity.loadPurgeULPActivities(startDateField.getDate(), endDateField.getDate());
                 break;
         }
         
         countLabel.setText("Populating Table");
         
+        return caseList;
+    }
+   
+    private void loadTable(List<PurgedActivity> caseList) {
+        String section = sectionComboBox.getSelectedItem().toString().trim();
+        
         if (caseList != null){
-            for (Activity item : caseList) {
+            for (PurgedActivity item : caseList) {
                 String caseNumber = "";
                 
-                if (section.equals("ORG")){
+                if (section.equals("ORG") || section.equals("CSC")
+                        || section.equals("Civil Service Commission")){
                     caseNumber = item.caseNumber;
                 } else {
                     caseNumber = NumberFormatService.generateFullCaseNumberNonGlobal(
@@ -163,33 +187,47 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
                 }
                 model.addRow(new Object[]{
                     item,
-                    false,
+                    item.fileName == null,
                     item.fileName == null ? "" : item.fileName,
                     caseNumber,
-                    item.date,
-                    item.action,
-                    item.from,
-                    item.user
+                    item.date == null ? "" : Global.mmddyyyyhhmma.format(item.date),
+                    item.action == null ? "" : item.action,
+                    item.from == null ? "" : item.from,
+                    item.userName
                 });
             }
             countLabel.setText("Count: " + NumberFormat.getIntegerInstance().format(caseList.size()));
         } else {
             countLabel.setText("No Entries");
         }
+        validate();
+        repaint();
     }
 
     private void setPanelEnabled(boolean enabled){
         closeButton.setEnabled(enabled);
         purgeButton.setEnabled(enabled);
         sectionComboBox.setEnabled(enabled);
+        NeedsPurgedReportButton.setEnabled(enabled);
+        PurgedDocumentsReportButton.setEnabled(enabled);
+        SelectAllCheckBox.setEnabled(enabled);
         jTable1.setEnabled(enabled);
         jPanel1.setVisible(!enabled);
+        
+        if (sectionComboBox.getSelectedItem().equals("ORG")
+                || sectionComboBox.getSelectedItem().equals("CSC")
+                || sectionComboBox.getSelectedItem().equals("Civil Service Commission")) {
+            startDateField.setEnabled(false);
+            endDateField.setEnabled(false);
+        } else {
+            startDateField.setEnabled(enabled);
+            endDateField.setEnabled(enabled);
+        }
     }
-    
-    
+        
     private void openFile(MouseEvent evt){
         if (jTable1.getSelectedRow() > -1 && jTable1.getSelectedColumn() != 1 && evt.getClickCount() == 2) {
-            Activity rowObject = (Activity) jTable1.getValueAt(jTable1.getSelectedRow(), 0);
+            PurgedActivity rowObject = (PurgedActivity) jTable1.getValueAt(jTable1.getSelectedRow(), 0);
             String section = sectionComboBox.getSelectedItem().toString().trim();
 
             if (!rowObject.fileName.equals("")) {
@@ -210,20 +248,19 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
             }
         }
     }
-    
-    private void purgeDocumentsThread() {
-        setPanelEnabled(false);
         
-        Thread temp = new Thread(() -> {
-            purgeRecords();
-            setPanelEnabled(true);
-            WebOptionPane.showMessageDialog(Global.root, "Record Purge Complete", "Purged", WebOptionPane.INFORMATION_MESSAGE);
-        });
-        temp.start();
-    } 
-    
-    private void purgeRecords(){
-        //TODO: Need Direction from Justin in Order to Complete
+    private void loadTableListener() {
+        String section = sectionComboBox.getSelectedItem().toString().trim();
+        
+        if (       section.equals("ORG") 
+                || section.equals("CSC")
+                || section.equals("Civil Service Commission")) {
+            loadTableThread();
+        } else if (!startDateField.getText().equals("")
+                && !endDateField.getText().equals("")
+                && !sectionComboBox.getSelectedItem().toString().equals("")) {
+            loadTableThread();
+        }
     }
     
     /**
@@ -241,11 +278,19 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLayeredPane1 = new javax.swing.JLayeredPane();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
         countLabel = new javax.swing.JLabel();
+        startDateField = new com.alee.extended.date.WebDateField();
+        jLabel2 = new javax.swing.JLabel();
+        endDateField = new com.alee.extended.date.WebDateField();
+        jLabel4 = new javax.swing.JLabel();
+        SelectAllCheckBox = new javax.swing.JCheckBox();
+        NeedsPurgedReportButton = new javax.swing.JButton();
+        PurgedDocumentsReportButton = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Record Retention");
@@ -278,21 +323,7 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel3.setText("Section:");
 
-        jLabel5.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/loading_spinner.gif"))); // NOI18N
-
-        org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jLabel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jLabel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 519, Short.MAX_VALUE)
-        );
-
+        jTable1.setAutoCreateRowSorter(true);
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -331,8 +362,23 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
             jTable1.getColumnModel().getColumn(4).setResizable(false);
         }
 
-        jLayeredPane1.setLayer(jPanel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLabel5.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/loading_spinner.gif"))); // NOI18N
+
+        org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jLabel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jLabel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
+        );
+
         jLayeredPane1.setLayer(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(jPanel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         org.jdesktop.layout.GroupLayout jLayeredPane1Layout = new org.jdesktop.layout.GroupLayout(jLayeredPane1);
         jLayeredPane1.setLayout(jLayeredPane1Layout);
@@ -352,53 +398,147 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
         countLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         countLabel.setText("No Entries");
 
-        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(layout.createSequentialGroup()
-                .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLayeredPane1)
-                    .add(jLabel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(layout.createSequentialGroup()
-                        .add(jLabel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 64, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+        startDateField.setEditable(false);
+        startDateField.setCaretColor(new java.awt.Color(0, 0, 0));
+        startDateField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        startDateField.setDateFormat(Global.mmddyyyy);
+
+        startDateField.setCalendarCustomizer(new Customizer<WebCalendar> ()
+            {
+                @Override
+                public void customize ( final WebCalendar calendar )
+                {
+                    calendar.setStartWeekFromSunday ( true );
+                }
+            } );
+
+            jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+            jLabel2.setText("Begin Date:");
+
+            endDateField.setEditable(false);
+            endDateField.setCaretColor(new java.awt.Color(0, 0, 0));
+            endDateField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+            endDateField.setDateFormat(Global.mmddyyyy);
+
+            endDateField.setCalendarCustomizer(new Customizer<WebCalendar> ()
+                {
+                    @Override
+                    public void customize ( final WebCalendar calendar )
+                    {
+                        calendar.setStartWeekFromSunday ( true );
+                    }
+                } );
+
+                jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+                jLabel4.setText("End Date:");
+
+                SelectAllCheckBox.setText("Select All");
+                SelectAllCheckBox.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+                SelectAllCheckBox.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        SelectAllCheckBoxActionPerformed(evt);
+                    }
+                });
+
+                NeedsPurgedReportButton.setText("Needs Purged Report");
+                NeedsPurgedReportButton.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        NeedsPurgedReportButtonActionPerformed(evt);
+                    }
+                });
+
+                PurgedDocumentsReportButton.setText("Purged Documents Report");
+                PurgedDocumentsReportButton.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        PurgedDocumentsReportButtonActionPerformed(evt);
+                    }
+                });
+
+                org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
+                getContentPane().setLayout(layout);
+                layout.setHorizontalGroup(
+                    layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                            .add(jSeparator1)
+                            .add(org.jdesktop.layout.GroupLayout.LEADING, jLayeredPane1)
+                            .add(org.jdesktop.layout.GroupLayout.LEADING, jLabel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
+                                .add(closeButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 100, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .add(NeedsPurgedReportButton)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(PurgedDocumentsReportButton)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .add(purgeButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 125, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                            .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
+                                .add(SelectAllCheckBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 90, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .add(91, 91, 91)
+                                .add(countLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
+                                .add(0, 165, Short.MAX_VALUE)
+                                .add(jLabel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 64, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(sectionComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 161, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .add(36, 36, 36)
+                                .add(jLabel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 70, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(startDateField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 150, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .add(38, 38, 38)
+                                .add(jLabel4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 60, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(endDateField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 150, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .add(0, 165, Short.MAX_VALUE)))
+                        .addContainerGap())
+                );
+
+                layout.linkSize(new java.awt.Component[] {closeButton, purgeButton}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
+
+                layout.linkSize(new java.awt.Component[] {NeedsPurgedReportButton, PurgedDocumentsReportButton}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
+
+                layout.setVerticalGroup(
+                    layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .add(jLabel1)
+                        .add(18, 18, 18)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                                .add(endDateField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .add(jLabel4))
+                            .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                                .add(sectionComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .add(jLabel3)
+                                .add(startDateField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .add(jLabel2)))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .add(jSeparator1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 10, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(sectionComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 161, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .add(countLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 136, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(layout.createSequentialGroup()
-                        .add(closeButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 100, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 812, Short.MAX_VALUE)
-                        .add(purgeButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 125, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
-        );
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(SelectAllCheckBox)
+                            .add(countLabel))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jLayeredPane1)
+                        .add(18, 18, 18)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(closeButton)
+                            .add(purgeButton)
+                            .add(NeedsPurgedReportButton)
+                            .add(PurgedDocumentsReportButton))
+                        .addContainerGap())
+                );
 
-        layout.linkSize(new java.awt.Component[] {closeButton, purgeButton}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
+                layout.linkSize(new java.awt.Component[] {jLabel3, sectionComboBox}, org.jdesktop.layout.GroupLayout.VERTICAL);
 
-        layout.setVerticalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jLabel1)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(sectionComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jLabel3)
-                    .add(countLabel))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(jLayeredPane1)
-                .add(18, 18, 18)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(closeButton)
-                    .add(purgeButton))
-                .addContainerGap())
-        );
+                layout.linkSize(new java.awt.Component[] {jLabel2, startDateField}, org.jdesktop.layout.GroupLayout.VERTICAL);
 
-        layout.linkSize(new java.awt.Component[] {jLabel3, sectionComboBox}, org.jdesktop.layout.GroupLayout.VERTICAL);
+                layout.linkSize(new java.awt.Component[] {endDateField, jLabel4}, org.jdesktop.layout.GroupLayout.VERTICAL);
 
-        pack();
-    }// </editor-fold>//GEN-END:initComponents
+                layout.linkSize(new java.awt.Component[] {SelectAllCheckBox, countLabel}, org.jdesktop.layout.GroupLayout.VERTICAL);
+
+                pack();
+            }// </editor-fold>//GEN-END:initComponents
 
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
         this.dispose();
@@ -408,31 +548,91 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
         int answer = WebOptionPane.showConfirmDialog(this, "Are you sure you want to purge these records?",
                 "Purge?", WebOptionPane.YES_NO_OPTION);
         if (answer == WebOptionPane.YES_OPTION) {
-            purgeDocumentsThread();
+            setPanelEnabled(false);
+            new ProcessRecords(this, true, jTable1, sectionComboBox.getSelectedItem().toString());
+            loadTableThread();
         }
     }//GEN-LAST:event_purgeButtonActionPerformed
 
     private void sectionComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sectionComboBoxActionPerformed
-        if (!sectionComboBox.getSelectedItem().toString().equals("")){
-            loadTableThread();
+        String section = sectionComboBox.getSelectedItem().toString().trim();
+        model.setRowCount(0);
+        
+        if (       section.equals("ORG")
+                || section.equals("CSC")
+                || section.equals("Civil Service Commission")) {
+            jTable1.getColumnModel().getColumn(3).setHeaderValue("Name");
+            jLabel2.setEnabled(false);
+            startDateField.setEnabled(false);
+            startDateField.clear();
+            jLabel4.setEnabled(false);
+            endDateField.setEnabled(false);
+            endDateField.clear();
+        } else {
+            jTable1.getColumnModel().getColumn(3).setHeaderValue("Case Number");
+            jLabel2.setEnabled(true);
+            startDateField.setEnabled(true);
+            jLabel4.setEnabled(true);
+            endDateField.setEnabled(true);
         }
+        validate();
+        repaint();
+        
+        
+        loadTableListener();
     }//GEN-LAST:event_sectionComboBoxActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         openFile(evt);
     }//GEN-LAST:event_jTable1MouseClicked
 
+    private void SelectAllCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SelectAllCheckBoxActionPerformed
+        for (int i = 0; i < jTable1.getRowCount(); i++) {
+            jTable1.getModel().setValueAt(SelectAllCheckBox.isSelected(), i, 1);
+        }
+    }//GEN-LAST:event_SelectAllCheckBoxActionPerformed
+
+    private void NeedsPurgedReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NeedsPurgedReportButtonActionPerformed
+        jLayeredPane1.moveToFront(jPanel1);
+
+        Thread temp = new Thread(() -> {
+            SMDSDocuments report = SMDSDocuments.findDocumentByFileName("Cases Needing Purged.jasper");
+            GenerateReport.runReport(report);
+            jLayeredPane1.moveToBack(jPanel1);
+        });
+        temp.start();
+    }//GEN-LAST:event_NeedsPurgedReportButtonActionPerformed
+
+    private void PurgedDocumentsReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PurgedDocumentsReportButtonActionPerformed
+        jLayeredPane1.moveToFront(jPanel1);
+
+        Thread temp = new Thread(() -> {
+            SMDSDocuments report = SMDSDocuments.findDocumentByFileName("PurgedDocuments.jasper");
+            GenerateReport.runReport(report);
+            jLayeredPane1.moveToBack(jPanel1);
+        });
+        temp.start();
+    }//GEN-LAST:event_PurgedDocumentsReportButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton NeedsPurgedReportButton;
+    private javax.swing.JButton PurgedDocumentsReportButton;
+    private javax.swing.JCheckBox SelectAllCheckBox;
     private javax.swing.JButton closeButton;
     private javax.swing.JLabel countLabel;
+    private com.alee.extended.date.WebDateField endDateField;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTable1;
     private javax.swing.JButton purgeButton;
     private javax.swing.JComboBox sectionComboBox;
+    private com.alee.extended.date.WebDateField startDateField;
     // End of variables declaration//GEN-END:variables
 }
