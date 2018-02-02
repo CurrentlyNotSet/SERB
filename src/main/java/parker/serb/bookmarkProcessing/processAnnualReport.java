@@ -177,7 +177,7 @@ public class processAnnualReport {
          * This count was labeled as correct in tickets R3-057 & R3-072.
          * 
          * We looked and believe SERB is wrong and count should have been nineFour as the correct number (R3-057).
-         * Casetype in parentheses should be 'AND' not 'OR' as it showed ERC and JWD cases in the current format.
+         * Casetype in parentheses should be 'AND' not 'OR' as it shows ERC and JWD cases in the current format.
          * However R3-057 & R3-072 both say that threetwo has the correct count and use different date ranges in the
          * examples provided.
          * 
