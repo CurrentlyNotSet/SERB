@@ -170,7 +170,22 @@ public class processAnnualReport {
                         + "(BoardMeeting.caseType = 'ULP' OR BoardMeeting.caseType = 'ERC' OR BoardMeeting.caseType = 'JWD') "
                         + "AND (ULPCase.dismissalDate IS NOT NULL)");
         processBookmark.process("threeone", String.valueOf(threeone), Document);
-        //32
+        
+        /** 32
+         * 
+         * 02-02-2018
+         * This count was labeled as correct in tickets R3-057 & R3-072.
+         * 
+         * We looked and believe SERB is wrong and count should have been nineFour as the correct number (R3-057).
+         * Casetype in parentheses should be 'AND' not 'OR' as it showed ERC and JWD cases in the current format.
+         * However R3-057 & R3-072 both say that threetwo has the correct count and use different date ranges in the
+         * examples provided.
+         * 
+         * At this point in time this is just a reference comment in case the count comes in to question and is 
+         * revisited at a later point in time by SERB.
+         * 
+         *  - Andrew
+         */
         long threetwo = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM ULPCase WHERE (ULPCase.dismissalDate BETWEEN '"
                 + startDate + "' AND '" + endDate + "') AND (ULPCase.caseType != 'ERC' OR ULPCase.caseType != 'JWD') "
                 + "AND ULPCase.finalDispositionStatus LIKE '%W%' AND ULPCase.dismissalDate IS NOT NULL");
