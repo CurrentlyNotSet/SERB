@@ -452,8 +452,8 @@ public class processAnnualReport {
                 + "(BoardMeeting.caseType = 'ULP' OR BoardMeeting.caseType = 'ERC' OR BoardMeeting.caseType = 'JWD') "
                 + "AND (ULPCase.dismissalDate IS NOT NULL)");
         processBookmark.process("ninethree", String.valueOf(ninethree), Document);
-        //94 - Modified due to request R3-057
-        long ninefour = threefour;
+        //94 - Modified due to request R3-057 (Issue with code never checked Re-Fixed in R3-072)
+        long ninefour = threetwo;
         processBookmark.process("ninefour", String.valueOf(ninefour), Document);
         //95
         long ninefive = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM HearingCase WHERE (HearingCase.boardActionPCDate "
