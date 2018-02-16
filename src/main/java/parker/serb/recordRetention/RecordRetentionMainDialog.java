@@ -107,9 +107,9 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
         jTable1.getColumnModel().getColumn(2).setMaxWidth(25);
         
         //Case Number
-        jTable1.getColumnModel().getColumn(3).setMinWidth(125);
-        jTable1.getColumnModel().getColumn(3).setPreferredWidth(125);
-        jTable1.getColumnModel().getColumn(3).setMaxWidth(125);
+        jTable1.getColumnModel().getColumn(3).setMinWidth(175);
+        jTable1.getColumnModel().getColumn(3).setPreferredWidth(175);
+        jTable1.getColumnModel().getColumn(3).setMaxWidth(175);
         
         //Date
         jTable1.getColumnModel().getColumn(4).setPreferredWidth(140);
@@ -175,12 +175,11 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
                 
                 if (section.equals("ORG") || section.equals("CSC")
                         || section.equals("Civil Service Commission")){
-                    caseNumber = item.caseNumber;
+                    caseNumber = item.orgName;
                 } else {
                     caseNumber = NumberFormatService.generateFullCaseNumberNonGlobal(
                         item.caseYear, item.caseType, item.caseMonth, item.caseNumber);
-                }
-                
+                }                
 
                 if (item.fileName != null){
                     jTable1.getColumnModel().getColumn(2).setCellRenderer(new ImageIconRenderer());
@@ -577,8 +576,7 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
         }
         validate();
         repaint();
-        
-        
+                
         loadTableListener();
     }//GEN-LAST:event_sectionComboBoxActionPerformed
 

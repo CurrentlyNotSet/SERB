@@ -47,6 +47,10 @@ public class PurgedActivity {
     public boolean awaitingTimestamp;
     public boolean active;
     public Date mailLog;
+    
+    //
+    public String orgName;
+    
         
     public static List loadPurgeCMDSActivities(java.util.Date startDate, java.util.Date endDate) {
         List<PurgedActivity> activityList = new ArrayList<>();
@@ -84,7 +88,7 @@ public class PurgedActivity {
             }
             
             sql += " AND (CMDSCase.closeDate BETWEEN ? AND ?) ";
-            sql += " ORDER BY Activity.caseYear ASC, Activity.caseMonth ASC, Activity.caseNumber ASC, date ASC";
+            sql += " ORDER BY Activity.caseYear ASC, Activity.caseMonth ASC, Activity.caseNumber ASC, date DESC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             
@@ -163,7 +167,7 @@ public class PurgedActivity {
                         }
                         sql += ")";
                     }                    
-                    sql += " ORDER BY name ASC, date ASC";
+                    sql += " ORDER BY name ASC, date DESC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
@@ -193,6 +197,7 @@ public class PurgedActivity {
                 act.awaitingTimestamp = rs.getBoolean("awaitingTimestamp");
                 act.active       = rs.getBoolean("active");
                 act.mailLog      = rs.getDate   ("mailLog");
+                act.orgName      = rs.getString ("name");
                 activityList.add(act);
             }
         } catch (SQLException ex) {
@@ -263,7 +268,7 @@ public class PurgedActivity {
                     }
                     sql += "AND ((DATEADD(day,411, BoardMeeting.boardMeetingDate)) BETWEEN ? AND ?) "
                     
-                    + " ORDER BY ULPCase.caseYear ASC, ULPCase.caseMonth ASC, ULPCase.caseNumber ASC, date ASC";
+                    + " ORDER BY ULPCase.caseYear ASC, ULPCase.caseMonth ASC, ULPCase.caseNumber ASC, date DESC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
@@ -355,7 +360,7 @@ public class PurgedActivity {
                         sql += ")";
                     }
                     sql += " AND retentionTicklerDate >= ?  AND retentionTicklerDate <= ? "
-                    + " ORDER BY MEDCase.caseYear ASC, MEDCase.caseMonth ASC, MEDCase.caseNumber ASC, date ASC";
+                    + " ORDER BY MEDCase.caseYear ASC, MEDCase.caseMonth ASC, MEDCase.caseNumber ASC, date DESC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
@@ -435,7 +440,7 @@ public class PurgedActivity {
                         }
                         sql += ")";
                     }                    
-                    sql += " ORDER BY OrgName ASC, date ASC";
+                    sql += " ORDER BY OrgName ASC, date DESC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
@@ -465,6 +470,7 @@ public class PurgedActivity {
                 act.awaitingTimestamp = rs.getBoolean("awaitingTimestamp");
                 act.active       = rs.getBoolean("active");
                 act.mailLog      = rs.getDate   ("mailLog");
+                act.orgName      = rs.getString ("OrgName");
                 activityList.add(act);
             }
         } catch (SQLException ex) {

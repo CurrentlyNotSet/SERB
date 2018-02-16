@@ -44,6 +44,12 @@ public class SystemMontiorDialog extends javax.swing.JDialog implements Runnable
     public SystemMontiorDialog(java.awt.Frame parent, boolean modal) {
         super(parent, false);
         initComponents();
+        jButton2.setVisible(false);
+        jButton3.setVisible(false);
+        jLabel9.setVisible(false);
+        jLabel10.setVisible(false);
+        lastBackupLabel.setVisible(false);
+        nextBackupLabel.setVisible(false);
         addRenderer();
         activity();
         users();

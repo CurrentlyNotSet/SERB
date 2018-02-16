@@ -121,7 +121,7 @@ public class RootPanel extends javax.swing.JFrame {
      */
     public void enableTabs() {
         //disableMenuItem
-        recordRetentionMenuItem.setVisible(false);
+        //recordRetentionMenuItem.setVisible(false);
 
         //if the user has no applied roles, which should be rare,
         //alert the user and close the application
@@ -1219,7 +1219,6 @@ public class RootPanel extends javax.swing.JFrame {
         batchCloseMEDMenuItem = new javax.swing.JMenuItem();
         batchCloseREPMenuItem = new javax.swing.JMenuItem();
         batchCloseULPMenuItem = new javax.swing.JMenuItem();
-        recordRetentionMenuItem = new javax.swing.JMenuItem();
         jMenuItem7 = new javax.swing.JMenuItem();
         jMenuItem10 = new javax.swing.JMenuItem();
         jMenuItem8 = new javax.swing.JMenuItem();
@@ -1231,6 +1230,7 @@ public class RootPanel extends javax.swing.JFrame {
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         adminPanelMenuItem = new javax.swing.JMenuItem();
+        recordRetentionMenuItem = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
@@ -1717,14 +1717,6 @@ public class RootPanel extends javax.swing.JFrame {
         });
         batchCloseCasesSubMenu.add(batchCloseULPMenuItem);
 
-        recordRetentionMenuItem.setText("Record Retention");
-        recordRetentionMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                recordRetentionMenuItemActionPerformed(evt);
-            }
-        });
-        batchCloseCasesSubMenu.add(recordRetentionMenuItem);
-
         jMenu1.add(batchCloseCasesSubMenu);
 
         jMenuItem7.setText("Annual Report");
@@ -1799,6 +1791,14 @@ public class RootPanel extends javax.swing.JFrame {
             }
         });
         jMenu2.add(adminPanelMenuItem);
+
+        recordRetentionMenuItem.setText("Record Retention");
+        recordRetentionMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                recordRetentionMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu2.add(recordRetentionMenuItem);
 
         jMenuItem5.setText("Tracking");
         jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
