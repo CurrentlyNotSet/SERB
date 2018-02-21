@@ -342,7 +342,7 @@ public class GenerateReport {
         if (report.fileName == null || !new File(jasperFileName).exists()) {
             WebOptionPane.showMessageDialog(Global.root, "<html><center> Sorry, unable to locate report. <br><br>" + report.fileName + "</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
         } else {
-            if (report.fileName.equalsIgnoreCase("Cases Needing Purged.jasper")){
+            if (report.fileName.equalsIgnoreCase("Record Retention Cases Needing Purged.jasper")){
                 hash = generateNeedsPurgedReport(report, hash);
             }
             try {

@@ -1,5 +1,6 @@
 package parker.serb.adminDBMaintenance;
 
+import javax.swing.ImageIcon;
 import parker.serb.Global;
 
 /**
@@ -10,6 +11,7 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
     public AdminMainMenuPanel(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.setIconImage( new ImageIcon(getClass().getResource("/SERBSeal.png")).getImage() );
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }

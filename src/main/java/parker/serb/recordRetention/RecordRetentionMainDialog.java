@@ -13,6 +13,7 @@ import java.awt.event.MouseEvent;
 import java.text.NumberFormat;
 import java.util.Date;
 import java.util.List;
+import javax.swing.ImageIcon;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -30,7 +31,7 @@ import parker.serb.util.NumberFormatService;
  *
  * @author andrew.schmidt
  */
-public class RecordRetentionMainDialog extends javax.swing.JFrame {
+public class RecordRetentionMainDialog extends javax.swing.JDialog {
     
     DefaultTableModel model;
     
@@ -41,8 +42,10 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
      * @param modal
      */
     public RecordRetentionMainDialog(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
         addRenderer();
+        this.setIconImage( new ImageIcon(getClass().getResource("/SERBSeal.png")).getImage() );
         setActive();
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
@@ -548,7 +551,7 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
                 "Purge?", WebOptionPane.YES_NO_OPTION);
         if (answer == WebOptionPane.YES_OPTION) {
             setPanelEnabled(false);
-            new ProcessRecords(this, true, jTable1, sectionComboBox.getSelectedItem().toString());
+            new ProcessRecords(Global.root, true, jTable1, sectionComboBox.getSelectedItem().toString());
             loadTableThread();
         }
     }//GEN-LAST:event_purgeButtonActionPerformed
@@ -594,7 +597,7 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
         jLayeredPane1.moveToFront(jPanel1);
 
         Thread temp = new Thread(() -> {
-            SMDSDocuments report = SMDSDocuments.findDocumentByFileName("Cases Needing Purged.jasper");
+            SMDSDocuments report = SMDSDocuments.findDocumentByFileName("Record Retention Cases Needing Purged.jasper");
             GenerateReport.runReport(report);
             jLayeredPane1.moveToBack(jPanel1);
         });
@@ -605,7 +608,7 @@ public class RecordRetentionMainDialog extends javax.swing.JFrame {
         jLayeredPane1.moveToFront(jPanel1);
 
         Thread temp = new Thread(() -> {
-            SMDSDocuments report = SMDSDocuments.findDocumentByFileName("PurgedDocuments.jasper");
+            SMDSDocuments report = SMDSDocuments.findDocumentByFileName("Record Retention Purged Documents Report.jasper");
             GenerateReport.runReport(report);
             jLayeredPane1.moveToBack(jPanel1);
         });

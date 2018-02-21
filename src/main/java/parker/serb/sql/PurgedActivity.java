@@ -48,7 +48,7 @@ public class PurgedActivity {
     public boolean active;
     public Date mailLog;
     
-    //
+    // Additional Information
     public String orgName;
     
         
@@ -66,7 +66,7 @@ public class PurgedActivity {
             String sql = "SELECT Activity.*, "
                     + " ISNULL(Users.firstName, '') + ' ' + ISNULL(Users.lastName, '') AS userName "
                     + " FROM Activity "
-                    + " INNER JOIN Users "
+                    + " LEFT JOIN Users "
                     + " ON Activity.userID = Users.id "
                     + " INNER JOIN CMDSCase "
                     + " ON (CMDSCase.caseYear = Activity.caseYear "
@@ -109,6 +109,7 @@ public class PurgedActivity {
                 act.caseMonth    = rs.getString ("caseMonth");
                 act.caseNumber   = rs.getString ("caseNumber");
                 act.user         = rs.getString ("userID");
+                act.userName     = rs.getString ("userName").trim().equals("") ? "SYSTEM": rs.getString ("userName").trim();
                 act.date         = rs.getTimestamp("date");
                 act.action       = rs.getString ("action");
                 act.fileName     = rs.getString ("fileName");
@@ -149,7 +150,7 @@ public class PurgedActivity {
                     + " ISNULL(Users.firstName, '') + ' ' + ISNULL(Users.lastName, '') AS userName"
                     + " FROM Activity"
                     //Join to Users To Get UserName
-                    + " INNER JOIN Users"
+                    + " LEFT JOIN Users"
                     + " ON Activity.userID = Users.id"
                     //Join to CSCCase to get entries older than [Due Date] minus 7 years
                     + " INNER JOIN CSCCase"
@@ -185,7 +186,7 @@ public class PurgedActivity {
                 act.caseMonth    = rs.getString ("caseMonth");
                 act.caseNumber   = rs.getString ("caseNumber");
                 act.user         = rs.getString ("userID");
-                act.userName     = rs.getString ("userName");
+                act.userName     = rs.getString ("userName").trim().equals("") ? "SYSTEM": rs.getString ("userName").trim();
                 act.date         = rs.getTimestamp("date");
                 act.action       = rs.getString ("action");
                 act.fileName     = rs.getString ("fileName");
@@ -227,7 +228,7 @@ public class PurgedActivity {
                     + " ISNULL(Users.firstName, '') + ' ' + ISNULL(Users.lastName, '') AS userName"
                     + " FROM Activity"
                     //Join to Users To Get UserName
-                    + " INNER JOIN Users"
+                    + " LEFT JOIN Users"
                     + " ON Activity.userID = Users.id"
                     //Join to MEDCase to get Case Status
                     + " INNER JOIN ULPCase"
@@ -289,7 +290,7 @@ public class PurgedActivity {
                 act.caseMonth    = rs.getString ("caseMonth");
                 act.caseNumber   = rs.getString ("caseNumber");
                 act.user         = rs.getString ("userID");
-                act.userName     = rs.getString ("userName");
+                act.userName     = rs.getString ("userName").trim().equals("") ? "SYSTEM": rs.getString ("userName").trim();
                 act.date         = rs.getTimestamp("date");
                 act.action       = rs.getString ("action");
                 act.fileName     = rs.getString ("fileName");
@@ -330,7 +331,7 @@ public class PurgedActivity {
                     + " ISNULL(Users.firstName, '') + ' ' + ISNULL(Users.lastName, '') AS userName"
                     + " FROM Activity"
                     //Join to Users To Get UserName
-                    + " INNER JOIN Users"
+                    + " LEFT JOIN Users"
                     + " ON Activity.userID = Users.id"
                     //Join to MEDCase to get Case Status
                     + " INNER JOIN MEDCase"
@@ -381,7 +382,7 @@ public class PurgedActivity {
                 act.caseMonth    = rs.getString ("caseMonth");
                 act.caseNumber   = rs.getString ("caseNumber");
                 act.user         = rs.getString ("userID");
-                act.userName     = rs.getString ("userName");
+                act.userName     = rs.getString ("userName").trim().equals("") ? "SYSTEM": rs.getString ("userName").trim();
                 act.date         = rs.getTimestamp("date");
                 act.action       = rs.getString ("action");
                 act.fileName     = rs.getString ("fileName");
@@ -422,7 +423,7 @@ public class PurgedActivity {
                     + " ISNULL(Users.firstName, '') + ' ' + ISNULL(Users.lastName, '') AS userName"
                     + " FROM Activity"
                     //Join to Users To Get UserName
-                    + " INNER JOIN Users"
+                    + " LEFT JOIN Users"
                     + " ON Activity.userID = Users.id"
                     //Join to OrgCase to get entries older than [Due Date] minus 7 years
                     + " INNER JOIN ORGCase"
@@ -458,7 +459,7 @@ public class PurgedActivity {
                 act.caseMonth    = rs.getString ("caseMonth");
                 act.caseNumber   = rs.getString ("caseNumber");
                 act.user         = rs.getString ("userID");
-                act.userName     = rs.getString ("userName");
+                act.userName     = rs.getString ("userName").trim().equals("") ? "SYSTEM": rs.getString ("userName").trim();
                 act.date         = rs.getTimestamp("date");
                 act.action       = rs.getString ("action");
                 act.fileName     = rs.getString ("fileName");
