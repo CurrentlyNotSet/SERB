@@ -130,9 +130,16 @@ public class RootPanel extends javax.swing.JFrame {
             System.exit(0);
         }
 
+        
+        //If Record Retention Remove Item
+        if(!Global.activeUserRoles.contains("Record Retention")) {
+            jMenu2.remove(recordRetentionMenuItem);        
+        }
+        
         //if the user is not admin remove the tabs that are not selected
         if(!Global.activeUserRoles.contains("Admin")) {
             jMenuBar1.remove(jMenu2);
+            
             for(int i = jTabbedPane1.getTabCount()-1; i >= 0; i--) {
                 if(!Global.activeUserRoles.contains(jTabbedPane1.getTitleAt(i))) {
                     jTabbedPane1.remove(i);
@@ -144,8 +151,7 @@ public class RootPanel extends javax.swing.JFrame {
         //If none of the proper roles, remove the header option
         if(!Global.activeUserRoles.contains("REP")
                 && !Global.activeUserRoles.contains("MED")
-                && !Global.activeUserRoles.contains("ULP")
-                && !Global.activeUserRoles.contains("Record Retention")) {
+                && !Global.activeUserRoles.contains("ULP")) {
             jMenuBar1.remove(batchCloseCasesSubMenu);
 
             if(!Global.activeUserRoles.contains("REP")) {
@@ -158,10 +164,6 @@ public class RootPanel extends javax.swing.JFrame {
 
             if(!Global.activeUserRoles.contains("ULP")) {
                 jMenuBar1.remove(batchCloseULPMenuItem);
-            }
-            
-            if(!Global.activeUserRoles.contains("Record Retention")) {
-                jMenuBar1.remove(recordRetentionMenuItem);        
             }
         }
 
