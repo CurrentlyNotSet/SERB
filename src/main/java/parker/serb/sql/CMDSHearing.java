@@ -9,7 +9,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import javax.swing.JFrame;
 import org.apache.commons.dbutils.DbUtils;
 import parker.serb.CMDS.CMDSUpdateInventoryStatusLineDialog;
 import parker.serb.Global;
@@ -68,11 +67,15 @@ public class CMDSHearing {
                     partySet += (partySet.trim().equals("") ? "" : " ") + (party.lastName.trim().equals("") ? party.companyName : party.lastName);
                 }
                 
+                String hearingDateTime = hearingTime == null ? "" 
+                : " on " + Global.mmddyyyy.format(hearingTime) + " at " + Global.hhmma.format(hearingTime);
+                
                 String emailSubject = 
                         hearingType + " " +  //Type Code
                         CMDSCase.getALJinitials() + " " + //ALJ Initials
                         partySet + " " + // Appellant
-                        NumberFormatService.generateFullCaseNumber(); // Full Case Number
+                        NumberFormatService.generateFullCaseNumber() + // Full Case Number
+                        hearingDateTime; //generate Date Time
                                 
                 
                 EmailOutInvites.addNewHearing("CMDS",

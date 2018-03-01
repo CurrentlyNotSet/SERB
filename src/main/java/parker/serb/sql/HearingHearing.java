@@ -70,7 +70,7 @@ public class HearingHearing {
                         hearingRoom,
                         hearingType,
                         new Timestamp(hearingTime.getTime()),
-                        generateEmailOutInviteSubject(Global.caseYear, Global.caseType, Global.caseMonth, Global.caseNumber, hearingType));
+                        generateEmailOutInviteSubject(Global.caseYear, Global.caseType, Global.caseMonth, Global.caseNumber, hearingType, hearingTime));
                 Activity.addActivty("Created a " + hearingType + " on " + Global.mmddyyyyhhmma.format(hearingTime) + " in " + hearingRoom, null);
             }
 
@@ -234,7 +234,7 @@ public class HearingHearing {
     }
     
     private static String generateEmailOutInviteSubject(String caseYear, 
-            String caseType, String caseMonth, String caseNumber, String hearingType){
+            String caseType, String caseMonth, String caseNumber, String hearingType, Date hearingTime){
         String subject = "";
                 
         String partyType = "";
@@ -249,19 +249,21 @@ public class HearingHearing {
                         caseYear, caseType, caseMonth, caseNumber, 
                         partyType);
                 
-                String partySet = "";
-                for (CaseParty party : partylist){
-                    partySet += (partySet.trim().equals("") ? "" : " ") + (party.lastName.trim().equals("") ? party.companyName : party.lastName);
-                }
-                
-                subject = hearingType + " " +  //Type Code
-                        CMDSCase.getALJinitials() + " " + //ALJ Initials
-                        partySet + " " + // Appellant
-                        NumberFormatService.generateFullCaseNumber(); // Full Case Number
-        
-        
-        
-        
+        String partySet = "";
+        for (CaseParty party : partylist){
+            partySet += (partySet.trim().equals("") ? "" : " ") 
+                    + (party.lastName.trim().equals("") ? party.companyName : party.lastName);
+        }
+
+        String hearingDateTime = hearingTime == null ? "" 
+                : " on " + Global.mmddyyyy.format(hearingTime) + " at " + Global.hhmma.format(hearingTime);
+
+        subject = hearingType + " " +  //Type Code
+                CMDSCase.getALJinitials() + " " + //ALJ Initials
+                partySet + " " + // Appellant
+                NumberFormatService.generateFullCaseNumber() + // Full Case Number
+                hearingDateTime; //Hearingdate Time
+
         return subject;
     }
 }
