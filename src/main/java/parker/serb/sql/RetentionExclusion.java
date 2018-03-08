@@ -167,7 +167,7 @@ public class RetentionExclusion {
         try {
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "UPDATE AppealCourt SET "
+            String sql = "UPDATE RetentionExclusion SET "
                     + "active = ?, "
                     + "section = ?, "
                     + "excludeString = ? "
