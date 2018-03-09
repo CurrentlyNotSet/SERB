@@ -113,17 +113,18 @@ public class ProcessRecords extends javax.swing.JDialog {
     }
 
     private void handleRecord(PurgedActivity item, String sectionSelected) {
-        //insert record
-        if (PurgedActivity.insertPurgedRecord(item)) {
-            //DeleteFile
-            boolean safeToPurge = true;
+        //Preset the 'safeToPurge' from Activity table flag 
+        boolean safeToPurge = true;
 
-            if (item.fileName != null) {
-                safeToPurge = deleteFile(item, sectionSelected);
-            }
+        //Check activity for a file, and attempt to delete
+        if (item.fileName != null) {
+            safeToPurge = deleteFile(item, sectionSelected);
+        }
 
-            //Delete Activity Record
-            if (safeToPurge) {
+        if (safeToPurge) {
+            //Attempt to insert to Purge Activity Table
+            if (PurgedActivity.insertPurgedRecord(item)) {
+                //Remove Activity Table Record
                 Activity.deleteActivityByID(item.activityID);
             }
         }
@@ -132,7 +133,7 @@ public class ProcessRecords extends javax.swing.JDialog {
     private boolean deleteFile(PurgedActivity item, String sectionSelected) {
         String filePath = Global.activityPath
                 + (sectionSelected.equals("Civil Service Commission")
-                ? Global.caseType : sectionSelected) + File.separator;
+                ? "CSC" : sectionSelected) + File.separator;
 
         if (sectionSelected.equalsIgnoreCase("Civil Service Commission")
                 || sectionSelected.equalsIgnoreCase("CSC")
