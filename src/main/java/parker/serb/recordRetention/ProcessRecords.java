@@ -23,6 +23,8 @@ import parker.serb.util.NumberFormatService;
  * @author parker
  */
 public class ProcessRecords extends javax.swing.JDialog {
+    
+    List<PurgedActivity> failedPurgeList = new ArrayList<>();
 
     public ProcessRecords(java.awt.Frame parent, boolean modal, JTable tablePassed, String sectionSelectedPassed) {
         super(parent, modal);
@@ -35,6 +37,7 @@ public class ProcessRecords extends javax.swing.JDialog {
     private void processThread(JTable table, String sectionSelected) {
         Thread temp = new Thread(() -> {
             PurgeRecords(table, sectionSelected);
+            UnprocessableDialog(sectionSelected);
             dispose();
         });
         temp.start();
@@ -62,42 +65,43 @@ public class ProcessRecords extends javax.swing.JDialog {
             if (table.getValueAt(i, 1).equals(true)) {
                 PurgedActivity item = (PurgedActivity) table.getValueAt(i, 0);
 
-                //ORG/CSC Numbers
-                if (sectionSelected.equalsIgnoreCase("Civil Service Commission")
-                        || sectionSelected.equalsIgnoreCase("CSC")
-                        || sectionSelected.equalsIgnoreCase("ORG")) {
-                    if (!caseType.equalsIgnoreCase(item.caseType)
-                            || !caseNumber.equalsIgnoreCase(item.caseNumber)) {
-                        caseType = item.caseType;
-                        caseNumber = item.caseNumber;
+                if (handleRecord(item, sectionSelected)) { //deleted
 
-                        CaseNumberModel cNum = new CaseNumberModel();
-                        cNum.setCaseType(caseType);
-                        cNum.setCaseNumber(caseNumber);
+                    //ORG/CSC Numbers
+                    if (sectionSelected.equalsIgnoreCase("Civil Service Commission")
+                            || sectionSelected.equalsIgnoreCase("CSC")
+                            || sectionSelected.equalsIgnoreCase("ORG")) {
+                        if (!caseType.equalsIgnoreCase(item.caseType)
+                                || !caseNumber.equalsIgnoreCase(item.caseNumber)) {
+                            caseType = item.caseType;
+                            caseNumber = item.caseNumber;
 
-                        distinctCaseNumbers.add(cNum);
-                    }
-                } else {
-                    if (!caseYear.equalsIgnoreCase(item.caseYear)
-                            || !caseType.equalsIgnoreCase(item.caseType)
-                            || !caseMonth.equalsIgnoreCase(item.caseMonth)
-                            || !caseNumber.equalsIgnoreCase(item.caseNumber)) {
-                        caseYear = item.caseYear;
-                        caseType = item.caseType;
-                        caseMonth = item.caseMonth;
-                        caseNumber = item.caseNumber;
+                            CaseNumberModel cNum = new CaseNumberModel();
+                            cNum.setCaseType(caseType);
+                            cNum.setCaseNumber(caseNumber);
 
-                        CaseNumberModel cNum = new CaseNumberModel();
-                        cNum.setCaseYear(caseYear);
-                        cNum.setCaseType(caseType);
-                        cNum.setCaseMonth(caseMonth);
-                        cNum.setCaseNumber(caseNumber);
+                            distinctCaseNumbers.add(cNum);
+                        }
+                    } else {
+                        if (!caseYear.equalsIgnoreCase(item.caseYear)
+                                || !caseType.equalsIgnoreCase(item.caseType)
+                                || !caseMonth.equalsIgnoreCase(item.caseMonth)
+                                || !caseNumber.equalsIgnoreCase(item.caseNumber)) {
+                            caseYear = item.caseYear;
+                            caseType = item.caseType;
+                            caseMonth = item.caseMonth;
+                            caseNumber = item.caseNumber;
 
-                        distinctCaseNumbers.add(cNum);
+                            CaseNumberModel cNum = new CaseNumberModel();
+                            cNum.setCaseYear(caseYear);
+                            cNum.setCaseType(caseType);
+                            cNum.setCaseMonth(caseMonth);
+                            cNum.setCaseNumber(caseNumber);
+
+                            distinctCaseNumbers.add(cNum);
+                        }
                     }
                 }
-                //Handle Record
-                handleRecord(item, sectionSelected);
             }
         }
 
@@ -112,7 +116,7 @@ public class ProcessRecords extends javax.swing.JDialog {
         System.out.println("Purge Process Time: " + NumberFormatService.convertLongToTime(lEndTime - lStartTime));
     }
 
-    private void handleRecord(PurgedActivity item, String sectionSelected) {
+    private boolean handleRecord(PurgedActivity item, String sectionSelected) {
         //Preset the 'safeToPurge' from Activity table flag 
         boolean safeToPurge = true;
 
@@ -127,7 +131,12 @@ public class ProcessRecords extends javax.swing.JDialog {
                 //Remove Activity Table Record
                 Activity.deleteActivityByID(item.activityID);
             }
+        } else {
+            //Add Entry To Not Able To Delete List
+            failedPurgeList.add(item);
         }
+        
+        return safeToPurge;
     }
 
     private boolean deleteFile(PurgedActivity item, String sectionSelected) {
@@ -155,7 +164,14 @@ public class ProcessRecords extends javax.swing.JDialog {
         }
         return false;
     }
-
+    
+    private void UnprocessableDialog(String sectionSelected) {
+        if (failedPurgeList.size() > 0){
+            this.setVisible(false);
+            new UnProcessableActivityDialog(Global.root, true, failedPurgeList, sectionSelected);
+        }
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
