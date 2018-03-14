@@ -76,10 +76,28 @@ public class RecordRetentionMainDialog extends javax.swing.JDialog {
 
     private void addListeners() {
         startDateField.addDateSelectionListener((Date date) -> {
+            if (startDateField.getDate() != null && endDateField.getDate() != null) {
+                if (endDateField.getDate().compareTo(date) < 0) {
+                    endDateField.setValue(null);
+                    endDateField.clear();
+                }
+            } else {
+                endDateField.setValue(null);
+                endDateField.clear();
+            }
             loadTableListener();
         });
 
         endDateField.addDateSelectionListener((Date date) -> {
+            if (startDateField.getDate() != null && endDateField.getDate() != null) {
+                if (date.compareTo(startDateField.getDate()) < 0) {
+                    endDateField.setValue(null);
+                    endDateField.clear();
+                }
+            } else {
+                endDateField.setValue(null);
+                endDateField.clear();
+            }
             loadTableListener();
         });
     }
@@ -127,6 +145,7 @@ public class RecordRetentionMainDialog extends javax.swing.JDialog {
 
     private void loadTableThread() {
         model.setRowCount(0);
+        SelectAllCheckBox.setSelected(false);
         setPanelEnabled(false);
 
         Thread temp = new Thread(() -> {
@@ -262,6 +281,11 @@ public class RecordRetentionMainDialog extends javax.swing.JDialog {
                 && !endDateField.getText().equals("")
                 && !sectionComboBox.getSelectedItem().toString().equals("")) {
             loadTableThread();
+        } else {
+            SelectAllCheckBox.setSelected(false);
+            model.setRowCount(0);
+            countLabel.setText("No Entries");
+            purgeButton.setEnabled(false);
         }
     }
     
