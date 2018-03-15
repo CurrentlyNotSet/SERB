@@ -156,7 +156,7 @@ public class PurgedActivity {
                     + " INNER JOIN CSCCase"
                     + " ON Activity.caseNumber = CSCCase.CSCNumber"
                     + " WHERE Activity.caseType = 'CSC'"
-                    + " AND Activity.date < CAST((CONVERT(varchar(4), (YEAR(GETDATE()) - 7), 4) + '-04-30 00:00:00.000') AS datetime) ";
+                    + " AND Activity.date < DATEADD(month, -6, CAST((CONVERT(varchar(4), (YEAR(GETDATE()) - 7), 4) + '-04-30 00:00:00.000') AS datetime)) ";
                     if (excludeList.size() > 0) {
                         sql += " AND (";
 
@@ -429,7 +429,7 @@ public class PurgedActivity {
                     + " INNER JOIN ORGCase"
                     + " ON Activity.caseNumber = ORGCase.orgNumber"
                     + " WHERE Activity.caseType = 'ORG'"
-                    + " AND Activity.date < CAST(REPLACE(ORGCase.filingDueDate, RIGHT(ORGCase.filingDueDate, 2), ' ') + CONVERT(varchar(4), (YEAR(GETDATE()) - 7), 4) AS datetime) ";
+                    + " AND Activity.date < DATEADD(month, -6, CAST(REPLACE(ORGCase.filingDueDate, RIGHT(ORGCase.filingDueDate, 2), ' ') + CONVERT(varchar(4), (YEAR(GETDATE()) - 7), 4) AS datetime)) ";
                     if (excludeList.size() > 0) {
                         sql += " AND (";
 
