@@ -1652,4 +1652,28 @@ public class Activity {
         }
     }
     
+    public static void removeFileLinkFromActivtyEntry(int activtyID) {
+        Statement stmt = null;
+
+        try {
+
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "update Activity SET fileName = NULL Where id = ?";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setInt(1, activtyID);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            if(ex.getCause() instanceof SQLServerException) {
+                removeFileLinkFromActivtyEntry(activtyID);
+            } else {
+                SlackNotification.sendNotification(ex);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+    }
+    
 }

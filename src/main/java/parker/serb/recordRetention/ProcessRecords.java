@@ -128,8 +128,14 @@ public class ProcessRecords extends javax.swing.JDialog {
         if (safeToPurge) {
             //Attempt to insert to Purge Activity Table
             if (PurgedActivity.insertPurgedRecord(item)) {
-                //Remove Activity Table Record
-                Activity.deleteActivityByID(item.activityID);
+                //Handle Activity Table Record
+                if (sectionSelected.equalsIgnoreCase("CMDS")){
+                    //Delete File Name from Activity Row
+                    Activity.removeFileLinkFromActivtyEntry(item.activityID);
+                } else {
+                    //Delete Whole Row
+                    Activity.deleteActivityByID(item.activityID);
+                }
             }
         } else {
             //Add Entry To Not Able To Delete List

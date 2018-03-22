@@ -88,6 +88,7 @@ public class PurgedActivity {
             }
             
             sql += " AND (CMDSCase.closeDate BETWEEN ? AND ?) ";
+            sql += " AND (Activity.fileName IS NOT NULL AND LTRIM(RTRIM(filename)) != '') ";
             sql += " ORDER BY Activity.caseYear ASC, Activity.caseMonth ASC, Activity.caseNumber ASC, date DESC";
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
