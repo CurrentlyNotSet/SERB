@@ -39,6 +39,7 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
 
     MEDCase orginalInformation;
     DefaultTableModel relatedCaseModel;
+    
     /**
      * Creates new form MEDCaseStatusPanel
      */
@@ -51,7 +52,7 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
 
     private void addRenderer() {
         relatedCaseTable.setDefaultRenderer(Object.class, new TableCellRenderer(){
-            private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
+            private final DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                 Component c = DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
@@ -65,7 +66,6 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
     }
 
     public void clearAll() {
-
         filingDateTextBox.setText("");
         employerIDNumberTextBox.setText("");
         bargainingUnitTextBox.setText("");
@@ -74,7 +74,6 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
         approxNumberOfEmployeesTextBox.setText("");
         duplicateCaseNumberTextBox.setText("");
         relatedCaseNumberTextBox.setText("");
-
         negotiationTypeComboBox.setSelectedItem(" ");
         expirationDateTextBox.setText("");
         NTNFiledByComboBox.setSelectedItem("");
@@ -110,7 +109,6 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
         employerIDNumberTextBox.setBackground(Color.white);
         bargainingUnitTextBox.setEnabled(true);
         bargainingUnitTextBox.setBackground(Color.white);
-
         approxNumberOfEmployeesTextBox.setEnabled(true);
         approxNumberOfEmployeesTextBox.setBackground(Color.white);
         duplicateCaseNumberTextBox.setEnabled(true);
@@ -118,7 +116,6 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
         relatedCaseNumberTextBox.setEnabled(true);
         relatedCaseNumberTextBox.setBackground(Color.white);
         addMultiCaseButton.setVisible(true);
-
         negotiationTypeComboBox.setEnabled(true);
         expirationDateTextBox.setEnabled(true);
         expirationDateTextBox.setBackground(Color.white);
@@ -146,7 +143,6 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
         dismissedCheckBox.setEnabled(true);
     }
 
-
     public void disableUpdate(boolean save) {
         Global.root.getjButton2().setText("Update");
         Global.root.getjButton9().setVisible(false);
@@ -157,7 +153,6 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
         employerIDNumberTextBox.setBackground(new Color(238,238,238));
         bargainingUnitTextBox.setEnabled(false);
         bargainingUnitTextBox.setBackground(new Color(238,238,238));
-
         approxNumberOfEmployeesTextBox.setEnabled(false);
         approxNumberOfEmployeesTextBox.setBackground(new Color(238,238,238));
         duplicateCaseNumberTextBox.setEnabled(false);
@@ -165,7 +160,6 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
         relatedCaseNumberTextBox.setEnabled(false);
         relatedCaseNumberTextBox.setBackground(new Color(238,238,238));
         addMultiCaseButton.setVisible(false);
-
         negotiationTypeComboBox.setEnabled(false);
         expirationDateTextBox.setEnabled(false);
         expirationDateTextBox.setBackground(new Color(238,238,238));
@@ -195,7 +189,6 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
         if(save) {
             saveInformation();
         }
-
         loadInformation();
     }
 
@@ -203,15 +196,11 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
         MEDCase newInformation = new MEDCase();
 
         newInformation.fileDate = filingDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(filingDateTextBox.getText()));
-
         newInformation.employerIDNumber = employerIDNumberTextBox.getText().equals("") ? null : employerIDNumberTextBox.getText();
         newInformation.bargainingUnitNumber = bargainingUnitTextBox.getText().equals("") ? null : bargainingUnitTextBox.getText();
-
         newInformation.approxNumberOfEmployees = approxNumberOfEmployeesTextBox.getText().equals("") ? null : approxNumberOfEmployeesTextBox.getText();
-
         newInformation.duplicateCaseNumber = duplicateCaseNumberTextBox.getText().equals("") ? null : duplicateCaseNumberTextBox.getText();
         newInformation.relatedCaseNumber = relatedCaseNumberTextBox.getText().equals("") ? null : relatedCaseNumberTextBox.getText();
-
         newInformation.negotiationType = negotiationTypeComboBox.getSelectedItem().toString().trim().equals("") ? null : negotiationTypeComboBox.getSelectedItem().toString();
         newInformation.expirationDate = expirationDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(expirationDateTextBox.getText()));
         newInformation.NTNFiledBy = NTNFiledByComboBox.getSelectedItem().toString().trim().equals("") ? null : NTNFiledByComboBox.getSelectedItem().toString();
@@ -240,7 +229,6 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
 
     public void loadStateMediators() {
         stateMediatorAppointedComboBox.removeAllItems();
-
         stateMediatorAppointedComboBox.addItem("");
 
         List currentOwnerList = Mediator.loadMediators("State");
@@ -254,7 +242,6 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
 
     public void loadFMCSMediators() {
         FCMSMediatorAppointedComboBox.removeAllItems();
-
         FCMSMediatorAppointedComboBox.addItem("");
 
         List currentOwnerList = Mediator.loadMediators("FMCS");
@@ -267,25 +254,32 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
     }
 
     public void loadInformation() {
-        orginalInformation = MEDCase.loadStatusInformation();
-
         loadStateMediators();
         loadFMCSMediators();
         loadRelatedCasesTable();
+        
+        //Load Panel Information
+        orginalInformation = MEDCase.loadStatusInformation();
 
+        //Convert Names For Mediators
+        String stateMedName = "";
+        String fmcsMedName = "";
+                
+        //stateMediatorAppointedComboBox
+        if (orginalInformation.stateMediatorAppointedID != null){
+            stateMedName = Mediator.getMediatorNameByID(orginalInformation.stateMediatorAppointedID);
+        }
+        //FCMSMediatorAppointedComboBox
+        if (orginalInformation.FMCSMediatorAppointedID != null) {
+            fmcsMedName = Mediator.getMediatorNameByID(orginalInformation.FMCSMediatorAppointedID);
+        }
+        
         filingDateTextBox.setText(orginalInformation.fileDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.fileDate.getTime())) : "");
         employerIDNumberTextBox.setText(orginalInformation.employerIDNumber != null ? orginalInformation.employerIDNumber : "");
         bargainingUnitTextBox.setText(orginalInformation.bargainingUnitNumber != null ? orginalInformation.bargainingUnitNumber : "");
-
-        if(orginalInformation.bargainingUnitNumber != null) {
-            setBUNumberCheckBoxes(BargainingUnit.getCertStatus(orginalInformation.bargainingUnitNumber));
-        }
-
         approxNumberOfEmployeesTextBox.setText((orginalInformation.approxNumberOfEmployees != null ? orginalInformation.approxNumberOfEmployees : ""));
-
         duplicateCaseNumberTextBox.setText(orginalInformation.duplicateCaseNumber != null ? orginalInformation.duplicateCaseNumber : "");
         relatedCaseNumberTextBox.setText(orginalInformation.relatedCaseNumber != null ? orginalInformation.relatedCaseNumber : "");
-
         negotiationTypeComboBox.setSelectedItem(orginalInformation.negotiationType != null ? orginalInformation.negotiationType : " ");
         expirationDateTextBox.setText(orginalInformation.expirationDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.expirationDate.getTime())) : "");
         NTNFiledByComboBox.setSelectedItem(orginalInformation.NTNFiledBy != null ? orginalInformation.NTNFiledBy : " ");
@@ -293,8 +287,8 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
         multiUnitBargainingRequestedCheckBox.setSelected(orginalInformation.multiunitBargainingRequested == true);
         mediatorAppointedDateTextBox.setText(orginalInformation.mediatorAppointedDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.mediatorAppointedDate.getTime())) : "");
         mediatorReplacementCheckBox.setSelected(orginalInformation.mediatorReplacement == true);
-        stateMediatorAppointedComboBox.setSelectedItem(orginalInformation.stateMediatorAppointedID != null ? Mediator.getMediatorNameByID(orginalInformation.stateMediatorAppointedID) : "");
-        FCMSMediatorAppointedComboBox.setSelectedItem(orginalInformation.FMCSMediatorAppointedID != null ? Mediator.getMediatorNameByID(orginalInformation.FMCSMediatorAppointedID) : "");
+        stateMediatorAppointedComboBox.setSelectedItem(stateMedName);
+        FCMSMediatorAppointedComboBox.setSelectedItem(fmcsMedName);
         settlementDateTextBox.setText(orginalInformation.settlementDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.settlementDate.getTime())) : "");
         sendToBoardToCloseCheckBox.setSelected(orginalInformation.sendToBoardToClose == true);
         boardFinalDateTextBox.setText(orginalInformation.boardFinalDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.boardFinalDate.getTime())) : "");
@@ -308,6 +302,21 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
         motionCheckBox.setSelected(orginalInformation.motion == true);
         dismissedCheckBox.setSelected(orginalInformation.dismissed == true);
         statusComboBox.setSelectedItem(orginalInformation.caseStatus == null ? "" : orginalInformation.caseStatus);
+        if(orginalInformation.bargainingUnitNumber != null) {
+            setBUNumberCheckBoxes(BargainingUnit.getCertStatus(orginalInformation.bargainingUnitNumber));
+        }
+        
+        //Verify that state and FMCS comboboxes have been filled in
+        //stateMediatorAppointedComboBox
+        if (orginalInformation.stateMediatorAppointedID != null && stateMediatorAppointedComboBox.getSelectedItem().toString().equals("")){
+            stateMediatorAppointedComboBox.addItem(stateMedName);
+            stateMediatorAppointedComboBox.setSelectedItem(stateMedName);
+        }
+        //FCMSMediatorAppointedComboBox
+        if (orginalInformation.FMCSMediatorAppointedID != null && FCMSMediatorAppointedComboBox.getSelectedItem().toString().equals("")) {
+            FCMSMediatorAppointedComboBox.addItem(fmcsMedName);
+            FCMSMediatorAppointedComboBox.setSelectedItem(fmcsMedName);
+        }
     }
 
     private void setBUNumberCheckBoxes(String certStatus) {
@@ -329,7 +338,6 @@ public class MEDCaseStatusPanel extends javax.swing.JPanel {
     }
 
     public void loadRelatedCasesTable() {
-
         relatedCaseModel.setRowCount(0);
 
         List relatedCases = RelatedCase.loadRelatedCases();
