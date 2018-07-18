@@ -75,6 +75,11 @@ public class processREPbookmarks {
         String employeeOrganizationRepAddressBlock = "";         //EOREP
         String petitionerAddressBlock = "";                      //P
         String petitionerRepAddressBlock = "";                   //PREP
+        String intervenerName = ""; //INT
+        String intervenerAddressBlock = ""; //INT
+        String intervenerRepName = ""; //INTREP
+        String intervenerRepAddressBlock = ""; //INTREP
+        String intervenerRepSalutation = ""; //INTREPSAL
         String mediationDate = null;
         String mediationTime = null;
         String mediationCC = "";
@@ -85,6 +90,7 @@ public class processREPbookmarks {
         String multiCaseElection = "";
         String longMeetDate = "";
         String pollingEnd = "";
+        
 
         for (CaseParty party : partyList) {
 
@@ -257,6 +263,26 @@ public class processREPbookmarks {
                         petitionerRepAddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
                         petitionerRepName += StringUtilities.buildCasePartyNameNoPreFix(party);
                         incumbentEmployeeOrganizationEmail += party.emailAddress;
+                        break;
+                    case "Intervener":
+                        if (!"".equals(intervenerName.trim())) {
+                            intervenerName += ", ";
+                        }
+                        if (!"".equals(intervenerAddressBlock.trim())) {
+                            intervenerAddressBlock += "\n\n";
+                        }
+                        intervenerAddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
+                        intervenerName += StringUtilities.buildCasePartyNameNoPreFix(party);
+                        break;
+                    case "Intervener REP":
+                        if (!"".equals(intervenerRepName.trim())) {
+                            intervenerRepName += ", ";
+                        }
+                        if (!"".equals(intervenerRepAddressBlock.trim())) {
+                            intervenerRepAddressBlock += "\n\n";
+                        }
+                        intervenerRepAddressBlock += StringUtilities.buildAddressBlockWithLineBreaks(party);
+                        intervenerRepName += StringUtilities.buildCasePartyNameNoPreFix(party);
                         break;
                     default:
                         if (party.caseRelation.startsWith("Rival Employee Organization") && !party.caseRelation.endsWith("REP")) {
@@ -457,6 +483,9 @@ public class processREPbookmarks {
             processBookmark.process("PETINTERSAL" + (i == 0 ? "" : i), petitionerName.trim(), Document);
             processBookmark.process("PETITIONERINTERVENOR" + (i == 0 ? "" : i), petitionerName.trim(), Document);
             processBookmark.process("PETINTERREP" + (i == 0 ? "" : i), petitionerName.trim(), Document);
+            processBookmark.process("INTERVENER" + (i == 0 ? "" : i), intervenerName.trim(), Document);
+            processBookmark.process("INTERVENERREP" + (i == 0 ? "" : i), intervenerRepName.trim(), Document);
+            processBookmark.process("INTERVENERREPSAL" + (i == 0 ? "" : i), intervenerRepName.trim(), Document);
             processBookmark.process("INCUMBENTADDRESSBLOCK" + (i == 0 ? "" : i), incumbentEmployeeOrganizationAddressBlock, Document);
             processBookmark.process("INCUMBENTREPADDRESSBLOCK" + (i == 0 ? "" : i), incumbentEmployeeOrganizationRepAddressBlock, Document);
             processBookmark.process("EMPLOYERADDRESSBLOCK" + (i == 0 ? "" : i), employerAddressBlock, Document);
@@ -467,6 +496,8 @@ public class processREPbookmarks {
             processBookmark.process("EMPLOYEEORGREPADDRESSBLOCK" + (i == 0 ? "" : i), employeeOrganizationRepAddressBlock, Document);
             processBookmark.process("PETITIONERADDRESSBLOCK" + (i == 0 ? "" : i), petitionerAddressBlock, Document);
             processBookmark.process("PETITIONERREPADDRESSBLOCK" + (i == 0 ? "" : i), petitionerRepAddressBlock, Document);
+            processBookmark.process("INTERVENERADDRESSBLOCK" + (i == 0 ? "" : i), intervenerAddressBlock, Document);
+            processBookmark.process("INTERVENERREPADDRESSBLOCK" + (i == 0 ? "" : i), intervenerRepAddressBlock, Document);
             processBookmark.process("IEOCONTACT" + (i == 0 ? "" : i),
                     (!"".equals(incumbentEmployeeOrganizationRepName) ? incumbentEmployeeOrganizationRepName.trim() : incumbentEmployeeOrganizationName.trim()), Document);
             processBookmark.process("EMPCONTACT" + (i == 0 ? "" : i),
