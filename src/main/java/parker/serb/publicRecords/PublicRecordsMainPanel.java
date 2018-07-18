@@ -296,6 +296,22 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
         }
     }
 
+    private boolean redactDocsConfirmation() {
+        int count = 0;
+        for (int i = 0; i < caseDocsTable.getRowCount(); i++) {
+            if (caseDocsTable.getValueAt(i, 1).equals(true)) {
+                count++;
+            }
+        }
+        
+        int answer = WebOptionPane.showConfirmDialog(this, 
+                "Are you sure you want to redact " + count + " documents?", 
+                "Redact", 
+                WebOptionPane.YES_NO_OPTION
+        );
+        return answer == WebOptionPane.YES_OPTION;
+    }
+    
     private void redactDocs() {
         for (int i = 0; i < caseDocsTable.getRowCount(); i++) {
             if (caseDocsTable.getValueAt(i, 1).equals(true)) {
@@ -731,7 +747,9 @@ public class PublicRecordsMainPanel extends javax.swing.JDialog {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         switch (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex())) {
             case "Case Documents":
-                redactDocs();
+                if (redactDocsConfirmation()){
+                    redactDocs();
+                }
                 break;
             case "Awaiting Redaction":
                 break;
