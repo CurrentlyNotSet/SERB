@@ -16,7 +16,6 @@ import parker.serb.sql.AdministrationInformation;
 public class AdministrationInfoAddEdidDialog extends javax.swing.JDialog {
 
     private AdministrationInformation item;
-    int id;
     
     /**
      * Creates new form AdministrationInfoAddEdidDialog
