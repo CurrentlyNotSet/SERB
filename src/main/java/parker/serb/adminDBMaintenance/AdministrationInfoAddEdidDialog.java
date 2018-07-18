@@ -80,7 +80,6 @@ public class AdministrationInfoAddEdidDialog extends javax.swing.JDialog {
         item.Phone = PhoneTextBox.getText().trim();
         item.Fax = FaxTextField.getText().trim();
         item.Footer = FooterTextArea.getText().trim();
-        item.id = id;
 
         AdministrationInformation.updateAdministrationInformation(item);
     }
