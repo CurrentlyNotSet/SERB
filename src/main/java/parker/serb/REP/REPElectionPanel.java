@@ -2440,7 +2440,7 @@ public class REPElectionPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_ballotsCountDateMouseClicked
 
     private void eligibilityListDateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_eligibilityListDateMouseClicked
-        clearDate(eligibiltyDateTextBox, evt);
+        clearDate(eligibilityListDate, evt);
     }//GEN-LAST:event_eligibilityListDateMouseClicked
 
     private void multiCaseElectionCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_multiCaseElectionCheckBoxStateChanged
