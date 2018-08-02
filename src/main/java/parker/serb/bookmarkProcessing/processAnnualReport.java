@@ -467,6 +467,7 @@ public class processAnnualReport {
                 + "(BoardMeeting.caseType = 'ULP' OR BoardMeeting.caseType = 'ERC' OR BoardMeeting.caseType = 'JWD') "
                 + "AND (ULPCase.dismissalDate IS NOT NULL)");
         processBookmark.process("ninethree", String.valueOf(ninethree), Document);
+               
         //94 - Modified due to request R3-057 (Issue with code never checked Re-Fixed in R3-072)
         long ninefour = threetwo;
         processBookmark.process("ninefour", String.valueOf(ninefour), Document);
@@ -534,6 +535,56 @@ public class processAnnualReport {
         processBookmark.process("onezerosix", String.valueOf(onezerosix), Document);
         //end of the 16th section
 
+        
+        // Bookmarks 107 - 113 added due to Ticket R3-097 on 7/12/2018
+		
+        // 107 - Number of CMDS Cases
+	long onezeroseven = AnnualReport.getCount("SELECT COUNT(CMDSCase.openDate) AS COLUMN1 FROM CMDSCase WHERE (CMDSCase.openDate BETWEEN '"
+		+ startDate + "' AND '" + endDate + "')");
+	processBookmark.process("onezeroseven", String.valueOf(onezeroseven), Document);
+		
+        // 108 - Number of CMDS R&Rs Issued
+	long onezeroeight = AnnualReport.getCount("SELECT COUNT(CMDSCase.mailedrr) AS COLUMN1 FROM CMDSCase WHERE (CMDSCase.mailedrr BETWEEN '"
+                + startDate + "' AND '" + endDate + "')");
+	processBookmark.process("onezeroeight", String.valueOf(onezeroeight), Document);
+		
+	// 109 - Number of CMDS Board Orders Issued
+	long onezeronine = AnnualReport.getCount("SELECT COUNT(CMDSCase.mailedbo) AS COLUMN1 FROM CMDSCase WHERE (CMDSCase.mailedbo BETWEEN '"
+                + startDate + "' AND '" + endDate + "')");
+	processBookmark.process("onezeronine", String.valueOf(onezeronine), Document);
+		
+        //110 - Number of CMDS Hearing Days
+	long oneonezero = AnnualReport.getCount("SELECT Count(*) AS COLUMN1 FROM Activity INNER JOIN CaseType ON CaseType.caseType = Activity.caseType "
+                + "WHERE (Activity.action NOT LIKE '%Prehearing%') AND "
+                + "((Activity.action LIKE '%Hearing Completed%' AND Activity.fileName LIKE '%.dcr') "
+                + "OR Activity.action LIKE '%No Hearing%') AND (CaseType.section = 'CMDS') AND (Activity.type LIKE 'P%') "
+                + "AND Activity.date BETWEEN ('07/01/2017' + ' 00:00:00.000') AND ('06/30/2018' + ' 23:59:59.999'))");
+	processBookmark.process("oneonezero", String.valueOf(oneonezero), Document);
+			
+		
+	//111 - Number of CMDS Prehearing Days
+	long oneoneone = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM CMDSCase INNER JOIN CaseType ON CaseType.caseType = Activity.caseType "
+		+ "WHERE (Activity.action LIKE '%Mediation Conference Completed%' OR Activity.action LIKE '%No Prehearing - Failure to Appear%' "
+		+ "OR Activity.action LIKE '%No Prehearing - Pending Submission%' OR Activity.action LIKE '%No Status Conference%' OR Activity.action "
+		+ " LIKE '%Prehearing Completed%' OR Activity.action LIKE '%Settlement Conference Completed%' OR Activity.action LIKE '%Status Conference Completed%' "
+		+ "OR Activity.action LIKE '%Telephone Prehearing Completed%' OR Activity.action LIKE '%Telephone Status Conference Completed%') "
+		+ "AND (CaseType.section = 'CMDS') AND (Activity.type LIKE 'P%') "
+		+ "AND (Activity.date BETWEEN ('" + startDate + "' + ' 00:00:00.000') AND ('" + endDate + "' + ' 23:59:59.999'))");
+	processBookmark.process("oneoneone", String.valueOf(oneoneone), Document);
+		
+		
+	//112 - Number of SERB Pre-Hearings Conducted
+	long oneonetwo = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM HearingCase WHERE (HearingCase.preHearingDate BETWEEN '"
+                + startDate + "' AND '" + endDate + "') AND (HearingCase.aljID != '1385' AND HearingCase.aljID != '1449')");
+	processBookmark.process("oneonetwo", String.valueOf(oneonetwo), Document);	
+				
+		
+	//113 - Number of SERB Hearings Conducted
+	long oneonethree = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM HearingCase WHERE (HearingCase.HearingDate BETWEEN '"
+		+ startDate + "' AND '" + endDate + "') AND (HearingCase.aljID != '1385' AND HearingCase.aljID != '1449')");
+	processBookmark.process("oneonethree", String.valueOf(oneonethree), Document);	
+        
+        
         return Document;
     }
 
