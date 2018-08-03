@@ -301,6 +301,73 @@ public class User {
         }
         return user;
     }
+    
+    public static User getUserByName(String firstLastName) {
+        User user = new User();
+
+        String[] parsedUserName = firstLastName.split(" ");
+
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Select * from Users where firstName = ? and lastName = ? and active = 1";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, parsedUserName[0]);
+            preparedStatement.setString(2, parsedUserName[1]);
+
+            ResultSet foundUser = preparedStatement.executeQuery();
+
+            while (foundUser.next()) {
+                user.id = foundUser.getInt("id");
+                user.active = foundUser.getBoolean("active");
+                user.firstName = foundUser.getString("firstName");
+                user.middleInitial = foundUser.getString("middleInitial");
+                user.lastName = foundUser.getString("lastName");
+                user.workPhone = NumberFormatService.convertStringToPhoneNumber(foundUser.getString("workPhone"));
+                user.emailAddress = foundUser.getString("emailAddress");
+                user.username = foundUser.getString("username");
+                user.passwordSalt = foundUser.getLong("passwordSalt");
+                user.password = foundUser.getString("password");
+                user.lastLogInDateTime = foundUser.getTimestamp("lastLogInDateTime");
+                user.lastLogInPCName = foundUser.getString("lastLogInPCName");
+                user.activeLogIn = foundUser.getBoolean("activeLogIn");
+                user.passwordReset = foundUser.getBoolean("passwordReset");
+                user.applicationVersion = foundUser.getString("applicationVersion");
+                user.defaultSection = foundUser.getString("defaultSection");
+                user.ULPCaseWorker = foundUser.getBoolean("ULPCaseWorker");
+                user.REPCaseWorker = foundUser.getBoolean("REPCaseWorker");
+                user.ULPDocketing = foundUser.getBoolean("ULPDocketing");
+                user.REPDocketing = foundUser.getBoolean("REPDocketing");
+                user.initials = foundUser.getString("initials");
+                user.investigator = foundUser.getBoolean("investigator");
+                user.jobTitle = foundUser.getString("jobTitle");
+                user.MEDCaseWorker = foundUser.getBoolean("MEDCaseWorker");
+                user.ORGCaseWorker = foundUser.getBoolean("ORGCaseWorker");
+                user.CSCCaseWorker = foundUser.getBoolean("CSCCaseWorker");
+                user.CMDSCaseWorker = foundUser.getBoolean("CMDSCaseWorker");
+                user.HearingsCaseWorker = foundUser.getBoolean("HearingsCaseWorker");
+                user.lastTab = foundUser.getString("lastTab") == null ? "" : foundUser.getString("lastTab");
+                user.lastCaseYear = foundUser.getString("lastCaseYear");
+                user.lastCaseType = foundUser.getString("lastCaseType");
+                user.lastCaseMonth = foundUser.getString("lastCaseMonth");
+                user.lastCaseNumber = foundUser.getString("lastCaseNumber");
+                user.ORGDocketing = foundUser.getBoolean("ORGDocketing");
+                user.MEDDocketing = foundUser.getBoolean("MEDDocketing");
+                user.CSCDocketing = foundUser.getBoolean("CSCDocketing");
+                user.CMDSDocketing = foundUser.getBoolean("CMDSDocketing");
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getUserByName(firstLastName);
+            }
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return user;
+    }
 
     /**
      * Load a list of all users currently logged into the application
