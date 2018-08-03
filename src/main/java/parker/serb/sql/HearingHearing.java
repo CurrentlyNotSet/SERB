@@ -40,6 +40,7 @@ public class HearingHearing {
         Statement stmt = null;
         
         HearingType type = HearingType.getHearingTypeByTypeCode(hearingType);
+        User aljUser = User.getUserByName(alj);
         
         try {
             stmt = Database.connectToDB().createStatement();
@@ -55,14 +56,14 @@ public class HearingHearing {
             preparedStatement.setString(6, hearingType);
             preparedStatement.setString(7, hearingRoom);
             preparedStatement.setTimestamp(8, new Timestamp(hearingTime.getTime()));
-            preparedStatement.setInt(9, User.getUserID(alj));
+            preparedStatement.setInt(9, aljUser.id);
             preparedStatement.setString(10, comments);
 
             int process = preparedStatement.executeUpdate();
             
             if(process == 1) {
                 EmailOutInvites.addNewHearing(getCaseSection(),
-                        generateHearingToAddress(CMDSCase.getALJemail(), HearingRoom.getHearingRoomEmailByName(hearingRoom)),
+                        generateHearingToAddress(aljUser.emailAddress, HearingRoom.getHearingRoomEmailByName(hearingRoom)),
                         null,
                         "An upcoming " + (type.hearingDescription.equals("") ? hearingType : type.hearingDescription) + " is booked in " + hearingRoom + " at " + Global.mmddyyyyhhmma.format(hearingTime),
                         NumberFormatService.generateFullCaseNumber(),
