@@ -558,12 +558,12 @@ public class processAnnualReport {
                 + "WHERE (Activity.action NOT LIKE '%Prehearing%') AND "
                 + "((Activity.action LIKE '%Hearing Completed%' AND Activity.fileName LIKE '%.dcr') "
                 + "OR Activity.action LIKE '%No Hearing%') AND (CaseType.section = 'CMDS') AND (Activity.type LIKE 'P%') "
-                + "AND Activity.date BETWEEN ('07/01/2017' + ' 00:00:00.000') AND ('06/30/2018' + ' 23:59:59.999'))");
+                + "AND Activity.date BETWEEN ('" + startDate + "' + ' 00:00:00.000') AND ('" + endDate + "' + ' 23:59:59.999')");
 	processBookmark.process("oneonezero", String.valueOf(oneonezero), Document);
 			
 		
 	//111 - Number of CMDS Prehearing Days
-	long oneoneone = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM CMDSCase INNER JOIN CaseType ON CaseType.caseType = Activity.caseType "
+	long oneoneone = AnnualReport.getCount("SELECT COUNT(*) AS COLUMN1 FROM Activity INNER JOIN CaseType ON CaseType.caseType = Activity.caseType "
 		+ "WHERE (Activity.action LIKE '%Mediation Conference Completed%' OR Activity.action LIKE '%No Prehearing - Failure to Appear%' "
 		+ "OR Activity.action LIKE '%No Prehearing - Pending Submission%' OR Activity.action LIKE '%No Status Conference%' OR Activity.action "
 		+ " LIKE '%Prehearing Completed%' OR Activity.action LIKE '%Settlement Conference Completed%' OR Activity.action LIKE '%Status Conference Completed%' "
