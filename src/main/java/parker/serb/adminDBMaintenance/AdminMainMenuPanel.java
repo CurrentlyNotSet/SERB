@@ -65,6 +65,7 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
         SMDSTemplatesButton = new javax.swing.JButton();
         EmailErrorListButton = new javax.swing.JButton();
         SMDSTemplatesButton1 = new javax.swing.JButton();
+        EmailErrorListButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -320,6 +321,13 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
             }
         });
 
+        EmailErrorListButton1.setText("Email Settings");
+        EmailErrorListButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EmailErrorListButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -425,6 +433,10 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(CloseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(EmailErrorListButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {HistoryTypesButton, PartyButton, REPRecsButton, SERBExecButton, SystemSERBButton, ULPRecsButton, UsersButton});
@@ -500,7 +512,9 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(EmailErrorListButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(SMDSTemplatesButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(EmailErrorListButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(CloseButton)
                 .addContainerGap())
         );
@@ -634,6 +648,10 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
         new RetentionExclusionSearchDialog(Global.root, true);
     }//GEN-LAST:event_SMDSTemplatesButton1ActionPerformed
 
+    private void EmailErrorListButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EmailErrorListButton1ActionPerformed
+        new SystemEmailListSearchDialog(Global.root, true);
+    }//GEN-LAST:event_EmailErrorListButton1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AppealCourtButton;
     private javax.swing.JButton BoardActionTypeButton;
@@ -647,6 +665,7 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
     private javax.swing.JButton CloseButton;
     private javax.swing.JButton DirectorsButton;
     private javax.swing.JButton EmailErrorListButton;
+    private javax.swing.JButton EmailErrorListButton1;
     private javax.swing.JButton FFConciliatorsButton;
     private javax.swing.JButton HearingRoomsButton;
     private javax.swing.JButton HearingTypesButton;
