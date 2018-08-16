@@ -78,7 +78,9 @@ public class SystemEmailListSearchDialog extends javax.swing.JDialog {
     }
 
     private void tableClick(java.awt.event.MouseEvent evt) {
-        if (evt.getClickCount() >= 2){
+        if (evt.getClickCount() == 1) {
+            EditButton.setEnabled(true);
+        } else if (evt.getClickCount() >= 2){
             EditButtonActionPerformed(null);
         }
     }
