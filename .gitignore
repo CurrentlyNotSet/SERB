@@ -16,3 +16,4 @@ DBConnectionInfo.java
 target/*
 target/
 nb-configuration.xml
+/nbproject/

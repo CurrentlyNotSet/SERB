@@ -36,7 +36,7 @@ public class FileService {
 
     public static void setFilePath() {
         try {
-            switch(InetAddress.getLocalHost().getHostName()) {
+            switch (InetAddress.getLocalHost().getHostName()) {
                 case "Parkers-MacBook-Air.local": //Parker MBA on APE
                 case "Parkers-Air": //Parker MBA on any non APE-router
                     Global.scanPath = "/Users/parkerjohnston/Desktop/SERB/Scan/";
@@ -74,7 +74,7 @@ public class FileService {
             SlackNotification.sendNotification(ex);
         }
     }
-    
+
     public static void openFileWithCaseNumber(String activeSection, String caseYear, String caseType, String caseMonth, String caseNumber, String fileName) {
         try {
             Audit.addAuditEntry("Opened " + fileName + " from Activity Table");
@@ -249,29 +249,29 @@ public class FileService {
 
         File docketFile = new File(Global.scanPath + section + File.separatorChar + fileName);
 
-        if(docketFile.exists()) {
+        if (docketFile.exists()) {
             for (String caseNumber : caseNumbers) {
 
                 File caseArchiveFile = null;
 
-                switch(section) {
+                switch (section) {
                     case "ORG":
                     case "CSC":
                         caseArchiveFile = new File(
-                        Global.activityPath
-                        + section
-                        + File.separatorChar
-                        + caseNumber.trim());
+                                Global.activityPath
+                                + section
+                                + File.separatorChar
+                                + caseNumber.trim());
                         break;
                     default:
                         String[] caseNumberParts = caseNumber.trim().split("-");
                         caseArchiveFile = new File(
-                        Global.activityPath
-                        + section
-                        + File.separatorChar
-                        + caseNumberParts[0]
-                        + File.separatorChar
-                        + caseNumber.trim());
+                                Global.activityPath
+                                + section
+                                + File.separatorChar
+                                + caseNumberParts[0]
+                                + File.separatorChar
+                                + caseNumber.trim());
                         break;
                 }
 
@@ -281,23 +281,23 @@ public class FileService {
 
                 FileUtils.copyFile(docketFile, new File(caseArchiveFile + File.separator + fileDate + "_" + typeAbbrv + (redacted ? "_REDACTED.pdf" : ".pdf")));
 
-                switch(section) {
+                switch (section) {
                     case "ORG":
                     case "CSC":
                         Activity.addScanActivtyFromDocketORGCSC(direction + " - Filed " + typeFull,
-                        fileDate + "_" + typeAbbrv + fileName.substring(fileName.lastIndexOf(".")),
-                        caseNumber, from, to, typeFull, comment, false, false, section, activityDate);
+                                fileDate + "_" + typeAbbrv + fileName.substring(fileName.lastIndexOf(".")),
+                                caseNumber, from, to, typeFull, comment, false, false, section, activityDate);
                         break;
                     default:
                         Activity.addScanActivtyFromDocket(direction + " - Filed " + typeFull,
-                        fileDate + "_" + typeAbbrv + fileName.substring(fileName.lastIndexOf(".")),
-                        caseNumber.trim().split("-"),from, to, typeFull, comment, false, false, activityDate);
+                                fileDate + "_" + typeAbbrv + fileName.substring(fileName.lastIndexOf(".")),
+                                caseNumber.trim().split("-"), from, to, typeFull, comment, false, false, activityDate);
                         break;
                 }
 
                 Audit.addAuditEntry("Filed " + typeFull + " from " + from + (redacted ? " (REDACTED)" : ""));
 
-                switch(section) {
+                switch (section) {
                     case "ULP":
                         ULPCase.ULPDocketNotification(caseNumber);
                         break;
@@ -326,29 +326,29 @@ public class FileService {
 
         File docketFile = new File(Global.mediaPath + section + File.separatorChar + fileName);
 
-        if(docketFile.exists()) {
+        if (docketFile.exists()) {
             for (String caseNumber : caseNumbers) {
 
                 File caseArchiveFile = null;
 
-                switch(section) {
+                switch (section) {
                     case "ORG":
                     case "CSC":
                         caseArchiveFile = new File(
-                        Global.activityPath
-                        + section
-                        + File.separatorChar
-                        + caseNumber.trim());
+                                Global.activityPath
+                                + section
+                                + File.separatorChar
+                                + caseNumber.trim());
                         break;
                     default:
                         String[] caseNumberParts = caseNumber.trim().split("-");
                         caseArchiveFile = new File(
-                        Global.activityPath
-                        + section
-                        + File.separatorChar
-                        + caseNumberParts[0]
-                        + File.separatorChar
-                        + caseNumber.trim());
+                                Global.activityPath
+                                + section
+                                + File.separatorChar
+                                + caseNumberParts[0]
+                                + File.separatorChar
+                                + caseNumber.trim());
                         break;
                 }
 
@@ -358,23 +358,23 @@ public class FileService {
 
                 FileUtils.copyFile(docketFile, new File(caseArchiveFile + File.separator + fileDate + "_" + typeAbbrv + fileName.substring(fileName.lastIndexOf("."))));
 
-                switch(section) {
+                switch (section) {
                     case "ORG":
                     case "CSC":
                         Activity.addActivtyFromDocketORGCSC(direction + " - Filed " + typeFull,
-                        fileDate + "_" + typeAbbrv + fileName.substring(fileName.lastIndexOf(".")),
-                        caseNumber, from, to, typeFull, comment, false, false, section, new Timestamp(System.currentTimeMillis()));
+                                fileDate + "_" + typeAbbrv + fileName.substring(fileName.lastIndexOf(".")),
+                                caseNumber, from, to, typeFull, comment, false, false, section, new Timestamp(System.currentTimeMillis()));
                         break;
                     default:
                         Activity.addActivtyFromDocket(direction + " - Filed " + typeFull,
-                        fileDate + "_" + typeAbbrv + fileName.substring(fileName.lastIndexOf(".")),
-                        caseNumber.trim().split("-"),from, to, typeFull, comment, false, false);
+                                fileDate + "_" + typeAbbrv + fileName.substring(fileName.lastIndexOf(".")),
+                                caseNumber.trim().split("-"), from, to, typeFull, comment, false, false);
                         break;
                 }
 
                 Audit.addAuditEntry("Filed " + typeFull + " from " + from);
 
-                switch(section) {
+                switch (section) {
                     case "ULP":
                         ULPCase.ULPDocketNotification(caseNumber);
                         break;
@@ -404,29 +404,29 @@ public class FileService {
 
         File docketFile = new File(Global.mediaPath + section + File.separatorChar + fileName);
 
-        if(docketFile.exists()) {
+        if (docketFile.exists()) {
             for (String caseNumber : caseNumbers) {
 
                 File caseArchiveFile = null;
 
-                switch(section) {
+                switch (section) {
                     case "ORG":
                     case "CSC":
                         caseArchiveFile = new File(
-                        Global.activityPath
-                        + section
-                        + File.separatorChar
-                        + caseNumber.trim());
+                                Global.activityPath
+                                + section
+                                + File.separatorChar
+                                + caseNumber.trim());
                         break;
                     default:
                         String[] caseNumberParts = caseNumber.trim().split("-");
                         caseArchiveFile = new File(
-                        Global.activityPath
-                        + section
-                        + File.separatorChar
-                        + caseNumberParts[0]
-                        + File.separatorChar
-                        + caseNumber.trim());
+                                Global.activityPath
+                                + section
+                                + File.separatorChar
+                                + caseNumberParts[0]
+                                + File.separatorChar
+                                + caseNumber.trim());
                         break;
                 }
 
@@ -436,23 +436,23 @@ public class FileService {
 
                 FileUtils.copyFile(docketFile, new File(caseArchiveFile + File.separator + fileDate + "_" + typeAbbrv + fileName.substring(fileName.lastIndexOf("."))));
 
-                switch(section) {
+                switch (section) {
                     case "ORG":
                     case "CSC":
                         Activity.addScanActivtyFromDocketORGCSC(direction + " - Filed " + typeFull,
-                        fileDate + "_" + typeAbbrv + fileName.substring(fileName.lastIndexOf(".")),
-                        caseNumber, from, to, typeFull, comment, false, false, section, activityDate);
+                                fileDate + "_" + typeAbbrv + fileName.substring(fileName.lastIndexOf(".")),
+                                caseNumber, from, to, typeFull, comment, false, false, section, activityDate);
                         break;
                     default:
                         Activity.addScanActivtyFromDocket(direction + " - Filed " + typeFull,
-                        fileDate + "_" + typeAbbrv + fileName.substring(fileName.lastIndexOf(".")),
-                        caseNumber.trim().split("-"),from, to, typeFull, comment, false, false, activityDate);
+                                fileDate + "_" + typeAbbrv + fileName.substring(fileName.lastIndexOf(".")),
+                                caseNumber.trim().split("-"), from, to, typeFull, comment, false, false, activityDate);
                         break;
                 }
 
                 Audit.addAuditEntry("Filed " + typeFull + " from " + from + (redacted ? " (REDACTED)" : ""));
 
-                switch(section) {
+                switch (section) {
                     case "ULP":
                         ULPCase.ULPDocketNotification(caseNumber);
                         break;
@@ -545,7 +545,6 @@ public class FileService {
 //
 //
 //    }
-
     public static void docketEmailAttachment(String[] caseNumbers,
             String atachmentID,
             String emailID,
@@ -561,30 +560,29 @@ public class FileService {
 
         File docketFile = new File(Global.emailPath + section + File.separatorChar + fileName.trim());
 
-        if(docketFile.exists()) {
-
+        if (docketFile.exists()) {
 
             for (String caseNumber : caseNumbers) {
                 File caseArchiveFile;
 
-                switch(section) {
+                switch (section) {
                     case "ORG":
                     case "CSC":
                         caseArchiveFile = new File(
-                        Global.activityPath
-                        + section
-                        + File.separatorChar
-                        + caseNumber.trim());
+                                Global.activityPath
+                                + section
+                                + File.separatorChar
+                                + caseNumber.trim());
                         break;
                     default:
                         String[] caseNumberParts = caseNumber.trim().split("-");
                         caseArchiveFile = new File(
-                        Global.activityPath
-                        + section
-                        + File.separatorChar
-                        + caseNumberParts[0]
-                        + File.separatorChar
-                        + caseNumber.trim());
+                                Global.activityPath
+                                + section
+                                + File.separatorChar
+                                + caseNumberParts[0]
+                                + File.separatorChar
+                                + caseNumber.trim());
                         break;
                 }
 
@@ -598,21 +596,21 @@ public class FileService {
 
                 FileUtils.copyFile(docketFile, new File(caseArchiveFile + File.separator + fileDate + "_" + type + fileExtenstion));
 
-                switch(section) {
+                switch (section) {
                     case "ORG":
                     case "CSC":
                         Activity.addActivtyFromDocketORGCSC(direction + " - Filed " + fullType,
-                        fileDate + "_" + type + fileExtenstion,
-                        caseNumber, from, to, fullType, comment, false, false, section, activityDate);
+                                fileDate + "_" + type + fileExtenstion,
+                                caseNumber, from, to, fullType, comment, false, false, section, activityDate);
                         break;
                     default:
                         Activity.addActivtyFromDocket(direction + " - Filed " + fullType,
-                        fileDate + "_" + type + fileExtenstion,
-                        caseNumber.trim().split("-"), from, to, fullType, comment, false, false, activityDate);
+                                fileDate + "_" + type + fileExtenstion,
+                                caseNumber.trim().split("-"), from, to, fullType, comment, false, false, activityDate);
                         break;
                 }
 
-                switch(section) {
+                switch (section) {
                     case "ULP":
                         ULPCase.ULPDocketNotification(caseNumber);
                         break;
@@ -626,7 +624,6 @@ public class FileService {
 
                 Audit.addAuditEntry("Filed " + fullType + " from " + from);
             }
-
 
         }
         docketFile.delete();
@@ -645,7 +642,8 @@ public class FileService {
             String comment,
             Date activityDate,
             String direction,
-            Dialog parent) {
+            Dialog parent,
+            boolean updateAllCases) {
 
         File docketFile = new File(Global.emailPath + section + File.separatorChar + fileName.trim());
 
@@ -683,13 +681,15 @@ public class FileService {
                         direction,
                         caseNumber.trim(),
                         from,
-                        to
+                        to,
+                        updateAllCases
                 );
             }
         }
         docketFile.delete();
     }
 
+    @Deprecated
     public static void docketCMDSMedia(String[] caseNumbers,
             String section,
             String from,
@@ -700,6 +700,119 @@ public class FileService {
             String comment,
             String direction,
             Dialog parent) {
+//
+//        File docketFile = new File(Global.mediaPath + section + File.separatorChar + fileName.trim());
+//
+//        if (docketFile.exists()) {
+//            for (String caseNumber : caseNumbers) {
+//                File caseArchiveFile;
+//
+//                String[] caseNumberParts = caseNumber.trim().split("-");
+//                caseArchiveFile = new File(
+//                        Global.activityPath
+//                        + section
+//                        + File.separatorChar
+//                        + caseNumberParts[0]
+//                        + File.separatorChar
+//                        + caseNumber.trim()
+//                );
+//
+//                caseArchiveFile.mkdirs();
+//
+//                String fileDate = String.valueOf(new Date().getTime());
+//
+//                String fileExtenstion = fileName.substring(fileName.lastIndexOf(".")); //. included
+//
+//                FileUtils.copyFile(docketFile, new File(caseArchiveFile + File.separator + fileDate + fileExtenstion));
+//
+//                NumberFormatService.parseFullCaseNumber(caseNumber);
+//
+//                CMDSCaseDocketEntryTypes.updateCaseHistory(
+//                        type.split("-")[0].trim(),
+//                        type2,
+//                        comment,
+//                        new Date(),
+//                        parent,
+//                        caseArchiveFile + File.separator + fileDate + fileExtenstion,
+//                        direction,
+//                        caseNumber,
+//                        from,
+//                        to
+//                );
+//            }
+//        }
+//        docketFile.delete();
+    }
+
+    public static void docketCMDSScan(String[] caseNumbers,
+            String section,
+            String from,
+            String to,
+            String fileName,
+            String type,
+            String type2,
+            String comment,
+            String direction,
+            Dialog parent,
+            Date activityDate,
+            boolean updateAllCases) {
+
+        File docketFile = new File(Global.scanPath + section + File.separatorChar + fileName.trim());
+
+        if (docketFile.exists()) {
+            for (String caseNumber : caseNumbers) {
+                File caseArchiveFile;
+
+                String[] caseNumberParts = caseNumber.trim().split("-");
+                caseArchiveFile = new File(
+                        Global.activityPath
+                        + section
+                        + File.separatorChar
+                        + caseNumberParts[0]
+                        + File.separatorChar
+                        + caseNumber.trim()
+                );
+
+                caseArchiveFile.mkdirs();
+
+                String fileDate = String.valueOf(new Date().getTime());
+
+                String fileExtenstion = fileName.substring(fileName.lastIndexOf(".")); //. included
+
+                FileUtils.copyFile(docketFile, new File(caseArchiveFile + File.separator + fileDate + fileExtenstion));
+
+                NumberFormatService.parseFullCaseNumber(caseNumber);
+
+                CMDSCaseDocketEntryTypes.updateCaseHistory(
+                        type.split("-")[0].trim(),
+                        type2,
+                        comment,
+                        activityDate,
+                        parent,
+                        caseArchiveFile + File.separator + fileDate + fileExtenstion,
+                        direction,
+                        caseNumber,
+                        from,
+                        to,
+                        updateAllCases
+                );
+            }
+        }
+        docketFile.delete();
+    }
+
+    public static void docketCMDSMediaWithTime(String[] caseNumbers,
+            String section,
+            String from,
+            String to,
+            String fileName,
+            String type,
+            String type2,
+            String comment,
+            String direction,
+            Dialog parent,
+            Date activityDate,
+            boolean updateAllCases) {
 
         File docketFile = new File(Global.mediaPath + section + File.separatorChar + fileName.trim());
 
@@ -731,123 +844,14 @@ public class FileService {
                         type.split("-")[0].trim(),
                         type2,
                         comment,
-                        new Date(),
+                        activityDate,
                         parent,
                         caseArchiveFile + File.separator + fileDate + fileExtenstion,
                         direction,
                         caseNumber,
                         from,
-                        to
-                );
-            }
-        }
-        docketFile.delete();
-    }
-
-    public static void docketCMDSScan(String[] caseNumbers,
-            String section,
-            String from,
-            String to,
-            String fileName,
-            String type,
-            String type2,
-            String comment,
-            String direction,
-            Dialog parent,
-            Date activityDate) {
-
-        File docketFile = new File(Global.scanPath + section + File.separatorChar + fileName.trim());
-
-        if (docketFile.exists()) {
-            for (String caseNumber : caseNumbers) {
-                File caseArchiveFile;
-
-                String[] caseNumberParts = caseNumber.trim().split("-");
-                caseArchiveFile = new File(
-                        Global.activityPath
-                        + section
-                        + File.separatorChar
-                        + caseNumberParts[0]
-                        + File.separatorChar
-                        + caseNumber.trim()
-                );
-
-                caseArchiveFile.mkdirs();
-
-                String fileDate = String.valueOf(new Date().getTime());
-
-                String fileExtenstion = fileName.substring(fileName.lastIndexOf(".")); //. included
-
-                FileUtils.copyFile(docketFile, new File(caseArchiveFile + File.separator + fileDate + fileExtenstion));
-
-                NumberFormatService.parseFullCaseNumber(caseNumber);
-
-                CMDSCaseDocketEntryTypes.updateCaseHistory(
-                    type.split("-")[0].trim(),
-                    type2,
-                    comment,
-                    activityDate,
-                    parent,
-                    caseArchiveFile + File.separator + fileDate + fileExtenstion,
-                    direction,
-                    caseNumber,
-                    from,
-                    to
-                );
-            }
-        }
-        docketFile.delete();
-    }
-
-    public static void docketCMDSMediaWithTime(String[] caseNumbers,
-            String section,
-            String from,
-            String to,
-            String fileName,
-            String type,
-            String type2,
-            String comment,
-            String direction,
-            Dialog parent,
-            Date activityDate) {
-
-        File docketFile = new File(Global.mediaPath + section + File.separatorChar + fileName.trim());
-
-        if (docketFile.exists()) {
-            for (String caseNumber : caseNumbers) {
-                File caseArchiveFile;
-
-                String[] caseNumberParts = caseNumber.trim().split("-");
-                caseArchiveFile = new File(
-                        Global.activityPath
-                        + section
-                        + File.separatorChar
-                        + caseNumberParts[0]
-                        + File.separatorChar
-                        + caseNumber.trim()
-                );
-
-                caseArchiveFile.mkdirs();
-
-                String fileDate = String.valueOf(new Date().getTime());
-
-                String fileExtenstion = fileName.substring(fileName.lastIndexOf(".")); //. included
-
-                FileUtils.copyFile(docketFile, new File(caseArchiveFile + File.separator + fileDate + fileExtenstion));
-
-                NumberFormatService.parseFullCaseNumber(caseNumber);
-
-                CMDSCaseDocketEntryTypes.updateCaseHistory(
-                    type.split("-")[0].trim(),
-                    type2,
-                    comment,
-                    activityDate,
-                    parent,
-                    caseArchiveFile + File.separator + fileDate + fileExtenstion,
-                    direction,
-                    caseNumber,
-                    from,
-                    to
+                        to,
+                        updateAllCases
                 );
             }
         }
@@ -860,7 +864,7 @@ public class FileService {
                 + File.separator + Global.caseYear
                 + File.separator + Global.caseYear + "-" + Global.caseType
                 + "-" + Global.caseMonth + "-" + Global.caseNumber
-                + File.separator + fileName), new File(Global.activityPath  + Global.activeSection
+                + File.separator + fileName), new File(Global.activityPath + Global.activeSection
                 + File.separator + Global.caseYear
                 + File.separator + Global.caseYear + "-" + Global.caseType
                 + "-" + Global.caseMonth + "-" + Global.caseNumber
@@ -877,7 +881,7 @@ public class FileService {
     public static boolean renamePublicRecordsFile(String fileName) {
         String[] file = fileName.split("_", 2);
         String newFileName = "";
-        if (file.length > 1){
+        if (file.length > 1) {
             newFileName = file[0] + "_REDACTED-" + file[1];
         } else {
             newFileName = "REDACTED-" + fileName;
@@ -914,13 +918,13 @@ public class FileService {
                 || image.toLowerCase().endsWith(".png");
     }
 
-    public static String getCaseSectionFolderByCaseType(String caseSection){
+    public static String getCaseSectionFolderByCaseType(String caseSection) {
         String section = "";
 
         List<CaseType> caseTypeList = CaseType.loadAllCaseTypes("".split(" "));
 
         for (CaseType item : caseTypeList) {
-            if (item.caseType.equals(caseSection)){
+            if (item.caseType.equals(caseSection)) {
                 return item.section;
             }
         }

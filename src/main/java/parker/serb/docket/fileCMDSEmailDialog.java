@@ -27,6 +27,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import parker.serb.CMDS.CMDSUpdateAllGroupCasesDialog;
 import parker.serb.Global;
 import parker.serb.sql.CMDSCase;
 import parker.serb.sql.CMDSHistoryCategory;
@@ -35,6 +36,7 @@ import parker.serb.sql.CaseNumber;
 import parker.serb.sql.Email;
 import parker.serb.sql.EmailAttachment;
 import parker.serb.sql.User;
+import parker.serb.util.CaseNumberTools;
 import parker.serb.util.FileService;
 
 /**
@@ -52,6 +54,11 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form FileDocumentDialog
+     * @param parent
+     * @param modal
+     * @param id
+     * @param section
+     * @param time
      */
     public fileCMDSEmailDialog(java.awt.Frame parent, boolean modal, String id, String section, String time) {
         super(parent, modal);
@@ -70,7 +77,7 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
 
     private void addRenderer() {
         attachmentTable.setDefaultRenderer(Object.class, new TableCellRenderer() {
-            private DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
+            private final DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
 
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
@@ -382,6 +389,14 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
         if (attachmentTable.getCellEditor() != null) {
             attachmentTable.getCellEditor().stopCellEditing();
         }
+        
+        //Update All question now
+        CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(this, true);
+        
+        //If true trim and strip duplicates
+        if (update.isUpdateStatus()) {
+            caseNumbers = CaseNumberTools.removeDupliateCasesByGroupNumber(caseNumbers);
+        }
 
         for (int i = 0; i < attachmentTable.getRowCount(); i++) {
             if (!attachmentTable.getValueAt(i, 2).toString().equals("DO NOT FILE")) {
@@ -399,7 +414,8 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
                         ? attachmentTable.getValueAt(i, 4).toString() : "",
                         generateDate(),
                         directionComboBox.getSelectedItem().toString(),
-                        this);
+                        this,
+                        update.isUpdateStatus());
             }
         }
     }

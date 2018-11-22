@@ -18,12 +18,14 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import parker.serb.CMDS.CMDSUpdateAllGroupCasesDialog;
 import parker.serb.Global;
 import parker.serb.sql.CMDSCase;
 import parker.serb.sql.CMDSHistoryCategory;
 import parker.serb.sql.CMDSHistoryDescription;
 import parker.serb.sql.CaseNumber;
 import parker.serb.sql.User;
+import parker.serb.util.CaseNumberTools;
 import parker.serb.util.FileService;
 
 /**
@@ -506,6 +508,14 @@ public class scanCMDSFileDialog extends javax.swing.JDialog {
 
     private void fileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileButtonActionPerformed
         String[] caseNumbers = caseNumberTextBox.getText().trim().split(",");
+        
+        //Update All question now
+        CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(this, true);
+        
+        //If true trim and strip duplicates
+        if (update.isUpdateStatus()) {
+            caseNumbers = CaseNumberTools.removeDupliateCasesByGroupNumber(caseNumbers);
+        }
 
         FileService.docketCMDSScan(caseNumbers, //caseNumber
             selectedSection,
@@ -517,7 +527,8 @@ public class scanCMDSFileDialog extends javax.swing.JDialog {
             commentTextBox.getText().trim(),
             directionComboBox.getSelectedItem().toString(),
             this, 
-            generateDate()
+            generateDate(),
+            update.isUpdateStatus()
         );
         dispose();
     }//GEN-LAST:event_fileButtonActionPerformed

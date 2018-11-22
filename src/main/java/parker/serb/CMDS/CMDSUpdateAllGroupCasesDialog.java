@@ -14,6 +14,8 @@ public class CMDSUpdateAllGroupCasesDialog extends javax.swing.JDialog {
     boolean updateStatus = false;
     /**
      * Creates new form CMDSUpdateInventoryStatusLineDialog
+     * @param parent
+     * @param modal
      */
     public CMDSUpdateAllGroupCasesDialog(java.awt.Dialog parent, boolean modal) {
         super(parent, modal);
