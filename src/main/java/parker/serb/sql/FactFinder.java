@@ -156,7 +156,7 @@ public class FactFinder {
     }
 
 
-    public static List searchFactFinder(String[] param) {
+    public static List searchFactFinder(String type, String[] param) {
         List<FactFinder> recommendationList = new ArrayList<>();
 
         Statement stmt = null;
@@ -176,6 +176,44 @@ public class FactFinder {
                             + "zip, email, phone) LIKE ?";
                 }
             }
+            
+            if (null != type) switch (type) {
+                case "F/C":
+                    if (param.length > 0) {
+                        sql += " AND";
+                    } else {
+                        sql += " WHERE";
+                    }
+                    sql += " (status = 'C' OR status = 'F')";
+                    break;
+                case "F":
+                    if (param.length > 0) {
+                        sql += " AND";
+                    } else {
+                        sql += " WHERE";
+                    }
+                    sql += " status = 'F'";
+                    break;
+                case "C":
+                    if (param.length > 0) {
+                        sql += " AND";
+                    } else {
+                        sql += " WHERE";
+                    }
+                    sql += " status = 'C'";
+                    break;
+                case "O":
+                    if (param.length > 0) {
+                        sql += " AND";
+                    } else {
+                        sql += " WHERE";
+                    }
+                    sql += " status = 'O'";
+                    break;
+                default:
+                    break;
+            }
+            
             sql += " ORDER BY lastName";
 
             PreparedStatement ps = stmt.getConnection().prepareStatement(sql);
@@ -208,7 +246,7 @@ public class FactFinder {
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                searchFactFinder(param);
+                searchFactFinder(type, param);
             }
         } finally {
             DbUtils.closeQuietly(stmt);
