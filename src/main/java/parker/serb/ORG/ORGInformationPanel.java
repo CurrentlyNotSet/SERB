@@ -1168,7 +1168,7 @@ public class ORGInformationPanel extends javax.swing.JPanel {
                     dueDateTextBox.setText("January 15th");
                     break;
                 case "September":
-                    dueDateTextBox.setText("Febuary 15th");
+                    dueDateTextBox.setText("February 15th");
                     break;
                 case "October":
                     dueDateTextBox.setText("March 15th");
