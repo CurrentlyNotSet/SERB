@@ -86,7 +86,7 @@ public class CMDSMultiCaseDocketingDialog extends javax.swing.JDialog {
         for (CMDSCase item : caseList) {
             model.addRow(new Object[]{
                 item,
-                item.active,
+                true,
                 NumberFormatService.generateFullCaseNumberNonGlobal(item.caseYear, item.caseType, item.caseMonth, item.caseNumber),
                 item.groupNumber
             });

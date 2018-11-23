@@ -7,7 +7,6 @@ package parker.serb.CMDS;
 
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.List;
 import parker.serb.Global;
 import parker.serb.sql.Activity;
 import parker.serb.sql.CMDSCase;
@@ -31,192 +30,123 @@ public class CMDSCaseDocketEntryTypes {
             String caseNumber,
             String from,
             String to,
-            boolean updateAllCases) {
-
+            boolean updateStatusInventoryLine) {
+                
+        CMDSCaseDocketEntryModel docket = new CMDSCaseDocketEntryModel();
+        docket.category = category;
+        docket.entryDescription = entryDescription;
+        docket.comment = comment;
+        docket.entryDate = entryDate;
+        docket.comment = "";
+        docket.dialog = dialog;
+        docket.filePath = filePath;
+        docket.direction = direction;
+        docket.caseNumber = caseNumber;
+        docket.from = from;
+        docket.to = to;
+        docket.updateStatusInventoryLine = updateStatusInventoryLine;
+        
         switch(category) {
             case "A":
-                addAEntryType(entryDescription, comment, entryDate,
-                dialog, filePath, direction, caseNumber, from, to, category, updateAllCases);
+                addAEntryType(docket);
                 break;
             case "C":
-                addCEntryType(entryDescription, comment, entryDate,
-                dialog, filePath, direction, caseNumber, from, to, category, updateAllCases);
+                addCEntryType(docket);
                 break;
             case "D":
-                addDEntryType(entryDescription, comment, entryDate,
-                dialog, filePath, direction, caseNumber, from, to, category, updateAllCases);
+                addDEntryType(docket);
                 break;
             case "E":
-                addEEntryType(entryDescription, comment, entryDate,
-                dialog, filePath, direction, caseNumber, from, to, category, updateAllCases);
+                addEEntryType(docket);
                 break;
             case "F":
-                addFEntryType(entryDescription, comment, entryDate,
-                dialog, filePath, direction, caseNumber, from, to, category, updateAllCases);
+                addFEntryType(docket);
                 break;
             case "G":
-                addGEntryType(entryDescription, comment, entryDate,
-                dialog, filePath, direction, caseNumber, from, to, category, updateAllCases);
+                addGEntryType(docket);
                 break;
             case "H":
-                addHEntryType(entryDescription, comment, entryDate,
-                dialog, filePath, direction, caseNumber, from, to, category, updateAllCases);
+                addHEntryType(docket);
                 break;
             case "I":
-                addIEntryType(entryDescription, comment, entryDate,
-                dialog, filePath, direction, caseNumber, from, to, category, updateAllCases);
+                addIEntryType(docket);
                 break;
             case "J":
-                addJEntryType(entryDescription, comment, entryDate,
-                dialog, filePath, direction, caseNumber, from, to, category, updateAllCases);
+                addJEntryType(docket);
                 break;
             case "K":
-                addKEntryType(entryDescription, comment, entryDate,
-                dialog, filePath, direction, caseNumber, from, to, category, updateAllCases);
+                addKEntryType(docket);
                 break;
             case "L":
-                addLEntryType(entryDescription, comment, entryDate,
-                dialog, filePath, direction, caseNumber, from, to, category, updateAllCases);
+                addLEntryType(docket);
                 break;
             case "M":
-                addMEntryType(entryDescription, comment, entryDate,
-                dialog, filePath, direction, caseNumber, from, to, category, updateAllCases);
+                addMEntryType(docket);
                 break;
             case "N":
-                addNEntryType(entryDescription, comment, entryDate,
-                dialog, filePath, direction, caseNumber, from, to, category, updateAllCases);
+                addNEntryType(docket);
                 break;
             case "O":
-                addOEntryType(entryDescription, comment, entryDate,
-                dialog, filePath, direction, caseNumber, from, to, category, updateAllCases);
+                addOEntryType(docket);
                 break;
             case "P":
-                addPEntryType(entryDescription, comment, entryDate,
-                dialog, filePath, direction, caseNumber, from, to, category, updateAllCases);
+                addPEntryType(docket);
                 break;
             case "Q":
-                addQEntryType(entryDescription, comment, entryDate,
-                dialog, filePath, direction, caseNumber, from, to, category, updateAllCases);
+                addQEntryType(docket);
                 break;
             case "R":
-                addREntryType(entryDescription, comment, entryDate,
-                dialog, filePath, direction, caseNumber, from, to, category, updateAllCases);
+                addREntryType(docket);
                 break;
             case "S":
-                addSEntryType(entryDescription, comment, entryDate,
-                dialog, filePath, direction, caseNumber, from, to, category, updateAllCases);
+                addSEntryType(docket);
                 break;
             case "U":
-                addUEntryType(entryDescription, comment, entryDate,
-                dialog, filePath, direction, caseNumber, from, to, category, updateAllCases);
+                addUEntryType(docket);
                 break;
             case "V":
-                addVEntryType(entryDescription, comment, entryDate,
-                dialog, filePath, direction, caseNumber, from, to, category, updateAllCases);
+                addVEntryType(docket);
                 break;
             case "W":
-                addWEntryType(entryDescription, comment, entryDate,
-                dialog, filePath, direction, caseNumber, from, to, category, updateAllCases);
+                addWEntryType(docket);
                 break;
         }
     }
 
-    private static void addAEntryType(String entryDescription,
-            String extraText, Date entryDate,
-            java.awt.Dialog dialog, String filePath, String direction,
-            String caseNumber, String from, String to, String category, boolean updateAllCases) {
+    private static void addAEntryType(CMDSCaseDocketEntryModel d) {
+        String activity = d.direction + " - Notice of " + d.entryDescription;
 
-        String activity = direction + " - Notice of " + entryDescription;
-
-        CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
-
-        if(status.isUpdateStatus()) {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                CMDSCase.updateCaseInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-            }
-
-            if(groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-
-                    if(updateAllCases) {
-                        CMDSCase.updateAllGroupInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-                    }
-                }
-            }
-        } else {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-            } else if (groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                }
-            }
+        Activity.addCMDSActivty(activity, d.filePath, d.entryDate, d.caseNumber, 
+                d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
+        
+        if(d.updateStatusInventoryLine) {   
+            CMDSCase.updateCaseInventoryStatusLines(activity  + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, d.caseNumber);
         }
     }
 
-    private static void addCEntryType(String entryDescription,
-            String extraText, Date entryDate,
-            java.awt.Dialog dialog, String filePath, String direction,
-            String caseNumber, String from, String to, String category, boolean updateAllCases) {
+    private static void addCEntryType(CMDSCaseDocketEntryModel d) {
+        String activity = d.direction + " - R & R mailed " + d.entryDescription;
 
-        String activity = direction + " - R & R mailed " + entryDescription;
+        Activity.addCMDSActivty(activity, d.filePath, d.entryDate, d.caseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
+        CMDSCase.updateCaseByTypeCEntry(d.entryDate, d.caseNumber);
+        
 
-        CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
-
-        if(status.isUpdateStatus()) {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                CMDSCase.updateCaseByTypeCEntry(entryDate, caseNumber);
-                CMDSCase.updateCaseInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-            }
-
-            if(groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                    CMDSCase.updateCaseByTypeCEntry(entryDate, groupList.get(i).toString());
-                    if(updateAllCases) {
-                        CMDSCase.updateAllGroupInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-                    }
-                }
-            }
-        } else {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                CMDSCase.updateCaseByTypeCEntry(entryDate, caseNumber);
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-            } else if (groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    CMDSCase.updateCaseByTypeCEntry(entryDate, groupList.get(i).toString());
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                }
-            }
+        if(d.updateStatusInventoryLine) {
+            CMDSCase.updateCaseInventoryStatusLines(activity  + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, d.caseNumber);
         }
     }
 
-    private static void addDEntryType(String entryDescription,
-            String extraText, Date entryDate,
-            java.awt.Dialog dialog, String filePath, String direction,
-            String caseNumber, String from, String to, String category, boolean updateAllCases) {
-
+    private static void addDEntryType(CMDSCaseDocketEntryModel d) {
         String caseStatus = CMDSCase.getCaseStatus();
-        Timestamp MailedBO = new Timestamp(entryDate.getTime());
+        Timestamp MailedBO = new Timestamp(d.entryDate.getTime());
 
-        CMDSResultDialog result = new CMDSResultDialog(dialog, true);
+        CMDSResultDialog result = new CMDSResultDialog(d.dialog, true);
 
-        if(entryDescription.toLowerCase().contains("stayed") ||
-                entryDescription.toLowerCase().contains("fifting of stay")) {
+        if(d.entryDescription.toLowerCase().contains("stayed") ||
+                d.entryDescription.toLowerCase().contains("fifting of stay")) {
 
             if (caseStatus.equals("S")) {
-                CMDSRemoveStayDialog removeStay = new CMDSRemoveStayDialog(dialog, true);
+                CMDSRemoveStayDialog removeStay = new CMDSRemoveStayDialog(d.dialog, true);
                 if (removeStay.isRemoveStay()) {
                     caseStatus = "O";
                 } else {
@@ -224,7 +154,7 @@ public class CMDSCaseDocketEntryTypes {
                 }
                 removeStay.dispose();
             } else if (caseStatus.equals("O")) {
-                CMDSPlaceStayDialog placeStay = new CMDSPlaceStayDialog(dialog, true);
+                CMDSPlaceStayDialog placeStay = new CMDSPlaceStayDialog(d.dialog, true);
                 if (placeStay.isPlaceStay()) {
                     caseStatus = "S";
                 } else {
@@ -235,85 +165,54 @@ public class CMDSCaseDocketEntryTypes {
         }
 
         if(!result.getResult().equals("")) {
-            String activity = direction + " - Board Order mailed " + entryDescription;
+            String activity = d.direction + " - Board Order mailed " + d.entryDescription;
             activity += " Code " + result.getResult();
 
-            CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
+            Activity.addCMDSActivty(activity, d.filePath, d.entryDate, d.caseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
+            CMDSCase.updateCaseByTypeDEntry(result.getResult(), MailedBO, caseStatus, d.caseNumber);
 
-            if(status.isUpdateStatus()) {
-                List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-                if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                    CMDSCase.updateCaseByTypeDEntry(result.getResult(), MailedBO, caseStatus, caseNumber);
-                    CMDSCase.updateCaseInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-                }
-
-                if(groupList.size() > 0) {
-                    for(int i = 0; i < groupList.size(); i++) {
-                        Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                        CMDSCase.updateCaseByTypeDEntry(result.getResult(), MailedBO, caseStatus, groupList.get(i).toString());
-                        if(updateAllCases) {
-                            CMDSCase.updateAllGroupInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-                        }
-                    }
-                }
-            } else {
-                List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-                if(groupList.isEmpty()) {
-                    Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                    CMDSCase.updateCaseByTypeDEntry(result.getResult(), MailedBO, caseStatus, caseNumber);
-                } else if (groupList.size() > 0) {
-                    for(int i = 0; i < groupList.size(); i++) {
-                        Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                        CMDSCase.updateCaseByTypeDEntry(result.getResult(), MailedBO, caseStatus, groupList.get(i).toString());
-                    }
-                }
+            if(d.updateStatusInventoryLine) {
+                CMDSCase.updateCaseInventoryStatusLines(activity  + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, d.caseNumber);
             }
         }
         result.dispose();
     }
 
-    private static void addEEntryType(String entryDescription,
-            String extraText, Date entryDate,
-            java.awt.Dialog dialog, String filePath, String direction,
-            String caseNumber, String from, String to, String category, boolean updateAllCases) {
-
-        CMDSResponseDueDateDialog dueDate = new CMDSResponseDueDateDialog(dialog, true);
+    private static void addEEntryType(CMDSCaseDocketEntryModel d) {
+        CMDSResponseDueDateDialog dueDate = new CMDSResponseDueDateDialog(d.dialog, true);
 
         if(dueDate.getResponseDueDate()!= null) {
             EmailOutInvites.addNewHearing("CMDS",
                 CMDSCase.getALJemail(),
                 null,
-                "Response due for " + caseNumber,
-                caseNumber,
+                "Response due for " + d.caseNumber,
+                d.caseNumber,
                 null,
                 null,
                 null,
                 DateConversion.generateReminderStartDate(dueDate.getResponseDueDate()),
-                "Response due for " + caseNumber
+                "Response due for " + d.caseNumber
             );
         }
 
-        String caseStatus = CMDSCase.getCaseStatus(caseNumber);
+        String caseStatus = CMDSCase.getCaseStatus(d.caseNumber);
 
-        CMDSCase PODate = CMDSCase.getmailedPODates(caseNumber);
+        CMDSCase PODate = CMDSCase.getmailedPODates(d.caseNumber);
 
         if(PODate.mailedPO1 == null) {
-            PODate.mailedPO1 = new Timestamp(entryDate.getTime());
+            PODate.mailedPO1 = new Timestamp(d.entryDate.getTime());
         } else if(PODate.mailedPO2 == null) {
-            PODate.mailedPO2 = new Timestamp(entryDate.getTime());
+            PODate.mailedPO2 = new Timestamp(d.entryDate.getTime());
         } else if(PODate.mailedPO3 == null) {
-            PODate.mailedPO3 = new Timestamp(entryDate.getTime());
+            PODate.mailedPO3 = new Timestamp(d.entryDate.getTime());
         } else if(PODate.mailedPO4 == null) {
-            PODate.mailedPO4 = new Timestamp(entryDate.getTime());
+            PODate.mailedPO4 = new Timestamp(d.entryDate.getTime());
         }
 
-        CMDSCertifiedLetterDialog certified = new CMDSCertifiedLetterDialog(dialog, true);
+        CMDSCertifiedLetterDialog certified = new CMDSCertifiedLetterDialog(d.dialog, true);
 
         if(caseStatus.equals("S")) {
-            CMDSRemoveStayDialog removeStay = new CMDSRemoveStayDialog(dialog, true);
+            CMDSRemoveStayDialog removeStay = new CMDSRemoveStayDialog(d.dialog, true);
             if(removeStay.isRemoveStay()) {
                 caseStatus = "O";
             } else {
@@ -321,7 +220,7 @@ public class CMDSCaseDocketEntryTypes {
             }
             removeStay.dispose();
         } else if(caseStatus.equals("O")) {
-            CMDSPlaceStayDialog placeStay = new CMDSPlaceStayDialog(dialog, true);
+            CMDSPlaceStayDialog placeStay = new CMDSPlaceStayDialog(d.dialog, true);
             if(placeStay.isPlaceStay()) {
                 caseStatus = "S";
             } else {
@@ -330,62 +229,30 @@ public class CMDSCaseDocketEntryTypes {
             placeStay.dispose();
         }
 
-
-        String activity = direction + " - " + entryDescription;
+        String activity = d.direction + " - " + d.entryDescription;
         activity += (certified.isCertified() ? " - (Certified)" : "");
 
-        CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
+        Activity.addCMDSActivty(activity, d.filePath, d.entryDate, d.caseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
+        CMDSCase.updateCaseByTypeEEntry(PODate, caseStatus, d.caseNumber);
 
-        if(status.isUpdateStatus()) {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber.split("-")[0]);
-
-            if(groupList.isEmpty()) {
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                CMDSCase.updateCaseByTypeEEntry(PODate, caseStatus, caseNumber);
-                CMDSCase.updateCaseInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-            }
-
-            if(groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                    CMDSCase.updateCaseByTypeEEntry(PODate, caseStatus, groupList.get(i).toString());
-                    if(updateAllCases) {
-                        CMDSCase.updateAllGroupInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-                    }
-                }
-            }
-        } else {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                CMDSCase.updateCaseByTypeEEntry(PODate, caseStatus, caseNumber);
-            } else if (groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                    CMDSCase.updateCaseByTypeEEntry(PODate, caseStatus, groupList.get(i).toString());
-                }
-            }
+        if(d.updateStatusInventoryLine) {
+            CMDSCase.updateCaseInventoryStatusLines(activity  + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, d.caseNumber);
         }
     }
 
-    private static void addFEntryType(String entryDescription,
-            String extraText, Date entryDate,
-            java.awt.Dialog dialog, String filePath, String direction,
-            String caseNumber, String from, String to, String category, boolean updateAllCases) {
+    private static void addFEntryType(CMDSCaseDocketEntryModel d) {
+        CMDSCase rrpoPullDates = CMDSCase.getRRPOPullDates(d.caseNumber);
 
-        CMDSCase rrpoPullDates = CMDSCase.getRRPOPullDates(caseNumber);
-
-        CMDSRRorPODialog rrpo = new CMDSRRorPODialog(dialog, true);
+        CMDSRRorPODialog rrpo = new CMDSRRorPODialog(d.dialog, true);
 
         if(rrpo.getSelection().equals("R&R")) {
-            CMDSPullDateDialog pullDate = new CMDSPullDateDialog(dialog, true);
+            CMDSPullDateDialog pullDate = new CMDSPullDateDialog(d.dialog, true);
             rrpoPullDates.pullDateRR = pullDate.getResponseDueDate();
             pullDate.dispose();
         } else {
-            CMDSWhichPOPullDateDialog whichPO = new CMDSWhichPOPullDateDialog(dialog, true);
+            CMDSWhichPOPullDateDialog whichPO = new CMDSWhichPOPullDateDialog(d.dialog, true);
 
-            CMDSPullDateDialog pullDate = new CMDSPullDateDialog(dialog, true);
+            CMDSPullDateDialog pullDate = new CMDSPullDateDialog(d.dialog, true);
 
             switch (whichPO.getWhichPO()) {
                 case "PO1":
@@ -408,805 +275,280 @@ public class CMDSCaseDocketEntryTypes {
             pullDate.dispose();
         }
 
-        String activity = direction + " - " + entryDescription;
+        String activity = d.direction + " - " + d.entryDescription;
 
-        CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
+        Activity.addCMDSActivty(activity, d.filePath, d.entryDate, d.caseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
+        CMDSCase.updateCaseByTypeFEntry(rrpoPullDates, d.caseNumber);
 
-        if(status.isUpdateStatus()) {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                CMDSCase.updateCaseByTypeFEntry(rrpoPullDates, caseNumber);
-                CMDSCase.updateCaseInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-            }
-
-            if(groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                    CMDSCase.updateCaseByTypeFEntry(rrpoPullDates, groupList.get(i).toString());
-                    if(updateAllCases) {
-                        CMDSCase.updateAllGroupInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-                    }
-                }
-            }
-        } else {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                CMDSCase.updateCaseByTypeFEntry(rrpoPullDates, caseNumber);
-            } else if (groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                    CMDSCase.updateCaseByTypeFEntry(rrpoPullDates, groupList.get(i).toString());
-                }
-            }
+        if(d.updateStatusInventoryLine) {
+            CMDSCase.updateCaseInventoryStatusLines(activity  + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, d.caseNumber);
         }
     }
 
-    private static void addGEntryType(String entryDescription,
-            String extraText, Date entryDate,
-            java.awt.Dialog dialog, String filePath, String direction,
-            String caseNumber, String from, String to, String category, boolean updateAllCases) {
-
-        CMDSResponseDueDateDialog dueDate = new CMDSResponseDueDateDialog(dialog, true);
+    private static void addGEntryType(CMDSCaseDocketEntryModel d) {
+        CMDSResponseDueDateDialog dueDate = new CMDSResponseDueDateDialog(d.dialog, true);
 
         if(dueDate.getResponseDueDate()!= null) {
-
             EmailOutInvites.addNewHearing("CMDS",
                 CMDSCase.getALJemail(),
                 null,
-                "Response due for " + caseNumber,
-                caseNumber,
+                "Response due for " + d.caseNumber,
+                d.caseNumber,
                 null,
                 null,
                 null,
                 DateConversion.generateReminderStartDate(dueDate.getResponseDueDate()),
-                "Response due for " + caseNumber
+                "Response due for " + d.caseNumber
             );
         }
 
-        String activity = direction + " - " + entryDescription;
+        String activity = d.direction + " - " + d.entryDescription;
         activity += (dueDate.getResponseDueDate() == null ? "" : " " + Global.mmddyyyy.format(new Date(dueDate.getResponseDueDate().getTime())));
 
-        CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
+        Activity.addCMDSActivty(activity, d.filePath, d.entryDate, d.caseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
 
-        if(status.isUpdateStatus()) {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                CMDSCase.updateCaseInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-            }
-
-            if(groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                    if(updateAllCases) {
-                        CMDSCase.updateAllGroupInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-                    }
-                }
-            }
-        } else {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-            } else if (groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                }
-            }
+        if(d.updateStatusInventoryLine) {
+            CMDSCase.updateCaseInventoryStatusLines(activity  + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, d.caseNumber);
         }
     }
 
-    private static void addHEntryType(String entryDescription,
-            String extraText, Date entryDate,
-            java.awt.Dialog dialog, String filePath, String direction,
-            String caseNumber, String from, String to, String category, boolean updateAllCases) {
+    private static void addHEntryType(CMDSCaseDocketEntryModel d) {
+        CMDSResponseDueDateDialog dueDate = new CMDSResponseDueDateDialog(d.dialog, true);
 
+        if(dueDate.getResponseDueDate()!= null) {
+            EmailOutInvites.addNewHearing("CMDS",
+                CMDSCase.getALJemail(),
+                null,
+                "Response due for " + d.caseNumber,
+                d.caseNumber,
+                null,
+                null,
+                null,
+                DateConversion.generateReminderStartDate(dueDate.getResponseDueDate()),
+                "Response due for " + d.caseNumber
+            );
+        }
 
-        CMDSResponseDueDateDialog dueDate = new CMDSResponseDueDateDialog(dialog, true);
+        String activity = d.direction + " - " + d.entryDescription;
+        activity += (dueDate.getResponseDueDate() == null ? "" : " Response Due " + Global.mmddyyyy.format(new Date(dueDate.getResponseDueDate().getTime())));
+
+        Activity.addCMDSActivty(activity, d.filePath, d.entryDate, d.caseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
+
+        if(d.updateStatusInventoryLine) {
+            CMDSCase.updateCaseInventoryStatusLines(activity  + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, d.caseNumber);
+        }
+    }
+
+    private static void addIEntryType(CMDSCaseDocketEntryModel d) {
+        String activity = d.direction + " - " + d.entryDescription;
+
+        Activity.addCMDSActivty(activity, d.filePath, d.entryDate, d.caseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
+
+        if(d.updateStatusInventoryLine) {
+            CMDSCase.updateCaseInventoryStatusLines(activity  + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, d.caseNumber);
+        }
+    }
+
+    private static void addJEntryType(CMDSCaseDocketEntryModel d) {
+        CMDSResponseDueDateDialog dueDate = new CMDSResponseDueDateDialog(d.dialog, true);
 
         if(dueDate.getResponseDueDate()!= null) {
 
             EmailOutInvites.addNewHearing("CMDS",
                 CMDSCase.getALJemail(),
                 null,
-                "Response due for " + caseNumber,
-                caseNumber,
+                "Response due for " + d.caseNumber,
+                d.caseNumber,
                 null,
                 null,
                 null,
                 DateConversion.generateReminderStartDate(dueDate.getResponseDueDate()),
-                "Response due for " + caseNumber
+                "Response due for " + d.caseNumber
             );
         }
 
-        String activity = direction + " - " + entryDescription;
+        String activity = d.direction + " - " + d.entryDescription;
         activity += (dueDate.getResponseDueDate() == null ? "" : " Response Due " + Global.mmddyyyy.format(new Date(dueDate.getResponseDueDate().getTime())));
 
-        CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
+        Activity.addCMDSActivty(activity, d.filePath, d.entryDate, d.caseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
 
-        if(status.isUpdateStatus()) {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                CMDSCase.updateCaseInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-            }
-
-            if(groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                    if(updateAllCases) {
-                        CMDSCase.updateAllGroupInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-                    }
-                }
-            }
-        } else {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-            } else if (groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                }
-            }
+        if(d.updateStatusInventoryLine) {
+            CMDSCase.updateCaseInventoryStatusLines(activity  + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, d.caseNumber);
         }
     }
 
-    private static void addIEntryType(String entryDescription,
-            String extraText, Date entryDate,
-            java.awt.Dialog dialog, String filePath, String direction,
-            String caseNumber, String from, String to, String category, boolean updateAllCases) {
+    private static void addKEntryType(CMDSCaseDocketEntryModel d) {
+        String activity = d.direction + " - " + d.entryDescription;
 
-        String activity = direction + " - " + entryDescription;
+        Activity.addCMDSActivty(activity, d.filePath, d.entryDate, d.caseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
 
-        CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
-
-        if(status.isUpdateStatus()) {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                CMDSCase.updateCaseInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-            }
-
-            if(groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                    if(updateAllCases) {
-                        CMDSCase.updateAllGroupInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-                    }
-                }
-            }
-        } else {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-            } else if (groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                }
-            }
+        if(d.updateStatusInventoryLine) {
+            CMDSCase.updateCaseInventoryStatusLines(activity  + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, d.caseNumber);
         }
     }
 
-    private static void addJEntryType(String entryDescription,
-        String extraText, Date entryDate,
-        java.awt.Dialog dialog, String filePath, String direction,
-        String caseNumber, String from, String to, String category, boolean updateAllCases) {
+    private static void addLEntryType(CMDSCaseDocketEntryModel d) {
+        String activity = d.direction + " - " + d.entryDescription;
+        
+        Activity.addCMDSActivty(activity, d.filePath, d.entryDate, d.caseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
 
-        CMDSResponseDueDateDialog dueDate = new CMDSResponseDueDateDialog(dialog, true);
-
-        if(dueDate.getResponseDueDate()!= null) {
-
-            EmailOutInvites.addNewHearing("CMDS",
-                CMDSCase.getALJemail(),
-                null,
-                "Response due for " + caseNumber,
-                caseNumber,
-                null,
-                null,
-                null,
-                DateConversion.generateReminderStartDate(dueDate.getResponseDueDate()),
-                "Response due for " + caseNumber
-            );
-        }
-
-        String activity = direction + " - " + entryDescription;
-        activity += (dueDate.getResponseDueDate() == null ? "" : " Response Due " + Global.mmddyyyy.format(new Date(dueDate.getResponseDueDate().getTime())));
-
-        CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
-
-        if(status.isUpdateStatus()) {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                CMDSCase.updateCaseInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-            }
-
-            if(groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                    if(updateAllCases) {
-                        CMDSCase.updateAllGroupInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-                    }
-                }
-            }
-        } else {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-            } else if (groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                }
-            }
+        if(d.updateStatusInventoryLine) {
+            CMDSCase.updateCaseInventoryStatusLines(activity  + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, d.caseNumber);
         }
     }
 
-    private static void addKEntryType(String entryDescription,
-        String extraText, Date entryDate,
-        java.awt.Dialog dialog, String filePath, String direction,
-        String caseNumber, String from, String to, String category, boolean updateAllCases) {
+    private static void addMEntryType(CMDSCaseDocketEntryModel d) {
+        CMDSAppealsCourtDialog court = new CMDSAppealsCourtDialog(d.dialog, true);
 
-        String activity = direction + " - " + entryDescription;
-
-        CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
-
-        if(status.isUpdateStatus()) {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                CMDSCase.updateCaseInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-            }
-
-            if(groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                    if(updateAllCases) {
-                        CMDSCase.updateAllGroupInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-                    }
-                }
-            }
-        } else {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-            } else if (groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                }
-            }
-        }
-    }
-
-    private static void addLEntryType(String entryDescription,
-        String extraText, Date entryDate,
-        java.awt.Dialog dialog, String filePath, String direction,
-        String caseNumber, String from, String to, String category, boolean updateAllCases) {
-
-        String activity = direction + " - " + entryDescription;
-        CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
-
-        if(status.isUpdateStatus()) {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                CMDSCase.updateCaseInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-            }
-
-            if(groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                    if(updateAllCases) {
-                        CMDSCase.updateAllGroupInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-                    }
-                }
-            }
-        } else {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-            } else if (groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                }
-            }
-        }
-    }
-
-    private static void addMEntryType(String entryDescription,
-        String extraText, Date entryDate,
-        java.awt.Dialog dialog, String filePath, String direction,
-        String caseNumber, String from, String to, String category, boolean updateAllCases) {
-
-        CMDSAppealsCourtDialog court = new CMDSAppealsCourtDialog(dialog, true);
-
-        String activity = direction + " - " + entryDescription;
-        activity += (court.getSelection() == null ? "" : " - Appealed to " + court.getSelection());
+        String activity = d.direction + " - " + d.entryDescription;
+        activity += (court.getSelection() == null ? "" : " - Appealed d.to " + court.getSelection());
         activity += (court.getCaseNumber().equals("") ? "" : " - Case Number " + court.getCaseNumber());
 
-        CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
+        Activity.addCMDSActivty(activity, d.filePath, d.entryDate, d.caseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
+                CMDSCase.updateCaseByTypeMEntry(d.caseNumber);
 
-        if(status.isUpdateStatus()) {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                CMDSCase.updateCaseByTypeMEntry(caseNumber);
-                CMDSCase.updateCaseInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-            }
-
-            if(groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                    CMDSCase.updateCaseByTypeMEntry(groupList.get(i).toString());
-                    if(updateAllCases) {
-                        CMDSCase.updateAllGroupInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-                    }
-                }
-            }
-        } else {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                CMDSCase.updateCaseByTypeMEntry(caseNumber);
-            } else if (groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                    CMDSCase.updateCaseByTypeMEntry(groupList.get(i).toString());
-                }
-            }
-        }
-        status.dispose();
-    }
-
-    private static void addNEntryType(String entryDescription,
-        String extraText, Date entryDate,
-        java.awt.Dialog dialog, String filePath, String direction,
-        String caseNumber, String from, String to, String category, boolean updateAllCases) {
-
-        CMDSClearDateDialog clear = new CMDSClearDateDialog(dialog, true);
-
-        String activity = direction + " - " + entryDescription;
-
-        CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
-
-        if(status.isUpdateStatus()) {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                CMDSCase.updateCaseByTypeNEntry(clearWhichDate(clear.getDateType(), clear.getWhichDate()), caseNumber);
-                CMDSCase.updateCaseInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-            }
-
-            if(groupList.size() > 0) {
-
-                for(int i = 0; i < groupList.size(); i++) {
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                    CMDSCase.updateCaseByTypeNEntry(clearWhichDate(clear.getDateType(), clear.getWhichDate()), groupList.get(i).toString());
-                    if(updateAllCases) {
-                        CMDSCase.updateAllGroupInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-                    }
-                }
-            }
-        } else {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                CMDSCase.updateCaseByTypeNEntry(clearWhichDate(clear.getDateType(), clear.getWhichDate()), caseNumber);
-            } else if (groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                    CMDSCase.updateCaseByTypeNEntry(clearWhichDate(clear.getDateType(), clear.getWhichDate()), groupList.get(i).toString());
-                }
-            }
+        if(d.updateStatusInventoryLine) {
+            CMDSCase.updateCaseInventoryStatusLines(activity  + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, d.caseNumber);
         }
     }
 
-    private static void addOEntryType(String entryDescription,
-        String extraText, Date entryDate,
-        java.awt.Dialog dialog, String filePath, String direction,
-        String caseNumber, String from, String to, String category, boolean updateAllCases) {
+    private static void addNEntryType(CMDSCaseDocketEntryModel d) {
+        CMDSClearDateDialog clear = new CMDSClearDateDialog(d.dialog, true);
 
-        CMDSResponseDueDateDialog dueDate = new CMDSResponseDueDateDialog(dialog, true);
+        String activity = d.direction + " - " + d.entryDescription;
+
+        Activity.addCMDSActivty(activity, d.filePath, d.entryDate, d.caseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
+        CMDSCase.updateCaseByTypeNEntry(clearWhichDate(clear.getDateType(), clear.getWhichDate()), d.caseNumber);
+
+        if(d.updateStatusInventoryLine) {
+            CMDSCase.updateCaseInventoryStatusLines(activity  + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, d.caseNumber);
+        }
+    }
+
+    private static void addOEntryType(CMDSCaseDocketEntryModel d) {
+        CMDSResponseDueDateDialog dueDate = new CMDSResponseDueDateDialog(d.dialog, true);
 
         if(dueDate.getResponseDueDate() != null) {
 
             EmailOutInvites.addNewHearing("CMDS",
                 CMDSCase.getALJemail(),
                 null,
-                "Response due for " + caseNumber,
-                caseNumber,
+                "Response due for " + d.caseNumber,
+                d.caseNumber,
                 null,
                 null,
                 null,
                 DateConversion.generateReminderStartDate(dueDate.getResponseDueDate()),
-                "Response due for " + caseNumber
+                "Response due for " + d.caseNumber
             );
         }
 
-        String activity = direction + " - " + entryDescription;
+        String activity = d.direction + " - " + d.entryDescription;
         activity += (dueDate.getResponseDueDate() == null ? "" : " Response Due " + Global.mmddyyyy.format(new Date(dueDate.getResponseDueDate().getTime())));
 
-        CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
+        Activity.addCMDSActivty(activity, d.filePath, d.entryDate, d.caseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
 
-        if(status.isUpdateStatus()) {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                CMDSCase.updateCaseInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-            }
-
-            if(groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                    if(updateAllCases) {
-                        CMDSCase.updateAllGroupInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-                    }
-                }
-            }
-        } else {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-            } else if (groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                }
-            }
+        if(d.updateStatusInventoryLine) {
+            CMDSCase.updateCaseInventoryStatusLines(activity  + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, d.caseNumber);
         }
     }
 
-    private static void addPEntryType(String entryDescription,
-        String extraText, Date entryDate,
-        java.awt.Dialog dialog, String filePath, String direction,
-        String caseNumber, String from, String to, String category, boolean updateAllCases) {
+    private static void addPEntryType(CMDSCaseDocketEntryModel d) {
+        String activity = d.direction + " - " + d.entryDescription;
 
-        String activity = direction + " - " + entryDescription;
+        Activity.addCMDSActivty(activity, d.filePath, d.entryDate, d.caseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
 
-        CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
-
-        if(status.isUpdateStatus()) {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                CMDSCase.updateCaseInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-            }
-
-            if(groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                    if(updateAllCases) {
-                        CMDSCase.updateAllGroupInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-                    }
-                }
-            }
-        } else {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-            } else if (groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                }
-            }
+        if(d.updateStatusInventoryLine) {
+            CMDSCase.updateCaseInventoryStatusLines(activity  + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, d.caseNumber);
         }
     }
 
-    private static void addQEntryType(String entryDescription,
-        String extraText, Date entryDate,
-        java.awt.Dialog dialog, String filePath, String direction,
-        String caseNumber, String from, String to, String category, boolean updateAllCases) {
+    private static void addQEntryType(CMDSCaseDocketEntryModel d) {
+        CMDSWhichGreenCardDialog pullDate = new CMDSWhichGreenCardDialog(d.dialog, true);
+        String activity = d.direction + " - " + d.entryDescription;
 
-        CMDSWhichGreenCardDialog pullDate = new CMDSWhichGreenCardDialog(dialog, true);
-
-        String activity = direction + " - " + entryDescription;
-
-        CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
-
-        if(status.isUpdateStatus()) {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
+        Activity.addCMDSActivty(activity, d.filePath, d.entryDate, d.caseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
                 CMDSCase.updateCaseByTypeQEntry(greenCardWhichDate(pullDate.getWhichType()),
                         whichPullDate(pullDate.getWhichType()),
                         pullDate.getSignedDate(),
                         pullDate.getPullDate(),
-                        caseNumber);
-                CMDSCase.updateCaseInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-            }
+                        d.caseNumber);
 
-            if(groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                    CMDSCase.updateCaseByTypeQEntry(greenCardWhichDate(pullDate.getWhichType()),
-                            whichPullDate(pullDate.getWhichType()),
-                            pullDate.getSignedDate(),
-                            pullDate.getPullDate(),
-                            groupList.get(i).toString());
-                    if(updateAllCases) {
-                        CMDSCase.updateAllGroupInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-                    }
-                }
-            }
-        } else {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                CMDSCase.updateCaseByTypeQEntry(greenCardWhichDate(pullDate.getWhichType()),
-                        whichPullDate(pullDate.getWhichType()),
-                        pullDate.getSignedDate(),
-                        pullDate.getPullDate(),
-                        caseNumber);
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-            } else if (groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    CMDSCase.updateCaseByTypeQEntry(greenCardWhichDate(pullDate.getWhichType()),
-                            whichPullDate(pullDate.getWhichType()),
-                            pullDate.getSignedDate(),
-                            pullDate.getPullDate(),
-                            groupList.get(i).toString());
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                }
-            }
+        if(d.updateStatusInventoryLine) {
+            CMDSCase.updateCaseInventoryStatusLines(activity  + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, d.caseNumber);
         }
         pullDate.dispose();
     }
 
-    private static void addREntryType(String entryDescription,
-        String extraText, Date entryDate,
-        java.awt.Dialog dialog, String filePath, String direction,
-        String caseNumber, String from, String to, String category, boolean updateAllCases) {
+    private static void addREntryType(CMDSCaseDocketEntryModel d) {
+        String activity = d.direction + " - " + d.entryDescription;
+        String entryDate2 = Global.MMMMddyyyy.format(d.entryDate);
 
-        String activity = direction + " - " + entryDescription;
+        Activity.addCMDSActivty(activity, d.filePath, d.entryDate, d.caseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
+                CMDSCase.updateCaseByTypeREntry(entryDate2, d.caseNumber);
 
-        String entryDate2 = Global.MMMMddyyyy.format(entryDate);
-
-        CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
-
-        if(status.isUpdateStatus()) {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                CMDSCase.updateCaseByTypeREntry(entryDate2, caseNumber);
-                CMDSCase.updateCaseInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-            }
-
-            if(groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                    CMDSCase.updateCaseByTypeREntry(entryDate2, groupList.get(i).toString());
-                    if(updateAllCases) {
-                        CMDSCase.updateAllGroupInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-                    }
-                }
-            }
-        } else {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                CMDSCase.updateCaseByTypeREntry(entryDate2, caseNumber);
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-
-            } else if (groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    CMDSCase.updateCaseByTypeREntry(entryDate2, groupList.get(i).toString());
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                }
-            }
+        if(d.updateStatusInventoryLine) {
+            CMDSCase.updateCaseInventoryStatusLines(activity  + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, d.caseNumber);
         }
     }
 
-    private static void addSEntryType(String entryDescription,
-        String extraText, Date entryDate,
-        java.awt.Dialog dialog, String filePath, String direction,
-        String caseNumber, String from, String to, String category, boolean updateAllCases) {
-
-        String activity = direction + " - " + entryDescription;
-        CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
-
-        if(status.isUpdateStatus()) {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                CMDSCase.updateCaseInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-            }
-
-            if(groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                    if(updateAllCases) {
-                        CMDSCase.updateAllGroupInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-                    }
-                }
-            }
-        } else {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-            } else if (groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                }
-            }
+    private static void addSEntryType(CMDSCaseDocketEntryModel d) {
+        String activity = d.direction + " - " + d.entryDescription;
+        
+        Activity.addCMDSActivty(activity, d.filePath, d.entryDate, d.caseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
+        
+        if(d.updateStatusInventoryLine) {
+            CMDSCase.updateCaseInventoryStatusLines(activity  + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, d.caseNumber);
         }
     }
 
-    private static void addUEntryType(String entryDescription,
-        String extraText, Date entryDate,
-        java.awt.Dialog dialog, String filePath, String direction,
-        String caseNumber, String from, String to, String category, boolean updateAllCases) {
+    private static void addUEntryType(CMDSCaseDocketEntryModel d) {
 
-        CMDSPBRBoxDialog pbr = new CMDSPBRBoxDialog(dialog, true);
+        CMDSPBRBoxDialog pbr = new CMDSPBRBoxDialog(d.dialog, true);
 
-        String activity = direction + " - " + entryDescription;
+        String activity = d.direction + " - " + d.entryDescription;
         activity += (pbr.getPbrBox().equals("") ? "" : " " + pbr.getPbrBox());
 
-        CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
+        Activity.addCMDSActivty(activity, d.filePath, d.entryDate, d.caseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
+        CMDSCase.updateCaseByTypeUEntry(pbr.getPbrBox().equals("") ? null : pbr.getPbrBox(), d.caseNumber);
+        
 
-        if(status.isUpdateStatus()) {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                CMDSCase.updateCaseByTypeUEntry(pbr.getPbrBox().equals("") ? null : pbr.getPbrBox(),
-                        caseNumber);
-                CMDSCase.updateCaseInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-            }
-
-            if(groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                    CMDSCase.updateCaseByTypeUEntry(pbr.getPbrBox().equals("") ? null : pbr.getPbrBox(),
-                        groupList.get(i).toString());
-                    if(updateAllCases) {
-                        CMDSCase.updateAllGroupInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-                    }
-                }
-            }
-        } else {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                CMDSCase.updateCaseByTypeUEntry(pbr.getPbrBox().equals("") ? null : pbr.getPbrBox(),
-                        caseNumber);
-            } else if (groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    CMDSCase.updateCaseByTypeUEntry(pbr.getPbrBox().equals("") ? null : pbr.getPbrBox(),
-                        groupList.get(i).toString());
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                }
-            }
+        if(d.updateStatusInventoryLine) {
+            CMDSCase.updateCaseInventoryStatusLines(activity  + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, d.caseNumber);
         }
         pbr.dispose();
     }
 
-    private static void addVEntryType(String entryDescription,
-        String extraText, Date entryDate,
-        java.awt.Dialog dialog, String filePath, String direction,
-        String caseNumber, String from, String to, String category, boolean updateAllCases) {
-
-        CMDSRemailedDialog remailed = new CMDSRemailedDialog(dialog, true);
+    private static void addVEntryType(CMDSCaseDocketEntryModel d) {
+        CMDSRemailedDialog remailed = new CMDSRemailedDialog(d.dialog, true);
         CMDSPullDateDialog pulldate = null;
 
-        if(entryDescription.equals("R & R Remailed Certified Mail")
-                || entryDescription.equals("R & R Remailed Regular Mail"))
+        if(d.entryDescription.equals("R & R Remailed Certified Mail")
+                || d.entryDescription.equals("R & R Remailed Regular Mail"))
         {
-            pulldate = new CMDSPullDateDialog(dialog, true);
+            pulldate = new CMDSPullDateDialog(d.dialog, true);
         }
 
-        String activity = direction + " - " + entryDescription;
+        String activity = d.direction + " - " + d.entryDescription;
 
-        CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
+        Activity.addCMDSActivty(activity, d.filePath, d.entryDate, d.caseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
+                CMDSCase.updateCaseByTypeVEntry(whichRemailedDate(remailed.getWhichType()), remailed.getRemailedDate(), pulldate == null ? null : pulldate.getResponseDueDate(), d.caseNumber);
 
-        if(status.isUpdateStatus()) {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                CMDSCase.updateCaseByTypeVEntry(whichRemailedDate(remailed.getWhichType()),
-                        remailed.getRemailedDate(),
-                        pulldate == null ? null : pulldate.getResponseDueDate(),
-                        caseNumber);
-                CMDSCase.updateCaseInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-            }
-
-            if(groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                    CMDSCase.updateCaseByTypeVEntry(whichRemailedDate(remailed.getWhichType()),
-                            remailed.getRemailedDate(),
-                            pulldate == null ? null : pulldate.getResponseDueDate(),
-                            groupList.get(i).toString());
-                    if(updateAllCases) {
-                        CMDSCase.updateAllGroupInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-                    }
-                }
-            }
-        } else {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                CMDSCase.updateCaseByTypeVEntry(whichRemailedDate(remailed.getWhichType()),
-                        remailed.getRemailedDate(),
-                        pulldate == null ? null : pulldate.getResponseDueDate(),
-                        caseNumber);
-            } else if (groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    CMDSCase.updateCaseByTypeVEntry(whichRemailedDate(remailed.getWhichType()),
-                            remailed.getRemailedDate(),
-                            pulldate == null ? null : pulldate.getResponseDueDate(),
-                            groupList.get(i).toString());
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                }
-            }
+        if(d.updateStatusInventoryLine) {
+            CMDSCase.updateCaseInventoryStatusLines(activity  + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, d.caseNumber);
         }
         remailed.dispose();
     }
 
-    private static void addWEntryType(String entryDescription,
-        String extraText, Date entryDate,
-        java.awt.Dialog dialog, String filePath, String direction,
-        String caseNumber, String from, String to, String category, boolean updateAllCases) {
+    private static void addWEntryType(CMDSCaseDocketEntryModel d) {
+        String activity = d.direction + " - " + d.entryDescription;
+        
+        Activity.addCMDSActivty(activity, d.filePath, d.entryDate, d.caseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
 
-        String activity = direction + " - " + entryDescription;
-        CMDSUpdateInventoryStatusLineDialog status = new CMDSUpdateInventoryStatusLineDialog(dialog, true);
-
-        if(status.isUpdateStatus()) {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                CMDSCase.updateCaseInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-            }
-
-            if(groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                    if(updateAllCases) {
-                        CMDSCase.updateAllGroupInventoryStatusLines(activity  + (extraText.equals("") ? "" : " " + extraText), entryDate, caseNumber);
-                    }
-                }
-            }
-        } else {
-            List groupList = CMDSCase.getGroupNumberList(caseNumber);
-
-            if(groupList.isEmpty()) {
-                Activity.addCMDSActivty(activity, filePath, entryDate, caseNumber, from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-            } else if (groupList.size() > 0) {
-                for(int i = 0; i < groupList.size(); i++) {
-                    Activity.addCMDSActivty(activity, filePath, entryDate, groupList.get(i).toString(), from, to, category, entryDescription, (extraText.trim().equals("") ? null : extraText.trim()));
-                }
-            }
+        if(d.updateStatusInventoryLine) {
+            CMDSCase.updateCaseInventoryStatusLines(activity  + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, d.caseNumber);
         }
     }
-
 
     private static String clearWhichDate(String dateType, String whichDate) {
         String clearDateString = "";

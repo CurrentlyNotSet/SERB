@@ -28,6 +28,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import parker.serb.CMDS.CMDSUpdateAllGroupCasesDialog;
+import parker.serb.CMDS.CMDSUpdateInventoryStatusLineDialog;
 import parker.serb.Global;
 import parker.serb.sql.CMDSCase;
 import parker.serb.sql.CMDSHistoryCategory;
@@ -393,21 +394,26 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
         
         for (int i = 0; i < attachmentTable.getRowCount(); i++) {
             if (!attachmentTable.getValueAt(i, 2).toString().equals("DO NOT FILE")) {
-//                FileService.docketCMDSEmailAttachment(caseNumbers, //caseNumber
-//                        attachmentTable.getValueAt(i, 0).toString(), //attachmentid
-//                        emailID,
-//                        emailSection,
-//                        fromTextBox.getText(),
-//                        toComboBox.getSelectedItem().toString(),
-//                        subjectTextBox.getText(),
-//                        attachmentTable.getValueAt(i, 1).toString(), //fileName
-//                        attachmentTable.getValueAt(i, 2).toString(), //fileType1
-//                        attachmentTable.getValueAt(i, 3).toString(), //fileType2
-//                        attachmentTable.getValueAt(i, 4) != null //comment
-//                        ? attachmentTable.getValueAt(i, 4).toString() : "",
-//                        generateDate(),
-//                        directionComboBox.getSelectedItem().toString(),
-//                        this);
+                //UpdateInventory Status Line Dialog
+                CMDSUpdateInventoryStatusLineDialog statusLineUpdate = new CMDSUpdateInventoryStatusLineDialog(this, true);
+                
+                //Docket Row
+                FileService.docketCMDSEmailAttachment(caseNumbers, //caseNumber
+                        attachmentTable.getValueAt(i, 0).toString(), //attachmentid
+                        emailID,
+                        emailSection,
+                        fromTextBox.getText(),
+                        toComboBox.getSelectedItem().toString(),
+                        subjectTextBox.getText(),
+                        attachmentTable.getValueAt(i, 1).toString(), //fileName
+                        attachmentTable.getValueAt(i, 2).toString(), //fileType1
+                        attachmentTable.getValueAt(i, 3).toString(), //fileType2
+                        attachmentTable.getValueAt(i, 4) != null //comment
+                        ? attachmentTable.getValueAt(i, 4).toString() : "",
+                        generateDate(),
+                        directionComboBox.getSelectedItem().toString(),
+                        this,
+                        statusLineUpdate.isUpdateStatus());
             }
         }
     }
@@ -701,18 +707,24 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
 
     private void fileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileButtonActionPerformed
         //Set Verification of docketing
+        boolean updateAllCases = false;
         boolean okToDocket = true;
 
         //getcaseNumber
         String[] caseNumbers = caseNumberTextBox.getText().trim().split(",");
 
+        List<String> groupNumbers = CMDSCase.DistinctGroupNumberFromCMDSCaseNumbers(caseNumbers);
+        
+        if (groupNumbers.size() > 1) {
         //Update All question now
-        CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(this, true);
+            CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(this, true);
+            updateAllCases = update.isUpdateStatus();
+        }
         
         //If true trim and strip duplicates
-        if (update.isUpdateStatus()) {
+        if (updateAllCases) {
             //Get List of All Cases
-            List<CMDSCase> caseList = CaseNumberTools.DocketingCases(caseNumbers);
+            List<CMDSCase> caseList = CMDSCase.CMDSDocketingCaseList(caseNumbers, groupNumbers.toArray(new String[0]));
             
             if (caseList.size() > 0){
                 //User Selects specific cases

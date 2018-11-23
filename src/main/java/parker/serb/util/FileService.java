@@ -643,7 +643,7 @@ public class FileService {
             Date activityDate,
             String direction,
             Dialog parent,
-            boolean updateAllCases) {
+            boolean updateInventoryStatusLine) {
 
         File docketFile = new File(Global.emailPath + section + File.separatorChar + fileName.trim());
 
@@ -682,7 +682,7 @@ public class FileService {
                         caseNumber.trim(),
                         from,
                         to,
-                        updateAllCases
+                        updateInventoryStatusLine
                 );
             }
         }
