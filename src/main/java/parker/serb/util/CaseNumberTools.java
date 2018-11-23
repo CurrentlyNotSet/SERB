@@ -35,5 +35,15 @@ public class CaseNumberTools {
         String[] returnList = strippedArray.toArray(new String[0]);
         return returnList;
     }
+    
+    
+    public static List<CMDSCase> DocketingCases(String[] caseNumbers) {
+        
+        List<String> groupNumbers = CMDSCase.DistinctGroupNumberFromCMDSCaseNumbers(caseNumbers);
 
+        List<CMDSCase> caseList = CMDSCase.CMDSDocketingCaseList(caseNumbers, groupNumbers.toArray(new String[0]));
+        
+        return caseList;
+    }
+    
 }

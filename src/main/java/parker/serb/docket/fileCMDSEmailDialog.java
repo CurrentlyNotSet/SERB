@@ -390,32 +390,24 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
             attachmentTable.getCellEditor().stopCellEditing();
         }
         
-        //Update All question now
-        CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(this, true);
         
-        //If true trim and strip duplicates
-        if (update.isUpdateStatus()) {
-            caseNumbers = CaseNumberTools.removeDupliateCasesByGroupNumber(caseNumbers);
-        }
-
         for (int i = 0; i < attachmentTable.getRowCount(); i++) {
             if (!attachmentTable.getValueAt(i, 2).toString().equals("DO NOT FILE")) {
-                FileService.docketCMDSEmailAttachment(caseNumbers, //caseNumber
-                        attachmentTable.getValueAt(i, 0).toString(), //attachmentid
-                        emailID,
-                        emailSection,
-                        fromTextBox.getText(),
-                        toComboBox.getSelectedItem().toString(),
-                        subjectTextBox.getText(),
-                        attachmentTable.getValueAt(i, 1).toString(), //fileName
-                        attachmentTable.getValueAt(i, 2).toString(), //fileType1
-                        attachmentTable.getValueAt(i, 3).toString(), //fileType2
-                        attachmentTable.getValueAt(i, 4) != null //comment
-                        ? attachmentTable.getValueAt(i, 4).toString() : "",
-                        generateDate(),
-                        directionComboBox.getSelectedItem().toString(),
-                        this,
-                        update.isUpdateStatus());
+//                FileService.docketCMDSEmailAttachment(caseNumbers, //caseNumber
+//                        attachmentTable.getValueAt(i, 0).toString(), //attachmentid
+//                        emailID,
+//                        emailSection,
+//                        fromTextBox.getText(),
+//                        toComboBox.getSelectedItem().toString(),
+//                        subjectTextBox.getText(),
+//                        attachmentTable.getValueAt(i, 1).toString(), //fileName
+//                        attachmentTable.getValueAt(i, 2).toString(), //fileType1
+//                        attachmentTable.getValueAt(i, 3).toString(), //fileType2
+//                        attachmentTable.getValueAt(i, 4) != null //comment
+//                        ? attachmentTable.getValueAt(i, 4).toString() : "",
+//                        generateDate(),
+//                        directionComboBox.getSelectedItem().toString(),
+//                        this);
             }
         }
     }
@@ -491,7 +483,7 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
         fromTextBox = new javax.swing.JTextField();
         subjectTextBox = new javax.swing.JTextField();
         fileButton = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        CancelButton = new javax.swing.JButton();
         toComboBox = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
@@ -598,10 +590,10 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
             }
         });
 
-        jButton2.setText("Cancel");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        CancelButton.setText("Cancel");
+        CancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                CancelButtonActionPerformed(evt);
             }
         });
 
@@ -648,7 +640,7 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
                             .addComponent(directionComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(orgNameComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(CancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(fileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -700,7 +692,7 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(fileButton)
-                    .addComponent(jButton2))
+                    .addComponent(CancelButton))
                 .addContainerGap())
         );
 
@@ -708,35 +700,54 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void fileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileButtonActionPerformed
+        //Set Verification of docketing
+        boolean okToDocket = true;
+
         //getcaseNumber
         String[] caseNumbers = caseNumberTextBox.getText().trim().split(",");
 
-        //fileBody --> no longer needed 2/28/17
-//        FileService.docketEmailBody(caseNumbers,
-//                emailID,
-//                emailSection,
-//                fromTextBox.getText(),
-//                toComboBox.getSelectedItem().toString(),
-//                subjectTextBox.getText(),
-//                generateDate(),
-//                directionComboBox.getSelectedItem().toString());
-        //fileAttachements
-        fileEmailAttachments(caseNumbers);
+        //Update All question now
+        CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(this, true);
+        
+        //If true trim and strip duplicates
+        if (update.isUpdateStatus()) {
+            //Get List of All Cases
+            List<CMDSCase> caseList = CaseNumberTools.DocketingCases(caseNumbers);
+            
+            if (caseList.size() > 0){
+                //User Selects specific cases
+                CMDSMultiCaseDocketingDialog userSelected = new CMDSMultiCaseDocketingDialog(this, true, caseList);
+            
+                //Update the caseNumbers List with selected items.
+                caseNumbers = userSelected.selectedCaseList.toArray(new String[0]);
 
-        deleteEmail(emailID);
+                //inverse of cancelled cancelled = true then okToDocket = false.
+                okToDocket = !userSelected.cancelled;
 
-        dispose();
+                //Dispose of the hidden panel now that all variables have been utalized
+                userSelected.dispose();
+            } else {
+                okToDocket = false;
+            }
+        }
+        
+        if (okToDocket){
+//            fileEmailAttachments(caseNumbers);
+//            deleteEmail(emailID);
+//            dispose();
+        }
     }//GEN-LAST:event_fileButtonActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void CancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelButtonActionPerformed
         dispose();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_CancelButtonActionPerformed
 
     private void dateTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateTextBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_dateTextBoxActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton CancelButton;
     private javax.swing.JTable attachmentTable;
     private javax.swing.JTextArea bodyTextArea;
     private javax.swing.JTextField caseNumberTextBox;
@@ -744,7 +755,6 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
     private javax.swing.JComboBox<String> directionComboBox;
     private javax.swing.JButton fileButton;
     private javax.swing.JTextField fromTextBox;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
