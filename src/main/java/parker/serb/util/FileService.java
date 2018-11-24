@@ -5,6 +5,7 @@
  */
 package parker.serb.util;
 
+import com.alee.laf.optionpane.WebOptionPane;
 import com.alee.utils.FileUtils;
 import java.awt.Desktop;
 import java.awt.Dialog;
@@ -16,6 +17,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JFrame;
+import parker.serb.CMDS.CMDSCaseDocketEntryModel;
 import parker.serb.CMDS.CMDSCaseDocketEntryTypes;
 import parker.serb.Global;
 import parker.serb.sql.Activity;
@@ -630,8 +632,6 @@ public class FileService {
     }
 
     public static void docketCMDSEmailAttachment(String[] caseNumbers,
-            String atachmentID,
-            String emailID,
             String section,
             String from,
             String to,
@@ -648,100 +648,27 @@ public class FileService {
         File docketFile = new File(Global.emailPath + section + File.separatorChar + fileName.trim());
 
         if (docketFile.exists()) {
-            for (String caseNumber : caseNumbers) {
-                File caseArchiveFile;
+            CMDSCaseDocketEntryModel docket = new CMDSCaseDocketEntryModel();
+            docket.category = type.split("-")[0].trim();
+            docket.entryDescription = type2;
+            docket.comment = comment;
+            docket.entryDate = activityDate;
+            docket.comment = "";
+            docket.dialog = parent;
+            docket.fileName = fileName;
+            docket.direction = direction;
+            docket.caseNumbers = caseNumbers;
+            docket.from = from;
+            docket.to = to;
+            docket.updateStatusInventoryLine = updateInventoryStatusLine;
+            docket.caseSection = section;
+            docket.originalFileLocation = docketFile;
 
-                String[] caseNumberParts = caseNumber.trim().split("-");
-                caseArchiveFile = new File(
-                        Global.activityPath
-                        + section
-                        + File.separatorChar
-                        + caseNumberParts[0]
-                        + File.separatorChar
-                        + caseNumber.trim()
-                );
-
-                caseArchiveFile.mkdirs();
-
-                String fileDate = String.valueOf(new Date().getTime());
-
-                String fileExtenstion = fileName.substring(fileName.lastIndexOf(".")); //. included
-
-                FileUtils.copyFile(docketFile, new File(caseArchiveFile + File.separator + fileDate + fileExtenstion));
-
-                NumberFormatService.parseFullCaseNumber(caseNumber.trim());
-
-                CMDSCaseDocketEntryTypes.updateCaseHistory(
-                        type.split("-")[0].trim(),
-                        type2,
-                        comment,
-                        activityDate,
-                        parent,
-                        caseArchiveFile + File.separator + fileDate + fileExtenstion,
-                        direction,
-                        caseNumber.trim(),
-                        from,
-                        to,
-                        updateInventoryStatusLine
-                );
-            }
+            CMDSCaseDocketEntryTypes.updateCaseHistory(docket);
+            docketFile.delete();
+        } else {
+            WebOptionPane.showMessageDialog(Global.root, "<html><center> Sorry, unable to locate file. <br><br>" + fileName.trim() + "</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
         }
-        docketFile.delete();
-    }
-
-    @Deprecated
-    public static void docketCMDSMedia(String[] caseNumbers,
-            String section,
-            String from,
-            String to,
-            String fileName,
-            String type,
-            String type2,
-            String comment,
-            String direction,
-            Dialog parent) {
-//
-//        File docketFile = new File(Global.mediaPath + section + File.separatorChar + fileName.trim());
-//
-//        if (docketFile.exists()) {
-//            for (String caseNumber : caseNumbers) {
-//                File caseArchiveFile;
-//
-//                String[] caseNumberParts = caseNumber.trim().split("-");
-//                caseArchiveFile = new File(
-//                        Global.activityPath
-//                        + section
-//                        + File.separatorChar
-//                        + caseNumberParts[0]
-//                        + File.separatorChar
-//                        + caseNumber.trim()
-//                );
-//
-//                caseArchiveFile.mkdirs();
-//
-//                String fileDate = String.valueOf(new Date().getTime());
-//
-//                String fileExtenstion = fileName.substring(fileName.lastIndexOf(".")); //. included
-//
-//                FileUtils.copyFile(docketFile, new File(caseArchiveFile + File.separator + fileDate + fileExtenstion));
-//
-//                NumberFormatService.parseFullCaseNumber(caseNumber);
-//
-//                CMDSCaseDocketEntryTypes.updateCaseHistory(
-//                        type.split("-")[0].trim(),
-//                        type2,
-//                        comment,
-//                        new Date(),
-//                        parent,
-//                        caseArchiveFile + File.separator + fileDate + fileExtenstion,
-//                        direction,
-//                        caseNumber,
-//                        from,
-//                        to
-//                );
-//            }
-//        }
-//        docketFile.delete();
     }
 
     public static void docketCMDSScan(String[] caseNumbers,
@@ -755,50 +682,32 @@ public class FileService {
             String direction,
             Dialog parent,
             Date activityDate,
-            boolean updateAllCases) {
+            boolean updateInventoryStatusLine) {
 
         File docketFile = new File(Global.scanPath + section + File.separatorChar + fileName.trim());
 
         if (docketFile.exists()) {
-            for (String caseNumber : caseNumbers) {
-                File caseArchiveFile;
+            CMDSCaseDocketEntryModel docket = new CMDSCaseDocketEntryModel();
+            docket.category = type.split("-")[0].trim();
+            docket.entryDescription = type2;
+            docket.comment = comment;
+            docket.entryDate = activityDate;
+            docket.comment = "";
+            docket.dialog = parent;
+            docket.fileName = fileName;
+            docket.direction = direction;
+            docket.caseNumbers = caseNumbers;
+            docket.from = from;
+            docket.to = to;
+            docket.updateStatusInventoryLine = updateInventoryStatusLine;
+            docket.caseSection = section;
+            docket.originalFileLocation = docketFile;
 
-                String[] caseNumberParts = caseNumber.trim().split("-");
-                caseArchiveFile = new File(
-                        Global.activityPath
-                        + section
-                        + File.separatorChar
-                        + caseNumberParts[0]
-                        + File.separatorChar
-                        + caseNumber.trim()
-                );
-
-                caseArchiveFile.mkdirs();
-
-                String fileDate = String.valueOf(new Date().getTime());
-
-                String fileExtenstion = fileName.substring(fileName.lastIndexOf(".")); //. included
-
-                FileUtils.copyFile(docketFile, new File(caseArchiveFile + File.separator + fileDate + fileExtenstion));
-
-                NumberFormatService.parseFullCaseNumber(caseNumber);
-
-                CMDSCaseDocketEntryTypes.updateCaseHistory(
-                        type.split("-")[0].trim(),
-                        type2,
-                        comment,
-                        activityDate,
-                        parent,
-                        caseArchiveFile + File.separator + fileDate + fileExtenstion,
-                        direction,
-                        caseNumber,
-                        from,
-                        to,
-                        updateAllCases
-                );
-            }
+            CMDSCaseDocketEntryTypes.updateCaseHistory(docket);
+            docketFile.delete();
+        } else {
+            WebOptionPane.showMessageDialog(Global.root, "<html><center> Sorry, unable to locate file. <br><br>" + fileName.trim() + "</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
         }
-        docketFile.delete();
     }
 
     public static void docketCMDSMediaWithTime(String[] caseNumbers,
@@ -812,50 +721,32 @@ public class FileService {
             String direction,
             Dialog parent,
             Date activityDate,
-            boolean updateAllCases) {
+            boolean updateInventoryStatusLine) {
 
         File docketFile = new File(Global.mediaPath + section + File.separatorChar + fileName.trim());
 
         if (docketFile.exists()) {
-            for (String caseNumber : caseNumbers) {
-                File caseArchiveFile;
+            CMDSCaseDocketEntryModel docket = new CMDSCaseDocketEntryModel();
+            docket.category = type.split("-")[0].trim();
+            docket.entryDescription = type2;
+            docket.comment = comment;
+            docket.entryDate = activityDate;
+            docket.comment = "";
+            docket.dialog = parent;
+            docket.fileName = fileName;
+            docket.direction = direction;
+            docket.caseNumbers = caseNumbers;
+            docket.from = from;
+            docket.to = to;
+            docket.updateStatusInventoryLine = updateInventoryStatusLine;
+            docket.caseSection = section;
+            docket.originalFileLocation = docketFile;
 
-                String[] caseNumberParts = caseNumber.trim().split("-");
-                caseArchiveFile = new File(
-                        Global.activityPath
-                        + section
-                        + File.separatorChar
-                        + caseNumberParts[0]
-                        + File.separatorChar
-                        + caseNumber.trim()
-                );
-
-                caseArchiveFile.mkdirs();
-
-                String fileDate = String.valueOf(new Date().getTime());
-
-                String fileExtenstion = fileName.substring(fileName.lastIndexOf(".")); //. included
-
-                FileUtils.copyFile(docketFile, new File(caseArchiveFile + File.separator + fileDate + fileExtenstion));
-
-                NumberFormatService.parseFullCaseNumber(caseNumber);
-
-                CMDSCaseDocketEntryTypes.updateCaseHistory(
-                        type.split("-")[0].trim(),
-                        type2,
-                        comment,
-                        activityDate,
-                        parent,
-                        caseArchiveFile + File.separator + fileDate + fileExtenstion,
-                        direction,
-                        caseNumber,
-                        from,
-                        to,
-                        updateAllCases
-                );
-            }
+            CMDSCaseDocketEntryTypes.updateCaseHistory(docket);
+            docketFile.delete();
+        } else {
+            WebOptionPane.showMessageDialog(Global.root, "<html><center> Sorry, unable to locate file. <br><br>" + fileName.trim() + "</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
         }
-        docketFile.delete();
     }
 
     public static void renameActivtyFile(String fileName, String updatedType) {
@@ -928,8 +819,22 @@ public class FileService {
                 return item.section;
             }
         }
-
         return section;
+    }
+
+    public static boolean CMDSDocketingFileOperation(CMDSCaseDocketEntryModel d, String cmdsCaseNumber) {
+        String[] caseNumberParts = cmdsCaseNumber.trim().split("-");
+        File caseArchiveFile = new File(
+                Global.activityPath
+                + d.caseSection
+                + File.separatorChar
+                + caseNumberParts[0]
+                + File.separatorChar
+                + cmdsCaseNumber.trim()
+        );
+        caseArchiveFile.mkdirs();
+
+        return FileUtils.copyFile(d.originalFileLocation, new File(caseArchiveFile + File.separator + d.fileName));
     }
 
 }

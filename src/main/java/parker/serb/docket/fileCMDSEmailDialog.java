@@ -55,6 +55,7 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form FileDocumentDialog
+     *
      * @param parent
      * @param modal
      * @param id
@@ -193,8 +194,8 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
                 enableButton();
             }
 
-            if (!comboEditor.getSelectedItem().toString().equals("") ||
-                    !comboEditor.getSelectedItem().toString().equals("DO NOT FILE")) {
+            if (!comboEditor.getSelectedItem().toString().equals("")
+                    || !comboEditor.getSelectedItem().toString().equals("DO NOT FILE")) {
                 loadType2ComboBox();
             } else {
                 comboEditor2.removeAllItems();
@@ -251,22 +252,18 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
             }
 
             if (attachmentTable.getValueAt(i, 2) != null) {
-                if(attachmentTable.getValueAt(i, 2).toString().equals("DO NOT FILE")) {
+                if (attachmentTable.getValueAt(i, 2).toString().equals("DO NOT FILE")) {
                     comboEditor2.setSelectedItem("");
                     attachmentTable.setValueAt("", i, 3);
                     enableButton = true;
+                } else if (attachmentTable.getValueAt(i, 3) == null) {
+                    enableButton = false;
+                    break;
+                } else if (attachmentTable.getValueAt(i, 3).equals("")) {
+                    enableButton = false;
+                    break;
                 } else {
-                    if(attachmentTable.getValueAt(i, 3) == null) {
-                        enableButton = false;
-                        break;
-                    } else {
-                        if (attachmentTable.getValueAt(i, 3).equals("")) {
-                            enableButton = false;
-                            break;
-                        } else {
-                            enableButton = true;
-                        }
-                    }
+                    enableButton = true;
                 }
             }
         }
@@ -390,17 +387,14 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
         if (attachmentTable.getCellEditor() != null) {
             attachmentTable.getCellEditor().stopCellEditing();
         }
-        
-        
+
         for (int i = 0; i < attachmentTable.getRowCount(); i++) {
             if (!attachmentTable.getValueAt(i, 2).toString().equals("DO NOT FILE")) {
                 //UpdateInventory Status Line Dialog
                 CMDSUpdateInventoryStatusLineDialog statusLineUpdate = new CMDSUpdateInventoryStatusLineDialog(this, true);
-                
+
                 //Docket Row
                 FileService.docketCMDSEmailAttachment(caseNumbers, //caseNumber
-                        attachmentTable.getValueAt(i, 0).toString(), //attachmentid
-                        emailID,
                         emailSection,
                         fromTextBox.getText(),
                         toComboBox.getSelectedItem().toString(),
@@ -408,8 +402,7 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
                         attachmentTable.getValueAt(i, 1).toString(), //fileName
                         attachmentTable.getValueAt(i, 2).toString(), //fileType1
                         attachmentTable.getValueAt(i, 3).toString(), //fileType2
-                        attachmentTable.getValueAt(i, 4) != null //comment
-                        ? attachmentTable.getValueAt(i, 4).toString() : "",
+                        attachmentTable.getValueAt(i, 4) != null ? attachmentTable.getValueAt(i, 4).toString() : "", //Comment
                         generateDate(),
                         directionComboBox.getSelectedItem().toString(),
                         this,
@@ -423,7 +416,7 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
         cal.set(Calendar.YEAR, Integer.valueOf(passedTime.split(" ")[0].split("/")[2]));
         cal.set(Calendar.MONTH, Integer.valueOf(passedTime.split(" ")[0].split("/")[0]) - 1);
         cal.set(Calendar.DAY_OF_MONTH, Integer.valueOf(passedTime.split(" ")[0].split("/")[1]));
-        if(passedTime.split(" ")[1].split(":")[0].equals("12")) {
+        if (passedTime.split(" ")[1].split(":")[0].equals("12")) {
             cal.set(Calendar.HOUR_OF_DAY, passedTime.split(" ")[2].equals("AM") ? Integer.valueOf(passedTime.split(" ")[1].split(":")[0]) : Integer.valueOf(passedTime.split(" ")[1].split(":")[0]));
         } else {
             cal.set(Calendar.HOUR_OF_DAY, passedTime.split(" ")[2].equals("AM") ? Integer.valueOf(passedTime.split(" ")[1].split(":")[0]) : Integer.valueOf(passedTime.split(" ")[1].split(":")[0]) + 12);
@@ -714,22 +707,23 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
         String[] caseNumbers = caseNumberTextBox.getText().trim().split(",");
 
         List<String> groupNumbers = CMDSCase.DistinctGroupNumberFromCMDSCaseNumbers(caseNumbers);
-        
+
         if (groupNumbers.size() > 1) {
-        //Update All question now
+            //Update All question now
             CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(this, true);
             updateAllCases = update.isUpdateStatus();
+            update.dispose();
         }
-        
+
         //If true trim and strip duplicates
         if (updateAllCases) {
             //Get List of All Cases
             List<CMDSCase> caseList = CMDSCase.CMDSDocketingCaseList(caseNumbers, groupNumbers.toArray(new String[0]));
-            
-            if (caseList.size() > 0){
+
+            if (caseList.size() > 0) {
                 //User Selects specific cases
                 CMDSMultiCaseDocketingDialog userSelected = new CMDSMultiCaseDocketingDialog(this, true, caseList);
-            
+
                 //Update the caseNumbers List with selected items.
                 caseNumbers = userSelected.selectedCaseList.toArray(new String[0]);
 
@@ -742,8 +736,8 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
                 okToDocket = false;
             }
         }
-        
-        if (okToDocket){
+
+        if (okToDocket) {
 //            fileEmailAttachments(caseNumbers);
 //            deleteEmail(emailID);
 //            dispose();

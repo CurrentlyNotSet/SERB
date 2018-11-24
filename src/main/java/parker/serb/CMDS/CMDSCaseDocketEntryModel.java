@@ -5,6 +5,7 @@
  */
 package parker.serb.CMDS;
 
+import java.io.File;
 import java.util.Date;
 
 /**
@@ -12,15 +13,17 @@ import java.util.Date;
  * @author Andrew
  */
 public class CMDSCaseDocketEntryModel {
-    String category;
-    String entryDescription;
-    String comment;
-    Date entryDate;
-    java.awt.Dialog dialog;
-    String filePath;
-    String direction;
-    String caseNumber;
-    String from;
-    String to;
-    boolean updateStatusInventoryLine;
+    public String caseSection;
+    public String category;
+    public String entryDescription;
+    public String comment;
+    public Date entryDate;
+    public java.awt.Dialog dialog;
+    public String fileName;
+    public String direction;
+    public String[] caseNumbers;
+    public String from;
+    public String to;
+    public boolean updateStatusInventoryLine;
+    public File originalFileLocation;
 }

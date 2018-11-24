@@ -19,6 +19,7 @@ import javax.swing.JFrame;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import parker.serb.CMDS.CMDSUpdateAllGroupCasesDialog;
+import parker.serb.CMDS.CMDSUpdateInventoryStatusLineDialog;
 import parker.serb.Global;
 import parker.serb.sql.CMDSCase;
 import parker.serb.sql.CMDSHistoryCategory;
@@ -36,8 +37,10 @@ public class scanCMDSFileDialog extends javax.swing.JDialog {
 
     String selectedSection = "";
     boolean orgProcess = false;
+
     /**
      * Creates new form scanFileDialog
+     *
      * @param parent
      * @param modal
      * @param file
@@ -85,7 +88,8 @@ public class scanCMDSFileDialog extends javax.swing.JDialog {
 
         caseNumberTextBox.addFocusListener(new FocusListener() {
             @Override
-            public void focusGained(FocusEvent e) {}
+            public void focusGained(FocusEvent e) {
+            }
 
             @Override
             public void focusLost(FocusEvent e) {
@@ -108,7 +112,7 @@ public class scanCMDSFileDialog extends javax.swing.JDialog {
             public void changedUpdate(DocumentEvent e) {
                 enableButton();
             }
-         });
+        });
 
         fromTextBox.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -132,13 +136,13 @@ public class scanCMDSFileDialog extends javax.swing.JDialog {
         });
 
         typeComboBox.addActionListener((ActionEvent e) -> {
-            if (!typeComboBox.getSelectedItem().toString().equals("")){
+            if (!typeComboBox.getSelectedItem().toString().equals("")) {
                 loadType2ComboBox();
             }
         });
 
         descriptionComboBox.addActionListener((ActionEvent e) -> {
-            if (descriptionComboBox != null){
+            if (descriptionComboBox != null) {
                 enableButton();
             } else {
                 fileButton.setEnabled(false);
@@ -148,29 +152,33 @@ public class scanCMDSFileDialog extends javax.swing.JDialog {
         fileNameTextBox.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if(e.getClickCount() == 2) {
+                if (e.getClickCount() == 2) {
                     FileService.openScanFile(fileNameTextBox.getText().trim(), selectedSection);
                 }
             }
 
             @Override
-            public void mousePressed(MouseEvent e) {}
+            public void mousePressed(MouseEvent e) {
+            }
 
             @Override
-            public void mouseReleased(MouseEvent e) {}
+            public void mouseReleased(MouseEvent e) {
+            }
 
             @Override
-            public void mouseEntered(MouseEvent e) {}
+            public void mouseEntered(MouseEvent e) {
+            }
 
             @Override
-            public void mouseExited(MouseEvent e) {}
+            public void mouseExited(MouseEvent e) {
+            }
         });
     }
 
     private void autoCompleteTimeOfDay() {
-        if(hourTextBox.getText().equals("")) {
+        if (hourTextBox.getText().equals("")) {
             //place holder
-        } else if(Integer.parseInt(hourTextBox.getText()) >= 7 && Integer.parseInt(hourTextBox.getText()) <= 11) {
+        } else if (Integer.parseInt(hourTextBox.getText()) >= 7 && Integer.parseInt(hourTextBox.getText()) <= 11) {
             amPMComboBox.setSelectedItem("AM");
         } else {
             amPMComboBox.setSelectedItem("PM");
@@ -178,7 +186,7 @@ public class scanCMDSFileDialog extends javax.swing.JDialog {
     }
 
     private void enableButton() {
-        if(caseNumberTextBox.getText().equals("")
+        if (caseNumberTextBox.getText().equals("")
                 || fromTextBox.getText().equals("")
                 || toComboBox.getSelectedItem().toString().equals("")
                 || typeComboBox.getSelectedItem().toString().equals("")
@@ -196,7 +204,7 @@ public class scanCMDSFileDialog extends javax.swing.JDialog {
         toComboBox.removeAllItems();
         toComboBox.addItem("");
 
-        for(int i = 0; i < userList.size(); i++) {
+        for (int i = 0; i < userList.size(); i++) {
             toComboBox.addItem(userList.get(i).toString());
         }
     }
@@ -232,20 +240,20 @@ public class scanCMDSFileDialog extends javax.swing.JDialog {
 
         String caseNumberFail = "";
 
-        switch(selectedSection) {
+        switch (selectedSection) {
             case "CMDS":
                 caseNumberFail = CaseNumber.validateCMDSCaseNumber(caseNumbers);
                 break;
         }
 
-        if(!caseNumberFail.equals("")) {
+        if (!caseNumberFail.equals("")) {
             new docketingCaseNotFound((JFrame) Global.root.getRootPane().getParent(), true, caseNumberFail);
             caseNumberTextBox.setText("");
 //            caseNumberTextBox.requestFocus();
         }
 
-        if(!caseNumberTextBox.getText().equals("")) {
-            if(!caseNumberTextBox.getText().equals("")) {
+        if (!caseNumberTextBox.getText().equals("")) {
+            if (!caseNumberTextBox.getText().equals("")) {
 
                 switch (selectedSection) {
                     case "CMDS":
@@ -263,7 +271,7 @@ public class scanCMDSFileDialog extends javax.swing.JDialog {
         cal.set(Calendar.YEAR, Integer.valueOf(scanDateTextBox.getText().split("/")[2]));
         cal.set(Calendar.MONTH, Integer.valueOf(scanDateTextBox.getText().split("/")[0]) - 1);
         cal.set(Calendar.DAY_OF_MONTH, Integer.valueOf(scanDateTextBox.getText().split("/")[1]));
-        if (amPMComboBox.getSelectedItem().toString().equalsIgnoreCase("PM") && hour == 12){
+        if (amPMComboBox.getSelectedItem().toString().equalsIgnoreCase("PM") && hour == 12) {
             cal.set(Calendar.HOUR_OF_DAY, hour);
         } else {
             cal.set(Calendar.HOUR_OF_DAY, amPMComboBox.getSelectedItem().toString().equalsIgnoreCase("AM") ? hour : hour + 12);
@@ -330,11 +338,6 @@ public class scanCMDSFileDialog extends javax.swing.JDialog {
         fileNameTextBox.setEditable(false);
         fileNameTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         fileNameTextBox.setEnabled(false);
-        fileNameTextBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fileNameTextBoxActionPerformed(evt);
-            }
-        });
 
         cancelButton.setText("Cancel");
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
@@ -373,25 +376,8 @@ public class scanCMDSFileDialog extends javax.swing.JDialog {
                     calendar.setStartWeekFromSunday ( true );
                 }
             } );
-            scanDateTextBox.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    scanDateTextBoxActionPerformed(evt);
-                }
-            });
-
-            hourTextBox.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    hourTextBoxActionPerformed(evt);
-                }
-            });
 
             jLabel10.setText(":");
-
-            minuteTextBox.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    minuteTextBoxActionPerformed(evt);
-                }
-            });
 
             amPMComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "AM", "PM" }));
 
@@ -507,48 +493,65 @@ public class scanCMDSFileDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void fileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileButtonActionPerformed
+        //Set Verification of docketing
+        boolean updateAllCases = false;
+        boolean okToDocket = true;
+
+        //getcaseNumber
         String[] caseNumbers = caseNumberTextBox.getText().trim().split(",");
-        
-        //Update All question now
-        CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(this, true);
-        
-        //If true trim and strip duplicates
-        if (update.isUpdateStatus()) {
-            caseNumbers = CaseNumberTools.removeDupliateCasesByGroupNumber(caseNumbers);
+
+        List<String> groupNumbers = CMDSCase.DistinctGroupNumberFromCMDSCaseNumbers(caseNumbers);
+
+        if (groupNumbers.size() > 1) {
+            //Update All question now
+            CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(this, true);
+            updateAllCases = update.isUpdateStatus();
+            update.dispose();
         }
 
-        FileService.docketCMDSScan(caseNumbers, //caseNumber
-            selectedSection,
-            fromTextBox.getText(),
-            toComboBox.getSelectedItem().toString(),
-            fileNameTextBox.getText(), //fileName
-            typeComboBox.getSelectedItem().toString(), //fileType1
-            descriptionComboBox.getSelectedItem().toString(), //fileType2
-            commentTextBox.getText().trim(),
-            directionComboBox.getSelectedItem().toString(),
-            this, 
-            generateDate(),
-            update.isUpdateStatus()
-        );
+        //UpdateInventory Status Line Dialog
+        CMDSUpdateInventoryStatusLineDialog statusLineUpdate = new CMDSUpdateInventoryStatusLineDialog(this, true);
+
+        //If true trim and strip duplicates
+        if (updateAllCases) {
+            //Get List of All Cases
+            List<CMDSCase> caseList = CMDSCase.CMDSDocketingCaseList(caseNumbers, groupNumbers.toArray(new String[0]));
+
+            if (caseList.size() > 0) {
+                //User Selects specific cases
+                CMDSMultiCaseDocketingDialog userSelected = new CMDSMultiCaseDocketingDialog(this, true, caseList);
+
+                //Update the caseNumbers List with selected items.
+                caseNumbers = userSelected.selectedCaseList.toArray(new String[0]);
+
+                //inverse of cancelled cancelled = true then okToDocket = false.
+                okToDocket = !userSelected.cancelled;
+
+                //Dispose of the hidden panel now that all variables have been utalized
+                userSelected.dispose();
+            } else {
+                okToDocket = false;
+            }
+        }
+
+        if (okToDocket) {
+            FileService.docketCMDSScan(
+                    caseNumbers, //caseNumber
+                    selectedSection,
+                    fromTextBox.getText(),
+                    toComboBox.getSelectedItem().toString(),
+                    fileNameTextBox.getText(), //fileName
+                    typeComboBox.getSelectedItem().toString(), //fileType1
+                    descriptionComboBox.getSelectedItem().toString(), //fileType2
+                    commentTextBox.getText().trim(),
+                    directionComboBox.getSelectedItem().toString(),
+                    this,
+                    generateDate(),
+                    statusLineUpdate.isUpdateStatus()
+            );
+        }
         dispose();
     }//GEN-LAST:event_fileButtonActionPerformed
-
-    private void scanDateTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scanDateTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_scanDateTextBoxActionPerformed
-
-    private void hourTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hourTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_hourTextBoxActionPerformed
-
-    private void minuteTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minuteTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_minuteTextBoxActionPerformed
-
-    private void fileNameTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileNameTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_fileNameTextBoxActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> amPMComboBox;
