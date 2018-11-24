@@ -391,7 +391,8 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
         for (int i = 0; i < attachmentTable.getRowCount(); i++) {
             if (!attachmentTable.getValueAt(i, 2).toString().equals("DO NOT FILE")) {
                 //UpdateInventory Status Line Dialog
-                CMDSUpdateInventoryStatusLineDialog statusLineUpdate = new CMDSUpdateInventoryStatusLineDialog(this, true);
+                CMDSUpdateInventoryStatusLineDialog statusLineUpdate = new CMDSUpdateInventoryStatusLineDialog(
+                        this, true, attachmentTable.getValueAt(i, 2).toString() + " - " + attachmentTable.getValueAt(i, 3).toString());
 
                 //Docket Row
                 FileService.docketCMDSEmailAttachment(caseNumbers, //caseNumber
@@ -567,11 +568,6 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
         dateTextBox.setEditable(false);
         dateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         dateTextBox.setEnabled(false);
-        dateTextBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                dateTextBoxActionPerformed(evt);
-            }
-        });
 
         fromTextBox.setEditable(false);
         fromTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
@@ -738,19 +734,15 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
         }
 
         if (okToDocket) {
-//            fileEmailAttachments(caseNumbers);
-//            deleteEmail(emailID);
-//            dispose();
+            fileEmailAttachments(caseNumbers);
+            deleteEmail(emailID);
+            dispose();
         }
     }//GEN-LAST:event_fileButtonActionPerformed
 
     private void CancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelButtonActionPerformed
         dispose();
     }//GEN-LAST:event_CancelButtonActionPerformed
-
-    private void dateTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_dateTextBoxActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CancelButton;

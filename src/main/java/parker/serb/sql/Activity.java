@@ -47,6 +47,7 @@ public class Activity {
     /**
      * Add an activity to the activity table, pulls the case number from the
      * current selected case
+     *
      * @param action the action that has been preformed
      * @param fileName the fileName of a document - null if no file
      */
@@ -80,7 +81,7 @@ public class Activity {
             preparedStatement.executeUpdate();
 
         } catch (SQLException ex) {
-            if(ex.getCause() instanceof SQLServerException) {
+            if (ex.getCause() instanceof SQLServerException) {
                 addActivty(action, fileName);
             } else {
                 SlackNotification.sendNotification(ex);
@@ -89,7 +90,7 @@ public class Activity {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void addActivtyNonGlobalCaseNumber(
             String action,
             String fileName,
@@ -123,7 +124,7 @@ public class Activity {
             preparedStatement.executeUpdate();
 
         } catch (SQLException ex) {
-            if(ex.getCause() instanceof SQLServerException) {
+            if (ex.getCause() instanceof SQLServerException) {
                 addActivtyNonGlobalCaseNumber(action, fileName, caseNumber);
             } else {
                 SlackNotification.sendNotification(ex);
@@ -133,7 +134,7 @@ public class Activity {
         }
     }
 
-    public static void addActivtyORGCase( String caseType, String orgNumber, String action, String fileName) {
+    public static void addActivtyORGCase(String caseType, String orgNumber, String action, String fileName) {
         Statement stmt = null;
 
         try {
@@ -163,7 +164,7 @@ public class Activity {
             preparedStatement.executeUpdate();
 
         } catch (SQLException ex) {
-            if(ex.getCause() instanceof SQLServerException) {
+            if (ex.getCause() instanceof SQLServerException) {
                 addActivty(action, fileName);
             } else {
                 SlackNotification.sendNotification(ex);
@@ -175,70 +176,61 @@ public class Activity {
 
     public static void addCMDSActivty(String action, String fileName, Date date,
             String caseNumber, String from, String to, String category, String description, String comment) {
-//        try {
-            Statement stmt = null;
-            String type = null;
+        Statement stmt = null;
+        String type = null;
 
-            if(category != null && description != null) {
-                type = category + " - " + description;
+        if (category != null && description != null) {
+            type = category + " - " + description;
+        }
+
+        try {
+
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, caseNumber.split("-")[0].trim()); //caseYear
+            preparedStatement.setString(2, caseNumber.split("-")[1].trim()); //caseType
+            preparedStatement.setString(3, caseNumber.split("-")[2].trim()); //caseMonth
+            preparedStatement.setString(4, caseNumber.split("-")[3].trim()); //caseNumber
+            preparedStatement.setInt(5, Global.activeUser.id); //user
+            preparedStatement.setTimestamp(6, new Timestamp(date.getTime())); //date
+            preparedStatement.setString(7, action.equals("") ? null : action); //action
+            preparedStatement.setString(8, fileName == null || fileName.equals("")
+                    ? null : FilenameUtils.getName(fileName)); //fileName
+            preparedStatement.setString(9, from == null ? null
+                    : from.trim().equals("") ? null : from.trim()); //from
+            preparedStatement.setString(10, to == null ? null
+                    : to.trim().equals("") ? null : to.trim()); //to
+            preparedStatement.setString(11, type == null ? null
+                    : type.trim().equals("") ? null : type.trim()); //type
+            preparedStatement.setString(12, comment == null ? null
+                    : comment.trim().equals("") ? null : comment.trim()); //comment
+            preparedStatement.setBoolean(13, false);
+            preparedStatement.setBoolean(14, false);
+            preparedStatement.setBoolean(15, true);
+            preparedStatement.setTimestamp(16, new Timestamp(System.currentTimeMillis())); //mailLog
+
+            preparedStatement.executeUpdate();
+
+            if (fileName != null && !fileName.equals("")) {
+                File src = new File(fileName);
+                File dst = new File(Global.activityPath + File.separator + "CMDS" + File.separator + caseNumber.split("-")[0] + File.separator + caseNumber + fileName.substring(fileName.lastIndexOf(File.separator)));
+                dst.mkdirs();
+                Files.copy(src.toPath(), dst.toPath(), REPLACE_EXISTING);
             }
-
-//            String timeString = Global.mmddyyyyhhmma.format(date); // 10 is the beginIndex of time here
-//            String startUserDateString = Global.mmddyyyy.format(date);
-//            startUserDateString = startUserDateString+" "+timeString;
-//            date = Global.mmddyyyyhhmma.parse(startUserDateString);
-
-            try {
-
-                stmt = Database.connectToDB().createStatement();
-
-                String sql = "Insert INTO Activity VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-
-                PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-                preparedStatement.setString(1, caseNumber.split("-")[0].trim()); //caseYear
-                preparedStatement.setString(2, caseNumber.split("-")[1].trim()); //caseType
-                preparedStatement.setString(3, caseNumber.split("-")[2].trim()); //caseMonth
-                preparedStatement.setString(4, caseNumber.split("-")[3].trim()); //caseNumber
-                preparedStatement.setInt(5, Global.activeUser.id); //user
-                preparedStatement.setTimestamp(6, new Timestamp(date.getTime())); //date
-                preparedStatement.setString(7, action.equals("") ? null : action); //action
-                preparedStatement.setString(8, fileName == null || fileName.equals("") ?
-                        null : FilenameUtils.getName(fileName)); //fileName
-                preparedStatement.setString(9, from == null ? null :
-                        from.trim().equals("") ? null : from.trim()); //from
-                preparedStatement.setString(10, to == null ? null :
-                        to.trim().equals("") ? null : to.trim()); //to
-                preparedStatement.setString(11, type == null ? null :
-                        type.trim().equals("") ? null : type.trim()); //type
-                preparedStatement.setString(12, comment == null ? null :
-                        comment.trim().equals("") ? null : comment.trim()); //comment
-                preparedStatement.setBoolean(13, false);
-                preparedStatement.setBoolean(14, false);
-                preparedStatement.setBoolean(15, true);
-                preparedStatement.setTimestamp(16, new Timestamp(System.currentTimeMillis())); //mailLog
-
-                preparedStatement.executeUpdate();
-
-                if(fileName != null && !fileName.equals("")) {
-                    File src = new File(fileName);
-                    File dst = new File(Global.activityPath + File.separator + "CMDS" + File.separator + caseNumber.split("-")[0] + File.separator + caseNumber + fileName.substring(fileName.lastIndexOf(File.separator)));
-                    dst.mkdirs();
-                    Files.copy(src.toPath(), dst.toPath(), REPLACE_EXISTING);
-                }
-            } catch (SQLException ex) {
-                if(ex.getCause() instanceof SQLServerException) {
-                    addCMDSActivty(action, fileName, date, caseNumber, from, to, category, description, comment);
-                } else {
-                    SlackNotification.sendNotification(ex);
-                }
-            }  catch (IOException ex) {
+        } catch (SQLException ex) {
+            if (ex.getCause() instanceof SQLServerException) {
+                addCMDSActivty(action, fileName, date, caseNumber, from, to, category, description, comment);
+            } else {
                 SlackNotification.sendNotification(ex);
-            } finally {
-                DbUtils.closeQuietly(stmt);
             }
-//        } catch (ParseException ex) {
-//            SlackNotification.sendNotification(ex);
-//        }
+        } catch (IOException ex) {
+            SlackNotification.sendNotification(ex);
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
     }
 
     public static void addHearingActivty(String action, String fileName, String caseNumber) {
@@ -270,19 +262,19 @@ public class Activity {
 
             preparedStatement.executeUpdate();
 
-            if(fileName != null && !fileName.equals("")) {
+            if (fileName != null && !fileName.equals("")) {
                 File src = new File(fileName);
                 File dst = new File(Global.activityPath + File.separator + "CMDS" + File.separator + caseNumber.split("-")[0] + File.separator + caseNumber + fileName.substring(fileName.lastIndexOf(File.separator)));
                 dst.mkdirs();
                 Files.copy(src.toPath(), dst.toPath(), REPLACE_EXISTING);
             }
         } catch (SQLException ex) {
-            if(ex.getCause() instanceof SQLServerException) {
+            if (ex.getCause() instanceof SQLServerException) {
                 addHearingActivty(action, fileName, caseNumber);
             } else {
                 SlackNotification.sendNotification(ex);
             }
-        }  catch (IOException ex) {
+        } catch (IOException ex) {
             SlackNotification.sendNotification(ex);
         } finally {
             DbUtils.closeQuietly(stmt);
@@ -302,7 +294,7 @@ public class Activity {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            if(ex.getCause() instanceof SQLServerException) {
+            if (ex.getCause() instanceof SQLServerException) {
                 disableActivtyByID(id);
             } else {
                 SlackNotification.sendNotification(ex);
@@ -349,7 +341,7 @@ public class Activity {
             preparedStatement.executeUpdate();
 
         } catch (SQLException ex) {
-            if(ex.getCause() instanceof SQLServerException) {
+            if (ex.getCause() instanceof SQLServerException) {
                 addActivtyFromDocket(action, fileName, caseNumber, from, to, type, comment, redacted, needsTimestamp);
             } else {
                 SlackNotification.sendNotification(ex);
@@ -396,7 +388,7 @@ public class Activity {
             preparedStatement.executeUpdate();
 
         } catch (SQLException ex) {
-            if(ex.getCause() instanceof SQLServerException) {
+            if (ex.getCause() instanceof SQLServerException) {
                 addActivtySendPostal(action, fileName, caseNumber, from, to, type, comment, redacted, needsTimestamp);
             } else {
                 SlackNotification.sendNotification(ex);
@@ -444,7 +436,7 @@ public class Activity {
             preparedStatement.executeUpdate();
 
         } catch (SQLException ex) {
-            if(ex.getCause() instanceof SQLServerException) {
+            if (ex.getCause() instanceof SQLServerException) {
                 addActivtySendPostalORGCSC(action, fileName, caseSection, caseNumber, from, to, type, comment, redacted, needsTimestamp);
             } else {
                 SlackNotification.sendNotification(ex);
@@ -492,7 +484,7 @@ public class Activity {
             preparedStatement.executeUpdate();
 
         } catch (SQLException ex) {
-            if(ex.getCause() instanceof SQLServerException) {
+            if (ex.getCause() instanceof SQLServerException) {
                 addActivtyFromDocket(action, fileName, caseNumber, from, to, type, comment, redacted, needsTimestamp);
             } else {
                 SlackNotification.sendNotification(ex);
@@ -541,7 +533,7 @@ public class Activity {
             preparedStatement.executeUpdate();
 
         } catch (SQLException ex) {
-            if(ex.getCause() instanceof SQLServerException) {
+            if (ex.getCause() instanceof SQLServerException) {
                 addActivtyFromDocketORGCSC(action, fileName, caseNumber, from, to, type, comment, redacted, needsTimestamp, section, fileDate);
             } else {
                 SlackNotification.sendNotification(ex);
@@ -590,7 +582,7 @@ public class Activity {
             preparedStatement.executeUpdate();
 
         } catch (SQLException ex) {
-            if(ex.getCause() instanceof SQLServerException) {
+            if (ex.getCause() instanceof SQLServerException) {
                 addActivtyFromDocketORGCSC(action, fileName, caseNumber, from, to, type, comment, redacted, needsTimestamp, section, activityDate);
             } else {
                 SlackNotification.sendNotification(ex);
@@ -638,7 +630,7 @@ public class Activity {
             preparedStatement.executeUpdate();
 
         } catch (SQLException ex) {
-            if(ex.getCause() instanceof SQLServerException) {
+            if (ex.getCause() instanceof SQLServerException) {
                 addActivtyFromDocket(action, fileName, caseNumber, from, to, type, comment, redacted, needsTimestamp, activityDate);
             } else {
                 SlackNotification.sendNotification(ex);
@@ -650,6 +642,7 @@ public class Activity {
 
     /**
      * Creates activity entry when new cases are created
+     *
      * @param caseNumber the new case number
      * @param message
      */
@@ -684,7 +677,7 @@ public class Activity {
             preparedStatement.executeUpdate();
 
         } catch (SQLException ex) {
-            if(ex.getCause() instanceof SQLServerException) {
+            if (ex.getCause() instanceof SQLServerException) {
                 addNewCaseActivty(caseNumber, message);
             } else {
                 SlackNotification.sendNotification(ex);
@@ -697,6 +690,7 @@ public class Activity {
     /**
      * Loads all activity for a specified case number, pulls the case number
      * from global
+     *
      * @param searchTerm term to limit the search results
      * @return List of Activities
      */
@@ -710,30 +704,30 @@ public class Activity {
 
             stmt = Database.connectToDB().createStatement();
 
-            if(Global.caseType.equals("ORG") || Global.caseType.equals("CSC")) {
+            if (Global.caseType.equals("ORG") || Global.caseType.equals("CSC")) {
                 String sql = "select Activity.id,"
-                    + " caseYear,"
-                    + " caseType,"
-                    + " caseMonth,"
-                    + " caseNumber,"
-                    + " date,"
-                    + " action,"
-                    + " comment,"
-                    + " [from],"
-                    + " firstName,"
-                    + " lastName,"
-                    + " fileName"
-                    + " from Activity"
-                    + " LEFT JOIN Users"
-                    + " ON Activity.userID = Users.id"
-                    + " where "
-                    + " caseType = ? and"
-                    + " caseNumber = ? and"
-                    + " (firstName like ? or"
-                    + " lastName like ? or"
-                    + " action like ?)"
-                    + " and Activity.active = 1"
-                    + " ORDER BY date DESC, activity.id DESC ";
+                        + " caseYear,"
+                        + " caseType,"
+                        + " caseMonth,"
+                        + " caseNumber,"
+                        + " date,"
+                        + " action,"
+                        + " comment,"
+                        + " [from],"
+                        + " firstName,"
+                        + " lastName,"
+                        + " fileName"
+                        + " from Activity"
+                        + " LEFT JOIN Users"
+                        + " ON Activity.userID = Users.id"
+                        + " where "
+                        + " caseType = ? and"
+                        + " caseNumber = ? and"
+                        + " (firstName like ? or"
+                        + " lastName like ? or"
+                        + " action like ?)"
+                        + " and Activity.active = 1"
+                        + " ORDER BY date DESC, activity.id DESC ";
 
                 preparedStatement = stmt.getConnection().prepareStatement(sql);
                 preparedStatement.setObject(1, Global.caseType);
@@ -743,29 +737,29 @@ public class Activity {
                 preparedStatement.setString(5, "%" + searchTerm + "%");
             } else {
                 String sql = "select Activity.id,"
-                    + " caseYear,"
-                    + " caseType,"
-                    + " caseMonth,"
-                    + " caseNumber,"
-                    + " date,"
-                    + " action,"
-                    + " comment,"
-                    + " [from],"
-                    + " firstName,"
-                    + " lastName,"
-                    + " fileName"
-                    + " from Activity"
-                    + " LEFT JOIN Users"
-                    + " ON Activity.userID = Users.id"
-                    + " where caseYear = ? and"
-                    + " caseType = ? and"
-                    + " caseMonth = ? and"
-                    + " caseNumber = ? and"
-                    + " (firstName like ? or"
-                    + " lastName like ? or"
-                    + " action like ?) "
-                    + " and Activity.active = 1"
-                    + "ORDER BY date DESC, activity.id DESC ";
+                        + " caseYear,"
+                        + " caseType,"
+                        + " caseMonth,"
+                        + " caseNumber,"
+                        + " date,"
+                        + " action,"
+                        + " comment,"
+                        + " [from],"
+                        + " firstName,"
+                        + " lastName,"
+                        + " fileName"
+                        + " from Activity"
+                        + " LEFT JOIN Users"
+                        + " ON Activity.userID = Users.id"
+                        + " where caseYear = ? and"
+                        + " caseType = ? and"
+                        + " caseMonth = ? and"
+                        + " caseNumber = ? and"
+                        + " (firstName like ? or"
+                        + " lastName like ? or"
+                        + " action like ?) "
+                        + " and Activity.active = 1"
+                        + "ORDER BY date DESC, activity.id DESC ";
 
                 preparedStatement = stmt.getConnection().prepareStatement(sql);
                 preparedStatement.setObject(1, Global.caseYear);
@@ -779,10 +773,10 @@ public class Activity {
 
             ResultSet caseActivity = preparedStatement.executeQuery();
 
-            while(caseActivity.next()) {
+            while (caseActivity.next()) {
                 Activity act = new Activity();
 
-                if(caseActivity.getString("firstName") == null && caseActivity.getString("lastName") == null) {
+                if (caseActivity.getString("firstName") == null && caseActivity.getString("lastName") == null) {
                     act.user = "SYSTEM";
                 } else {
                     act.user = caseActivity.getString("firstName") + " " + caseActivity.getString("lastName");
@@ -797,7 +791,7 @@ public class Activity {
                 activityList.add(act);
             }
         } catch (SQLException ex) {
-            if(ex.getCause() instanceof SQLServerException) {
+            if (ex.getCause() instanceof SQLServerException) {
                 loadCaseNumberActivity(searchTerm);
             } else {
                 SlackNotification.sendNotification(ex);
@@ -839,7 +833,7 @@ public class Activity {
 
             ResultSet caseActivity = preparedStatement.executeQuery();
 
-            while(caseActivity.next()) {
+            while (caseActivity.next()) {
                 Activity act = new Activity();
                 act.id = caseActivity.getInt("id");
                 act.user = caseActivity.getString("firstName") + " " + caseActivity.getString("lastName");
@@ -855,7 +849,7 @@ public class Activity {
                 activityList.add(act);
             }
         } catch (SQLException ex) {
-            if(ex.getCause() instanceof SQLServerException) {
+            if (ex.getCause() instanceof SQLServerException) {
                 loadAllActivity();
             } else {
                 SlackNotification.sendNotification(ex);
@@ -907,7 +901,7 @@ public class Activity {
 
             ResultSet caseActivity = preparedStatement.executeQuery();
 
-            while(caseActivity.next()) {
+            while (caseActivity.next()) {
                 Activity act = new Activity();
                 act.id = caseActivity.getInt("id");
                 act.user = caseActivity.getString("firstName") + " " + caseActivity.getString("lastName");
@@ -923,7 +917,7 @@ public class Activity {
                 activityList.add(act);
             }
         } catch (SQLException ex) {
-            if(ex.getCause() instanceof SQLServerException) {
+            if (ex.getCause() instanceof SQLServerException) {
                 loadHearingActivity();
             } else {
                 SlackNotification.sendNotification(ex);
@@ -945,42 +939,42 @@ public class Activity {
 
             stmt = Database.connectToDB().createStatement();
 
-            if(user.equals("SYSTEM")) {
+            if (user.equals("SYSTEM")) {
                 sql = "select Activity.id,"
-                    + " caseYear,"
-                    + " caseType,"
-                    + " caseMonth,"
-                    + " caseNumber,"
-                    + " date,"
-                    + " [to],"
-                    + " [from],"
-                    + " type,"
-                    + " comment,"
-                    + " action,"
-                    + " fileName"
-                    + " from Activity"
-                    + " Where Activity.id = ?"
-                    + " and Activity.active = 1";
+                        + " caseYear,"
+                        + " caseType,"
+                        + " caseMonth,"
+                        + " caseNumber,"
+                        + " date,"
+                        + " [to],"
+                        + " [from],"
+                        + " type,"
+                        + " comment,"
+                        + " action,"
+                        + " fileName"
+                        + " from Activity"
+                        + " Where Activity.id = ?"
+                        + " and Activity.active = 1";
             } else {
                 sql = "select Activity.id,"
-                    + " caseYear,"
-                    + " caseType,"
-                    + " caseMonth,"
-                    + " caseNumber,"
-                    + " date,"
-                    + " [to],"
-                    + " [from],"
-                    + " type,"
-                    + " comment,"
-                    + " action,"
-                    + " firstName,"
-                    + " lastName,"
-                    + " fileName"
-                    + " from Activity"
-                    + " INNER JOIN Users"
-                    + " ON Activity.userID = Users.id"
-                    + " Where Activity.id = ?"
-                    + " and Activity.active = 1";
+                        + " caseYear,"
+                        + " caseType,"
+                        + " caseMonth,"
+                        + " caseNumber,"
+                        + " date,"
+                        + " [to],"
+                        + " [from],"
+                        + " type,"
+                        + " comment,"
+                        + " action,"
+                        + " firstName,"
+                        + " lastName,"
+                        + " fileName"
+                        + " from Activity"
+                        + " INNER JOIN Users"
+                        + " ON Activity.userID = Users.id"
+                        + " Where Activity.id = ?"
+                        + " and Activity.active = 1";
             }
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
@@ -988,8 +982,7 @@ public class Activity {
 
             ResultSet caseActivity = preparedStatement.executeQuery();
 
-
-            while(caseActivity.next()) {
+            while (caseActivity.next()) {
                 if (user.equals("SYSTEM")) {
                     activity.id = caseActivity.getInt("id");
                     activity.user = "SYSTEM";
@@ -1021,7 +1014,7 @@ public class Activity {
                 }
             }
         } catch (SQLException ex) {
-            if(ex.getCause() instanceof SQLServerException) {
+            if (ex.getCause() instanceof SQLServerException) {
                 loadActivityByID(id, user);
             } else {
                 SlackNotification.sendNotification(ex);
@@ -1059,7 +1052,7 @@ public class Activity {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            if(ex.getCause() instanceof SQLServerException) {
+            if (ex.getCause() instanceof SQLServerException) {
                 updateActivtyEntry(activty);
             } else {
                 SlackNotification.sendNotification(ex);
@@ -1097,7 +1090,7 @@ public class Activity {
 
             ResultSet caseActivity = preparedStatement.executeQuery();
 
-            while(caseActivity.next()) {
+            while (caseActivity.next()) {
                 Activity act = new Activity();
                 act.id = caseActivity.getInt("id");
                 act.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
@@ -1110,7 +1103,7 @@ public class Activity {
                 activityList.add(act);
             }
         } catch (SQLException ex) {
-            if(ex.getCause() instanceof SQLServerException) {
+            if (ex.getCause() instanceof SQLServerException) {
                 loadActivityDocumentsByGlobalCase();
             } else {
                 SlackNotification.sendNotification(ex);
@@ -1145,7 +1138,7 @@ public class Activity {
 
             ResultSet caseActivity = preparedStatement.executeQuery();
 
-            while(caseActivity.next()) {
+            while (caseActivity.next()) {
                 Activity act = new Activity();
                 act.id = caseActivity.getInt("id");
                 act.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
@@ -1158,7 +1151,7 @@ public class Activity {
                 activityList.add(act);
             }
         } catch (SQLException ex) {
-            if(ex.getCause() instanceof SQLServerException) {
+            if (ex.getCause() instanceof SQLServerException) {
                 loadActivityDocumentsByGlobalCaseORG();
             } else {
                 SlackNotification.sendNotification(ex);
@@ -1198,7 +1191,7 @@ public class Activity {
 
             ResultSet caseActivity = preparedStatement.executeQuery();
 
-            while(caseActivity.next()) {
+            while (caseActivity.next()) {
                 Activity act = new Activity();
                 act.id = caseActivity.getInt("id");
                 act.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
@@ -1212,7 +1205,7 @@ public class Activity {
                 activityList.add(act);
             }
         } catch (SQLException ex) {
-            if(ex.getCause() instanceof SQLServerException) {
+            if (ex.getCause() instanceof SQLServerException) {
                 loadActivityDocumentsByGlobalCasePublicRecords();
             } else {
                 SlackNotification.sendNotification(ex);
@@ -1250,7 +1243,7 @@ public class Activity {
 
             ResultSet caseActivity = preparedStatement.executeQuery();
 
-            while(caseActivity.next()) {
+            while (caseActivity.next()) {
                 Activity act = new Activity();
                 act.id = caseActivity.getInt("id");
                 act.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
@@ -1264,7 +1257,7 @@ public class Activity {
                 activityList.add(act);
             }
         } catch (SQLException ex) {
-            if(ex.getCause() instanceof SQLServerException) {
+            if (ex.getCause() instanceof SQLServerException) {
                 loadActivityDocumentsByGlobalCaseORGCSCPublicRecords();
             } else {
                 SlackNotification.sendNotification(ex);
@@ -1295,7 +1288,7 @@ public class Activity {
             if (!casetypes.isEmpty()) {
                 sql += "AND (";
 
-                while(i < casetypes.size()) {
+                while (i < casetypes.size()) {
                     sql += " Activity.caseType = ? OR";
                     i++;
                 }
@@ -1315,7 +1308,7 @@ public class Activity {
 
             ResultSet caseActivity = preparedStatement.executeQuery();
 
-            while(caseActivity.next()) {
+            while (caseActivity.next()) {
                 Activity act = new Activity();
                 act.id = caseActivity.getInt("id");
                 act.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
@@ -1328,7 +1321,7 @@ public class Activity {
                 activityList.add(act);
             }
         } catch (SQLException ex) {
-            if(ex.getCause() instanceof SQLServerException) {
+            if (ex.getCause() instanceof SQLServerException) {
                 loadDocumentsBySectionAwaitingRedaction();
             } else {
                 SlackNotification.sendNotification(ex);
@@ -1395,10 +1388,10 @@ public class Activity {
                     preparedStatement.setString(4, section);
                     break;
             }
-            
+
             ResultSet caseActivity = preparedStatement.executeQuery();
 
-            while(caseActivity.next()) {
+            while (caseActivity.next()) {
                 Activity activity = new Activity();
                 activity.id = caseActivity.getInt("id");
                 activity.date = Global.mmddyyyyhhmma.format(new Date(caseActivity.getTimestamp("date").getTime()));
@@ -1416,7 +1409,7 @@ public class Activity {
                 activityList.add(activity);
             }
         } catch (SQLException ex) {
-            if(ex.getCause() instanceof SQLServerException) {
+            if (ex.getCause() instanceof SQLServerException) {
                 loadMailLogBySectionActiveSection(startDate, endDate, to, section);
             } else {
                 SlackNotification.sendNotification(ex);
@@ -1442,7 +1435,7 @@ public class Activity {
             ps.executeUpdate();
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
-            if(ex.getCause() instanceof SQLServerException) {
+            if (ex.getCause() instanceof SQLServerException) {
                 updateRedactedStatus(redacted, id);
             }
         } finally {
@@ -1465,7 +1458,7 @@ public class Activity {
             ps.executeUpdate();
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
-            if(ex.getCause() instanceof SQLServerException) {
+            if (ex.getCause() instanceof SQLServerException) {
                 updateUnRedactedAction(action, id);
             }
         } finally {
@@ -1489,7 +1482,7 @@ public class Activity {
 
             ResultSet caseActivity = preparedStatement.executeQuery();
 
-            while(caseActivity.next()) {
+            while (caseActivity.next()) {
                 activity.id = caseActivity.getInt("id");
                 activity.caseYear = caseActivity.getString("caseYear");
                 activity.caseType = caseActivity.getString("caseType");
@@ -1510,7 +1503,7 @@ public class Activity {
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
-            if(ex.getCause() instanceof SQLServerException) {
+            if (ex.getCause() instanceof SQLServerException) {
                 getFULLActivityByID(id);
             }
         } finally {
@@ -1535,27 +1528,27 @@ public class Activity {
             stmt = Database.connectToDB().createStatement();
 
             String sql = "Insert INTO Activity ("
-                    + "caseYear, "         //01
-                    + "caseType, "         //02
-                    + "caseMonth, "        //03
-                    + "caseNumber, "       //04
-                    + "userID, "           //05
-                    + "date, "             //06
-                    + "action, "           //07
-                    + "fileName, "         //08
-                    + "[from], "           //09
-                    + "[to], "             //10
-                    + "type, "             //11
-                    + "comment, "          //12
-                    + "redacted, "         //13
+                    + "caseYear, " //01
+                    + "caseType, " //02
+                    + "caseMonth, " //03
+                    + "caseNumber, " //04
+                    + "userID, " //05
+                    + "date, " //06
+                    + "action, " //07
+                    + "fileName, " //08
+                    + "[from], " //09
+                    + "[to], " //10
+                    + "type, " //11
+                    + "comment, " //12
+                    + "redacted, " //13
                     + "awaitingTimeStamp, "//14
-                    + "active, "           //15
-                    + "mailLog "           //16
+                    + "active, " //15
+                    + "mailLog " //16
                     + ") VALUES (";
-                    for(int i=0; i<15; i++){
-                        sql += "?, ";   //01-15
-                    }
-                     sql += "?)"; //16
+            for (int i = 0; i < 15; i++) {
+                sql += "?, ";   //01-15
+            }
+            sql += "?)"; //16
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
 
@@ -1580,14 +1573,14 @@ public class Activity {
 
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
-            if(ex.getCause() instanceof SQLServerException) {
+            if (ex.getCause() instanceof SQLServerException) {
                 duplicatePublicRecordActivty(item);
             }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void deleteActivityByID(int id) {
 
         Statement stmt = null;
@@ -1601,17 +1594,17 @@ public class Activity {
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
-                        
+
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
-            if(ex.getCause() instanceof SQLServerException) {
+            if (ex.getCause() instanceof SQLServerException) {
                 deleteActivityByID(id);
             }
         } finally {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void addPurgedActivityEntry(String action, CaseNumberModel caseNum) {
         Statement stmt = null;
 
@@ -1642,7 +1635,7 @@ public class Activity {
             preparedStatement.executeUpdate();
 
         } catch (SQLException ex) {
-            if(ex.getCause() instanceof SQLServerException) {
+            if (ex.getCause() instanceof SQLServerException) {
                 addPurgedActivityEntry(action, caseNum);
             } else {
                 SlackNotification.sendNotification(ex);
@@ -1651,7 +1644,7 @@ public class Activity {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
     public static void removeFileLinkFromActivtyEntry(int activtyID) {
         Statement stmt = null;
 
@@ -1666,7 +1659,7 @@ public class Activity {
 
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            if(ex.getCause() instanceof SQLServerException) {
+            if (ex.getCause() instanceof SQLServerException) {
                 removeFileLinkFromActivtyEntry(activtyID);
             } else {
                 SlackNotification.sendNotification(ex);
@@ -1675,5 +1668,5 @@ public class Activity {
             DbUtils.closeQuietly(stmt);
         }
     }
-    
+
 }

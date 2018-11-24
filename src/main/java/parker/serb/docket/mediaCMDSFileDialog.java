@@ -26,7 +26,6 @@ import parker.serb.sql.CMDSHistoryCategory;
 import parker.serb.sql.CMDSHistoryDescription;
 import parker.serb.sql.CaseNumber;
 import parker.serb.sql.User;
-import parker.serb.util.CaseNumberTools;
 import parker.serb.util.FileService;
 
 /**
@@ -509,9 +508,6 @@ public class mediaCMDSFileDialog extends javax.swing.JDialog {
             update.dispose();
         }
 
-        //UpdateInventory Status Line Dialog
-        CMDSUpdateInventoryStatusLineDialog statusLineUpdate = new CMDSUpdateInventoryStatusLineDialog(this, true);
-
         //If true trim and strip duplicates
         if (updateAllCases) {
             //Get List of All Cases
@@ -535,6 +531,10 @@ public class mediaCMDSFileDialog extends javax.swing.JDialog {
         }
 
         if (okToDocket) {
+            //UpdateInventory Status Line Dialog
+            CMDSUpdateInventoryStatusLineDialog statusLineUpdate = new CMDSUpdateInventoryStatusLineDialog(
+                    this, true, typeComboBox.getSelectedItem().toString() + " - " + descriptionComboBox.getSelectedItem().toString());
+
             FileService.docketCMDSMediaWithTime(caseNumbers, //caseNumber
                     selectedSection,
                     fromTextBox.getText(),

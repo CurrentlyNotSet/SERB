@@ -92,14 +92,13 @@ public class CMDSCaseDocketEntryTypes {
         String activity = d.direction + " - Notice of " + d.entryDescription;
 
         for (String cmdsCaseNumber : d.caseNumbers) {
-            if (FileService.CMDSDocketingFileOperation(d, cmdsCaseNumber)) {
-                Activity.addCMDSActivty(activity, d.fileName, d.entryDate, cmdsCaseNumber,
-                        d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
+            Activity.addCMDSActivty(activity, d.originalFileLocation, d.entryDate, cmdsCaseNumber,
+                    d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
 
-                if (d.updateStatusInventoryLine) {
-                    CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
-                }
+            if (d.updateStatusInventoryLine) {
+                CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
             }
+
         }
     }
 
@@ -107,13 +106,11 @@ public class CMDSCaseDocketEntryTypes {
         String activity = d.direction + " - R & R mailed " + d.entryDescription;
 
         for (String cmdsCaseNumber : d.caseNumbers) {
-            if (FileService.CMDSDocketingFileOperation(d, cmdsCaseNumber)) {
-                Activity.addCMDSActivty(activity, d.fileName, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
-                CMDSCase.updateCaseByTypeCEntry(d.entryDate, cmdsCaseNumber);
+            Activity.addCMDSActivty(activity, d.originalFileLocation, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
+            CMDSCase.updateCaseByTypeCEntry(d.entryDate, cmdsCaseNumber);
 
-                if (d.updateStatusInventoryLine) {
-                    CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
-                }
+            if (d.updateStatusInventoryLine) {
+                CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
             }
         }
     }
@@ -127,39 +124,37 @@ public class CMDSCaseDocketEntryTypes {
         }
 
         for (String cmdsCaseNumber : d.caseNumbers) {
-            if (FileService.CMDSDocketingFileOperation(d, cmdsCaseNumber)) {
-                String caseStatus = CMDSCase.getCaseStatus(cmdsCaseNumber);
-                Timestamp MailedBO = new Timestamp(d.entryDate.getTime());
+            String caseStatus = CMDSCase.getCaseStatus(cmdsCaseNumber);
+            Timestamp MailedBO = new Timestamp(d.entryDate.getTime());
 
-                if (d.entryDescription.toLowerCase().contains("stayed")
-                        || d.entryDescription.toLowerCase().contains("fifting of stay")) {
+            if (d.entryDescription.toLowerCase().contains("stayed")
+                    || d.entryDescription.toLowerCase().contains("fifting of stay")) {
 
-                    if (caseStatus.equals("S")) {
-                        CMDSRemoveStayDialog removeStay = new CMDSRemoveStayDialog(d.dialog, true);
-                        if (removeStay.isRemoveStay()) {
-                            caseStatus = "O";
-                        } else {
-                            caseStatus = "S";
-                        }
-                        removeStay.dispose();
-                    } else if (caseStatus.equals("O")) {
-                        CMDSPlaceStayDialog placeStay = new CMDSPlaceStayDialog(d.dialog, true);
-                        if (placeStay.isPlaceStay()) {
-                            caseStatus = "S";
-                        } else {
-                            caseStatus = "O";
-                        }
-                        placeStay.dispose();
+                if (caseStatus.equals("S")) {
+                    CMDSRemoveStayDialog removeStay = new CMDSRemoveStayDialog(d.dialog, true, cmdsCaseNumber);
+                    if (removeStay.isRemoveStay()) {
+                        caseStatus = "O";
+                    } else {
+                        caseStatus = "S";
                     }
+                    removeStay.dispose();
+                } else if (caseStatus.equals("O")) {
+                    CMDSPlaceStayDialog placeStay = new CMDSPlaceStayDialog(d.dialog, true, cmdsCaseNumber);
+                    if (placeStay.isPlaceStay()) {
+                        caseStatus = "S";
+                    } else {
+                        caseStatus = "O";
+                    }
+                    placeStay.dispose();
                 }
+            }
 
-                if (!result.getResult().equals("")) {
-                    Activity.addCMDSActivty(activity, d.fileName, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
-                    CMDSCase.updateCaseByTypeDEntry(result.getResult(), MailedBO, caseStatus, cmdsCaseNumber);
+            if (!result.getResult().equals("")) {
+                Activity.addCMDSActivty(activity, d.originalFileLocation, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
+                CMDSCase.updateCaseByTypeDEntry(result.getResult(), MailedBO, caseStatus, cmdsCaseNumber);
 
-                    if (d.updateStatusInventoryLine) {
-                        CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
-                    }
+                if (d.updateStatusInventoryLine) {
+                    CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
                 }
             }
         }
@@ -173,60 +168,57 @@ public class CMDSCaseDocketEntryTypes {
         String activity = d.direction + " - " + d.entryDescription + (certified.isCertified() ? " - (Certified)" : "");
 
         for (String cmdsCaseNumber : d.caseNumbers) {
-            if (FileService.CMDSDocketingFileOperation(d, cmdsCaseNumber)) {
+            if (dueDate.getResponseDueDate() != null) {
+                EmailOutInvites.addNewHearing("CMDS",
+                        CMDSCase.getALJemail(),
+                        null,
+                        "Response due for " + cmdsCaseNumber,
+                        cmdsCaseNumber,
+                        null,
+                        null,
+                        null,
+                        DateConversion.generateReminderStartDate(dueDate.getResponseDueDate()),
+                        "Response due for " + cmdsCaseNumber
+                );
+            }
 
-                if (dueDate.getResponseDueDate() != null) {
-                    EmailOutInvites.addNewHearing("CMDS",
-                            CMDSCase.getALJemail(),
-                            null,
-                            "Response due for " + cmdsCaseNumber,
-                            cmdsCaseNumber,
-                            null,
-                            null,
-                            null,
-                            DateConversion.generateReminderStartDate(dueDate.getResponseDueDate()),
-                            "Response due for " + cmdsCaseNumber
-                    );
+            String caseStatus = CMDSCase.getCaseStatus(cmdsCaseNumber);
+
+            CMDSCase PODate = CMDSCase.getmailedPODates(cmdsCaseNumber);
+
+            if (PODate.mailedPO1 == null) {
+                PODate.mailedPO1 = new Timestamp(d.entryDate.getTime());
+            } else if (PODate.mailedPO2 == null) {
+                PODate.mailedPO2 = new Timestamp(d.entryDate.getTime());
+            } else if (PODate.mailedPO3 == null) {
+                PODate.mailedPO3 = new Timestamp(d.entryDate.getTime());
+            } else if (PODate.mailedPO4 == null) {
+                PODate.mailedPO4 = new Timestamp(d.entryDate.getTime());
+            }
+
+            if (caseStatus.equals("S")) {
+                CMDSRemoveStayDialog removeStay = new CMDSRemoveStayDialog(d.dialog, true, cmdsCaseNumber);
+                if (removeStay.isRemoveStay()) {
+                    caseStatus = "O";
+                } else {
+                    caseStatus = "S";
                 }
-
-                String caseStatus = CMDSCase.getCaseStatus(cmdsCaseNumber);
-
-                CMDSCase PODate = CMDSCase.getmailedPODates(cmdsCaseNumber);
-
-                if (PODate.mailedPO1 == null) {
-                    PODate.mailedPO1 = new Timestamp(d.entryDate.getTime());
-                } else if (PODate.mailedPO2 == null) {
-                    PODate.mailedPO2 = new Timestamp(d.entryDate.getTime());
-                } else if (PODate.mailedPO3 == null) {
-                    PODate.mailedPO3 = new Timestamp(d.entryDate.getTime());
-                } else if (PODate.mailedPO4 == null) {
-                    PODate.mailedPO4 = new Timestamp(d.entryDate.getTime());
+                removeStay.dispose();
+            } else if (caseStatus.equals("O")) {
+                CMDSPlaceStayDialog placeStay = new CMDSPlaceStayDialog(d.dialog, true, cmdsCaseNumber);
+                if (placeStay.isPlaceStay()) {
+                    caseStatus = "S";
+                } else {
+                    caseStatus = "O";
                 }
+                placeStay.dispose();
+            }
 
-                if (caseStatus.equals("S")) {
-                    CMDSRemoveStayDialog removeStay = new CMDSRemoveStayDialog(d.dialog, true);
-                    if (removeStay.isRemoveStay()) {
-                        caseStatus = "O";
-                    } else {
-                        caseStatus = "S";
-                    }
-                    removeStay.dispose();
-                } else if (caseStatus.equals("O")) {
-                    CMDSPlaceStayDialog placeStay = new CMDSPlaceStayDialog(d.dialog, true);
-                    if (placeStay.isPlaceStay()) {
-                        caseStatus = "S";
-                    } else {
-                        caseStatus = "O";
-                    }
-                    placeStay.dispose();
-                }
+            Activity.addCMDSActivty(activity, d.originalFileLocation, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
+            CMDSCase.updateCaseByTypeEEntry(PODate, caseStatus, cmdsCaseNumber);
 
-                Activity.addCMDSActivty(activity, d.fileName, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
-                CMDSCase.updateCaseByTypeEEntry(PODate, caseStatus, cmdsCaseNumber);
-
-                if (d.updateStatusInventoryLine) {
-                    CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
-                }
+            if (d.updateStatusInventoryLine) {
+                CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
             }
         }
         dueDate.dispose();
@@ -237,47 +229,45 @@ public class CMDSCaseDocketEntryTypes {
         String activity = d.direction + " - " + d.entryDescription;
 
         for (String cmdsCaseNumber : d.caseNumbers) {
-            if (FileService.CMDSDocketingFileOperation(d, cmdsCaseNumber)) {
-                CMDSCase rrpoPullDates = CMDSCase.getRRPOPullDates(cmdsCaseNumber);
+            CMDSCase rrpoPullDates = CMDSCase.getRRPOPullDates(cmdsCaseNumber);
 
-                CMDSRRorPODialog rrpo = new CMDSRRorPODialog(d.dialog, true);
+            CMDSRRorPODialog rrpo = new CMDSRRorPODialog(d.dialog, true);
 
-                if (rrpo.getSelection().equals("R&R")) {
-                    CMDSPullDateDialog pullDate = new CMDSPullDateDialog(d.dialog, true);
-                    rrpoPullDates.pullDateRR = pullDate.getResponseDueDate();
-                    pullDate.dispose();
-                } else {
-                    CMDSWhichPOPullDateDialog whichPO = new CMDSWhichPOPullDateDialog(d.dialog, true);
+            if (rrpo.getSelection().equals("R&R")) {
+                CMDSPullDateDialog pullDate = new CMDSPullDateDialog(d.dialog, true);
+                rrpoPullDates.pullDateRR = pullDate.getResponseDueDate();
+                pullDate.dispose();
+            } else {
+                CMDSWhichPOPullDateDialog whichPO = new CMDSWhichPOPullDateDialog(d.dialog, true);
 
-                    CMDSPullDateDialog pullDate = new CMDSPullDateDialog(d.dialog, true);
+                CMDSPullDateDialog pullDate = new CMDSPullDateDialog(d.dialog, true);
 
-                    switch (whichPO.getWhichPO()) {
-                        case "PO1":
-                            rrpoPullDates.pullDatePO1 = pullDate.getResponseDueDate();
-                            break;
-                        case "PO2":
-                            rrpoPullDates.pullDatePO2 = pullDate.getResponseDueDate();
-                            break;
-                        case "PO3":
-                            rrpoPullDates.pullDatePO3 = pullDate.getResponseDueDate();
-                            break;
-                        case "PO4":
-                            rrpoPullDates.pullDatePO4 = pullDate.getResponseDueDate();
-                            break;
-                        default:
-                            break;
-                    }
-
-                    whichPO.dispose();
-                    pullDate.dispose();
+                switch (whichPO.getWhichPO()) {
+                    case "PO1":
+                        rrpoPullDates.pullDatePO1 = pullDate.getResponseDueDate();
+                        break;
+                    case "PO2":
+                        rrpoPullDates.pullDatePO2 = pullDate.getResponseDueDate();
+                        break;
+                    case "PO3":
+                        rrpoPullDates.pullDatePO3 = pullDate.getResponseDueDate();
+                        break;
+                    case "PO4":
+                        rrpoPullDates.pullDatePO4 = pullDate.getResponseDueDate();
+                        break;
+                    default:
+                        break;
                 }
 
-                Activity.addCMDSActivty(activity, d.fileName, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
-                CMDSCase.updateCaseByTypeFEntry(rrpoPullDates, cmdsCaseNumber);
+                whichPO.dispose();
+                pullDate.dispose();
+            }
 
-                if (d.updateStatusInventoryLine) {
-                    CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
-                }
+            Activity.addCMDSActivty(activity, d.originalFileLocation, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
+            CMDSCase.updateCaseByTypeFEntry(rrpoPullDates, cmdsCaseNumber);
+
+            if (d.updateStatusInventoryLine) {
+                CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
             }
         }
     }
@@ -291,27 +281,24 @@ public class CMDSCaseDocketEntryTypes {
         }
 
         for (String cmdsCaseNumber : d.caseNumbers) {
-            if (FileService.CMDSDocketingFileOperation(d, cmdsCaseNumber)) {
+            if (dueDate.getResponseDueDate() != null) {
+                EmailOutInvites.addNewHearing("CMDS",
+                        CMDSCase.getALJemail(),
+                        null,
+                        "Response due for " + cmdsCaseNumber,
+                        cmdsCaseNumber,
+                        null,
+                        null,
+                        null,
+                        DateConversion.generateReminderStartDate(dueDate.getResponseDueDate()),
+                        "Response due for " + cmdsCaseNumber
+                );
+            }
 
-                if (dueDate.getResponseDueDate() != null) {
-                    EmailOutInvites.addNewHearing("CMDS",
-                            CMDSCase.getALJemail(),
-                            null,
-                            "Response due for " + cmdsCaseNumber,
-                            cmdsCaseNumber,
-                            null,
-                            null,
-                            null,
-                            DateConversion.generateReminderStartDate(dueDate.getResponseDueDate()),
-                            "Response due for " + cmdsCaseNumber
-                    );
-                }
+            Activity.addCMDSActivty(activity, d.originalFileLocation, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
 
-                Activity.addCMDSActivty(activity, d.fileName, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
-
-                if (d.updateStatusInventoryLine) {
-                    CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
-                }
+            if (d.updateStatusInventoryLine) {
+                CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
             }
         }
         dueDate.dispose();
@@ -326,27 +313,24 @@ public class CMDSCaseDocketEntryTypes {
         }
 
         for (String cmdsCaseNumber : d.caseNumbers) {
-            if (FileService.CMDSDocketingFileOperation(d, cmdsCaseNumber)) {
+            if (dueDate.getResponseDueDate() != null) {
+                EmailOutInvites.addNewHearing("CMDS",
+                        CMDSCase.getALJemail(),
+                        null,
+                        "Response due for " + cmdsCaseNumber,
+                        cmdsCaseNumber,
+                        null,
+                        null,
+                        null,
+                        DateConversion.generateReminderStartDate(dueDate.getResponseDueDate()),
+                        "Response due for " + cmdsCaseNumber
+                );
+            }
 
-                if (dueDate.getResponseDueDate() != null) {
-                    EmailOutInvites.addNewHearing("CMDS",
-                            CMDSCase.getALJemail(),
-                            null,
-                            "Response due for " + cmdsCaseNumber,
-                            cmdsCaseNumber,
-                            null,
-                            null,
-                            null,
-                            DateConversion.generateReminderStartDate(dueDate.getResponseDueDate()),
-                            "Response due for " + cmdsCaseNumber
-                    );
-                }
+            Activity.addCMDSActivty(activity, d.originalFileLocation, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
 
-                Activity.addCMDSActivty(activity, d.fileName, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
-
-                if (d.updateStatusInventoryLine) {
-                    CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
-                }
+            if (d.updateStatusInventoryLine) {
+                CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
             }
         }
         dueDate.dispose();
@@ -356,12 +340,10 @@ public class CMDSCaseDocketEntryTypes {
         String activity = d.direction + " - " + d.entryDescription;
 
         for (String cmdsCaseNumber : d.caseNumbers) {
-            if (FileService.CMDSDocketingFileOperation(d, cmdsCaseNumber)) {
-                Activity.addCMDSActivty(activity, d.fileName, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
+            Activity.addCMDSActivty(activity, d.originalFileLocation, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
 
-                if (d.updateStatusInventoryLine) {
-                    CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
-                }
+            if (d.updateStatusInventoryLine) {
+                CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
             }
         }
     }
@@ -375,26 +357,24 @@ public class CMDSCaseDocketEntryTypes {
         }
 
         for (String cmdsCaseNumber : d.caseNumbers) {
-            if (FileService.CMDSDocketingFileOperation(d, cmdsCaseNumber)) {
-                if (dueDate.getResponseDueDate() != null) {
-                    EmailOutInvites.addNewHearing("CMDS",
-                            CMDSCase.getALJemail(),
-                            null,
-                            "Response due for " + cmdsCaseNumber,
-                            cmdsCaseNumber,
-                            null,
-                            null,
-                            null,
-                            DateConversion.generateReminderStartDate(dueDate.getResponseDueDate()),
-                            "Response due for " + cmdsCaseNumber
-                    );
-                }
+            if (dueDate.getResponseDueDate() != null) {
+                EmailOutInvites.addNewHearing("CMDS",
+                        CMDSCase.getALJemail(),
+                        null,
+                        "Response due for " + cmdsCaseNumber,
+                        cmdsCaseNumber,
+                        null,
+                        null,
+                        null,
+                        DateConversion.generateReminderStartDate(dueDate.getResponseDueDate()),
+                        "Response due for " + cmdsCaseNumber
+                );
+            }
 
-                Activity.addCMDSActivty(activity, d.fileName, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
+            Activity.addCMDSActivty(activity, d.originalFileLocation, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
 
-                if (d.updateStatusInventoryLine) {
-                    CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
-                }
+            if (d.updateStatusInventoryLine) {
+                CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
             }
         }
         dueDate.dispose();
@@ -404,12 +384,10 @@ public class CMDSCaseDocketEntryTypes {
         String activity = d.direction + " - " + d.entryDescription;
 
         for (String cmdsCaseNumber : d.caseNumbers) {
-            if (FileService.CMDSDocketingFileOperation(d, cmdsCaseNumber)) {
-                Activity.addCMDSActivty(activity, d.fileName, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
+            Activity.addCMDSActivty(activity, d.originalFileLocation, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
 
-                if (d.updateStatusInventoryLine) {
-                    CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
-                }
+            if (d.updateStatusInventoryLine) {
+                CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
             }
         }
     }
@@ -418,12 +396,10 @@ public class CMDSCaseDocketEntryTypes {
         String activity = d.direction + " - " + d.entryDescription;
 
         for (String cmdsCaseNumber : d.caseNumbers) {
-            if (FileService.CMDSDocketingFileOperation(d, cmdsCaseNumber)) {
-                Activity.addCMDSActivty(activity, d.fileName, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
+            Activity.addCMDSActivty(activity, d.originalFileLocation, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
 
-                if (d.updateStatusInventoryLine) {
-                    CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
-                }
+            if (d.updateStatusInventoryLine) {
+                CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
             }
         }
     }
@@ -436,13 +412,11 @@ public class CMDSCaseDocketEntryTypes {
         activity += (court.getCaseNumber().equals("") ? "" : " - Case Number " + court.getCaseNumber());
 
         for (String cmdsCaseNumber : d.caseNumbers) {
-            if (FileService.CMDSDocketingFileOperation(d, cmdsCaseNumber)) {
-                Activity.addCMDSActivty(activity, d.fileName, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
-                CMDSCase.updateCaseByTypeMEntry(cmdsCaseNumber);
+            Activity.addCMDSActivty(activity, d.originalFileLocation, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
+            CMDSCase.updateCaseByTypeMEntry(cmdsCaseNumber);
 
-                if (d.updateStatusInventoryLine) {
-                    CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
-                }
+            if (d.updateStatusInventoryLine) {
+                CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
             }
         }
         court.dispose();
@@ -453,13 +427,11 @@ public class CMDSCaseDocketEntryTypes {
         String activity = d.direction + " - " + d.entryDescription;
 
         for (String cmdsCaseNumber : d.caseNumbers) {
-            if (FileService.CMDSDocketingFileOperation(d, cmdsCaseNumber)) {
-                Activity.addCMDSActivty(activity, d.fileName, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
-                CMDSCase.updateCaseByTypeNEntry(clearWhichDate(clear.getDateType(), clear.getWhichDate()), cmdsCaseNumber);
+            Activity.addCMDSActivty(activity, d.originalFileLocation, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
+            CMDSCase.updateCaseByTypeNEntry(clearWhichDate(clear.getDateType(), clear.getWhichDate()), cmdsCaseNumber);
 
-                if (d.updateStatusInventoryLine) {
-                    CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
-                }
+            if (d.updateStatusInventoryLine) {
+                CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
             }
         }
         clear.dispose();
@@ -474,25 +446,23 @@ public class CMDSCaseDocketEntryTypes {
         }
 
         for (String cmdsCaseNumber : d.caseNumbers) {
-            if (FileService.CMDSDocketingFileOperation(d, cmdsCaseNumber)) {
-                if (dueDate.getResponseDueDate() != null) {
-                    EmailOutInvites.addNewHearing("CMDS",
-                            CMDSCase.getALJemail(),
-                            null,
-                            "Response due for " + cmdsCaseNumber,
-                            cmdsCaseNumber,
-                            null,
-                            null,
-                            null,
-                            DateConversion.generateReminderStartDate(dueDate.getResponseDueDate()),
-                            "Response due for " + cmdsCaseNumber
-                    );
-                }
-                Activity.addCMDSActivty(activity, d.fileName, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
+            if (dueDate.getResponseDueDate() != null) {
+                EmailOutInvites.addNewHearing("CMDS",
+                        CMDSCase.getALJemail(),
+                        null,
+                        "Response due for " + cmdsCaseNumber,
+                        cmdsCaseNumber,
+                        null,
+                        null,
+                        null,
+                        DateConversion.generateReminderStartDate(dueDate.getResponseDueDate()),
+                        "Response due for " + cmdsCaseNumber
+                );
+            }
+            Activity.addCMDSActivty(activity, d.originalFileLocation, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
 
-                if (d.updateStatusInventoryLine) {
-                    CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
-                }
+            if (d.updateStatusInventoryLine) {
+                CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
             }
         }
         dueDate.dispose();
@@ -502,12 +472,10 @@ public class CMDSCaseDocketEntryTypes {
         String activity = d.direction + " - " + d.entryDescription;
 
         for (String cmdsCaseNumber : d.caseNumbers) {
-            if (FileService.CMDSDocketingFileOperation(d, cmdsCaseNumber)) {
-                Activity.addCMDSActivty(activity, d.fileName, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
+            Activity.addCMDSActivty(activity, d.originalFileLocation, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
 
-                if (d.updateStatusInventoryLine) {
-                    CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
-                }
+            if (d.updateStatusInventoryLine) {
+                CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
             }
         }
     }
@@ -517,17 +485,15 @@ public class CMDSCaseDocketEntryTypes {
         String activity = d.direction + " - " + d.entryDescription;
 
         for (String cmdsCaseNumber : d.caseNumbers) {
-            if (FileService.CMDSDocketingFileOperation(d, cmdsCaseNumber)) {
-                Activity.addCMDSActivty(activity, d.fileName, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
-                CMDSCase.updateCaseByTypeQEntry(greenCardWhichDate(pullDate.getWhichType()),
-                        whichPullDate(pullDate.getWhichType()),
-                        pullDate.getSignedDate(),
-                        pullDate.getPullDate(),
-                        cmdsCaseNumber);
+            Activity.addCMDSActivty(activity, d.originalFileLocation, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
+            CMDSCase.updateCaseByTypeQEntry(greenCardWhichDate(pullDate.getWhichType()),
+                    whichPullDate(pullDate.getWhichType()),
+                    pullDate.getSignedDate(),
+                    pullDate.getPullDate(),
+                    cmdsCaseNumber);
 
-                if (d.updateStatusInventoryLine) {
-                    CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
-                }
+            if (d.updateStatusInventoryLine) {
+                CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
             }
         }
         pullDate.dispose();
@@ -538,13 +504,11 @@ public class CMDSCaseDocketEntryTypes {
         String entryDate2 = Global.MMMMddyyyy.format(d.entryDate);
 
         for (String cmdsCaseNumber : d.caseNumbers) {
-            if (FileService.CMDSDocketingFileOperation(d, cmdsCaseNumber)) {
-                Activity.addCMDSActivty(activity, d.fileName, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
-                CMDSCase.updateCaseByTypeREntry(entryDate2, cmdsCaseNumber);
+            Activity.addCMDSActivty(activity, d.originalFileLocation, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
+            CMDSCase.updateCaseByTypeREntry(entryDate2, cmdsCaseNumber);
 
-                if (d.updateStatusInventoryLine) {
-                    CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
-                }
+            if (d.updateStatusInventoryLine) {
+                CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
             }
         }
     }
@@ -553,12 +517,10 @@ public class CMDSCaseDocketEntryTypes {
         String activity = d.direction + " - " + d.entryDescription;
 
         for (String cmdsCaseNumber : d.caseNumbers) {
-            if (FileService.CMDSDocketingFileOperation(d, cmdsCaseNumber)) {
-                Activity.addCMDSActivty(activity, d.fileName, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
+            Activity.addCMDSActivty(activity, d.originalFileLocation, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
 
-                if (d.updateStatusInventoryLine) {
-                    CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
-                }
+            if (d.updateStatusInventoryLine) {
+                CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
             }
         }
     }
@@ -570,13 +532,11 @@ public class CMDSCaseDocketEntryTypes {
         activity += (pbr.getPbrBox().equals("") ? "" : " " + pbr.getPbrBox());
 
         for (String cmdsCaseNumber : d.caseNumbers) {
-            if (FileService.CMDSDocketingFileOperation(d, cmdsCaseNumber)) {
-                Activity.addCMDSActivty(activity, d.fileName, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
-                CMDSCase.updateCaseByTypeUEntry(pbr.getPbrBox().equals("") ? null : pbr.getPbrBox(), cmdsCaseNumber);
+            Activity.addCMDSActivty(activity, d.originalFileLocation, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
+            CMDSCase.updateCaseByTypeUEntry(pbr.getPbrBox().equals("") ? null : pbr.getPbrBox(), cmdsCaseNumber);
 
-                if (d.updateStatusInventoryLine) {
-                    CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
-                }
+            if (d.updateStatusInventoryLine) {
+                CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
             }
         }
         pbr.dispose();
@@ -594,13 +554,11 @@ public class CMDSCaseDocketEntryTypes {
         String activity = d.direction + " - " + d.entryDescription;
 
         for (String cmdsCaseNumber : d.caseNumbers) {
-            if (FileService.CMDSDocketingFileOperation(d, cmdsCaseNumber)) {
-                Activity.addCMDSActivty(activity, d.fileName, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
-                CMDSCase.updateCaseByTypeVEntry(whichRemailedDate(remailed.getWhichType()), remailed.getRemailedDate(), pulldate == null ? null : pulldate.getResponseDueDate(), cmdsCaseNumber);
+            Activity.addCMDSActivty(activity, d.originalFileLocation, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
+            CMDSCase.updateCaseByTypeVEntry(whichRemailedDate(remailed.getWhichType()), remailed.getRemailedDate(), pulldate == null ? null : pulldate.getResponseDueDate(), cmdsCaseNumber);
 
-                if (d.updateStatusInventoryLine) {
-                    CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
-                }
+            if (d.updateStatusInventoryLine) {
+                CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
             }
         }
         remailed.dispose();
@@ -610,12 +568,10 @@ public class CMDSCaseDocketEntryTypes {
         String activity = d.direction + " - " + d.entryDescription;
 
         for (String cmdsCaseNumber : d.caseNumbers) {
-            if (FileService.CMDSDocketingFileOperation(d, cmdsCaseNumber)) {
-                Activity.addCMDSActivty(activity, d.fileName, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
+            Activity.addCMDSActivty(activity, d.originalFileLocation, d.entryDate, cmdsCaseNumber, d.from, d.to, d.category, d.entryDescription, (d.comment.trim().equals("") ? null : d.comment.trim()));
 
-                if (d.updateStatusInventoryLine) {
-                    CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
-                }
+            if (d.updateStatusInventoryLine) {
+                CMDSCase.updateCaseInventoryStatusLines(activity + (d.comment.equals("") ? "" : " " + d.comment), d.entryDate, cmdsCaseNumber);
             }
         }
     }

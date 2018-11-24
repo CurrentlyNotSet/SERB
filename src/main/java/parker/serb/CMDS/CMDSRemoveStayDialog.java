@@ -12,12 +12,18 @@ package parker.serb.CMDS;
 public class CMDSRemoveStayDialog extends javax.swing.JDialog {
 
     boolean removeStay = false;
+
     /**
      * Creates new form CMDSCaseStatusDialog
+     *
+     * @param parent
+     * @param modal
+     * @param caseNumber
      */
-    public CMDSRemoveStayDialog(java.awt.Dialog parent, boolean modal) {
+    public CMDSRemoveStayDialog(java.awt.Dialog parent, boolean modal, String caseNumber) {
         super(parent, modal);
         initComponents();
+        caseNumberLabel.setText(caseNumber);
         setLocationRelativeTo(parent);
         setVisible(true);
     }
@@ -25,7 +31,7 @@ public class CMDSRemoveStayDialog extends javax.swing.JDialog {
     public boolean isRemoveStay() {
         return removeStay;
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -39,6 +45,7 @@ public class CMDSRemoveStayDialog extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        caseNumberLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -63,6 +70,9 @@ public class CMDSRemoveStayDialog extends javax.swing.JDialog {
             }
         });
 
+        caseNumberLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        caseNumberLabel.setText("<<CASE #>>");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -75,7 +85,8 @@ public class CMDSRemoveStayDialog extends javax.swing.JDialog {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(caseNumberLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -85,11 +96,13 @@ public class CMDSRemoveStayDialog extends javax.swing.JDialog {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(caseNumberLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -105,6 +118,7 @@ public class CMDSRemoveStayDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel caseNumberLabel;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
