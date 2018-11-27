@@ -27,11 +27,24 @@ public class FactFinderConciliatorSearchDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         setColumnSize();
+        loadTypeComboBox();
         loadingThread();
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }
 
+    private void loadTypeComboBox() {
+        typeComboBox.removeAllItems();
+        
+        typeComboBox.addItem("All");
+        typeComboBox.addItem("F/C");
+        typeComboBox.addItem("F");
+        typeComboBox.addItem("C");
+        typeComboBox.addItem("O");
+        
+        typeComboBox.setSelectedItem("F/C");
+    }
+    
     private void loadingThread() {
         Thread temp = new Thread(() -> {
                 loadTable();
@@ -42,6 +55,7 @@ public class FactFinderConciliatorSearchDialog extends javax.swing.JDialog {
     
     private void enableTextBoxes() {
         searchTextBox.setEnabled(true);
+        typeComboBox.setEnabled(true);
     }
     
     private void setColumnSize() {        
@@ -88,7 +102,7 @@ public class FactFinderConciliatorSearchDialog extends javax.swing.JDialog {
 
         String[] param = searchTextBox.getText().trim().split(" ");
 
-        List<FactFinder> databaseList = FactFinder.searchFactFinder(param);
+        List<FactFinder> databaseList = FactFinder.searchFactFinder(typeComboBox.getSelectedItem().toString(), param);
 
         for (FactFinder item : databaseList) {
             String fullName = "";
@@ -177,6 +191,8 @@ public class FactFinderConciliatorSearchDialog extends javax.swing.JDialog {
         SearchTable = new javax.swing.JTable();
         EditButton = new javax.swing.JButton();
         CloseButton = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        typeComboBox = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -250,6 +266,14 @@ public class FactFinderConciliatorSearchDialog extends javax.swing.JDialog {
             }
         });
 
+        jLabel2.setText("Type:");
+
+        typeComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                typeComboBoxActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -260,9 +284,13 @@ public class FactFinderConciliatorSearchDialog extends javax.swing.JDialog {
                     .addComponent(jScrollPane1)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 873, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(searchTextBox)
+                        .addComponent(typeComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(searchTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 543, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(AddNewButton, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
@@ -280,7 +308,9 @@ public class FactFinderConciliatorSearchDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(searchTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(AddNewButton))
+                    .addComponent(AddNewButton)
+                    .addComponent(jLabel2)
+                    .addComponent(typeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 402, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
@@ -317,14 +347,20 @@ public class FactFinderConciliatorSearchDialog extends javax.swing.JDialog {
         tableClick(evt);
     }//GEN-LAST:event_SearchTableMouseClicked
 
+    private void typeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_typeComboBoxActionPerformed
+        loadTable();
+    }//GEN-LAST:event_typeComboBoxActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AddNewButton;
     private javax.swing.JButton CloseButton;
     private javax.swing.JButton EditButton;
     private javax.swing.JTable SearchTable;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField searchTextBox;
+    private javax.swing.JComboBox<String> typeComboBox;
     // End of variables declaration//GEN-END:variables
 }
