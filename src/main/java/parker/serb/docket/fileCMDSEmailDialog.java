@@ -704,7 +704,7 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
 
         List<String> groupNumbers = CMDSCase.DistinctGroupNumberFromCMDSCaseNumbers(caseNumbers);
 
-        if (groupNumbers.size() > 1) {
+        if (groupNumbers.size() >= 1) {
             //Update All question now
             CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(this, true);
             updateAllCases = update.isUpdateStatus();
