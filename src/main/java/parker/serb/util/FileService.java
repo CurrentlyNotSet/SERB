@@ -576,7 +576,6 @@ public class FileService {
             docket.entryDescription = type2;
             docket.comment = comment;
             docket.entryDate = activityDate;
-            docket.comment = "";
             docket.dialog = parent;
             docket.originalFileLocation = docketFile.toString();
             docket.direction = direction;
@@ -614,7 +613,6 @@ public class FileService {
             docket.entryDescription = type2;
             docket.comment = comment;
             docket.entryDate = activityDate;
-            docket.comment = "";
             docket.dialog = parent;
             docket.originalFileLocation = docketFile.toString();
             docket.direction = direction;
@@ -652,7 +650,6 @@ public class FileService {
             docket.entryDescription = type2;
             docket.comment = comment;
             docket.entryDate = activityDate;
-            docket.comment = "";
             docket.dialog = parent;
             docket.originalFileLocation = docketFile.toString();
             docket.direction = direction;
