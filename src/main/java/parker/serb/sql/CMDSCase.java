@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.apache.commons.dbutils.DbUtils;
+import org.eclipse.persistence.internal.helper.Helper;
 import parker.serb.Global;
 import parker.serb.util.NumberFormatService;
 import parker.serb.util.SlackNotification;
@@ -1889,6 +1890,173 @@ public class CMDSCase {
         } finally {
             DbUtils.closeQuietly(stmt);
         }
+    }
+    
+    public static List CMDSCaseNumbersWithGroupNumber(String[] param) {
+        List<CMDSCase> returnList = new ArrayList<>();
+
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT id, caseYear, caseType, caseMonth, caseNumber, groupNumber FROM CMDSCase";
+            if (param.length > 0) {
+                sql += " WHERE";
+                for (int i = 0; i < param.length; i++) {
+                    NumberFormatService num = NumberFormatService.parseFullCaseNumberNoNGlobal(param[i].trim());
+
+                    if (i > 0) {
+                        sql += " OR ";
+                    }
+                    sql += "( caseYear = '" + num.caseYear + "' AND"
+                            + " caseType = '" + num.caseType + "' AND"
+                            + " caseMonth = '" + num.caseMonth + "' AND"
+                            + " caseNumber = '" + num.caseNumber + "')";
+                }
+                
+                sql += " ORDER BY groupNumber";
+            }
+
+            PreparedStatement ps = stmt.getConnection().prepareStatement(sql);            
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                CMDSCase cmds = new CMDSCase();
+                cmds.id = rs.getInt("id");
+                cmds.caseYear = rs.getString("caseYear");
+                cmds.caseType = rs.getString("caseType");
+                cmds.caseMonth = rs.getString("caseMonth");
+                cmds.caseNumber = rs.getString("caseNumber");
+                cmds.groupNumber = rs.getString("groupNumber") == null ? "" : rs.getString("groupNumber");
+                returnList.add(cmds);
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                CMDSCaseNumbersWithGroupNumber(param);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return returnList;
+    }
+    
+    
+    @SuppressWarnings("empty-statement")
+    public static List DistinctGroupNumberFromCMDSCaseNumbers(String[] param) {
+        List<String> returnList = new ArrayList<>();
+
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT DISTINCT groupNumber FROM CMDSCase";
+            if (param.length > 0) {
+                sql += " WHERE";
+                for (int i = 0; i < param.length; i++) {
+                    NumberFormatService num = NumberFormatService.parseFullCaseNumberNoNGlobal(param[i].trim());
+
+                    if (i > 0) {
+                        sql += " OR ";
+                    }
+                    sql += "( caseYear = '" + num.caseYear + "' AND"
+                            + " caseType = '" + num.caseType + "' AND"
+                            + " caseMonth = '" + num.caseMonth + "' AND"
+                            + " caseNumber = '" + num.caseNumber + "')";
+                }
+            }
+            
+            if (param.length > 0) {
+                sql += " AND ";
+            }
+            
+            sql += "(groupNumber != '' AND groupNumber IS NOT NULL) ORDER BY groupNumber";
+
+            PreparedStatement ps = stmt.getConnection().prepareStatement(sql);            
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                
+                if (rs.getString("groupNumber") != null) {
+                    if (!"".equals(rs.getString("groupNumber"))){
+                        returnList.add(rs.getString("groupNumber"));
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                CMDSCaseNumbersWithGroupNumber(param);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return returnList;
+    }
+    
+    public static List CMDSDocketingCaseList(String[] caseNumbers, String[] groupNumbers) {
+        List<CMDSCase> returnList = new ArrayList<>();
+
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT id, caseYear, caseType, caseMonth, caseNumber, groupNumber FROM CMDSCase";
+            if (caseNumbers.length > 0) {
+                sql += " WHERE";
+                for (int i = 0; i < caseNumbers.length; i++) {
+                    NumberFormatService num = NumberFormatService.parseFullCaseNumberNoNGlobal(caseNumbers[i].trim());
+
+                    if (i > 0) {
+                        sql += " OR ";
+                    }
+                    sql += " (  caseYear = '" + num.caseYear + "' AND"
+                            + " caseType = '" + num.caseType + "' AND"
+                            + " caseMonth = '" + num.caseMonth + "' AND"
+                            + " caseNumber = '" + num.caseNumber + "') ";
+                }
+            }
+            
+            
+            if (groupNumbers.length > 0) {
+                if (caseNumbers.length == 0) {
+                    sql += " WHERE ";
+                } else { 
+                    sql += " OR ";
+                }
+                for (int j = 0; j < groupNumbers.length; j++) {
+                    if (j > 0) {
+                        sql += " OR ";
+                    }
+                    sql += " groupNumber = '" + groupNumbers[j] + "' ";
+                }
+            }
+            
+            
+            sql += " ORDER BY groupNumber DESC, caseYear, caseMonth, caseNumber";
+
+            PreparedStatement ps = stmt.getConnection().prepareStatement(sql);            
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                CMDSCase cmds = new CMDSCase();
+                cmds.id = rs.getInt("id");
+                cmds.caseYear = rs.getString("caseYear");
+                cmds.caseType = rs.getString("caseType");
+                cmds.caseMonth = rs.getString("caseMonth");
+                cmds.caseNumber = rs.getString("caseNumber");
+                cmds.groupNumber = rs.getString("groupNumber") == null ? "" : rs.getString("groupNumber");
+                returnList.add(cmds);
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                CMDSCaseNumbersWithGroupNumber(caseNumbers);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return returnList;
     }
     
 }

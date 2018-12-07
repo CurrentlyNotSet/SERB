@@ -12,13 +12,19 @@ package parker.serb.CMDS;
 public class CMDSUpdateInventoryStatusLineDialog extends javax.swing.JDialog {
 
     boolean updateStatus = false;
+
     /**
      * Creates new form CMDSUpdateInventoryStatusLineDialog
+     *
+     * @param parent
+     * @param modal
+     * @param description
      */
-    public CMDSUpdateInventoryStatusLineDialog(java.awt.Dialog parent, boolean modal) {
+    public CMDSUpdateInventoryStatusLineDialog(java.awt.Dialog parent, boolean modal, String description) {
         super(parent, modal);
         initComponents();
-        if(parent == null) {
+        descriptionLabel.setText(description);
+        if (parent == null) {
             setLocationRelativeTo(null);
         } else {
             setLocationRelativeTo(parent.getParent());
@@ -43,6 +49,7 @@ public class CMDSUpdateInventoryStatusLineDialog extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        descriptionLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -51,7 +58,7 @@ public class CMDSUpdateInventoryStatusLineDialog extends javax.swing.JDialog {
         jLabel1.setText("Inventory Status Line");
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Would you like to update the inventory status information?");
+        jLabel2.setText("Would you like to update the inventory status information for the case(s)?");
 
         jButton1.setText("Yes");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -67,6 +74,9 @@ public class CMDSUpdateInventoryStatusLineDialog extends javax.swing.JDialog {
             }
         });
 
+        descriptionLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        descriptionLabel.setText("<<Label>>");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -75,11 +85,12 @@ public class CMDSUpdateInventoryStatusLineDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 606, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(descriptionLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -90,10 +101,12 @@ public class CMDSUpdateInventoryStatusLineDialog extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addGap(18, 18, 18)
+                .addComponent(descriptionLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -110,6 +123,7 @@ public class CMDSUpdateInventoryStatusLineDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel descriptionLabel;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;

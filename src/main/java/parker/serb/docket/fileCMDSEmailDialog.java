@@ -27,6 +27,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import parker.serb.CMDS.CMDSUpdateAllGroupCasesDialog;
+import parker.serb.CMDS.CMDSUpdateInventoryStatusLineDialog;
 import parker.serb.Global;
 import parker.serb.sql.CMDSCase;
 import parker.serb.sql.CMDSHistoryCategory;
@@ -35,6 +37,7 @@ import parker.serb.sql.CaseNumber;
 import parker.serb.sql.Email;
 import parker.serb.sql.EmailAttachment;
 import parker.serb.sql.User;
+import parker.serb.util.CaseNumberTools;
 import parker.serb.util.FileService;
 
 /**
@@ -52,6 +55,12 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form FileDocumentDialog
+     *
+     * @param parent
+     * @param modal
+     * @param id
+     * @param section
+     * @param time
      */
     public fileCMDSEmailDialog(java.awt.Frame parent, boolean modal, String id, String section, String time) {
         super(parent, modal);
@@ -70,7 +79,7 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
 
     private void addRenderer() {
         attachmentTable.setDefaultRenderer(Object.class, new TableCellRenderer() {
-            private DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
+            private final DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
 
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
@@ -185,8 +194,8 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
                 enableButton();
             }
 
-            if (!comboEditor.getSelectedItem().toString().equals("") ||
-                    !comboEditor.getSelectedItem().toString().equals("DO NOT FILE")) {
+            if (!comboEditor.getSelectedItem().toString().equals("")
+                    || !comboEditor.getSelectedItem().toString().equals("DO NOT FILE")) {
                 loadType2ComboBox();
             } else {
                 comboEditor2.removeAllItems();
@@ -243,22 +252,18 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
             }
 
             if (attachmentTable.getValueAt(i, 2) != null) {
-                if(attachmentTable.getValueAt(i, 2).toString().equals("DO NOT FILE")) {
+                if (attachmentTable.getValueAt(i, 2).toString().equals("DO NOT FILE")) {
                     comboEditor2.setSelectedItem("");
                     attachmentTable.setValueAt("", i, 3);
                     enableButton = true;
+                } else if (attachmentTable.getValueAt(i, 3) == null) {
+                    enableButton = false;
+                    break;
+                } else if (attachmentTable.getValueAt(i, 3).equals("")) {
+                    enableButton = false;
+                    break;
                 } else {
-                    if(attachmentTable.getValueAt(i, 3) == null) {
-                        enableButton = false;
-                        break;
-                    } else {
-                        if (attachmentTable.getValueAt(i, 3).equals("")) {
-                            enableButton = false;
-                            break;
-                        } else {
-                            enableButton = true;
-                        }
-                    }
+                    enableButton = true;
                 }
             }
         }
@@ -385,9 +390,12 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
 
         for (int i = 0; i < attachmentTable.getRowCount(); i++) {
             if (!attachmentTable.getValueAt(i, 2).toString().equals("DO NOT FILE")) {
+                //UpdateInventory Status Line Dialog
+                CMDSUpdateInventoryStatusLineDialog statusLineUpdate = new CMDSUpdateInventoryStatusLineDialog(
+                        this, true, attachmentTable.getValueAt(i, 2).toString() + " - " + attachmentTable.getValueAt(i, 3).toString());
+
+                //Docket Row
                 FileService.docketCMDSEmailAttachment(caseNumbers, //caseNumber
-                        attachmentTable.getValueAt(i, 0).toString(), //attachmentid
-                        emailID,
                         emailSection,
                         fromTextBox.getText(),
                         toComboBox.getSelectedItem().toString(),
@@ -395,11 +403,11 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
                         attachmentTable.getValueAt(i, 1).toString(), //fileName
                         attachmentTable.getValueAt(i, 2).toString(), //fileType1
                         attachmentTable.getValueAt(i, 3).toString(), //fileType2
-                        attachmentTable.getValueAt(i, 4) != null //comment
-                        ? attachmentTable.getValueAt(i, 4).toString() : "",
+                        attachmentTable.getValueAt(i, 4) != null ? attachmentTable.getValueAt(i, 4).toString() : "", //Comment
                         generateDate(),
                         directionComboBox.getSelectedItem().toString(),
-                        this);
+                        this,
+                        statusLineUpdate.isUpdateStatus());
             }
         }
     }
@@ -409,7 +417,7 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
         cal.set(Calendar.YEAR, Integer.valueOf(passedTime.split(" ")[0].split("/")[2]));
         cal.set(Calendar.MONTH, Integer.valueOf(passedTime.split(" ")[0].split("/")[0]) - 1);
         cal.set(Calendar.DAY_OF_MONTH, Integer.valueOf(passedTime.split(" ")[0].split("/")[1]));
-        if(passedTime.split(" ")[1].split(":")[0].equals("12")) {
+        if (passedTime.split(" ")[1].split(":")[0].equals("12")) {
             cal.set(Calendar.HOUR_OF_DAY, passedTime.split(" ")[2].equals("AM") ? Integer.valueOf(passedTime.split(" ")[1].split(":")[0]) : Integer.valueOf(passedTime.split(" ")[1].split(":")[0]));
         } else {
             cal.set(Calendar.HOUR_OF_DAY, passedTime.split(" ")[2].equals("AM") ? Integer.valueOf(passedTime.split(" ")[1].split(":")[0]) : Integer.valueOf(passedTime.split(" ")[1].split(":")[0]) + 12);
@@ -475,7 +483,7 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
         fromTextBox = new javax.swing.JTextField();
         subjectTextBox = new javax.swing.JTextField();
         fileButton = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        CancelButton = new javax.swing.JButton();
         toComboBox = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
@@ -560,11 +568,6 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
         dateTextBox.setEditable(false);
         dateTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         dateTextBox.setEnabled(false);
-        dateTextBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                dateTextBoxActionPerformed(evt);
-            }
-        });
 
         fromTextBox.setEditable(false);
         fromTextBox.setDisabledTextColor(new java.awt.Color(0, 0, 0));
@@ -582,10 +585,10 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
             }
         });
 
-        jButton2.setText("Cancel");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        CancelButton.setText("Cancel");
+        CancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                CancelButtonActionPerformed(evt);
             }
         });
 
@@ -632,7 +635,7 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
                             .addComponent(directionComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(orgNameComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(CancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(fileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -684,7 +687,7 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(fileButton)
-                    .addComponent(jButton2))
+                    .addComponent(CancelButton))
                 .addContainerGap())
         );
 
@@ -692,35 +695,57 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void fileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileButtonActionPerformed
+        //Set Verification of docketing
+        boolean updateAllCases = false;
+        boolean okToDocket = true;
+
         //getcaseNumber
         String[] caseNumbers = caseNumberTextBox.getText().trim().split(",");
 
-        //fileBody --> no longer needed 2/28/17
-//        FileService.docketEmailBody(caseNumbers,
-//                emailID,
-//                emailSection,
-//                fromTextBox.getText(),
-//                toComboBox.getSelectedItem().toString(),
-//                subjectTextBox.getText(),
-//                generateDate(),
-//                directionComboBox.getSelectedItem().toString());
-        //fileAttachements
-        fileEmailAttachments(caseNumbers);
+        List<String> groupNumbers = CMDSCase.DistinctGroupNumberFromCMDSCaseNumbers(caseNumbers);
 
-        deleteEmail(emailID);
+        if (groupNumbers.size() >= 1) {
+            //Update All question now
+            CMDSUpdateAllGroupCasesDialog update = new CMDSUpdateAllGroupCasesDialog(this, true);
+            updateAllCases = update.isUpdateStatus();
+            update.dispose();
+        }
 
-        dispose();
+        //If true trim and strip duplicates
+        if (updateAllCases) {
+            //Get List of All Cases
+            List<CMDSCase> caseList = CMDSCase.CMDSDocketingCaseList(caseNumbers, groupNumbers.toArray(new String[0]));
+
+            if (caseList.size() > 0) {
+                //User Selects specific cases
+                CMDSMultiCaseDocketingDialog userSelected = new CMDSMultiCaseDocketingDialog(this, true, caseList);
+
+                //Update the caseNumbers List with selected items.
+                caseNumbers = userSelected.selectedCaseList.toArray(new String[0]);
+
+                //inverse of cancelled cancelled = true then okToDocket = false.
+                okToDocket = !userSelected.cancelled;
+
+                //Dispose of the hidden panel now that all variables have been utalized
+                userSelected.dispose();
+            } else {
+                okToDocket = false;
+            }
+        }
+
+        if (okToDocket) {
+            fileEmailAttachments(caseNumbers);
+            deleteEmail(emailID);
+            dispose();
+        }
     }//GEN-LAST:event_fileButtonActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void CancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelButtonActionPerformed
         dispose();
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void dateTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_dateTextBoxActionPerformed
+    }//GEN-LAST:event_CancelButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton CancelButton;
     private javax.swing.JTable attachmentTable;
     private javax.swing.JTextArea bodyTextArea;
     private javax.swing.JTextField caseNumberTextBox;
@@ -728,7 +753,6 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
     private javax.swing.JComboBox<String> directionComboBox;
     private javax.swing.JButton fileButton;
     private javax.swing.JTextField fromTextBox;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
