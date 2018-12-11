@@ -224,6 +224,7 @@
               </Properties>
               <Events>
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="groupNumberTextBoxMouseClicked"/>
+                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="groupNumberTextBoxKeyTyped"/>
               </Events>
             </Component>
             <Component class="javax.swing.JComboBox" name="mediatorComboBox">
@@ -395,7 +396,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="jPanel8" min="-2" pref="101" max="-2" attributes="0"/>
+                          <Component id="jPanel8" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Component id="jPanel9" max="32767" attributes="0"/>
                           <EmptySpace min="-2" max="-2" attributes="0"/>

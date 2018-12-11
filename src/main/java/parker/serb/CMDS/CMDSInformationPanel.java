@@ -7,6 +7,7 @@ package parker.serb.CMDS;
 
 import com.alee.extended.date.WebCalendar;
 import com.alee.extended.date.WebDateField;
+import com.alee.laf.optionpane.WebOptionPane;
 import com.alee.utils.swing.Customizer;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
@@ -30,13 +31,14 @@ import parker.serb.util.NumberFormatService;
 public class CMDSInformationPanel extends javax.swing.JPanel {
 
     CMDSCase orginalInformation;
+
     /**
      * Creates new form ORGInformationPanel
      */
     public CMDSInformationPanel() {
         initComponents();
     }
-    
+
     public void clearAll() {
         caseNumberTextBox.setText("");
         aljComboBox.setSelectedItem("");
@@ -50,91 +52,91 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
         reclassCodeComboBox.setSelectedItem("");
         resultComboBox.setSelectedItem("");
     }
-    
+
     public void loadALJComboBox() {
         aljComboBox.removeAllItems();
-        
+
         aljComboBox.addItem("");
-        
+
         List userList = User.loadSectionDropDowns("ALJ");
-        
+
         for (Object user : userList) {
             aljComboBox.addItem((String) user);
         }
-        
+
         aljComboBox.setSelectedItem("");
     }
-    
+
     public void loadMediatorComboBox() {
         mediatorComboBox.removeAllItems();
-        
+
         mediatorComboBox.addItem("");
-        
+
         List userList = User.loadSectionDropDowns("CMDS");
-        
+
         for (Object user : userList) {
             mediatorComboBox.addItem((String) user);
         }
-        
+
         mediatorComboBox.setSelectedItem("");
     }
-    
+
     public void loadCaseStatusComboBox() {
         statusComboBox.removeAllItems();
-        
+
         statusComboBox.addItem("");
-        
+
         List userList = CMDSStatusType.loadAll();
-        
+
         for (Object user : userList) {
             statusComboBox.addItem((String) user);
         }
-        
+
         statusComboBox.setSelectedItem("");
     }
-    
+
     public void loadReclassComboBox() {
         reclassCodeComboBox.removeAllItems();
-        
+
         reclassCodeComboBox.addItem("");
-        
+
         List userList = ReClassCode.loadAll();
-        
+
         for (Object user : userList) {
             reclassCodeComboBox.addItem((String) user);
         }
-        
+
         reclassCodeComboBox.setSelectedItem("");
     }
-    
+
     public void loadResultComboBox() {
         resultComboBox.removeAllItems();
-        
+
         resultComboBox.addItem("");
-        
+
         List userList = CMDSResult.loadAll();
-        
+
         for (Object user : userList) {
             resultComboBox.addItem((String) user);
         }
-        
+
         resultComboBox.setSelectedItem("");
     }
-    
+
     public void loadGroupTypeComboBox() {
         groupTypeComboBox.removeAllItems();
-        
+
         groupTypeComboBox.addItem("");
         groupTypeComboBox.addItem("S");
         groupTypeComboBox.addItem("M");
-        
+
         groupTypeComboBox.setSelectedItem("");
     }
-    
+
     public void enableUpdate() {
         Global.root.getjButton2().setText("Save");
         Global.root.getjButton9().setVisible(true);
-        
+
         aljComboBox.setEnabled(true);
         openDateTextBox.setEnabled(true);
         openDateTextBox.setBackground(Color.white);
@@ -150,83 +152,82 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
         reclassCodeComboBox.setEnabled(true);
         resultComboBox.setEnabled(true);
     }
-    
+
     public void disableUpdate(boolean save) {
         Global.root.getjButton2().setText("Update");
         Global.root.getjButton9().setVisible(false);
-        
+
         aljComboBox.setEnabled(false);
         openDateTextBox.setEnabled(false);
-        openDateTextBox.setBackground(new Color(238,238,238));
+        openDateTextBox.setBackground(new Color(238, 238, 238));
         closeDateTextBox.setEnabled(false);
-        closeDateTextBox.setBackground(new Color(238,238,238));
+        closeDateTextBox.setBackground(new Color(238, 238, 238));
         groupNumberTextBox.setEnabled(false);
-        groupNumberTextBox.setBackground(new Color(238,238,238));
+        groupNumberTextBox.setBackground(new Color(238, 238, 238));
         mediatorComboBox.setEnabled(false);
         pbrBoxTextBox.setEnabled(false);
-        pbrBoxTextBox.setBackground(new Color(238,238,238));
+        pbrBoxTextBox.setBackground(new Color(238, 238, 238));
         groupTypeComboBox.setEnabled(false);
         statusComboBox.setEnabled(false);
         reclassCodeComboBox.setEnabled(false);
         resultComboBox.setEnabled(false);
 
-        if(save) {
+        if (save) {
             saveInformation();
         }
-        
+
         loadInformation();
     }
-    
+
     private void saveInformation() {
         CMDSCase newInformation = new CMDSCase();
-        
-        
+
         newInformation.aljID = (aljComboBox.getSelectedItem() == null || aljComboBox.getSelectedItem().equals("")) ? 0 : (aljComboBox.getSelectedItem().toString().equals("") ? 0 : User.getUserID(aljComboBox.getSelectedItem().toString().trim()));
         newInformation.openDate = openDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(openDateTextBox.getText()));
         newInformation.closeDate = closeDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(closeDateTextBox.getText()));
         newInformation.groupNumber = groupNumberTextBox.getText().trim().equals("") ? null : groupNumberTextBox.getText().trim();
         newInformation.mediatorID = (mediatorComboBox.getSelectedItem() == null || mediatorComboBox.getSelectedItem().equals("")) ? 0 : (mediatorComboBox.getSelectedItem().toString().equals("") ? 0 : User.getUserID(mediatorComboBox.getSelectedItem().toString().trim()));
-        
+
         newInformation.PBRBox = pbrBoxTextBox.getText().trim().equals("") ? null : pbrBoxTextBox.getText().trim();
         newInformation.groupType = groupTypeComboBox.getSelectedItem().toString().trim().equals("") ? null : groupTypeComboBox.getSelectedItem().toString();
         newInformation.caseStatus = statusComboBox.getSelectedItem().toString().trim().equals("") ? null : statusComboBox.getSelectedItem().toString();
         newInformation.reclassCode = reclassCodeComboBox.getSelectedItem().toString().trim().equals("") ? null : reclassCodeComboBox.getSelectedItem().toString();
         newInformation.result = resultComboBox.getSelectedItem().toString().trim().equals("") ? null : resultComboBox.getSelectedItem().toString();
-        
+
         newInformation.mailedRR = rrMailedTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(rrMailedTextBox.getText()));
         newInformation.mailedBO = boMailedTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(boMailedTextBox.getText()));
         newInformation.mailedPO1 = po1MailedTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(po1MailedTextBox.getText()));
         newInformation.mailedPO2 = po2MailedTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(po2MailedTextBox.getText()));
         newInformation.mailedPO3 = po3MailedTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(po3MailedTextBox.getText()));
         newInformation.mailedPO4 = po4MailedTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(po4MailedTextBox.getText()));
-         
+
         newInformation.remailedRR = rrRemailedTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(rrRemailedTextBox.getText()));
         newInformation.remailedBO = boRemailedTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(boRemailedTextBox.getText()));
         newInformation.remailedPO1 = po1RemailedTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(po1RemailedTextBox.getText()));
         newInformation.remailedPO2 = po2RemailedTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(po2RemailedTextBox.getText()));
         newInformation.remailedPO3 = po3RemailedTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(po3RemailedTextBox.getText()));
         newInformation.remailedPO4 = po4RemailedTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(po4RemailedTextBox.getText()));
-        
+
         newInformation.returnReceiptRR = rrReturnReceiptTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(rrReturnReceiptTextBox.getText()));
         newInformation.returnReceiptBO = boReturnReceiptTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(boReturnReceiptTextBox.getText()));
         newInformation.returnReceiptPO1 = po1ReturnReceiptTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(po1ReturnReceiptTextBox.getText()));
         newInformation.returnReceiptPO2 = po2ReturnReceiptTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(po2ReturnReceiptTextBox.getText()));
         newInformation.returnReceiptPO3 = po3ReturnReceiptTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(po3ReturnReceiptTextBox.getText()));
         newInformation.returnReceiptPO4 = po4ReturnReceiptTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(po4ReturnReceiptTextBox.getText()));
-        
+
         newInformation.pullDateRR = rrPullDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(rrPullDateTextBox.getText()));
         newInformation.pullDateBO = boPullDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(boPullDateTextBox.getText()));
         newInformation.pullDatePO1 = po1PullDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(po1PullDateTextBox.getText()));
         newInformation.pullDatePO2 = po2PullDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(po2PullDateTextBox.getText()));
         newInformation.pullDatePO3 = po3PullDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(po3PullDateTextBox.getText()));
-        newInformation.pullDatePO4 = po4PullDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(po4PullDateTextBox.getText())); 
-        
+        newInformation.pullDatePO4 = po4PullDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(po4PullDateTextBox.getText()));
+
         newInformation.hearingCompletedDate = hearingCompletedDateTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(hearingCompletedDateTextBox.getText()));
         newInformation.postHearingBriefsDue = postHearingBriefsDueTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(postHearingBriefsDueTextBox.getText()));
-        
+
         CMDSCase.updateCMDSInformation(newInformation, orginalInformation);
     }
-    
+
     public void loadInformation() {
         loadALJComboBox();
         loadMediatorComboBox();
@@ -234,7 +235,7 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
         loadCaseStatusComboBox();
         loadReclassComboBox();
         loadResultComboBox();
-        
+
         orginalInformation = CMDSCase.loadCMDSCaseInformation();
 
         caseNumberTextBox.setText(NumberFormatService.generateFullCaseNumber());
@@ -249,12 +250,12 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
         statusComboBox.setSelectedItem(orginalInformation.caseStatus != null ? orginalInformation.caseStatus : "");
         reclassCodeComboBox.setSelectedItem(orginalInformation.reclassCode != null ? orginalInformation.reclassCode : "");
         resultComboBox.setSelectedItem(orginalInformation.result != null ? orginalInformation.result : "");
-        
+
         rrMailedTextBox.setText(orginalInformation.mailedRR != null ? Global.mmddyyyy.format(new Date(orginalInformation.mailedRR.getTime())) : "");
         rrRemailedTextBox.setText(orginalInformation.remailedRR != null ? Global.mmddyyyy.format(new Date(orginalInformation.remailedRR.getTime())) : "");
         rrReturnReceiptTextBox.setText(orginalInformation.returnReceiptRR != null ? Global.mmddyyyy.format(new Date(orginalInformation.returnReceiptRR.getTime())) : "");
         rrPullDateTextBox.setText(orginalInformation.pullDateRR != null ? Global.mmddyyyy.format(new Date(orginalInformation.pullDateRR.getTime())) : "");
-        
+
         boMailedTextBox.setText(orginalInformation.mailedBO != null ? Global.mmddyyyy.format(new Date(orginalInformation.mailedBO.getTime())) : "");
         boRemailedTextBox.setText(orginalInformation.remailedBO != null ? Global.mmddyyyy.format(new Date(orginalInformation.remailedBO.getTime())) : "");
         boReturnReceiptTextBox.setText(orginalInformation.returnReceiptBO != null ? Global.mmddyyyy.format(new Date(orginalInformation.returnReceiptBO.getTime())) : "");
@@ -274,7 +275,7 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
         po3RemailedTextBox.setText(orginalInformation.remailedPO3 != null ? Global.mmddyyyy.format(new Date(orginalInformation.remailedPO3.getTime())) : "");
         po3ReturnReceiptTextBox.setText(orginalInformation.returnReceiptPO3 != null ? Global.mmddyyyy.format(new Date(orginalInformation.returnReceiptPO3.getTime())) : "");
         po3PullDateTextBox.setText(orginalInformation.pullDatePO3 != null ? Global.mmddyyyy.format(new Date(orginalInformation.pullDatePO3.getTime())) : "");
-        
+
         po4MailedTextBox.setText(orginalInformation.mailedPO4 != null ? Global.mmddyyyy.format(new Date(orginalInformation.mailedPO4.getTime())) : "");
         po4RemailedTextBox.setText(orginalInformation.remailedPO4 != null ? Global.mmddyyyy.format(new Date(orginalInformation.remailedPO4.getTime())) : "");
         po4ReturnReceiptTextBox.setText(orginalInformation.returnReceiptPO4 != null ? Global.mmddyyyy.format(new Date(orginalInformation.returnReceiptPO4.getTime())) : "");
@@ -284,11 +285,11 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
         postHearingBriefsDueTextBox.setText(orginalInformation.postHearingBriefsDue != null ? Global.mmddyyyy.format(new Date(orginalInformation.postHearingBriefsDue.getTime())) : "");
 
     }
-    
+
     private void clearDate(WebDateField dateField, MouseEvent evt) {
-        if(evt.getButton() == MouseEvent.BUTTON3 && dateField.isEnabled()) {
+        if (evt.getButton() == MouseEvent.BUTTON3 && dateField.isEnabled()) {
             ClearDateDialog dialog = new ClearDateDialog((JFrame) Global.root, true);
-            if(dialog.isReset()) {
+            if (dialog.isReset()) {
                 dateField.setText("");
             }
             dialog.dispose();
@@ -443,6 +444,11 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
                 groupNumberTextBox.addMouseListener(new java.awt.event.MouseAdapter() {
                     public void mouseClicked(java.awt.event.MouseEvent evt) {
                         groupNumberTextBoxMouseClicked(evt);
+                    }
+                });
+                groupNumberTextBox.addKeyListener(new java.awt.event.KeyAdapter() {
+                    public void keyTyped(java.awt.event.KeyEvent evt) {
+                        groupNumberTextBoxKeyTyped(evt);
                     }
                 });
 
@@ -941,7 +947,7 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
                         .addContainerGap()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1012,12 +1018,19 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_closeDateTextBoxMouseClicked
 
     private void groupNumberTextBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_groupNumberTextBoxMouseClicked
-        if(groupNumberTextBox.isEnabled() && evt.getClickCount() == 2) {
+        if (groupNumberTextBox.isEnabled() && evt.getClickCount() == 2) {
             new CMDSGroupNumberDialog(Global.root, true, groupNumberTextBox.getText().trim());
             loadInformation();
         }
     }//GEN-LAST:event_groupNumberTextBoxMouseClicked
 
+    private void groupNumberTextBoxKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_groupNumberTextBoxKeyTyped
+        if (groupNumberTextBox.getText().length() >= 8) {
+            evt.consume();
+            groupNumberTextBox.setText(groupNumberTextBox.getText().substring(0, 8));
+            WebOptionPane.showMessageDialog(Global.root, "Group Number is limited to 8 characters max.", "Warning", WebOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_groupNumberTextBoxKeyTyped
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> aljComboBox;
