@@ -691,7 +691,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                     || SMDSdocToGenerate.description.toLowerCase().equals("rejection of fact-finding report")
                     || SMDSdocToGenerate.description.toLowerCase().equals("fact finder appointment serb (discrectionary)")
                     || SMDSdocToGenerate.description.toLowerCase().equals("fact finder appointment serb (discretionary)")
-                    || SMDSdocToGenerate.description.toLowerCase().equals("fact finder extension")) {
+                    || SMDSdocToGenerate.description.toLowerCase().equals("fact finder appointment extension")) {
                 if (!medCaseData.FFSelection.equals("") || !medCaseData.FFReplacement.equals("")) {
                     String factFinderSelectionName = medCaseData.FFReplacement == null
                             ? medCaseData.FFSelection
