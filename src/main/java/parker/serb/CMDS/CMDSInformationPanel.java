@@ -15,6 +15,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.JTextField;
 import parker.serb.Global;
 import parker.serb.sql.CMDSCase;
 import parker.serb.sql.CMDSResult;
@@ -295,7 +296,11 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
             dialog.dispose();
         }
     }
-
+    
+    public boolean groupNumberValidation(){
+        return groupNumberTextBox.getText().trim().length() == 0 || groupNumberTextBox.getText().trim().length() == 8;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -1028,7 +1033,7 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
         if (groupNumberTextBox.getText().length() >= 8) {
             evt.consume();
             groupNumberTextBox.setText(groupNumberTextBox.getText().substring(0, 8));
-            WebOptionPane.showMessageDialog(Global.root, "Group Number is limited to 8 characters max.", "Warning", WebOptionPane.WARNING_MESSAGE);
+            WebOptionPane.showMessageDialog(Global.root, "Group Number is limited to 8 characters only.", "Warning", WebOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_groupNumberTextBoxKeyTyped
 
