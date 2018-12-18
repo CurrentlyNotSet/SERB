@@ -167,7 +167,7 @@ public class CMDSRootPanel extends javax.swing.JPanel {
                         cMDSInformationPanel1.disableUpdate(true);
                         Global.root.getcMDSHeaderPanel1().loadHeaderInformation();
                     } else {
-                        WebOptionPane.showMessageDialog(Global.root, "Group Number is limited to 8 characters only.", "Warning", WebOptionPane.WARNING_MESSAGE);
+                        WebOptionPane.showMessageDialog(Global.root, "Group Number is limited to 8 numbers only.", "Warning", WebOptionPane.WARNING_MESSAGE);
                     }
                 }
                 break;

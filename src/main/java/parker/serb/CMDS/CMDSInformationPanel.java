@@ -14,6 +14,8 @@ import java.awt.event.MouseEvent;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 import parker.serb.Global;
@@ -1030,10 +1032,20 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_groupNumberTextBoxMouseClicked
 
     private void groupNumberTextBoxKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_groupNumberTextBoxKeyTyped
+        Pattern pattern = Pattern.compile("[0-9]");
+        Matcher m = pattern.matcher(String.valueOf(evt.getKeyChar()));
+        
+        if (!m.matches()){
+            evt.consume();
+            WebOptionPane.showMessageDialog(Global.root, 
+                    "<html><center>\""+ String.valueOf(evt.getKeyChar()) + "\" is an invalid character.<br><br>Group Number is limited to numbers only.</center></html>", 
+                    "Warning", WebOptionPane.WARNING_MESSAGE);
+        }
+        
         if (groupNumberTextBox.getText().length() >= 8) {
             evt.consume();
             groupNumberTextBox.setText(groupNumberTextBox.getText().substring(0, 8));
-            WebOptionPane.showMessageDialog(Global.root, "Group Number is limited to 8 characters only.", "Warning", WebOptionPane.WARNING_MESSAGE);
+            WebOptionPane.showMessageDialog(Global.root, "Group Number is limited to a maximum 8 numbers only.", "Warning", WebOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_groupNumberTextBoxKeyTyped
 
