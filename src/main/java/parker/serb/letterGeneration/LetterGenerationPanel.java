@@ -567,10 +567,15 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
 
             int emailID = 0;
             int postalID = 0;
+            
+            if (Global.activeSection.equals("CMDS")){
+                //TODO: Add Dialog for case selection
+            }
 
             if (sendToEmail) {
                 emailID = insertEmail();
                 insertGeneratedAttachementEmail(emailID, docName);
+                //TODO: Add insert for Related Email Cases
             }
 
             if (sendToPostal) {
@@ -588,6 +593,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
 
                         postalID = insertPostal(personTable.getValueAt(i, 0).toString(), org, csc);
                         insertGeneratedAttachementPostal(postalID, docName);
+                        //TODO: Add insert for Related Postal Cases
                         postalIDList.add(postalID);
                     }
                 }

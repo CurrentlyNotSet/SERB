@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package parker.serb.docket;
+package parker.serb.letterQueue;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -21,25 +21,25 @@ import parker.serb.util.NumberFormatService;
  *
  * @author User
  */
-public class CMDSMultiCaseDocketingDialog extends javax.swing.JDialog {
+public class MultiCaseDocketingDialog extends javax.swing.JDialog {
 
-    private final List<CMDSCase> caseList;
     public List<String> selectedCaseList = new ArrayList<>();
     public boolean cancelled = false;
+    private final String caseNumber;
 
     /**
      * Creates new form CMDSStatusTypeAddEditDialog
      * @param parent
      * @param modal
-     * @param caseList
+     * @param caseNumber
      */
-    public CMDSMultiCaseDocketingDialog(java.awt.Dialog parent, boolean modal, List<CMDSCase> caseList) {
+    public MultiCaseDocketingDialog(java.awt.Dialog parent, boolean modal, String caseNumber) {
         super(parent, modal);
         initComponents();
         addRenderer();
         setColumnSize();
-        this.caseList = caseList;
         loadingThread();
+        this.caseNumber = caseNumber;
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }
@@ -59,13 +59,6 @@ public class CMDSMultiCaseDocketingDialog extends javax.swing.JDialog {
         });
     }
 
-    private void loadingThread() {
-        Thread temp = new Thread(() -> {
-                loadTable();
-        });
-        temp.start();
-    }
-    
     private void setColumnSize() {        
         //ID
         SearchTable.getColumnModel().getColumn(0).setMinWidth(0);
@@ -77,19 +70,44 @@ public class CMDSMultiCaseDocketingDialog extends javax.swing.JDialog {
         SearchTable.getColumnModel().getColumn(1).setWidth(60);
         SearchTable.getColumnModel().getColumn(1).setMaxWidth(60);
     }
-
+    
+    private void loadingThread() {
+        Thread temp = new Thread(() -> {
+                gatherRelatedCases();
+                loadTable();
+        });
+        temp.start();
+    }
+    
+    private void gatherRelatedCases(){
+        switch(Global.activeSection) {
+            case "CMDS":
+                //TODO: Gather related Cases
+                break;
+            case "REP":
+            case "ULP":
+            case "Hearings":
+            case "MED":
+            case "ORG":
+            case "Civil Service Commission":
+                break;
+            default:
+                break;
+        }
+    }
+    
     private void loadTable() {
         DefaultTableModel model = (DefaultTableModel) SearchTable.getModel();
         model.setRowCount(0);
-
-        for (CMDSCase item : caseList) {
-            model.addRow(new Object[]{
-                item,
-                true,
-                NumberFormatService.generateFullCaseNumberNonGlobal(item.caseYear, item.caseType, item.caseMonth, item.caseNumber),
-                item.groupNumber
-            });
-        }
+//TODO: Load Case List
+//        for (CMDSCase item : caseList) {
+//            model.addRow(new Object[]{
+//                item,
+//                true,
+//                NumberFormatService.generateFullCaseNumberNonGlobal(item.caseYear, item.caseType, item.caseMonth, item.caseNumber),
+//                item.groupNumber
+//            });
+//        }
     }
 
     private void updateCaseList(){        
