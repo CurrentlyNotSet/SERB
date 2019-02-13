@@ -5,6 +5,7 @@
  */
 package parker.serb.CMDS;
 
+import com.alee.laf.optionpane.WebOptionPane;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
@@ -159,11 +160,15 @@ public class CMDSRootPanel extends javax.swing.JPanel {
                     disableTabs(jTabbedPane1.getSelectedIndex());
                     cMDSInformationPanel1.enableUpdate();
                 } else {
-                    enableTabs();
-                    Global.root.enableTabsAfterSave();
-                    Global.root.enableButtonsAfterCancel();
-                    cMDSInformationPanel1.disableUpdate(true);
-                    Global.root.getcMDSHeaderPanel1().loadHeaderInformation();
+                    if (cMDSInformationPanel1.groupNumberValidation()){
+                        enableTabs();
+                        Global.root.enableTabsAfterSave();
+                        Global.root.enableButtonsAfterCancel();
+                        cMDSInformationPanel1.disableUpdate(true);
+                        Global.root.getcMDSHeaderPanel1().loadHeaderInformation();
+                    } else {
+                        WebOptionPane.showMessageDialog(Global.root, "Group Number is limited to 8 numbers only.", "Warning", WebOptionPane.WARNING_MESSAGE);
+                    }
                 }
                 break;
             case "Notes":
