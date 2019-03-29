@@ -36,7 +36,6 @@ import parker.serb.Global;
 import parker.serb.bookmarkProcessing.generateDocument;
 import parker.serb.bookmarkProcessing.questionsCMDSModel;
 import parker.serb.bookmarkProcessing.questionsCMDSPanel;
-import parker.serb.letterQueue.MultiCaseDocketingDialog;
 import parker.serb.sql.Activity;
 import parker.serb.sql.Audit;
 import parker.serb.sql.CMDSCase;
@@ -573,6 +572,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                 if (!groupNumber.equalsIgnoreCase("")){
                     MultiCaseDocketingDialog multiCaseSelection = new MultiCaseDocketingDialog(this, true, NumberFormatService.generateFullCaseNumber(), groupNumber);
                     relatedCasesList = multiCaseSelection.selectedCaseList;
+                    multiCaseSelection.dispose();
                 }
             }
 

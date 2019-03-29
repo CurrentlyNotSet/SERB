@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package parker.serb.letterQueue;
+package parker.serb.letterGeneration;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -15,9 +15,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import parker.serb.Global;
 import parker.serb.sql.CMDSCase;
-import parker.serb.sql.EmailOutRelatedCase;
-import parker.serb.sql.PostalOutRelatedCase;
-import parker.serb.util.NumberFormatService;
 
 /**
  *
@@ -27,8 +24,6 @@ public class MultiCaseDocketingDialog extends javax.swing.JDialog {
 
     public List<String> selectedCaseList = new ArrayList<>();
     public boolean cancelled = false;
-    private final String originLocation;
-    private final int databaseID;
     private final String caseNumber;
 
     /**
@@ -37,15 +32,11 @@ public class MultiCaseDocketingDialog extends javax.swing.JDialog {
      * @param modal
      * @param caseNumber
      * @param groupNumber
-     * @param originLocation
-     * @param databaseID
      */
-    public MultiCaseDocketingDialog(java.awt.Dialog parent, boolean modal, String caseNumber, String groupNumber, String originLocation, int databaseID) {
+    public MultiCaseDocketingDialog(java.awt.Dialog parent, boolean modal, String caseNumber, String groupNumber) {
         super(parent, modal);
         initComponents();
         this.caseNumber = caseNumber;
-        this.originLocation = originLocation;
-        this.databaseID = databaseID;
         referenceCaseLabel.setText("CURRENT CASE: " + caseNumber + "  |  GROUP NUMBER: " + groupNumber);
         addRenderer();
         setColumnSize();
@@ -84,8 +75,7 @@ public class MultiCaseDocketingDialog extends javax.swing.JDialog {
     private void loadingThread() {
         Thread temp = new Thread(() -> {
                 List caseList = gatherRelatedCases();
-                List relatedOutList = gatherRelatedDocketCases();
-                loadTable(caseList, relatedOutList);
+                loadTable(caseList);
         });
         temp.start();
     }
@@ -110,58 +100,14 @@ public class MultiCaseDocketingDialog extends javax.swing.JDialog {
         return caseList;
     }
     
-    private List gatherRelatedDocketCases(){
-        List relatedOutList = null;
-        
-        switch(originLocation) {
-            case "postalOut":
-                relatedOutList = PostalOutRelatedCase.getPostalOutRelatedCaseByID(databaseID);
-                break;
-            case "emailOut":
-                relatedOutList = EmailOutRelatedCase.getEmailOutRelatedCaseByID(databaseID);
-                break;
-            default:
-                break;
-        }
-        return relatedOutList;
-    }
-    
-    private void loadTable(List caseList, List relatedOutList) {
+    private void loadTable(List caseList) {
         DefaultTableModel model = (DefaultTableModel) SearchTable.getModel();
         model.setRowCount(0);
         for (Object item : caseList) {
-            boolean exists = false;            
-            
-            if (caseNumber.equalsIgnoreCase(item.toString())) {
-                //DONT ADD PRIMARY CASE to related list
-            } else {
-                
-
-                for (Object itemTwo : relatedOutList) {
-                    String relatedCaseNumber = "";
-
-                    switch (originLocation) {
-                        case "postalOut":
-                            PostalOutRelatedCase docketPCase = (PostalOutRelatedCase) itemTwo;
-                            relatedCaseNumber = NumberFormatService.generateFullCaseNumberNonGlobal(docketPCase.caseYear, docketPCase.caseType, docketPCase.caseMonth, docketPCase.caseNumber);
-                            break;
-                        case "emailOut":
-                            EmailOutRelatedCase docketECase = (EmailOutRelatedCase) itemTwo;
-                            relatedCaseNumber = NumberFormatService.generateFullCaseNumberNonGlobal(docketECase.caseYear, docketECase.caseType, docketECase.caseMonth, docketECase.caseNumber);
-                            break;
-                        default:
-                            break;
-                    }
-
-                    if (relatedCaseNumber.equalsIgnoreCase(item.toString())) {
-                        exists = true;
-                        break;
-                    }
-                }
-
+            if (!caseNumber.equalsIgnoreCase(item.toString())){
                 model.addRow(new Object[]{
                     item,
-                    exists,
+                    true,
                     item.toString()
                 });
             }
@@ -171,9 +117,7 @@ public class MultiCaseDocketingDialog extends javax.swing.JDialog {
     private void updateCaseList(){        
         for (int i = 0; i < SearchTable.getRowCount(); i++) {
             if (SearchTable.getValueAt(i, 1).toString().equals("true")){
-                //TODO: Insert to DB
-            } else if (SearchTable.getValueAt(i, 1).toString().equals("false")){
-                //TODO: Delete from DB
+                selectedCaseList.add(SearchTable.getValueAt(i, 2).toString());
             }
         }
     }
@@ -190,7 +134,7 @@ public class MultiCaseDocketingDialog extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         SearchTable = new javax.swing.JTable();
-        SaveButton = new javax.swing.JButton();
+        DocketButton = new javax.swing.JButton();
         CloseButton = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -233,10 +177,10 @@ public class MultiCaseDocketingDialog extends javax.swing.JDialog {
             SearchTable.getColumnModel().getColumn(2).setResizable(false);
         }
 
-        SaveButton.setText("Save");
-        SaveButton.addActionListener(new java.awt.event.ActionListener() {
+        DocketButton.setText("Docket");
+        DocketButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SaveButtonActionPerformed(evt);
+                DocketButtonActionPerformed(evt);
             }
         });
 
@@ -268,7 +212,7 @@ public class MultiCaseDocketingDialog extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(CloseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(SaveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(DocketButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(referenceCaseLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -289,17 +233,17 @@ public class MultiCaseDocketingDialog extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(CloseButton)
-                    .addComponent(SaveButton))
+                    .addComponent(DocketButton))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void SaveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SaveButtonActionPerformed
+    private void DocketButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DocketButtonActionPerformed
         updateCaseList();
         this.setVisible(false);
-    }//GEN-LAST:event_SaveButtonActionPerformed
+    }//GEN-LAST:event_DocketButtonActionPerformed
 
     private void CloseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CloseButtonActionPerformed
         cancelled = true;
@@ -308,7 +252,7 @@ public class MultiCaseDocketingDialog extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CloseButton;
-    private javax.swing.JButton SaveButton;
+    private javax.swing.JButton DocketButton;
     private javax.swing.JTable SearchTable;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

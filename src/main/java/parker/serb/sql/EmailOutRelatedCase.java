@@ -7,8 +7,11 @@ package parker.serb.sql;
 
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.dbutils.DbUtils;
 import parker.serb.util.SlackNotification;
 
@@ -50,6 +53,42 @@ public class EmailOutRelatedCase {
         } finally {
             DbUtils.closeQuietly(stmt);
         }
+    }
+    
+    public static List<EmailOutRelatedCase> getEmailOutRelatedCaseByID(int emailOutRelatedID) {
+        List<EmailOutRelatedCase> list = new ArrayList<>();
+
+        Statement stmt = null;
+        
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT * FROM EmailOutRelatedCase WHERE emailOutId = ?";
+
+            PreparedStatement ps = stmt.getConnection().prepareStatement(sql);
+            ps.setInt(1, emailOutRelatedID);
+
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                EmailOutRelatedCase item = new EmailOutRelatedCase();
+                item.id = rs.getInt("id");
+                item.emailOutId = rs.getInt("emailOutId");
+                item.caseYear = rs.getString("caseYear") == null ? "" : rs.getString("caseYear");
+                item.caseType = rs.getString("caseType") == null ? "" : rs.getString("caseType");
+                item.caseMonth = rs.getString("caseMonth") == null ? "" : rs.getString("caseMonth");
+                item.caseNumber = rs.getString("caseNumber") == null ? "" : rs.getString("caseNumber");
+                list.add(item);
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getEmailOutRelatedCaseByID(emailOutRelatedID);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return list;
     }
     
 }

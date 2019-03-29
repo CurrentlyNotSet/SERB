@@ -7,8 +7,11 @@ package parker.serb.sql;
 
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.dbutils.DbUtils;
 import parker.serb.util.SlackNotification;
 
@@ -52,9 +55,40 @@ public class PostalOutRelatedCase {
         }
     }
     
-    
-    
-    
-    
+    public static List<PostalOutRelatedCase> getPostalOutRelatedCaseByID(int postalOutID) {
+        List<PostalOutRelatedCase> list = new ArrayList<>();
+
+        Statement stmt = null;
+        
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT * FROM PostalOutRelatedCase WHERE postalOutId = ?";
+
+            PreparedStatement ps = stmt.getConnection().prepareStatement(sql);
+            ps.setInt(1, postalOutID);
+
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                PostalOutRelatedCase item = new PostalOutRelatedCase();
+                item.id = rs.getInt("id");
+                item.postalOutId = rs.getInt("postalOutId");
+                item.caseYear = rs.getString("caseYear") == null ? "" : rs.getString("caseYear");
+                item.caseType = rs.getString("caseType") == null ? "" : rs.getString("caseType");
+                item.caseMonth = rs.getString("caseMonth") == null ? "" : rs.getString("caseMonth");
+                item.caseNumber = rs.getString("caseNumber") == null ? "" : rs.getString("caseNumber");
+                list.add(item);
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                getPostalOutRelatedCaseByID(postalOutID);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return list;
+    }
     
 }
