@@ -84,7 +84,8 @@ public class MultiCaseDocketingDialog extends javax.swing.JDialog {
     }
 
     private void loadingThread() {
-        Thread temp = new Thread(() -> {
+        jLayeredPane1.moveToFront(loadingPane);
+        Thread temp = new Thread(() -> {    
             List caseList = gatherRelatedCases();
             List relatedOutList = gatherRelatedDocketCases();
             loadTable(caseList, relatedOutList);
@@ -141,14 +142,17 @@ public class MultiCaseDocketingDialog extends javax.swing.JDialog {
                 //NOTHING TO DO: DONT ADD PRIMARY CASE to related list
             } else {
                 
-                //Each Lopp reset variables
+                //Each Loop reset variables
                 boolean exists = false;
                 int relatedKeyID = 0;
+                String relatedCaseNumber = "";
                 
                 
                 //Check for related case
                 for (Object itemTwo : relatedOutList) {
-                    String relatedCaseNumber = "";
+                    exists = false;
+                    relatedKeyID = 0;
+                    relatedCaseNumber = "";
 
                     if (originLocation.equals("postalOut")) {
                         PostalOutRelatedCase docketPCase = (PostalOutRelatedCase) itemTwo;
@@ -188,6 +192,9 @@ public class MultiCaseDocketingDialog extends javax.swing.JDialog {
                 });
             }
         }
+        
+        jLayeredPane1.moveToBack(loadingPane);
+        loadingPane.setVisible(false);
     }
     
     
@@ -253,19 +260,47 @@ public class MultiCaseDocketingDialog extends javax.swing.JDialog {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        SearchTable = new javax.swing.JTable();
         SaveButton = new javax.swing.JButton();
         CloseButton = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         referenceCaseLabel = new javax.swing.JLabel();
+        jLayeredPane1 = new javax.swing.JLayeredPane();
+        tablePane = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        SearchTable = new javax.swing.JTable();
+        loadingPane = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Multi Case Docketing");
+
+        SaveButton.setText("Save");
+        SaveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SaveButtonActionPerformed(evt);
+            }
+        });
+
+        CloseButton.setText("Close");
+        CloseButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CloseButtonActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("Please uncheck any additional cases you do");
+
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("NOT want these outgoing documents to be docketed to");
+
+        referenceCaseLabel.setText("CURRENT CASE:  <CASENUMBER>  GROUP: <GROUPNUMBER>");
+
+        jLayeredPane1.setLayout(new javax.swing.OverlayLayout(jLayeredPane1));
 
         SearchTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -298,44 +333,52 @@ public class MultiCaseDocketingDialog extends javax.swing.JDialog {
             SearchTable.getColumnModel().getColumn(2).setResizable(false);
         }
 
-        SaveButton.setText("Save");
-        SaveButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SaveButtonActionPerformed(evt);
-            }
-        });
+        javax.swing.GroupLayout tablePaneLayout = new javax.swing.GroupLayout(tablePane);
+        tablePane.setLayout(tablePaneLayout);
+        tablePaneLayout.setHorizontalGroup(
+            tablePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
+        );
+        tablePaneLayout.setVerticalGroup(
+            tablePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 418, Short.MAX_VALUE)
+        );
 
-        CloseButton.setText("Close");
-        CloseButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CloseButtonActionPerformed(evt);
-            }
-        });
+        jLayeredPane1.add(tablePane);
 
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Please uncheck any additional cases you do");
+        jLabel6.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/loading_spinner.gif"))); // NOI18N
 
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("NOT want these outgoing documents to be docketed to");
+        javax.swing.GroupLayout loadingPaneLayout = new javax.swing.GroupLayout(loadingPane);
+        loadingPane.setLayout(loadingPaneLayout);
+        loadingPaneLayout.setHorizontalGroup(
+            loadingPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
+        );
+        loadingPaneLayout.setVerticalGroup(
+            loadingPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 418, Short.MAX_VALUE)
+        );
 
-        referenceCaseLabel.setText("CURRENT CASE:  <CASENUMBER>  GROUP: <GROUPNUMBER>");
+        jLayeredPane1.add(loadingPane);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(CloseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(SaveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(referenceCaseLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(referenceCaseLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -349,8 +392,8 @@ public class MultiCaseDocketingDialog extends javax.swing.JDialog {
                 .addComponent(jLabel3)
                 .addGap(26, 26, 26)
                 .addComponent(referenceCaseLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 509, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jLayeredPane1)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(CloseButton)
@@ -378,7 +421,11 @@ public class MultiCaseDocketingDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPanel loadingPane;
     private javax.swing.JLabel referenceCaseLabel;
+    private javax.swing.JPanel tablePane;
     // End of variables declaration//GEN-END:variables
 }
