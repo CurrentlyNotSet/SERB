@@ -91,4 +91,27 @@ public class EmailOutRelatedCase {
         return list;
     }
     
+    public static void deleteEmailOutRelatedCaseByID(int id) {
+        Statement stmt = null;
+        
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Delete from EmailOutRelatedCase where id = ?";
+            
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+
+            preparedStatement.executeUpdate();
+            
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                deleteEmailOutRelatedCaseByID(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+    }
+    
 }

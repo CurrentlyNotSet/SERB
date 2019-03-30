@@ -91,4 +91,27 @@ public class PostalOutRelatedCase {
         return list;
     }
     
+    public static void deletePostalOutRelatedCaseByID(int id) {
+        Statement stmt = null;
+        
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Delete from PostalOutRelatedCase where id = ?";
+            
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+
+            preparedStatement.executeUpdate();
+            
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                deletePostalOutRelatedCaseByID(id);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+    }
+    
 }

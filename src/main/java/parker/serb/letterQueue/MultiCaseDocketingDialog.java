@@ -28,24 +28,25 @@ public class MultiCaseDocketingDialog extends javax.swing.JDialog {
     public List<String> selectedCaseList = new ArrayList<>();
     public boolean cancelled = false;
     private final String originLocation;
-    private final int databaseID;
+    private final int queueDatabaseID;
     private final String caseNumber;
 
     /**
      * Creates new form MultiCaseDocketingDialog
+     *
      * @param parent
      * @param modal
      * @param caseNumber
      * @param groupNumber
      * @param originLocation
-     * @param databaseID
+     * @param queueDatabaseID
      */
-    public MultiCaseDocketingDialog(java.awt.Dialog parent, boolean modal, String caseNumber, String groupNumber, String originLocation, int databaseID) {
+    public MultiCaseDocketingDialog(java.awt.Dialog parent, boolean modal, String caseNumber, String groupNumber, String originLocation, int queueDatabaseID) {
         super(parent, modal);
         initComponents();
         this.caseNumber = caseNumber;
         this.originLocation = originLocation;
-        this.databaseID = databaseID;
+        this.queueDatabaseID = queueDatabaseID;
         referenceCaseLabel.setText("CURRENT CASE: " + caseNumber + "  |  GROUP NUMBER: " + groupNumber);
         addRenderer();
         setColumnSize();
@@ -53,10 +54,11 @@ public class MultiCaseDocketingDialog extends javax.swing.JDialog {
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }
-    
+
     private void addRenderer() {
-        SearchTable.setDefaultRenderer(Object.class, new TableCellRenderer(){
-            private final DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
+        SearchTable.setDefaultRenderer(Object.class, new TableCellRenderer() {
+            private final DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
+
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                 Component c = DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
@@ -69,31 +71,31 @@ public class MultiCaseDocketingDialog extends javax.swing.JDialog {
         });
     }
 
-    private void setColumnSize() {        
+    private void setColumnSize() {
         //ID
-        SearchTable.getColumnModel().getColumn(0).setMinWidth(0);
-        SearchTable.getColumnModel().getColumn(0).setPreferredWidth(0);
-        SearchTable.getColumnModel().getColumn(0).setMaxWidth(0);
-        
+//        SearchTable.getColumnModel().getColumn(0).setMinWidth(0);
+//        SearchTable.getColumnModel().getColumn(0).setPreferredWidth(0);
+//        SearchTable.getColumnModel().getColumn(0).setMaxWidth(0);
+
         //Active (Yes/No)
         SearchTable.getColumnModel().getColumn(1).setMinWidth(60);
         SearchTable.getColumnModel().getColumn(1).setWidth(60);
         SearchTable.getColumnModel().getColumn(1).setMaxWidth(60);
     }
-    
+
     private void loadingThread() {
         Thread temp = new Thread(() -> {
-                List caseList = gatherRelatedCases();
-                List relatedOutList = gatherRelatedDocketCases();
-                loadTable(caseList, relatedOutList);
+            List caseList = gatherRelatedCases();
+            List relatedOutList = gatherRelatedDocketCases();
+            loadTable(caseList, relatedOutList);
         });
         temp.start();
     }
-    
-    private List gatherRelatedCases(){
+
+    private List gatherRelatedCases() {
         List caseList = null;
-        
-        switch(Global.activeSection) {
+
+        switch (Global.activeSection) {
             case "CMDS":
                 caseList = CMDSCase.getGroupNumberList(caseNumber);
                 break;
@@ -109,50 +111,70 @@ public class MultiCaseDocketingDialog extends javax.swing.JDialog {
         }
         return caseList;
     }
-    
-    private List gatherRelatedDocketCases(){
+
+    private List gatherRelatedDocketCases() {
         List relatedOutList = null;
-        
-        switch(originLocation) {
+
+        switch (originLocation) {
             case "postalOut":
-                relatedOutList = PostalOutRelatedCase.getPostalOutRelatedCaseByID(databaseID);
+                relatedOutList = PostalOutRelatedCase.getPostalOutRelatedCaseByID(queueDatabaseID);
                 break;
             case "emailOut":
-                relatedOutList = EmailOutRelatedCase.getEmailOutRelatedCaseByID(databaseID);
+                relatedOutList = EmailOutRelatedCase.getEmailOutRelatedCaseByID(queueDatabaseID);
                 break;
             default:
                 break;
         }
         return relatedOutList;
     }
-    
-    private void loadTable(List caseList, List relatedOutList) {
+
+    private void loadTable(List groupedCaseList, List relatedOutList) {
         DefaultTableModel model = (DefaultTableModel) SearchTable.getModel();
         model.setRowCount(0);
-        for (Object item : caseList) {
-            boolean exists = false;            
-            
+        
+        
+        
+        //loop through entire case grouping
+        for (Object item : groupedCaseList) {
+            //skip over primary case
             if (caseNumber.equalsIgnoreCase(item.toString())) {
-                //DONT ADD PRIMARY CASE to related list
+                //NOTHING TO DO: DONT ADD PRIMARY CASE to related list
             } else {
                 
-
+                //Each Lopp reset variables
+                boolean exists = false;
+                int relatedKeyID = 0;
+                
+                
+                //Check for related case
                 for (Object itemTwo : relatedOutList) {
                     String relatedCaseNumber = "";
 
-                    switch (originLocation) {
-                        case "postalOut":
-                            PostalOutRelatedCase docketPCase = (PostalOutRelatedCase) itemTwo;
-                            relatedCaseNumber = NumberFormatService.generateFullCaseNumberNonGlobal(docketPCase.caseYear, docketPCase.caseType, docketPCase.caseMonth, docketPCase.caseNumber);
-                            break;
-                        case "emailOut":
-                            EmailOutRelatedCase docketECase = (EmailOutRelatedCase) itemTwo;
-                            relatedCaseNumber = NumberFormatService.generateFullCaseNumberNonGlobal(docketECase.caseYear, docketECase.caseType, docketECase.caseMonth, docketECase.caseNumber);
-                            break;
-                        default:
-                            break;
+                    if (originLocation.equals("postalOut")) {
+                        PostalOutRelatedCase docketPCase = (PostalOutRelatedCase) itemTwo;
+                        relatedKeyID = docketPCase.id;
+                        relatedCaseNumber = NumberFormatService.generateFullCaseNumberNonGlobal(docketPCase.caseYear, docketPCase.caseType, docketPCase.caseMonth, docketPCase.caseNumber);
+                    } else if (originLocation.equals("emailOut")) {
+                        EmailOutRelatedCase docketECase = (EmailOutRelatedCase) itemTwo;
+                        relatedKeyID = docketECase.id;
+                        relatedCaseNumber = NumberFormatService.generateFullCaseNumberNonGlobal(docketECase.caseYear, docketECase.caseType, docketECase.caseMonth, docketECase.caseNumber);
                     }
 
+
+//                    switch (originLocation) {
+//                        case "postalOut":
+//                            PostalOutRelatedCase docketPCase = (PostalOutRelatedCase) itemTwo;
+//                            relatedKeyID = docketPCase.id;
+//                            relatedCaseNumber = NumberFormatService.generateFullCaseNumberNonGlobal(docketPCase.caseYear, docketPCase.caseType, docketPCase.caseMonth, docketPCase.caseNumber);
+//                            break;
+//                        case "emailOut":
+//                            EmailOutRelatedCase docketECase = (EmailOutRelatedCase) itemTwo;
+//                            relatedKeyID = docketECase.id;
+//                            relatedCaseNumber = NumberFormatService.generateFullCaseNumberNonGlobal(docketECase.caseYear, docketECase.caseType, docketECase.caseMonth, docketECase.caseNumber);
+//                            break;
+//                        default:
+//                            break;
+//                    }
                     if (relatedCaseNumber.equalsIgnoreCase(item.toString())) {
                         exists = true;
                         break;
@@ -160,24 +182,67 @@ public class MultiCaseDocketingDialog extends javax.swing.JDialog {
                 }
 
                 model.addRow(new Object[]{
-                    item,
+                    relatedKeyID,
                     exists,
                     item.toString()
                 });
             }
         }
     }
+    
+    
+    private void addItem(){
+        
+    }
+    
+    
 
-    private void updateCaseList(){        
+    private void updateCaseList() {
         for (int i = 0; i < SearchTable.getRowCount(); i++) {
-            if (SearchTable.getValueAt(i, 1).toString().equals("true")){
-                //TODO: Insert to DB
-            } else if (SearchTable.getValueAt(i, 1).toString().equals("false")){
-                //TODO: Delete from DB
+            int dbKey = (int) SearchTable.getValueAt(i, 0);
+
+            if (SearchTable.getValueAt(i, 1).toString().equals("true") && dbKey == 0) {
+                NumberFormatService num = NumberFormatService.parseFullCaseNumberNoNGlobal(SearchTable.getValueAt(i, 2).toString());
+                
+                switch (originLocation) {
+                    case "postalOut":
+                        PostalOutRelatedCase postalRelatedModel = new PostalOutRelatedCase();
+                        postalRelatedModel.postalOutId = queueDatabaseID;
+                        postalRelatedModel.caseYear = num.caseYear;
+                        postalRelatedModel.caseType = num.caseType;
+                        postalRelatedModel.caseMonth = num.caseMonth;
+                        postalRelatedModel.caseNumber = num.caseNumber;
+                        
+                        PostalOutRelatedCase.insertPostalOutRelatedCase(postalRelatedModel);
+                        break;
+                    case "emailOut":
+                        EmailOutRelatedCase emailRelatedModel = new EmailOutRelatedCase();
+                        emailRelatedModel.emailOutId = queueDatabaseID;
+                        emailRelatedModel.caseYear = num.caseYear;
+                        emailRelatedModel.caseType = num.caseType;
+                        emailRelatedModel.caseMonth = num.caseMonth;
+                        emailRelatedModel.caseNumber = num.caseNumber;
+                        
+                        EmailOutRelatedCase.insertEmailOutRelatedCase(emailRelatedModel);
+                        break;
+                    default:
+                        break;
+                }
+            } else if (SearchTable.getValueAt(i, 1).toString().equals("false") && dbKey > 0){
+                switch (originLocation) {
+                    case "postalOut":
+                        PostalOutRelatedCase.deletePostalOutRelatedCaseByID(dbKey);
+                        break;
+                    case "emailOut":
+                        EmailOutRelatedCase.deleteEmailOutRelatedCaseByID(dbKey);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
