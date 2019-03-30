@@ -738,5 +738,27 @@ public class FileService {
         }
         return section;
     }
+    
+    
+    public static String getCaseFolderORGCSCLocationNonGlobal(String caseNumber) {
+        NumberFormatService num = NumberFormatService.parseFullCaseNumberNoNGlobal(caseNumber);
+        
+        String casePath = Global.activityPath
+                + File.separatorChar + num.caseType.toUpperCase()
+                + File.separatorChar + caseNumber
+                + File.separatorChar;
+        return casePath;
+    }
+    
+    public static String getCaseFolderLocationNonGlobal(String caseNumber) {
+        NumberFormatService num = NumberFormatService.parseFullCaseNumberNoNGlobal(caseNumber);
+        
+        String casePath = Global.activityPath
+                + File.separatorChar + CaseType.getSectionFromCaseType(num.caseType)
+                + File.separatorChar + num.caseYear
+                + File.separatorChar + caseNumber
+                + File.separatorChar;
+        return casePath;
+    }
 
 }

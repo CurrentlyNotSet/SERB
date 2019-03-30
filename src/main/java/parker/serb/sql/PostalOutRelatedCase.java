@@ -97,7 +97,7 @@ public class PostalOutRelatedCase {
         try {
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "Delete from PostalOutRelatedCase where id = ?";
+            String sql = "DELETE FROM PostalOutRelatedCase WHERE postalOutId = ?";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setInt(1, id);
