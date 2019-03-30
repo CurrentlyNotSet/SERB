@@ -73,9 +73,9 @@ public class MultiCaseDocketingDialog extends javax.swing.JDialog {
 
     private void setColumnSize() {
         //ID
-//        SearchTable.getColumnModel().getColumn(0).setMinWidth(0);
-//        SearchTable.getColumnModel().getColumn(0).setPreferredWidth(0);
-//        SearchTable.getColumnModel().getColumn(0).setMaxWidth(0);
+        SearchTable.getColumnModel().getColumn(0).setMinWidth(0);
+        SearchTable.getColumnModel().getColumn(0).setPreferredWidth(0);
+        SearchTable.getColumnModel().getColumn(0).setMaxWidth(0);
 
         //Active (Yes/No)
         SearchTable.getColumnModel().getColumn(1).setMinWidth(60);
@@ -132,59 +132,41 @@ public class MultiCaseDocketingDialog extends javax.swing.JDialog {
     private void loadTable(List groupedCaseList, List relatedOutList) {
         DefaultTableModel model = (DefaultTableModel) SearchTable.getModel();
         model.setRowCount(0);
-        
-        
-        
+
         //loop through entire case grouping
         for (Object item : groupedCaseList) {
+            //Each Loop reset variables
+            boolean exists = false;
+            int relatedKeyID = 0;
+            String relatedCaseNumber = "";
+
             //skip over primary case
             if (caseNumber.equalsIgnoreCase(item.toString())) {
                 //NOTHING TO DO: DONT ADD PRIMARY CASE to related list
             } else {
-                
-                //Each Loop reset variables
-                boolean exists = false;
-                int relatedKeyID = 0;
-                String relatedCaseNumber = "";
-                
-                
                 //Check for related case
                 for (Object itemTwo : relatedOutList) {
-                    exists = false;
-                    relatedKeyID = 0;
-                    relatedCaseNumber = "";
+                    int dbKey = 0;
 
+                    //Verify Origin Location to get data
                     if (originLocation.equals("postalOut")) {
                         PostalOutRelatedCase docketPCase = (PostalOutRelatedCase) itemTwo;
-                        relatedKeyID = docketPCase.id;
+                        dbKey = docketPCase.id;
                         relatedCaseNumber = NumberFormatService.generateFullCaseNumberNonGlobal(docketPCase.caseYear, docketPCase.caseType, docketPCase.caseMonth, docketPCase.caseNumber);
                     } else if (originLocation.equals("emailOut")) {
                         EmailOutRelatedCase docketECase = (EmailOutRelatedCase) itemTwo;
-                        relatedKeyID = docketECase.id;
+                        dbKey = docketECase.id;
                         relatedCaseNumber = NumberFormatService.generateFullCaseNumberNonGlobal(docketECase.caseYear, docketECase.caseType, docketECase.caseMonth, docketECase.caseNumber);
                     }
 
-
-//                    switch (originLocation) {
-//                        case "postalOut":
-//                            PostalOutRelatedCase docketPCase = (PostalOutRelatedCase) itemTwo;
-//                            relatedKeyID = docketPCase.id;
-//                            relatedCaseNumber = NumberFormatService.generateFullCaseNumberNonGlobal(docketPCase.caseYear, docketPCase.caseType, docketPCase.caseMonth, docketPCase.caseNumber);
-//                            break;
-//                        case "emailOut":
-//                            EmailOutRelatedCase docketECase = (EmailOutRelatedCase) itemTwo;
-//                            relatedKeyID = docketECase.id;
-//                            relatedCaseNumber = NumberFormatService.generateFullCaseNumberNonGlobal(docketECase.caseYear, docketECase.caseType, docketECase.caseMonth, docketECase.caseNumber);
-//                            break;
-//                        default:
-//                            break;
-//                    }
+                    //Check if case is in list
                     if (relatedCaseNumber.equalsIgnoreCase(item.toString())) {
                         exists = true;
+                        relatedKeyID = dbKey;
                         break;
                     }
                 }
-
+                //Add Item to Table.                
                 model.addRow(new Object[]{
                     relatedKeyID,
                     exists,
@@ -192,17 +174,10 @@ public class MultiCaseDocketingDialog extends javax.swing.JDialog {
                 });
             }
         }
-        
+
         jLayeredPane1.moveToBack(loadingPane);
         loadingPane.setVisible(false);
     }
-    
-    
-    private void addItem(){
-        
-    }
-    
-    
 
     private void updateCaseList() {
         for (int i = 0; i < SearchTable.getRowCount(); i++) {
