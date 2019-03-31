@@ -34,8 +34,6 @@ import parker.serb.sql.REPCaseSearchData;
 import parker.serb.sql.ULPCaseSearchData;
 import parker.serb.util.SlackNotification;
 
-//TODO: Implement duplicate party catch
-
 /**
  *
  * @author parker

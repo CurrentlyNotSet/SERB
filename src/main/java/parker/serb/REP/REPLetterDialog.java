@@ -5,7 +5,6 @@
  */
 package parker.serb.REP;
 
-//TODO: Load all of the letter types
 import com.alee.laf.optionpane.WebOptionPane;
 import java.awt.event.ItemEvent;
 import java.io.File;

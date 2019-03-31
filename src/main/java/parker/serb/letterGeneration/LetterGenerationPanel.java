@@ -565,8 +565,9 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
 
             int emailID = 0;
             int postalID = 0;
+            
+            //CMDS Related Case Information (R3-091)
             List<String> relatedCasesList = new ArrayList<>();
-
             if (Global.activeSection.equals("CMDS")) {
                 String groupNumber = CMDSCase.getGroupNumber();
                 if (!groupNumber.equalsIgnoreCase("")){
