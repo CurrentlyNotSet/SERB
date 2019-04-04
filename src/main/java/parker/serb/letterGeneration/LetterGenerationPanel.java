@@ -570,12 +570,12 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
             List<String> relatedCasesList = new ArrayList<>();
             if (Global.activeSection.equals("CMDS")) {
                 String groupNumber = CMDSCase.getGroupNumber();
-                if (groupNumber != null){
-                    if (!groupNumber.equalsIgnoreCase("")){
-                    MultiCaseDocketingDialog multiCaseSelection = new MultiCaseDocketingDialog(this, true, NumberFormatService.generateFullCaseNumber(), groupNumber);
-                    relatedCasesList = multiCaseSelection.selectedCaseList;
-                    multiCaseSelection.dispose();
-                }
+                if (groupNumber != null) {
+                    if (!groupNumber.equalsIgnoreCase("")) {
+                        MultiCaseDocketingDialog multiCaseSelection = new MultiCaseDocketingDialog(this, true, NumberFormatService.generateFullCaseNumber(), groupNumber);
+                        relatedCasesList = multiCaseSelection.selectedCaseList;
+                        multiCaseSelection.dispose();
+                    }
                 }
             }
 
