@@ -164,14 +164,14 @@ public class postalSend {
                 || Global.activeSection.equalsIgnoreCase("CSC")
                 || Global.activeSection.equalsIgnoreCase("ORG")) {
             Activity.addActivtySendPostalORGCSC(
-                    "OUT - " + postalEntry.historyDescription,
+                    "OUT - " + postalEntry.historyDescription + " - " + postalEntry.person,
                     savedDoc,
                     postalEntry.caseType,
                     postalEntry.caseNumber,
                     "", "", "", "", false, false);
         } else {
             Activity.addActivtySendPostal(
-                    "OUT - " + postalEntry.historyDescription,
+                    "OUT - " + postalEntry.historyDescription + " - " + postalEntry.person,
                     savedDoc,
                     NumberFormatService.generateFullCaseNumberNonGlobal(
                             postalEntry.caseYear, postalEntry.caseType, postalEntry.caseMonth, postalEntry.caseNumber).split("-"),
@@ -201,7 +201,7 @@ public class postalSend {
 
                     //Add Related Case Activity Entry
                     Activity.addActivtySendPostal(
-                    "OUT - " + postalEntry.historyDescription,
+                    "OUT - " + postalEntry.historyDescription + " - " + postalEntry.person,
                     savedDoc,
                     caseNumber.split("-"),
                     "", "", "", "", false, false);
@@ -232,14 +232,14 @@ public class postalSend {
                             || Global.activeSection.equalsIgnoreCase("CSC")
                             || Global.activeSection.equalsIgnoreCase("ORG")) {
                         Activity.addActivtySendPostalORGCSC(
-                                "OUT - " + postalEntry.historyDescription,
+                                "OUT - " + postalEntry.historyDescription + " - " + postalEntry.person,
                                 savedDoc,
                                 postalEntry.caseType,
                                 postalEntry.caseNumber,
                                 "", "", "", "", false, false);
                     } else {
                         Activity.addActivtySendPostal(
-                                "OUT - " + postalEntry.historyDescription,
+                                "OUT - " + postalEntry.historyDescription + " - " + postalEntry.person,
                                 savedDoc,
                                 caseNumber.split("-"),
                                 "", "", "", "", false, false);
