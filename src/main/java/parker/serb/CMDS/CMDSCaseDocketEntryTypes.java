@@ -407,7 +407,7 @@ public class CMDSCaseDocketEntryTypes {
         CMDSAppealsCourtDialog court = new CMDSAppealsCourtDialog(d.dialog, true);
 
         String activity = d.direction + " - " + d.entryDescription;
-        activity += (court.getSelection() == null ? "" : " - Appealed d.to " + court.getSelection());
+        activity += (court.getSelection() == null ? "" : " - Appealed to " + court.getSelection());
         activity += (court.getCaseNumber().equals("") ? "" : " - Case Number " + court.getCaseNumber());
 
         for (String cmdsCaseNumber : d.caseNumbers) {

@@ -1032,9 +1032,9 @@ public class CMDSInformationPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_groupNumberTextBoxMouseClicked
 
     private void groupNumberTextBoxKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_groupNumberTextBoxKeyTyped
-        Pattern pattern = Pattern.compile("[0-9]");
+        Pattern pattern = Pattern.compile("[0-9\\S]");
         Matcher m = pattern.matcher(String.valueOf(evt.getKeyChar()));
-        
+                
         if (!m.matches()){
             evt.consume();
             WebOptionPane.showMessageDialog(Global.root, 
