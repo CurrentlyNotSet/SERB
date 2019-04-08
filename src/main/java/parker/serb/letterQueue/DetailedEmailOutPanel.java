@@ -13,10 +13,12 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 import parker.serb.Global;
+import parker.serb.sql.CMDSCase;
 import parker.serb.sql.EmailOut;
 import parker.serb.sql.EmailOutAttachment;
 import parker.serb.util.ClearDateDialog;
 import parker.serb.util.FileService;
+import parker.serb.util.NumberFormatService;
 
 /**
  *
@@ -26,6 +28,7 @@ public class DetailedEmailOutPanel extends javax.swing.JDialog {
 
     int emailID;
     EmailOut eml;
+    String groupNumber;
 
     public DetailedEmailOutPanel(java.awt.Frame parent, boolean modal, int id) {
         super(parent, modal);
@@ -37,6 +40,7 @@ public class DetailedEmailOutPanel extends javax.swing.JDialog {
 
     private void loadPanel(int id) {
         emailID = id;
+        relatedCasesButton.setVisible(false);
         setColumnWidth();
         loadInfo();
         loadAttachments();
@@ -44,6 +48,8 @@ public class DetailedEmailOutPanel extends javax.swing.JDialog {
 
     private void loadInfo() {
         eml = EmailOut.getEmailByID(emailID);
+        
+        setRelatedCaseButton();
 
         toTextBox.setText(eml.to);
         fromTextBox.setText(eml.from);
@@ -61,6 +67,31 @@ public class DetailedEmailOutPanel extends javax.swing.JDialog {
         jTable1.getColumnModel().getColumn(0).setMinWidth(0);
         jTable1.getColumnModel().getColumn(0).setPreferredWidth(0);
         jTable1.getColumnModel().getColumn(0).setMaxWidth(0);
+    }
+    
+    private void setRelatedCaseButton(){
+        switch(Global.activeSection) {
+            case "CMDS":
+                cmdsDisplayLogic();
+                break;
+            case "REP":
+            case "ULP":
+            case "Hearings":
+            case "MED":
+            case "ORG":
+            case "Civil Service Commission":
+            default:
+                break;
+        }
+    }
+        
+    private void cmdsDisplayLogic() {
+        groupNumber = CMDSCase.getGroupNumber(NumberFormatService.generateFullCaseNumberNonGlobal(eml.caseYear, eml.caseType, eml.caseMonth, eml.caseNumber));
+        if (groupNumber != null){
+            if (!groupNumber.equals("")){
+                relatedCasesButton.setVisible(true);
+            }
+        }
     }
 
     private void loadAttachments(){
@@ -86,6 +117,19 @@ public class DetailedEmailOutPanel extends javax.swing.JDialog {
         }
         EmailOut.updateEmailOut(eml);
     }
+    
+    private void multicaseDocketingWindow(){
+        MultiCaseDocketingDialog multiCaseSelection = new MultiCaseDocketingDialog(
+                this, 
+                true, 
+                NumberFormatService.generateFullCaseNumberNonGlobal(eml.caseYear, eml.caseType, eml.caseMonth, eml.caseNumber), 
+                groupNumber, 
+                "emailOut", 
+                emailID
+        );
+        
+        multiCaseSelection.dispose();
+    }
 
     private void clearDate(WebDateField dateField, MouseEvent evt) {
         if(evt.getButton() == MouseEvent.BUTTON3 && dateField.isEnabled()) {
@@ -96,7 +140,7 @@ public class DetailedEmailOutPanel extends javax.swing.JDialog {
             dialog.dispose();
         }
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -120,6 +164,7 @@ public class DetailedEmailOutPanel extends javax.swing.JDialog {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         suggestedSendDatePicker = new com.alee.extended.date.WebDateField();
+        relatedCasesButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -227,6 +272,13 @@ public class DetailedEmailOutPanel extends javax.swing.JDialog {
                 }
             });
 
+            relatedCasesButton.setText("Related Cases");
+            relatedCasesButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    relatedCasesButtonActionPerformed(evt);
+                }
+            });
+
             javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
             getContentPane().setLayout(layout);
             layout.setHorizontalGroup(
@@ -240,6 +292,8 @@ public class DetailedEmailOutPanel extends javax.swing.JDialog {
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                             .addComponent(cancelButton)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(relatedCasesButton)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -248,7 +302,7 @@ public class DetailedEmailOutPanel extends javax.swing.JDialog {
                                 .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
                                 .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 49, Short.MAX_VALUE))
+                                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -302,7 +356,8 @@ public class DetailedEmailOutPanel extends javax.swing.JDialog {
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(saveButton)
-                        .addComponent(cancelButton))
+                        .addComponent(cancelButton)
+                        .addComponent(relatedCasesButton))
                     .addContainerGap())
             );
 
@@ -340,6 +395,10 @@ public class DetailedEmailOutPanel extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_jTable1MouseClicked
 
+    private void relatedCasesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_relatedCasesButtonActionPerformed
+        multicaseDocketingWindow();
+    }//GEN-LAST:event_relatedCasesButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;
     private javax.swing.JTextField ccTextbox;
@@ -356,6 +415,7 @@ public class DetailedEmailOutPanel extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
+    private javax.swing.JButton relatedCasesButton;
     private javax.swing.JButton saveButton;
     private javax.swing.JTextField subjectTextbox;
     private com.alee.extended.date.WebDateField suggestedSendDatePicker;

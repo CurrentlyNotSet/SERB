@@ -14,7 +14,6 @@ import parker.serb.sql.ActiveStatus;
 import parker.serb.sql.Party;
 import parker.serb.util.StringUtilities;
 
-//TODO: Check that a party is not already in the DB
 /**
  *
  * @author parker

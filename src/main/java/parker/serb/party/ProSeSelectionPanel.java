@@ -5,13 +5,8 @@
  */
 package parker.serb.party;
 
-import java.util.List;
-import parker.serb.Global;
 import parker.serb.sql.Activity;
 import parker.serb.sql.CaseParty;
-import parker.serb.sql.PartyType;
-
-//TODO: Add all other section party types to DB
 
 /**
  *

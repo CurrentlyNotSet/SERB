@@ -5,8 +5,6 @@
  */
 package parker.serb.report;
 
-//TODO: Load all REP Reports
-
 import com.alee.laf.optionpane.WebOptionPane;
 import java.awt.event.ItemEvent;
 import java.io.File;

@@ -94,10 +94,10 @@ public class CMDSHeaderPanel extends javax.swing.JPanel {
         if(Global.caseNumber != null) {
             CMDSCase cmds = CMDSCase.loadHeaderInformation();
             if(cmds == null) {
-                //TODO: Case Not Found
+                WebOptionPane.showMessageDialog(Global.root, "<html><center> Sorry, unable to locate case.</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
             } else {
                 groupNumberTextBox.setText(cmds.groupNumber != null ? cmds.groupNumber : "");
-                aljTextBox.setText(cmds.aljID != 0 ? User.getNameByID(cmds.aljID).replace("null", "").trim() : ""); //TODO: Convert ID to Name
+                aljTextBox.setText(cmds.aljID != 0 ? User.getNameByID(cmds.aljID).replace("null", "").trim() : "");
                 openDateTExtBox.setText(cmds.openDate != null ? Global.mmddyyyy.format(new Date(cmds.openDate.getTime())) : "");
                 closeDateTextBox.setText(cmds.closeDate != null ? Global.mmddyyyy.format(new Date(cmds.closeDate.getTime())) : "");
                 inventoryStatusDateTextBox.setText(cmds.inventoryStatusDate != null ? Global.mmddyyyy.format(new Date(cmds.inventoryStatusDate.getTime())) : "");

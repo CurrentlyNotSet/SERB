@@ -22,7 +22,9 @@ public class Global {
     // Major Version       3 -- will stay 3
     // Minor Version       0 -- update with larger enhancments
     // Maintenence Version 0 -- bug fix releases
-    public static final String APPLICATION_VERSION = "3.8.6";
+
+    public static final String APPLICATION_VERSION = "3.9.0";
+
 
     //All Date and Time formatters
     public static SimpleDateFormat mmddyyyyhhmma = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
@@ -57,7 +59,6 @@ public class Global {
     public static User activeUser = null;
 
     //Slack Informaiton
-    //TODO: Move this hook and value to another gitignore file
     public static final String SLACK_HOOK = "https://hooks.slack.com/services/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";
     public static final String SLACK_ICON = ":computer:";
     public static final String SLACK_CHANNEL = "serbapplication";

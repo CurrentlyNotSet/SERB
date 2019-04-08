@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package parker.serb.docket;
+package parker.serb.letterGeneration;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -15,30 +15,31 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import parker.serb.Global;
 import parker.serb.sql.CMDSCase;
-import parker.serb.util.NumberFormatService;
 
 /**
  *
  * @author User
  */
-public class CMDSMultiCaseDocketingDialog extends javax.swing.JDialog {
+public class MultiCaseDocketingDialog extends javax.swing.JDialog {
 
-    private final List<CMDSCase> caseList;
     public List<String> selectedCaseList = new ArrayList<>();
     public boolean cancelled = false;
+    private final String caseNumber;
 
     /**
-     * Creates new form CMDSStatusTypeAddEditDialog
+     * Creates new form MultiCaseDocketingDialog
      * @param parent
      * @param modal
-     * @param caseList
+     * @param caseNumber
+     * @param groupNumber
      */
-    public CMDSMultiCaseDocketingDialog(java.awt.Dialog parent, boolean modal, List<CMDSCase> caseList) {
+    public MultiCaseDocketingDialog(java.awt.Dialog parent, boolean modal, String caseNumber, String groupNumber) {
         super(parent, modal);
         initComponents();
+        this.caseNumber = caseNumber;
+        referenceCaseLabel.setText("CURRENT CASE: " + caseNumber + "  |  GROUP NUMBER: " + groupNumber);
         addRenderer();
         setColumnSize();
-        this.caseList = caseList;
         loadingThread();
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
@@ -59,13 +60,6 @@ public class CMDSMultiCaseDocketingDialog extends javax.swing.JDialog {
         });
     }
 
-    private void loadingThread() {
-        Thread temp = new Thread(() -> {
-                loadTable();
-        });
-        temp.start();
-    }
-    
     private void setColumnSize() {        
         //ID
         SearchTable.getColumnModel().getColumn(0).setMinWidth(0);
@@ -77,18 +71,46 @@ public class CMDSMultiCaseDocketingDialog extends javax.swing.JDialog {
         SearchTable.getColumnModel().getColumn(1).setWidth(60);
         SearchTable.getColumnModel().getColumn(1).setMaxWidth(60);
     }
-
-    private void loadTable() {
+    
+    private void loadingThread() {
+        Thread temp = new Thread(() -> {
+                List caseList = gatherRelatedCases();
+                loadTable(caseList);
+        });
+        temp.start();
+    }
+    
+    private List gatherRelatedCases(){
+        List caseList = null;
+        
+        switch(Global.activeSection) {
+            case "CMDS":
+                caseList = CMDSCase.getGroupNumberList(caseNumber);
+                break;
+            case "REP":
+            case "ULP":
+            case "Hearings":
+            case "MED":
+            case "ORG":
+            case "Civil Service Commission":
+                break;
+            default:
+                break;
+        }
+        return caseList;
+    }
+    
+    private void loadTable(List caseList) {
         DefaultTableModel model = (DefaultTableModel) SearchTable.getModel();
         model.setRowCount(0);
-
-        for (CMDSCase item : caseList) {
-            model.addRow(new Object[]{
-                item,
-                true,
-                NumberFormatService.generateFullCaseNumberNonGlobal(item.caseYear, item.caseType, item.caseMonth, item.caseNumber),
-                item.groupNumber
-            });
+        for (Object item : caseList) {
+            if (!caseNumber.equalsIgnoreCase(item.toString())){
+                model.addRow(new Object[]{
+                    item,
+                    true,
+                    item.toString()
+                });
+            }
         }
     }
 
@@ -116,6 +138,7 @@ public class CMDSMultiCaseDocketingDialog extends javax.swing.JDialog {
         CloseButton = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        referenceCaseLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -128,14 +151,14 @@ public class CMDSMultiCaseDocketingDialog extends javax.swing.JDialog {
 
             },
             new String [] {
-                "ID", "Active", "Case Number", "Group Number"
+                "ID", "", "Case Number"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.Object.class, java.lang.Boolean.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, false, false
+                false, true, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -152,7 +175,6 @@ public class CMDSMultiCaseDocketingDialog extends javax.swing.JDialog {
             SearchTable.getColumnModel().getColumn(0).setResizable(false);
             SearchTable.getColumnModel().getColumn(1).setResizable(false);
             SearchTable.getColumnModel().getColumn(2).setResizable(false);
-            SearchTable.getColumnModel().getColumn(3).setResizable(false);
         }
 
         DocketButton.setText("Docket");
@@ -170,10 +192,12 @@ public class CMDSMultiCaseDocketingDialog extends javax.swing.JDialog {
         });
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Please uncheck any cases you do");
+        jLabel2.setText("Please uncheck any additional cases you do");
 
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("NOT want this file to be docketed to");
+        jLabel3.setText("NOT want these outgoing documents to be docketed to");
+
+        referenceCaseLabel.setText("CURRENT CASE:  <CASENUMBER>  GROUP: <GROUPNUMBER>");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -183,13 +207,14 @@ public class CMDSMultiCaseDocketingDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 391, Short.MAX_VALUE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(CloseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 491, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(DocketButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(referenceCaseLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -201,8 +226,10 @@ public class CMDSMultiCaseDocketingDialog extends javax.swing.JDialog {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
-                .addGap(7, 7, 7)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 548, Short.MAX_VALUE)
+                .addGap(26, 26, 26)
+                .addComponent(referenceCaseLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(CloseButton)
@@ -231,5 +258,6 @@ public class CMDSMultiCaseDocketingDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel referenceCaseLabel;
     // End of variables declaration//GEN-END:variables
 }

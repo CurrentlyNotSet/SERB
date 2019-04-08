@@ -38,17 +38,20 @@ import parker.serb.bookmarkProcessing.questionsCMDSModel;
 import parker.serb.bookmarkProcessing.questionsCMDSPanel;
 import parker.serb.sql.Activity;
 import parker.serb.sql.Audit;
+import parker.serb.sql.CMDSCase;
 import parker.serb.sql.CMDSDocuments;
 import parker.serb.sql.CSCCase;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.EmailOut;
 import parker.serb.sql.EmailOutAttachment;
+import parker.serb.sql.EmailOutRelatedCase;
 import parker.serb.sql.FactFinder;
 import parker.serb.sql.MEDCase;
 import parker.serb.sql.Mediator;
 import parker.serb.sql.ORGCase;
 import parker.serb.sql.PostalOut;
 import parker.serb.sql.PostalOutAttachment;
+import parker.serb.sql.PostalOutRelatedCase;
 import parker.serb.sql.SMDSDocuments;
 import parker.serb.util.ClearDateDialog;
 import parker.serb.util.FileService;
@@ -86,7 +89,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
 
     private void addRenderer() {
         personTable.setDefaultRenderer(Object.class, new TableCellRenderer() {
-            private DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
+            private final DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
 
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
@@ -100,7 +103,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         });
 
         activityTable.setDefaultRenderer(Object.class, new TableCellRenderer() {
-            private DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
+            private final DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
 
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
@@ -114,7 +117,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
         });
 
         additionalDocsTable.setDefaultRenderer(Object.class, new TableCellRenderer() {
-            private DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
+            private final DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
 
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
@@ -453,16 +456,13 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                         || medCaseData.FFList2Name5.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)) {
                     return true;
                 }
-            } else {
-                if (medCaseData.FFList1Name1.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                        || medCaseData.FFList1Name2.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                        || medCaseData.FFList1Name3.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                        || medCaseData.FFList1Name4.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                        || medCaseData.FFList1Name5.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)) {
-                    return true;
-                }
+            } else if (medCaseData.FFList1Name1.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                    || medCaseData.FFList1Name2.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                    || medCaseData.FFList1Name3.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                    || medCaseData.FFList1Name4.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                    || medCaseData.FFList1Name5.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)) {
+                return true;
             }
-
         } else if ((SMDSdocToGenerate.description.contains("Conciliation") || SMDSdocToGenerate.description.contains("Conciliator")) && medCaseData != null) {
             if (!medCaseData.concilList2Name1.equals("")) {
                 if (medCaseData.concilList2Name1.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
@@ -472,14 +472,12 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                         || medCaseData.concilList2Name5.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)) {
                     return true;
                 }
-            } else {
-                if (medCaseData.concilList1Name1.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                        || medCaseData.concilList1Name2.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                        || medCaseData.concilList1Name3.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                        || medCaseData.concilList1Name4.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
-                        || medCaseData.concilList1Name5.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)) {
-                    return true;
-                }
+            } else if (medCaseData.concilList1Name1.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                    || medCaseData.concilList1Name2.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                    || medCaseData.concilList1Name3.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                    || medCaseData.concilList1Name4.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)
+                    || medCaseData.concilList1Name5.replaceAll("[^a-zA-Z]", "").toLowerCase().equals(Name)) {
+                return true;
             }
         }
         return false;
@@ -532,7 +530,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                 case "ORG":
                     Activity.addActivtyORGCase("ORG", orgCase.orgNumber,
                             "Generated " + (SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription),
-                             docName);
+                            docName);
                     String lastNotify = "";
 
                     if (SMDSdocToGenerate.description.startsWith("Tickler 45")) {
@@ -554,7 +552,7 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                 case "Civil Service Commission":
                     Activity.addActivtyORGCase("CSC", cscCase.cscNumber,
                             "Generated " + (SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription),
-                             docName);
+                            docName);
                     Audit.addAuditEntry("Generated " + SMDSdocToGenerate.historyDescription == null ? SMDSdocToGenerate.description : SMDSdocToGenerate.historyDescription);
                     break;
                 default:
@@ -567,10 +565,37 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
 
             int emailID = 0;
             int postalID = 0;
+            
+            //CMDS Related Case Information (R3-091)
+            List<String> relatedCasesList = new ArrayList<>();
+            if (Global.activeSection.equals("CMDS")) {
+                String groupNumber = CMDSCase.getGroupNumber();
+                if (groupNumber != null) {
+                    if (!groupNumber.equalsIgnoreCase("")) {
+                        MultiCaseDocketingDialog multiCaseSelection = new MultiCaseDocketingDialog(this, true, NumberFormatService.generateFullCaseNumber(), groupNumber);
+                        relatedCasesList = multiCaseSelection.selectedCaseList;
+                        multiCaseSelection.dispose();
+                    }
+                }
+            }
 
             if (sendToEmail) {
                 emailID = insertEmail();
                 insertGeneratedAttachementEmail(emailID, docName);
+                if (relatedCasesList.size() > 0) {
+                    for (String relatedCase : relatedCasesList) {
+                        NumberFormatService num = NumberFormatService.parseFullCaseNumberNoNGlobal(relatedCase);
+
+                        EmailOutRelatedCase emailRelatedModel = new EmailOutRelatedCase();
+                        emailRelatedModel.emailOutId = emailID;
+                        emailRelatedModel.caseYear = num.caseYear;
+                        emailRelatedModel.caseType = num.caseType;
+                        emailRelatedModel.caseMonth = num.caseMonth;
+                        emailRelatedModel.caseNumber = num.caseNumber;
+
+                        EmailOutRelatedCase.insertEmailOutRelatedCase(emailRelatedModel);
+                    }
+                }
             }
 
             if (sendToPostal) {
@@ -589,6 +614,20 @@ public class LetterGenerationPanel extends javax.swing.JDialog {
                         postalID = insertPostal(personTable.getValueAt(i, 0).toString(), org, csc);
                         insertGeneratedAttachementPostal(postalID, docName);
                         postalIDList.add(postalID);
+                        if (relatedCasesList.size() > 0) {
+                            for (String relatedCase : relatedCasesList) {
+                                NumberFormatService num = NumberFormatService.parseFullCaseNumberNoNGlobal(relatedCase);
+
+                                PostalOutRelatedCase postalRelatedModel = new PostalOutRelatedCase();
+                                postalRelatedModel.postalOutId = postalID;
+                                postalRelatedModel.caseYear = num.caseYear;
+                                postalRelatedModel.caseType = num.caseType;
+                                postalRelatedModel.caseMonth = num.caseMonth;
+                                postalRelatedModel.caseNumber = num.caseNumber;
+
+                                PostalOutRelatedCase.insertPostalOutRelatedCase(postalRelatedModel);
+                            }
+                        }
                     }
                 }
             }
