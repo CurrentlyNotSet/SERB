@@ -21,6 +21,7 @@ import parker.serb.Global;
 import parker.serb.sql.CMDSCase;
 import parker.serb.sql.PostalOut;
 import parker.serb.sql.PostalOutAttachment;
+import parker.serb.sql.PostalOutBulk;
 import parker.serb.util.ClearDateDialog;
 import parker.serb.util.FileService;
 import parker.serb.util.NumberFormatService;
@@ -69,13 +70,28 @@ public class DetailedPostalOutPanel extends javax.swing.JDialog {
 
     private void loadInfo() {
         post = PostalOut.getPostalOutByID(postalID);
+        List<PostalOutBulk> postalAddressList = PostalOutBulk.getPostalOutBulkEntries(postalID);
 
         setRelatedCaseButton();
         
-        addressBlockTextArea.setText(
+        if (postalAddressList.isEmpty()){
+            addressBlockTextArea.setText(
                 (post.addressBlock.startsWith(post.person) ? "" : post.person + System.lineSeparator())
                 + post.addressBlock);
-
+        } else {
+            String AddressBlockText = "";
+            for (PostalOutBulk person : postalAddressList){
+                if (!AddressBlockText.isEmpty()){
+                    AddressBlockText += System.lineSeparator() + System.lineSeparator();
+                }
+                AddressBlockText += "          ------------ Recipient ------------" + System.lineSeparator() + System.lineSeparator();
+                AddressBlockText += (person.addressBlock.startsWith(person.person) ? "" : person.person + System.lineSeparator()) + person.addressBlock;
+            }
+            addressBlockTextArea.setText(AddressBlockText);
+        }
+        
+        addressBlockTextArea.setCaretPosition(0);
+        
         if (post.suggestedSendDate != null) {
             suggestedSendDatePicker.setText(Global.mmddyyyy.format(post.suggestedSendDate));
         }
@@ -297,11 +313,11 @@ public class DetailedPostalOutPanel extends javax.swing.JDialog {
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(jLabel5)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(18, 18, 18)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                     .addComponent(jLabel6)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(18, 18, 18)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(cancelButton)

@@ -19,6 +19,8 @@ import parker.serb.sql.EmailOutAttachment;
 import parker.serb.sql.LetterQueue;
 import parker.serb.sql.PostalOut;
 import parker.serb.sql.PostalOutAttachment;
+import parker.serb.sql.PostalOutBulk;
+import parker.serb.sql.PostalOutRelatedCase;
 
 /**
  *
@@ -163,13 +165,7 @@ public class LetterQueuePanel extends javax.swing.JDialog {
     }
 
     private void processSendButton() {
-            //OLD Way, Single Use only
             new ConfirmationBulkDialog(Global.root, true, jTable1);
-
-//            //OLD Way, Single Use only
-//            new ConfirmationDialog(Global.root, true,
-//                    jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString(),
-//                    (int) jTable1.getValueAt(jTable1.getSelectedRow(), 0));
     }
 
     private void processDeleteButton() {
@@ -178,13 +174,16 @@ public class LetterQueuePanel extends javax.swing.JDialog {
             for (int i = 0; i < jTable1.getRowCount(); i++) {
                 if (jTable1.getValueAt(i, 1).equals(true)) {
                     int rowID = (int) jTable1.getValueAt(i, 0);
+                    String sendType = jTable1.getValueAt(i, 2).toString().trim();
 
-                    if (jTable1.getValueAt(i, 2).toString().equals("Email")) {
+                    if (sendType.equals("Email")) {
                         EmailOut.removeEmail(rowID);
                         EmailOutAttachment.removeEmailAttachment(rowID);
-                    } else if (jTable1.getValueAt(i, 2).toString().equals("Postal")) {
+                    } else if (sendType.equals("Postal")) {
                         PostalOut.removeEntry(rowID);
                         PostalOutAttachment.removeEntry(rowID);
+                        PostalOutRelatedCase.deletePostalOutRelatedCaseByID(rowID);
+                        PostalOutBulk.removeEntry(rowID);
                     }
                 }
             }
