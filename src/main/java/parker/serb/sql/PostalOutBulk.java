@@ -33,7 +33,7 @@ public class PostalOutBulk {
         try {
             stmt = Database.connectToDB().createStatement();
 
-            String sql = "SELECT * FROM PostalOutBulk WHERE postalOutID = ? ORDER BY person DESC";
+            String sql = "SELECT * FROM PostalOutBulk WHERE postalOutID = ? ORDER BY person ASC";
             
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
             preparedStatement.setInt(1, id);
