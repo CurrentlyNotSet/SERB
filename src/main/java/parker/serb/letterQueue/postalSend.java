@@ -23,6 +23,7 @@ import parker.serb.fileOperations.WordToPDF;
 import parker.serb.sql.Activity;
 import parker.serb.sql.PostalOut;
 import parker.serb.sql.PostalOutAttachment;
+import parker.serb.sql.PostalOutBulk;
 import parker.serb.sql.PostalOutRelatedCase;
 import parker.serb.sql.RelatedCase;
 import parker.serb.util.FileService;
@@ -46,6 +47,7 @@ public class postalSend {
         // Get Letter List
         PostalOut postalEntry = PostalOut.getPostalOutByID(sendID);
         List<PostalOutAttachment> attachmentList = PostalOutAttachment.getPostalOutAttachments(sendID);
+        List<PostalOutBulk> postalAddressList = PostalOutBulk.getPostalOutBulkEntries(sendID);
 
         //Set Case Path
         String casePath = "";
@@ -69,73 +71,109 @@ public class postalSend {
                     + File.separatorChar;
         }
 
-        //Envelope Insert
-        if (!(Global.activeSection.equalsIgnoreCase("CSC") || Global.activeSection.equalsIgnoreCase("Civil Service Commission"))) {
-            //Generate Envelope Insert
-            String envelopeFileName = processMailingAddressBookmarks.processDoAEnvelopeInsert(Global.templatePath, "EnvelopeInsert.docx", postalEntry);
+        if (0 == postalAddressList.size()){
+            //Envelope Insert
+            if (!(Global.activeSection.equalsIgnoreCase("CSC") || Global.activeSection.equalsIgnoreCase("Civil Service Commission"))) {
+                //Generate Envelope Insert
+                String envelopeFileName = processMailingAddressBookmarks.processDoAEnvelopeInsert(Global.templatePath, "EnvelopeInsert.docx", postalEntry, null);
 
-            //Convert Envelope
-            String envelopeFilePDF = WordToPDF.createPDF(casePath, envelopeFileName);
+                //Convert Envelope
+                String envelopeFilePDF = WordToPDF.createPDF(casePath, envelopeFileName);
 
-            //Add Envelope To PDF Merge
-            try {
-                ut.addSource(casePath + envelopeFilePDF);
-                tempPDFList.add(casePath + envelopeFilePDF);
-                tempPDFList.add(casePath + envelopeFileName);
-            } catch (FileNotFoundException ex) {
-                SlackNotification.sendNotification(ex);
+                //Add Envelope To PDF Merge
+                try {
+                    ut.addSource(casePath + envelopeFilePDF);
+                    tempPDFList.add(casePath + envelopeFilePDF);
+                    tempPDFList.add(casePath + envelopeFileName);
+                } catch (FileNotFoundException ex) {
+                    SlackNotification.sendNotification(ex);
+                }
             }
-        }
 
-        //Convert Attachments
-        for (PostalOutAttachment attach : attachmentList) {
-            String fileName = attach.fileName;
-            String extension = FilenameUtils.getExtension(attach.fileName);
+            //Convert Attachments
+            for (PostalOutAttachment attach : attachmentList) {
+                String fileName = attach.fileName;
+                String extension = FilenameUtils.getExtension(attach.fileName);
 
-            //Convert attachments to PDF
-            //If Image
-            if (FileService.isImageFormat(fileName)) {
-                fileName = ImageToPDF.createPDFFromImage(casePath, fileName);
+                //Convert attachments to PDF
+                //If Image
+                if (FileService.isImageFormat(fileName)) {
+                    fileName = ImageToPDF.createPDFFromImage(casePath, fileName);
+                } else if (extension.equals("docx") || extension.equals("doc")) {
+                    fileName = WordToPDF.createPDF(casePath, fileName);
+                } else if ("txt".equals(extension)) {
+                    fileName = TXTtoPDF.createPDF(casePath, fileName);
+                } 
 
                 //Add Attachment To PDF Merge
                 try {
                     ut.addSource(casePath + fileName);
+                    // if NOT pdf add it to the temp list for removal
+                    if (!FilenameUtils.getExtension(fileName).equals("pdf")) {
+                        tempPDFList.add(casePath + fileName);
+                    }
+                } catch (FileNotFoundException ex) {
+                    SlackNotification.sendNotification(ex);
+                }
+            }
+
+        } else {
+            List<String> envelopePDFList = new ArrayList<>();
+            List<String> attachmentPDFList = new ArrayList<>();
+            
+            //Envelope Insert
+            if (!(Global.activeSection.equalsIgnoreCase("CSC") || Global.activeSection.equalsIgnoreCase("Civil Service Commission"))) {
+                for (PostalOutBulk postalParty : postalAddressList) {
+                    //Generate Envelope Insert
+                    String envelopeFileName = processMailingAddressBookmarks.processDoAEnvelopeInsert(Global.templatePath, "EnvelopeInsert.docx", postalEntry, postalParty);
+
+                    //Convert Envelope
+                    String envelopeFilePDF = WordToPDF.createPDF(casePath, envelopeFileName);
+
+                    //Add to Lists
+                    envelopePDFList.add(casePath + envelopeFilePDF);
+                    tempPDFList.add(casePath + envelopeFilePDF);
+                    tempPDFList.add(casePath + envelopeFileName);
+                }
+            }
+
+            //Convert Attachments
+            for (PostalOutAttachment attach : attachmentList) {
+                String fileName = attach.fileName;
+                String extension = FilenameUtils.getExtension(attach.fileName);
+
+                //Convert attachments to PDF
+                //If Image
+                if (FileService.isImageFormat(fileName)) {
+                    fileName = ImageToPDF.createPDFFromImage(casePath, fileName);
+                } else if (extension.equals("docx") || extension.equals("doc")) {
+                    fileName = WordToPDF.createPDF(casePath, fileName);
+                } else if ("txt".equals(extension)) {
+                    fileName = TXTtoPDF.createPDF(casePath, fileName);
+                } 
+
+                //Add to Lists
+                attachmentPDFList.add(casePath + fileName);
+                
+                // if NOT pdf add it to the temp list for removal
+                if (!FilenameUtils.getExtension(fileName).equals("pdf")) {
                     tempPDFList.add(casePath + fileName);
+                }
+            }
+            
+            for (String person : envelopePDFList) {
+                try {
+                    ut.addSource(person);
                 } catch (FileNotFoundException ex) {
                     SlackNotification.sendNotification(ex);
                 }
 
-                //If Word Doc
-            } else if (extension.equals("docx") || extension.equals("doc")) {
-                fileName = WordToPDF.createPDF(casePath, fileName);
-
-                //Add Attachment To PDF Merge
-                try {
-                    ut.addSource(casePath + fileName);
-                    tempPDFList.add(casePath + fileName);
-                } catch (FileNotFoundException ex) {
-                    SlackNotification.sendNotification(ex);
-                }
-                //If Text File
-            } else if ("txt".equals(extension)) {
-                fileName = TXTtoPDF.createPDF(casePath, fileName);
-
-                //Add Attachment To PDF Merge
-                try {
-                    ut.addSource(casePath + fileName);
-                    tempPDFList.add(casePath + fileName);
-                } catch (FileNotFoundException ex) {
-                    SlackNotification.sendNotification(ex);
-                }
-
-                //If PDF
-            } else if (FilenameUtils.getExtension(fileName).equals("pdf")) {
-
-                //Add Attachment To PDF Merge
-                try {
-                    ut.addSource(casePath + fileName);
-                } catch (FileNotFoundException ex) {
-                    SlackNotification.sendNotification(ex);
+                for (String attachment : attachmentPDFList) {
+                    try {
+                        ut.addSource(attachment);
+                    } catch (FileNotFoundException ex) {
+                        SlackNotification.sendNotification(ex);
+                    }
                 }
             }
         }
@@ -252,6 +290,7 @@ public class postalSend {
         PostalOut.removeEntry(sendID);
         PostalOutAttachment.removeEntry(sendID);
         PostalOutRelatedCase.deletePostalOutRelatedCaseByID(sendID);
+        PostalOutBulk.removeEntry(sendID);
 
         return casePath + savedDoc;
     }

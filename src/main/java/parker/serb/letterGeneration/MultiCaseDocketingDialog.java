@@ -177,14 +177,14 @@ public class MultiCaseDocketingDialog extends javax.swing.JDialog {
             SearchTable.getColumnModel().getColumn(2).setResizable(false);
         }
 
-        DocketButton.setText("Docket");
+        DocketButton.setText("Accept");
         DocketButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 DocketButtonActionPerformed(evt);
             }
         });
 
-        CloseButton.setText("Close");
+        CloseButton.setText("None");
         CloseButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 CloseButtonActionPerformed(evt);
