@@ -456,7 +456,7 @@ public class CMDSDetailedActivityDialog extends javax.swing.JDialog {
 
     private void updateInventoryStatusLineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateInventoryStatusLineButtonActionPerformed
         try {
-            CMDSCase.updateCaseInventoryStatusLines(actionTextBox.getText(), Global.mmddyyyyhhmma.parse(dateTextBox.getText()));
+            CMDSCase.updateCaseInventoryStatusLines(actionTextBox.getText() + (commentTextArea.getText().trim().equals("") ? "" : " " + commentTextArea.getText().trim()), Global.mmddyyyyhhmma.parse(dateTextBox.getText()));
             Global.root.getcMDSHeaderPanel1().loadHeaderInformation();
             descriptionComboBox.setEnabled(false);
             commentTextArea.setEnabled(false);
