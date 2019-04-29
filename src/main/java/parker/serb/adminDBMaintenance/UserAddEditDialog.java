@@ -134,6 +134,7 @@ public class UserAddEditDialog extends javax.swing.JDialog {
         ORGWorkerCheckBox.setSelected(item.ORGCaseWorker);
         REPWorkerCheckBox.setSelected(item.REPCaseWorker);
         ULPWorkerCheckBox.setSelected(item.ULPCaseWorker);
+        HearingsAdminCheckBox.setSelected(item.HearingAdmin);
         loadRolesTable();
     }
 
@@ -180,6 +181,7 @@ public class UserAddEditDialog extends javax.swing.JDialog {
         item.MEDDocketing = MEDDocketingCheckBox.isSelected();
         item.CSCDocketing = CSCDocketingCheckBox.isSelected();
         item.CMDSDocketing = CMDSDocketingCheckBox.isSelected();
+        item.HearingAdmin = HearingsAdminCheckBox.isSelected();
 
         if (ID > 0) {
             User.updateUser(item);
@@ -278,6 +280,7 @@ public class UserAddEditDialog extends javax.swing.JDialog {
         AddAccessButton = new javax.swing.JButton();
         RemoveAccessButton = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
+        HearingsAdminCheckBox = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -427,6 +430,8 @@ public class UserAddEditDialog extends javax.swing.JDialog {
             }
         });
 
+        HearingsAdminCheckBox.setText("Add/Rem. Hearings");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -487,8 +492,10 @@ public class UserAddEditDialog extends javax.swing.JDialog {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(CSCDocketingCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(CSCWorkerCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(HearingsWorkerCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(HearingsWorkerCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(HearingsAdminCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(MEDWorkerCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -520,7 +527,7 @@ public class UserAddEditDialog extends javax.swing.JDialog {
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
@@ -581,7 +588,9 @@ public class UserAddEditDialog extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(CMDSDocketingCheckBox)
-                    .addComponent(CSCDocketingCheckBox)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(CSCDocketingCheckBox)
+                        .addComponent(HearingsAdminCheckBox))
                     .addComponent(ORGDocketingCheckBox)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(REPDocketingCheckBox)
@@ -600,7 +609,7 @@ public class UserAddEditDialog extends javax.swing.JDialog {
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(REPWorkerCheckBox)
                                 .addComponent(ULPWorkerCheckBox)))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(editButton)
                     .addComponent(closeButton))
@@ -609,7 +618,7 @@ public class UserAddEditDialog extends javax.swing.JDialog {
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {EmailTextField, FirstNameTextField, LastNameTextField, MiddleInitialTextField, PhoneTextField, jLabel10, jLabel11, jLabel12, jLabel2, jLabel3, jLabel4, jLabel7, jLabel8, jLabel9});
 
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {CMDSDocketingCheckBox, CMDSWorkerCheckBox, CSCDocketingCheckBox, CSCWorkerCheckBox, HearingsWorkerCheckBox, MEDDocketingCheckBox, MEDWorkerCheckBox, ORGDocketingCheckBox, ORGWorkerCheckBox, REPDocketingCheckBox, REPWorkerCheckBox, ULPDocketingCheckBox, ULPWorkerCheckBox});
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {CMDSDocketingCheckBox, CMDSWorkerCheckBox, CSCDocketingCheckBox, CSCWorkerCheckBox, HearingsAdminCheckBox, HearingsWorkerCheckBox, MEDDocketingCheckBox, MEDWorkerCheckBox, ORGDocketingCheckBox, ORGWorkerCheckBox, REPDocketingCheckBox, REPWorkerCheckBox, ULPDocketingCheckBox, ULPWorkerCheckBox});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -667,6 +676,7 @@ public class UserAddEditDialog extends javax.swing.JDialog {
     private javax.swing.JCheckBox CSCWorkerCheckBox;
     private javax.swing.JTextField EmailTextField;
     private javax.swing.JTextField FirstNameTextField;
+    private javax.swing.JCheckBox HearingsAdminCheckBox;
     private javax.swing.JCheckBox HearingsWorkerCheckBox;
     private javax.swing.JTextField InitialsTextField;
     private javax.swing.JCheckBox InvestigatorCheckBox;

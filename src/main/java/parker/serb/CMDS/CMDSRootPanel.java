@@ -109,7 +109,11 @@ public class CMDSRootPanel extends javax.swing.JPanel {
                 break;
             case "Hearings":
                 Global.root.getjButton2().setText("Add Hearing");
-                Global.root.getjButton2().setEnabled(true);
+                if (Global.activeUser.CMDSCaseWorker && Global.activeUser.HearingAdmin) {
+                    Global.root.getjButton2().setEnabled(true);
+                } else {
+                    Global.root.getjButton2().setEnabled(false);
+                }
                 Global.root.getjButton9().setVisible(false);
                 break;
         }

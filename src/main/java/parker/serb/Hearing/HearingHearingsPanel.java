@@ -54,8 +54,13 @@ public class HearingHearingsPanel extends javax.swing.JPanel {
                 Global.root.getjButton9().setEnabled(false);
                 Global.root.getjButton9().setVisible(false);
             } else {
-                Global.root.getjButton9().setEnabled(true);
-                Global.root.getjButton9().setVisible(true);
+                if (Global.activeUser.HearingsCaseWorker && Global.activeUser.HearingAdmin) {
+                        Global.root.getjButton9().setEnabled(true);
+                        Global.root.getjButton9().setVisible(true);
+                    } else {
+                        Global.root.getjButton9().setEnabled(false);
+                        Global.root.getjButton9().setVisible(false);
+                    }
             }
         });
     }

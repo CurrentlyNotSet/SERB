@@ -60,6 +60,7 @@ public class User {
     public boolean MEDDocketing;
     public boolean CSCDocketing;
     public boolean CMDSDocketing;
+    public boolean HearingAdmin;
 
     public static String[] createUser(User item) {
         Statement stmt = null;
@@ -106,7 +107,8 @@ public class User {
                     + "ORGDocketing, "      //33
                     + "MEDDocketing, "      //34
                     + "CSCDocketing, "      //35
-                    + "CMDSDocketing "      //36
+                    + "CMDSDocketing, "     //36
+                    + "HearingAdmin"        //37
                     + ") VALUES (";
                     for(int i=0; i<35; i++){
                         sql += "?, ";   //01-35
@@ -150,6 +152,7 @@ public class User {
             preparedStatement.setBoolean(34, item.MEDDocketing);
             preparedStatement.setBoolean(35, item.CSCDocketing);
             preparedStatement.setBoolean(36, item.CMDSDocketing);
+            preparedStatement.setBoolean(37, item.HearingAdmin);
             preparedStatement.executeUpdate();
 
             ResultSet newRow = preparedStatement.getGeneratedKeys();
@@ -226,6 +229,7 @@ public class User {
                 user.MEDDocketing = foundUser.getBoolean("MEDDocketing");
                 user.CSCDocketing = foundUser.getBoolean("CSCDocketing");
                 user.CMDSDocketing = foundUser.getBoolean("CMDSDocketing");
+                user.HearingAdmin = foundUser.getBoolean("HearingAdmin");
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
@@ -290,6 +294,7 @@ public class User {
                 user.MEDDocketing = foundUser.getBoolean("MEDDocketing");
                 user.CSCDocketing = foundUser.getBoolean("CSCDocketing");
                 user.CMDSDocketing = foundUser.getBoolean("CMDSDocketing");
+                user.HearingAdmin = foundUser.getBoolean("HearingAdmin");
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
@@ -357,6 +362,7 @@ public class User {
                 user.MEDDocketing = foundUser.getBoolean("MEDDocketing");
                 user.CSCDocketing = foundUser.getBoolean("CSCDocketing");
                 user.CMDSDocketing = foundUser.getBoolean("CMDSDocketing");
+                user.HearingAdmin = foundUser.getBoolean("HearingAdmin");
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
@@ -410,6 +416,7 @@ public class User {
                 user.lastCaseType = users.getString("lastCaseType");
                 user.lastCaseMonth = users.getString("lastCaseMonth");
                 user.lastCaseNumber = users.getString("lastCaseNumber");
+                user.HearingAdmin = users.getBoolean("HearingAdmin");
                 activeUsers.add(user);
             }
         } catch (SQLException ex) {
@@ -466,6 +473,7 @@ public class User {
                 user.lastCaseType = users.getString("lastCaseType");
                 user.lastCaseMonth = users.getString("lastCaseMonth");
                 user.lastCaseNumber = users.getString("lastCaseNumber");
+                user.HearingAdmin = users.getBoolean("HearingAdmin");
                 activeUsers.add(user);
             }
         } catch (SQLException ex) {
@@ -522,6 +530,7 @@ public class User {
                 user.lastCaseType = users.getString("lastCaseType");
                 user.lastCaseMonth = users.getString("lastCaseMonth");
                 user.lastCaseNumber = users.getString("lastCaseNumber");
+                user.HearingAdmin = users.getBoolean("HearingAdmin");
                 activeUsers.add(user);
             }
         } catch (SQLException ex) {
@@ -1343,7 +1352,8 @@ public class User {
                     + "ORGDocketing = ?, "
                     + "MEDDocketing = ?, "
                     + "CSCDocketing = ?, "
-                    + "CMDSDocketing = ? "
+                    + "CMDSDocketing = ?, "
+                    + "HearingAdmin = ? "
                     + "where id = ?";
             PreparedStatement ps = stmt.getConnection().prepareStatement(sql);
             ps.setString ( 1, item.firstName.equals("") ? null : StringUtils.left(item.firstName.trim(), 25));
@@ -1371,7 +1381,8 @@ public class User {
             ps.setBoolean(23, item.MEDDocketing);
             ps.setBoolean(24, item.CSCDocketing);
             ps.setBoolean(25, item.CMDSDocketing);
-            ps.setInt(26, item.id);
+            ps.setBoolean(26, item.HearingAdmin);
+            ps.setInt(27, item.id);
 
             ps.executeUpdate();
         } catch (SQLException ex) {
