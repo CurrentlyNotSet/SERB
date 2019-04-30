@@ -21,14 +21,6 @@ import parker.serb.sql.ServerEmailControl;
 import parker.serb.sql.User;
 import parker.serb.util.SlackNotification;
 
-//TODO: Remove the flash that occurs on update
-//TODO: Add button for DB Backup
-//TODO: Add button for DB restore
-//TODO: Display the DB Size
-//TODO: Display the File store size
-//TODO: Allow for year stats to be viewed
-//TODO: Allow for a back up to happen to dev - a pop up in the process asking
-
 /**
  *
  * @author parkerjohnston

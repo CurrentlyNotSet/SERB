@@ -115,6 +115,49 @@ public class RelatedCase {
         return relatedCasesList;
     }
     
+    public static List<RelatedCase> loadRelatedCasesNonGlobal(String caseYear, String caseType, String caseMonth, String caseNumber) {
+        List<RelatedCase> relatedCasesList = new ArrayList<>();
+        
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "select * from RelatedCase where"
+                    + " caseYear = ? AND"
+                    + " caseType = ? AND"
+                    + " caseMonth = ? AND"
+                    + " caseNumber = ? ORDER BY"
+                    + " relatedCaseNumber ASC";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, caseYear);
+            preparedStatement.setString(2, caseType);
+            preparedStatement.setString(3, caseMonth);
+            preparedStatement.setString(4, caseNumber);
+
+            ResultSet relatedCaseRS = preparedStatement.executeQuery();
+            
+            while(relatedCaseRS.next()) {
+                RelatedCase item = new RelatedCase();
+                item.id = relatedCaseRS.getInt("relatedCaseNumber");
+                item.relatedCaseYear = relatedCaseRS.getString("caseYear");
+                item.relatedCaseType = relatedCaseRS.getString("caseType");
+                item.relatedCaseMonth = relatedCaseRS.getString("caseMonth");
+                item.relatedCaseNumber = relatedCaseRS.getString("caseNumber");
+                
+                relatedCasesList.add(item);
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadRelatedCasesNonGlobal(caseYear, caseType, caseMonth, caseNumber);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return relatedCasesList;
+    }
+    
     public static boolean checkCaseIsAlreadyRelated(String caseNumber) {
         boolean newCase = true;
         

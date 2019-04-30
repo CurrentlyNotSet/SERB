@@ -116,7 +116,11 @@ public class HearingRootPanel extends javax.swing.JPanel {
                 break;
             case "Hearings":
                 Global.root.getjButton2().setText("Add Hearing");
-                Global.root.getjButton2().setEnabled(true);
+                if (Global.activeUser.HearingsCaseWorker && Global.activeUser.HearingAdmin) {
+                    Global.root.getjButton2().setEnabled(true);
+                } else {
+                    Global.root.getjButton2().setEnabled(false);
+                }
                 Global.root.getjButton4().setText("Documents");
                 Global.root.getjButton4().setEnabled(true);
                 Global.root.getjButton9().setVisible(false);

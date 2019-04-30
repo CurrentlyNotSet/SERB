@@ -15,6 +15,7 @@ import parker.serb.fileOperations.WordToPDF;
 import parker.serb.sql.AdministrationInformation;
 import parker.serb.sql.CaseParty;
 import parker.serb.sql.PostalOut;
+import parker.serb.sql.PostalOutBulk;
 import parker.serb.util.FileService;
 import parker.serb.util.JacobCOMBridge;
 import parker.serb.util.StringUtilities;
@@ -25,7 +26,7 @@ import parker.serb.util.StringUtilities;
  */
 public class processMailingAddressBookmarks {
 
-    public static String processDoAEnvelopeInsert(String templatePath, String templateName, PostalOut item) {
+    public static String processDoAEnvelopeInsert(String templatePath, String templateName, PostalOut item, PostalOutBulk person) {
         String dept = StringUtilities.getDepartment();
         AdministrationInformation sysAdminInfo = AdministrationInformation.loadAdminInfo(dept);
 
@@ -85,9 +86,17 @@ public class processMailingAddressBookmarks {
         }
 
         String name = "";
-        name += item.person.trim() + System.lineSeparator();
-        if (!item.addressBlock.equals("")) {
-            name += item.addressBlock.trim();
+
+        if (person != null) {
+            name += person.person.trim() + System.lineSeparator();
+            if (!person.addressBlock.equals("")) {
+                name += person.addressBlock.trim();
+            }
+        } else {
+            name += item.person.trim() + System.lineSeparator();
+            if (!item.addressBlock.equals("")) {
+                name += item.addressBlock.trim();
+            }
         }
 
         processBookmark.process("SerbAddress", serbAddress, Document);

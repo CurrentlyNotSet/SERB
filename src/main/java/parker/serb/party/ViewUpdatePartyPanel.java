@@ -30,9 +30,6 @@ import parker.serb.util.FileService;
 import parker.serb.util.NumberFormatService;
 import parker.serb.util.SlackNotification;
 
-//TODO: Allow for a party to be updated from this panel
-//TODO: Reload Table after changes have been made to name, phone number, email
-
 /**
  *
  * @author parker

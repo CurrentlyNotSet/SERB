@@ -48,17 +48,22 @@ public class CMDSHearingsPanel extends javax.swing.JPanel {
     }
     
     private void addListeners() {
-        hearingTable.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
-            if(hearingTable.getSelectionModel().isSelectionEmpty()) {
-                Global.root.getjButton9().setEnabled(false);
-                Global.root.getjButton9().setVisible(false);
-            } else {
-                Global.root.getjButton9().setEnabled(true);
-                Global.root.getjButton9().setVisible(true);
-            }
-        });
+            hearingTable.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
+                if (hearingTable.getSelectionModel().isSelectionEmpty()) {
+                    Global.root.getjButton9().setEnabled(false);
+                    Global.root.getjButton9().setVisible(false);
+                } else {
+                    if (Global.activeUser.CMDSCaseWorker && Global.activeUser.HearingAdmin) {
+                        Global.root.getjButton9().setEnabled(true);
+                        Global.root.getjButton9().setVisible(true);
+                    } else {
+                        Global.root.getjButton9().setEnabled(false);
+                        Global.root.getjButton9().setVisible(false);
+                    }
+                }
+            });
     }
-    
+
     public void removeHearing() {
         String id = hearingTable.getValueAt(hearingTable.getSelectedRow(), 0).toString();
         String hearingDate = hearingTable.getValueAt(hearingTable.getSelectedRow(), 1).toString();

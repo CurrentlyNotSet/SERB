@@ -79,7 +79,6 @@ public class CSCAllLettersPanel extends javax.swing.JDialog {
         enableGenerateButton();
     }
 
-    //TODO: CLean this up so they all work for macOS
     private void setColumnSize() {
         //ID
         jTable1.getColumnModel().getColumn(0).setMinWidth(0);

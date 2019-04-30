@@ -18,10 +18,13 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import parker.serb.Global;
+import parker.serb.sql.CMDSCase;
 import parker.serb.sql.PostalOut;
 import parker.serb.sql.PostalOutAttachment;
+import parker.serb.sql.PostalOutBulk;
 import parker.serb.util.ClearDateDialog;
 import parker.serb.util.FileService;
+import parker.serb.util.NumberFormatService;
 
 /**
  *
@@ -31,6 +34,7 @@ public class DetailedPostalOutPanel extends javax.swing.JDialog {
 
     int postalID;
     PostalOut post;
+    String groupNumber;
 
     public DetailedPostalOutPanel(java.awt.Frame parent, boolean modal, int id) {
         super(parent, modal);
@@ -43,7 +47,7 @@ public class DetailedPostalOutPanel extends javax.swing.JDialog {
 
     private void setRenderer() {
         jTable1.setDefaultRenderer(Object.class, new TableCellRenderer(){
-            private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
+            private final DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                 Component c = DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
@@ -57,6 +61,7 @@ public class DetailedPostalOutPanel extends javax.swing.JDialog {
     }
 
     private void loadPanel(int id) {
+        relatedCasesButton.setVisible(false);
         postalID = id;
         setColumnWidth();
         loadInfo();
@@ -65,16 +70,58 @@ public class DetailedPostalOutPanel extends javax.swing.JDialog {
 
     private void loadInfo() {
         post = PostalOut.getPostalOutByID(postalID);
+        List<PostalOutBulk> postalAddressList = PostalOutBulk.getPostalOutBulkEntries(postalID);
 
-        addressBlockTextArea.setText(
+        setRelatedCaseButton();
+        
+        if (postalAddressList.isEmpty()){
+            addressBlockTextArea.setText(
                 (post.addressBlock.startsWith(post.person) ? "" : post.person + System.lineSeparator())
                 + post.addressBlock);
-
+        } else {
+            String AddressBlockText = "";
+            for (PostalOutBulk person : postalAddressList){
+                if (!AddressBlockText.isEmpty()){
+                    AddressBlockText += System.lineSeparator() + System.lineSeparator();
+                }
+                AddressBlockText += "          ------------ Recipient ------------" + System.lineSeparator() + System.lineSeparator();
+                AddressBlockText += (person.addressBlock.startsWith(person.person) ? "" : person.person + System.lineSeparator()) + person.addressBlock;
+            }
+            addressBlockTextArea.setText(AddressBlockText);
+        }
+        
+        addressBlockTextArea.setCaretPosition(0);
+        
         if (post.suggestedSendDate != null) {
             suggestedSendDatePicker.setText(Global.mmddyyyy.format(post.suggestedSendDate));
         }
     }
 
+    private void setRelatedCaseButton(){
+        switch(Global.activeSection) {
+            case "CMDS":
+                cmdsDisplayLogic();
+                break;
+            case "REP":
+            case "ULP":
+            case "Hearings":
+            case "MED":
+            case "ORG":
+            case "Civil Service Commission":
+            default:
+                break;
+        }
+    }
+        
+    private void cmdsDisplayLogic() {
+        groupNumber = CMDSCase.getGroupNumber(NumberFormatService.generateFullCaseNumberNonGlobal(post.caseYear, post.caseType, post.caseMonth, post.caseNumber));
+        if (groupNumber != null){
+            if (!groupNumber.equals("")){
+                relatedCasesButton.setVisible(true);
+            }
+        }
+    }
+    
     private void setColumnWidth() {
         // ID
         jTable1.getColumnModel().getColumn(0).setMinWidth(0);
@@ -106,6 +153,18 @@ public class DetailedPostalOutPanel extends javax.swing.JDialog {
         }
     }
 
+    private void multicaseDocketingWindow(){
+        MultiCaseDocketingDialog multiCaseSelection = new MultiCaseDocketingDialog(this, 
+                true, 
+                NumberFormatService.generateFullCaseNumberNonGlobal(post.caseYear, post.caseType, post.caseMonth, post.caseNumber), 
+                groupNumber, 
+                "postalOut", 
+                postalID
+        );
+        
+        multiCaseSelection.dispose();
+    }
+    
     private void saveInfo(){
         if (suggestedSendDatePicker.getText().trim().equals("")){
             post.suggestedSendDate = null;
@@ -114,7 +173,7 @@ public class DetailedPostalOutPanel extends javax.swing.JDialog {
         }
         PostalOut.updatePostalOut(post);
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -130,6 +189,7 @@ public class DetailedPostalOutPanel extends javax.swing.JDialog {
         jLabel7 = new javax.swing.JLabel();
         suggestedSendDatePicker = new com.alee.extended.date.WebDateField();
         saveButton = new javax.swing.JButton();
+        relatedCasesButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -209,6 +269,13 @@ public class DetailedPostalOutPanel extends javax.swing.JDialog {
                 }
             });
 
+            relatedCasesButton.setText("Related Cases");
+            relatedCasesButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    relatedCasesButtonActionPerformed(evt);
+                }
+            });
+
             javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
             getContentPane().setLayout(layout);
             layout.setHorizontalGroup(
@@ -229,6 +296,8 @@ public class DetailedPostalOutPanel extends javax.swing.JDialog {
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(relatedCasesButton)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addContainerGap())
             );
@@ -244,15 +313,16 @@ public class DetailedPostalOutPanel extends javax.swing.JDialog {
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(jLabel5)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(18, 18, 18)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                     .addComponent(jLabel6)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(18, 18, 18)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(cancelButton)
-                        .addComponent(saveButton))
+                        .addComponent(saveButton)
+                        .addComponent(relatedCasesButton))
                     .addContainerGap())
             );
 
@@ -289,6 +359,10 @@ public class DetailedPostalOutPanel extends javax.swing.JDialog {
         dispose();
     }//GEN-LAST:event_saveButtonActionPerformed
 
+    private void relatedCasesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_relatedCasesButtonActionPerformed
+        multicaseDocketingWindow();
+    }//GEN-LAST:event_relatedCasesButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea addressBlockTextArea;
     private javax.swing.JButton cancelButton;
@@ -299,6 +373,7 @@ public class DetailedPostalOutPanel extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
+    private javax.swing.JButton relatedCasesButton;
     private javax.swing.JButton saveButton;
     private com.alee.extended.date.WebDateField suggestedSendDatePicker;
     // End of variables declaration//GEN-END:variables
