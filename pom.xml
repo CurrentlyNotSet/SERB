@@ -13,63 +13,42 @@
         <dependency> <!-- Email Validation -->
             <groupId>commons-validator</groupId>
             <artifactId>commons-validator</artifactId>
-            <version>1.5.1</version>
+            <version>1.6</version>
         </dependency>
         <dependency> <!-- Sending Error To Slack -->
             <groupId>in.ashwanthkumar</groupId>
             <artifactId>slack-java-webhook</artifactId>
-            <version>0.0.7</version>
+            <version>0.0.9</version>
         </dependency>
-        <dependency> <!-- Look and Feel -->
+        <dependency> <!-- Look and Feel TODO: UPDATE MIGRATION-->
             <groupId>de.sciss</groupId>
             <artifactId>weblaf</artifactId>
             <version>1.29</version>
         </dependency>
-        <!--(Deprecated)    <dependency> -->
-        <!--(Deprecated)        <groupId>io.airbrake</groupId>  -->
-        <!--(Deprecated)        <artifactId>airbrake-java</artifactId>  -->
-        <!--(Deprecated)        <version>2.2.8</version>    -->
-        <!--(Deprecated)    </dependency>   -->
         <dependency> <!-- Password Generation -->
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.10</version>
+            <version>1.12</version>
         </dependency>
         <dependency> <!-- String Utilities -->
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.5</version>
+            <version>3.9</version>
         </dependency>
         <dependency> <!-- Sending Out Mail -->
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
             <version>1.4.7</version>
         </dependency>
-        <dependency> <!-- testing -->
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency> <!-- ??? WHAT IS THIS ??? -->
-            <groupId>com.yuvimasory</groupId>
-            <artifactId>orange-extensions</artifactId>
-            <version>1.3.0</version>
-        </dependency>
         <dependency> <!-- closing SQL Connection -->
             <groupId>commons-dbutils</groupId>
             <artifactId>commons-dbutils</artifactId>
-            <version>1.6</version>
+            <version>1.7</version>
         </dependency>
         <dependency> <!-- SQL Server Connections (Manual Install) -->
             <groupId>com.microsoft.sqlserver</groupId>
             <artifactId>sqljdbc42</artifactId>
             <version>6.0</version>
-        </dependency>
-        <dependency> <!-- ??? WHAT IS THIS ??? -->
-            <groupId>org.eclipse.persistence</groupId>
-            <artifactId>eclipselink</artifactId>
-            <version>2.5.2</version>
         </dependency>
         <dependency> <!-- COM hook for Microsoft Word conversion to PDF (Manual Install) -->
             <!--mvn install:install-file -Dfile='/Users/parkerjohnston/Desktop/jacob.jar' -DgroupId='local.net.sf.jacob-project' -DartifactId='jacob' -Dversion='1.18' -Dpackaging='jar'-->
@@ -77,25 +56,25 @@
             <artifactId>jacob</artifactId>
             <version>1.18</version>
         </dependency>
-        <dependency> <!-- ??? WHAT IS THIS ??? -->
-            <groupId>org.swinglabs</groupId>
-            <artifactId>swing-layout</artifactId>
-            <version>1.0.3</version>
-        </dependency>
         <dependency> <!-- Generating Reports -->
             <groupId>net.sf.jasperreports</groupId>
             <artifactId>jasperreports</artifactId>
-            <version>6.4.0</version>
+            <version>6.8.1</version>
         </dependency>
         <dependency> <!-- Converting files to PDF -->
             <groupId>org.apache.pdfbox</groupId>
             <artifactId>pdfbox</artifactId>
-            <version>2.0.4</version>
+            <version>2.0.15</version>
         </dependency>
         <dependency> <!-- file tools in conjunction with Extensions -->
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.5</version>
+            <version>2.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.swinglabs</groupId>
+            <artifactId>swing-layout</artifactId>
+            <version>1.0.3</version>
         </dependency>
     </dependencies>
     <!-- Building the JAR-->        
