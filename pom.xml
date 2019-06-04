@@ -36,9 +36,9 @@
             <version>3.9</version>
         </dependency>
         <dependency> <!-- Sending Out Mail -->
-            <groupId>javax.mail</groupId>
-            <artifactId>mail</artifactId>
-            <version>1.4.7</version>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>javax.mail</artifactId>
+            <version>1.6.2</version>
         </dependency>
         <dependency> <!-- closing SQL Connection -->
             <groupId>commons-dbutils</groupId>
