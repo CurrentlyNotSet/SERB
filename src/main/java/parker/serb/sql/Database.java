@@ -27,15 +27,14 @@ public class Database {
         
         Connection connection = null;
         
-        String url = DBConnectionInfo.url;
-        String driver = DBConnectionInfo.driver;
-        String userName = DBConnectionInfo.userName;
-        String password = DBConnectionInfo.password;
-        
         while (true) {
             try {
-                Class.forName(driver);
-                connection = DriverManager.getConnection(url, userName, password);
+                Class.forName(DBConnectionInfo.getDriver());
+                connection = DriverManager.getConnection(
+                        DBConnectionInfo.getUrl(), 
+                        DBConnectionInfo.getUserName(), 
+                        DBConnectionInfo.getPassword()
+                );
                 DriverManager.setLoginTimeout(30);
                 break;
             } catch (ClassNotFoundException | SQLException e) {

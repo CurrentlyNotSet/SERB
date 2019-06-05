@@ -15,6 +15,7 @@ import java.net.URISyntaxException;
 import javax.swing.ImageIcon;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import parker.serb.DBConnectionInfo;
 import parker.serb.Global;
 import parker.serb.RootPanel;
 import parker.serb.util.FileService;
@@ -33,6 +34,11 @@ public class LogInDialog extends javax.swing.JFrame {
     public LogInDialog(java.awt.Frame parent) {
         initComponents();
         setIconImage( new ImageIcon(getClass().getResource("/SERBSeal.png")).getImage() );
+        
+        if (!DBConnectionInfo.getDatabase().equals("SERB")){
+            jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SERBSeal-INVERT.png")));
+        }
+
         addListeners();
         getRootPane().setDefaultButton(logInButton);
         jLabel4.setForeground(new Color(238, 238, 238));
