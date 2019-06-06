@@ -26,12 +26,14 @@ public class Database {
         int nbAttempts = 0;
         
         Connection connection = null;
+           
+        String dbURLBuilt = DBConnectionInfo.getConnectionType() + DBConnectionInfo.getServer() + "databaseName=" + DBConnectionInfo.getDatabase();
         
         while (true) {
             try {
                 Class.forName(DBConnectionInfo.getDriver());
                 connection = DriverManager.getConnection(
-                        DBConnectionInfo.getUrl(), 
+                        dbURLBuilt, 
                         DBConnectionInfo.getUserName(), 
                         DBConnectionInfo.getPassword()
                 );

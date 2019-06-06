@@ -7,6 +7,7 @@ package parker.serb;
 
 import com.alee.laf.optionpane.WebOptionPane;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -14,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import parker.serb.CMDS.CMDSBulkCloseCasesDialog;
 import parker.serb.CMDS.CMDSHeaderPanel;
@@ -103,10 +105,13 @@ public class RootPanel extends javax.swing.JFrame {
         letterQueueThread();
         Global.activeUser.activeLogIn = true;
         if (DBConnectionInfo.getDatabase().contains("SERB-Development")){
+            this.setIconImage( new ImageIcon(getClass().getResource("/SERBSeal-INVERT.png")).getImage() );
             this.setTitle("State Employment Relations Board - DEVELOPMENT");
-        } else if (DBConnectionInfo.getDatabase().contains("SERB-Training")){
+        } else if (DBConnectionInfo.getDatabase().contains("SERB-TEST")){
+            this.setIconImage( new ImageIcon(getClass().getResource("/SERBSeal-INVERT.png")).getImage() );
             this.setTitle("State Employment Relations Board - TRAINING");
         }
+        
         setLocationRelativeTo(null);
         setVisible(true);
     }

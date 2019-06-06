@@ -33,10 +33,20 @@ public class LogInDialog extends javax.swing.JFrame {
      */
     public LogInDialog(java.awt.Frame parent) {
         initComponents();
-        setIconImage( new ImageIcon(getClass().getResource("/SERBSeal.png")).getImage() );
+        if (DBConnectionInfo.getDatabase().contains("SERB-Development") || DBConnectionInfo.getDatabase().contains("SERB-TEST")){
+            this.setIconImage( new ImageIcon(getClass().getResource("/SERBSeal-INVERT.png")).getImage() );
+        } else {
+            this.setIconImage( new ImageIcon(getClass().getResource("/SERBSeal.png")).getImage() );
+        }
         
         if (!DBConnectionInfo.getDatabase().equals("SERB")){
             jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SERBSeal-INVERT.png")));
+        }
+        
+        if (DBConnectionInfo.getDatabase().contains("SERB-Development")){
+            this.setTitle("DEVELOPMENT");
+        } else if (DBConnectionInfo.getDatabase().contains("SERB-TEST")){
+            this.setTitle("TRAINING");
         }
 
         addListeners();

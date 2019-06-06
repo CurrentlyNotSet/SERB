@@ -1,6 +1,7 @@
 package parker.serb.adminDBMaintenance;
 
 import javax.swing.ImageIcon;
+import parker.serb.DBConnectionInfo;
 import parker.serb.Global;
 
 /**
@@ -11,7 +12,11 @@ public class AdminMainMenuPanel extends javax.swing.JDialog {
     public AdminMainMenuPanel(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        this.setIconImage( new ImageIcon(getClass().getResource("/SERBSeal.png")).getImage() );
+        if (DBConnectionInfo.getDatabase().contains("SERB-Development") || DBConnectionInfo.getDatabase().contains("SERB-TEST")){
+            this.setIconImage( new ImageIcon(getClass().getResource("/SERBSeal-INVERT.png")).getImage() );
+        } else {
+            this.setIconImage( new ImageIcon(getClass().getResource("/SERBSeal.png")).getImage() );
+        }
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }
