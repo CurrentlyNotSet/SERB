@@ -14,6 +14,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import parker.serb.DBConnectionInfo;
 import parker.serb.Global;
 import parker.serb.sql.PurgedActivity;
 import parker.serb.util.NumberFormatService;
@@ -56,7 +57,11 @@ public class UnProcessableActivityDialog extends javax.swing.JDialog {
     }
     
     private void setActive(List<PurgedActivity> failedPurgeListPassed, String sectionSelectedPassed) {
-        this.setIconImage( new ImageIcon(getClass().getResource("/SERBSeal.png")).getImage() );
+        if (DBConnectionInfo.getDatabase().contains("SERB-Development") || DBConnectionInfo.getDatabase().contains("SERB-TEST")){
+            this.setIconImage( new ImageIcon(getClass().getResource("/SERBSeal-INVERT.png")).getImage() );
+        } else {
+            this.setIconImage( new ImageIcon(getClass().getResource("/SERBSeal.png")).getImage() );
+        }
         setTableSize();
         loadTableThread(failedPurgeListPassed, sectionSelectedPassed);
     }
