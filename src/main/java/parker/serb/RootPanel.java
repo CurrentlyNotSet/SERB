@@ -7,6 +7,7 @@ package parker.serb;
 
 import com.alee.laf.optionpane.WebOptionPane;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -14,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import parker.serb.CMDS.CMDSBulkCloseCasesDialog;
 import parker.serb.CMDS.CMDSHeaderPanel;
@@ -102,11 +104,14 @@ public class RootPanel extends javax.swing.JFrame {
         enableButtons();
         letterQueueThread();
         Global.activeUser.activeLogIn = true;
-        if (DBConnectionInfo.url.contains("SERB-Development")){
+        if (DBConnectionInfo.getDatabase().contains("SERB-Development")){
+            this.setIconImage( new ImageIcon(getClass().getResource("/SERBSeal-INVERT.png")).getImage() );
             this.setTitle("State Employment Relations Board - DEVELOPMENT");
-        } else if (DBConnectionInfo.url.contains("SERB-Training")){
+        } else if (DBConnectionInfo.getDatabase().contains("SERB-TEST")){
+            this.setIconImage( new ImageIcon(getClass().getResource("/SERBSeal-INVERT.png")).getImage() );
             this.setTitle("State Employment Relations Board - TRAINING");
         }
+        
         setLocationRelativeTo(null);
         setVisible(true);
     }
@@ -216,11 +221,19 @@ public class RootPanel extends javax.swing.JFrame {
         switch (Global.activeSection) {
             case "Docketing":
                 card.show(jPanel9, "card2");
-                jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
+                if (DBConnectionInfo.getDatabase().equals("SERB")){
+                    jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
+                } else {
+                    jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal-INVERT.png")));
+                }
                 break;
             case "REP":
                 card.show(jPanel9, "card3");
-                jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
+                if (DBConnectionInfo.getDatabase().equals("SERB")){
+                    jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
+                } else {
+                    jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal-INVERT.png")));
+                }
                 rEPHeaderPanel1.loadCases();
                 if(REPCase.validateCaseNumber(firstCaseNumber) && initialLoad) {
                     rEPHeaderPanel1.getjComboBox2().setSelectedItem(firstCaseNumber);
@@ -234,7 +247,11 @@ public class RootPanel extends javax.swing.JFrame {
                 break;
             case "ULP":
                 card.show(jPanel9, "card4");
-                jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
+                if (DBConnectionInfo.getDatabase().equals("SERB")){
+                    jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
+                } else {
+                    jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal-INVERT.png")));
+                }
                 uLPHeaderPanel1.loadCases();
                 if(ULPCase.validateCaseNumber(firstCaseNumber) && initialLoad) {
                     uLPHeaderPanel1.getjComboBox2().setSelectedItem(firstCaseNumber);
@@ -248,7 +265,11 @@ public class RootPanel extends javax.swing.JFrame {
                 break;
             case "ORG":
                 card.show(jPanel9, "card5");
-                jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
+                if (DBConnectionInfo.getDatabase().equals("SERB")){
+                    jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
+                } else {
+                    jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal-INVERT.png")));
+                }
                 oRGHeaderPanel2.loadCases();
                 if(ORGCase.validateOrg(firstCaseNumber) && initialLoad) {
                     oRGHeaderPanel2.getjComboBox2().setSelectedItem(ORGCase.getORGName(firstCaseNumber));
@@ -262,7 +283,11 @@ public class RootPanel extends javax.swing.JFrame {
                 break;
             case "MED":
                 card.show(jPanel9, "card6");
-                jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
+                if (DBConnectionInfo.getDatabase().equals("SERB")){
+                    jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
+                } else {
+                    jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal-INVERT.png")));
+                }
                 mEDHeaderPanel1.loadCases();
                 if(MEDCase.validateCaseNumber(firstCaseNumber) && initialLoad) {
                     mEDHeaderPanel1.getjComboBox2().setSelectedItem(firstCaseNumber);
@@ -276,7 +301,11 @@ public class RootPanel extends javax.swing.JFrame {
                 break;
             case "Hearings":
                 card.show(jPanel9, "card7");
-                jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
+                if (DBConnectionInfo.getDatabase().equals("SERB")){
+                    jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
+                } else {
+                    jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal-INVERT.png")));
+                }
                 hearingHeaderPanel1.loadCases();
                 if(HearingCase.validateCaseNumber(firstCaseNumber) && initialLoad) {
                     hearingHeaderPanel1.getjComboBox2().setSelectedItem(firstCaseNumber);
@@ -290,7 +319,11 @@ public class RootPanel extends javax.swing.JFrame {
                 break;
             case "Civil Service Commission":
                 card.show(jPanel9, "card8");
-                jLabel1.setIcon(new ImageIcon(getClass().getResource("/SPBRSeal.png")));
+                if (DBConnectionInfo.getDatabase().equals("SERB")){
+                    jLabel1.setIcon(new ImageIcon(getClass().getResource("/SPBRSeal.png")));
+                } else {
+                    jLabel1.setIcon(new ImageIcon(getClass().getResource("/SPBRSeal-INVERT.png")));
+                }
                 cSCHeaderPanel1.loadCases();
                 if(CSCCase.validateCSC(firstCaseNumber) && initialLoad) {
                     cSCHeaderPanel1.getjComboBox2().setSelectedItem(CSCCase.getCSCName(firstCaseNumber));
@@ -304,7 +337,11 @@ public class RootPanel extends javax.swing.JFrame {
                 break;
             case "CMDS":
                 card.show(jPanel9, "card9");
-                jLabel1.setIcon(new ImageIcon(getClass().getResource("/SPBRSeal.png")));
+                if (DBConnectionInfo.getDatabase().equals("SERB")){
+                    jLabel1.setIcon(new ImageIcon(getClass().getResource("/SPBRSeal.png")));
+                } else {
+                    jLabel1.setIcon(new ImageIcon(getClass().getResource("/SPBRSeal-INVERT.png")));
+                }
                 cMDSHeaderPanel1.loadCases();
                 if(CMDSCase.validateCaseNumber(firstCaseNumber) && initialLoad) {
                     cMDSHeaderPanel1.getjComboBox2().setSelectedItem(firstCaseNumber);
@@ -318,7 +355,11 @@ public class RootPanel extends javax.swing.JFrame {
                 break;
             case "Employer Search":
                 card.show(jPanel9, "card2");
-                jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
+                if (DBConnectionInfo.getDatabase().equals("SERB")){
+                    jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal.png")));
+                } else {
+                    jLabel1.setIcon(new ImageIcon(getClass().getResource("/SERBSeal-INVERT.png")));
+                }
                 docketingSectionLabel.setText("");
                 break;
         }

@@ -95,9 +95,6 @@ public class Global {
     public static String reportingPath;
     public static String documentationPath;
 
-    //boolean about if notigication should be sent
-    public static boolean errorNotifications;
-
     //bookmark loop limit
     public static final int BOOKMARK_LIMIT = 10;
 

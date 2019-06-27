@@ -13,7 +13,7 @@ import java.awt.event.MouseEvent;
 import java.sql.Timestamp;
 import java.util.List;
 import javax.swing.JFrame;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import parker.serb.Global;
 import parker.serb.employer.employerSearch;
 import parker.serb.sql.BargainingUnit;

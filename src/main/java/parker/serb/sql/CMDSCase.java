@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.apache.commons.dbutils.DbUtils;
-import org.eclipse.persistence.internal.helper.Helper;
 import parker.serb.Global;
 import parker.serb.util.NumberFormatService;
 import parker.serb.util.SlackNotification;

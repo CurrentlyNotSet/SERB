@@ -39,16 +39,6 @@ public class FileService {
     public static void setFilePath() {
         try {
             switch (InetAddress.getLocalHost().getHostName()) {
-                case "Parkers-MacBook-Air.local": //Parker MBA on APE
-                case "Parkers-Air": //Parker MBA on any non APE-router
-                    Global.scanPath = "/Users/parkerjohnston/Desktop/SERB/Scan/";
-                    Global.emailPath = "/Users/parkerjohnston/Desktop/SERB/Email/";
-                    Global.activityPath = "/Users/parkerjohnston/Desktop/SERB/Activity/";
-                    Global.mediaPath = "/Users/parkerjohnston/Desktop/SERB/Media/";
-                    Global.templatePath = "/Users/parkerjohnston/Desktop/SERB/Template/";
-                    Global.reportingPath = "/Users/parkerjohnston/Desktop/SERB/Reporting/";
-                    Global.documentationPath = "/Users/parkerjohnston/Desktop/SERB/Documentation/";
-                    break;
                 case "Alienware15":
                 case "Optiplex3010":
                 case "Sniper":

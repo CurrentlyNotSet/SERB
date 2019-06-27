@@ -19,6 +19,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import parker.serb.DBConnectionInfo;
 import parker.serb.Global;
 import parker.serb.report.GenerateReport;
 import parker.serb.sql.PurgedActivity;
@@ -45,7 +46,11 @@ public class RecordRetentionMainDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         addRenderer();
-        this.setIconImage( new ImageIcon(getClass().getResource("/SERBSeal.png")).getImage() );
+        if (DBConnectionInfo.getDatabase().contains("SERB-Development") || DBConnectionInfo.getDatabase().contains("SERB-TEST")){
+            this.setIconImage( new ImageIcon(getClass().getResource("/SERBSeal-INVERT.png")).getImage() );
+        } else {
+            this.setIconImage( new ImageIcon(getClass().getResource("/SERBSeal.png")).getImage() );
+        }
         setActive();
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
