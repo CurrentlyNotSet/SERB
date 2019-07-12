@@ -23,7 +23,7 @@ public class Global {
     // Minor Version       0 -- update with larger enhancments
     // Maintenence Version 0 -- bug fix releases
 
-    public static final String APPLICATION_VERSION = "3.9.0";
+    public static final String APPLICATION_VERSION = "3.10.1";
 
 
     //All Date and Time formatters

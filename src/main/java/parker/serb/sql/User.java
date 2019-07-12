@@ -110,10 +110,10 @@ public class User {
                     + "CMDSDocketing, "     //36
                     + "HearingAdmin"        //37
                     + ") VALUES (";
-                    for(int i=0; i<35; i++){
-                        sql += "?, ";   //01-35
+                    for(int i=0; i<36; i++){
+                        sql += "?, ";   //01-36
                     }
-                     sql += "?)"; //36
+                     sql += "?)"; //37
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setBoolean(1, true);
