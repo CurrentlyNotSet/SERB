@@ -14,8 +14,6 @@ import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
@@ -37,7 +35,6 @@ import parker.serb.sql.CaseNumber;
 import parker.serb.sql.Email;
 import parker.serb.sql.EmailAttachment;
 import parker.serb.sql.User;
-import parker.serb.util.CaseNumberTools;
 import parker.serb.util.FileService;
 
 /**
@@ -52,6 +49,7 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
     String emailSection = "";
     String passedTime;
     TableColumn myColumn2;
+    Email emailInObject;
 
     /**
      * Creates new form FileDocumentDialog
@@ -103,10 +101,6 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
         attachmentTable.getColumnModel().getColumn(0).setPreferredWidth(0);
         attachmentTable.getColumnModel().getColumn(0).setMinWidth(0);
         attachmentTable.getColumnModel().getColumn(0).setMaxWidth(0);
-//        attachmentTable.getColumnModel().getColumn(2).setPreferredWidth(150);
-//        attachmentTable.getColumnModel().getColumn(2).setMinWidth(150);
-//        attachmentTable.getColumnModel().getColumn(2).setMaxWidth(150);
-
     }
 
     private void addListeners(String section, String id) {
@@ -320,13 +314,11 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
     }
 
     private void loadEmailInformation(String id) {
-        Email emailToLoad = Email.getEmailByID(id);
-
-        dateTextBox.setText(Global.mmddyyyyhhmma.format(emailToLoad.receivedDate));
-        fromTextBox.setText(emailToLoad.emailFrom);
-        subjectTextBox.setText(emailToLoad.emailSubject);
-        bodyTextArea.setText(emailToLoad.emailBody);
-
+        emailInObject = Email.getEmailByID(id);
+        dateTextBox.setText(Global.mmddyyyyhhmma.format(emailInObject.receivedDate));
+        fromTextBox.setText(emailInObject.emailFrom);
+        subjectTextBox.setText(emailInObject.emailSubject);
+        bodyTextArea.setText(emailInObject.emailBody);
     }
 
     private void loadAttachmentTable(String id, String section) {
@@ -397,36 +389,19 @@ public class fileCMDSEmailDialog extends javax.swing.JDialog {
                 //Docket Row
                 FileService.docketCMDSEmailAttachment(caseNumbers, //caseNumber
                         emailSection,
-                        fromTextBox.getText(),
+                        emailInObject.emailFrom,
                         toComboBox.getSelectedItem().toString(),
-                        subjectTextBox.getText(),
+                        emailInObject.emailSubject,
                         attachmentTable.getValueAt(i, 1).toString(), //fileName
                         attachmentTable.getValueAt(i, 2).toString(), //fileType1
                         attachmentTable.getValueAt(i, 3).toString(), //fileType2
                         attachmentTable.getValueAt(i, 4) != null ? attachmentTable.getValueAt(i, 4).toString() : "", //Comment
-                        generateDate(),
+                        emailInObject.receivedDate,
                         directionComboBox.getSelectedItem().toString(),
                         this,
                         statusLineUpdate.isUpdateStatus());
             }
-        }
-    }
-
-    private Date generateDate() {
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR, Integer.valueOf(passedTime.split(" ")[0].split("/")[2]));
-        cal.set(Calendar.MONTH, Integer.valueOf(passedTime.split(" ")[0].split("/")[0]) - 1);
-        cal.set(Calendar.DAY_OF_MONTH, Integer.valueOf(passedTime.split(" ")[0].split("/")[1]));
-        if (passedTime.split(" ")[1].split(":")[0].equals("12")) {
-            cal.set(Calendar.HOUR_OF_DAY, passedTime.split(" ")[2].equals("AM") ? Integer.valueOf(passedTime.split(" ")[1].split(":")[0]) : Integer.valueOf(passedTime.split(" ")[1].split(":")[0]));
-        } else {
-            cal.set(Calendar.HOUR_OF_DAY, passedTime.split(" ")[2].equals("AM") ? Integer.valueOf(passedTime.split(" ")[1].split(":")[0]) : Integer.valueOf(passedTime.split(" ")[1].split(":")[0]) + 12);
-        }
-        cal.set(Calendar.MINUTE, Integer.valueOf(passedTime.split(" ")[1].split(":")[1]));
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-
-        return cal.getTime();
+        }        
     }
 
     private void deleteEmail(String id) {

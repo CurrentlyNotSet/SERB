@@ -50,6 +50,7 @@ public class fileEmailDialog extends javax.swing.JDialog {
     String emailSection = "";
     String passedTime;
     boolean orgProcess = false;
+    Email emailInObject;
 
     /**
      * Creates new form FileDocumentDialog
@@ -391,13 +392,12 @@ public class fileEmailDialog extends javax.swing.JDialog {
     }
 
     private void loadEmailInformation(String id) {
-        Email emailToLoad = Email.getEmailByID(id);
+        emailInObject = Email.getEmailByID(id);
 
-        dateTextBox.setText(Global.mmddyyyyhhmma.format(emailToLoad.receivedDate));
-        fromTextBox.setText(emailToLoad.emailFrom);
-        subjectTextBox.setText(emailToLoad.emailSubject);
-        bodyTextArea.setText(emailToLoad.emailBody);
-
+        dateTextBox.setText(Global.mmddyyyyhhmma.format(emailInObject.receivedDate));
+        fromTextBox.setText(emailInObject.emailFrom);
+        subjectTextBox.setText(emailInObject.emailSubject);
+        bodyTextArea.setText(emailInObject.emailBody);
     }
 
     private void loadAttachmentTable(String id, String section) {
@@ -445,34 +445,17 @@ public class fileEmailDialog extends javax.swing.JDialog {
                 attachmentTable.getValueAt(i, 0).toString(),    //attachmentid
                 emailID,
                 emailSection,
-                fromTextBox.getText(),
+                emailInObject.emailFrom,
                 toComboBox.getSelectedItem().toString(),
-                subjectTextBox.getText(),
+                emailInObject.emailSubject,
                 attachmentTable.getValueAt(i, 1).toString(),    //fileName
                 attachmentTable.getValueAt(i, 2).toString(),    //fileType
                 attachmentTable.getValueAt(i, 3) != null        //comment
                         ? attachmentTable.getValueAt(i, 3).toString() : "",
-                generateDate(),
+                emailInObject.receivedDate,
                 directionComboBox.getSelectedItem().toString());
             }
         }
-    }
-
-    private Date generateDate() {
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR, Integer.valueOf(passedTime.split(" ")[0].split("/")[2]));
-        cal.set(Calendar.MONTH, Integer.valueOf(passedTime.split(" ")[0].split("/")[0]) - 1);
-        cal.set(Calendar.DAY_OF_MONTH, Integer.valueOf(passedTime.split(" ")[0].split("/")[1]));
-        if(passedTime.split(" ")[1].split(":")[0].equals("12")) {
-            cal.set(Calendar.HOUR_OF_DAY, passedTime.split(" ")[2].equals("AM") ? Integer.valueOf(passedTime.split(" ")[1].split(":")[0]) : Integer.valueOf(passedTime.split(" ")[1].split(":")[0]));
-        } else {
-            cal.set(Calendar.HOUR_OF_DAY, passedTime.split(" ")[2].equals("AM") ? Integer.valueOf(passedTime.split(" ")[1].split(":")[0]) : Integer.valueOf(passedTime.split(" ")[1].split(":")[0]) + 12);
-        }
-        cal.set(Calendar.MINUTE, Integer.valueOf(passedTime.split(" ")[1].split(":")[1]));
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-
-        return cal.getTime();
     }
 
     private void deleteEmail(String id) {
