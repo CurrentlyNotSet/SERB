@@ -311,6 +311,9 @@ public class generateDocument {
         c.setTime(today);
         c.add(Calendar.DATE, 21);
         Date twentyOneDayOut = c.getTime();
+        c.setTime(today);
+        c.add(Calendar.YEAR, -1);
+        Date yearMinusOne = c.getTime();
 
         if (!chairmanFullName.trim().equals("")) {
             personnelAddressBlock += chairmanFullName + ", Chair";
@@ -379,6 +382,7 @@ public class generateDocument {
                     + Global.DAY_SUFFIXES[Calendar.getInstance().get(Calendar.DAY_OF_MONTH)], Document);
             processBookmark.process("MONTH" + (i == 0 ? "" : i), Global.MMMMM.format(today), Document);
             processBookmark.process("YEAR" + (i == 0 ? "" : i), Global.yyyy.format(today), Document);
+            processBookmark.process("YEARMINUSONE" + (i == 0 ? "" : i), Global.yyyy.format(yearMinusOne), Document);
             processBookmark.process("DUEDATE" + (i == 0 ? "" : i), Global.MMMMdyyyy.format(dueDate), Document);
             processBookmark.process("PLUS7" + (i == 0 ? "" : i), Global.MMMMdyyyy.format(sevenDayOut), Document);
             processBookmark.process("PLUS14" + (i == 0 ? "" : i), Global.MMMMdyyyy.format(fourteenDayOut), Document);
@@ -468,6 +472,9 @@ public class generateDocument {
         c.setTime(today);
         c.add(Calendar.DATE, 21);
         Date twentyOneDayOut = c.getTime();
+        c.setTime(today);
+        c.add(Calendar.YEAR, -1);
+        Date yearMinusOne = c.getTime();
 
         if (!chairmanFullName.trim().equals("")) {
             personnelAddressBlock += chairmanFullName + ", Chair";
@@ -545,6 +552,7 @@ public class generateDocument {
                     + Global.DAY_SUFFIXES[Calendar.getInstance().get(Calendar.DAY_OF_MONTH)], Document);
             processBookmark.process("MONTH" + (i == 0 ? "" : i), Global.MMMMM.format(new Date()), Document);
             processBookmark.process("Year" + (i == 0 ? "" : i), Global.yyyy.format(new Date()), Document);
+            processBookmark.process("YEARMINUSONE" + (i == 0 ? "" : i), Global.yyyy.format(yearMinusOne), Document);
             processBookmark.process("PLUS7" + (i == 0 ? "" : i), Global.MMMMdyyyy.format(sevenDayOut), Document);
             processBookmark.process("Date2WeeksFromNow" + (i == 0 ? "" : i), Global.MMMMdyyyy.format(Date2WeeksFromNow), Document);
             processBookmark.process("PLUS15" + (i == 0 ? "" : i), Global.MMMMdyyyy.format(fifteenDayOut), Document);
