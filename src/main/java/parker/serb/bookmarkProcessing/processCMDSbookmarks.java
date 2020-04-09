@@ -535,7 +535,7 @@ public class processCMDSbookmarks {
             String cleanedNumber = answers.getHearingLength().replaceAll("\\d*\\.\\d*", "");
 
             if (!cleanedNumber.equals("")) {
-                double precost = Double.parseDouble(cleanedNumber) * 1.5;
+                double precost = Double.parseDouble(cleanedNumber) * 3;
                 cost = "$" + String.format("%.2f", precost);
 
                 double pretotal = precost + 25;
