@@ -41,6 +41,7 @@ public class SERB {
                 case "Sniper":
                 case "HP-8100":
                 case "DESKTOP-3G61PRG":
+                case "XLN-Anthony":
                     DBConnectionInfo.setLocation("XLN");
                     break;
                 default: //SERB LOCATION
