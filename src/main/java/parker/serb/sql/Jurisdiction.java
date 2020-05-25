@@ -50,4 +50,33 @@ public class Jurisdiction {
         }
         return jurisList;
     }
+    
+    public static List loadDistinctJurisdictionList() {
+        List<Jurisdiction> jurisList = new ArrayList<>();
+        
+        Statement stmt = null;   
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "select DISTINCT jurisCode from Jurisdiction ORDER BY jurisCode ASC";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+
+            ResultSet caseActivity = preparedStatement.executeQuery();
+            
+            while(caseActivity.next()) {
+                Jurisdiction juris = new Jurisdiction();
+                juris.jurisCode = caseActivity.getString("jurisCode");
+                jurisList.add(juris);
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadJurisdictionList();
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return jurisList;
+    }
 }
