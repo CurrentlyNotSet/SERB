@@ -17,6 +17,7 @@ import parker.serb.sql.Jurisdiction;
 public class employerDetailAdd extends javax.swing.JDialog {
 
     String empIDNumber;
+    String empName;
     /**
      * Creates new form employerDetail
      * @param parent
@@ -258,7 +259,9 @@ public class employerDetailAdd extends javax.swing.JDialog {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         saveInformation();
-        dispose();
+        empName = employerNameTextBox.getText();
+        empIDNumber = idNumberTextBox.getText();
+        setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void countyComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_countyComboBoxActionPerformed
