@@ -59,8 +59,11 @@ public class BoardExecSearchDialog extends javax.swing.JDialog {
         
         if (dept.equals("SERB")) {
             headerLabel.setText("SERB Executives Maintenance");
+            BookmarkOrderButton.setVisible(true);
         } else if (dept.equals("SPBR")) {
             headerLabel.setText("PBR Executives Maintenance");
+            //TODO - This of course works for both departments but they specifically said only give to SERB. Does not have the other half in the bookmarks changed for SBPR.
+            BookmarkOrderButton.setVisible(false);
         }
         setColumnSize();
         loadingThread();
@@ -182,6 +185,7 @@ public class BoardExecSearchDialog extends javax.swing.JDialog {
         SearchTable = new javax.swing.JTable();
         EditButton = new javax.swing.JButton();
         CloseButton = new javax.swing.JButton();
+        BookmarkOrderButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -255,6 +259,13 @@ public class BoardExecSearchDialog extends javax.swing.JDialog {
             }
         });
 
+        BookmarkOrderButton.setText("Change Bookmark Order");
+        BookmarkOrderButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BookmarkOrderButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -272,7 +283,9 @@ public class BoardExecSearchDialog extends javax.swing.JDialog {
                         .addComponent(AddNewButton, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(CloseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, Short.MAX_VALUE)
+                        .addComponent(BookmarkOrderButton)
+                        .addGap(18, 18, Short.MAX_VALUE)
                         .addComponent(EditButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -291,7 +304,8 @@ public class BoardExecSearchDialog extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(CloseButton)
-                    .addComponent(EditButton))
+                    .addComponent(EditButton)
+                    .addComponent(BookmarkOrderButton))
                 .addContainerGap())
         );
 
@@ -322,8 +336,13 @@ public class BoardExecSearchDialog extends javax.swing.JDialog {
         tableClick(evt);
     }//GEN-LAST:event_SearchTableMouseClicked
 
+    private void BookmarkOrderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BookmarkOrderButtonActionPerformed
+        new BoardExecBookmarkDialog(Global.root, true, dept);
+    }//GEN-LAST:event_BookmarkOrderButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AddNewButton;
+    private javax.swing.JButton BookmarkOrderButton;
     private javax.swing.JButton CloseButton;
     private javax.swing.JButton EditButton;
     private javax.swing.JTable SearchTable;
