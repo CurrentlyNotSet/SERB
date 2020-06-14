@@ -5,7 +5,9 @@
  */
 package parker.serb.employer;
 
+import com.alee.laf.optionpane.WebOptionPane;
 import java.util.List;
+import parker.serb.Global;
 import parker.serb.sql.County;
 import parker.serb.sql.Employer;
 import parker.serb.sql.Jurisdiction;
@@ -62,15 +64,40 @@ public class employerDetailAdd extends javax.swing.JDialog {
         
     private void saveInformation() {
         Employer emp = new Employer();
-        
+
+        //Test and Add leading Zeros
+        int idLength = idNumberTextBox.getText().trim().length();
+        switch (idLength) {
+            case 1:
+                emp.employerIDNumber = "000" + idNumberTextBox.getText().trim();
+                break;
+            case 2:
+                emp.employerIDNumber = "00" + idNumberTextBox.getText().trim();
+                break;
+            case 3:
+                emp.employerIDNumber = "0" + idNumberTextBox.getText().trim();
+                break;
+            default:
+                emp.employerIDNumber = idNumberTextBox.getText().trim();
+                break;
+        }
+
         emp.employerName = employerNameTextBox.getText().trim();
-        emp.employerIDNumber = idNumberTextBox.getText().trim();
         emp.county = countyComboBox.getSelectedItem().toString();
         emp.jurisdiction = jurisdictionComboBox.getSelectedItem().toString();
         emp.employerType = 2;
         emp.employerTypeCode = employerTypeCodeTextBox.getText().trim();
+
+        String exists = Employer.getEmployerNameByID(emp.employerIDNumber);
         
-        Employer.createEmployer(emp);
+        if (!exists.isEmpty()){
+            WebOptionPane.showMessageDialog(Global.root, "<html><center>The Employer ID: " + emp.employerIDNumber + " Is currently in use.<br><br>Please Choose Another Employer ID</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
+        } else {
+            Employer.createEmployer(emp);
+            empName = employerNameTextBox.getText();
+            empIDNumber = idNumberTextBox.getText();
+            setVisible(false);
+        }
     }
     
     private void checkButton(){
@@ -84,7 +111,7 @@ public class employerDetailAdd extends javax.swing.JDialog {
             jButton2.setEnabled(true);
         }
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -259,9 +286,6 @@ public class employerDetailAdd extends javax.swing.JDialog {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         saveInformation();
-        empName = employerNameTextBox.getText();
-        empIDNumber = idNumberTextBox.getText();
-        setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void countyComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_countyComboBoxActionPerformed
