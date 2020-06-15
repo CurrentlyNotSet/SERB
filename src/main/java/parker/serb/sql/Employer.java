@@ -273,4 +273,45 @@ public class Employer {
         }
         return name;
     }
+    
+    public static void createEmployer(Employer item) {
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Insert INTO Employers ("
+                    + "Active, "
+                    + "employerIDNumber, "
+                    + "employerName, "
+                    + "county, "
+                    + "jurisdiction, "
+                    + "employerType, "
+                    + "employerTypeCode"
+                    + ") VALUES ("
+                    + "1, "
+                    + "?, " // 1 - employer ID Number
+                    + "?, " // 2 - Employer Name
+                    + "?, " // 3 - County
+                    + "?, " // 4 - Jurisdiction
+                    + "?, " // 5 - Employer Type
+                    + "?)"; // 6 - Employer Type Code
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, item.employerIDNumber.equals("") ? null : item.employerIDNumber.trim());
+            preparedStatement.setString(2, item.employerName.equals("") ? null : item.employerName.trim());
+            preparedStatement.setString(3, item.county.equals("") ? null : item.county.trim());
+            preparedStatement.setString(4, item.jurisdiction.equals("") ? null : item.jurisdiction.trim());
+            preparedStatement.setInt(5, item.employerType);
+            preparedStatement.setString(6, item.employerTypeCode.equals("") ? null : item.employerTypeCode.trim());
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                createEmployer(item);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+    }
+    
 }

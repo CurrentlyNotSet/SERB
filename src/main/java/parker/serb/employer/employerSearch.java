@@ -10,7 +10,6 @@ import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
-import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -18,11 +17,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import parker.serb.Global;
-import parker.serb.activity.DetailedActivityDialog;
-import parker.serb.sql.Activity;
-import parker.serb.sql.Audit;
 import parker.serb.sql.Employer;
-import parker.serb.util.FileService;
 
 /**
  *
@@ -36,6 +31,9 @@ public class employerSearch extends javax.swing.JDialog {
     String county = "";
     /**
      * Creates new form employerSearch
+     * @param parent
+     * @param modal
+     * @param employerNumber
      */
     public employerSearch(java.awt.Frame parent, boolean modal, String employerNumber) {
         super(parent, modal);
@@ -209,6 +207,7 @@ public class employerSearch extends javax.swing.JDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         employerTable = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
+        NewButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -243,6 +242,13 @@ public class employerSearch extends javax.swing.JDialog {
             }
         });
 
+        NewButton.setText("New");
+        NewButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NewButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -255,7 +261,9 @@ public class employerSearch extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(searchTextBox))
+                        .addComponent(searchTextBox)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(NewButton, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -267,9 +275,10 @@ public class employerSearch extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(searchTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(searchTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(NewButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 295, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 292, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1)
                 .addContainerGap())
@@ -282,7 +291,17 @@ public class employerSearch extends javax.swing.JDialog {
         setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void NewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewButtonActionPerformed
+        employerDetailAdd eda = new employerDetailAdd(null, true);
+        
+        eda.dispose();
+        employers = Employer.loadEmployerList();
+        searchTextBox.setText(eda.empName);
+        searchEmployers();
+    }//GEN-LAST:event_NewButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton NewButton;
     private javax.swing.JTable employerTable;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
