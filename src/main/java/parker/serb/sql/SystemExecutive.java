@@ -298,4 +298,41 @@ public class SystemExecutive {
             DbUtils.closeQuietly(stmt);
         }
     }
+    
+    public static List loadBookmarkExecs(String dept) {
+        List execsList = new ArrayList<>();
+        
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT * FROM SystemExecutive where active = 1 AND department = ? AND bookmarkorder != 0 ORDER BY bookmarkorder";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, dept);
+            
+            ResultSet rs = preparedStatement.executeQuery();
+            
+            while(rs.next()) {
+                SystemExecutive exec = new SystemExecutive();
+                exec.id = rs.getInt("id");
+                exec.department = rs.getString("department") == null ? "" : rs.getString("department");
+                exec.position = rs.getString("position") == null ? "" : rs.getString("position");
+                exec.phoneNumber = rs.getString("phoneNumber") == null ? "" : rs.getString("phoneNumber");
+                exec.email = rs.getString("email") == null ? "" : rs.getString("email");
+                exec.firstName = rs.getString("firstName") == null ? "" : rs.getString("firstName");
+                exec.middleName = rs.getString("middleName") == null ? "" : rs.getString("middleName");
+                exec.lastName = rs.getString("lastName") == null ? "" : rs.getString("lastName");
+                execsList.add(exec);
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadBookmarkExecs(dept);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return execsList;
+    }
 }
