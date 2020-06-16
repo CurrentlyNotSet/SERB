@@ -368,7 +368,7 @@ public class generateDocument {
             if (!personnelAddressBlock.trim().equals("")) {
                 personnelAddressBlock += "\n";
 
-                if ("Executive Director".equals(execsbookmarkList.get(i).position)) {
+                if ("Executive Director".equals(position)) {
                     personnelAddressBlock += "\n";
                 }
             }
