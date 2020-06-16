@@ -343,7 +343,28 @@ public class generateDocument {
 //        }
 
         for (int i = 0; i < execsbookmarkList.size(); i++) {
-            
+
+            String position = "";
+            if (null != execsbookmarkList.get(i).position) {
+                switch (execsbookmarkList.get(i).position) {
+                    case "Chairman":
+                        position = "Chair";
+                        break;
+                    case "ViceChairman":
+                        position = "Vice Chair";
+                        break;
+                    case "BoardMember":
+                        position = "Board Member";
+                        break;
+                    case "ExecutiveDirector":
+                        position = "Executive Director";
+                        break;
+                    default:
+                        position = execsbookmarkList.get(i).position;
+                        break;
+                }
+            }
+
             if (!personnelAddressBlock.trim().equals("")) {
                 personnelAddressBlock += "\n";
 
@@ -357,9 +378,9 @@ public class generateDocument {
                     execsbookmarkList.get(i).middleName,
                     execsbookmarkList.get(i).lastName)
                     + ", "
-                    + execsbookmarkList.get(i).position;
+                    + position;
         }
-
+        
         //ProcessBookmarks
         for (int i = 0; i < Global.BOOKMARK_LIMIT; i++) {
             //System Executives
