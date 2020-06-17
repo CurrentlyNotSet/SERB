@@ -31,6 +31,7 @@ public class SystemExecutive {
     public String lastName;
     public String phoneNumber;
     public String email;
+    public int bookmarkorder;
     
     public static List loadExecs(String dept) {
         List execsList = new ArrayList<>();
@@ -120,8 +121,6 @@ public class SystemExecutive {
         }
         return execsList;
     }
-    
-    
     
     public static SystemExecutive getSystemExecutiveByID(int id) {
         SystemExecutive item = new SystemExecutive();
@@ -235,5 +234,105 @@ public class SystemExecutive {
         } finally {
             DbUtils.closeQuietly(stmt);
         }
+    }
+    
+    public static List loadExecsAllByDeptartmentForBookMarks(String dept) {
+        List execsList = new ArrayList<>();
+        
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT * FROM SystemExecutive WHERE department = ? AND active = 1 ORDER BY bookmarkorder";
+            
+            PreparedStatement ps = stmt.getConnection().prepareStatement(sql);
+
+            ps.setString(1, dept);
+
+            ResultSet rs = ps.executeQuery();
+            
+            while(rs.next()) {
+                SystemExecutive exec = new SystemExecutive();
+                exec.id = rs.getInt("id");
+                exec.department = rs.getString("department") == null ? "" : rs.getString("department");
+                exec.position = rs.getString("position") == null ? "" : rs.getString("position");
+                exec.phoneNumber = rs.getString("phoneNumber") == null ? "" : rs.getString("phoneNumber");
+                exec.email = rs.getString("email") == null ? "" : rs.getString("email");
+                exec.firstName = rs.getString("firstName") == null ? "" : rs.getString("firstName");
+                exec.middleName = rs.getString("middleName") == null ? "" : rs.getString("middleName");
+                exec.lastName = rs.getString("lastName") == null ? "" : rs.getString("lastName");
+                exec.bookmarkorder = rs.getInt("bookmarkorder");
+                execsList.add(exec);
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadExecsAllByDeptartmentForBookMarks(dept);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return execsList;
+    }
+    
+    public static void updateSystemExecutiveBookmarkOrder(int id, int bookmarkOrder) {
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "UPDATE SystemExecutive SET "
+                    + "bookmarkorder = ? " //01
+                    + "where id = ?";      //02
+
+            PreparedStatement ps = stmt.getConnection().prepareStatement(sql);
+            ps.setInt(1, bookmarkOrder);
+            ps.setInt(2, id);
+
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                updateSystemExecutiveBookmarkOrder(id, bookmarkOrder);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+    }
+    
+    public static List loadBookmarkExecs(String dept) {
+        List execsList = new ArrayList<>();
+        
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "SELECT * FROM SystemExecutive where active = 1 AND department = ? AND bookmarkorder != 0 ORDER BY bookmarkorder";
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, dept);
+            
+            ResultSet rs = preparedStatement.executeQuery();
+            
+            while(rs.next()) {
+                SystemExecutive exec = new SystemExecutive();
+                exec.id = rs.getInt("id");
+                exec.department = rs.getString("department") == null ? "" : rs.getString("department");
+                exec.position = rs.getString("position") == null ? "" : rs.getString("position");
+                exec.phoneNumber = rs.getString("phoneNumber") == null ? "" : rs.getString("phoneNumber");
+                exec.email = rs.getString("email") == null ? "" : rs.getString("email");
+                exec.firstName = rs.getString("firstName") == null ? "" : rs.getString("firstName");
+                exec.middleName = rs.getString("middleName") == null ? "" : rs.getString("middleName");
+                exec.lastName = rs.getString("lastName") == null ? "" : rs.getString("lastName");
+                execsList.add(exec);
+            }
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                loadBookmarkExecs(dept);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+        return execsList;
     }
 }
