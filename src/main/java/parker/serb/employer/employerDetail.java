@@ -26,6 +26,9 @@ public class employerDetail extends javax.swing.JDialog {
     String empIDNumber;
     /**
      * Creates new form employerDetail
+     * @param parent
+     * @param modal
+     * @param passedEmpIDNumber
      */
     public employerDetail(java.awt.Frame parent, boolean modal, String passedEmpIDNumber) {
         super(parent, modal);

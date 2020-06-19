@@ -36,6 +36,7 @@ public class employerDetailAdd extends javax.swing.JDialog {
     private void loadComboBoxes() { 
         loadCountyComboBox();
         loadJurisdictionComboBox();
+        loadEmployerTypeComboBox();
     }
     
     private void loadCountyComboBox() {
@@ -59,6 +60,16 @@ public class employerDetailAdd extends javax.swing.JDialog {
         for (Object singleJurisdition : jurisdictionList) {
             Jurisdiction juris = (Jurisdiction) singleJurisdition;
             jurisdictionComboBox.addItem(juris.jurisCode);
+        }
+    }
+    
+    private void loadEmployerTypeComboBox() {
+        
+        EmployerTypeCodeComboBox.removeAllItems();
+        EmployerTypeCodeComboBox.addItem("");
+        
+        for (String type : Global.employerTypeCodes) {
+            EmployerTypeCodeComboBox.addItem(type);
         }
     }
         
@@ -86,7 +97,7 @@ public class employerDetailAdd extends javax.swing.JDialog {
         emp.county = countyComboBox.getSelectedItem().toString();
         emp.jurisdiction = jurisdictionComboBox.getSelectedItem().toString();
         emp.employerType = 2;
-        emp.employerTypeCode = employerTypeCodeTextBox.getText().trim();
+        emp.employerTypeCode = EmployerTypeCodeComboBox.getSelectedItem().toString();
 
         String exists = Employer.getEmployerNameByID(emp.employerIDNumber);
         
@@ -105,7 +116,7 @@ public class employerDetailAdd extends javax.swing.JDialog {
                 idNumberTextBox.getText().trim().equals("") || 
                 countyComboBox.getSelectedItem().toString().trim().equals("") || 
                 jurisdictionComboBox.getSelectedItem().toString().trim().equals("") || 
-                employerTypeCodeTextBox.getText().trim().equals("")){
+                EmployerTypeCodeComboBox.getSelectedItem().toString().trim().equals("")){
             jButton2.setEnabled(false);
         } else {
             jButton2.setEnabled(true);
@@ -134,7 +145,7 @@ public class employerDetailAdd extends javax.swing.JDialog {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jLabel24 = new javax.swing.JLabel();
-        employerTypeCodeTextBox = new javax.swing.JTextField();
+        EmployerTypeCodeComboBox = new javax.swing.JComboBox<>();
 
         jRadioButton1.setText("jRadioButton1");
 
@@ -202,12 +213,6 @@ public class employerDetailAdd extends javax.swing.JDialog {
         jLabel24.setMinimumSize(new java.awt.Dimension(140, 14));
         jLabel24.setPreferredSize(new java.awt.Dimension(140, 14));
 
-        employerTypeCodeTextBox.addCaretListener(new javax.swing.event.CaretListener() {
-            public void caretUpdate(javax.swing.event.CaretEvent evt) {
-                employerTypeCodeTextBoxCaretUpdate(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -218,26 +223,28 @@ public class employerDetailAdd extends javax.swing.JDialog {
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 479, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 489, Short.MAX_VALUE)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
-                                .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
+                            .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(employerNameTextBox)
-                            .addComponent(employerTypeCodeTextBox)
                             .addComponent(idNumberTextBox)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jurisdictionComboBox, 0, 402, Short.MAX_VALUE)
                                     .addComponent(countyComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(0, 0, Short.MAX_VALUE)))))
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(EmployerTypeCodeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 402, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -258,24 +265,24 @@ public class employerDetailAdd extends javax.swing.JDialog {
                     .addComponent(employerNameTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(employerTypeCodeTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(countyComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jurisdictionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel12))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(EmployerTypeCodeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
                     .addComponent(jButton1))
                 .addContainerGap())
         );
 
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {countyComboBox, employerNameTextBox, employerTypeCodeTextBox, idNumberTextBox, jLabel11, jLabel12, jLabel2, jLabel24, jLabel7, jurisdictionComboBox});
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {countyComboBox, employerNameTextBox, idNumberTextBox, jLabel11, jLabel12, jLabel2, jLabel24, jLabel7, jurisdictionComboBox});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -300,18 +307,14 @@ public class employerDetailAdd extends javax.swing.JDialog {
         checkButton();
     }//GEN-LAST:event_employerNameTextBoxCaretUpdate
 
-    private void employerTypeCodeTextBoxCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_employerTypeCodeTextBoxCaretUpdate
-        checkButton();
-    }//GEN-LAST:event_employerTypeCodeTextBoxCaretUpdate
-
     private void idNumberTextBoxCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_idNumberTextBoxCaretUpdate
         checkButton();
     }//GEN-LAST:event_idNumberTextBoxCaretUpdate
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> EmployerTypeCodeComboBox;
     private javax.swing.JComboBox<String> countyComboBox;
     private javax.swing.JTextField employerNameTextBox;
-    private javax.swing.JTextField employerTypeCodeTextBox;
     private javax.swing.JTextField idNumberTextBox;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
