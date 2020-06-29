@@ -20,30 +20,21 @@ import parker.serb.sql.SystemError;
 public class SlackNotification {
 
     public static void sendNotification(Exception ex) {
+        String message = "\n" + "User: " + (Global.activeUser != null ? Global.activeUser.username : "NO USER") + "\n";
+        message += "Class Name: " + Thread.currentThread().getStackTrace()[2].getClassName() + "\n";
+        message += "Method Name: " + Thread.currentThread().getStackTrace()[2].getMethodName() + "\n";
+        message += "Exception Type: " + ex.getClass().getSimpleName() + "\n";
+        message += "Exception Short: " + ex.toString() + "\n";
 
-        try {
-            String message = "User: " + (Global.activeUser != null ? Global.activeUser.username : "NO USER") + "\n" ;
-            message += "Class Name: " + Thread.currentThread().getStackTrace()[2].getClassName() + "\n";
-            message += "Method Name: " + Thread.currentThread().getStackTrace()[2].getMethodName() + "\n";
-            message += "Exception Type: " + ex.getClass().getSimpleName() + "\n";
-            message += "Exception Short: " + ex.toString() + "\n";
+        System.out.println(message);
 
-            new Slack(Global.SLACK_HOOK)
-                .icon(Global.SLACK_ICON) // Ref - http://www.emoji-cheat-sheet.com/
-                .sendToChannel(Global.SLACK_CHANNEL)
-                .displayName(Global.SLACK_USER)
-                .push(new SlackMessage(message));
-
-            SystemError.addSystemErrorEntry(
-                    Thread.currentThread().getStackTrace()[2].getClassName(),
-                    Thread.currentThread().getStackTrace()[2].getMethodName(),
-                    detailedExceptionType(ex),
-                    ex.toString(),
-                    convertStackTrace(ex)
-            );
-        } catch (IOException ex1) {
-            //leave blank
-        }
+        SystemError.addSystemErrorEntry(
+                Thread.currentThread().getStackTrace()[2].getClassName(),
+                Thread.currentThread().getStackTrace()[2].getMethodName(),
+                detailedExceptionType(ex),
+                ex.toString(),
+                convertStackTrace(ex)
+        );
     }
 
     private static String convertStackTrace(Exception ex) {

@@ -20,6 +20,8 @@ public class employerDetailAdd extends javax.swing.JDialog {
 
     String empIDNumber;
     String empName;
+    int databaseID;
+    
     /**
      * Creates new form employerDetail
      * @param parent
@@ -81,6 +83,7 @@ public class employerDetailAdd extends javax.swing.JDialog {
     private void loadInformation(String employerID) {
         Employer emp = Employer.loadEmployerByID(employerID);
         
+        databaseID = emp.id;
         employerNameTextBox.setText(emp.employerName);
         idNumberTextBox.setText(emp.employerIDNumber);
         countyComboBox.setSelectedItem(emp.county);
@@ -123,7 +126,13 @@ public class employerDetailAdd extends javax.swing.JDialog {
         if (!exists.isEmpty()){
             WebOptionPane.showMessageDialog(Global.root, "<html><center>The Employer ID: " + emp.employerIDNumber + " Is currently in use.<br><br>Please Choose Another Employer ID</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
         } else {
-            Employer.createEmployer(emp);
+            
+            if (empIDNumber.isEmpty()){
+                Employer.createEmployer(emp);
+            } else {
+                Employer.updateEmployer(databaseID, emp);
+            }
+            
             empName = employerNameTextBox.getText();
             empIDNumber = idNumberTextBox.getText();
             setVisible(false);

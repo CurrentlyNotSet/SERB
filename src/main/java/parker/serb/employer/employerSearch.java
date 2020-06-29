@@ -139,8 +139,10 @@ public class employerSearch extends javax.swing.JDialog {
                    county = employerName = employerTable.getValueAt(employerTable.getSelectedRow(), 2).toString().trim();
                    setVisible(false);
                 } else if (e.getButton() == MouseEvent.BUTTON3 && employerTable.getSelectedRow() > -1){
-                    new employerDetailAdd((JFrame) Global.root.getRootPane().getParent(), true, employerTable.getValueAt(employerTable.getSelectedRow(), 0).toString().trim());
-                    loadTable();
+                    employerDetailAdd eda = new employerDetailAdd((JFrame) Global.root.getRootPane().getParent(), true, employerTable.getValueAt(employerTable.getSelectedRow(), 0).toString().trim());
+                    employers = Employer.loadEmployerList();
+                    searchTextBox.setText(eda.empIDNumber);
+                    searchEmployers();
                     searchEmployers();
                 }
             }
@@ -305,7 +307,7 @@ public class employerSearch extends javax.swing.JDialog {
         
         eda.dispose();
         employers = Employer.loadEmployerList();
-        searchTextBox.setText(eda.empName);
+        searchTextBox.setText(eda.empIDNumber);
         searchEmployers();
     }//GEN-LAST:event_NewButtonActionPerformed
 
