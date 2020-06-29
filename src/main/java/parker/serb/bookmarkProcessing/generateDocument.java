@@ -328,12 +328,13 @@ public class generateDocument {
                 }
             }
 
-            personnelAddressBlock += StringUtilities.buildFullName(
+            String builtName = StringUtilities.buildFullName(
                     execsbookmarkList.get(i).firstName,
                     execsbookmarkList.get(i).middleName,
-                    execsbookmarkList.get(i).lastName)
-                    + ", "
-                    + position;
+                    execsbookmarkList.get(i).lastName);
+            
+            //Check for Blanks in Name
+            personnelAddressBlock += (builtName.trim().length() > 0 ? builtName + ", " + position : " ");
         }
         
         //ProcessBookmarks
