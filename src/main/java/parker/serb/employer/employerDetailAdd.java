@@ -31,6 +31,7 @@ public class employerDetailAdd extends javax.swing.JDialog {
         initComponents();
         loadComboBoxes();
         if (!employerID.isEmpty()){
+            empIDNumber = employerID;
             loadInformation(employerID);
             checkButton();
         }
@@ -69,7 +70,6 @@ public class employerDetailAdd extends javax.swing.JDialog {
     }
     
     private void loadEmployerTypeComboBox() {
-        
         EmployerTypeCodeComboBox.removeAllItems();
         EmployerTypeCodeComboBox.addItem("");
         
@@ -114,7 +114,11 @@ public class employerDetailAdd extends javax.swing.JDialog {
         emp.employerType = 2;
         emp.employerTypeCode = EmployerTypeCodeComboBox.getSelectedItem().toString();
 
-        String exists = Employer.getEmployerNameByID(emp.employerIDNumber);
+        String exists = "";
+        
+        if (!empIDNumber.equalsIgnoreCase(emp.employerIDNumber)){
+            exists = Employer.getEmployerNameByID(emp.employerIDNumber);
+        }
         
         if (!exists.isEmpty()){
             WebOptionPane.showMessageDialog(Global.root, "<html><center>The Employer ID: " + emp.employerIDNumber + " Is currently in use.<br><br>Please Choose Another Employer ID</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
