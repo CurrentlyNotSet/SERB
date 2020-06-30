@@ -316,54 +316,9 @@ public class generateDocument {
         c.add(Calendar.YEAR, -1);
         Date yearMinusOne = c.getTime();
 
-//        //OLD Bookmark Setup
-//        if (!chairmanFullName.trim().equals("")) {
-//            personnelAddressBlock += chairmanFullName + ", Chair";
-//        }
-//
-//        if (!viceChairmanFullName.trim().equals("")) {
-//            if (!personnelAddressBlock.trim().equals("")) {
-//                personnelAddressBlock += "\n";
-//            }
-//            personnelAddressBlock += viceChairmanFullName + ", Vice Chair";
-//        }
-//
-//        if (!boardMemberFullName.trim().equals("")) {
-//            if (!personnelAddressBlock.trim().equals("")) {
-//                personnelAddressBlock += "\n";
-//            }
-//            personnelAddressBlock += boardMemberFullName + ", Board Member";
-//        }
-//
-//        if (!executiveDirectorFullName.trim().equals("")) {
-//            if (!personnelAddressBlock.trim().equals("")) {
-//                personnelAddressBlock += "\n\n";
-//            }
-//            personnelAddressBlock += executiveDirectorFullName + ", Executive Director";
-//        }
-
         for (int i = 0; i < execsbookmarkList.size(); i++) {
 
-            String position = "";
-            if (null != execsbookmarkList.get(i).position) {
-                switch (execsbookmarkList.get(i).position) {
-                    case "Chairman":
-                        position = "Chair";
-                        break;
-                    case "ViceChairman":
-                        position = "Vice Chair";
-                        break;
-                    case "BoardMember":
-                        position = "Board Member";
-                        break;
-                    case "ExecutiveDirector":
-                        position = "Executive Director";
-                        break;
-                    default:
-                        position = execsbookmarkList.get(i).position;
-                        break;
-                }
-            }
+            String position = execsbookmarkList.get(i).position;
 
             if (!personnelAddressBlock.trim().equals("")) {
                 personnelAddressBlock += "\n";
@@ -373,12 +328,13 @@ public class generateDocument {
                 }
             }
 
-            personnelAddressBlock += StringUtilities.buildFullName(
+            String builtName = StringUtilities.buildFullName(
                     execsbookmarkList.get(i).firstName,
                     execsbookmarkList.get(i).middleName,
-                    execsbookmarkList.get(i).lastName)
-                    + ", "
-                    + position;
+                    execsbookmarkList.get(i).lastName);
+            
+            //Check for Blanks in Name
+            personnelAddressBlock += (builtName.trim().length() > 0 ? builtName + ", " + position : " ");
         }
         
         //ProcessBookmarks

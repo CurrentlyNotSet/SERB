@@ -274,6 +274,40 @@ public class Employer {
         return name;
     }
     
+    public static void updateEmployer(int databaseID, Employer item) {
+        Statement stmt = null;
+        try {
+            stmt = Database.connectToDB().createStatement();
+
+            String sql = "Update Employers set "
+                    + "employerIDNumber = ?, "      //01
+                    + "employerName = ?, "          //02
+                    + "county = ?, "                //03
+                    + "jurisdiction = ?, "          //04
+                    + "employerType = ?, "          //05
+                    + "employerTypeCode = ? "       //06
+                    + "WHERE id = ?"; //07
+
+            PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, item.employerIDNumber.equals("") ? null : item.employerIDNumber.trim());
+            preparedStatement.setString(2, item.employerName.equals("") ? null : item.employerName.trim());
+            preparedStatement.setString(3, item.county.equals("") ? null : item.county.trim());
+            preparedStatement.setString(4, item.jurisdiction.equals("") ? null : item.jurisdiction.trim());
+            preparedStatement.setInt   (5, item.employerType);
+            preparedStatement.setString(6, item.employerTypeCode.equals("") ? null : item.employerTypeCode.trim());
+            preparedStatement.setInt   (7, databaseID);
+            
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            SlackNotification.sendNotification(ex);
+            if(ex.getCause() instanceof SQLServerException) {
+                createEmployer(item);
+            } 
+        } finally {
+            DbUtils.closeQuietly(stmt);
+        }
+    }
+    
     public static void createEmployer(Employer item) {
         Statement stmt = null;
         try {

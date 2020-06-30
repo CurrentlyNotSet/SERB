@@ -417,7 +417,7 @@
     </Component>
     <Component class="javax.swing.JCheckBox" name="barginingUnitCheckBox">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Bargining Unit"/>
+        <Property name="text" type="java.lang.String" value="Bargaining Unit"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JCheckBox" name="appellantAppointedCheckBox">

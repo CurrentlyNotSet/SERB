@@ -10,6 +10,7 @@ import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
+import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -112,6 +113,12 @@ public class employerSearch extends javax.swing.JDialog {
         county = passedCounty;
         employers = Employer.loadEmployerList();
         
+        loadTable();
+        
+        searchTextBox.setText(number);
+    }
+    
+    private void loadTable(){
         DefaultTableModel model = (DefaultTableModel) employerTable.getModel();
         model.setRowCount(0);
         
@@ -119,21 +126,25 @@ public class employerSearch extends javax.swing.JDialog {
             Employer emp = (Employer) employer;
             model.addRow(new Object[] {emp.employerIDNumber, emp.employerName, emp.county});
         }
-        
-        searchTextBox.setText(number);
-    }
+    };
     
     private void addListeners() {
         employerTable.addMouseListener(new MouseListener() {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                if(e.getClickCount() == 2) {
+                if(e.getClickCount() == 2 && employerTable.getSelectedRow() > -1) {
                    employerNumber = employerTable.getValueAt(employerTable.getSelectedRow(), 0).toString().trim();
                    employerName = employerTable.getValueAt(employerTable.getSelectedRow(), 1).toString().trim();
                    county = employerName = employerTable.getValueAt(employerTable.getSelectedRow(), 2).toString().trim();
                    setVisible(false);
-                } 
+                } else if (e.getButton() == MouseEvent.BUTTON3 && employerTable.getSelectedRow() > -1){
+                    employerDetailAdd eda = new employerDetailAdd((JFrame) Global.root.getRootPane().getParent(), true, employerTable.getValueAt(employerTable.getSelectedRow(), 0).toString().trim());
+                    employers = Employer.loadEmployerList();
+                    searchTextBox.setText(eda.empIDNumber);
+                    searchEmployers();
+                    searchEmployers();
+                }
             }
 
             @Override
@@ -292,11 +303,11 @@ public class employerSearch extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void NewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewButtonActionPerformed
-        employerDetailAdd eda = new employerDetailAdd(null, true);
+        employerDetailAdd eda = new employerDetailAdd(null, true, "");
         
         eda.dispose();
         employers = Employer.loadEmployerList();
-        searchTextBox.setText(eda.empName);
+        searchTextBox.setText(eda.empIDNumber);
         searchEmployers();
     }//GEN-LAST:event_NewButtonActionPerformed
 

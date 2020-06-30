@@ -58,12 +58,6 @@ public class Global {
     //Information about the active user
     public static User activeUser = null;
 
-    //Slack Informaiton
-    public static final String SLACK_HOOK = "https://hooks.slack.com/services/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";
-    public static final String SLACK_ICON = ":computer:";
-    public static final String SLACK_CHANNEL = "serbapplication";
-    public static final String SLACK_USER = "SERB";
-
     //indicate which section the user is currently in
     public static String activeSection;
 
@@ -113,4 +107,12 @@ public class Global {
                 "th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th",
                 //    30    31
                 "th", "st"};
+
+    public static final String[] employerTypeCodes = {
+        "AG", "AU", "CC", "CD", "CF", "CI", "CL", "CM", "CO", "CR", "CS", "CU", 
+        "DE", "EA", "EG", "EM", "FD", "GV", "HC", "HD", "HO", "HU", "IN", "JR", 
+        "JV", "LO", "MA", "ME", "MH", "MR", "NA", "OC", "PC", "PD", "PK", "PR", 
+        "PT", "RE", "SC", "SH", "SN", "TA", "TC", "TE", "TR", "TS", "UV", "VA", 
+        "VI", "WS"};
+
 }

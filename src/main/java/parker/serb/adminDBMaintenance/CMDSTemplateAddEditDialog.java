@@ -320,7 +320,7 @@ public class CMDSTemplateAddEditDialog extends javax.swing.JDialog {
 
         classificationNumberCheckBox.setText("Classification Number");
 
-        barginingUnitCheckBox.setText("Bargining Unit");
+        barginingUnitCheckBox.setText("Bargaining Unit");
 
         appellantAppointedCheckBox.setText("Appellant Appointed");
 

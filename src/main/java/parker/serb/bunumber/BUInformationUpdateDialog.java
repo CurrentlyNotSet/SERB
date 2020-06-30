@@ -283,7 +283,7 @@ public class BUInformationUpdateDialog extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Bargining Unit Information");
+        jLabel1.setText("Bargaining Unit Information");
 
         jLabel2.setText("Employer Number:");
 
