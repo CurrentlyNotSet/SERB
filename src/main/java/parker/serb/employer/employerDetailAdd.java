@@ -18,7 +18,7 @@ import parker.serb.sql.Jurisdiction;
  */
 public class employerDetailAdd extends javax.swing.JDialog {
 
-    String empIDNumber;
+    String empIDNumber = "";
     String empName;
     int databaseID;
     
@@ -241,6 +241,12 @@ public class employerDetailAdd extends javax.swing.JDialog {
         jLabel24.setMinimumSize(new java.awt.Dimension(140, 14));
         jLabel24.setPreferredSize(new java.awt.Dimension(140, 14));
 
+        EmployerTypeCodeComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EmployerTypeCodeComboBoxActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -319,7 +325,11 @@ public class employerDetailAdd extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        saveInformation();
+        if (idNumberTextBox.getText().trim().length() > 4){
+            WebOptionPane.showMessageDialog(Global.root, "<html><center>The Employer ID: " + idNumberTextBox.getText().trim() + " exceeds length limit.<br><br>Please Choose Another Employer ID of 4 characters or less</center></html>", "Error", WebOptionPane.ERROR_MESSAGE);
+        } else {
+            saveInformation();
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void countyComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_countyComboBoxActionPerformed
@@ -337,6 +347,10 @@ public class employerDetailAdd extends javax.swing.JDialog {
     private void idNumberTextBoxCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_idNumberTextBoxCaretUpdate
         checkButton();
     }//GEN-LAST:event_idNumberTextBoxCaretUpdate
+
+    private void EmployerTypeCodeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EmployerTypeCodeComboBoxActionPerformed
+        checkButton();
+    }//GEN-LAST:event_EmployerTypeCodeComboBoxActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> EmployerTypeCodeComboBox;
