@@ -837,12 +837,13 @@ public class MEDCase {
                     + " strikeFileDate,"
                     + " relatedCaseNumber,"
                     + " unitDescription,"
+                    + " FFEmployerType,"
+                    + " FFEmployeeType,"
                     + " unitSize,"
                     + " unauthorizedStrike,"
                     + " noticeOfIntentToStrikeOnly,"
                     + " intendedDateStrike,"
                     + " noticeOfIntentToPicketOnly,"
-                    + " intendedDatePicket,"
                     + " informational,"
                     + " noticeOfIntentToStrikeAndPicket,"
                     + " strikeOccured,"
@@ -871,12 +872,13 @@ public class MEDCase {
                 med.strikeFileDate = caseInformation.getTimestamp("strikeFileDate");
                 med.relatedCaseNumber = caseInformation.getString("relatedCaseNumber");
                 med.description = caseInformation.getString("unitDescription");
+                med.FFEmployerType = caseInformation.getString("FFEmployerType");
+                med.FFEmployeeType = caseInformation.getString("FFEmployeeType");
                 med.unitSize = caseInformation.getString("unitSize");
                 med.unauthorizedStrike = caseInformation.getBoolean("unauthorizedStrike");
                 med.noticeOfIntentToStrikeOnly = caseInformation.getBoolean("noticeOfIntentToStrikeOnly");
                 med.intendedDateStrike = caseInformation.getTimestamp("intendedDateStrike");
                 med.noticeOfIntentToPicketOnly = caseInformation.getBoolean("noticeOfIntentToPicketOnly");
-                med.intendedDatePicket = caseInformation.getTimestamp("intendedDatePicket");
                 med.informational = caseInformation.getBoolean("informational");
                 med.noticeOfIntentToStrikeAndPicket = caseInformation.getBoolean("noticeOfIntentToStrikeAndPicket");
                 med.strikeOccured = caseInformation.getString("strikeOccured");
@@ -898,70 +900,72 @@ public class MEDCase {
         return med;
     }
 
-    public static void updateStrikeInformation(MEDCase newCaseInformation, MEDCase caseInformation) {
-        MEDCase med = null;
-
+    public static void updateStrikeInformation(MEDCase newCaseInfo, MEDCase existingCaseInco) {
         Statement stmt = null;
         try {
             stmt = Database.connectToDB().createStatement();
 
             String sql = "Update MEDCase Set"
-                    + " strikeFileDate = ?,"
-                    + " relatedCaseNumber = ?,"
-                    + " unitDescription = ?,"
-                    + " unitSize = ? ,"
-                    + " unauthorizedStrike = ?,"
-                    + " noticeOfIntentToStrikeOnly = ?,"
-                    + " intendedDateStrike = ?,"
-                    + " noticeOfIntentToPicketOnly = ?,"
-                    + " intendedDatePicket = ?,"
-                    + " informational = ?,"
-                    + " noticeOfIntentToStrikeAndPicket = ?,"
-                    + " strikeOccured = ?,"
-                    + " strikeStatus = ?,"
-                    + " strikeBegan = ?,"
-                    + " strikeEnded = ?,"
-                    + " totalNumberOfDays = ?,"
-                    + " strikeMediatorAppointedID = ?,"
-                    + " strikeNote = ?"
-                    + " from MEDCase where caseYear = ? "
-                    + " AND caseType = ? "
-                    + " AND caseMonth = ? "
-                    + " AND caseNumber = ?";
+                    + " strikeFileDate = ?,"    //01
+                    + " relatedCaseNumber = ?," //02
+                    + " unitDescription = ?,"   //03
+                    + " unitSize = ?,"          //04
+                    + " unauthorizedStrike = ?,"//05
+                    + " noticeOfIntentToStrikeOnly = ?,"        //06
+                    + " intendedDateStrike = ?,"                //07
+                    + " noticeOfIntentToPicketOnly = ?,"        //08
+                    + " intendedDatePicket = ?,"                //09
+                    + " informational = ?,"                     //10
+                    + " noticeOfIntentToStrikeAndPicket = ?,"   //11
+                    + " strikeOccured = ?,"             //12
+                    + " strikeStatus = ?,"              //13
+                    + " strikeBegan = ?,"               //14
+                    + " strikeEnded = ?,"               //15
+                    + " totalNumberOfDays = ?,"         //16
+                    + " strikeMediatorAppointedID = ?," //17
+                    + " FFEmployerType = ?,"            //18
+                    + " FFEmployeeType = ?,"            //19
+                    + " strikeNote = ?"                 //20
+                    + " WHERE caseYear = ? "            //21
+                    + " AND caseType = ? "              //22
+                    + " AND caseMonth = ? "             //23
+                    + " AND caseNumber = ?";            //24
 
             PreparedStatement preparedStatement = stmt.getConnection().prepareStatement(sql);
-            preparedStatement.setTimestamp(1, newCaseInformation.strikeFileDate);
-            preparedStatement.setString(2, newCaseInformation.relatedCaseNumber);
-            preparedStatement.setString(3, newCaseInformation.description);
-            preparedStatement.setString(4, newCaseInformation.unitSize);
-            preparedStatement.setBoolean(5, newCaseInformation.unauthorizedStrike);
-            preparedStatement.setBoolean(6, newCaseInformation.noticeOfIntentToStrikeOnly);
-            preparedStatement.setTimestamp(7, newCaseInformation.intendedDateStrike);
-            preparedStatement.setBoolean(8, newCaseInformation.noticeOfIntentToPicketOnly);
-            preparedStatement.setTimestamp(9, newCaseInformation.intendedDatePicket);
-            preparedStatement.setBoolean(10, newCaseInformation.informational);
-            preparedStatement.setBoolean(11, newCaseInformation.noticeOfIntentToStrikeAndPicket);
-            preparedStatement.setString(12, newCaseInformation.strikeOccured);
-            preparedStatement.setString(13, newCaseInformation.strikeStatus);
-            preparedStatement.setTimestamp(14, newCaseInformation.strikeBegan);
-            preparedStatement.setTimestamp(15, newCaseInformation.strikeEnded);
-            preparedStatement.setString(16, newCaseInformation.totalNumberOfDays);
-            preparedStatement.setString(17, newCaseInformation.strikeMediatorAppointedID);
-            preparedStatement.setString(18, newCaseInformation.strikeNotes);
-            preparedStatement.setString(19, Global.caseYear);
-            preparedStatement.setString(20, Global.caseType);
-            preparedStatement.setString(21, Global.caseMonth);
-            preparedStatement.setString(22, Global.caseNumber);
+            preparedStatement.setTimestamp  ( 1, newCaseInfo.strikeFileDate);
+            preparedStatement.setString     ( 2, newCaseInfo.relatedCaseNumber);
+            preparedStatement.setString     ( 3, newCaseInfo.description);
+            preparedStatement.setString     ( 4, newCaseInfo.unitSize);
+            preparedStatement.setBoolean    ( 5, newCaseInfo.unauthorizedStrike);
+            preparedStatement.setBoolean    ( 6, newCaseInfo.noticeOfIntentToStrikeOnly);
+            preparedStatement.setTimestamp  ( 7, newCaseInfo.intendedDateStrike);
+            preparedStatement.setBoolean    ( 8, newCaseInfo.noticeOfIntentToPicketOnly);
+            preparedStatement.setTimestamp  ( 9, newCaseInfo.intendedDatePicket);
+            preparedStatement.setBoolean    (10, newCaseInfo.informational);
+            preparedStatement.setBoolean    (11, newCaseInfo.noticeOfIntentToStrikeAndPicket);
+            preparedStatement.setString     (12, newCaseInfo.strikeOccured);
+            preparedStatement.setString     (13, newCaseInfo.strikeStatus);
+            preparedStatement.setTimestamp  (14, newCaseInfo.strikeBegan);
+            preparedStatement.setTimestamp  (15, newCaseInfo.strikeEnded);
+            preparedStatement.setString     (16, newCaseInfo.totalNumberOfDays);
+            preparedStatement.setString     (17, newCaseInfo.strikeMediatorAppointedID);
+            preparedStatement.setString     (18, newCaseInfo.FFEmployerType);
+            preparedStatement.setString     (19, newCaseInfo.FFEmployeeType);
+            preparedStatement.setString     (20, newCaseInfo.strikeNotes);
+            preparedStatement.setString     (21, Global.caseYear);
+            preparedStatement.setString     (22, Global.caseType);
+            preparedStatement.setString     (23, Global.caseMonth);
+            preparedStatement.setString     (24, Global.caseNumber);
 
             int success = preparedStatement.executeUpdate();
 
             if(success == 1) {
-                detailedStrikeSaveInformation(newCaseInformation, caseInformation);
+                detailedStrikeSaveInformation(newCaseInfo, existingCaseInco);
             }
         } catch (SQLException ex) {
             SlackNotification.sendNotification(ex);
             if(ex.getCause() instanceof SQLServerException) {
-                updateStrikeInformation(newCaseInformation, caseInformation);
+                updateStrikeInformation(newCaseInfo, existingCaseInco);
             }
         } finally {
             DbUtils.closeQuietly(stmt);

@@ -114,8 +114,6 @@ public class MEDStrikePanel extends javax.swing.JPanel {
         intendedDateStrikeTextBox.setEnabled(true);
         intendedDateStrikeTextBox.setBackground(Color.white);
         noticeOfIntentToPicketOnlyCheckBox.setEnabled(true);
-//        intendedDatePicketTextBox.setEnabled(true);
-//        intendedDatePicketTextBox.setBackground(Color.white);
         informationCheckBox.setEnabled(true);
         noticeOfIntentToStrikeAndPicketCheckBox.setEnabled(true);
         
@@ -151,8 +149,6 @@ public class MEDStrikePanel extends javax.swing.JPanel {
         intendedDateStrikeTextBox.setEnabled(false);
         intendedDateStrikeTextBox.setBackground(new Color(238,238,238));
         noticeOfIntentToPicketOnlyCheckBox.setEnabled(false);
-//        intendedDatePicketTextBox.setEnabled(false);
-//        intendedDatePicketTextBox.setBackground(new Color(238,238,238));
         informationCheckBox.setEnabled(false);
         noticeOfIntentToStrikeAndPicketCheckBox.setEnabled(false);
         
@@ -175,25 +171,20 @@ public class MEDStrikePanel extends javax.swing.JPanel {
     
     public void loadMediators() {
         mediatorAppointedComboBox.removeAllItems();
-        
         mediatorAppointedComboBox.addItem("");
         
         List currentOwnerList = Mediator.loadAllMediators();
         
         for (Object currentOwners : currentOwnerList) {
             Mediator med = (Mediator) currentOwners;
-            
             mediatorAppointedComboBox.addItem(med.firstName + " " + med.lastName);
         }
     }
     
     public void loadInformaiton() {
-        
-        loadMediators();
-        
+        loadMediators();        
         orginalInformation = MEDCase.loadStrikeInformation();
-        
-        
+
         EmployerTypeComboBox.setSelectedItem(orginalInformation.FFEmployerType != null ? orginalInformation.FFEmployerType : " ");
         EmployeeTypeComboBox.setSelectedItem(orginalInformation.FFEmployeeType != null ? orginalInformation.FFEmployeeType : " ");
         strikeFileDateTextBox.setText(orginalInformation.strikeFileDate != null ? Global.mmddyyyy.format(new Date(orginalInformation.strikeFileDate.getTime())) : "");
@@ -204,7 +195,6 @@ public class MEDStrikePanel extends javax.swing.JPanel {
         noticeOfIntentToStrikeOnlyCheckBox.setSelected(orginalInformation.noticeOfIntentToStrikeOnly == true);
         intendedDateStrikeTextBox.setText(orginalInformation.intendedDateStrike != null ? Global.mmddyyyy.format(new Date(orginalInformation.intendedDateStrike.getTime())) : "");
         noticeOfIntentToPicketOnlyCheckBox.setSelected(orginalInformation.noticeOfIntentToPicketOnly == true);
-//        intendedDatePicketTextBox.setText(orginalInformation.intendedDatePicket != null ? Global.mmddyyyy.format(new Date(orginalInformation.intendedDatePicket.getTime())) : "");
         informationCheckBox.setSelected(orginalInformation.informational == true);
         noticeOfIntentToStrikeAndPicketCheckBox.setSelected(orginalInformation.noticeOfIntentToStrikeAndPicket == true);
         strikeOccuredComboBox.setSelectedItem(orginalInformation.strikeOccured != null ? orginalInformation.strikeOccured : " ");
@@ -229,15 +219,12 @@ public class MEDStrikePanel extends javax.swing.JPanel {
         newCaseInformation.unauthorizedStrike = unauthorizedStrikeCheckBox.isSelected();
         newCaseInformation.noticeOfIntentToStrikeOnly = noticeOfIntentToStrikeOnlyCheckBox.isSelected();
         newCaseInformation.intendedDateStrike = intendedDateStrikeTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(intendedDateStrikeTextBox.getText()));
-        newCaseInformation.noticeOfIntentToPicketOnly = noticeOfIntentToPicketOnlyCheckBox.isSelected();        
-//        newCaseInformation.intendedDatePicket = intendedDatePicketTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(intendedDatePicketTextBox.getText()));
-        newCaseInformation.informational = informationCheckBox.isSelected();        
+        newCaseInformation.noticeOfIntentToPicketOnly = noticeOfIntentToPicketOnlyCheckBox.isSelected();     
         newCaseInformation.noticeOfIntentToStrikeAndPicket = noticeOfIntentToStrikeAndPicketCheckBox.isSelected();        
         newCaseInformation.informational = informationCheckBox.isSelected();        
         newCaseInformation.strikeOccured = strikeOccuredComboBox.getSelectedItem().toString().trim().equals("") ? null : strikeOccuredComboBox.getSelectedItem().toString();
         newCaseInformation.strikeStatus = strikeStatusComboBox.getSelectedItem().toString().trim().equals("") ? null : strikeStatusComboBox.getSelectedItem().toString();
         newCaseInformation.strikeBegan = strikeBeganTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(strikeBeganTextBox.getText()));
-        newCaseInformation.strikeEnded = strikeEndedTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(strikeEndedTextBox.getText()));
         newCaseInformation.strikeEnded = strikeEndedTextBox.getText().equals("") ? null : new Timestamp(NumberFormatService.convertMMDDYYYY(strikeEndedTextBox.getText()));
         newCaseInformation.totalNumberOfDays = totalNumberOfDaysTextBox.getText().equals("") ? null : totalNumberOfDaysTextBox.getText();
         newCaseInformation.strikeMediatorAppointedID = mediatorAppointedComboBox.getSelectedItem().toString().equals("") ? null : Mediator.getMediatorIDByName(mediatorAppointedComboBox.getSelectedItem().toString());
@@ -257,7 +244,6 @@ public class MEDStrikePanel extends javax.swing.JPanel {
         noticeOfIntentToStrikeOnlyCheckBox.setSelected(false);
         intendedDateStrikeTextBox.setText("");
         noticeOfIntentToPicketOnlyCheckBox.setSelected(false);
-//        intendedDatePicketTextBox.setText("");
         informationCheckBox.setSelected(false);
         noticeOfIntentToStrikeAndPicketCheckBox.setSelected(false);
         
